@@ -15,7 +15,7 @@ export default function GameBoosts({ navigation }) {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.header}>
-                    <HeaderBack onPress={() => navigation.navigate('GameMode')} />
+                    <HeaderBack onPress={() => navigation.navigate('Dashboard')} />
                     <Text style={styles.headerTextStyle}>Store</Text>
                 </View>
                 <View style={styles.content}>

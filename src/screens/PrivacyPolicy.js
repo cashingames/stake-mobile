@@ -20,7 +20,7 @@ const PrivacyPolicy = ({ navigation }) => {
             paddingTop: 40,
         }}>
             <View style={styles.header}>
-                <HeaderBack onPress={() => navigation.navigate('SignIn')} />
+                <HeaderBack onPress={() => navigation.navigate('Dashboard')} />
                 <Text style={styles.headerTextStyle}>Privacy Policy</Text>
             </View>
             <View style={styles.container}>

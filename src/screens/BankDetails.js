@@ -39,7 +39,7 @@ const DetailsInput = () => {
 
     return (
         <View>
-            <DetailInput
+            <DetailInput 
                 inputLabel='Account Number'
                 value={accountNumber}
                 onChange={setAccountNumber}

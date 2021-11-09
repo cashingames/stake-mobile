@@ -33,8 +33,8 @@ const slides = [
 const IntroSlide = ({ navigation }) => {
 
   const onDone = () => {
-    // AsyncStorage.setItem('fTime', 'visited');
-    navigation.navigate('Dashboard');
+    AsyncStorage.setItem('isFirst', JSON.stringify(false));
+    navigation.navigate('DashboardScreen');
   };
   const _renderNextButton = () => {
     return (
