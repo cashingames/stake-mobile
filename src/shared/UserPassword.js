@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, Text,View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, TextInput, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../utils/normalize';
 
-const UserPassword = ({ value, inputLabel, onChangeText, onPress, secureStyle, secure, secureTextEntry }) => {
+const UserPassword = ({ value, inputLabel, onChangeText }) => {
+    const [hidden, setHidden] = useState(true);
+
+    const toggleSecureText = () => {
+        setHidden(!hidden);
+    }
+
     return (
         <View>
             <Text style={styles.inputLabel} >{inputLabel}</Text>
@@ -11,10 +17,10 @@ const UserPassword = ({ value, inputLabel, onChangeText, onPress, secureStyle, s
                 <TextInput
                     value={value}
                     onChangeText={onChangeText}
-                    secureTextEntry={secureTextEntry}
+                    secureTextEntry={hidden}
                 />
-                <Text onPress={onPress} style={secureStyle} >
-                    <Ionicons name={{ secure } ? "eye" : 'eye-off'} size={20} color="#00000080" />
+                <Text onPress={toggleSecureText} style={styles.passwordIcon} >
+                    <Ionicons name={hidden ? "eye" : 'eye-off'} size={20} color="#00000080" />
                 </Text>
             </View>
         </View>
@@ -36,14 +42,21 @@ const styles = StyleSheet.create({
         color: '#00000080',
         display: 'flex',
         flexDirection: 'row',
-        alignItems:'center',
-        // justifyContent:'space-between'
+        alignItems: 'center',
 
     },
     inputLabel: {
         fontFamily: 'graphik-medium',
         color: '#000000B2',
         marginBottom: normalize(8)
+    },
+    passwordIcon: {
+        position: 'absolute',
+        right: '5%',
+        top: '55%',
+        transform: [{ translateY: normalize(-8) }],
+        zIndex: 2,
+
     },
 });
 

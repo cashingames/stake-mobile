@@ -2,22 +2,21 @@ import React from "react";
 import { StyleSheet, Text, Pressable } from 'react-native';
 
 
-export default function AppButton({ onPress, text , disabledState}) {
-    const disabledT= disabledState;
+export default function AppButton({ onPress, text, disabled }) {
     return (
 
         <Pressable
             onPress={onPress}
             style={() => [
                 {
-                  backgroundColor: disabledT
-                    ? '#DFCBCF'
-                    : '#EF2F55'
+                    backgroundColor: disabled
+                        ? '#DFCBCF'
+                        : '#EF2F55'
                 },
                 styles.button
-              ]}
-            disabled = {disabledT}
-            >
+            ]}
+            disabled={disabled}
+        >
             <Text style={styles.text}>{text}</Text>
         </Pressable>
     );

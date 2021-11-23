@@ -17,26 +17,23 @@ const slides = [
     key: 's1',
     text: 'Play exiciting quizzes and games with family and friends',
     image: require('../../assets/images/slide2.png'),
-    // backgroundColor: 'linear-gradient(360deg, rgba(255, 224, 196, 0.4) 37.56%, rgba(255, 224, 196, 0) 74%)',
   },
   {
     key: 's2',
     text: 'Your journey to being the ultimate quiz master starts here!',
     image: require('../../assets/images/slide1.png'),
-    // backgroundColor: 'linear-gradient(360deg, rgba(255, 224, 196, 0.4) 37.56%, rgba(255, 224, 196, 0) 74%)',
   },
   {
     key: 's3',
     text: 'Multiplayer Level Games',
     image: require('../../assets/images/slide3.png'),
-    // backgroundColor: 'linear-gradient(360deg, rgba(255, 224, 196, 0.4) 37.56%, rgba(255, 224, 196, 0) 74%)',
   }]
 
 const IntroSlide = ({ navigation }) => {
 
   const onDone = () => {
     AsyncStorage.setItem('isFirst', JSON.stringify(false));
-    navigation.navigate('DashboardScreen');
+    navigation.navigate('LoginScreen');
   };
   const _renderNextButton = () => {
     return (

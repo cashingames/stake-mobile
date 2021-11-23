@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import IntroSlide from './screens/IntroSlide';
 import PrivacyPolicy from './screens/PrivacyPolicy';
 import TermsAndConditions from './screens/TermsAndConditions';
-import SignInScreen from './screens/Auth/SignInScreen';
+import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/Auth/SignUpScreen';
 import ForgotPassword from './screens/Auth/ForgotPassword';
 import AppLoading from 'expo-app-loading';
@@ -19,7 +19,7 @@ function AppRouter() {
     useEffect(() => {
         AsyncStorage.getItem('isFirst')
             .then(result => {
-                // setIsFirst(result);
+                setIsFirst(result);
                 setIsLoading(false);
             });
     }, []);
@@ -38,13 +38,13 @@ function AppRouter() {
             </Stack.Navigator>
         );
     }
-    
+
     console.log("Rendering application");
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             {/* <Stack.Screen name="DashboardScreen" component={DashboardScreen} /> */}
-            <Stack.Screen name="SignInScreen" component={SignInScreen} />
+            <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
             <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
             <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} />
