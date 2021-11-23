@@ -9,25 +9,27 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import normalize from '../utils/normalize';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const slides = [
   {
     key: 's1',
     text: 'Play exiciting quizzes and games with family and friends',
     image: require('../../assets/images/slide2.png'),
-    backgroundColor: 'linear-gradient(360deg, rgba(255, 224, 196, 0.4) 37.56%, rgba(255, 224, 196, 0) 74%)',
+    // backgroundColor: 'linear-gradient(360deg, rgba(255, 224, 196, 0.4) 37.56%, rgba(255, 224, 196, 0) 74%)',
   },
   {
     key: 's2',
     text: 'Your journey to being the ultimate quiz master starts here!',
     image: require('../../assets/images/slide1.png'),
-    backgroundColor: 'linear-gradient(360deg, rgba(255, 224, 196, 0.4) 37.56%, rgba(255, 224, 196, 0) 74%)',
+    // backgroundColor: 'linear-gradient(360deg, rgba(255, 224, 196, 0.4) 37.56%, rgba(255, 224, 196, 0) 74%)',
   },
   {
     key: 's3',
     text: 'Multiplayer Level Games',
     image: require('../../assets/images/slide3.png'),
-    backgroundColor: 'linear-gradient(360deg, rgba(255, 224, 196, 0.4) 37.56%, rgba(255, 224, 196, 0) 74%)',
+    // backgroundColor: 'linear-gradient(360deg, rgba(255, 224, 196, 0.4) 37.56%, rgba(255, 224, 196, 0) 74%)',
   }]
 
 const IntroSlide = ({ navigation }) => {
@@ -61,8 +63,7 @@ const IntroSlide = ({ navigation }) => {
   const _renderItem = ({ item }) => {
     return (
       <View
-        style={[styles.item, { backgroundColor: item.backgroundColor }]}>
-        {/* style={styles.item}> */}
+        style={styles.item}>
         <Text style={styles.introTextStyle}>
           {item.text}
         </Text>
@@ -74,25 +75,43 @@ const IntroSlide = ({ navigation }) => {
     );
   };
   return (
-    <AppIntroSlider
-      renderItem={_renderItem}
-      data={slides}
-      renderNextButton={_renderNextButton}
-      renderDoneButton={_renderDoneButton}
-      renderSkipButton={_renderSkipButton}
-      showSkipButton={true}
-      onSkip={onDone}
-      onDone={onDone}
-    />
+    <SafeAreaView style={styles.container}>
+      <LinearGradient
+        colors={['#fff', '#FFE0C3']}
+        style={styles.background}
+        end={{ x: 1, y: 1 }}
+      />
+      <AppIntroSlider
+        renderItem={_renderItem}
+        data={slides}
+        renderNextButton={_renderNextButton}
+        renderDoneButton={_renderDoneButton}
+        renderSkipButton={_renderSkipButton}
+        showSkipButton={true}
+        onSkip={onDone}
+        onDone={onDone}
+      />
+    </SafeAreaView>
   );
 };
 
 export default IntroSlide;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFE0C3',
+    paddingTop: normalize(40),
+  },
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: normalize(1000),
+  },
   item: {
     flex: 1,
-    paddingTop: normalize(40),
   },
   contentStyle: {
   },

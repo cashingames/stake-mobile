@@ -8,20 +8,26 @@ import TermsAndConditions from './screens/TermsAndConditions';
 import SignInScreen from './screens/Auth/SignInScreen';
 import SignUpScreen from './screens/Auth/SignUpScreen';
 import ForgotPassword from './screens/Auth/ForgotPassword';
+import AppLoading from 'expo-app-loading';
 
 const Stack = createNativeStackNavigator();
 
 function AppRouter() {
     const [isFirst, setIsFirst] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         AsyncStorage.getItem('isFirst')
             .then(result => {
-                setIsFirst(result);
+                // setIsFirst(result);
+                setIsLoading(false);
             });
     }, []);
 
-     console.log("About to render " + isFirst);
+    if (isLoading) {
+        console.log("Loading");
+        return <AppLoading />
+    }
 
     if (isFirst === true || isFirst === null || isFirst === undefined) {
         console.log("Rendering intro slides" + isFirst);
@@ -32,6 +38,8 @@ function AppRouter() {
             </Stack.Navigator>
         );
     }
+    
+    console.log("Rendering application");
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>

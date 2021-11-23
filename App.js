@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AppRouter from './src/AppRouter';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function App() {
 
@@ -16,16 +17,18 @@ function App() {
     'graphik-medium': require('./assets/fonts/GraphikMedium.otf'),
   });
 
-  
+
   if (!fontsLoaded) {
     return <AppLoading />
   }
 
   console.log("here");
-  
+
   return (
     <NavigationContainer>
-      <AppRouter />
+      <SafeAreaProvider>
+        <AppRouter />
+      </SafeAreaProvider>
     </NavigationContainer>
   );
 }
