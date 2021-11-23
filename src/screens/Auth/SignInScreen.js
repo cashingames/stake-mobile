@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, Image, Text, TouchableOpacity, View } from 'react-native';
-import AuthTitle from '../../components/AuthTitle';
-import AppButton from '../../components/AppButton';
-import { normalize } from '../../constants/NormalizeFont';
+import AuthTitle from '../../shared/AuthTitle';
+import AppButton from '../../shared/AppButton';
+import normalize from '../../utils/normalize';
 import { ScrollView } from 'react-native-gesture-handler';
 // import { loginUser } from '../../utilities/api';
 // import { useAppDispatch } from '../../../hooks/typedReduxHooks';
 // import { tokenSaved } from '../../../redux/slices/userDetailsSlice';
 import { Ionicons } from '@expo/vector-icons';
-import SocialSignUp from '../../components/SocialSignUp';
-import AuthBanner from '../../components/AuthBanner';
+import SocialSignUp from '../../shared/SocialSignUp';
+import AuthBanner from '../../shared/AuthBanner';
 // import { loadUserDetails } from '../../utilities/actions';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import SignInInput from '../../components/SignInInput';
-import InputError from '../../components/InputError';
-import UserPassword from '../../components/UserPassword';
-import SocialSigninDivider from '../../components/SocialSigninDivider';
+import SignInInput from '../../shared/SignInInput';
+import InputError from '../../shared/InputError';
+import UserPassword from '../../shared/UserPassword';
+import SocialSigninDivider from '../../shared/SocialSigninDivider';
 
 
 export default function SignInScreen({ navigation }) {

@@ -5,8 +5,8 @@ import {
     View,
     Text,
 } from 'react-native';
-import { normalize } from '../constants/NormalizeFont';
-import HeaderBack from '../components/HeaderBack';
+import normalize from '../utils/normalize';
+import HeaderBack from '../shared/HeaderBack';
 
 const TermsAndConditions = ({ navigation }) => {
     return (

@@ -4,7 +4,7 @@ import { StyleSheet, Text, TextInput, Image, View, Alert } from 'react-native';
 import AuthTitle from '../../components/AuthTitle';
 import HeaderBack from '../../components/HeaderBack';
 import AppButton from '../../components/AppButton';
-import { normalize } from '../../constants/NormalizeFont';
+import normalize from '../../utils/normalize';
 // import { userSignUp, verifyUsername } from '../../utilities/api';
 // import { useAppDispatch } from '../../../hooks/typedReduxHooks';
 import { ScrollView } from 'react-native-gesture-handler';

@@ -8,7 +8,7 @@ import {
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { normalize } from '../constants/NormalizeFont';
+import normalize from '../utils/normalize';
 
 const slides = [
   {

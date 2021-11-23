@@ -1,0 +1,1 @@
+export const baseURL = 'https://stg-api.cashingames.com/api';

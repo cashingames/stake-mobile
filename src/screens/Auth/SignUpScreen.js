@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, Image, Text, TouchableOpacity, View, Platform, Pressable } from 'react-native';
-import AuthTitle from '../../components/AuthTitle';
+import AuthTitle from '../../shared/AuthTitle';
 import CheckBox from '@react-native-community/checkbox';
-import AppButton from '../../components/AppButton';
-import { normalize } from '../../constants/NormalizeFont';
+import AppButton from '../../shared/AppButton';
+import normalize from '../../utils/normalize';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
-import SocialSignUp from '../../components/SocialSignUp';
+import SocialSignUp from '../../shared/SocialSignUp';
 import { useNavigation } from '@react-navigation/native';
-import AuthBanner from '../../components/AuthBanner';
-import SignInInput from '../../components/SignInInput';
-import InputError from '../../components/InputError';
-import UserPassword from '../../components/UserPassword';
-import SocialSigninDivider from '../../components/SocialSigninDivider';
+import AuthBanner from '../../shared/AuthBanner';
+import SignInInput from '../../shared/SignInInput';
+import InputError from '../../shared/InputError';
+import UserPassword from '../../shared/UserPassword';
+import SocialSigninDivider from '../../shared/SocialSigninDivider';
 
 export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState('');

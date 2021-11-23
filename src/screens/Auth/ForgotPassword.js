@@ -6,13 +6,13 @@ import {
     Text,
     Alert
 } from 'react-native';
-import AppButton from '../../components/AppButton';
-import { normalize } from '../../constants/NormalizeFont';
+import AppButton from '../../shared/AppButton';
 import { ScrollView } from 'react-native-gesture-handler';
-import HeaderBack from '../../components/HeaderBack';
+import HeaderBack from '../../shared/HeaderBack';
 // import { getOtp } from '../../utilities/api';
-import InputError from '../../components/InputError';
-import SignInInput from '../../components/SignInInput';
+import InputError from '../../shared/InputError';
+import SignInInput from '../../shared/SignInInput';
+import normalize from '../../utils/normalize';
 
 const ForgotPassword = ({ navigation }) => {
 

@@ -6,7 +6,7 @@ import {
     Text,
 } from 'react-native';
 import AppButton from '../../components/AppButton';
-import { normalize } from '../../constants/NormalizeFont';
+import normalize from '../../utils/normalize';
 
 const ResetPasswordSuccess = ({ navigation }) => {
     return (
