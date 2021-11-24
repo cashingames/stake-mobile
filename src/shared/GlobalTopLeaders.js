@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { normalize } from '../constants/NormalizeFont';
+import normalize from '../utils/normalize';
 import TopLeader from './TopLeader';
-
 
 
 function GlobalTopLeaders({ leaders }) {
@@ -10,7 +9,7 @@ function GlobalTopLeaders({ leaders }) {
     return (
         <View style={styles.content}>
             {/* {games.map( (game: any) =><GameCard game={game} />)} */}
-            <TopLeader podPosition={require('../../assets/images/position3.png')} name='Zubby Nwajigba' point='3000' avatar={require('../../assets/images/user-icon.png')}/>
+            <TopLeader podPosition={require('../../assets/images/position3.png')} name='Zubby Nwajigba' point='3000' avatar={require('../../assets/images/user-icon.png')} />
             <TopLeader podPosition={require('../../assets/images/position1.png')} name='Joy Bewa' point='8000' avatar={require('../../assets/images/user-icon.png')} />
             <TopLeader podPosition={require('../../assets/images/position2.png')} name='Chimdia Anyiam' point='5000' avatar={require('../../assets/images/user-icon.png')} />
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet ,Text, View,Image} from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import normalize from '../utils/normalize';
 
 export default function AuthBanner() {
@@ -19,11 +19,9 @@ export default function AuthBanner() {
 
 const styles = StyleSheet.create({
     image: {
-        flex: 1,
-        justifyContent: "center",
         position: 'absolute',
         left: normalize(10),
-        top:normalize(15)
-      },
+        top: normalize(15)
+    },
 
 });

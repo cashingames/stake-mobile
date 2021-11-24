@@ -7,10 +7,11 @@ import {
 } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import normalize from '../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useDispatch } from 'react-redux';
+import { showLogin } from '../features/auth/authSlice';
 
 const slides = [
   {
@@ -29,12 +30,13 @@ const slides = [
     image: require('../../assets/images/slide3.png'),
   }]
 
-const IntroSlide = ({ navigation }) => {
+const IntroSlide = () => {
+  const dispatch = useDispatch();
 
   const onDone = () => {
-    AsyncStorage.setItem('isFirst', JSON.stringify(false));
-    navigation.navigate('LoginScreen');
+    dispatch(showLogin())
   };
+
   const _renderNextButton = () => {
     return (
       <View style={styles.buttonCircle}>

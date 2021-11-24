@@ -2,10 +2,13 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import AppRouter from './src/AppRouter';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
+
+import store from './src/store';
+import AppRouter from './src/AppRouter';
 
 function App() {
 
@@ -22,14 +25,16 @@ function App() {
     return <AppLoading />
   }
 
-  console.log("here");
+  console.log("app restart");
 
   return (
-    <NavigationContainer>
-      <SafeAreaProvider>
-        <AppRouter />
-      </SafeAreaProvider>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <AppRouter />
+        </SafeAreaProvider>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

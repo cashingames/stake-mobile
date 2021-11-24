@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { normalize } from '../constants/NormalizeFont';
+import normalize from '../utils/normalize';
 
-function TopLeader({ avatar, podPosition, name,point }) {
+function TopLeader({ avatar, podPosition, name, point }) {
     return (
         <View style={styles.position}>
             <Image
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     avatar: {
         width: normalize(30),
         height: normalize(30),
-        backgroundColor:'#FFFF',
+        backgroundColor: '#FFFF',
         borderRadius: 50,
     },
     icon: {},

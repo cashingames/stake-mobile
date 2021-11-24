@@ -1,26 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, Image, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
+
 import AuthTitle from '../shared/AuthTitle';
 import AppButton from '../shared/AppButton';
 import normalize from '../utils/normalize';
-import { ScrollView } from 'react-native-gesture-handler';
-// import { loginUser } from '../../utilities/api';
-// import { useAppDispatch } from '../../../hooks/typedReduxHooks';
-// import { tokenSaved } from '../../../redux/slices/userDetailsSlice';
 import SocialSignUp from '../shared/SocialSignUp';
 import AuthBanner from '../shared/AuthBanner';
-// import { loadUserDetails } from '../../utilities/actions';
-import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthInput from '../shared/SignInInput';
 import SocialSigninDivider from '../shared/SocialSigninDivider';
+import { loginUser } from '../features/auth/authSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 
 export default function LoginScreen({ navigation }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+
+    const dispatch = useDispatch();
+
+    const [email, setEmail] = useState('arunajoy2602@gmail.com');
+    const [password, setPassword] = useState('123456789');
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const onChangeEmail = (value) => {
         setEmail(value)
@@ -30,13 +34,30 @@ export default function LoginScreen({ navigation }) {
         setPassword(value)
     }
 
+
+
     const onLogin = () => {
         console.log("Username and password");
+        setLoading(true);
+        setCanLogin(false);
+        setError("");
+
+        dispatch(loginUser({ email, password })).then(unwrapResult)
+            .then((originalPromiseResult) => {
+                // handle result here
+                console.log("here");
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                setLoading(false);
+                setCanLogin(true);
+                setError("Invalid username or password providede");
+            })
     }
 
     useEffect(() => {
         var valid = email.length > 5 && password.length > 7;
         setCanLogin(valid);
+        setError('');
     }, [email, password]);
 
 
@@ -50,9 +71,10 @@ export default function LoginScreen({ navigation }) {
                     <AuthTitle text='Sign in' />
                 </View>
 
-                <SignInError />
-
                 <View style={styles.inputContainer} >
+                    {error.length > 0 &&
+                        <Text style={styles.errorBox}>{error}</Text>
+                    }
 
                     <AuthInput
                         label='Email or username'
@@ -105,11 +127,6 @@ const RenderCreateAccount = () => {
     )
 }
 
-const SignInError = () => {
-    return <Text style={styles.errorBox}>Email and Password combination is incorrect</Text>
-}
-
-
 
 const styles = StyleSheet.create({
 
@@ -125,10 +142,8 @@ const styles = StyleSheet.create({
         marginTop: normalize(25),
     },
 
-    err: {
-    },
     errorBox: {
-        marginTop: normalize(50),
+        marginVertical: normalize(20),
         backgroundColor: '#F442741A',
         paddingVertical: normalize(6),
         borderRadius: normalize(8),

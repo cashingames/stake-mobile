@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { normalize } from '../constants/NormalizeFont';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
+import normalize from '../utils/normalize';
 
 
 const Header = ({ title }) => {
     const navigation = useNavigation();
     return (
         <View style={styles.header}>
-            <TouchableOpacity onPress={() =>  navigation.openDrawer()}>
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
                 <Ionicons name="menu" style={styles.menuIcon} size={36} />
             </TouchableOpacity>
             <View>

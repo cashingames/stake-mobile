@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { normalize } from '../constants/NormalizeFont';
+import normalize from '../utils/normalize';
 import GlobalTopLeaders from './GlobalTopLeaders';
 import OtherLeaders from './OtherLeaders';
 

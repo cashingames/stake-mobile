@@ -5,8 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 const AuthInput = (props) => {
-    const [hidden, setHidden] = useState(true);
     const { label, type } = props;
+
+    const [hidden, setHidden] = useState(type === "password");
 
     const toggleSecureText = () => {
         setHidden(!hidden);

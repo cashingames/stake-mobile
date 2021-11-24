@@ -1,19 +1,15 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-// import { useAppSelector } from '../../hooks/typedReduxHooks';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import { normalize } from '../constants/NormalizeFont';
-// import currency from "../services/currency";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import GlobalTopLeaders from '../components/GlobalTopLeaders';
 import { useNavigation } from '@react-navigation/native';
-import Header from '../components/Header';
+
+import Header from '../shared/Header';
+import GlobalTopLeaders from '../shared/GlobalTopLeaders';
+import normalize from '../utils/normalize';
 
 export default function DashboardScreen({ navigation }) {
-    // const user = useAppSelector(state => state.userDetails.user);
-    // const profile = useAppSelector(state => state.userDetails.profile);
-    // const wallet = useAppSelector(state => state.walletDetails.wallet);
 
     return (
         <SafeAreaView style={styles.container}>
