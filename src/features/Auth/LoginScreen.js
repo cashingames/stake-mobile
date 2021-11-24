@@ -5,14 +5,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
 
-import AuthTitle from '../shared/AuthTitle';
-import AppButton from '../shared/AppButton';
-import normalize from '../utils/normalize';
-import SocialSignUp from '../shared/SocialSignUp';
-import AuthBanner from '../shared/AuthBanner';
-import AuthInput from '../shared/SignInInput';
-import SocialSigninDivider from '../shared/SocialSigninDivider';
-import { loginUser } from '../features/auth/authSlice';
+import AuthTitle from '../../shared/AuthTitle';
+import AppButton from '../../shared/AppButton';
+import normalize from '../../utils/normalize';
+import SocialSignUp from '../../shared/SocialSignUp';
+import AuthBanner from '../../shared/AuthBanner';
+import AuthInput from '../../shared/SignInInput';
+import SocialSigninDivider from '../../shared/SocialSigninDivider';
+import { loginUser } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 

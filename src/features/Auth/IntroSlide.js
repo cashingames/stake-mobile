@@ -7,27 +7,27 @@ import {
 } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { Ionicons } from '@expo/vector-icons';
-import normalize from '../utils/normalize';
+import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch } from 'react-redux';
-import { showLogin } from '../features/auth/authSlice';
+import { showLogin } from './AuthSlice';
 
 const slides = [
   {
     key: 's1',
     text: 'Play exiciting quizzes and games with family and friends',
-    image: require('../../assets/images/slide2.png'),
+    image: require('../../../assets/images/slide2.png'),
   },
   {
     key: 's2',
     text: 'Your journey to being the ultimate quiz master starts here!',
-    image: require('../../assets/images/slide1.png'),
+    image: require('../../../assets/images/slide1.png'),
   },
   {
     key: 's3',
     text: 'Multiplayer Level Games',
-    image: require('../../assets/images/slide3.png'),
+    image: require('../../../assets/images/slide3.png'),
   }]
 
 const IntroSlide = () => {

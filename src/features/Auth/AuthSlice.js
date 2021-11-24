@@ -40,7 +40,7 @@ const initialState = {
 }
 
 
-export const authSlice = createSlice({
+export const AuthSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
@@ -56,7 +56,7 @@ export const authSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        // Add reducers for additional action types here, and handle loading state as needed
+        // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
         builder
             .addCase(loginUser.fulfilled, (state, action) => {
                 // Add user to the state array
@@ -73,8 +73,6 @@ export const authSlice = createSlice({
     },
 });
 
-export const { setToken, setUser, showLogin } = authSlice.actions
+export const { setToken, setUser, showLogin } = AuthSlice.actions
 
-// export const { setUser } = authSlice.actions
-
-export default authSlice.reducer
+export default AuthSlice.reducer
