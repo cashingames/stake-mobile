@@ -2,25 +2,20 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
-import Header from '../shared/Header';
 import GlobalTopLeaders from '../shared/GlobalTopLeaders';
 import normalize from '../utils/normalize';
 
 export default function DashboardScreen({ navigation }) {
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <Header title="Home" />
-                <UserDetails />
-                <GameCards games={[]} />
-                <RecentlyPlayedCards games={[]} />
-                <Leaderboard />
-            </ScrollView>
-        </SafeAreaView>
+        <ScrollView>
+            <UserDetails />
+            <GameCards games={[]} />
+            <RecentlyPlayedCards games={[]} />
+            <Leaderboard />
+        </ScrollView>
     );
 }
 
@@ -169,36 +164,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-
-    header: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: normalize(20),
-        paddingTop: normalize(30),
-        paddingBottom: normalize(10),
-    },
-    headerTitle: {
-        fontSize: normalize(20),
-        fontFamily: 'graphik-medium',
-    },
-    headerIcons: {
-        display: 'flex',
-        flexDirection: 'row',
-
-    },
-    pageIcon: {
-        marginLeft: normalize(30),
-    },
     userDetails: {
         backgroundColor: '#151C2F',
         paddingTop: normalize(10),
         paddingRight: normalize(20),
         paddingLeft: normalize(20),
         paddingBottom: normalize(15),
-    },
-    icon: {
-
     },
     wallet: {
         display: 'flex',

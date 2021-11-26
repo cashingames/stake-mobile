@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import AppLoading from 'expo-app-loading';
-
-import { logout } from './utils/ApiHelper';
-import { isLoggedIn } from './features/Auth/AuthSlice';
-import { isTrue } from './utils/stringUtl';
-
-import DashboardScreen from './screens/DashboardScreen';
+import HomeRouter from './features/Home/HomeRouter';
 import AuthRouter from './features/Auth/AuthRouter';
 
 
-const AppStack = createNativeStackNavigator();
+import { isTrue } from './utils/stringUtl';
+import { isLoggedIn } from './features/Auth/AuthSlice';
 
 function AppRouter() {
     const dispatch = useDispatch();
@@ -22,29 +17,22 @@ function AppRouter() {
 
     //during app restart, check localstorage for these info
     useEffect(() => {
-        dispatch(isLoggedIn()).then(values => {
+        dispatch(isLoggedIn()).then(() => {
             setLoading(false);
-        })
+        });
     }, []);
-
 
     if (loading) {
         return <AppLoading />
     }
 
-
-    // logout();
-
     if (!isTrue(token)) {
         return <AuthRouter />;
     }
 
-    return (
-        <AppStack.Navigator screenOptions={{ headerShown: false }}>
-            <AppStack.Screen name="DashboardScreen" component={DashboardScreen} />
-        </AppStack.Navigator>
-    );
+    return <HomeRouter />
 
 }
+
 
 export default AppRouter;
