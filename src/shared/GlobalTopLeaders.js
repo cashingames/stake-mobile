@@ -6,13 +6,30 @@ import TopLeader from './TopLeader';
 
 function GlobalTopLeaders({ leaders }) {
 
+    const topLeaders = leaders?.slice(0, 3) ?? null;
+    const firstLeader = topLeaders[0] ?? { first_name: "..." };
+    const secondLeader = topLeaders[1] ?? { first_name: "..." };
+    const thirdLeader = topLeaders[2] ?? { first_name: "..." };
     return (
         <View style={styles.content}>
-            {/* {games.map( (game: any) =><GameCard game={game} />)} */}
-            <TopLeader podPosition={require('../../assets/images/position3.png')} name='Zubby Nwajigba' point='3000' avatar={require('../../assets/images/user-icon.png')} />
-            <TopLeader podPosition={require('../../assets/images/position1.png')} name='Joy Bewa' point='8000' avatar={require('../../assets/images/user-icon.png')} />
-            <TopLeader podPosition={require('../../assets/images/position2.png')} name='Chimdia Anyiam' point='5000' avatar={require('../../assets/images/user-icon.png')} />
-
+            {topLeaders.length > 0 ? <>
+                <TopLeader
+                    podPosition={require('../../assets/images/position3.png')}
+                    name={`${thirdLeader.first_name} ${thirdLeader.last_name}`}
+                    point={thirdLeader.points}
+                    avatar={thirdLeader.avatar} />
+                <TopLeader
+                    podPosition={require('../../assets/images/position1.png')}
+                    name={`${firstLeader.first_name} ${firstLeader.last_name}`}
+                    point={firstLeader.points}
+                    avatar={firstLeader.avatar} />
+                <TopLeader
+                    podPosition={require('../../assets/images/position2.png')}
+                    name={`${secondLeader.first_name} ${thirdLeader.last_name}`}
+                    point={secondLeader.points}
+                    avatar={secondLeader.avatar} />
+            </> : <></>
+            }
         </View>
     )
 }

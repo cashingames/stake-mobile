@@ -23,6 +23,19 @@ async function postData(url = '', data = {}) {
     }
     return response.json(); // parses JSON response into native JavaScript objects
 }
+async function getData(url = '') {
+    // Default options are marked with *
+    var token = await AsyncStorage.getItem("token");
+    const response = await fetch(`${BASE_URL}/${url}`, {
+        headers: new Headers({
+            'Authorization': 'Bearer ' + token,
+        }),
+    });
+    if (!response.ok) {
+        throw new Error(response.json());
+    }
+    return response.json(); // parses JSON response into native JavaScript objects
+}
 
 async function login(data) {
     return postData('auth/login', data)
@@ -34,7 +47,7 @@ async function login(data) {
 }
 
 async function saveToken(data) {
-    await AsyncStorage.setItem("token", "token");
+    await AsyncStorage.setItem("token", data);
     await AsyncStorage.setItem("used", "token");
 }
 
@@ -50,4 +63,4 @@ async function logout() {
 }
 
 export { login, saveToken, getIsLoggedIn, getIsLoggedInOnce, logout };
-export default postData;
+export { getData, postData };

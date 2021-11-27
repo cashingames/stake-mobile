@@ -3,27 +3,19 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemL
 
 
 import { useNavigation } from '@react-navigation/core';
-import { Image, Linking, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { BorderlessButton, TouchableOpacity } from 'react-native-gesture-handler';
 import normalize from '../../utils/normalize';
 
-import DashboardScreen from '../../screens/DashboardScreen';
+import { Ionicons } from '@expo/vector-icons';
+import HomeScreen from './HomeScreen';
 
 const AppStack = createDrawerNavigator();
 
 const HomeRouter = () => {
-    // const MenuButton = (
-    //     <View>
-    //         <TouchableOpacity onPress={() => { /* AND NOW?! */ }}>
-    //             <Icon name="bars" style={{ color: 'white', padding: 10, marginLeft: 10, fontSize: 20 }} />
-    //         </TouchableOpacity>
-    //     </View>
-    // );
+
     const AppMainHeaderOptions = () => {
         return {
-            headerStyle: {
-                backgroundColor: '#f4511e',
-            },
             headerRight: (props) => <RightButtons {...props} />,
             headerRightContainerStyle: {
                 paddingRight: normalize(15),
@@ -36,7 +28,7 @@ const HomeRouter = () => {
             initialRouteName="Home"
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={AppMainHeaderOptions}>
-            <AppStack.Screen name="Home" component={DashboardScreen} options={{ title: 'Home' }} />
+            <AppStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
         </AppStack.Navigator>
     );
 }
@@ -69,41 +61,62 @@ const RightButtons = ({ options }) => {
 }
 
 function CustomDrawerContent(props) {
+    const navigation = useNavigation();
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
             <View style={drawStyles.sideHeader}>
                 <Image
                     style={drawStyles.logo}
-                    source={require('../../../assets/images/favicon.png')}
+                    source={require('../../../assets/images/user-icon.png')}
                 />
-                <Text style={drawStyles.userName}> {"Oyesola Ogundele"}</Text>
-                <Text style={drawStyles.userPhone}> {"Username"}</Text>
+                <Text style={drawStyles.userTitle}> {"Oyesola Ogundele"}</Text>
+                <Text style={drawStyles.userName}> {"@username"}</Text>
+                <TouchableOpacity style={drawStyles.profile}><Text style={drawStyles.viewProfile}>View Profile</Text></TouchableOpacity>
             </View>
 
             <View style={drawStyles.menu}>
-                <DrawerItemList labelStyle={drawStyles.itemLabel} activeTintColor="#CE0303"  {...props} />
+                <DrawerItem
+                    label={() =>
+                        <View style={drawStyles.labelName}>
+                            <Text style={drawStyles.itemLabel}>Home</Text>
+                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                        </View>}
+                    onPress={() => navigation.navigate('Home')}
+                    activeTintColor='#EF2F55'
+                    style={drawStyles.label}
+                />
+                {/* <DrawerItem
+                    label={() =>
+                        <View style={drawStyles.labelName}>
+                            <Text style={drawStyles.itemLabel}>Home</Text>
+                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                        </View>}
+                    onPress={() => navigation.navigate('Home')}
+                    activeTintColor='#EF2F55'
+                    style={drawStyles.label}
+                />
+                <DrawerItem
+                    label={() =>
+                        <View style={drawStyles.labelName}>
+                            <Text style={drawStyles.itemLabel}>Home</Text>
+                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                        </View>}
+                    onPress={() => navigation.navigate('Home')}
+                    activeTintColor='#EF2F55'
+                    style={drawStyles.label}
+                />
+                <DrawerItem
+                    label={() =>
+                        <View style={drawStyles.labelName}>
+                            <Text style={drawStyles.itemLabel}>Home</Text>
+                            <Ionicons name='chevron-forward-outline' size={24} color='#7C7D7F' />
+                        </View>
+                    }
+                    onPress={() => navigation.navigate('Home')}
+                    activeTintColor='#EF2F55'
+                    style={drawStyles.label}
+                /> */}
             </View>
-
-            <DrawerItem
-                label="Help"
-                onPress={() => Linking.openURL('https://mywebsite.com/help')}
-            />
-
-            <DrawerItem
-                label="Help"
-                onPress={() => Linking.openURL('https://mywebsite.com/help')}
-            />
-
-            <DrawerItem
-                label="Help"
-                onPress={() => Linking.openURL('https://mywebsite.com/help')}
-            />
-
-            <DrawerItem
-                label="Help"
-                onPress={() => Linking.openURL('https://mywebsite.com/help')}
-            />
-
             <BorderlessButton onPress={() => { }} style={styles.logoutContainer}>
                 <Text style={drawStyles.logoutText}>Logout</Text>
             </BorderlessButton>
@@ -127,47 +140,77 @@ const styles = StyleSheet.create({
 
 const drawStyles = StyleSheet.create({
     container: {
-        // flex: 1,
-        height: '100%',
+        flex: 1,
+        marginBottom: 20,
+        backgroundColor: '#F8F9FD',
     },
     sideHeader: {
-        // flex: 1,
+        // flex: 2,
         alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: "rgba(0, 0, 0, 0.1)",
+        paddingTop: normalize(35),
+        paddingBottom: normalize(15),
     },
     logo: {
         resizeMode: 'contain',
-        width: normalize(100),
-        height: normalize(80),
+        width: normalize(70),
+        height: normalize(70),
+        borderWidth: 1,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        borderRadius: 100
+    },
+    userTitle: {
+        fontSize: normalize(16),
+        fontFamily: 'graphik-bold',
+        color: '#000000',
+        marginVertical: normalize(10)
     },
     userName: {
-        fontSize: normalize(21),
-        fontFamily: 'Roboto_900Black',
-        color: '#181818',
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-    },
-    userPhone: {
-        color: '#545252',
+        color: '#333333',
         fontSize: normalize(12),
-        fontFamily: 'Roboto_400Regular',
-        marginVertical: normalize(10),
+        fontFamily: 'graphik-regular',
+        marginBottom: normalize(10),
+        opacity: 0.5
+    },
+    profile: {
+        backgroundColor: '#EF2F55',
+        paddingVertical: normalize(8),
+        paddingHorizontal: normalize(18),
+        borderRadius: 32,
+        marginVertical: normalize(10)
     },
     viewProfile: {
-        fontSize: normalize(12),
-        color: '#2B4257',
-        fontFamily: 'Roboto_700Bold',
-        fontWeight: '700',
-        lineHeight: normalize(14),
-        textTransform: 'uppercase',
+        fontSize: normalize(10),
+        color: '#fff',
+        fontFamily: 'graphik-medium',
+        textAlign: 'center',
     },
     menu: {
         flex: 2,
-        paddingVertical: normalize(40),
     },
     itemLabel: {
-        textTransform: 'uppercase',
-        fontFamily: 'Roboto_900Black',
-        fontWeight: "900",
+        color: '#151C2F',
+        fontSize: normalize(12),
+        fontFamily: 'graphik-regular',
+    },
+    label: {
+        borderBottomWidth: 1,
+        justifyContent: 'center',
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        paddingVertical: normalize(10),
+        // backgroundColor: 'red',
+    },
+    labelName: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        // backgroundColor: 'yellow',
+    },
+    logoutText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: normalize(10),
+        fontFamily: 'graphik-medium',
     },
 });
 

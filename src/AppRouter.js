@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AppLoading from 'expo-app-loading';
 import HomeRouter from './features/Home/HomeRouter';
 import AuthRouter from './features/Auth/AuthRouter';
 
 
 import { isTrue } from './utils/stringUtl';
 import { isLoggedIn } from './features/Auth/AuthSlice';
+import { logout } from './utils/ApiHelper';
+import PageLoading from './shared/PageLoading';
 
 function AppRouter() {
     const dispatch = useDispatch();
@@ -23,8 +24,11 @@ function AppRouter() {
     }, []);
 
     if (loading) {
-        return <AppLoading />
+        return <PageLoading />
     }
+
+
+    // logout();
 
     if (!isTrue(token)) {
         return <AuthRouter />;

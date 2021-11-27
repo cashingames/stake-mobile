@@ -1,13 +1,17 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
+import { backendUrl } from '../utils/BaseUrl';
 import normalize from '../utils/normalize';
+import { isTrue } from '../utils/stringUtl';
 
 function TopLeader({ avatar, podPosition, name, point }) {
+
+
     return (
         <View style={styles.position}>
             <Image
                 style={styles.avatar}
-                source={avatar}
+                source={isTrue(avatar) ? { uri: `${backendUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
             />
             <Text style={styles.leaderName}>{name}</Text>
             <Image
