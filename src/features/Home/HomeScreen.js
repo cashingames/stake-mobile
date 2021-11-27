@@ -169,7 +169,7 @@ const Leaderboard = ({ leaders }) => {
             <View style={styles.leaderboardHeader}>
                 <Text style={styles.title}>Leaderboard</Text>
                 <View style={styles.extended}>
-                    <Text onPress={() => navigation.navigate('ExtendedLeaderboard')}>
+                    <Text onPress={() => navigation.navigate('Leaderboard')}>
                         <Text style={styles.extendedText}>Extended Leaderboard</Text>
                     </Text>
                     <Ionicons name="md-arrow-forward-sharp" size={24} color="#EF2F55" />

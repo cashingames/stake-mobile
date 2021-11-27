@@ -10,7 +10,7 @@ import normalize from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from './HomeScreen';
 
-const AppStack = createDrawerNavigator();
+const HomeStack = createDrawerNavigator();
 
 const HomeRouter = () => {
 
@@ -24,12 +24,12 @@ const HomeRouter = () => {
     }
 
     return (
-        <AppStack.Navigator
+        <HomeStack.Navigator
             initialRouteName="Home"
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={AppMainHeaderOptions}>
-            <AppStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
-        </AppStack.Navigator>
+            <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
+        </HomeStack.Navigator>
     );
 }
 

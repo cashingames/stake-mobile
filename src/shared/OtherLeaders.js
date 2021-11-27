@@ -1,39 +1,49 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { normalize } from '../constants/NormalizeFont';
-import OtherLeader from './OtherLeader';
+import { backendUrl } from '../utils/BaseUrl';
+import normalize from '../utils/normalize';
+import { isTrue } from '../utils/stringUtl';
 
-function OtherLeaders({ othersAvatar, othersPoints, subLeaderFirstName, subLeaderLastName, position, indexArrow }) {
+export default function OtherLeaders({ leaders }) {
+    const currentLeadedrs = leaders?.slice(3, leaders.length) ?? null;
+    if (currentLeadedrs === null) {
+        return <></>;
+    }
+
     return (
         <View style={styles.container}>
-            <OtherLeader
-                othersAvatar={require('../../assets/images/user-icon.png')}
-                othersPoints='2500'
-                subLeaderFirstName='Fluffy'
-                subLeaderLastName='Oye'
+            {currentLeadedrs.map((leader, i) => <OtherLeader key={i} leader={leader}
                 position='4'
                 indexArrow={require('../../assets/images/up_arrow.png')}
-            />
-            <OtherLeader
-                othersAvatar={require('../../assets/images/user-icon.png')}
-                othersPoints='2000'
-                subLeaderFirstName='Joy'
-                subLeaderLastName='Richard'
-                position='5'
-                indexArrow={require('../../assets/images/up_arrow.png')}
-            />
-            <OtherLeader
-                othersAvatar={require('../../assets/images/user-icon.png')}
-                othersPoints='1500'
-                subLeaderFirstName='Danielle'
-                subLeaderLastName='Mark'
-                position='4'
-                indexArrow={require('../../assets/images/up_arrow.png')}
-            />
+            />)}
         </View>
     );
 }
-export default OtherLeaders;
+function OtherLeader({ leader, position, indexArrow }) {
+    return (
+        <View style={otherLeaderStyles.container}>
+            <View style={otherLeaderStyles.avatar}>
+                <Image
+                    style={otherLeaderStyles.profilePic}
+                    source={isTrue(leader.avatar) ? { uri: `${backendUrl}/${leader.avatar}` } : require("../../assets/images/user-icon.png")}
+                />
+                <View style={otherLeaderStyles.username}>
+                    <Text style={otherLeaderStyles.names}>{`${leader.first_name} ${leader.last_name}`}</Text>
+                    <Text style={otherLeaderStyles.point}>{leader.points}pts</Text>
+                </View>
+            </View>
+            <View style={otherLeaderStyles.position}>
+                <View style={otherLeaderStyles.rank}>
+                    <Text style={otherLeaderStyles.rankText}>{position}</Text>
+                </View>
+                <Image
+                    style={otherLeaderStyles.arrow}
+                    source={indexArrow}
+                />
+            </View>
+        </View>
+    );
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -254,4 +264,57 @@ const styles = StyleSheet.create({
         width: normalize(75),
         textAlign: 'center',
     }
+});
+
+
+const otherLeaderStyles = StyleSheet.create({
+    container: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: normalize(15)
+    },
+    profilePic: {
+        width: normalize(30),
+        height: normalize(30),
+        backgroundColor: '#FFFF',
+        borderRadius: 50,
+    },
+    arrow: {
+        marginLeft: normalize(7)
+    },
+    avatar: {
+        display: 'flex',
+        flexDirection: 'row',
+
+    },
+    position: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    username: {
+        marginLeft: normalize(10),
+    },
+    names: {
+        color: '#535761',
+        fontSize: normalize(12),
+        fontFamily: 'graphik-bold',
+    },
+    rank: {
+        backgroundColor: '#C4C4C4',
+        paddingHorizontal: normalize(7),
+        paddingVertical: normalize(3),
+        borderRadius: 5
+    },
+    rankText: {
+        color: '#535761',
+        fontSize: normalize(10),
+        fontFamily: 'graphik-bold',
+    },
+    point: {
+        color: '#BDBDBD',
+        fontSize: normalize(8),
+        fontFamily: 'graphik-bold',
+    },
 });

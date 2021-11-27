@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { baseURL } from "./BaseUrl";
 import { isTrue } from "./stringUtl";
 
 // Example POST method implementation:
-const BASE_URL = "https://stg-api.cashingames.com/api"
 async function postData(url = '', data = {}) {
     // Default options are marked with *
     const response = await fetch(`${BASE_URL}/${url}`, {
@@ -26,7 +26,7 @@ async function postData(url = '', data = {}) {
 async function getData(url = '') {
     // Default options are marked with *
     var token = await AsyncStorage.getItem("token");
-    const response = await fetch(`${BASE_URL}/${url}`, {
+    const response = await fetch(`${baseURL}/${url}`, {
         headers: new Headers({
             'Authorization': 'Bearer ' + token,
         }),
