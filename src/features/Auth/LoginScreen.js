@@ -50,7 +50,7 @@ export default function LoginScreen({ navigation }) {
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);
                 setCanLogin(true);
-                setError("Invalid username or password providede");
+                setError("Invalid username or password provided");
             })
     }
 
@@ -120,7 +120,7 @@ const RenderCreateAccount = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.signIn}><Text style={styles.signInText}>Don't have an account ? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('SignUpScreen')} >
+            <TouchableOpacity onPress={() => navigation.navigate('SignupScreen')} >
                 <Text style={styles.linkText}>Create one</Text>
             </TouchableOpacity>
         </View>

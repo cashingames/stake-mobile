@@ -10,7 +10,6 @@ import SocialSignUp from '../../shared/SocialSignUp';
 import { useNavigation } from '@react-navigation/native';
 import AuthBanner from '../../shared/AuthBanner';
 import SignInInput from '../../shared/SignInInput';
-import AuthInput from '../../shared/SignInInput';
 import InputError from '../../shared/InputError';
 import UserPassword from '../../shared/UserPassword';
 import SocialSigninDivider from '../../shared/SocialSigninDivider';
@@ -26,8 +25,6 @@ export default function SignUpScreen({ navigation }) {
   const [emailErr, setEmailError] = useState(false);
   const [phoneErr, setPhoneError] = useState(false);
   const [secureType, setSecureType] = useState(true);
-  const [error, setError] = useState('');
-
 
 
   const onChangeEmail = (email) => {
@@ -35,7 +32,7 @@ export default function SignUpScreen({ navigation }) {
     setEmail(email)
   }
   const onChangePassword = (password) => {
-    password.length > 0 && password.length < 8 ? setPassError(true) : setPassError(false);
+    passErr && setPassError(false);
     setPassword(password)
   }
   const onChangePhone = (phone) => {
@@ -43,7 +40,8 @@ export default function SignUpScreen({ navigation }) {
     setPhone(phone)
   }
   const onChangeConfirmPassword = (password) => {
-    if (password !== password_confirmation) {setPasswordConfirmation(password)}
+    passErr && setPassError(false);
+    setPasswordConfirmation(password)
   }
 
   const toggleSecureText = () => {
@@ -65,7 +63,7 @@ export default function SignUpScreen({ navigation }) {
   const onNext = (email, password, password_confirmation, phone) => {
     if (password !== password_confirmation) {
       setPassError(true);
-      navigation.navigate("SignupScreen")
+      navigation.navigate("SignUpEmail")
       return;
     }
     const re = /^\S+@\S+\.\S+$/;
@@ -73,14 +71,6 @@ export default function SignUpScreen({ navigation }) {
       setInActive(true);
       setEmailError(true);
       console.log('checked')
-      return;
-    }
-    if (password.length < 8) {
-      setPassError(true);
-      return;
-    }
-    if (phone.length < 11) {
-      setPhoneError(true);
       return;
     }
     navigation.navigate("SignupDetails", { email, password, password_confirmation, phone })
@@ -93,6 +83,7 @@ export default function SignUpScreen({ navigation }) {
       password.length == 0 || password_confirmation.length == 0 ||
       phoneErr || passErr || emailErr) {
       setInActive(true);
+      setEmailError(false)
     }
     console.log(password_confirmation, password)
   })
@@ -103,44 +94,27 @@ export default function SignUpScreen({ navigation }) {
         <AuthTitle text='Create an account' />
       </View>
       <View style={styles.inputContainer}>
-        {/* {error.length > 0 &&
-          <Text style={styles.errorBox}>{error}</Text>
-        } */}
         {emailErr && <InputError text='*email is not valid' textStyle={styles.err} />}
-        <AuthInput
-          label='Email'
-          placeholder="johndoe@example.com"
-          value={email}
-          onChangeText={text => onChangeEmail(text)}
-        />
+        <SignInInput inputLabel='Email' onChange={(text) => { onChangeEmail(text) }} value={email} />
         {phoneErr && <InputError text='Phone number cannot be less than 11 digits' textStyle={styles.err} />}
-        <AuthInput
-          label='Phone Number'
-          placeholder="080xxxxxxxx"
-          value={phone}
-          onChangeText={text => onChangePhone(text)}
-          // maxLength={11}
-          keyboardType="numeric"
+        <SignInInput inputLabel='Phone Number' onChange={onChangePhone}
+          value={phone} maxLength={11} keyboardType="numeric"
         />
         {
           passErr && <InputError text='*password must not be less than 8 digits' textStyle={styles.err} />
         }
-        <AuthInput
-          type="password"
-          label='Password'
-          value={password}
-          placeholder="Enter password"
-          onChangeText={text => { onChangePassword(text) }}
+        <UserPassword inputLabel='Password' onPress={toggleSecureText}
+          secureStyle={passErr ? { ...styles.passwordIcon, top: '61%', } : styles.passwordIcon}
+          secure={secureType} value={password} onChangeText={(text) => { onChangePassword(text) }}
+          secureTextEntry={secureType}
         />
         {
           passErr && <InputError text='*password confirmation must match password' textStyle={styles.err} />
         }
-        <AuthInput
-          type="password"
-          label='Password'
-          value={password_confirmation}
-          placeholder="Confirm password"
-          onChangeText={text => { onChangeConfirmPassword(text) }}
+        <UserPassword inputLabel='Confirm Password' onPress={toggleSecureText}
+          secureStyle={passErr ? { ...styles.confirmPassIcon, top: '89%', } : styles.confirmPassIcon}
+          secure={secureType} value={password_confirmation} onChangeText={(text) => { onChangeConfirmPassword(text) }}
+          secureTextEntry={secureType}
         />
       </View>
       <View style={styles.termsAndConditions}>
@@ -157,7 +131,7 @@ export default function SignUpScreen({ navigation }) {
         inActive && <Text style={styles.errorMsg}>*Please fill details and accept our terms and conditions to proceed</Text>
       }
       <View>
-        <AppButton text='continue' onPress={() => onNext(email, password, password_confirmation, phone)} disabled={inActive} />
+        <AppButton text='continue' onPress={() => onNext(email, password, password_confirmation, phone)} disabledState={inActive} />
       </View>
       <SocialSigninDivider signInText='sign up' />
       <SocialSignUp action={() => navigation.navigate('SignIn')} />
@@ -190,7 +164,7 @@ const SignIn = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.signIn}><Text style={styles.signInText}>Have an account already ? </Text>
-      <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')} >
+      <TouchableOpacity onPress={() => navigation.navigate('SignIn')} >
         <Text style={{ ...styles.linkText, fontFamily: 'graphik-medium', marginLeft: normalize(15) }}>Sign in</Text>
       </TouchableOpacity>
     </View>
@@ -318,15 +292,5 @@ const styles = StyleSheet.create({
     color: '#00000080',
     fontFamily: 'graphik-medium',
     marginBottom: normalize(40)
-  },
-  errorBox: {
-    marginVertical: normalize(20),
-    backgroundColor: '#F442741A',
-    paddingVertical: normalize(6),
-    borderRadius: normalize(8),
-    textAlign: 'center',
-    fontFamily: 'graphik-regular',
-    color: '#EF2F55',
-    fontSize: normalize(10)
   },
 });
