@@ -4,7 +4,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./LoginScreen";
 import IntroSlide from './IntroSlide';
 import { shouldShowIntro } from './AuthSlice';
-import SignUpScreen from '../../screens/Auth/SignUpScreen';
+import SignUpScreen from './SignUpScreen';
+import SignUpDetails from './SignUpDetails';
 
 const AuthStack = createNativeStackNavigator();
 
@@ -25,6 +26,8 @@ const AuthRouter = () => {
         <AuthStack.Navigator screenOptions={{ headerShown: false }}>
             <AuthStack.Screen name="LoginScreen" component={LoginScreen} />
             <AuthStack.Screen name="SignupScreen" component={SignUpScreen} />
+            <AuthStack.Screen name="Signupdetails" component={SignUpDetails}  initialParams={{email:'', password:'', password_confirmation:'', phone:'' }} />
+
         </AuthStack.Navigator>
     );
 }

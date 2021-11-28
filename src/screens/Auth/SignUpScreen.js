@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, Image, Text, TouchableOpacity, View, Platform, Pressable } from 'react-native';
 import AuthTitle from '../../shared/AuthTitle';
-import CheckBox from '@react-native-community/checkbox';
+//import CheckBox from '@react-native-community/checkbox';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -14,19 +14,18 @@ import AuthInput from '../../shared/SignInInput';
 import InputError from '../../shared/InputError';
 import UserPassword from '../../shared/UserPassword';
 import SocialSigninDivider from '../../shared/SocialSigninDivider';
+import { CheckBox } from 'react-native-elements'
 
 export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [password_confirmation, setPasswordConfirmation] = useState('');
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [inActive, setInActive] = useState(true);
   const [passErr, setPassError] = useState(false);
   const [emailErr, setEmailError] = useState(false);
   const [phoneErr, setPhoneError] = useState(false);
-  const [secureType, setSecureType] = useState(true);
-  const [error, setError] = useState('');
+  const [checked, setChecked] = useState(false);
 
 
 
@@ -46,17 +45,12 @@ export default function SignUpScreen({ navigation }) {
     if (password !== password_confirmation) {setPasswordConfirmation(password)}
   }
 
-  const toggleSecureText = () => {
-    secureType ? setSecureType(false) : setSecureType(true)
-  }
-
   const checkBoxToggle = () => {
-    if (toggleCheckBox === false) {
-      setToggleCheckBox(true);
+    if (!checked){
+      setChecked(true)
       setInActive(false);
-    }
-    else {
-      setToggleCheckBox(false);
+    }else{
+      setChecked(false);
       setInActive(true);
     }
 
@@ -103,9 +97,6 @@ export default function SignUpScreen({ navigation }) {
         <AuthTitle text='Create an account' />
       </View>
       <View style={styles.inputContainer}>
-        {/* {error.length > 0 &&
-          <Text style={styles.errorBox}>{error}</Text>
-        } */}
         {emailErr && <InputError text='*email is not valid' textStyle={styles.err} />}
         <AuthInput
           label='Email'
@@ -119,7 +110,6 @@ export default function SignUpScreen({ navigation }) {
           placeholder="080xxxxxxxx"
           value={phone}
           onChangeText={text => onChangePhone(text)}
-          // maxLength={11}
           keyboardType="numeric"
         />
         {
@@ -144,13 +134,14 @@ export default function SignUpScreen({ navigation }) {
         />
       </View>
       <View style={styles.termsAndConditions}>
-        {/* {(Platform.OS === 'web') ? <input type="checkbox" onChange={checkBoxToggle} />
+        {(Platform.OS === 'web') ? <input type="checkbox" onChange={checkBoxToggle} />
           :
           <CheckBox
-            value={toggleCheckBox}
-            onValueChange={checkBoxToggle}
+            checked={checked}
+            onIconPress = {checkBoxToggle}
+
           />
-        } */}
+        }
         <Agreement />
       </View>
       {

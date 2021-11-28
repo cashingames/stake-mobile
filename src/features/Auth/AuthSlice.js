@@ -1,6 +1,6 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { getIsLoggedIn, getIsLoggedInOnce, login as loginApi } from '../../utils/ApiHelper';
+import { getIsLoggedIn, getIsLoggedInOnce, login as loginApi, register as registerApi} from '../../utils/ApiHelper';
 
 // const fetchUserById = createAsyncThunk(
 //     'users/fetchByIdStatus',
@@ -9,6 +9,14 @@ import { getIsLoggedIn, getIsLoggedInOnce, login as loginApi } from '../../utils
 //         return response.data
 //     }
 // )
+
+export const registerUser = createAsyncThunk(
+    'auth/registerUser',
+    async (data, thunkAPI) => {
+        const response = await registerApi(data);
+        return response.data
+    }
+)
 
 export const loginUser = createAsyncThunk(
     'auth/loginUser',

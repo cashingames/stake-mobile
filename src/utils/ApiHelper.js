@@ -37,12 +37,30 @@ async function getData(url = '') {
     return response.json(); // parses JSON response into native JavaScript objects
 }
 
+async function register(data) {
+    return postData('auth/register', data)
+        .then(response => {
+            console.log(response);
+            saveToken(response.data);
+            return response;
+        });
+}
+
 async function login(data) {
     return postData('auth/login', data)
         .then(response => {
             console.log(response);
             saveToken(response.data);
             return response;
+        });
+}
+
+async function verifyUsername(username) {
+    console.log(username);
+    return postData('auth/username/verify/'+username)
+        .then(response => {
+            console.log(response);
+            return response.data;
         });
 }
 
@@ -62,5 +80,5 @@ async function logout() {
     AsyncStorage.removeItem("token");
 }
 
-export { login, saveToken, getIsLoggedIn, getIsLoggedInOnce, logout };
+export { login, register, verifyUsername, saveToken, getIsLoggedIn, getIsLoggedInOnce, logout };
 export { getData, postData };

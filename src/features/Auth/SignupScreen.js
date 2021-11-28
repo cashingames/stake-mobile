@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, Image, Text, TouchableOpacity, View, Platform, Pressable } from 'react-native';
-import AuthTitle from '../../shared/AuthTitle';
-import CheckBox from '@react-native-community/checkbox';
+import { StyleSheet, Text, TouchableOpacity, View, Platform} from 'react-native';
+//import CheckBox from '@react-native-community/checkbox';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Ionicons } from '@expo/vector-icons';
 import SocialSignUp from '../../shared/SocialSignUp';
 import { useNavigation } from '@react-navigation/native';
 import AuthBanner from '../../shared/AuthBanner';
-import SignInInput from '../../shared/SignInInput';
+import AuthInput from '../../shared/SignInInput';
 import InputError from '../../shared/InputError';
-import UserPassword from '../../shared/UserPassword';
 import SocialSigninDivider from '../../shared/SocialSigninDivider';
+import { CheckBox } from 'react-native-elements'
+import AuthTitle from '../../shared/AuthTitle';
 
 export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [password_confirmation, setPasswordConfirmation] = useState('');
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [inActive, setInActive] = useState(true);
   const [passErr, setPassError] = useState(false);
   const [emailErr, setEmailError] = useState(false);
   const [phoneErr, setPhoneError] = useState(false);
-  const [secureType, setSecureType] = useState(true);
+  const [checked, setChecked] = useState(false);
+
 
 
   const onChangeEmail = (email) => {
@@ -32,7 +31,7 @@ export default function SignUpScreen({ navigation }) {
     setEmail(email)
   }
   const onChangePassword = (password) => {
-    passErr && setPassError(false);
+    password.length > 0 && password.length < 8 ? setPassError(true) : setPassError(false);
     setPassword(password)
   }
   const onChangePhone = (phone) => {
@@ -40,21 +39,15 @@ export default function SignUpScreen({ navigation }) {
     setPhone(phone)
   }
   const onChangeConfirmPassword = (password) => {
-    passErr && setPassError(false);
-    setPasswordConfirmation(password)
-  }
-
-  const toggleSecureText = () => {
-    secureType ? setSecureType(false) : setSecureType(true)
+    if (password !== password_confirmation) {setPasswordConfirmation(password)}
   }
 
   const checkBoxToggle = () => {
-    if (toggleCheckBox === false) {
-      setToggleCheckBox(true);
+    if (!checked){
+      setChecked(true)
       setInActive(false);
-    }
-    else {
-      setToggleCheckBox(false);
+    }else{
+      setChecked(false);
       setInActive(true);
     }
 
@@ -63,7 +56,7 @@ export default function SignUpScreen({ navigation }) {
   const onNext = (email, password, password_confirmation, phone) => {
     if (password !== password_confirmation) {
       setPassError(true);
-      navigation.navigate("SignUpEmail")
+      navigation.navigate("Signupdetails")
       return;
     }
     const re = /^\S+@\S+\.\S+$/;
@@ -73,7 +66,15 @@ export default function SignUpScreen({ navigation }) {
       console.log('checked')
       return;
     }
-    navigation.navigate("SignupDetails", { email, password, password_confirmation, phone })
+    if (password.length < 8) {
+      setPassError(true);
+      return;
+    }
+    if (phone.length < 11) {
+      setPhoneError(true);
+      return;
+    }
+    navigation.navigate("Signupdetails", { email, password, password_confirmation, phone })
   }
 
 
@@ -83,7 +84,6 @@ export default function SignUpScreen({ navigation }) {
       password.length == 0 || password_confirmation.length == 0 ||
       phoneErr || passErr || emailErr) {
       setInActive(true);
-      setEmailError(false)
     }
     console.log(password_confirmation, password)
   })
@@ -95,46 +95,60 @@ export default function SignUpScreen({ navigation }) {
       </View>
       <View style={styles.inputContainer}>
         {emailErr && <InputError text='*email is not valid' textStyle={styles.err} />}
-        <SignInInput inputLabel='Email' onChange={(text) => { onChangeEmail(text) }} value={email} />
+        <AuthInput
+          label='Email'
+          placeholder="johndoe@example.com"
+          value={email}
+          onChangeText={text => onChangeEmail(text)}
+        />
         {phoneErr && <InputError text='Phone number cannot be less than 11 digits' textStyle={styles.err} />}
-        <SignInInput inputLabel='Phone Number' onChange={onChangePhone}
-          value={phone} maxLength={11} keyboardType="numeric"
+        <AuthInput
+          label='Phone Number'
+          placeholder="080xxxxxxxx"
+          value={phone}
+          onChangeText={text => onChangePhone(text)}
+          keyboardType="numeric"
         />
         {
           passErr && <InputError text='*password must not be less than 8 digits' textStyle={styles.err} />
         }
-        <UserPassword inputLabel='Password' onPress={toggleSecureText}
-          secureStyle={passErr ? { ...styles.passwordIcon, top: '61%', } : styles.passwordIcon}
-          secure={secureType} value={password} onChangeText={(text) => { onChangePassword(text) }}
-          secureTextEntry={secureType}
+        <AuthInput
+          type="password"
+          label='Password'
+          value={password}
+          placeholder="Enter password"
+          onChangeText={text => { onChangePassword(text) }}
         />
         {
           passErr && <InputError text='*password confirmation must match password' textStyle={styles.err} />
         }
-        <UserPassword inputLabel='Confirm Password' onPress={toggleSecureText}
-          secureStyle={passErr ? { ...styles.confirmPassIcon, top: '89%', } : styles.confirmPassIcon}
-          secure={secureType} value={password_confirmation} onChangeText={(text) => { onChangeConfirmPassword(text) }}
-          secureTextEntry={secureType}
+        <AuthInput
+          type="password"
+          label='Password'
+          value={password_confirmation}
+          placeholder="Confirm password"
+          onChangeText={text => { onChangeConfirmPassword(text) }}
         />
       </View>
       <View style={styles.termsAndConditions}>
-        {/* {(Platform.OS === 'web') ? <input type="checkbox" onChange={checkBoxToggle} />
+        {(Platform.OS === 'web') ? <input type="checkbox" onChange={checkBoxToggle} />
           :
           <CheckBox
-            value={toggleCheckBox}
-            onValueChange={checkBoxToggle}
+            checked={checked}
+            onIconPress = {checkBoxToggle}
+
           />
-        } */}
+        }
         <Agreement />
       </View>
       {
         inActive && <Text style={styles.errorMsg}>*Please fill details and accept our terms and conditions to proceed</Text>
       }
       <View>
-        <AppButton text='continue' onPress={() => onNext(email, password, password_confirmation, phone)} disabledState={inActive} />
+        <AppButton text='continue' onPress={() => onNext(email, password, password_confirmation, phone)} disabled={inActive} />
       </View>
       <SocialSigninDivider signInText='sign up' />
-      <SocialSignUp action={() => navigation.navigate('SignIn')} />
+      <SocialSignUp action={() => navigation.navigate('LoginScreen')} />
       <SignIn />
     </ScrollView >
   );
@@ -164,7 +178,7 @@ const SignIn = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.signIn}><Text style={styles.signInText}>Have an account already ? </Text>
-      <TouchableOpacity onPress={() => navigation.navigate('SignIn')} >
+      <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')} >
         <Text style={{ ...styles.linkText, fontFamily: 'graphik-medium', marginLeft: normalize(15) }}>Sign in</Text>
       </TouchableOpacity>
     </View>
@@ -292,5 +306,15 @@ const styles = StyleSheet.create({
     color: '#00000080',
     fontFamily: 'graphik-medium',
     marginBottom: normalize(40)
+  },
+  errorBox: {
+    marginVertical: normalize(20),
+    backgroundColor: '#F442741A',
+    paddingVertical: normalize(6),
+    borderRadius: normalize(8),
+    textAlign: 'center',
+    fontFamily: 'graphik-regular',
+    color: '#EF2F55',
+    fontSize: normalize(10)
   },
 });
