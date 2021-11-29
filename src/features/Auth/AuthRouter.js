@@ -6,12 +6,9 @@ import ForgotPasswordScreen from './ForgotPasswordScreen';
 
 import IntroSlide from './IntroSlide';
 import { shouldShowIntro } from './AuthSlice';
-<<<<<<< HEAD
 import SignUpScreen from './SignUpScreen';
 import SignUpDetails from './SignUpDetails';
-=======
 import VerifyEmailScreen from './VerifyEmailScreen';
->>>>>>> main
 
 const AuthStack = createNativeStackNavigator();
 
