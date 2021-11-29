@@ -70,7 +70,7 @@ export default function SignUpScreen({ navigation }) {
       setPassError(true);
       return;
     }
-    if (phone.length < 11) {
+    if (phone.length < 11 || phone.length > 11) {
       setPhoneError(true);
       return;
     }
@@ -148,7 +148,7 @@ export default function SignUpScreen({ navigation }) {
         <AppButton text='continue' onPress={() => onNext(email, password, password_confirmation, phone)} disabled={inActive} />
       </View>
       <SocialSigninDivider signInText='sign up' />
-      <SocialSignUp action={() => navigation.navigate('LoginScreen')} />
+      <SocialSignUp action={() => navigation.navigate('Login')} />
       <SignIn />
     </ScrollView >
   );
@@ -178,7 +178,7 @@ const SignIn = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.signIn}><Text style={styles.signInText}>Have an account already ? </Text>
-      <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')} >
+      <TouchableOpacity onPress={() => navigation.navigate('Login')} >
         <Text style={{ ...styles.linkText, fontFamily: 'graphik-medium', marginLeft: normalize(15) }}>Sign in</Text>
       </TouchableOpacity>
     </View>

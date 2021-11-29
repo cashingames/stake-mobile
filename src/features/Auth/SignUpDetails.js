@@ -9,13 +9,13 @@ import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import InputError from '../../shared/InputError';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { registerUser,} from './AuthSlice';
+import { registerUser, } from './AuthSlice';
 import { verifyUsername } from '../../utils/ApiHelper';
 
 export default function SignUpDetails({ navigation, route, }) {
     const params = route.params;
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
+    const [first_name, setFirstname] = useState('');
+    const [last_name, setLastname] = useState('');
     const [username, setUsername] = useState('');
     const [referrer, setReferrer] = useState('');
     const [loading, setLoading] = useState(false);
@@ -24,10 +24,11 @@ export default function SignUpDetails({ navigation, route, }) {
     const [defaultInput, setDefaultInput] = useState(true);
     const [fNameErr, setFnameErr] = useState(false);
     const [lNameErr, setLnameErr] = useState(false);
+    const [error, setError] = useState('');
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (firstname.length == 0 || lastname.length == 0 ||
+        if (first_name.length == 0 || last_name.length == 0 ||
             username.length == 0 || loading) {
             setInActive(true);
             setFnameErr(false);
@@ -40,11 +41,11 @@ export default function SignUpDetails({ navigation, route, }) {
 
     useEffect(() => {
         const re = /\d/;
-        if (re.test(firstname) === true) {
+        if (re.test(first_name) === true) {
             setInActive(true);
             setFnameErr(true);
         }
-        if (re.test(lastname) === true) {
+        if (re.test(last_name) === true) {
             setInActive(true);
             setLnameErr(true);
         }
@@ -57,6 +58,7 @@ export default function SignUpDetails({ navigation, route, }) {
         if (verified) {
             setDefaultInput(false)
             setAvailable(true)
+            console.log(verified);
         } else {
             setDefaultInput(false)
             setAvailable(false);
@@ -64,22 +66,23 @@ export default function SignUpDetails({ navigation, route, }) {
             return
         }
         dispatch(registerUser({
-            firstname,
-            lastname,
+            first_name,
+            last_name,
             referrer,
             username,
             email: params.email,
             password: params.password,
             password_confirmation: params.password_confirmation,
-            phone: params.phone
+            phone_number: params.phone
         })).then(unwrapResult)
             .then((originalPromiseResult) => {
-                console.log("here");
+                setLoading(false);
             })
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);
+                console.log(rejectedValueOrSerializedError)
+                setError("Email or Phone Number has already been taken");
             })
-       
     }
 
     return (
@@ -87,18 +90,21 @@ export default function SignUpDetails({ navigation, route, }) {
             <HeaderBack onPress={() => navigation.goBack()} />
             <DetailsTitle />
             <View >
+                {error.length > 0 &&
+                    <Text style={styles.errorBox}>{error}</Text>
+                }
                 {fNameErr && <InputError text="First name can't have numbers" textStyle={styles.err} />}
                 <AuthInput
                     label='First Name'
                     placeholder="John"
-                    value={firstname}
+                    value={first_name}
                     onChangeText={setFirstname}
                 />
                 {lNameErr && <InputError text="Last name can't have numbers" textStyle={styles.err} />}
                 <AuthInput
                     label='Last Name'
                     placeholder="Doe"
-                    value={lastname}
+                    value={last_name}
                     onChangeText={setLastname}
                 />
                 {!available && !defaultInput &&
@@ -187,6 +193,16 @@ const styles = StyleSheet.create({
         marginBottom: normalize(8)
     },
     err: {
+        fontFamily: 'graphik-regular',
+        color: '#EF2F55',
+        fontSize: normalize(10)
+    },
+    errorBox: {
+        marginVertical: normalize(20),
+        backgroundColor: '#F442741A',
+        paddingVertical: normalize(6),
+        borderRadius: normalize(8),
+        textAlign: 'center',
         fontFamily: 'graphik-regular',
         color: '#EF2F55',
         fontSize: normalize(10)

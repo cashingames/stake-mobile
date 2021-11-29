@@ -11,7 +11,8 @@ async function postData(url = '', data = {}) {
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, *same-origin, omit
         headers: {
-            'Content-Type': 'application/json'
+            // 'Accept': 'application/json',
+            'Content-Type': 'application/json',
             // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         redirect: 'follow', // manual, *follow, error
@@ -21,6 +22,7 @@ async function postData(url = '', data = {}) {
     if (!response.ok) {
         throw new Error(response.json());
     }
+
     return response.json(); // parses JSON response into native JavaScript objects
 }
 async function getData(url = '') {
@@ -38,18 +40,15 @@ async function getData(url = '') {
 }
 
 async function register(data) {
-    return postData('auth/register', data)
-        .then(response => {
-            console.log(response);
-            saveToken(response.data);
-            return response;
-        });
+    return postData('auth/register', data).then(response => {
+        saveToken(response.data);
+        return response;
+    });
 }
 
 async function login(data) {
     return postData('auth/login', data)
         .then(response => {
-            console.log(response);
             saveToken(response.data);
             return response;
         });
@@ -59,7 +58,8 @@ async function verifyUsername(username) {
     console.log(username);
     return postData('auth/username/verify/' + username)
         .then(response => {
-            console.log(response);
+            return response.data
+            // console.log(JSON.stringify(response.data) + " verified data");
         });
 }
 
@@ -95,5 +95,5 @@ async function logout() {
     AsyncStorage.removeItem("token");
 }
 
-export { login,register,verifyUsername, saveToken, getIsLoggedIn, getIsLoggedInOnce, verifyAccount, logout, verifyOtp };
+export { login, register, verifyUsername, saveToken, getIsLoggedIn, getIsLoggedInOnce, verifyAccount, logout, verifyOtp };
 export { getData, postData };

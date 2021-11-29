@@ -22,6 +22,7 @@ function AppRouter() {
 
     const token = useSelector(state => state.auth.token);
 
+    console.log(token + ' in router')
     //during app restart, check localstorage for these info
     useEffect(() => {
         dispatch(isLoggedIn()).then(() => {
@@ -33,7 +34,7 @@ function AppRouter() {
         return <PageLoading />
     }
 
-    // logout();
+     logout();
 
     if (!isTrue(token)) {
         return <AuthRouter />;
