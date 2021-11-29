@@ -33,9 +33,12 @@ function AppRouter() {
         return <PageLoading />
     }
 
+    // logout();
+
     if (!isTrue(token)) {
         return <AuthRouter />;
     }
+
 
     return (
         <AppStack.Navigator>

@@ -5,7 +5,7 @@ import { isTrue } from "./stringUtl";
 // Example POST method implementation:
 async function postData(url = '', data = {}) {
     // Default options are marked with *
-    const response = await fetch(`${BASE_URL}/${url}`, {
+    const response = await fetch(`${baseURL}/${url}`, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -46,6 +46,20 @@ async function login(data) {
         });
 }
 
+async function verifyAccount(data) {
+    return postData('auth/password/email', data)
+        .then(response => {
+            return response.data;
+        });
+}
+
+async function verifyOtp(data) {
+    return postData('auth/token/verify', data)
+        .then(response => {
+            return response.data;
+        });
+}
+
 async function saveToken(data) {
     await AsyncStorage.setItem("token", data);
     await AsyncStorage.setItem("used", "token");
@@ -54,13 +68,15 @@ async function saveToken(data) {
 async function getIsLoggedIn() {
     return AsyncStorage.getItem("token").then(result => isTrue(result));
 }
+
 async function getIsLoggedInOnce() {
     return AsyncStorage.getItem("used").then(result => isTrue(result));
 }
+
 async function logout() {
-    AsyncStorage.removeItem("used");
+    // AsyncStorage.removeItem("used");
     AsyncStorage.removeItem("token");
 }
 
-export { login, saveToken, getIsLoggedIn, getIsLoggedInOnce, logout };
+export { login, saveToken, getIsLoggedIn, getIsLoggedInOnce, verifyAccount, logout, verifyOtp };
 export { getData, postData };
