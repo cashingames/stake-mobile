@@ -1,11 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { baseURL } from "./BaseUrl";
 import { isTrue } from "./stringUtl";
 
 // Example POST method implementation:
-const BASE_URL = "https://stg-api.cashingames.com/api"
 async function postData(url = '', data = {}) {
     // Default options are marked with *
-    const response = await fetch(`${BASE_URL}/${url}`, {
+    const response = await fetch(`${baseURL}/${url}`, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -26,7 +26,7 @@ async function postData(url = '', data = {}) {
 async function getData(url = '') {
     // Default options are marked with *
     var token = await AsyncStorage.getItem("token");
-    const response = await fetch(`${BASE_URL}/${url}`, {
+    const response = await fetch(`${baseURL}/${url}`, {
         headers: new Headers({
             'Authorization': 'Bearer ' + token,
         }),
@@ -57,9 +57,22 @@ async function login(data) {
 
 async function verifyUsername(username) {
     console.log(username);
-    return postData('auth/username/verify/'+username)
+    return postData('auth/username/verify/' + username)
         .then(response => {
             console.log(response);
+        });
+}
+
+async function verifyAccount(data) {
+    return postData('auth/password/email', data)
+        .then(response => {
+            return response.data;
+        });
+}
+
+async function verifyOtp(data) {
+    return postData('auth/token/verify', data)
+        .then(response => {
             return response.data;
         });
 }
@@ -72,13 +85,15 @@ async function saveToken(data) {
 async function getIsLoggedIn() {
     return AsyncStorage.getItem("token").then(result => isTrue(result));
 }
+
 async function getIsLoggedInOnce() {
     return AsyncStorage.getItem("used").then(result => isTrue(result));
 }
+
 async function logout() {
-    AsyncStorage.removeItem("used");
+    // AsyncStorage.removeItem("used");
     AsyncStorage.removeItem("token");
 }
 
-export { login, register, verifyUsername, saveToken, getIsLoggedIn, getIsLoggedInOnce, logout };
+export { login,register,verifyUsername, saveToken, getIsLoggedIn, getIsLoggedInOnce, verifyAccount, logout, verifyOtp };
 export { getData, postData };

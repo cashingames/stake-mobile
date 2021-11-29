@@ -1,47 +1,73 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
-import { normalize } from '../constants/NormalizeFont';
-import OtherLeaders from '../components/OtherLeaders';
+import { backendUrl } from '../utils/BaseUrl';
+import normalize from '../utils/normalize';
+import { isTrue } from '../utils/stringUtl';
+import OtherLeaders from './OtherLeaders';
 
-function CategoryLeaderboard({ category }) {
+export default function CategoryLeaderboard({ category, leaders }) {
+    if (leaders === null || leaders === undefined || leaders.length === 0) {
+        return <></>
+    }
     return (
         <ScrollView>
             <View style={styles.category}>
                 <Text style={styles.categoryTitle}>{category}</Text>
-                <CategoryTopLeaders />
-                <OtherLeaders />
+                <CategoryTopLeaders leaders={leaders} />
+                <OtherLeaders leaders={leaders} />
             </View>
         </ScrollView>
     )
+}
 
+function CategoryTopLeaders({ leaders }) {
 
-    function CategoryTopLeaders() {
-        return (
-            <View style={styles.topLeaders}>
-                {/* {games.map( (game: any) =><GameCard game={game} />)} */}
-                <CategoryTopLeader position='3' name='Zubby Nwajigba' point='3000' avatar={require('../../assets/images/user-icon.png')} />
-                <CategoryTopLeader topLeaderStyle={styles.firstPosition} position='1' name='Joy Bewa' point='8000' avatar={require('../../assets/images/user-icon.png')} />
-                <CategoryTopLeader position='2' name='Chimdia Anyiam' point='5000' avatar={require('../../assets/images/user-icon.png')} />
+    const topLeaders = leaders?.slice(0, 3) ?? null;
+    const firstLeader = topLeaders[0] ?? { first_name: "..." };
+    const secondLeader = topLeaders[1] ?? { first_name: "..." };
+    const thirdLeader = topLeaders[2] ?? { first_name: "..." };
+
+    return (
+        <View style={styles.topLeaders}>
+            <CategoryTopLeader
+                position='3'
+                name={`${thirdLeader.first_name} ${thirdLeader.last_name}`}
+                point={thirdLeader.points}
+                avatar={thirdLeader.avatar}
+            />
+            <CategoryTopLeader
+                position='1'
+                name={`${firstLeader.first_name} ${firstLeader.last_name}`}
+                point={firstLeader.points}
+                avatar={firstLeader.avatar}
+                topLeaderStyle={styles.firstPosition}
+            />
+
+            <CategoryTopLeader
+                position='2'
+                name={`${secondLeader.first_name} ${secondLeader.last_name}`}
+                point={secondLeader.points}
+                avatar={secondLeader.avatar}
+            />
+        </View>
+    )
+}
+
+function CategoryTopLeader({ avatar, name, position, point, topLeaderStyle }) {
+    return (
+        <View style={[styles.topLeader, topLeaderStyle]}>
+            <Image
+                style={styles.avatar}
+                source={isTrue(avatar) ? { uri: `${backendUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
+            />
+            <Text style={styles.number}>{position}</Text>
+            <Text style={styles.leaderName}>{name}</Text>
+            <View style={styles.leaderPoint}>
+                <Text style={styles.point}>{point}</Text>
             </View>
-        )
-    }
-
-    function CategoryTopLeader({ avatar, name, position, point, topLeaderStyle }) {
-        return (
-            <View style={[styles.topLeader, topLeaderStyle]}>
-                <Image
-                    style={styles.avatar}
-                    source={avatar}
-                />
-                <Text style={styles.number}>{position}</Text>
-                <Text style={styles.leaderName}>{name}</Text>
-                <View style={styles.leaderPoint}>
-                    <Text style={styles.point}>{point}</Text>
-                </View>
-            </View>
-        )
-    }
-} export default CategoryLeaderboard;
+        </View>
+    )
+}
 
 const styles = StyleSheet.create({
     categories: {
@@ -57,7 +83,7 @@ const styles = StyleSheet.create({
         marginVertical: normalize(10)
     },
     category: {
-        paddingVertical: normalize(20),
+        // paddingVertical: normalize(20),
         paddingHorizontal: normalize(15),
         marginRight: normalize(5)
     },

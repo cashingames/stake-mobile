@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import HomeRouter from './features/Home/HomeRouter';
 import AuthRouter from './features/Auth/AuthRouter';
 
+import ExtendedLeaderboard from './features/Leaderboard/ExtendedLeaderboard';
+import PageLoading from './shared/PageLoading';
 
 import { isTrue } from './utils/stringUtl';
 import { isLoggedIn } from './features/Auth/AuthSlice';
 import { logout } from './utils/ApiHelper';
-import PageLoading from './shared/PageLoading';
+
+
+const AppStack = createNativeStackNavigator();
 
 function AppRouter() {
     const dispatch = useDispatch();
@@ -27,14 +33,19 @@ function AppRouter() {
         return <PageLoading />
     }
 
-
     // logout();
 
     if (!isTrue(token)) {
         return <AuthRouter />;
     }
 
-    return <HomeRouter />
+
+    return (
+        <AppStack.Navigator>
+            <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
+            <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Extended Leaderboard' }} />
+        </AppStack.Navigator>
+    )
 
 }
 
