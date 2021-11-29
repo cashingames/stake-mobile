@@ -1,1 +1,5 @@
-export default new Intl.NumberFormat('en');
+export default function currency() {
+    function format(value) {
+        return value;
+    }
+}

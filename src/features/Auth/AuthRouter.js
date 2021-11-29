@@ -28,11 +28,11 @@ const AuthRouter = () => {
     return (
 
         <AuthStack.Navigator screenOptions={{ title: "" }} >
-            <AuthStack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
+            <AuthStack.Screen name="SignupScreen" component={SignUpScreen} />
             <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             <AuthStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-            <AuthStack.Screen name="SignupScreen" component={SignUpScreen} />
-            <AuthStack.Screen name="Signupdetails" component={SignUpDetails}  initialParams={{email:'', password:'', password_confirmation:'', phone:'' }} />
+            <AuthStack.Screen name="Signupdetails" component={SignUpDetails} initialParams={{ email: '', password: '', password_confirmation: '', phone: '' }} />
+            <AuthStack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
         </AuthStack.Navigator>
     );
 }
