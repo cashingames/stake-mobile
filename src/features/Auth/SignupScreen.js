@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, Image, Text, TouchableOpacity, View, Platform, Pressable } from 'react-native';
-import AuthTitle from '../../shared/AuthTitle';
+import { StyleSheet, Text, TouchableOpacity, View, Platform} from 'react-native';
 //import CheckBox from '@react-native-community/checkbox';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Ionicons } from '@expo/vector-icons';
 import SocialSignUp from '../../shared/SocialSignUp';
 import { useNavigation } from '@react-navigation/native';
 import AuthBanner from '../../shared/AuthBanner';
-import SignInInput from '../../shared/SignInInput';
 import AuthInput from '../../shared/SignInInput';
 import InputError from '../../shared/InputError';
-import UserPassword from '../../shared/UserPassword';
 import SocialSigninDivider from '../../shared/SocialSigninDivider';
 import { CheckBox } from 'react-native-elements'
+import AuthTitle from '../../shared/AuthTitle';
 
 export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -59,7 +56,7 @@ export default function SignUpScreen({ navigation }) {
   const onNext = (email, password, password_confirmation, phone) => {
     if (password !== password_confirmation) {
       setPassError(true);
-      navigation.navigate("SignupScreen")
+      navigation.navigate("Signupdetails")
       return;
     }
     const re = /^\S+@\S+\.\S+$/;
@@ -73,11 +70,11 @@ export default function SignUpScreen({ navigation }) {
       setPassError(true);
       return;
     }
-    if (phone.length < 11) {
+    if (phone.length < 11 || phone.length > 11) {
       setPhoneError(true);
       return;
     }
-    navigation.navigate("SignupDetails", { email, password, password_confirmation, phone })
+    navigation.navigate("Signupdetails", { email, password, password_confirmation, phone })
   }
 
 
@@ -151,7 +148,7 @@ export default function SignUpScreen({ navigation }) {
         <AppButton text='continue' onPress={() => onNext(email, password, password_confirmation, phone)} disabled={inActive} />
       </View>
       <SocialSigninDivider signInText='sign up' />
-      <SocialSignUp action={() => navigation.navigate('SignIn')} />
+      <SocialSignUp action={() => navigation.navigate('Login')} />
       <SignIn />
     </ScrollView >
   );
@@ -181,7 +178,7 @@ const SignIn = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.signIn}><Text style={styles.signInText}>Have an account already ? </Text>
-      <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')} >
+      <TouchableOpacity onPress={() => navigation.navigate('Login')} >
         <Text style={{ ...styles.linkText, fontFamily: 'graphik-medium', marginLeft: normalize(15) }}>Sign in</Text>
       </TouchableOpacity>
     </View>

@@ -4,9 +4,19 @@ import {
     getIsLoggedIn,
     getIsLoggedInOnce,
     login as loginApi,
+    register as registerApi,
     verifyOtp as verifyOtpApi,
     verifyAccount as verifyAccountApi,
 } from '../../utils/ApiHelper';
+
+export const registerUser = createAsyncThunk(
+    'auth/registerUser',
+    async (data, thunkAPI) => {
+        const response = await registerApi(data);
+        return response.data
+        
+    }
+)
 
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
