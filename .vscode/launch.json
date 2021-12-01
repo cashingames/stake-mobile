@@ -16,7 +16,8 @@
             "cwd": "${workspaceFolder}",
             "type": "reactnative",
             "request": "launch",
-            "platform": "exponent"
+            "platform": "exponent",
+            "expoHostType": "local",
         }
     ]
 }
