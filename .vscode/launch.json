@@ -5,13 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Android",
-            "cwd": "${workspaceFolder}",
-            "type": "reactnative",
-            "request": "launch",
-            "platform": "android"
-        },
-        {
             "name": "Debug in Exponent",
             "cwd": "${workspaceFolder}",
             "type": "reactnative",

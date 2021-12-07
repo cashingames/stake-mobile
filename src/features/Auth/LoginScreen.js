@@ -20,8 +20,8 @@ export default function LoginScreen({ navigation }) {
 
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState('arunajoy2602@gmail.com');
-    const [password, setPassword] = useState('123456789');
+    const [email, setEmail] = useState('oyekunmi@gmail.com');
+    const [password, setPassword] = useState('Akinkunmi@1');
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -95,7 +95,7 @@ export default function LoginScreen({ navigation }) {
 
                 </View>
 
-                <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin(email, password)} disabled={!canLogin} />
+                <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={onLogin} disabled={!canLogin} />
                 <SocialSigninDivider signInText='sign in' />
                 <SocialSignUp action={() => navigation.navigate('SignIn')} />
                 <RenderCreateAccount />
@@ -120,7 +120,7 @@ const RenderCreateAccount = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.signIn}><Text style={styles.signInText}>Don't have an account ? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('SignupScreen')} >
+            <TouchableOpacity onPress={() => navigation.navigate('Signup')} >
                 <Text style={styles.linkText}>Create one</Text>
             </TouchableOpacity>
         </View>

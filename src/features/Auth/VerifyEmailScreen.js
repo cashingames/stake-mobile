@@ -5,59 +5,64 @@ import {
     Text,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch } from 'react-redux';
+
 import AppButton from '../../shared/AppButton';
 import AuthInput from '../../shared/SignInInput';
-
 import normalize from '../../utils/normalize';
+import { setUserPasswordResetToken } from './AuthSlice';
 
 export default function VerifyEmailScreen({ navigation, route }) {
 
-    const codeArray = [];
-    const [code, setCode] = useState('');
-    const [inActive, setInActive] = useState(true);
-    const [loading, setLoading] = useState(false);
-
-    const param = route.params;
+    const dispatch = useDispatch();
+    const [codes, setCodes] = useState([]);
+    const [active, setActive] = useState(false);
 
     const onChangeInput1 = (text) => {
-        codeArray.push(text)
+        console.log(text);
+        let newArr = [...codes];
+        newArr[0] = text;
+        setCodes(newArr)
     }
 
     const onChangeInput2 = (text) => {
-        codeArray.push(text);
+        console.log(text);
+        let newArr = [...codes];
+        newArr[1] = text;
+        setCodes(newArr)
     }
 
     const onChangeInput3 = (text) => {
-        codeArray.push(text);
+        let newArr = [...codes];
+        newArr[2] = text;
+        setCodes(newArr)
     }
 
     const onChangeInput4 = (text) => {
-        codeArray.push(text);
+        let newArr = [...codes];
+        newArr[3] = text;
+        setCodes(newArr)
     }
 
     const onChangeInput5 = (text) => {
-        codeArray.push(text)
-        setCode(codeArray.join(""));
+        let newArr = [...codes];
+        newArr[4] = text;
+        setCodes(newArr)
     }
 
-    const verifyCode = (code, email) => {
-        setLoading(true)
-        verifyOtp(code).then(
-            (x) => {
-                console.log(x)
-                navigation.navigate('ResetPassword', { email })
-                setLoading(false)
-            },
-            (err) => {
-                console.log(err)
-                setLoading(false)
-            }
-        );
+    const nextAction = () => {
+        dispatch(setUserPasswordResetToken(codes.join("")));
+        navigation.navigate('ResetPassword')
     }
 
     useEffect(() => {
-        code.length === 0 || code.length < 5 ? setInActive(true) : setInActive(false)
-    }, [code])
+        console.log(codes.length);
+        if (codes.length < 5) {
+            setActive(false)
+            return;
+        }
+        setActive(true);
+    }, [codes])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -72,45 +77,44 @@ export default function VerifyEmailScreen({ navigation, route }) {
 
                 <AuthInput
                     style={styles.input}
-                    onChange={text => onChangeInput1(text)}
+                    onChangeText={text => onChangeInput1(text)}
                     maxLength={1}
                     keyboardType="numeric"
                 />
 
                 <AuthInput
                     style={styles.input}
-                    onChange={text => onChangeInput2(text)}
+                    onChangeText={text => onChangeInput2(text)}
                     maxLength={1}
                     keyboardType="numeric"
                 />
 
                 <AuthInput
                     style={styles.input}
-                    onChange={text => onChangeInput3(text)}
+                    onChangeText={text => onChangeInput3(text)}
                     maxLength={1}
                     keyboardType="numeric"
                 />
 
                 <AuthInput
                     style={styles.input}
-                    onChange={text => onChangeInput4(text)}
+                    onChangeText={text => onChangeInput4(text)}
                     maxLength={1}
                     keyboardType="numeric"
                 />
 
                 <AuthInput
                     style={styles.input}
-                    onChange={text => onChangeInput5(text)}
+                    onChangeText={text => onChangeInput5(text)}
                     maxLength={1}
                     returnKeyType={"done"}
                     keyboardType="numeric"
                 />
 
             </View>
+
             <View style={styles.button}>
-                <AppButton onPress={() => verifyCode(code, param.email)}
-                    text={loading ? "Verifying OTP" : "Verify OTP"} disabledState={inActive}
-                />
+                <AppButton onPress={() => nextAction()} text="Continue" disabled={!active} />
             </View>
 
         </SafeAreaView>

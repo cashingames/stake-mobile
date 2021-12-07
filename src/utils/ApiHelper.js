@@ -1,6 +1,20 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+
 import { baseURL } from "./BaseUrl";
 import { isTrue } from "./stringUtl";
+import store from './../store';
+
+(function () {
+    const token = store.getState().auth.token;
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = token;
+    } else {
+        axios.defaults.headers.common['Authorization'] = null;
+        /*if setting null does not remove `Authorization` header then try  */
+        delete axios.defaults.headers.common['Authorization'];
+    }
+})();
 
 // Example POST method implementation:
 async function postData(url = '', data = {}) {
@@ -25,6 +39,7 @@ async function postData(url = '', data = {}) {
 
     return response.json(); // parses JSON response into native JavaScript objects
 }
+
 async function getData(url = '') {
     // Default options are marked with *
     var token = await AsyncStorage.getItem("token");
@@ -59,22 +74,19 @@ async function verifyUsername(username) {
     return postData('auth/username/verify/' + username)
         .then(response => {
             return response.data
-            // console.log(JSON.stringify(response.data) + " verified data");
         });
 }
 
 async function verifyAccount(data) {
-    return postData('auth/password/email', data)
-        .then(response => {
-            return response.data;
-        });
+    return axios.post(`${baseURL}/auth/password/email`, data);
 }
 
 async function verifyOtp(data) {
-    return postData('auth/token/verify', data)
-        .then(response => {
-            return response.data;
-        });
+    return axios.post(`${baseURL}/auth/token/verify`, data)
+}
+
+async function resetPassword(data) {
+    return axios.post(`${baseURL}/auth/password/reset/${data.email}`, data)
 }
 
 async function saveToken(data) {
@@ -95,5 +107,5 @@ async function logout() {
     AsyncStorage.removeItem("token");
 }
 
-export { login, register, verifyUsername, saveToken, getIsLoggedIn, getIsLoggedInOnce, verifyAccount, logout, verifyOtp };
+export { login, register, verifyUsername, saveToken, getIsLoggedIn, getIsLoggedInOnce, verifyAccount, logout, verifyOtp, resetPassword };
 export { getData, postData };

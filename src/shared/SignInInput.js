@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 const AuthInput = (props) => {
-    const { label, type } = props;
+    const { label, type, error } = props;
 
     const [hidden, setHidden] = useState(type === "password");
 
@@ -16,7 +16,7 @@ const AuthInput = (props) => {
     return (
         <>
             <Text style={styles.inputLabel} >{label}</Text>
-            <View>
+            <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
                     {...props}
@@ -31,6 +31,8 @@ const AuthInput = (props) => {
                         <Ionicons name={hidden ? 'eye-off' : "eye"} size={20} color="#00000080" />
                     </Text>
                 }
+
+                {error && <Text style={styles.error} >{error}</Text>}
             </View>
 
         </>
@@ -38,10 +40,11 @@ const AuthInput = (props) => {
 }
 
 const styles = StyleSheet.create({
-
+    inputContainer: {
+        marginBottom: normalize(15),
+    },
     input: {
         height: normalize(38),
-        marginBottom: normalize(15),
         borderWidth: normalize(1),
         borderRadius: normalize(10),
         paddingLeft: normalize(10),
@@ -63,6 +66,11 @@ const styles = StyleSheet.create({
         zIndex: 2,
 
     },
+    error: {
+        fontFamily: 'graphik-regular',
+        color: '#EF2F55',
+        fontSize: normalize(10)
+    }
 });
 
 export default AuthInput

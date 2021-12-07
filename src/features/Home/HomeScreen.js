@@ -6,9 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import GlobalTopLeaders from '../../shared/GlobalTopLeaders';
 import normalize from '../../utils/normalize';
-import currency from '../../utils/currency';
 import { getData } from '../../utils/ApiHelper';
-import { isTrue } from '../../utils/stringUtl';
+import { isTrue, formatCurrency } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
 
@@ -63,7 +62,7 @@ const UserWallet = ({ balance }) => {
                 style={styles.icon}
                 source={require('../../../assets/images/wallet.png')}
             />
-            <Text style={styles.walletText}>&#8358;{currency.format(balance)}</Text>
+            <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
         </View>
     );
 }
@@ -76,7 +75,7 @@ const UserPoints = ({ points }) => {
                 source={require('../../../assets/images/point-trophy.png')}
             />
             <View style={styles.pointsNumber}>
-                <Text style={styles.userPoint}>{currency.format(points)}</Text>
+                <Text style={styles.userPoint}>{formatCurrency(points)}</Text>
                 <Text style={styles.pointDetail} >YOUR POINTS EARNED</Text>
             </View>
         </View>
@@ -87,11 +86,11 @@ const UserRanking = ({ gamesCount, ranking }) => {
     return (
         <View style={styles.userRanking}>
             <View style={styles.gamesPlayed}>
-                <Text style={styles.rankNumber}>{currency.format(gamesCount)}</Text>
+                <Text style={styles.rankNumber}>{formatCurrency(gamesCount)}</Text>
                 <Text style={styles.rankDetail}>GAMES PLAYED</Text>
             </View>
             <View style={styles.globalRanking}>
-                <Text style={styles.rankNumber}>{currency.format(ranking)}</Text>
+                <Text style={styles.rankNumber}>{formatCurrency(ranking)}</Text>
                 <Text style={styles.rankDetail}>GLOBAL RANKING</Text>
             </View>
         </View>

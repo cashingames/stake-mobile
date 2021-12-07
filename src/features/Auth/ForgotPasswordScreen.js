@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StyleSheet, View, Text } from 'react-native';
 
 import AppButton from '../../shared/AppButton';
-// import { getOtp } from '../../utilities/api';
 import normalize from '../../utils/normalize';
 import AuthInput from '../../shared/SignInInput';
 import { verifyAccount } from './AuthSlice';
@@ -22,23 +20,20 @@ export default function ({ navigation }) {
         setEmail(value)
     }
 
-
-    const onSend = () => {
+    const onSend = async () => {
         setLoading(true);
         setCanSend(false);
         setError('');
 
-        dispatch(verifyAccount({ email })).then(unwrapResult)
-            .then((originalPromiseResult) => {
-                navigation.navigate("VerifyEmail");
-            })
-            .catch((rejectedValueOrSerializedError) => {
-                setError("Something went wrong, please try again later");
-            }).finally(() => {
-                setLoading(false);
-                setCanSend(true);
-            })
-
+        const result = (await dispatch(verifyAccount({ email }))).payload
+        console.info(result);
+        setLoading(false);
+        setCanSend(true);
+        if (result.success === true) {
+            navigation.navigate("VerifyEmail");
+        } else {
+            setError(result.message);
+        }
     }
 
     useEffect(() => {
@@ -109,6 +104,11 @@ const styles = StyleSheet.create({
         marginTop: normalize(15),
     },
     errorBox: {
+        marginVertical: normalize(20),
+        backgroundColor: '#F442741A',
+        paddingVertical: normalize(6),
+        borderRadius: normalize(8),
+        textAlign: 'center',
         fontFamily: 'graphik-regular',
         color: '#EF2F55',
         fontSize: normalize(10)

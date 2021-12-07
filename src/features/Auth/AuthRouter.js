@@ -6,9 +6,11 @@ import ForgotPasswordScreen from './ForgotPasswordScreen';
 
 import IntroSlide from './IntroSlide';
 import { shouldShowIntro } from './AuthSlice';
-import SignUpScreen from './SignUpScreen';
-import SignUpDetails from './SignUpDetails';
 import VerifyEmailScreen from './VerifyEmailScreen';
+import ResetPasswordScreen from './ResetPasswordScreen';
+import ResetPasswordSuccessScreen from './ResetPasswordSuccessScreen';
+import SignupScreen from './SignupScreen';
+import SignupProfileScreen from './SignupProfileScreen';
 
 const AuthStack = createNativeStackNavigator();
 
@@ -27,12 +29,16 @@ const AuthRouter = () => {
 
     return (
 
-        <AuthStack.Navigator screenOptions={{ title: "" }} >
-            <AuthStack.Screen name="SignupScreen" component={SignUpScreen} />
+        <AuthStack.Navigator screenOptions={{ title: "" }}>
             <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+            <AuthStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
+            <AuthStack.Screen name="SignupProfile" component={SignupProfileScreen} options={{ title: "Let's get to know you" }} />
+
             <AuthStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-            <AuthStack.Screen name="Signupdetails" component={SignUpDetails} initialParams={{ email: '', password: '', password_confirmation: '', phone: '' }} />
             <AuthStack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
+            <AuthStack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+            <AuthStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} />
+
         </AuthStack.Navigator>
     );
 }

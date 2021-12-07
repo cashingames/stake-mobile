@@ -7,6 +7,7 @@ import {
     register as registerApi,
     verifyOtp as verifyOtpApi,
     verifyAccount as verifyAccountApi,
+    resetPassword as resetPasswordApi,
 } from '../../utils/ApiHelper';
 
 export const registerUser = createAsyncThunk(
@@ -14,7 +15,7 @@ export const registerUser = createAsyncThunk(
     async (data, thunkAPI) => {
         const response = await registerApi(data);
         return response.data
-        
+
     }
 )
 
@@ -42,9 +43,12 @@ export const shouldShowIntro = createAsyncThunk(
 
 export const verifyAccount = createAsyncThunk(
     'auth/verifyAccount',
-    async (data, thunkAPI) => {
-        const response = await verifyAccountApi(data);
-        return response.data
+    async (data, { rejectWithValue }) => {
+        try {
+            return (await verifyAccountApi(data)).data;
+        } catch (err) {
+            return rejectWithValue(err.response.data)
+        }
     }
 )
 
@@ -56,10 +60,25 @@ export const verifyOtp = createAsyncThunk(
     }
 )
 
+export const resetPassword = createAsyncThunk(
+    'auth/resetPassword',
+    async (data, { rejectWithValue }) => {
+        console.log(data)
+        try {
+            return (await resetPasswordApi(data)).data;
+        } catch (err) {
+            return rejectWithValue(err.response.data)
+        }
+    }
+)
+
 const initialState = {
     token: "",
     showIntro: false,
     user: {},
+    passwordReset: {
+        email: 'oyekunmi@gmail.com'
+    }
 }
 
 export const AuthSlice = createSlice({
@@ -75,26 +94,33 @@ export const AuthSlice = createSlice({
         },
         showLogin: (state) => {
             state.showIntro = false;
+        },
+        setUserPasswordResetToken: (state, action) => {
+            state.passwordReset.userCode = action.payload;
         }
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
         builder
             .addCase(loginUser.fulfilled, (state, action) => {
-                // Add user to the state array
                 state.token = action.payload;
             })
+            .addCase(resetPassword.fulfilled, (state) => {
+                state.passwordReset = {};
+            })
             .addCase(isLoggedIn.fulfilled, (state, action) => {
-                // Add user to the state array
                 state.token = action.payload;
             })
             .addCase(shouldShowIntro.fulfilled, (state, action) => {
-                // Add user to the state array
                 state.showIntro = !action.payload;
+            })
+            .addCase(verifyAccount.fulfilled, (state, action) => {
+                state.passwordReset.code = action.payload.data;
+                state.passwordReset.email = action.meta.arg.email;
             })
     },
 });
 
-export const { setToken, setUser, showLogin } = AuthSlice.actions
+export const { setToken, setUser, showLogin, setUserPasswordResetToken } = AuthSlice.actions
 
 export default AuthSlice.reducer
