@@ -11,10 +11,16 @@ import { getData } from '../../utils/ApiHelper';
 import { isTrue } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
+import { getUser } from '../Auth/AuthSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function HomeScreen({ navigation }) {
 
-    const [user, setUser] = useState({});
+    const dispatch = useDispatch();
+
+    // const [user, setUser] = useState({});
+    const user = useSelector(state => state.auth.user)
+
     const [commonData, setCommonData] = useState({});
     const [leaders, setLeaders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,7 +28,10 @@ export default function HomeScreen({ navigation }) {
 
 
     useEffect(() => {
-        var _1 = getData('v3/user/profile').then(response => setUser(response.data))
+
+        dispatch(getUser('v3/user/profile'));
+
+        var _1 = getData('v3/user/profile').then(response => response.data)
         var _2 = getData('v3/game/common').then(response => setCommonData(response.data))
         var _3 = getData('v2/leaders/global').then(response => setLeaders(response.data))
 
@@ -35,6 +44,8 @@ export default function HomeScreen({ navigation }) {
         return <PageLoading />
     }
 
+    debugger;
+    console.log("hhhere" + user);
     return (
         <ScrollView>
             <UserDetails user={user} />
@@ -169,7 +180,7 @@ const Leaderboard = ({ leaders }) => {
             <View style={styles.leaderboardHeader}>
                 <Text style={styles.title}>Leaderboard</Text>
                 <View style={styles.extended}>
-                    <Text onPress={() => navigation.navigate('Leaderboard')}>
+                    <Text onPress={() => navigation.navigate('ExtendedLeaderboard')}>
                         <Text style={styles.extendedText}>Extended Leaderboard</Text>
                     </Text>
                     <Ionicons name="md-arrow-forward-sharp" size={24} color="#EF2F55" />

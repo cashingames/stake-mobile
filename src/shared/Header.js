@@ -9,7 +9,7 @@ const Header = ({ options }) => {
 
     return (
         <View style={styles.headerIcons}>
-            <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                 <Image
                     style={styles.pageIcon}
                     source={require('../../assets/images/Home.png')}

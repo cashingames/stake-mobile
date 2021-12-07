@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import normalize from '../../utils/normalize';
 // import currency from "../services/currency";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import PageHeader from '../components/PageHeader';
+import PageHeader from '../../shared/PageHeader';
 
 export default function TransactionScreen({ navigation }) {
 
@@ -16,28 +16,28 @@ export default function TransactionScreen({ navigation }) {
                     amount="&#8358;2,000"
                     details="Card deposit"
                     date="20 Apr, 2021"
-                    arrow={require('../../assets/images/up_arrow.png')}
+                    arrow={require('../../../assets/images/up_arrow.png')}
                 />
                 <FundTransactions
                     naration="Fund Withdrawal"
                     amount="&#8358;2,000"
                     details="3 Answer wipe x2"
                     date="20 Apr, 2021"
-                    arrow={require('../../assets/images/up_arrow.png')}
+                    arrow={require('../../../assets/images/up_arrow.png')}
                 />
                 <FundTransactions
                     naration="Fund Received"
                     amount="&#8358;2,000"
                     details="Card deposit"
                     date="20 Apr, 2021"
-                    arrow={require('../../assets/images/up_arrow.png')}
+                    arrow={require('../../../assets/images/up_arrow.png')}
                 />
                 <FundTransactions
                     naration="Fund Received"
                     amount="&#8358;2,000"
                     details="Card deposit"
                     date="20 Apr, 2021"
-                    arrow={require('../../assets/images/up_arrow.png')}
+                    arrow={require('../../../assets/images/up_arrow.png')}
                 />
             </ScrollView>
         </SafeAreaView>

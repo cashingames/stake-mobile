@@ -9,6 +9,8 @@ import normalize from '../../utils/normalize';
 
 import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from './HomeScreen';
+import WalletScreen from '../Transactions/WalletScreen';
+import TransactionScreen from '../Transactions/TransactionScreen';
 
 const HomeStack = createDrawerNavigator();
 
@@ -28,6 +30,7 @@ const HomeRouter = () => {
             initialRouteName="Home"
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={AppMainHeaderOptions}>
+            <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
         </HomeStack.Navigator>
     );
@@ -38,19 +41,19 @@ const RightButtons = ({ options }) => {
 
     return (
         <View style={styles.headerIcons}>
-            <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                 <Image
                     style={styles.pageIcon}
                     source={require('../../../assets/images/Home.png')}
                 />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('GameScreen')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Game')}>
                 <Image
                     style={styles.pageIcon}
                     source={require('../../../assets/images/gamepad.png')}
                 />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('WalletScreen')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Wallet')}>
                 <Image
                     style={styles.pageIcon}
                     source={require('../../../assets/images/smallpurse.png')}

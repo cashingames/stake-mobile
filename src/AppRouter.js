@@ -11,6 +11,9 @@ import PageLoading from './shared/PageLoading';
 import { isTrue } from './utils/stringUtl';
 import { isLoggedIn } from './features/Auth/AuthSlice';
 import { logout } from './utils/ApiHelper';
+import WalletScreen from './features/Transactions/WalletScreen';
+import FundWalletScreen from './features/Transactions/FundWalletScreen';
+import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
 
 
 const AppStack = createNativeStackNavigator();
@@ -34,7 +37,6 @@ function AppRouter() {
         return <PageLoading />
     }
 
-     logout();
 
     if (!isTrue(token)) {
         return <AuthRouter />;
@@ -43,8 +45,12 @@ function AppRouter() {
 
     return (
         <AppStack.Navigator>
+            
             <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
             <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Extended Leaderboard' }} />
+            <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
+            <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }}  />
+            
         </AppStack.Navigator>
     )
 

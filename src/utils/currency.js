@@ -1,5 +1,5 @@
-export default function currency() {
-    function format(value) {
+export default  currency =  {
+    format(value) {
         return value;
     }
 }

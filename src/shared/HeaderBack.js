@@ -1,17 +1,19 @@
 import React from "react";
-import { StyleSheet, Image, Pressable, View } from 'react-native';
+import { StyleSheet, Image, Pressable, View, Text } from 'react-native';
+import normalize from "../utils/normalize";
 
 
-export default function HeaderBack({ onPress }) {
+export default function HeaderBack({ onPress, title }) {
 
     return (
-        <View >
+        <View style={styles.backButton} >
             <Pressable
                 onPress={onPress}
                 style={styles.button}>
                 <Image
                     source={require('../../assets/images/arrow_back.png')}
                 />
+                <Text style={styles.title}>{title}</Text>
             </Pressable>
         </View>
 
@@ -20,10 +22,18 @@ export default function HeaderBack({ onPress }) {
 }
 
 const styles = StyleSheet.create({
+    backButton: {
+        // backgroundColor: '#fff'
+    },
     button: {
-        paddingVertical: 10,
-        marginVertical: 20,
+        flexDirection: 'row',
+        alignItems: 'center'
         // backgroundColor: '#FFFF',
     },
+    title: {
+        marginLeft: normalize(20),
+        fontSize: normalize(12),
+        fontFamily:'graphik-medium',
+    }
 });
 

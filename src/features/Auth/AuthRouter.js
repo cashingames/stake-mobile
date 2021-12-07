@@ -9,6 +9,10 @@ import { shouldShowIntro } from './AuthSlice';
 import SignUpScreen from './SignUpScreen';
 import SignUpDetails from './SignUpDetails';
 import VerifyEmailScreen from './VerifyEmailScreen';
+import WalletScreen from '../Transactions/WalletScreen';
+import TransactionScreen from '../Transactions/TransactionScreen';
+import FundWalletScreen from '../Transactions/FundWalletScreen';
+import FundWalletCompleted from '../Transactions/FundWalletCompleted';
 
 const AuthStack = createNativeStackNavigator();
 
@@ -28,6 +32,7 @@ const AuthRouter = () => {
     return (
 
         <AuthStack.Navigator screenOptions={{ title: "" }} >
+            {/* <AuthStack.Screen name="TransactionScreen" component={TransactionScreen} /> */}
             <AuthStack.Screen name="SignupScreen" component={SignUpScreen} />
             <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             <AuthStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
