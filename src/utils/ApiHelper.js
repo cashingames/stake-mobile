@@ -69,6 +69,13 @@ async function verifyAccount(data) {
             return response.data;
         });
 }
+async function verifyFunding(data) {
+    return getData('v2/wallet/me/transaction/verify/' + data)
+        .then(response => {
+            console.log(response.data);
+            return response.data;
+        });
+}
 
 async function verifyOtp(data) {
     return postData('auth/token/verify', data)
@@ -95,5 +102,5 @@ async function logout() {
     AsyncStorage.removeItem("token");
 }
 
-export { login, register, verifyUsername, saveToken, getIsLoggedIn, getIsLoggedInOnce, verifyAccount, logout, verifyOtp };
+export { login, register, verifyUsername, saveToken, getIsLoggedIn, getIsLoggedInOnce, verifyAccount, verifyFunding, logout, verifyOtp };
 export { getData, postData };

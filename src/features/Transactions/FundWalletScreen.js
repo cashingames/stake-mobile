@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
@@ -10,22 +10,48 @@ import { getUser } from '../Auth/AuthSlice';
 import WalletBalance from './WalletBalance';
 import HeaderBack from '../../shared/HeaderBack';
 import RBSheet from "react-native-raw-bottom-sheet";
+import { Paystack, paystackProps } from 'react-native-paystack-webview';
+import { paystackKey } from '../../utils/BaseUrl';
+import { verifyFunding } from '../../utils/ApiHelper';
 
 
 export default function FundWalletScreen({ navigation }) {
+    const [amount, setAmount] = useState('');
+    const [fundingComplete, setFundingComplete] = useState(false);
+    const paystackWebViewRef = useRef();
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     useEffect(() => {
         dispatch(getUser('v3/user/profile'));
     }, []);
 
+    useEffect(() => {
+        if (fundingComplete) {navigation.navigate('Home')}
+    }, [fundingComplete]);
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                    <WalletBalance balance={user.walletBalance} />
-                <FundAmount />
+                <WalletBalance balance={user.walletBalance} />
+                {/* <FundAmount /> */}
+                <View style={styles.balance}>
+                    <Text style={styles.walletTitle}>How Much To Fund? (&#8358;)</Text>
+                    <TextInput
+                        style={styles.availableAmount}
+                        value={amount}
+                        keyboardType="numeric"
+                        onChangeText={setAmount}
+                        autoFocus={true}
+                    />
+                    <View style={styles.flag}>
+                        <Image
+                            source={require('../../../assets/images/naija_flag.png')}
+                        />
+                        <Text style={styles.flagText}>NGN</Text>
+                    </View>
+                </View>
                 {/* <FundSource /> */}
-                <FundButton onPress={() => navigation.navigate('FundWalletCompleted')} text='Fund Wallet' />
+                <FundButton onPress={() => paystackWebViewRef.current.startTransaction()} text='Fund Wallet' />
                 {/* <RBSheet
                     ref={refRBSheet}
                     closeOnDragDown={true}
@@ -46,12 +72,27 @@ export default function FundWalletScreen({ navigation }) {
                 >
                     <BankDetails />
                 </RBSheet> */}
+                <Paystack
+                    paystackKey={paystackKey}
+                    billingEmail={user.email}
+                    amount={amount}
+                    onCancel={(e) => {
+                        // handle response here
+                        console.log(e)
+                    }}
+                    onSuccess={(res) => {
+                        verifyFunding(res.data.transactionRef.reference);
+                        setFundingComplete(true);
+                    }}
+
+                    ref={paystackWebViewRef}
+                />
             </ScrollView>
         </SafeAreaView>
     );
 }
 const FundAmount = () => {
-    const [amount, setAmount] = useState('');
+    // const [amount, setAmount] = useState('');
 
     return (
         <View style={styles.balance}>
@@ -60,7 +101,7 @@ const FundAmount = () => {
                 style={styles.availableAmount}
                 value={amount}
                 keyboardType="numeric"
-                onChange={setAmount}
+                onChangeText={setAmount}
                 autoFocus={true}
             />
             <View style={styles.flag}>
