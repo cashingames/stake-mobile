@@ -1,7 +1,6 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import {
-    getIsLoggedIn,
     getIsLoggedInOnce,
     login as loginApi,
     register as registerApi,
@@ -10,6 +9,7 @@ import {
     getGameBoosts as getGameBoostsApi,
     getData,
 } from '../../utils/ApiHelper';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const registerUser = createAsyncThunk(
     'auth/registerUser',
@@ -28,10 +28,18 @@ export const loginUser = createAsyncThunk(
     }
 )
 
+export const logoutUser = createAsyncThunk(
+    'auth/logoutUser',
+    async (data, thunkAPI) => {
+        await AsyncStorage.removeItem("token");
+        return true;
+    }
+)
+
 export const isLoggedIn = createAsyncThunk(
     'auth/isLoggedIn',
     async (thunkAPI) => {
-        return getIsLoggedIn();
+        return AsyncStorage.getItem("token");
     }
 )
 
@@ -98,6 +106,13 @@ export const AuthSlice = createSlice({
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
         builder
+            .addCase(logoutUser.fulfilled, (state) => {
+                state.token = "";
+                state.showIntro = false;
+                state.user = {};
+                state.passwordReset = {};
+                state.createAccount = {};
+            })
             .addCase(loginUser.fulfilled, (state, action) => {
                 // Add user to the state array
                 state.token = action.payload;

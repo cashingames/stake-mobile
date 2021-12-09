@@ -97,18 +97,10 @@ async function saveToken(data) {
     await AsyncStorage.setItem("used", "token");
 }
 
-async function getIsLoggedIn() {
-    return AsyncStorage.getItem("token").then(result => isTrue(result));
-}
-
 async function getIsLoggedInOnce() {
     return AsyncStorage.getItem("used").then(result => isTrue(result));
 }
 
-async function logout() {
-    // AsyncStorage.removeItem("used");
-    AsyncStorage.removeItem("token");
-}
 
-export { login, register, verifyUsername,getGameBoosts, saveToken, getIsLoggedIn, getIsLoggedInOnce, verifyAccount, verifyFunding, logout, verifyOtp };
+export { login, register, verifyUsername, saveToken, getIsLoggedInOnce, verifyAccount, verifyFunding, resetPassword, verifyOtp };
 export { getData, postData };

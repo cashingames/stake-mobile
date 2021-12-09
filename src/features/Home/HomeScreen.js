@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useNavigation } from '@react-navigation/native';
@@ -27,9 +27,7 @@ export default function HomeScreen({ navigation }) {
 
     useEffect(() => {
 
-        dispatch(getUser('v3/user/profile'));
-
-        var _1 = getData('v3/user/profile').then(response => response.data)
+        var _1 = dispatch(getUser('v3/user/profile'));
         var _2 = getData('v3/game/common').then(response => setCommonData(response.data))
         var _3 = getData('v2/leaders/global').then(response => setLeaders(response.data))
 
