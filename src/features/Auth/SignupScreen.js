@@ -10,8 +10,13 @@ import AuthInput from '../../shared/SignInInput';
 import SocialSigninDivider from '../../shared/SocialSigninDivider';
 import { CheckBox } from 'react-native-elements'
 import AuthTitle from '../../shared/AuthTitle';
+import { useDispatch } from 'react-redux';
+import { saveCreatedUserCredentials } from './AuthSlice';
 
 export default function SignupScreen({ navigation }) {
+
+    const dispatch = useDispatch();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
@@ -23,13 +28,8 @@ export default function SignupScreen({ navigation }) {
     const [checked, setChecked] = useState(false);
 
     const onChangeEmail = (text) => {
-        const re = /^\S+@\S+\.\S+$/;
-        if (!(re.test(text))) {
-            setEmailError(true);
-        } else {
-            setEmailError(false)
-        }
-
+        const rule = /^\S+@\S+\.\S+$/;
+        setEmailError(!rule.test(text))
         setEmail(text)
     }
     const onChangePassword = (text) => {
@@ -46,6 +46,7 @@ export default function SignupScreen({ navigation }) {
 
     const onNext = () => {
         //save this information in store
+        dispatch(saveCreatedUserCredentials({ email, password, phone }));
         navigation.navigate("SignupProfile")
     }
 

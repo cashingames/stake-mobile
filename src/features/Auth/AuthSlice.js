@@ -78,7 +78,8 @@ const initialState = {
     user: {},
     passwordReset: {
         email: 'oyekunmi@gmail.com'
-    }
+    },
+    createAccount: {}
 }
 
 export const AuthSlice = createSlice({
@@ -97,6 +98,9 @@ export const AuthSlice = createSlice({
         },
         setUserPasswordResetToken: (state, action) => {
             state.passwordReset.userCode = action.payload;
+        },
+        saveCreatedUserCredentials: (state, action) => {
+            state.createAccount = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -121,6 +125,6 @@ export const AuthSlice = createSlice({
     },
 });
 
-export const { setToken, setUser, showLogin, setUserPasswordResetToken } = AuthSlice.actions
+export const { setToken, setUser, showLogin, setUserPasswordResetToken, saveCreatedUserCredentials } = AuthSlice.actions
 
 export default AuthSlice.reducer

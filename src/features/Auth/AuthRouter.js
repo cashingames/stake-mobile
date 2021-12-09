@@ -32,7 +32,7 @@ const AuthRouter = () => {
         <AuthStack.Navigator screenOptions={{ title: "" }}>
             <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             <AuthStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
-            <AuthStack.Screen name="SignupProfile" component={SignupProfileScreen} options={{ title: "Let's get to know you" }} />
+            <AuthStack.Screen name="SignupProfile" component={SignupProfileScreen} />
 
             <AuthStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
             <AuthStack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
