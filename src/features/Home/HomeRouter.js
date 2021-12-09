@@ -11,6 +11,9 @@ import HomeScreen from './HomeScreen';
 import WalletScreen from '../Transactions/WalletScreen';
 import GameScreen from '../Games/GameScreen';
 import { logoutUser } from '../Auth/AuthSlice';
+import { isTrue } from '../../utils/stringUtl';
+
+import { backendUrl } from '../../utils/BaseUrl';
 
 const HomeStack = createDrawerNavigator();
 
@@ -65,9 +68,11 @@ const RightButtons = ({ options }) => {
 }
 
 function CustomDrawerContent(props) {
+
     const navigation = useNavigation();
-    const user = useSelector(state => state.auth.user)
     const dispatch = useDispatch();
+
+    const user = useSelector(state => state.auth.user)
 
     const onLogout = () => {
         dispatch(logoutUser());
@@ -77,8 +82,8 @@ function CustomDrawerContent(props) {
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
             <View style={drawStyles.sideHeader}>
                 <Image
-                    style={drawStyles.logo}
-                    source={require('../../../assets/images/user-icon.png')}
+                    style={drawStyles.avatar}
+                    source={isTrue(user.avatar) ? { uri: `${backendUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
                 />
                 <Text style={drawStyles.userTitle}> {user.fullName}</Text>
                 <Text style={drawStyles.userName}> @{user.username}</Text>
@@ -86,7 +91,7 @@ function CustomDrawerContent(props) {
             </View>
 
             <View style={drawStyles.menu}>
-                <DrawerItem
+                {/* <DrawerItem
                     label={() =>
                         <View style={drawStyles.labelName}>
                             <Text style={drawStyles.itemLabel}>Home</Text>
@@ -95,7 +100,7 @@ function CustomDrawerContent(props) {
                     onPress={() => navigation.navigate('Home')}
                     activeTintColor='#EF2F55'
                     style={drawStyles.label}
-                />
+                /> */}
             </View>
 
             <BorderlessButton onPress={onLogout} style={styles.logoutContainer}>
@@ -122,7 +127,6 @@ const styles = StyleSheet.create({
 const drawStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8F9FD',
     },
     sideHeader: {
         // flex: 2,
@@ -131,9 +135,10 @@ const drawStyles = StyleSheet.create({
         borderBottomColor: "rgba(0, 0, 0, 0.1)",
         paddingTop: normalize(35),
         paddingBottom: normalize(15),
+        backgroundColor: '#F8F9FD',
     },
-    logo: {
-        resizeMode: 'contain',
+    avatar: {
+        // resizeMode: 'cover',
         width: normalize(70),
         height: normalize(70),
         borderWidth: 1,

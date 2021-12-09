@@ -1,7 +1,6 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import {
-    getIsLoggedIn,
     getIsLoggedInOnce,
     login as loginApi,
     register as registerApi,
@@ -37,11 +36,10 @@ export const logoutUser = createAsyncThunk(
     }
 )
 
-
 export const isLoggedIn = createAsyncThunk(
     'auth/isLoggedIn',
     async (thunkAPI) => {
-        return getIsLoggedIn();
+        return AsyncStorage.getItem("token");
     }
 )
 
