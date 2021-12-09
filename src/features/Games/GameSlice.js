@@ -1,67 +1,15 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import {
-    getIsLoggedIn,
-    getIsLoggedInOnce,
-    login as loginApi,
-    register as registerApi,
-    verifyOtp as verifyOtpApi,
-    verifyAccount as verifyAccountApi,
     getGameBoosts as getGameBoostsApi,
     getData,
 } from '../../utils/ApiHelper';
 
-export const registerUser = createAsyncThunk(
-    'auth/registerUser',
-    async (data, thunkAPI) => {
-        const response = await registerApi(data);
-        return response.data
-        
-    }
-)
-
-export const loginUser = createAsyncThunk(
-    'auth/loginUser',
-    async (data, thunkAPI) => {
-        const response = await loginApi(data);
-        return response.data
-    }
-)
-
-export const isLoggedIn = createAsyncThunk(
-    'auth/isLoggedIn',
-    async (thunkAPI) => {
-        return getIsLoggedIn();
-    }
-)
-
-export const shouldShowIntro = createAsyncThunk(
-    'auth/shouldShowIntro',
-    async (thunkAPI) => {
-        return getIsLoggedInOnce();
-    }
-)
-
-export const verifyAccount = createAsyncThunk(
-    'auth/verifyAccount',
-    async (data, thunkAPI) => {
-        const response = await verifyAccountApi(data);
-        return response.data
-    }
-)
 
 export const getGameBoosts = createAsyncThunk(
     'auth/getGameBoosts',
     async (data, thunkAPI) => {
         const response = await getGameBoostsApi(data);
-        return response.data
-    }
-)
-
-export const verifyOtp = createAsyncThunk(
-    'auth/verifyOtp',
-    async (data, thunkAPI) => {
-        const response = await verifyOtpApi(data);
         return response.data
     }
 )
