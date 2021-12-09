@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { normalize } from '../constants/NormalizeFont';
+import normalize from '../../utils/normalize';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import Header from '../components/Header';
-import AppNextButton from '../components/AppNextButton';
+import AppNextButton from '../../shared/AppNextButton';
+
 
 const Toptab = createMaterialTopTabNavigator();
 
@@ -16,7 +16,6 @@ export default function GameScreen({ navigation }) {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <Header title="Games" />
                 <View style={styles.contentContainer}>
                     <View style={styles.content}>
                         <WinBig />
@@ -35,7 +34,7 @@ const WinBig = () => {
         <View style={styles.winBig}>
             <Text style={styles.winText}>Play today to win big</Text>
             <Image
-                source={require('../../assets/images/big_gamepad.png')}
+                source={require('../../../assets/images/big_gamepad.png')}
             />
         </View>
     )
@@ -49,7 +48,7 @@ const ProgressMessage = () => {
                 <Text style={styles.text}>Your result was up 75% last week. You can try harder this week.</Text>
             </View>
             <Image
-                source={require('../../assets/images/treasure_chest.png')}
+                source={require('../../../assets/images/treasure_chest.png')}
             />
         </View>
     )
@@ -118,7 +117,7 @@ const GameCategoryCard = ({ category, onSelect, isSelected }) => {
                 <View style={styles.select}>
                     <Image
                         style={styles.cardIcon}
-                        source={require('../../assets/images/music.png')}
+                        source={require('../../../assets/images/music.png')}
                     />
                     {!isSelected ? <Ionicons name="md-ellipse" size={24} color="#FFFF" /> :
                         <Ionicons name="md-checkmark-sharp" size={20} color="#FFFF" style={styles.checkIcon} />
@@ -196,7 +195,7 @@ const MyQuiz = () => {
     return (
         <View style={styles.myQuiz}>
             <Image
-                source={require('../../assets/images/myquiz.png')}
+                source={require('../../../assets/images/myquiz.png')}
             />
             <Text style={styles.didYouKnow}>Did you know?</Text>
             <Text style={styles.editQuiz}>Edit Quiz</Text>

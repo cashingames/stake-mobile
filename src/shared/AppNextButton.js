@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { normalize } from '../constants/NormalizeFont';
+import normalize from '../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -23,6 +23,7 @@ const AppNextButton = ({ text,onPress }) => {
     )
 };
 export default AppNextButton;
+
 const styles = StyleSheet.create({
     buttonContainer: {
         paddingBottom: normalize(20),
@@ -30,13 +31,13 @@ const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: normalize(12),
-        paddingHorizontal: normalize(32),
+        // paddingVertical: normalize(12),
+        // paddingHorizontal: normalize(32),
         borderRadius: 12,
     },
     playButton: {
         fontFamily: 'graphik-medium',
-        fontSize: normalize(12),
+        // sze: normalize(12),
         color: '#FFFF'
     },
 });

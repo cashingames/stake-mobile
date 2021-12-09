@@ -31,9 +31,11 @@
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-countdown-circle-timer": "^2.5.4",
     "react-native-countdown-component": "^2.7.1",
+    "react-native-dotenv": "^3.3.0",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-pager-view": "5.4.6",
+    "react-native-paystack-webview": "^4.0.3",
     "react-native-progress": "^5.0.0",
     "react-native-raw-bottom-sheet": "^2.2.0",
     "react-native-reanimated": "~2.2.0",
@@ -44,6 +46,7 @@
     "react-native-swiper-flatlist": "^3.0.15",
     "react-native-tab-view": "^3.1.1",
     "react-native-web": "0.17.1",
+    "react-native-webview": "11.13.0",
     "react-redux": "^7.2.6",
     "react-router": "^6.0.1",
     "redux": "^4.1.2",
@@ -51,7 +54,6 @@
     "redux-thunk": "^2.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
   },
   "private": true
 }

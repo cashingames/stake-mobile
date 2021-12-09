@@ -80,6 +80,13 @@ async function verifyUsername(username) {
 async function verifyAccount(data) {
     return axios.post(`${baseURL}/auth/password/email`, data);
 }
+async function verifyFunding(data) {
+    return getData('v2/wallet/me/transaction/verify/' + data)
+        .then(response => {
+            console.log(response.data);
+            return response.data;
+        });
+}
 
 async function verifyOtp(data) {
     return axios.post(`${baseURL}/auth/token/verify`, data)
@@ -107,5 +114,5 @@ async function logout() {
     AsyncStorage.removeItem("token");
 }
 
-export { login, register, verifyUsername, saveToken, getIsLoggedIn, getIsLoggedInOnce, verifyAccount, logout, verifyOtp, resetPassword };
+export { login, register, verifyUsername, saveToken, getIsLoggedIn, getIsLoggedInOnce, verifyAccount, verifyFunding, resetPassword, logout, verifyOtp };
 export { getData, postData };

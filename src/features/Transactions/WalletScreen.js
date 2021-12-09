@@ -1,39 +1,48 @@
-import * as React from 'react';
+import React, {useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { normalize } from '../constants/NormalizeFont';
+import normalize from '../../utils/normalize';
 // import currency from "../services/currency";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Header from '../components/Header';
+import Header from '../../shared/Header';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from '../Auth/AuthSlice';
+import WalletBalance from './WalletBalance';
 
 export default function WalletScreen({ navigation }) {
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user)
+    useEffect(() => {
+        dispatch(getUser('v3/user/profile'));
+    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <Header title="Wallet" />
-                <WalletBalance />
+                <WalletBalance balance={user.walletBalance} />
                 <FundButton />
-                <UserEarnings point="5000" />
+                <UserEarnings point={user.points} />
                 <TransactionLink />
             </ScrollView>
         </SafeAreaView>
     );
 }
-const WalletBalance = () => {
-    return (
-        <View style={styles.balance}>
-            <Text style={styles.walletTitle}>Wallet Balance</Text>
-            <Text style={styles.availableAmount}>&#8358;10,002.00</Text>
-        </View>
-    )
-};
+// const WalletBalance = ({balance}) => {
+//     return (
+//         <View style={styles.balance}>
+//             <Text style={styles.walletTitle}>Wallet Balance</Text>
+//             <Text style={styles.availableAmount}>&#8358;{balance}</Text>
+//         </View>
+//     )
+// };
 
 const FundButton = () => {
+    const navigation = useNavigation();
     return (
         <View style={styles.buttonContainer}>
             <Pressable
+                onPress={() => navigation.navigate('FundWallet')}
                 style={() => [
                     {
                         backgroundColor:

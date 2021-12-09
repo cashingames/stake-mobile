@@ -8,6 +8,7 @@ import {
     verifyOtp as verifyOtpApi,
     verifyAccount as verifyAccountApi,
     resetPassword as resetPasswordApi,
+    getData,
 } from '../../utils/ApiHelper';
 
 export const registerUser = createAsyncThunk(
@@ -72,6 +73,14 @@ export const resetPassword = createAsyncThunk(
     }
 )
 
+export const getUser = createAsyncThunk(
+    'auth/user/get',
+    async (data, thunkAPI) => {
+        const response = await getData('v3/user/profile');
+        return response.data
+    }
+)
+
 const initialState = {
     token: "",
     showIntro: false,
@@ -86,7 +95,7 @@ export const AuthSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setUser: (state) => {
+        setUser: (state, action) => {
             state.user = action.payload.user;
         },
         setToken: (state, action) => {
@@ -111,6 +120,10 @@ export const AuthSlice = createSlice({
             })
             .addCase(resetPassword.fulfilled, (state) => {
                 state.passwordReset = {};
+            })
+            .addCase(getUser.fulfilled, (state, action) => {
+                // Add user to the state array
+                state.user = action.payload;
             })
             .addCase(isLoggedIn.fulfilled, (state, action) => {
                 state.token = action.payload;
