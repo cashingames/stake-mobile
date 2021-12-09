@@ -25,7 +25,11 @@ const HomeRouter = () => {
             headerRight: (props) => <RightButtons {...props} />,
             headerRightContainerStyle: {
                 paddingRight: normalize(15),
-            }
+            },
+            headerStyle: {
+                height: normalize(100)
+            },
+            headerForceInset: { top: 'never', bottom: 'never' }
         };
     }
 
