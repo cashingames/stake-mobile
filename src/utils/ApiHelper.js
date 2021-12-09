@@ -3,10 +3,9 @@ import axios from "axios";
 
 import { baseURL } from "./BaseUrl";
 import { isTrue } from "./stringUtl";
-import store from './../store';
 
-(function () {
-    const token = store.getState().auth.token;
+(async function () {
+    const token = await AsyncStorage.getItem("token");
     if (token) {
         axios.defaults.headers.common['Authorization'] = token;
     } else {

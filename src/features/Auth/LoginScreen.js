@@ -20,8 +20,8 @@ export default function LoginScreen({ navigation }) {
 
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState('oyekunmi@gmail.com');
-    const [password, setPassword] = useState('Akinkunmi@1');
+    const [email, setEmail] = useState('arunajoy2602@gmail.com');
+    const [password, setPassword] = useState('12345678');
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -50,6 +50,7 @@ export default function LoginScreen({ navigation }) {
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);
                 setCanLogin(true);
+                console.log(rejectedValueOrSerializedError)
                 setError("Invalid username or password provided");
             })
     }
