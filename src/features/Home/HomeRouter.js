@@ -1,14 +1,16 @@
 import React from 'react';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
+import { useDispatch, useSelector } from 'react-redux';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useNavigation } from '@react-navigation/core';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { BorderlessButton, TouchableOpacity } from 'react-native-gesture-handler';
-import normalize from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
+
+import normalize from '../../utils/normalize';
 import HomeScreen from './HomeScreen';
 import WalletScreen from '../Transactions/WalletScreen';
 import GameScreen from '../Games/GameScreen';
-import TransactionScreen from '../Transactions/TransactionScreen';
+import { logoutUser } from '../Auth/AuthSlice';
 
 const HomeStack = createDrawerNavigator();
 
@@ -64,6 +66,13 @@ const RightButtons = ({ options }) => {
 
 function CustomDrawerContent(props) {
     const navigation = useNavigation();
+    const user = useSelector(state => state.auth.user)
+    const dispatch = useDispatch();
+
+    const onLogout = () => {
+        dispatch(logoutUser());
+    }
+
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
             <View style={drawStyles.sideHeader}>
@@ -71,8 +80,8 @@ function CustomDrawerContent(props) {
                     style={drawStyles.logo}
                     source={require('../../../assets/images/user-icon.png')}
                 />
-                <Text style={drawStyles.userTitle}> {"Oyesola Ogundele"}</Text>
-                <Text style={drawStyles.userName}> {"@username"}</Text>
+                <Text style={drawStyles.userTitle}> {user.fullName}</Text>
+                <Text style={drawStyles.userName}> @{user.username}</Text>
                 <TouchableOpacity style={drawStyles.profile}><Text style={drawStyles.viewProfile}>View Profile</Text></TouchableOpacity>
             </View>
 
@@ -87,39 +96,9 @@ function CustomDrawerContent(props) {
                     activeTintColor='#EF2F55'
                     style={drawStyles.label}
                 />
-                {/* <DrawerItem
-                    label={() =>
-                        <View style={drawStyles.labelName}>
-                            <Text style={drawStyles.itemLabel}>Home</Text>
-                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                        </View>}
-                    onPress={() => navigation.navigate('Home')}
-                    activeTintColor='#EF2F55'
-                    style={drawStyles.label}
-                />
-                <DrawerItem
-                    label={() =>
-                        <View style={drawStyles.labelName}>
-                            <Text style={drawStyles.itemLabel}>Home</Text>
-                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                        </View>}
-                    onPress={() => navigation.navigate('Home')}
-                    activeTintColor='#EF2F55'
-                    style={drawStyles.label}
-                />
-                <DrawerItem
-                    label={() =>
-                        <View style={drawStyles.labelName}>
-                            <Text style={drawStyles.itemLabel}>Home</Text>
-                            <Ionicons name='chevron-forward-outline' size={24} color='#7C7D7F' />
-                        </View>
-                    }
-                    onPress={() => navigation.navigate('Home')}
-                    activeTintColor='#EF2F55'
-                    style={drawStyles.label}
-                /> */}
             </View>
-            <BorderlessButton onPress={() => { }} style={styles.logoutContainer}>
+
+            <BorderlessButton onPress={onLogout} style={styles.logoutContainer}>
                 <Text style={drawStyles.logoutText}>Logout</Text>
             </BorderlessButton>
 
@@ -143,7 +122,6 @@ const styles = StyleSheet.create({
 const drawStyles = StyleSheet.create({
     container: {
         flex: 1,
-        marginBottom: 20,
         backgroundColor: '#F8F9FD',
     },
     sideHeader: {
@@ -201,18 +179,18 @@ const drawStyles = StyleSheet.create({
         justifyContent: 'center',
         borderColor: 'rgba(0, 0, 0, 0.1)',
         paddingVertical: normalize(10),
-        // backgroundColor: 'red',
     },
     labelName: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        // backgroundColor: 'yellow',
     },
     logoutText: {
-        color: '#fff',
+        color: 'red',
         textAlign: 'center',
-        fontSize: normalize(10),
+        fontSize: normalize(14),
         fontFamily: 'graphik-medium',
+        // backgroundColor: 'green',
+        paddingVertical: normalize(20),
     },
 });
 
