@@ -14,6 +14,7 @@ import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
 import { backendUrl } from '../../utils/BaseUrl';
+import { Drawer } from 'react-native-router-flux';
 
 const HomeStack = createDrawerNavigator();
 
@@ -31,6 +32,7 @@ const HomeRouter = () => {
     return (
         <HomeStack.Navigator
             initialRouteName="Home"
+            drawerHideStatusBarOnOpen="true"
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={AppMainHeaderOptions}>
             <HomeStack.Screen name="Game" component={GameScreen} options={{ title: 'Game' }} />
@@ -91,22 +93,22 @@ function CustomDrawerContent(props) {
             </View>
 
             <View style={drawStyles.menu}>
-                {/* <DrawerItem
+                <DrawerItem
                     label={() =>
-                        <View style={drawStyles.labelName}>
-                            <Text style={drawStyles.itemLabel}>Home</Text>
+                        <View style={drawStyles.item}>
+                            <Text style={drawStyles.itemLabel}>Store</Text>
                             <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                         </View>}
                     onPress={() => navigation.navigate('Home')}
                     activeTintColor='#EF2F55'
                     style={drawStyles.label}
-                /> */}
-            </View>
+                    labelContainerStyle
 
+                />
+            </View>
             <BorderlessButton onPress={onLogout} style={styles.logoutContainer}>
                 <Text style={drawStyles.logoutText}>Logout</Text>
             </BorderlessButton>
-
         </DrawerContentScrollView>
     );
 }
@@ -174,20 +176,20 @@ const drawStyles = StyleSheet.create({
     menu: {
         flex: 2,
     },
-    itemLabel: {
-        color: '#151C2F',
-        fontSize: normalize(12),
-        fontFamily: 'graphik-regular',
-    },
     label: {
         borderBottomWidth: 1,
-        justifyContent: 'center',
         borderColor: 'rgba(0, 0, 0, 0.1)',
         paddingVertical: normalize(10),
+
     },
-    labelName: {
+    item: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    itemLabel: {
+        color: '#151C2F',
+        fontSize: normalize(16),
+        fontFamily: 'graphik-regular',
     },
     logoutText: {
         color: 'red',
