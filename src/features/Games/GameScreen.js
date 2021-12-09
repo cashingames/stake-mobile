@@ -14,7 +14,6 @@ const Toptab = createMaterialTopTabNavigator();
 export default function GameScreen({ navigation }) {
 
     return (
-        <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.contentContainer}>
                     <View style={styles.content}>
@@ -25,7 +24,6 @@ export default function GameScreen({ navigation }) {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
     );
 }
 
@@ -228,11 +226,9 @@ const GamesTabs = () => {
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        // marginVertical: normalize(20)
-    },
+
     contentContainer: {
+        flex: 1,
         backgroundColor: '#F8F9FD',
     },
     content: {
