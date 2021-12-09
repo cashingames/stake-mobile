@@ -1,19 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-
 import { baseURL } from "./BaseUrl";
 import { isTrue } from "./stringUtl";
-
-(async function () {
-    const token = await AsyncStorage.getItem("token");
-    if (token) {
-        axios.defaults.headers.common['Authorization'] = token;
-    } else {
-        axios.defaults.headers.common['Authorization'] = null;
-        /*if setting null does not remove `Authorization` header then try  */
-        delete axios.defaults.headers.common['Authorization'];
-    }
-})();
 
 // Example POST method implementation:
 async function postData(url = '', data = {}) {
@@ -38,7 +25,6 @@ async function postData(url = '', data = {}) {
 
     return response.json(); // parses JSON response into native JavaScript objects
 }
-
 async function getData(url = '') {
     // Default options are marked with *
     var token = await AsyncStorage.getItem("token");
@@ -73,11 +59,15 @@ async function verifyUsername(username) {
     return postData('auth/username/verify/' + username)
         .then(response => {
             return response.data
+            // console.log(JSON.stringify(response.data) + " verified data");
         });
 }
 
 async function verifyAccount(data) {
-    return axios.post(`${baseURL}/auth/password/email`, data);
+    return postData('auth/password/email', data)
+        .then(response => {
+            return response.data;
+        });
 }
 async function verifyFunding(data) {
     return getData('v2/wallet/me/transaction/verify/' + data)
@@ -87,12 +77,19 @@ async function verifyFunding(data) {
         });
 }
 
-async function verifyOtp(data) {
-    return axios.post(`${baseURL}/auth/token/verify`, data)
+async function getGameBoosts(data) {
+    return getData('v2/game/boosts/' + data)
+        .then(response => {
+            console.log(response.data);
+            return response.data;
+        });
 }
 
-async function resetPassword(data) {
-    return axios.post(`${baseURL}/auth/password/reset/${data.email}`, data)
+async function verifyOtp(data) {
+    return postData('auth/token/verify', data)
+        .then(response => {
+            return response.data;
+        });
 }
 
 async function saveToken(data) {
@@ -103,6 +100,7 @@ async function saveToken(data) {
 async function getIsLoggedInOnce() {
     return AsyncStorage.getItem("used").then(result => isTrue(result));
 }
+
 
 export { login, register, verifyUsername, saveToken, getIsLoggedInOnce, verifyAccount, verifyFunding, resetPassword, verifyOtp };
 export { getData, postData };
