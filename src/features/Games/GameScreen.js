@@ -14,18 +14,16 @@ const Toptab = createMaterialTopTabNavigator();
 export default function GameScreen({ navigation }) {
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <View style={styles.contentContainer}>
-                    <View style={styles.content}>
-                        <WinBig />
-                        <ProgressMessage />
-                        <SelectCategory />
-                        <AppNextButton text='Proceed to Play' onPress={() => navigation.navigate('GameMode')} />
-                    </View>
+        <ScrollView>
+            <View style={styles.contentContainer}>
+                <View style={styles.content}>
+                    <WinBig />
+                    <ProgressMessage />
+                    <SelectCategory />
+                    <AppNextButton text='Proceed to Play' onPress={() => navigation.navigate('GameMode')} />
                 </View>
-            </ScrollView>
-        </SafeAreaView>
+            </View>
+        </ScrollView>
     );
 }
 
@@ -228,11 +226,8 @@ const GamesTabs = () => {
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        // marginVertical: normalize(20)
-    },
     contentContainer: {
+        flex: 1,
         backgroundColor: '#F8F9FD',
     },
     content: {
