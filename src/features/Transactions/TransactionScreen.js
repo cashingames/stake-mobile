@@ -1,49 +1,64 @@
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import normalize from '../../utils/normalize';
 // import currency from "../services/currency";
-import { useDispatch, useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getUser } from '../Auth/AuthSlice';
 import PageHeader from '../../shared/PageHeader';
 
 export default function TransactionScreen({ navigation }) {
-    const dispatch = useDispatch();
-    const transactions = useSelector(state => state.auth.user.transactions)
-    useEffect(() => {
-        dispatch(getUser('v3/user/profile'));
-        // console.log(JSON.stringify(user.transactions) + 'madam');
-    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                {transactions && (
-                    <View>
-                        {transactions.map((x, i) => <FundTransactions key={i} transaction={x} />)}
-                        {transactions.length === 0 && <Text>No recent transactions</Text>}
-                    </View>
-                )}
+                <PageHeader title="Transactions" />
+                <FundTransactions
+                    naration="Fund Received"
+                    amount="&#8358;2,000"
+                    details="Card deposit"
+                    date="20 Apr, 2021"
+                    arrow={require('../../../assets/images/up_arrow.png')}
+                />
+                <FundTransactions
+                    naration="Fund Withdrawal"
+                    amount="&#8358;2,000"
+                    details="3 Answer wipe x2"
+                    date="20 Apr, 2021"
+                    arrow={require('../../../assets/images/up_arrow.png')}
+                />
+                <FundTransactions
+                    naration="Fund Received"
+                    amount="&#8358;2,000"
+                    details="Card deposit"
+                    date="20 Apr, 2021"
+                    arrow={require('../../../assets/images/up_arrow.png')}
+                />
+                <FundTransactions
+                    naration="Fund Received"
+                    amount="&#8358;2,000"
+                    details="Card deposit"
+                    date="20 Apr, 2021"
+                    arrow={require('../../../assets/images/up_arrow.png')}
+                />
             </ScrollView>
         </SafeAreaView>
     );
 }
 
-const FundTransactions = ({ transaction}) => {
+const FundTransactions = ({ naration, amount, details, date, arrow }) => {
     return (
         <View style={styles.transactionDetails}>
             <View style={styles.narationDetails}>
                 <View style={styles.naration}>
-                    {/* <Image
+                    <Image
                         source={arrow}
-                    /> */}
-                    <Text style={styles.narationTitle}>{transaction.type}</Text>
+                    />
+                    <Text style={styles.narationTitle}>{naration}</Text>
                 </View>
-                <Text style={transaction.type === "DEBIT" ? styles.transactionAmountWithdraw : styles.transactionAmountReceived}>{transaction.amount}</Text>
+                <Text style={styles.transactionAmountReceived}>{amount}</Text>
             </View>
             <View style={styles.typeAndDate}>
-                <Text style={styles.transactionType}>{transaction.description}</Text>
-                <Text style={styles.transactionType}>{transaction.transactionDate}</Text>
+                <Text style={styles.transactionType}>{details}</Text>
+                <Text style={styles.transactionType}>{date}</Text>
             </View>
         </View>
     )
@@ -88,16 +103,17 @@ const styles = StyleSheet.create({
     transactionAmountWithdraw: {
         fontFamily: 'graphik-bold',
         fontSize: normalize(14),
-        color: '#EB5757'
+        color: '#219653'
     },
     narationTitle: {
         fontFamily: 'graphik-medium',
         fontSize: normalize(12),
+        marginLeft: normalize(10),
         color: '#4F4F4F'
     },
     transactionType: {
         fontFamily: 'graphik-regular',
-        fontSize: normalize(10),
+        fontSize: normalize(12),
         color: '#C4C4C4'
     },
 });

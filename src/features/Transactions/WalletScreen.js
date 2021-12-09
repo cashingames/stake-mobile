@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
@@ -18,15 +18,24 @@ export default function WalletScreen({ navigation }) {
     }, []);
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            <ScrollView>
                 <WalletBalance balance={user.walletBalance} />
                 <FundButton />
                 <UserEarnings point={user.points} />
-                <TransactionLink /></View>
-        </ScrollView>
+                <TransactionLink />
+            </ScrollView>
+        </SafeAreaView>
     );
 }
+// const WalletBalance = ({balance}) => {
+//     return (
+//         <View style={styles.balance}>
+//             <Text style={styles.walletTitle}>Wallet Balance</Text>
+//             <Text style={styles.availableAmount}>&#8358;{balance}</Text>
+//         </View>
+//     )
+// };
 
 const FundButton = () => {
     const navigation = useNavigation();
@@ -63,12 +72,12 @@ const UserEarnings = ({ point }) => {
 const TransactionLink = () => {
     const navigation = useNavigation();
     return (
-        <TouchableOpacity onPress={() => navigation.navigate('Transactions')}>
-            <View style={styles.link}>
-                <Text style={styles.linkTitle}>See Transactions</Text>
+        <View style={styles.link}>
+            <Text style={styles.linkTitle}>See Transactions</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('TransactionScreen')}>
                 <Ionicons name="md-arrow-forward-sharp" size={24} color="#EF2F55" />
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+        </View>
     )
 };
 
@@ -78,7 +87,15 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F2F5FF'
     },
-
+    balance: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: normalize(38),
+        borderColor: 'rgba(0, 0, 0, 0.15)',
+        borderBottomWidth: normalize(1),
+        backgroundColor: '#fff',
+    },
     walletTitle: {
         fontFamily: 'graphik-medium',
         fontSize: normalize(10),

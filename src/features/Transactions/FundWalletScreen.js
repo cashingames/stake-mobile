@@ -23,11 +23,10 @@ export default function FundWalletScreen({ navigation }) {
     const user = useSelector(state => state.auth.user)
     useEffect(() => {
         dispatch(getUser('v3/user/profile'));
-        console.log(JSON.stringify(user.transactions.type) + 'madam');
     }, []);
 
     useEffect(() => {
-        if (fundingComplete) {navigation.navigate('Wallet')}
+        if (fundingComplete) {navigation.navigate('Home')}
     }, [fundingComplete]);
 
     return (
