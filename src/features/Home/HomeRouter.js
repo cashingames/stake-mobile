@@ -53,7 +53,7 @@ const RightButtons = ({ options }) => {
                     source={require('../../../assets/images/Home.png')}
                 />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Game')}>
+            <TouchableOpacity onPress={() => navigation.navigate('GameBoosts')}>
                 <Image
                     style={styles.pageIcon}
                     source={require('../../../assets/images/gamepad.png')}

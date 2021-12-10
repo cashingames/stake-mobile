@@ -68,6 +68,14 @@ async function login(data) {
         });
 }
 
+async function getCommonData() {
+    return getData('v3/game/common')
+        .then(response => {
+            return response;
+        });
+}
+
+
 async function verifyUsername(username) {
     console.log(username);
     return postData('auth/username/verify/' + username)
@@ -104,5 +112,5 @@ async function getIsLoggedInOnce() {
     return AsyncStorage.getItem("used").then(result => isTrue(result));
 }
 
-export { login, register, verifyUsername, saveToken, getIsLoggedInOnce, verifyAccount, verifyFunding, resetPassword, verifyOtp };
+export { login, register, verifyUsername, saveToken, getIsLoggedInOnce, getCommonData,verifyAccount, verifyFunding, resetPassword, verifyOtp };
 export { getData, postData };

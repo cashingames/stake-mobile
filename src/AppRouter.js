@@ -13,6 +13,7 @@ import { isLoggedIn } from './features/Auth/AuthSlice';
 import FundWalletScreen from './features/Transactions/FundWalletScreen';
 import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
 import TransactionScreen from './features/Transactions/TransactionScreen';
+import GameBoosts from './features/Store/GameBoosts';
 
 
 const AppStack = createNativeStackNavigator();
@@ -48,6 +49,7 @@ function AppRouter() {
             <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Extended Leaderboard' }} />
             <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
             <AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
+            <AppStack.Screen name="GameBoosts" component={GameBoosts} options={{ title: 'Transactions' }} />
             <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
 
         </AppStack.Navigator>
