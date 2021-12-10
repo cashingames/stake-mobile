@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/core';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { BorderlessButton, TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
+import { useRoute } from '@react-navigation/native';
 
 import normalize from '../../utils/normalize';
 import HomeScreen from './HomeScreen';
@@ -14,7 +15,6 @@ import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
 import { backendUrl } from '../../utils/BaseUrl';
-import { Drawer } from 'react-native-router-flux';
 
 const HomeStack = createDrawerNavigator();
 
@@ -25,7 +25,11 @@ const HomeRouter = () => {
             headerRight: (props) => <RightButtons {...props} />,
             headerRightContainerStyle: {
                 paddingRight: normalize(15),
-            }
+            },
+            headerStyle: {
+                height: normalize(100)
+            },
+            headerForceInset: { top: 'never', bottom: 'never' }
         };
     }
 
@@ -44,26 +48,20 @@ const HomeRouter = () => {
 
 const RightButtons = ({ options }) => {
     const navigation = useNavigation();
+    const route = useRoute();
+
+    const routeName = route.name
 
     return (
         <View style={styles.headerIcons}>
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                <Image
-                    style={styles.pageIcon}
-                    source={require('../../../assets/images/Home.png')}
-                />
+                <Ionicons style={[styles.pageIcon, routeName === 'Home' ? styles.activePageIcon : {}]} name='home-outline' size={24} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('GameBoosts')}>
-                <Image
-                    style={styles.pageIcon}
-                    source={require('../../../assets/images/gamepad.png')}
-                />
+            <TouchableOpacity onPress={() => navigation.navigate('Game')}>
+                <Ionicons style={[styles.pageIcon, routeName === 'Game' ? styles.activePageIcon : {}]} name='game-controller-outline' size={24} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Wallet')}>
-                <Image
-                    style={styles.pageIcon}
-                    source={require('../../../assets/images/smallpurse.png')}
-                />
+                <Ionicons style={[styles.pageIcon, routeName === 'Wallet' ? styles.activePageIcon : {}]} name='wallet-outline' size={24} />
             </TouchableOpacity>
         </View>
     )
@@ -121,9 +119,11 @@ const styles = StyleSheet.create({
     },
     pageIcon: {
         marginLeft: normalize(20),
-        width: normalize(20),
-        height: normalize(20),
+        color: '#aaa'
     },
+    activePageIcon: {
+        color: '#000'
+    }
 });
 
 const drawStyles = StyleSheet.create({
