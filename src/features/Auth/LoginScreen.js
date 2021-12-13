@@ -10,7 +10,7 @@ import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import SocialSignUp from '../../shared/SocialSignUp';
 import AuthBanner from '../../shared/AuthBanner';
-import AuthInput from '../../shared/SignInInput';
+import Input from '../../shared/Input';
 import SocialSigninDivider from '../../shared/SocialSigninDivider';
 import { loginUser } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -74,14 +74,14 @@ export default function LoginScreen({ navigation }) {
                         <Text style={styles.errorBox}>{error}</Text>
                     }
 
-                    <AuthInput
+                    <Input
                         label='Email or username'
                         placeholder="johndoe or johndoe@example.com"
                         value={email}
                         onChangeText={text => onChangeEmail(text)}
                     />
 
-                    <AuthInput
+                    <Input
                         type="password"
                         label='Password'
                         value={password}

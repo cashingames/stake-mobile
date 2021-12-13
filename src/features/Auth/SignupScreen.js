@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import SocialSignUp from '../../shared/SocialSignUp';
 import { Link, useNavigation } from '@react-navigation/native';
 import AuthBanner from '../../shared/AuthBanner';
-import AuthInput from '../../shared/SignInInput';
+import Input from '../../shared/Input';
 import SocialSigninDivider from '../../shared/SocialSigninDivider';
 import { CheckBox } from 'react-native-elements'
 import AuthTitle from '../../shared/AuthTitle';
@@ -32,6 +32,7 @@ export default function SignupScreen({ navigation }) {
         setEmailError(!rule.test(text))
         setEmail(text)
     }
+
     const onChangePassword = (text) => {
         text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
         setPassword(text)
@@ -64,7 +65,7 @@ export default function SignupScreen({ navigation }) {
 
             <View style={styles.inputContainer}>
 
-                <AuthInput
+                <Input
                     label='Email'
                     placeholder="johndoe@example.com"
                     value={email}
@@ -73,7 +74,7 @@ export default function SignupScreen({ navigation }) {
                     onChangeText={text => onChangeEmail(text)}
                 />
 
-                <AuthInput
+                <Input
                     label='Phone Number'
                     placeholder="080xxxxxxxx"
                     value={phone}
@@ -83,7 +84,7 @@ export default function SignupScreen({ navigation }) {
                     keyboardType="numeric"
                 />
 
-                <AuthInput
+                <Input
                     type="password"
                     label='Password'
                     value={password}
@@ -92,7 +93,7 @@ export default function SignupScreen({ navigation }) {
                     onChangeText={text => { onChangePassword(text) }}
                 />
 
-                <AuthInput
+                <Input
                     type="password"
                     label='Password'
                     value={password_confirmation}

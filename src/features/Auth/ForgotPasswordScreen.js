@@ -5,7 +5,7 @@ import { StyleSheet, View, Text } from 'react-native';
 
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
-import AuthInput from '../../shared/SignInInput';
+import Input from '../../shared/Input';
 import { verifyAccount } from './AuthSlice';
 
 export default function ({ navigation }) {
@@ -52,7 +52,7 @@ export default function ({ navigation }) {
                         <Text style={styles.errorBox}>{error}</Text>
                     }
 
-                    <AuthInput
+                    <Input
                         label='Email or username'
                         placeholder="johndoe or johndoe@example.com"
                         value={email}

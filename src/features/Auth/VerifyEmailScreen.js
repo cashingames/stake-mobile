@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
 
 import AppButton from '../../shared/AppButton';
-import AuthInput from '../../shared/SignInInput';
+import Input from '../../shared/Input';
 import normalize from '../../utils/normalize';
 import { setUserPasswordResetToken } from './AuthSlice';
 
@@ -75,35 +75,35 @@ export default function VerifyEmailScreen({ navigation, route }) {
 
             <View style={styles.form}>
 
-                <AuthInput
+                <Input
                     style={styles.input}
                     onChangeText={text => onChangeInput1(text)}
                     maxLength={1}
                     keyboardType="numeric"
                 />
 
-                <AuthInput
+                <Input
                     style={styles.input}
                     onChangeText={text => onChangeInput2(text)}
                     maxLength={1}
                     keyboardType="numeric"
                 />
 
-                <AuthInput
+                <Input
                     style={styles.input}
                     onChangeText={text => onChangeInput3(text)}
                     maxLength={1}
                     keyboardType="numeric"
                 />
 
-                <AuthInput
+                <Input
                     style={styles.input}
                     onChangeText={text => onChangeInput4(text)}
                     maxLength={1}
                     keyboardType="numeric"
                 />
 
-                <AuthInput
+                <Input
                     style={styles.input}
                     onChangeText={text => onChangeInput5(text)}
                     maxLength={1}

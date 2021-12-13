@@ -10,6 +10,7 @@ import WalletBalance from './WalletBalance';
 import { Paystack } from 'react-native-paystack-webview';
 import { paystackKey } from '../../utils/BaseUrl';
 import { verifyFunding } from '../../utils/ApiHelper';
+import Input from '../../shared/Input';
 
 
 export default function FundWalletScreen({ navigation }) {
@@ -33,7 +34,7 @@ export default function FundWalletScreen({ navigation }) {
                 {/* <FundAmount /> */}
                 <View style={styles.balance}>
                     <Text style={styles.walletTitle}>How much do you want to deposit ? (&#8358;)</Text>
-                    <TextInput
+                    <Input
                         style={styles.availableAmount}
                         value={amount}
                         keyboardType="numeric"
@@ -89,7 +90,7 @@ export default function FundWalletScreen({ navigation }) {
     );
 }
 const FundAmount = () => {
-    // const [amount, setAmount] = useState('');
+    const [amount, setAmount] = useState('');
 
     return (
         <View style={styles.balance}>

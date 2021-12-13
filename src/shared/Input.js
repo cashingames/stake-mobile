@@ -4,7 +4,7 @@ import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 
 
-const AuthInput = (props) => {
+export default function (props) {
     const { label, type, error } = props;
 
     const [hidden, setHidden] = useState(type === "password");
@@ -72,5 +72,3 @@ const styles = StyleSheet.create({
         fontSize: normalize(10)
     }
 });
-
-export default AuthInput
