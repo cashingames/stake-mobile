@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
-// import currency from "../services/currency";
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Header from '../../shared/Header';
+
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
@@ -14,7 +12,7 @@ export default function WalletScreen({ navigation }) {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     useEffect(() => {
-        dispatch(getUser('v3/user/profile'));
+        dispatch(getUser());
     }, []);
 
     return (
@@ -49,7 +47,6 @@ const FundButton = () => {
 };
 
 const UserEarnings = ({ point }) => {
-    const navigation = useNavigation();
     return (
         <View style={styles.earnings}>
             <Text style={styles.earningText}>Your available point balance</Text>

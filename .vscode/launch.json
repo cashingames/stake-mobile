@@ -10,7 +10,7 @@
             "type": "reactnative",
             "request": "launch",
             "platform": "exponent",
-            // "expoHostType": "local",
+            "expoHostType": "local",
         }
     ]
 }

@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, TextInput, Image,TouchableOpacity, Text, View } from 'react-native';
-// import { Text, View,  } from './Themed';
+import { StyleSheet, Image, TouchableOpacity, Text, View } from 'react-native';
 import normalize from '../utils/normalize';
 
 
@@ -15,7 +14,7 @@ export default function SocialSignUp({ action }) {
                 />
                 <Text style={styles.social}>Google</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={action} >
+            {/* <TouchableOpacity onPress={action} >
                 <Image
                     style={{ ...styles.icon, width: 11, height: 23 }}
                     source={require('../../assets/images/facebook_icon.png')}
@@ -28,19 +27,16 @@ export default function SocialSignUp({ action }) {
                     source={require('../../assets/images/apple_icon.png')}
                 />
                 <Text style={styles.social}>Apple</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     );
-
-
-
 }
 
 const styles = StyleSheet.create({
     socialIcons: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'center'
     },
     icon: {
         position: 'absolute',
@@ -58,5 +54,5 @@ const styles = StyleSheet.create({
         marginTop: normalize(23),
         fontFamily: 'graphik-regular'
     },
-   
+
 });

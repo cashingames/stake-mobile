@@ -2,33 +2,29 @@ import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
-// import currency from "../services/currency";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
 import WalletBalance from './WalletBalance';
-import HeaderBack from '../../shared/HeaderBack';
-import RBSheet from "react-native-raw-bottom-sheet";
-import { Paystack, paystackProps } from 'react-native-paystack-webview';
+import { Paystack } from 'react-native-paystack-webview';
 import { paystackKey } from '../../utils/BaseUrl';
 import { verifyFunding } from '../../utils/ApiHelper';
 
 
 export default function FundWalletScreen({ navigation }) {
-    const [amount, setAmount] = useState('');
-    const [fundingComplete, setFundingComplete] = useState(false);
-    const paystackWebViewRef = useRef();
     const dispatch = useDispatch();
-    const user = useSelector(state => state.auth.user)
-    useEffect(() => {
-        dispatch(getUser('v3/user/profile'));
-        console.log(JSON.stringify(user.transactions.type) + 'madam');
-    }, []);
 
-    useEffect(() => {
-        if (fundingComplete) { navigation.navigate('Wallet') }
-    }, [fundingComplete]);
+    const [amount, setAmount] = useState('');
+    const user = useSelector(state => state.auth.user)
+
+    const paystackWebViewRef = useRef();
+
+    const transactionCompleted = (res) => {
+        navigation.navigate('Wallet')
+        verifyFunding(res.data.transactionRef.reference);
+        dispatch(getUser());
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -36,13 +32,14 @@ export default function FundWalletScreen({ navigation }) {
                 <WalletBalance balance={user.walletBalance} />
                 {/* <FundAmount /> */}
                 <View style={styles.balance}>
-                    <Text style={styles.walletTitle}>How Much To Fund? (&#8358;)</Text>
+                    <Text style={styles.walletTitle}>How much do you want to deposit ? (&#8358;)</Text>
                     <TextInput
                         style={styles.availableAmount}
                         value={amount}
                         keyboardType="numeric"
                         onChangeText={setAmount}
                         autoFocus={true}
+                        placeholder='500'
                     />
                     <View style={styles.flag}>
                         <Image
@@ -82,8 +79,7 @@ export default function FundWalletScreen({ navigation }) {
                         console.log(e)
                     }}
                     onSuccess={(res) => {
-                        verifyFunding(res.data.transactionRef.reference);
-                        setFundingComplete(true);
+                        transactionCompleted(res);
                     }}
 
                     ref={paystackWebViewRef}
@@ -97,7 +93,7 @@ const FundAmount = () => {
 
     return (
         <View style={styles.balance}>
-            <Text style={styles.walletTitle}>How Much To Fund? (&#8358;)</Text>
+            <Text style={styles.walletTitle}>How much do you want to deposit? (&#8358;)</Text>
             <TextInput
                 style={styles.availableAmount}
                 value={amount}
@@ -114,14 +110,7 @@ const FundAmount = () => {
         </View>
     )
 };
-// const WalletBalance = () => {
-//     const [userbalance, setUserBalance] = useState(3000)
-//     return (
-//         <View>
-//             <Text style={styles.walletTitle}>Bal: &#8358;{userbalance}</Text>
-//         </View>
-//     )
-// };
+
 
 const FundButton = ({ onPress, text }) => {
     return (
@@ -249,7 +238,9 @@ const styles = StyleSheet.create({
         fontFamily: 'graphik-bold',
         fontSize: normalize(40),
         color: '#333333',
-        marginVertical: normalize(20)
+        marginVertical: normalize(20),
+        width: normalize(100),
+        textAlign: 'center',
     },
     buttonContainer: {
         // borderColor: 'rgba(0, 0, 0, 0.15)',

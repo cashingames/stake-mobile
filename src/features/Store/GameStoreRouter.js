@@ -21,7 +21,7 @@ export default function GameStoreRouter({ navigation }) {
                 backgroundColor: '#F8F9FD'
             }}
         >
-            <Toptab.Screen name="PurchaseBoosts" component={PurchaseBoostsScreen} options={{ tabBarLabel: 'Boosts', }} />
+            <Toptab.Screen name="PurchaseBoosts" component={PurchaseBoostsScreen} options={{ tabBarLabel: 'Purchase', }} />
             <Toptab.Screen name="MyBoosts" component={MyBoostsScreen} options={{ tabBarLabel: 'My Items' }} />
         </Toptab.Navigator>
     );
