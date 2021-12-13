@@ -26,10 +26,10 @@ const HomeRouter = () => {
             headerRightContainerStyle: {
                 paddingRight: normalize(15),
             },
+            // headerShadowVisible: false,
             headerStyle: {
                 height: normalize(100)
             },
-            headerForceInset: { top: 'never', bottom: 'never' }
         };
     }
 
@@ -97,7 +97,7 @@ function CustomDrawerContent(props) {
                             <Text style={drawStyles.itemLabel}>Store</Text>
                             <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                         </View>}
-                    onPress={() => navigation.navigate('Home')}
+                    onPress={() => navigation.navigate('GameStore')}
                     activeTintColor='#EF2F55'
                     style={drawStyles.label}
                     labelContainerStyle

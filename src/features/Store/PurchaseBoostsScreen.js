@@ -1,44 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import normalize from '../../utils/normalize';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Dimensions } from 'react-native';
 import { backendUrl } from '../../utils/BaseUrl';
-import { useDispatch, useSelector } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { fetchBoosts } from './StoreSlice';
-import { getStoreData } from '../Store/StoreSlice';
-
-const Toptab = createMaterialTopTabNavigator();
-
-export default function GameBoosts({ navigation }) {
-    const dispatch = useDispatch();
+import { useSelector } from 'react-redux';
 
 
-    useEffect(() => {
-        dispatch(getStoreData()).then(unwrapResult)
-            .then((originalPromiseResult) => {
-                dispatch(fetchBoosts(originalPromiseResult.boosts))
-                //console.log(originalPromiseResult)
-            })
-            .catch((rejectedValueOrSerializedError) => {
+export default function () {
 
-                console.log(rejectedValueOrSerializedError)
-            })
-    }, []);
+    const boosts = useSelector(state => state.common.boosts);
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <View style={styles.content}>
-                    <GamesTabs />
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+        <View style={styles.availableBoosts}>
+            <Text style={styles.title}>Get Boosts</Text>
+            <View style={styles.boostCards}>
+                {boosts.map((boost, i) => <BoostCard key={i} boost={boost} />)}
+            </View>
+        </View>
     );
 }
+
 
 
 const BoostCard = ({ boost }) => {
@@ -64,127 +45,15 @@ const BoostCard = ({ boost }) => {
     )
 }
 
-const BoostCards = () => {
-    const boosts = useSelector(state => state.store.boosts);
-    return (
-        <View style={styles.availableBoosts1}>
-            <Text style={styles.title}>Get Boosts</Text>
-            <View style={styles.boostCards}>
-                {boosts.map((boost) => <BoostCard boost={boost} />)}
-            </View>
-        </View>
-
-    )
-}
-
-const MyItem = ({ boost }) => {
-    return (
-        <TouchableOpacity>
-            <View style={styles.boostContainer}>
-                <View style={styles.iconContainer}>
-                    <Image
-                        source={boost.boostIcon}
-                        style={styles.boostIcon}
-                    />
-                    <View style={styles.hr}><Text></Text></View>
-                </View>
-                <Text style={styles.boostName}>{boost.boostName}</Text>
-                <Text style={styles.number}>{boost.numberOfBoost}</Text>
-                <Text style={styles.description}>{boost.boostDescription}</Text>
-            </View>
-        </TouchableOpacity>
-    )
-}
-
-const MyItems = () => {
-    const boosts = [
-        {
-            id: 1,
-            boostIcon: require('../../../assets/images/time_freeze.png'),
-            numberOfBoost: "x5",
-            boostName: 'Time Freeze',
-            boostDescription: 'Time freeze for 15 seconds',
-        },
-        // {
-        //     id: 2,
-        //     boostIcon: require('../../assets/images/skip.png'),
-        //     numberOfBoost: "x3",
-        //     boostName: 'Skip',
-        //     boostDescription: 'Answer a different question',
-        // },
-        // {
-        //     id: 3,
-        //     boostIcon: require('../../assets/images/malware.png'),
-        //     numberOfBoost: "x3",
-        //     boostName: 'Bomb',
-        //     boostDescription: 'Removes two wrong answers',
-        // }
-    ]
-    return (
-        <View style={styles.availableBoosts1}>
-            <View style={styles.boostCards}>
-                {boosts.map((boost) => <MyItem boost={boost} />)}
-            </View>
-        </View>
-
-    )
-}
-
-
-
-const GamesTabs = () => {
-
-    return (
-        <Toptab.Navigator screenOptions={{
-            tabBarLabelStyle: { fontSize: 12, fontFamily: 'graphik-medium', },
-            tabBarStyle: { backgroundColor: '#FFFF' },
-            tabBarInactiveTintColor: '#7C7D7F',
-            tabBarActiveTintColor: '#151C2F',
-            tabBarIndicatorStyle: { backgroundColor: '#EB5757' },
-        }}
-            sceneContainerStyle={{ backgroundColor: '#F8F9FD' }}
-            style={{ height: Dimensions.get('window').height }}
-        // height: Dimensions.get('window').height
-        >
-            <Toptab.Screen name="Boosts" component={BoostCards} />
-            <Toptab.Screen name="My Items" component={MyItems} />
-        </Toptab.Navigator>
-    )
-};
-
-
-
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFFF',
-        // marginVertical: normalize(20)
-    },
-    contentContainer: {
-        backgroundColor: '#F8F9FD',
-    },
-    content: {
-        // marginHorizontal: normalize(18),
 
-    },
-    header: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-
-        paddingHorizontal: normalize(20),
-        paddingTop: normalize(15),
-    },
-    headerTextStyle: {
-        fontSize: normalize(14),
-        fontFamily: 'graphik-medium',
-        color: 'black',
-        marginLeft: normalize(15),
-    },
-    availableBoosts1: {
+    availableBoosts: {
         paddingVertical: normalize(20),
         paddingHorizontal: normalize(20),
+    },
+    title: {
+        fontFamily: 'graphik-bold',
+        fontWeight: '900',
     },
     iconContainer: {
         backgroundColor: '#FFFF',
@@ -199,6 +68,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
+        marginTop: normalize(15),
+
     },
     boostContainer: {
         alignItems: 'center',

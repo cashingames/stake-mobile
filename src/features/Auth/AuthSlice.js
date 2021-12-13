@@ -83,7 +83,7 @@ export const resetPassword = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
     'auth/user/get',
-    async (data, thunkAPI) => {
+    async (thunkAPI) => {
         const response = await getData('v3/user/profile');
         return response.data
     }

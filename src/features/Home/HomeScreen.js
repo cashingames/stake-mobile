@@ -12,14 +12,15 @@ import { backendUrl } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { getCommonData } from '../CommonSlice';
 
 export default function HomeScreen({ navigation }) {
 
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user)
+    const gameTypes = useSelector(state => state.common.gameTypes)
 
-    const [commonData, setCommonData] = useState({});
     const [leaders, setLeaders] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -28,8 +29,8 @@ export default function HomeScreen({ navigation }) {
     useEffect(() => {
 
         var _1 = dispatch(getUser('v3/user/profile'));
-        var _2 = getData('v3/game/common').then(response => setCommonData(response.data))
         var _3 = getData('v2/leaders/global').then(response => setLeaders(response.data))
+        var _2 = dispatch(getCommonData());
 
         Promise.all([_1, _2, _3]).then(values => {
             setLoading(false);
@@ -43,7 +44,7 @@ export default function HomeScreen({ navigation }) {
     return (
         <ScrollView>
             <UserDetails user={user} />
-            <GameCards games={commonData.gameTypes} />
+            <GameCards games={gameTypes} />
             <RecentlyPlayedCards games={user.recentGames} />
             <Leaderboard leaders={leaders} />
         </ScrollView>

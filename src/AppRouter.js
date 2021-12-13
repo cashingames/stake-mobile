@@ -13,7 +13,7 @@ import { isLoggedIn } from './features/Auth/AuthSlice';
 import FundWalletScreen from './features/Transactions/FundWalletScreen';
 import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
 import TransactionScreen from './features/Transactions/TransactionScreen';
-import GameBoosts from './features/Store/GameBoosts';
+import GameStoreRouter from './features/Store/GameStoreRouter';
 
 
 const AppStack = createNativeStackNavigator();
@@ -46,11 +46,15 @@ function AppRouter() {
         <AppStack.Navigator>
 
             <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
-            <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Extended Leaderboard' }} />
-            <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
-            <AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
-            <AppStack.Screen name="GameBoosts" component={GameBoosts} options={{ title: 'Transactions' }} />
-            <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
+
+            <AppStack.Group >
+                <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Extended Leaderboard' }} />
+                <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
+                <AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
+                <AppStack.Screen name="GameStore" component={GameStoreRouter} options={{ title: 'Store', headerShadowVisible: false }} />
+                <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
+            </AppStack.Group>
+
 
         </AppStack.Navigator>
     )

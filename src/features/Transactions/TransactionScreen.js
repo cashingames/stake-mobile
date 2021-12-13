@@ -1,42 +1,34 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import normalize from '../../utils/normalize';
-// import currency from "../services/currency";
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { getUser } from '../Auth/AuthSlice';
-import PageHeader from '../../shared/PageHeader';
+import normalize from '../../utils/normalize';
 
 export default function TransactionScreen({ navigation }) {
+
     const dispatch = useDispatch();
-    const transactions = useSelector(state => state.auth.user.transactions)
+    const transactions = useSelector(state => state.auth.user.transactions);
+
     useEffect(() => {
-        dispatch(getUser('v3/user/profile'));
-        // console.log(JSON.stringify(user.transactions) + 'madam');
+        dispatch(getUser());
     }, []);
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                {transactions && (
-                    <View>
-                        {transactions.map((x, i) => <FundTransactions key={i} transaction={x} />)}
-                        {transactions.length === 0 && <Text>No recent transactions</Text>}
-                    </View>
-                )}
-            </ScrollView>
-        </SafeAreaView>
+        <ScrollView style={styles.container}>
+            {transactions && (
+                transactions.map((x, i) => <FundTransactions key={i} transaction={x} />)
+            )}
+        </ScrollView>
     );
+
 }
 
-const FundTransactions = ({ transaction}) => {
+const FundTransactions = ({ transaction }) => {
+
     return (
         <View style={styles.transactionDetails}>
             <View style={styles.narationDetails}>
                 <View style={styles.naration}>
-                    {/* <Image
-                        source={arrow}
-                    /> */}
                     <Text style={styles.narationTitle}>{transaction.type}</Text>
                 </View>
                 <Text style={transaction.type === "DEBIT" ? styles.transactionAmountWithdraw : styles.transactionAmountReceived}>{transaction.amount}</Text>
@@ -47,7 +39,8 @@ const FundTransactions = ({ transaction}) => {
             </View>
         </View>
     )
-                }
+
+}
 
 
 const styles = StyleSheet.create({

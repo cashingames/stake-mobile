@@ -11,10 +11,6 @@ import ResetPasswordScreen from './ResetPasswordScreen';
 import ResetPasswordSuccessScreen from './ResetPasswordSuccessScreen';
 import SignupScreen from './SignupScreen';
 import SignupProfileScreen from './SignupProfileScreen';
-import WalletScreen from '../Transactions/WalletScreen';
-import TransactionScreen from '../Transactions/TransactionScreen';
-import FundWalletScreen from '../Transactions/FundWalletScreen';
-import FundWalletCompleted from '../Transactions/FundWalletCompleted';
 
 const AuthStack = createNativeStackNavigator();
 
@@ -33,7 +29,7 @@ const AuthRouter = () => {
 
     return (
 
-        <AuthStack.Navigator screenOptions={{ title: "" }}>
+        <AuthStack.Navigator screenOptions={{ title: "", headerShadowVisible: false }}>
             {/* <AuthStack.Screen name="TransactionScreen" component={TransactionScreen} /> */}
             <AuthStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             <AuthStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />

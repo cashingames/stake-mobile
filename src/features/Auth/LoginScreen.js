@@ -34,18 +34,15 @@ export default function LoginScreen({ navigation }) {
         setPassword(value)
     }
 
-
-
     const onLogin = () => {
-        console.log("Username and password");
         setLoading(true);
         setCanLogin(false);
         setError("");
 
         dispatch(loginUser({ email, password })).then(unwrapResult)
             .then((originalPromiseResult) => {
-                // handle result here
-                console.log("here");
+                // after login eager get commond data for the whole app
+                console.log("loggedin");
             })
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);
