@@ -14,6 +14,7 @@ import FundWalletScreen from './features/Transactions/FundWalletScreen';
 import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
 import TransactionScreen from './features/Transactions/TransactionScreen';
 import GameStoreRouter from './features/Store/GameStoreRouter';
+import PurchaseSuccessful from './features/Store/PurchaseSuccessful';
 
 
 const AppStack = createNativeStackNavigator();
@@ -52,6 +53,7 @@ function AppRouter() {
                 <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
                 <AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
                 <AppStack.Screen name="GameStore" component={GameStoreRouter} options={{ title: 'Store', headerShadowVisible: false }} />
+                <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessful} options={{ title: 'Store', headerShadowVisible: false }} />
                 <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
             </AppStack.Group>
 

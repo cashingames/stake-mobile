@@ -1,41 +1,28 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import normalize from '../../utils/normalize';
+import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
-export default function () {
-
-    var boosts = useSelector(state => state.auth.user.boosts);
-
+const PurchaseSuccessful = () => {
+    const navigation = useNavigation();
     return (
-        <View style={styles.availableBoosts1}>
-            <View style={styles.boostCards}>
-                {boosts.map((boost, i) => <MyItem key={i} boost={boost} />)}
+        <View>
+            <Text>Congratulations!!!</Text>
+            <Text>You have successfully purchased a boost to play a game and climb up the leaderboard</Text>
+            <View>
+                <Pressable onPress={() => navigation.navigate('Game')} style={styles.optionButton}>
+                    <Text style={styles.buyButton}>Play a Game</Text>
+                </Pressable>
+                <Pressable onPress={() => navigation.navigate('GameStore')} style={styles.optionButton}>
+                    <Text style={styles.buyButton}>Go to Store</Text>
+                </Pressable>
             </View>
         </View>
-
     )
 }
-
-const MyItem = ({ boost }) => {
-    return (
-        <TouchableOpacity>
-            <View style={styles.boostContainer}>
-                <View style={styles.iconContainer}>
-                    <Image
-                        source={require('../../../assets/images/time_freeze.png')}
-                        style={styles.boostIcon}
-                    />
-                    <View style={styles.hr}><Text></Text></View>
-                </View>
-                <Text style={styles.boostName}>{boost.name}</Text>
-                {/* <Text style={styles.number}>x{boost.count}</Text> */}
-                <Text style={styles.description}>{boost.description}</Text>
-            </View>
-        </TouchableOpacity>
-    )
-}
+export default PurchaseSuccessful;
 
 
 const styles = StyleSheet.create({

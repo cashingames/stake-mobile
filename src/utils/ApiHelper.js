@@ -5,9 +5,10 @@ import { baseURL } from "./BaseUrl";
 import { isTrue } from "./stringUtl";
 
 (async function () {
+    axios.defaults.baseURL = baseURL;
     const token = await AsyncStorage.getItem("token");
     if (token) {
-        axios.defaults.headers.common['Authorization'] = token;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
         axios.defaults.headers.common['Authorization'] = null;
         /*if setting null does not remove `Authorization` header then try  */
@@ -77,7 +78,7 @@ async function verifyUsername(username) {
 }
 
 async function verifyAccount(data) {
-    return axios.post(`${baseURL}/auth/password/email`, data);
+    return axios.post(`auth/password/email`, data);
 }
 async function verifyFunding(data) {
     return getData('v2/wallet/me/transaction/verify/' + data)
@@ -88,11 +89,11 @@ async function verifyFunding(data) {
 }
 
 async function verifyOtp(data) {
-    return axios.post(`${baseURL}/auth/token/verify`, data)
+    return axios.post(`auth/token/verify`, data)
 }
 
 async function resetPassword(data) {
-    return axios.post(`${baseURL}/auth/password/reset/${data.email}`, data)
+    return axios.post(`auth/password/reset/${data.email}`, data)
 }
 
 async function saveToken(data) {
