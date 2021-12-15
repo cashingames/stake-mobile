@@ -1,9 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import React, { useRef, useState } from "react";
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import normalize from '../../utils/normalize';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { backendUrl } from '../../utils/BaseUrl';
-import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import RBSheet from "react-native-raw-bottom-sheet";
+import { useDispatch, useSelector } from 'react-redux';
+import { buyBoostFromWallet } from "./StoreSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { getUser } from "../Auth/AuthSlice";
 
 
 export default function () {
@@ -23,8 +28,9 @@ export default function () {
 
 
 const BoostCard = ({ boost }) => {
+    const refRBSheet = useRef();
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => refRBSheet.current.open()}>
             <View style={styles.boostContainer}>
                 <View style={styles.iconContainer}>
                     <Image
@@ -40,8 +46,79 @@ const BoostCard = ({ boost }) => {
                     <Text style={styles.buyWithPoint}>{boost.point_value}pts</Text>
                     <Text style={styles.buyWithCash}>&#8358;{boost.currency_value}</Text>
                 </View>
+                <RBSheet
+                    ref={refRBSheet}
+                    closeOnDragDown={true}
+                    closeOnPressMask={true}
+                    height={300}
+                    customStyles={{
+                        wrapper: {
+                            backgroundColor: "rgba(0, 0, 0, 0.5)"
+                        },
+                        draggableIcon: {
+                            backgroundColor: "#000",
+                        },
+                        container: {
+                            borderTopStartRadius: 25,
+                            borderTopEndRadius: 25,
+                        }
+                    }}
+                >
+                    <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} />
+                </RBSheet>
             </View>
         </TouchableOpacity>
+    )
+}
+
+const BuyBoost = ({ boost, onClose, disabled }) => {
+    const [loading, setLoading] = useState(false);
+    const [canPay, setCanPay] = useState(false);
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
+
+    const buyBoostWallet = () => {
+        setLoading(true);
+        setCanPay(false);
+        dispatch(buyBoostFromWallet(boost.id))
+            .then(unwrapResult)
+            .then(result => {
+                console.log(result);
+                dispatch(getUser())
+                onClose()
+                navigation.navigate("PurchaseSuccessful")
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                setLoading(false);
+                setCanPay(true);
+                // after login eager get commond data for the whole app
+                console.log("failed");
+                console.log(rejectedValueOrSerializedError)
+            });
+    }
+
+    return (
+        <View style={styles.buyBoost}>
+            <Text style={styles.buyBoostTitle}>Buy Boosts</Text>
+            <Text style={styles.buyQuestion}>Are you sure you want to purchase this boost?</Text>
+            <View style={styles.buyOption}>
+                <Pressable onPress={buyBoostWallet} style={() => [
+                    {
+                        backgroundColor: disabled
+                            ?   '#EF2F55'
+                            : '#DFCBCF'
+                    },
+                    styles.optionButton
+                ]} 
+                disabled={canPay}
+                >
+                    <Text style={styles.buyButton}>{loading ? 'Buying...' : 'Pay'}</Text>
+                </Pressable>
+                <Pressable onPress={onClose} style={styles.optionButton}>
+                    <Text style={styles.buyButton}>Cancel</Text>
+                </Pressable>
+            </View>
+        </View>
     )
 }
 
@@ -134,4 +211,41 @@ const styles = StyleSheet.create({
         fontSize: normalize(8),
         color: '#151C2F',
     },
+    buyBoost: {
+        // alignItems:'center',
+        paddingHorizontal: normalize(18),
+        paddingVertical: normalize(15)
+    },
+    buyBoostTitle: {
+        fontFamily: 'graphik-medium',
+        fontSize: normalize(15),
+        color: '#151C2F',
+        marginBottom: normalize(15),
+        textAlign: 'center'
+    },
+    buyQuestion: {
+        fontFamily: 'graphik-regular',
+        fontSize: normalize(12),
+        color: '#151C2F',
+        marginBottom: normalize(30),
+        textAlign: 'center'
+    },
+    buyOption: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: normalize(25)
+    },
+    optionButton: {
+        backgroundColor: '#EF2F55',
+        paddingHorizontal: normalize(15),
+        width: normalize(80),
+        paddingVertical: normalize(10),
+        borderRadius: 10,
+        alignItems: 'center'
+    },
+    buyButton: {
+        fontFamily: 'graphik-bold',
+        fontSize: normalize(10),
+        color: '#FFFF',
+    }
 });

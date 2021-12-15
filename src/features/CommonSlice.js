@@ -1,13 +1,12 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { getData } from '../utils/ApiHelper'
+import { getData, postData } from '../utils/ApiHelper'
 
 export const getCommonData = createAsyncThunk(
     'common/get',
     async (thunkAPI) => {
         const response = await getData('v3/game/common')
         return response.data
-
     }
 )
 

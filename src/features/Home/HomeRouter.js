@@ -15,6 +15,7 @@ import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
 import { backendUrl } from '../../utils/BaseUrl';
+import PurchaseSuccessfulScreen from '../Store/PurchaseSuccessfulScreen';
 
 const HomeStack = createDrawerNavigator();
 
