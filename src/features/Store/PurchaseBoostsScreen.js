@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { buyBoostFromWallet } from "./StoreSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { getUser } from "../Auth/AuthSlice";
-import PageLoading from '../../shared/PageLoading';
 
 
 export default function () {
@@ -86,6 +85,7 @@ const BuyBoost = ({ boost, onClose, disabled }) => {
             .then(result => {
                 console.log(result);
                 dispatch(getUser())
+                onClose()
                 navigation.navigate("PurchaseSuccessful")
             })
             .catch((rejectedValueOrSerializedError) => {

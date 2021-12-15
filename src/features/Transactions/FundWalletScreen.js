@@ -13,18 +13,24 @@ import { verifyFunding } from '../../utils/ApiHelper';
 import Input from '../../shared/Input';
 
 
-export default function FundWalletScreen({ navigation }) {
+export default function FundWalletScreen() {
     const dispatch = useDispatch();
 
     const [amount, setAmount] = useState('');
     const user = useSelector(state => state.auth.user)
+    const navigation = useNavigation();
 
     const paystackWebViewRef = useRef();
 
     const transactionCompleted = (res) => {
-        navigation.navigate('Wallet')
         verifyFunding(res.data.transactionRef.reference);
-        dispatch(getUser());
+        dispatch(getUser())
+            .then(result => {
+                console.log(result);
+                dispatch(getUser())
+                navigation.navigate('Wallet')
+            })
+       
     }
 
     return (

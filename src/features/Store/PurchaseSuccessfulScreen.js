@@ -21,14 +21,14 @@ const PurchaseSuccessfulScreen = () => {
                 <Text style={styles.congratulations}>{user.firstName}</Text>
             </View>
             <Text style={styles.message}>You have successfully purchased a boost to play a game and climb up the leaderboard</Text>
-            {/* <View style={styles.congratsButtons}>
+            <View style={styles.congratsButtons}>
                 <Pressable onPress={() => navigation.navigate('Game')} style={styles.optionButton}>
                     <Text style={styles.nextButton}>Play a Game</Text>
                 </Pressable>
-                <Pressable onPress={() => navigation.navigate('GameStore')} style={styles.optionButton}>
-                    <Text style={styles.nextButton}>Go to Store</Text>
+                <Pressable onPress={() => navigation.navigate('MyBoosts')} style={styles.optionButton}>
+                    <Text style={styles.nextButton}>My Boosts</Text>
                 </Pressable>
-            </View> */}
+            </View>
         </View>
     )
 }
@@ -38,11 +38,9 @@ export default PurchaseSuccessfulScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // alignItems:'center',
         backgroundColor: '#9C3DB8',
         paddingVertical: normalize(80),
         paddingHorizontal: normalize(20),
-        // justifyContent: 'center's
     },
     image: {
         alignItems: 'center',
@@ -60,13 +58,13 @@ const styles = StyleSheet.create({
         lineHeight: 50
     },
     congratsText: {
-        alignItems:'center',
+        alignItems: 'center',
         marginVertical: normalize(15)
     },
     message: {
         fontFamily: 'graphik-regular',
         fontSize: normalize(15),
-        textAlign:'center',
+        textAlign: 'center',
         color: '#FFFF',
         lineHeight: 30,
         marginTop: normalize(35)
@@ -79,7 +77,6 @@ const styles = StyleSheet.create({
     optionButton: {
         backgroundColor: '#EF2F55',
         width: normalize(100),
-        // height: normalize(30),
         paddingVertical: normalize(15),
         borderRadius: 8,
         alignItems: 'center',
@@ -87,7 +84,7 @@ const styles = StyleSheet.create({
     nextButton: {
         fontFamily: 'graphik-medium',
         fontSize: normalize(12),
-        textAlign:'center',
+        textAlign: 'center',
         color: '#FFFF',
     }
 });

@@ -43,7 +43,6 @@ const HomeRouter = () => {
             <HomeStack.Screen name="Game" component={GameScreen} options={{ title: 'Game' }} />
             <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
-            <HomeStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ title: 'Purchase'}} />
         </HomeStack.Navigator>
     );
 }
