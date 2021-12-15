@@ -86,7 +86,7 @@ const BuyBoost = ({ boost, onClose, disabled }) => {
             .then(result => {
                 console.log(result);
                 dispatch(getUser())
-                navigation.navigate("Home")
+                navigation.navigate("PurchaseSuccessful")
             })
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);
