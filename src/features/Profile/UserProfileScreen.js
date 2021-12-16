@@ -20,7 +20,7 @@ export default function UserProfileScreen({ navigation }) {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.content}>
-                    <UserAvatar avatar={require('../../../assets/images/user-icon.png')} />
+                    <UserAvatar />
                     <ProfileTabs />
                 </View>
             </ScrollView>
@@ -59,7 +59,7 @@ const ProfileTabs = () => {
             <ProfileTab tabName='Edit Details' onPress={() =>  navigation.navigate('ProfileRouter', { screen: 'EditDetails' })} />
             <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ProfileRouter' , { screen: 'ChangePassword' })} />
             <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('AchievementsMilestone')} />
-            <ProfileTab tabName='Stats' onPress={() => navigation.navigate('UserStats')} />
+            <ProfileTab tabName='Stats' onPress={() => navigation.navigate('ProfileRouter', { screen: 'UserStats'  })} />
             <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} />
             <ProfileTab tabName='Settings' onPress={() => navigation.navigate('Dashboard')} />
         </View>
