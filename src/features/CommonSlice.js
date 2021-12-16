@@ -10,8 +10,17 @@ export const getCommonData = createAsyncThunk(
     }
 )
 
+export const getAchievements = createAsyncThunk(
+    'common/achievements/get',
+    async (thunkAPI) => {
+        const response = await getData('v2/achievements')
+        return response.data
+    }
+)
+
 const initialState = {
     boosts: [],
+    achievements: [],
     gameTypes: [],
 }
 
@@ -27,8 +36,10 @@ export const CommonSlice = createSlice({
             .addCase(getCommonData.fulfilled, (state, action) => {
                 console.log("logging general boosts")
                 state.boosts = action.payload.boosts;
+                state.achievements = action.payload.achievements;
                 state.gameTypes = action.payload.gameTypes;
-                console.log(state.boosts)
+                console.log( JSON.stringify(state.boosts) + 'then' + JSON.stringify(state.achievements))
+                console.log(state.achievements)
             })
     },
 });
