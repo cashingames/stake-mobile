@@ -11,10 +11,10 @@ import { unwrapResult } from '@reduxjs/toolkit';
 
 export default function ChangePasswordScreen({ navigation }) {
     const [saving, setSaving] = useState(false);
-    const [canSave, setCanSave] = useState(false);
-    const [password, setPassword] = useState('12345678');
-    const [new_password, setNewPassword] = useState('123456789');
-    const [new_password_confirmation, setConfirmPassword] = useState('123456789');
+    const [canSave, setCanSave] = useState(false); 
+    const [password, setPassword] = useState('123456789');
+    const [new_password, setNewPassword] = useState('12345678');
+    const [new_password_confirmation, setConfirmPassword] = useState('12345678');
     const [passErr, setPassError] = useState(false);
     const dispatch = useDispatch();
 
@@ -46,14 +46,15 @@ export default function ChangePasswordScreen({ navigation }) {
             .then(result => {
                 console.log(result);
                 console.log("success");
-                dispatch(getUser())
+                // dispatch(getUser())
                 Alert.alert('Password changed successfully')
                 navigation.navigate("Home")
             })
             .catch((rejectedValueOrSerializedError) => {
+                console.log(rejectedValueOrSerializedError);
                 setSaving(false);
                 setCanSave(true);
-                Alert.alert('Change Password failed try again later')
+                Alert.alert('Invalid data provided')
                 // after login eager get commond data for the whole app
                 // console.log("failed");
                 // console.log(rejectedValueOrSerializedError)

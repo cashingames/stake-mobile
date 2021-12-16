@@ -85,26 +85,16 @@ export const resetPassword = createAsyncThunk(
 export const changePassword = createAsyncThunk(
     'auth/user/changePassword',
     async (data, thunkAPI) => {
-        console.log(data);
+        // console.log(data);
         const response = await axios.post('v2/profile/me/password/change', data)
-        .catch(error=>{
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-              } else if (error.request) {
-                // The request was made but no response was received
-                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                // http.ClientRequest in node.js
-                console.log(error.request);
-              } else {
-                // Something happened in setting up the request that triggered an Error
-                console.log('Error', error.message);
-              }
-              console.log(error.config);
-        });
+            // .catch(error => {
+            //     if (error.response) {
+            //         // The request was made and the server responded with a status code
+            //         // that falls out of the range of 2xx
+            //         // console.log(error.response.data);
+            //         return error.response.data;
+            //     }
+            // });
         return response.data
     }
 )
