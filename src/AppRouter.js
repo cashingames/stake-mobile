@@ -15,7 +15,6 @@ import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
 import TransactionScreen from './features/Transactions/TransactionScreen';
 import GameStoreRouter from './features/Store/GameStoreRouter';
 import PurchaseSuccessfulScreen from './features/Store/PurchaseSuccessfulScreen';
-import UserProfileScreen from './features/Profile/UserProfileScreen';
 import ProfileRouter from './features/Profile/ProfileRouter';
 
 
