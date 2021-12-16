@@ -4,7 +4,6 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import Input from '../../shared/Input';
-// import AuthInput from '../../shared/SignInInput';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import { registerUser, } from './AuthSlice';
