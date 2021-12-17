@@ -38,7 +38,7 @@ export const CommonSlice = createSlice({
                 state.boosts = action.payload.boosts;
                 state.achievements = action.payload.achievements;
                 state.gameTypes = action.payload.gameTypes;
-                console.log( JSON.stringify(state.boosts) + 'then' + JSON.stringify(state.achievements))
+                console.log(state.boosts) ;
                 console.log(state.achievements)
             })
     },

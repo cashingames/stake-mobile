@@ -12,29 +12,32 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 export default function AchievementsMilestoneScreen({ navigation }) {
     const achievements = useSelector(state => state.common.achievements);
     const user = useSelector(state => state.auth.user);
-    console.log(JSON.stringify(achievements) + 'ME')
+    // console.log(JSON.stringify(achievements) + 'ME')
 
+    var nextLevel = achievements.find( item => item.point_milestone > user.points);
+    // console.log(nextLevel)
+    // console.log(`${backendUrl}/${`${nextLevel.medal}`}`)
 
     return (
-        <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.content}>
-                    <MilestoneStatus milestoneIcon={require('../../../assets/images/regal_small.png')}
-                        pointsProgress='125/2000'
-                        milestoneName='Regal'
+                    <MilestoneStatus milestoneIcon={{ uri: `${backendUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${user.points}/${nextLevel.point_milestone}`}
+                        milestoneName={`${nextLevel.title}`}
                         progress={0.08}
                     />
                     <View style={styles.cards}>
-                        {achievements.map((achievement, i) => <AchievementCard userPoint={user.points} achievement={achievement} />)}
+                        {achievements.map((achievement, i) => <AchievementCard key= {i} userPoint={user.points} achievement={achievement} />)}
                     </View>
                 </View>
             </ScrollView>
-
-        </SafeAreaView>
     );
 }
 
 const MilestoneStatus = ({ milestoneIcon, pointsProgress, milestoneName, progress }) => {
+
+    console.log("here")
+    console.log(milestoneIcon)
     return (
         <View style={styles.status}>
             <View>
@@ -51,28 +54,27 @@ const MilestoneStatus = ({ milestoneIcon, pointsProgress, milestoneName, progres
             </View>
             <Image
                 source={milestoneIcon}
+                style= {styles.milestoneIcon}
             />
         </View>
     )
 }
 
-const AchievementCard = ({ achievement, userPoint }) => {
+const AchievementCard = ({ achievement, userPoint,  }) => {
+
+    const disabled = userPoint < achievement.point_milestone;
+
+
     return (
-        <Pressable style={({ disabled }) => [
-            {
-                opacity: disabled
-                    ? 0.5
-                    : 1
-            },
-            styles.card
-        ]} disabled={userPoint < achievement.point_milestone}>
+        <View 
+                style={[styles.card, {opacity: disabled ? 0.5 : 1}, {backgroundColor: disabled ? '#C4C4C4' : '#FFFF'}]} disabled={disabled}>
             <Image
                 source={{ uri: `${backendUrl}/${achievement.medal}` }}
                 style={styles.icon}
             />
             <Text style={styles.name}>{achievement.title}</Text>
             <Text style={styles.point}>{achievement.point_milestone}</Text>
-        </Pressable>
+        </View>
     )
 }
 
@@ -148,5 +150,9 @@ const styles = StyleSheet.create({
         marginVertical: normalize(10),
         fontFamily: 'graphik-medium',
         color: '#151C2F',
+    },
+    milestoneIcon: {
+        width: normalize(40),
+        height: normalize(40),
     }
 });
