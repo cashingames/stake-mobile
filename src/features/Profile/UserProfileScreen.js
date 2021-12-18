@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { normalize } from '../constants/NormalizeFont';
+import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';  
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import HeaderBack from '../components/HeaderBack';
+import {useSelector } from 'react-redux';
+import { isTrue } from '../../utils/stringUtl';
+import { backendUrl } from '../../utils/BaseUrl';
 
 
-export default function UserProfile({ navigation }) {
+
+
+
+export default function UserProfileScreen({ navigation }) {
+
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <View style={styles.header}>
-                    <HeaderBack onPress={() => navigation.navigate('Dashboard')} />
-                    <Text style={styles.headerTextStyle}>Profile</Text>
-                </View>
                 <View style={styles.content}>
-                    <UserAvatar avatar={require('../../assets/images/user-icon.png')} />
+                    <UserAvatar />
                     <ProfileTabs />
                 </View>
             </ScrollView>
@@ -26,13 +28,14 @@ export default function UserProfile({ navigation }) {
     );
 }
 
-const UserAvatar = ({ avatar }) => {
+const UserAvatar = () => {
+    const user = useSelector(state => state.auth.user)
     return (
         <View style={styles.userAvatar}>
-            <Image
-                source={avatar}
-                style={styles.avatar}
-            />
+              <Image
+                      style={styles.avatar}
+                    source={isTrue(user.avatar) ? { uri: `${backendUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+                />
             <TouchableOpacity style={styles.camera}>
                 <Ionicons name="camera-sharp" size={26} color="#FFFF" />
             </TouchableOpacity>
@@ -53,10 +56,10 @@ const ProfileTabs = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.profileTabs}>
-            <ProfileTab tabName='Edit Details' onPress={() => navigation.navigate('EditDetails')} />
-            <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ChangePassword')} />
-            <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('AchievementsMilestone')} />
-            <ProfileTab tabName='Stats' onPress={() => navigation.navigate('UserStats')} />
+            <ProfileTab tabName='Edit Details' onPress={() =>  navigation.navigate('ProfileRouter', { screen: 'EditDetails' })} />
+            <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ProfileRouter' , { screen: 'ChangePassword' })} />
+            <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('ProfileRouter' , { screen:'AchievementsMilestone' })} />
+            <ProfileTab tabName='Stats' onPress={() => navigation.navigate('ProfileRouter', { screen: 'UserStats'  })} />
             <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} />
             <ProfileTab tabName='Settings' onPress={() => navigation.navigate('Dashboard')} />
         </View>

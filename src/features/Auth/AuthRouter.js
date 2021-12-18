@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./LoginScreen";
 import ForgotPasswordScreen from './ForgotPasswordScreen';
-
 import IntroSlide from './IntroSlide';
 import { shouldShowIntro } from './AuthSlice';
 import VerifyEmailScreen from './VerifyEmailScreen';

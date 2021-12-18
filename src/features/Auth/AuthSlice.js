@@ -1,5 +1,6 @@
 
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios, { Axios } from 'axios';
 import {
     getIsLoggedInOnce,
     login as loginApi,
@@ -78,6 +79,23 @@ export const resetPassword = createAsyncThunk(
         } catch (err) {
             return rejectWithValue(err.response.data)
         }
+    }
+)
+
+export const changePassword = createAsyncThunk(
+    'auth/user/changePassword',
+    async (data, thunkAPI) => {
+        // console.log(data);
+        const response = await axios.post('v2/profile/me/password/change', data)
+            // .catch(error => {
+            //     if (error.response) {
+            //         // The request was made and the server responded with a status code
+            //         // that falls out of the range of 2xx
+            //         // console.log(error.response.data);
+            //         return error.response.data;
+            //     }
+            // });
+        return response.data
     }
 )
 
