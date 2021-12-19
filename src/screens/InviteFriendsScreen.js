@@ -1,27 +1,19 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { normalize } from '../constants/NormalizeFont';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import HeaderBack from '../components/HeaderBack';
+import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function InviteFriends({ navigation }) {
+export default function InviteFriendsScreen({ navigation }) {
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <View style={styles.header}>
-                    <HeaderBack onPress={() => navigation.navigate('Dashboard')} />
-                    <Text style={styles.headerTextStyle}>Invite Friends</Text>
-                </View>
-                <View style={styles.contentContainer}>
-                    <Heading />
-                    <Instructions />
-                    <InviteLink />
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+        <ScrollView style={styles.container}>
+            <View style={styles.contentContainer}>
+                <Heading />
+                <Instructions />
+                <InviteLink />
+            </View>
+        </ScrollView>
     );
 }
 
@@ -73,7 +65,6 @@ const ShareLink = ({ iconName, text }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#F8F9FD',
     },
     contentContainer: {
@@ -84,24 +75,9 @@ const styles = StyleSheet.create({
         marginHorizontal: normalize(18),
 
     },
-    header: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderColor: 'rgba(0, 0, 0, 0.15)',
-        borderBottomWidth: normalize(1),
-        paddingHorizontal: normalize(20),
-        paddingTop: normalize(15),
-        backgroundColor: '#FFFF',
-    },
-    headerTextStyle: {
-        fontSize: normalize(14),
-        fontFamily: 'graphik-medium',
-        color: 'black',
-        marginLeft: normalize(15),
-    },
+
     heading: {
-        marginVertical: normalize(30),
+        marginVertical: normalize(10),
     },
     value: {
         fontSize: normalize(20),

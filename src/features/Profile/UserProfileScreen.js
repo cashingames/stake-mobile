@@ -60,8 +60,7 @@ const ProfileTabs = () => {
             <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ProfileRouter' , { screen: 'ChangePassword' })} />
             <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('ProfileRouter' , { screen:'AchievementsMilestone' })} />
             <ProfileTab tabName='Stats' onPress={() => navigation.navigate('ProfileRouter', { screen: 'UserStats'  })} />
-            <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} />
-            <ProfileTab tabName='Settings' onPress={() => navigation.navigate('Dashboard')} />
+            <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('ProfileRouter',{ screen:'BankDetails'})} />
         </View>
     )
 }

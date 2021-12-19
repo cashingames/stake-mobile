@@ -16,6 +16,10 @@ import TransactionScreen from './features/Transactions/TransactionScreen';
 import GameStoreRouter from './features/Store/GameStoreRouter';
 import PurchaseSuccessfulScreen from './features/Store/PurchaseSuccessfulScreen';
 import ProfileRouter from './features/Profile/ProfileRouter';
+import TermsAndConditionsScreen from './screens/TermsAndConditionsScreen';
+import PrivacyPolicyScreen from './screens/PrivacyPolicyScreen';
+import InviteFriendsScreen from './screens/InviteFriendsScreen';
+import UserProfileScreen from './features/Profile/UserProfileScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -54,9 +58,13 @@ function AppRouter() {
                 <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
                 <AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
                 <AppStack.Screen name="GameStore" component={GameStoreRouter} options={{ title: 'Store', headerShadowVisible: false }} />
+                <AppStack.Screen name="Terms" component={TermsAndConditionsScreen} options={{ title: 'Terms & Conditions' }} />
+                <AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
+                <AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
                 <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
                 <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ title: 'Purchase'}} />
-                <AppStack.Screen options={{ headerShown: false }} name="ProfileRouter" component={ProfileRouter} />
+                <AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
+                <AppStack.Screen  name="ProfileRouter" component={ProfileRouter}  options={{ title: '', headerShadowVisible: false }} />
             </AppStack.Group>
 
 

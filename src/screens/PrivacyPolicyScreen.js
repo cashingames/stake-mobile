@@ -6,24 +6,14 @@ import {
     Text,
 } from 'react-native';
 import normalize from '../utils/normalize';
-import HeaderBack from '../shared/HeaderBack';
 
 
-const PrivacyPolicy = ({ navigation }) => {
+const PrivacyPolicyScreen = ({ navigation }) => {
     return (
         <ScrollView style={{
-            flex: 1,
             backgroundColor: '#FFFF',
-            // paddingBottom: '30',
-            // paddingLeft: 30,
-            // paddingRight: 30,
-            paddingTop: 40,
+            paddingVertical: normalize(20),
         }}>
-            <View style={styles.header}>
-                <HeaderBack onPress={() => navigation.navigate('Dashboard')} />
-                <Text style={styles.headerTextStyle}>Privacy Policy</Text>
-            </View>
-            <View style={styles.container}>
                 <View style={styles.content}>
                     <View>
                         <View style={styles.display}>
@@ -369,41 +359,17 @@ const PrivacyPolicy = ({ navigation }) => {
                         </Text>
                     </View>
                 </View>
-            </View>
         </ScrollView>
     )
 }
-export default PrivacyPolicy;
+export default PrivacyPolicyScreen;
 
 const styles = StyleSheet.create({
-    header: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderColor: 'rgba(0, 0, 0, 0.15)',
-        borderBottomWidth: normalize(1),
-        paddingLeft: 30,
-        paddingRight: 30,
-        paddingBottom: 15,
-        paddingTop: 20,
-    },
-    container: {
-        paddingTop: 30,
-    },
     content: {
         justifyContent: 'space-between',
         paddingLeft: 30,
         paddingRight: 30,
         paddingBottom: 50,
-    },
-    headerTextStyle: {
-        fontSize: 26,
-        fontFamily: 'graphik-bold',
-        color: 'black',
-        marginLeft: 25,
-        // paddingVertical: 10,
-        // marginVertical: 20,
-        // lineHeight: 20,
     },
     display: {
         flexDirection: 'row',

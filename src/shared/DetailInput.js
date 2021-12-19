@@ -3,19 +3,20 @@ import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import normalize from '../utils/normalize';
 
 
-const DetailInput = ({ value, inputLabel, onChange, maxLength, keyboardType, style, editable }) => {
+const DetailInput = ({ value, inputLabel, onChangeText, maxLength, keyboardType, style, editable, error }) => {
 
     return (
         <View style={styles.detail}>
             <Text style={styles.inputLabel}>{inputLabel}</Text>
             <TextInput
                 style={style}
-                onChangeText={onChange}
+                onChangeText={onChangeText}
                 value={value}
                 maxLength={maxLength}
                 keyboardType={keyboardType}
                 editable={editable}
             />
+             {error && <Text style={styles.error} >{error}</Text>}
         </View>
     )
 }
@@ -41,4 +42,9 @@ const styles = StyleSheet.create({
         fontFamily: 'graphik-regular',
         color: '#000000',
     },
+    error: {
+        fontFamily: 'graphik-regular',
+        color: '#EF2F55',
+        fontSize: normalize(10)
+    }
 });

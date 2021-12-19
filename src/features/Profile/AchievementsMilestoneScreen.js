@@ -1,25 +1,20 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Pressable, } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import normalize from '../../utils/normalize';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
 import { backendUrl } from '../../utils/BaseUrl';
 import * as Progress from 'react-native-progress';
-import { useDispatch, useSelector } from 'react-redux';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
+
 
 
 export default function AchievementsMilestoneScreen({ navigation }) {
     const achievements = useSelector(state => state.common.achievements);
     const user = useSelector(state => state.auth.user);
-    // console.log(JSON.stringify(achievements) + 'ME')
 
     var nextLevel = achievements.find( item => item.point_milestone > user.points);
-    // console.log(nextLevel)
-    // console.log(`${backendUrl}/${`${nextLevel.medal}`}`)
 
     return (
-            <ScrollView>
+            <ScrollView style={styles.container}>
                 <View style={styles.content}>
                     <MilestoneStatus milestoneIcon={{ uri: `${backendUrl}/${nextLevel.medal}` }}
                         pointsProgress={`${user.points}/${nextLevel.point_milestone}`}
@@ -82,21 +77,13 @@ const AchievementCard = ({ achievement, userPoint,  }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#F8F9FD',
+        backgroundColor: '#E5E5E5',
     },
     content: {
         marginHorizontal: normalize(18),
         display: 'flex',
         justifyContent: 'space-between',
         marginTop: normalize(20),
-    },
-
-    textStyle: {
-        fontSize: normalize(14),
-        fontFamily: 'graphik-medium',
-        color: 'black',
-        marginBottom: normalize(10),
     },
     status: {
         display: 'flex',

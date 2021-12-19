@@ -88,9 +88,12 @@ function CustomDrawerContent(props) {
                 />
                 <Text style={drawStyles.userTitle}> {user.fullName}</Text>
                 <Text style={drawStyles.userName}> @{user.username}</Text>
-                <TouchableOpacity style={drawStyles.profile}  onPress={() => navigation.navigate('ProfileRouter', { screen: 'UserProfile' })}><Text style={drawStyles.viewProfile}>View Profile</Text></TouchableOpacity>
+                <TouchableOpacity style={drawStyles.profile}
+                    onPress={() => navigation.navigate('UserProfile')}>
+                    <Text style={drawStyles.viewProfile}>View Profile</Text>
+                </TouchableOpacity>
             </View>
-        
+
 
             <View style={drawStyles.menu}>
                 <DrawerItem
@@ -103,7 +106,39 @@ function CustomDrawerContent(props) {
                     activeTintColor='#EF2F55'
                     style={drawStyles.label}
                     labelContainerStyle
-
+                />
+                <DrawerItem
+                    label={() =>
+                        <View style={drawStyles.item}>
+                            <Text style={drawStyles.itemLabel}>Terms & Conditions</Text>
+                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                        </View>}
+                    onPress={() => navigation.navigate('Terms')}
+                    activeTintColor='#EF2F55'
+                    style={drawStyles.label}
+                    labelContainerStyle
+                />
+                  <DrawerItem
+                    label={() =>
+                        <View style={drawStyles.item}>
+                            <Text style={drawStyles.itemLabel}>Privacy Policy</Text>
+                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                        </View>}
+                    onPress={() => navigation.navigate('Privacy')}
+                    activeTintColor='#EF2F55'
+                    style={drawStyles.label}
+                    labelContainerStyle
+                />
+                <DrawerItem
+                    label={() =>
+                        <View style={drawStyles.item}>
+                            <Text style={drawStyles.itemLabel}>Invite Friends</Text>
+                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                        </View>}
+                    onPress={() => navigation.navigate('Invite')}
+                    activeTintColor='#EF2F55'
+                    style={drawStyles.label}
+                    labelContainerStyle
                 />
             </View>
             <BorderlessButton onPress={onLogout} style={styles.logoutContainer}>
