@@ -34,12 +34,9 @@ export const CommonSlice = createSlice({
         // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
         builder
             .addCase(getCommonData.fulfilled, (state, action) => {
-                console.log("logging general boosts")
                 state.boosts = action.payload.boosts;
                 state.achievements = action.payload.achievements;
                 state.gameTypes = action.payload.gameTypes;
-                console.log(state.boosts) ;
-                console.log(state.achievements)
             })
     },
 });

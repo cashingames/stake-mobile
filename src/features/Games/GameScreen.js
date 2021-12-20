@@ -170,7 +170,7 @@ const Categories = () => {
         <View style={styles.games}>
             <Text style={styles.title}>Choose Category</Text>
             <View style={styles.cards}>
-                {categories.map((category) => <GameCategoryCard
+                {categories.map((category, i) => <GameCategoryCard key= {i}
                     category={category}
                     isSelected={activeCategory?.id === category.id}
                     onSelect={onCategorySelected}
