@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
-import { normalize } from '../constants/NormalizeFont';
+import normalize from '../utils/normalize';
 
 
-const DetailInput = ({ value, inputLabel, onChange, maxLength, keyboardType, style }) => {
+const DetailInput = ({ value, inputLabel, onChange, maxLength, keyboardType, style, editable }) => {
 
     return (
         <View style={styles.detail}>
@@ -14,6 +14,7 @@ const DetailInput = ({ value, inputLabel, onChange, maxLength, keyboardType, sty
                 value={value}
                 maxLength={maxLength}
                 keyboardType={keyboardType}
+                editable={editable}
             />
         </View>
     )

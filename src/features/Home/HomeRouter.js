@@ -15,6 +15,7 @@ import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
 import { backendUrl } from '../../utils/BaseUrl';
+import PurchaseSuccessfulScreen from '../Store/PurchaseSuccessfulScreen';
 
 const HomeStack = createDrawerNavigator();
 
@@ -87,8 +88,9 @@ function CustomDrawerContent(props) {
                 />
                 <Text style={drawStyles.userTitle}> {user.fullName}</Text>
                 <Text style={drawStyles.userName}> @{user.username}</Text>
-                <TouchableOpacity style={drawStyles.profile}><Text style={drawStyles.viewProfile}>View Profile</Text></TouchableOpacity>
+                <TouchableOpacity style={drawStyles.profile}  onPress={() => navigation.navigate('ProfileRouter', { screen: 'UserProfile' })}><Text style={drawStyles.viewProfile}>View Profile</Text></TouchableOpacity>
             </View>
+        
 
             <View style={drawStyles.menu}>
                 <DrawerItem

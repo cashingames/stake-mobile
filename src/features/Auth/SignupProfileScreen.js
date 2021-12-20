@@ -3,8 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
-
-import AuthInput from '../../shared/SignInInput';
+import Input from '../../shared/Input';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import { registerUser, } from './AuthSlice';
@@ -68,7 +67,7 @@ export default function SignupProfileScreen({ navigation }) {
                 {error.length > 0 &&
                     <Text style={styles.errorBox}>{error}</Text>
                 }
-                <AuthInput
+                <Input
                     label='First Name'
                     placeholder="John"
                     value={firstName}
@@ -76,7 +75,7 @@ export default function SignupProfileScreen({ navigation }) {
                     onChangeText={setFirstName}
                 />
 
-                <AuthInput
+                <Input
                     label='Last Name'
                     placeholder="Doe"
                     value={lastName}
@@ -84,14 +83,14 @@ export default function SignupProfileScreen({ navigation }) {
                     onChangeText={setLastName}
                 />
 
-                <AuthInput
+                <Input
                     label='Username'
                     placeholder="johnDoe"
                     value={username}
                     onChangeText={setUsername}
                 />
 
-                <AuthInput
+                <Input
                     label='Referral Code (optional)'
                     value={referrer}
                     onChangeText={setReferrer}
