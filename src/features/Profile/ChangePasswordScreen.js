@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, Alert } from 'react-native';
 import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AppButton from '../../shared/AppNextButton';
+import AppButton from '../../shared/AppButton';
 import Input from '../../shared/Input';
 import { useDispatch } from 'react-redux';
 import { changePassword } from '../Auth/AuthSlice';
@@ -11,7 +11,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 
 export default function ChangePasswordScreen({ navigation }) {
     const [saving, setSaving] = useState(false);
-    const [canSave, setCanSave] = useState(false); 
+    const [canSave, setCanSave] = useState(false);
     const [password, setPassword] = useState('123456789');
     const [new_password, setNewPassword] = useState('12345678');
     const [new_password_confirmation, setConfirmPassword] = useState('12345678');
@@ -37,11 +37,11 @@ export default function ChangePasswordScreen({ navigation }) {
     }, [passErr, new_password_confirmation, new_password, password])
 
     const onSavePassword = () => {
-    
+
         setSaving(true);
         setCanSave(false);
         console.log(new_password + 'fish')
-        dispatch(changePassword({password, new_password, new_password_confirmation}))
+        dispatch(changePassword({ password, new_password, new_password_confirmation }))
             .then(unwrapResult)
             .then(result => {
                 console.log(result);
@@ -95,6 +95,7 @@ export default function ChangePasswordScreen({ navigation }) {
                         <PasswordRequirement />
                     </View>
                     <AppButton text={saving ? 'Saving' : 'Change Password'} onPress={onSavePassword} disabled={!canSave} />
+
                 </View>
             </ScrollView>
         </SafeAreaView >

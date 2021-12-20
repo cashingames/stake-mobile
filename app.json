@@ -2,7 +2,7 @@
   "expo": {
     "name": "cashingames-mobile",
     "slug": "cashingames-mobile",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -18,13 +18,13 @@
     ],
     "ios": {
       "bundleIdentifier": "com.cashingames.cashingames",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.1"
     },
     "android": {
       "package": "com.cashingames.cashingames",
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },

@@ -3,10 +3,9 @@ import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-nati
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import AppNextButton from '../../shared/AppNextButton';
+import AppButton from '../../shared/AppButton';
 
 
 const Toptab = createMaterialTopTabNavigator();
@@ -14,16 +13,16 @@ const Toptab = createMaterialTopTabNavigator();
 export default function GameScreen({ navigation }) {
 
     return (
-            <ScrollView>
-                <View style={styles.contentContainer}>
-                    <View style={styles.content}>
-                        <WinBig />
-                        <ProgressMessage />
-                        <SelectCategory />
-                        <AppNextButton text='Proceed to Play' onPress={() => navigation.navigate('GameMode')} />
-                    </View>
+        <ScrollView>
+            <View style={styles.contentContainer}>
+                <View style={styles.content}>
+                    <WinBig />
+                    <ProgressMessage />
+                    <SelectCategory />
+                    <AppButton text='Proceed to Play' onPress={() => navigation.navigate('GameMode')} />
                 </View>
-            </ScrollView>
+            </View>
+        </ScrollView>
     );
 }
 
