@@ -10,7 +10,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { getUser } from "../Auth/AuthSlice";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function EditDetailsScreen({ navigation }) {
+export default function EditProfileDetailsScreen({ navigation }) {
     const user = useSelector(state => state.auth.user)
     const [saving, setSaving] = useState(false);
     const [email, setEmail] = useState(user.email);

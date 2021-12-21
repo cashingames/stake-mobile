@@ -115,6 +115,22 @@ export const editPersonalDetails = createAsyncThunk(
         return response.data
     }
 )
+export const editBankDetails = createAsyncThunk(
+    'auth/user/editBankDetails',
+    async (data, thunkAPI) => {
+        // console.log(data);
+        const response = await axios.post('v2/profile/me/edit-bank', data)
+            // .catch(error => {
+            //     if (error.response) {
+            //         // The request was made and the server responded with a status code
+            //         // that falls out of the range of 2xx
+            //         // console.log(error.response.data);
+            //         return error.response.data;
+            //     }
+            // });
+        return response.data
+    }
+)
 
 export const getUser = createAsyncThunk(
     'auth/user/get',
