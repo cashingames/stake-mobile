@@ -20,10 +20,10 @@ import PrivacyPolicyScreen from './screens/PrivacyPolicyScreen';
 import InviteFriendsScreen from './screens/InviteFriendsScreen';
 import UserProfileScreen from './features/Profile/UserProfileScreen';
 import UserStatsScreen from './features/Profile/UserStatsScreen';
-import EditDetailsScreen from './features/Profile/EditDetailsScreen';
 import ChangePasswordScreen from './features/Profile/ChangePasswordScreen';
 import AchievementsMilestoneScreen from './features/Profile/AchievementsMilestoneScreen';
 import BankDetailsScreen from './features/Profile/BankDetailsScreen';
+import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -71,7 +71,7 @@ function AppRouter() {
 
                 <AppStack.Group >
                     <AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
-                    <AppStack.Screen name="EditDetails" component={EditDetailsScreen} options={{ title: 'Edit Details' }} />
+                    <AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Edit Details' }} />
                     <AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Change Password' }} />
                     <AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ title: 'Stats' }} />
                     <AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ title: 'Milestones' }} />

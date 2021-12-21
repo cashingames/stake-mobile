@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
+import { Picker } from '@react-native-picker/picker';
+import { editBankDetails, getUser } from '../Auth/AuthSlice';
+import { getBankData } from '../CommonSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 import Input from '../../shared/Input';
 import normalize from '../../utils/normalize';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function BankDetailsScreen({ navigation }) {
 
-    return (
-        <ScrollView style={styles.container}>
-            <TouchableOpacity>
-                <Text style={styles.saveChanges}>Save Changes</Text>
-            </TouchableOpacity>
-            <DetailsInput />
-        </ScrollView>
-    );
-}
-
-const DetailsInput = () => {
+    const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
+    const banks = useSelector(state => state.common.banks)
+
+
+    const [saving, setSaving] = useState(false);
+    const [canSave, setCanSave] = useState(false);
     const [accountNumber, setAccountNumber] = useState(user.accountNumber);
     const [accountName, setAccountName] = useState(user.accountName);
     const [accountNumberErr, setAccountNumberError] = useState(false);
     const [accountNameErr, setAccountNameError] = useState(false);
+    const [bankName, setBankName] = useState(user.bankName ?? '');
 
     const onChangeAccountNumber = (text) => {
         text.length > 0 && text.length < 10 ? setAccountNumberError(true) : setAccountNumberError(false);
@@ -39,28 +39,85 @@ const DetailsInput = () => {
         setCanSave(!invalid);
     }, [accountNumberErr, accountNameErr, accountName, accountNumber])
 
-    return (
-        <View>
-            <Input
-                label='Account Number'
-                value={accountNumber}
-                onChangeText={text => { onChangeAccountNumber(text) }}
-                maxLength={10}
-                keyboardType='numeric'
-                error={accountNumberErr && '*account number must not be less than 10 digits'}
-                style={styles.input}
-            />
-            <Input
-                label='Name on Account'
-                value={accountName}
-                onChangeText={text => { onChangeAccountName(text) }}
-                error={accountNameErr && '*account name must not be empty'}
-                style={styles.input}
-            />
-        </View>
-    )
-}
+    useEffect(() => {
+        if (!banks || banks.length === 0) {
+            dispatch(getBankData());
+        }
+        else {
+            setBankName(user.bankName || '')
+        }
+    }, [banks, user, dispatch])
 
+    const onSaveBankDetails = () => {
+        setSaving(true);
+
+        dispatch(editBankDetails({
+            bankName,
+            accountName,
+            accountNumber
+        }))
+            .then(unwrapResult)
+            .then(result => {
+                console.log(result);
+                console.log("success");
+                dispatch(getUser())
+                Alert.alert('Bank details updated successfully')
+                navigation.navigate("UserProfile")
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                console.log(rejectedValueOrSerializedError);
+                setSaving(false);
+                Alert.alert('Invalid data provided')
+                // after login eager get commond data for the whole app
+                // console.log("failed");
+                // console.log(rejectedValueOrSerializedError)
+            });
+    }
+
+    return (
+        <ScrollView style={styles.container}>
+            <View style={styles.content}>
+                <TouchableOpacity onPress={onSaveBankDetails} disabled={!canSave}>
+                    <Text style={styles.saveChanges}>{saving ? 'Saving' : 'Save Changes'}</Text>
+                </TouchableOpacity>
+                <View>
+                    <Input
+                        label='Account Number'
+                        value={accountNumber}
+                        onChangeText={text => { onChangeAccountNumber(text) }}
+                        maxLength={10}
+                        keyboardType='numeric'
+                        error={accountNumberErr && '*account number must not be less than 10 digits'}
+                    />
+                    <Input
+                        label='Name on Account'
+                        value={accountName}
+                        onChangeText={text => { onChangeAccountName(text) }}
+                        error={accountNameErr && '*account name must not be empty'}
+                    />
+                    <View style={styles.banksContainer}>
+                        <Text style={styles.bankLabel}>Select Bank</Text>
+
+                        <Picker
+                            style={styles.bankPicker}
+                            selectedValue={bankName}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setBankName(itemValue)
+                            }
+                            mode='dropdown'
+
+                        >
+                            {banks && banks.map((bank, i) =>
+                                <Picker.Item label={bank.name} key={i} value={bank.name} />
+                            )}
+                        </Picker>
+                    </View>
+
+                </View>
+            </View>
+        </ScrollView>
+    );
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -68,38 +125,25 @@ const styles = StyleSheet.create({
         paddingVertical: normalize(10),
         backgroundColor: "#F8F9FD",
     },
-    detail: {
-        marginVertical: normalize(10)
-    },
     saveChanges: {
         fontSize: normalize(12),
         fontFamily: 'graphik-medium',
         color: '#EF2F55',
         marginLeft: 'auto'
     },
-    inputLabel: {
-        fontSize: normalize(10),
+    banksContainer: {
+        marginVertical: normalize(10)
+    },
+    bankPicker: {
+        color: '#000000B2',
+        borderStyle: 'solid',
+        borderWidth: 5,
+        backgroundColor: "#ebeff5",
+    },
+    bankLabel: {
         fontFamily: 'graphik-medium',
-        color: 'rgba(0, 0, 0, 0.7)',
-        marginBottom: normalize(5)
+        color: '#000000B2',
+        marginBottom: normalize(8)
     },
-    input: {
-        borderColor: ' rgba(0, 0, 0, 0.1)',
-        borderWidth: 1,
-        borderRadius: 8,
-        padding: normalize(6),
-        fontSize: normalize(10),
-        fontFamily: 'graphik-regular',
-        color: '#000000',
-    },
-    email: {
-        borderColor: ' rgba(0, 0, 0, 0.1)',
-        borderWidth: 1,
-        borderRadius: 8,
-        padding: normalize(6),
-        fontSize: normalize(10),
-        fontFamily: 'graphik-regular',
-        color: '#535761',
-    }
 
 });
