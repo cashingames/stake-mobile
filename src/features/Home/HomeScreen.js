@@ -19,10 +19,12 @@ export default function HomeScreen({ navigation }) {
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user)
+    // console.log(user);
     const gameTypes = useSelector(state => state.common.gameTypes)
 
     const [leaders, setLeaders] = useState([]);
     const [loading, setLoading] = useState(true);
+
 
 
 

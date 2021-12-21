@@ -65,7 +65,6 @@ export default function ChangePasswordScreen({ navigation }) {
             <ScrollView>
                 <View style={styles.content}>
                     <View style={styles.submitButton}>
-                        {/* <PasswordInputs /> */}
                         <>
                             <Input
                                 type="password"
@@ -101,58 +100,7 @@ export default function ChangePasswordScreen({ navigation }) {
         </SafeAreaView >
     );
 }
-const PasswordInputs = () => {
-    const [password, setPassword] = useState('');
-    const [new_password, setNewPassword] = useState('');
-    const [new_password_confirmation, setConfirmPassword] = useState('');
-    const [passErr, setPassError] = useState(false);
 
-
-    const onChangePassword = (text) => {
-        text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
-        setPassword(text)
-    }
-    const onChangeNewPassword = (text) => {
-        text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
-        setNewPassword(text)
-    }
-    const onChangeConfirmPassword = (text) => {
-        text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
-        setConfirmPassword(text)
-    }
-    useEffect(() => {
-        const invalid = passErr || new_password_confirmation !== new_password || password === '' || new_password === '';
-        setCanSave(!invalid);
-    }, [passErr, new_password_confirmation, new_password, password])
-    return (
-        <>
-            <Input
-                type="password"
-                label='Old Password'
-                value={password}
-                placeholder="Enter password"
-                error={passErr && '*password must not be less than 8 digits'}
-                onChangeText={text => { onChangePassword(text) }}
-            />
-            <Input
-                type="password"
-                label='New Password'
-                value={new_password}
-                placeholder="Enter new password"
-                error={passErr && '*password must not be less than 8 digits'}
-                onChangeText={text => { onChangeNewPassword(text) }}
-            />
-            <Input
-                type="password"
-                label='Password'
-                value={new_password_confirmation}
-                placeholder="Confirm new password"
-                error={new_password_confirmation !== new_password && '*password confirmation must match password'}
-                onChangeText={text => { onChangeConfirmPassword(text) }}
-            />
-        </>
-    )
-}
 
 const PasswordRequirement = () => {
     return (
@@ -169,7 +117,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFF',
-        // marginVertical: normalize(20)
     },
     contentContainer: {
         backgroundColor: '#F8F9FD',

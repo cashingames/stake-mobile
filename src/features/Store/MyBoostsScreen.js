@@ -30,7 +30,7 @@ const MyItem = ({ boost }) => {
                     <View style={styles.hr}><Text></Text></View>
                 </View>
                 <Text style={styles.boostName}>{boost.name}</Text>
-                {/* <Text style={styles.number}>x{boost.count}</Text> */}
+                <Text style={styles.number}>x{boost.count}</Text>
                 <Text style={styles.description}>{boost.description}</Text>
             </View>
         </TouchableOpacity>
