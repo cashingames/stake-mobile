@@ -7,14 +7,15 @@ import Input from '../../shared/Input';
 import { useDispatch } from 'react-redux';
 import { changePassword } from '../Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { isStaging } from '../../utils/BaseUrl';
 
 
 export default function ChangePasswordScreen({ navigation }) {
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
-    const [password, setPassword] = useState('123456789');
+    const [password, setPassword] = useState(isStaging ? '123456789' : '');
     const [new_password, setNewPassword] = useState('12345678');
-    const [new_password_confirmation, setConfirmPassword] = useState('12345678');
+    const [new_password_confirmation, setConfirmPassword] = useState(isStaging ? '12345678' : '');
     const [passErr, setPassError] = useState(false);
     const dispatch = useDispatch();
 

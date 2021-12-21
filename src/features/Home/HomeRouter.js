@@ -15,7 +15,6 @@ import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
 import { backendUrl } from '../../utils/BaseUrl';
-import PurchaseSuccessfulScreen from '../Store/PurchaseSuccessfulScreen';
 
 const HomeStack = createDrawerNavigator();
 
@@ -118,7 +117,7 @@ function CustomDrawerContent(props) {
                     style={drawStyles.label}
                     labelContainerStyle
                 />
-                  <DrawerItem
+                <DrawerItem
                     label={() =>
                         <View style={drawStyles.item}>
                             <Text style={drawStyles.itemLabel}>Privacy Policy</Text>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,11 +8,9 @@ export default function InviteFriendsScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.contentContainer}>
-                <Heading />
-                <Instructions />
-                <InviteLink />
-            </View>
+            <Heading />
+            <Instructions />
+            <InviteLink />
         </ScrollView>
     );
 }
@@ -66,18 +64,11 @@ const ShareLink = ({ iconName, text }) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#F8F9FD',
-    },
-    contentContainer: {
-        paddingBottom: normalize(150),
         paddingHorizontal: normalize(18)
-    },
-    content: {
-        marginHorizontal: normalize(18),
-
     },
 
     heading: {
-        marginVertical: normalize(10),
+        marginVertical: normalize(30),
     },
     value: {
         fontSize: normalize(20),

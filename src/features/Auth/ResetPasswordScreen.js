@@ -7,11 +7,12 @@ import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import Input from '../../shared/Input';
 import { resetPassword } from './AuthSlice';
+import { isStaging } from '../../utils/BaseUrl';
 
 export default function ({ navigation }) {
     const dispatch = useDispatch();
 
-    const [password, setPassword] = useState('AAkinkunmi@1');
+    const [password, setPassword] = useState(isStaging ? 'AAkinkunmi@1' : '');
     const [canSend, setCanSend] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);

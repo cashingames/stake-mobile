@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import normalize from '../utils/normalize';
+import { formatNumber } from '../utils/stringUtl';
 import TopLeader from './TopLeader';
 
 
@@ -16,17 +17,17 @@ function GlobalTopLeaders({ leaders }) {
                 <TopLeader
                     podPosition={require('../../assets/images/position3.png')}
                     name={`${thirdLeader.first_name} ${thirdLeader.last_name}`}
-                    point={thirdLeader.points}
+                    point={`${formatNumber(thirdLeader.points)} pts`}
                     avatar={thirdLeader.avatar} />
                 <TopLeader
                     podPosition={require('../../assets/images/position1.png')}
                     name={`${firstLeader.first_name} ${firstLeader.last_name}`}
-                    point={firstLeader.points}
+                    point={`${formatNumber(firstLeader.points)} pts`}
                     avatar={firstLeader.avatar} />
                 <TopLeader
                     podPosition={require('../../assets/images/position2.png')}
-                    name={`${secondLeader.first_name} ${thirdLeader.last_name}`}
-                    point={secondLeader.points}
+                    name={`${secondLeader.first_name} ${secondLeader.last_name}`}
+                    point={`${formatNumber(secondLeader.points)} pts`}
                     avatar={secondLeader.avatar} />
             </> : <></>
             }

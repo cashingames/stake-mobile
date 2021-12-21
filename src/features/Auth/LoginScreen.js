@@ -14,13 +14,14 @@ import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import { loginUser } from './AuthSlice';
 import Input from '../../shared/Input';
+import { isStaging } from '../../utils/BaseUrl';
 
 export default function LoginScreen({ navigation }) {
 
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState('arunajoy2602@gmail.com');
-    const [password, setPassword] = useState('12345678');
+    const [email, setEmail] = useState(isStaging ? 'arunajoy2602@gmail.com' : '');
+    const [password, setPassword] = useState(isStaging ? '12345678' : '');
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');

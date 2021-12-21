@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import normalize from '../../utils/normalize';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
+import { formatNumber } from '../../utils/stringUtl';
 
 export default function () {
 
@@ -30,7 +31,7 @@ const MyItem = ({ boost }) => {
                     <View style={styles.hr}><Text></Text></View>
                 </View>
                 <Text style={styles.boostName}>{boost.name}</Text>
-                <Text style={styles.number}>x{boost.count}</Text>
+                <Text style={styles.number}>x{formatNumber(boost.count)}</Text>
                 <Text style={styles.description}>{boost.description}</Text>
             </View>
         </TouchableOpacity>

@@ -1,37 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, Button } from 'react-native';
-// import { Ionicons } from '@expo/vector-icons';
-// import DatePicker from 'react-native-date-picker'
-// import SelectDropdown from 'react-native-select-dropdown'
-import normalize from '../../utils/normalize';
-import { useDispatch, useSelector } from 'react-redux';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import DetailInput from '../../shared/DetailInput';
+import { useSelector } from 'react-redux';
+import Input from '../../shared/Input';
+import normalize from '../../utils/normalize';
 
 export default function BankDetailsScreen({ navigation }) {
-    const user = useSelector(state => state.auth.user)
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.content}>
-                <TouchableOpacity>
-                    <Text style={styles.saveChanges}>Save Changes</Text>
-                </TouchableOpacity>
-                <DetailsInput />
-            </View>
+            <TouchableOpacity>
+                <Text style={styles.saveChanges}>Save Changes</Text>
+            </TouchableOpacity>
+            <DetailsInput />
         </ScrollView>
     );
 }
 
 const DetailsInput = () => {
     const user = useSelector(state => state.auth.user)
-    const banks = []
-    const [bankName, setBankName] = useState('');
     const [accountNumber, setAccountNumber] = useState(user.accountNumber);
     const [accountName, setAccountName] = useState(user.accountName);
     const [accountNumberErr, setAccountNumberError] = useState(false);
     const [accountNameErr, setAccountNameError] = useState(false);
-    const [canSave, setCanSave] = useState(false); 
 
     const onChangeAccountNumber = (text) => {
         text.length > 0 && text.length < 10 ? setAccountNumberError(true) : setAccountNumberError(false);
@@ -44,14 +35,14 @@ const DetailsInput = () => {
     }
 
     useEffect(() => {
-        const invalid =accountNumberErr || accountNameErr  || accountName === '' || accountNumber === '';
+        const invalid = accountNumberErr || accountNameErr || accountName === '' || accountNumber === '';
         setCanSave(!invalid);
     }, [accountNumberErr, accountNameErr, accountName, accountNumber])
 
     return (
         <View>
-            <DetailInput
-                inputLabel='Account Number'
+            <Input
+                label='Account Number'
                 value={accountNumber}
                 onChangeText={text => { onChangeAccountNumber(text) }}
                 maxLength={10}
@@ -59,8 +50,8 @@ const DetailsInput = () => {
                 error={accountNumberErr && '*account number must not be less than 10 digits'}
                 style={styles.input}
             />
-            <DetailInput
-                inputLabel='Name on Account'
+            <Input
+                label='Name on Account'
                 value={accountName}
                 onChangeText={text => { onChangeAccountName(text) }}
                 error={accountNameErr && '*account name must not be empty'}
@@ -73,13 +64,9 @@ const DetailsInput = () => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor:'#E5E5E5'
-    },
-    content: {
-        marginHorizontal: normalize(18),
+        paddingHorizontal: normalize(18),
         paddingVertical: normalize(10),
-        marginBottom: normalize(20)
-
+        backgroundColor: "#F8F9FD",
     },
     detail: {
         marginVertical: normalize(10)
