@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 export default function (props) {
-    const { label, type, error } = props;
+    const { label, type, error, editable } = props;
 
     const [hidden, setHidden] = useState(type === "password");
 
@@ -18,7 +18,7 @@ export default function (props) {
             <Text style={styles.inputLabel} >{label}</Text>
             <View style={styles.inputContainer}>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, editable ?? styles.disabled]}
                     {...props}
                     secureTextEntry={hidden}
                 />
@@ -70,5 +70,9 @@ const styles = StyleSheet.create({
         fontFamily: 'graphik-regular',
         color: '#EF2F55',
         fontSize: normalize(10)
-    }
+    },
+    disabled: {
+        color: '#535761',
+        opacity: 0.3
+    },
 });

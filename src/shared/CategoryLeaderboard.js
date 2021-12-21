@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 import { backendUrl } from '../utils/BaseUrl';
 import normalize from '../utils/normalize';
-import { isTrue } from '../utils/stringUtl';
+import { formatNumber, isTrue } from '../utils/stringUtl';
 import OtherLeaders from './OtherLeaders';
 
 export default function CategoryLeaderboard({ category, leaders }) {
@@ -60,10 +60,10 @@ function CategoryTopLeader({ avatar, name, position, point, topLeaderStyle }) {
                 style={styles.avatar}
                 source={isTrue(avatar) ? { uri: `${backendUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
             />
-            <Text style={styles.number}>{position}</Text>
+            <Text style={styles.number}>{formatNumber(position)}</Text>
             <Text style={styles.leaderName}>{name}</Text>
             <View style={styles.leaderPoint}>
-                <Text style={styles.point}>{point}</Text>
+                <Text style={styles.point}>{formatNumber(point)} pts</Text>
             </View>
         </View>
     )

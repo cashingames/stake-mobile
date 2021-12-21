@@ -1,27 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Alert } from 'react-native';
-import normalize from '../../utils/normalize';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Picker } from '@react-native-picker/picker';
-import Input from '../../shared/Input';
-import { useDispatch, useSelector } from 'react-redux';
-import { editBankDetails } from '../Auth/AuthSlice';
+import { editBankDetails, getUser } from '../Auth/AuthSlice';
 import { getBankData } from '../CommonSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { getUser } from "../Auth/AuthSlice";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import Input from '../../shared/Input';
+import normalize from '../../utils/normalize';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function BankDetailsScreen({ navigation, bank }) {
-    const [saving, setSaving] = useState(false);
-    const [canSave, setCanSave] = useState(false);
+export default function BankDetailsScreen({ navigation }) {
+
+    const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     const banks = useSelector(state => state.common.banks)
-    // console.log(JSON.stringify(banks))
-    const [bankName, setBankName] = useState(user.bankName ?? '');
+
+
+    const [saving, setSaving] = useState(false);
+    const [canSave, setCanSave] = useState(false);
     const [accountNumber, setAccountNumber] = useState(user.accountNumber);
     const [accountName, setAccountName] = useState(user.accountName);
     const [accountNumberErr, setAccountNumberError] = useState(false);
     const [accountNameErr, setAccountNameError] = useState(false);
-    const dispatch = useDispatch();
+    const [bankName, setBankName] = useState(user.bankName ?? '');
+
     const onChangeAccountNumber = (text) => {
         text.length > 0 && text.length < 10 ? setAccountNumberError(true) : setAccountNumberError(false);
         setAccountNumber(text)
@@ -48,7 +50,7 @@ export default function BankDetailsScreen({ navigation, bank }) {
 
     const onSaveBankDetails = () => {
         setSaving(true);
-        console.log(accountNumber + 'fish')
+
         dispatch(editBankDetails({
             bankName,
             accountName,
@@ -93,10 +95,11 @@ export default function BankDetailsScreen({ navigation, bank }) {
                         onChangeText={text => { onChangeAccountName(text) }}
                         error={accountNameErr && '*account name must not be empty'}
                     />
-                    <View style={styles.detail}>
-                        <Text style={styles.inputLabel}>Select Bank</Text>
-                        <Text style={styles.input}>Select Bank</Text>
+                    <View style={styles.banksContainer}>
+                        <Text style={styles.bankLabel}>Select Bank</Text>
+
                         <Picker
+                            style={styles.bankPicker}
                             selectedValue={bankName}
                             onValueChange={(itemValue, itemIndex) =>
                                 setBankName(itemValue)
@@ -105,7 +108,7 @@ export default function BankDetailsScreen({ navigation, bank }) {
 
                         >
                             {banks && banks.map((bank, i) =>
-                                <Picker.Item label={bank.name} key={i} value={bank.name} style={styles.pickerItem} />
+                                <Picker.Item label={bank.name} key={i} value={bank.name} />
                             )}
                         </Picker>
                     </View>
@@ -116,36 +119,11 @@ export default function BankDetailsScreen({ navigation, bank }) {
     );
 }
 
-const SelectBank = ({ bank }) => {
-    const user = useSelector(state => state.auth.user)
-    const [bankName, setBankName] = useState(user.bankName ?? '');
-    return (
-
-        <Picker
-            selectedValue={bankName}
-            onValueChange={(itemValue, itemIndex) =>
-                setBankName(itemValue)
-            }
-            mode='dropdown'
-
-        >
-            {banks && banks.map((bank, i) => <SelectBank key={i} bank={bank} />)}
-            <Picker.Item label={bank.name} value={bank.name} style={styles.pickerItem} />
-        </Picker>
-
-    )
-}
-
-
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#E5E5E5'
-    },
-    content: {
-        marginHorizontal: normalize(18),
+        paddingHorizontal: normalize(18),
         paddingVertical: normalize(10),
-        marginBottom: normalize(20)
-
+        backgroundColor: "#F8F9FD",
     },
     saveChanges: {
         fontSize: normalize(12),
@@ -153,33 +131,19 @@ const styles = StyleSheet.create({
         color: '#EF2F55',
         marginLeft: 'auto'
     },
-    detail: {
+    banksContainer: {
         marginVertical: normalize(10)
     },
-    select: {
-        borderColor: ' rgba(0, 0, 0, 0.1)',
-        borderWidth: 1,
-        borderRadius: 8,
+    bankPicker: {
+        color: '#000000B2',
+        borderStyle: 'solid',
+        borderWidth: 5,
+        backgroundColor: "#ebeff5",
     },
-    pickerItem: {
-        height: normalize(20)
-    },
-    inputLabel: {
+    bankLabel: {
         fontFamily: 'graphik-medium',
         color: '#000000B2',
         marginBottom: normalize(8)
-    },
-    input: {
-        // height: normalize(38),
-        paddingVertical:normalize(15),
-        borderWidth: normalize(1),
-        borderRadius: normalize(10),
-        paddingLeft: normalize(10),
-        paddingRight: normalize(20),
-        borderColor: '#CDD4DF',
-        fontFamily: 'graphik-regular',
-        color: '#00000080',
-        alignItems:'center'
     },
 
 });

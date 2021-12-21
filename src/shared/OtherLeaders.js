@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { backendUrl } from '../utils/BaseUrl';
 import normalize from '../utils/normalize';
-import { isTrue } from '../utils/stringUtl';
+import { formatNumber, isTrue } from '../utils/stringUtl';
 
 export default function OtherLeaders({ leaders }) {
     const currentLeadedrs = leaders?.slice(3, leaders.length) ?? null;
@@ -13,7 +13,7 @@ export default function OtherLeaders({ leaders }) {
     return (
         <View style={styles.container}>
             {currentLeadedrs.map((leader, i) => <OtherLeader key={i} leader={leader}
-                position='4'
+                position={formatNumber(i + 4)}
                 indexArrow={require('../../assets/images/up_arrow.png')}
             />)}
         </View>
@@ -29,17 +29,17 @@ function OtherLeader({ leader, position, indexArrow }) {
                 />
                 <View style={otherLeaderStyles.username}>
                     <Text style={otherLeaderStyles.names}>{`${leader.first_name} ${leader.last_name}`}</Text>
-                    <Text style={otherLeaderStyles.point}>{leader.points}pts</Text>
+                    <Text style={otherLeaderStyles.point}>{formatNumber(leader.points)} pts</Text>
                 </View>
             </View>
             <View style={otherLeaderStyles.position}>
                 <View style={otherLeaderStyles.rank}>
                     <Text style={otherLeaderStyles.rankText}>{position}</Text>
                 </View>
-                <Image
+                {/* <Image
                     style={otherLeaderStyles.arrow}
                     source={indexArrow}
-                />
+                /> */}
             </View>
         </View>
     );

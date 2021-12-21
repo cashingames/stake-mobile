@@ -7,11 +7,12 @@ import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import Input from '../../shared/Input';
 import { verifyAccount } from './AuthSlice';
+import { isStaging } from '../../utils/BaseUrl';
 
 export default function ({ navigation }) {
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState('oyekunmi@gmail.com');
+    const [email, setEmail] = useState(isStaging ? 'oyekunmi@gmail.com' : '');
     const [canSend, setCanSend] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);

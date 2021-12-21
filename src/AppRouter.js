@@ -15,11 +15,15 @@ import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
 import TransactionScreen from './features/Transactions/TransactionScreen';
 import GameStoreRouter from './features/Store/GameStoreRouter';
 import PurchaseSuccessfulScreen from './features/Store/PurchaseSuccessfulScreen';
-import ProfileRouter from './features/Profile/ProfileRouter';
 import TermsAndConditionsScreen from './screens/TermsAndConditionsScreen';
 import PrivacyPolicyScreen from './screens/PrivacyPolicyScreen';
 import InviteFriendsScreen from './screens/InviteFriendsScreen';
 import UserProfileScreen from './features/Profile/UserProfileScreen';
+import UserStatsScreen from './features/Profile/UserStatsScreen';
+import ChangePasswordScreen from './features/Profile/ChangePasswordScreen';
+import AchievementsMilestoneScreen from './features/Profile/AchievementsMilestoneScreen';
+import BankDetailsScreen from './features/Profile/BankDetailsScreen';
+import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -57,14 +61,23 @@ function AppRouter() {
                 <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Extended Leaderboard' }} />
                 <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
                 <AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
+
                 <AppStack.Screen name="GameStore" component={GameStoreRouter} options={{ title: 'Store', headerShadowVisible: false }} />
                 <AppStack.Screen name="Terms" component={TermsAndConditionsScreen} options={{ title: 'Terms & Conditions' }} />
                 <AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
                 <AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
                 <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
-                <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ title: 'Purchase'}} />
-                <AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
-                <AppStack.Screen  name="ProfileRouter" component={ProfileRouter}  options={{ title: '', headerShadowVisible: false }} />
+                <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ title: 'Purchase' }} />
+
+                <AppStack.Group >
+                    <AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
+                    <AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Edit Details' }} />
+                    <AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Change Password' }} />
+                    <AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ title: 'Stats' }} />
+                    <AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ title: 'Milestones' }} />
+                    <AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
+                </AppStack.Group>
+
             </AppStack.Group>
 
 

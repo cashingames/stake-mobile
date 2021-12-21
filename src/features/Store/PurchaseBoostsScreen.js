@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { buyBoostFromWallet } from "./StoreSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { getUser } from "../Auth/AuthSlice";
+import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 
 
 export default function () {
@@ -40,11 +41,11 @@ const BoostCard = ({ boost }) => {
                     <View style={styles.hr}><Text></Text></View>
                 </View>
                 <Text style={styles.boostName}>{boost.name}</Text>
-                <Text style={styles.number}>x{boost.pack_count}</Text>
+                <Text style={styles.number}>x{formatNumber(boost.pack_count)}</Text>
                 <Text style={styles.description}>{boost.description}</Text>
                 <View style={styles.buy}>
-                    <Text style={styles.buyWithPoint}>{boost.point_value}pts</Text>
-                    <Text style={styles.buyWithCash}>&#8358;{boost.currency_value}</Text>
+                    <Text style={styles.buyWithPoint}>{formatNumber(boost.point_value)} pts</Text>
+                    <Text style={styles.buyWithCash}>&#8358;{formatCurrency(boost.currency_value)}</Text>
                 </View>
                 <RBSheet
                     ref={refRBSheet}
@@ -105,12 +106,12 @@ const BuyBoost = ({ boost, onClose, disabled }) => {
                 <Pressable onPress={buyBoostWallet} style={() => [
                     {
                         backgroundColor: disabled
-                            ?   '#EF2F55'
+                            ? '#EF2F55'
                             : '#DFCBCF'
                     },
                     styles.optionButton
-                ]} 
-                disabled={canPay}
+                ]}
+                    disabled={canPay}
                 >
                     <Text style={styles.buyButton}>{loading ? 'Buying...' : 'Pay'}</Text>
                 </Pressable>

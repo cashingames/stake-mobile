@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import GlobalTopLeaders from '../../shared/GlobalTopLeaders';
 import normalize from '../../utils/normalize';
 import { getData } from '../../utils/ApiHelper';
-import { isTrue, formatCurrency } from '../../utils/stringUtl';
+import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
@@ -78,7 +78,7 @@ const UserPoints = ({ points }) => {
                 source={require('../../../assets/images/point-trophy.png')}
             />
             <View style={styles.pointsNumber}>
-                <Text style={styles.userPoint}>{formatCurrency(points)}</Text>
+                <Text style={styles.userPoint}>{formatNumber(points)}</Text>
                 <Text style={styles.pointDetail} >YOUR POINTS EARNED</Text>
             </View>
         </View>
@@ -89,11 +89,11 @@ const UserRanking = ({ gamesCount, ranking }) => {
     return (
         <View style={styles.userRanking}>
             <View style={styles.gamesPlayed}>
-                <Text style={styles.rankNumber}>{formatCurrency(gamesCount)}</Text>
+                <Text style={styles.rankNumber}>{formatNumber(gamesCount)}</Text>
                 <Text style={styles.rankDetail}>GAMES PLAYED</Text>
             </View>
             <View style={styles.globalRanking}>
-                <Text style={styles.rankNumber}>{formatCurrency(ranking)}</Text>
+                <Text style={styles.rankNumber}>{formatNumber(ranking)}</Text>
                 <Text style={styles.rankDetail}>GLOBAL RANKING</Text>
             </View>
         </View>

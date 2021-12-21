@@ -4,24 +4,24 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
+import { unwrapResult } from '@reduxjs/toolkit';
 
+import SocialSigninDivider from '../../shared/SocialSigninDivider';
+import SocialSignUp from '../../shared/SocialSignUp';
+import AuthBanner from '../../shared/AuthBanner';
 import AuthTitle from '../../shared/AuthTitle';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
-import SocialSignUp from '../../shared/SocialSignUp';
-import AuthBanner from '../../shared/AuthBanner';
-import Input from '../../shared/Input';
-import SocialSigninDivider from '../../shared/SocialSigninDivider';
 import { loginUser } from './AuthSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
-
+import Input from '../../shared/Input';
+import { isStaging } from '../../utils/BaseUrl';
 
 export default function LoginScreen({ navigation }) {
 
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState('arunajoy2602@gmail.com');
-    const [password, setPassword] = useState('12345678');
+    const [email, setEmail] = useState(isStaging ? 'arunajoy2602@gmail.com' : '');
+    const [password, setPassword] = useState(isStaging ? '12345678' : '');
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');

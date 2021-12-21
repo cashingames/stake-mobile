@@ -1,23 +1,16 @@
-import React, { useRef, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity, TextInput, ImageBackground } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import normalize from '../../utils/normalize';
-// import currency from "../services/currency";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import HeaderBack from '../../shared/HeaderBack';
-import { useNavigation } from '@react-navigation/native';
 
 
 export default function FundWalletCompleted({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* <ImageBackground source={require('../../../assets/images/confetti1.png')} style={styles.image} resizeMode="cover"> */}
-                <ScrollView>
-                    <TransactionSuccessful />
-                    {/* <TransactionFailed /> */}
-                </ScrollView>
-            {/* </ImageBackground> */}
+            <ScrollView>
+                <TransactionSuccessful />
+            </ScrollView>
         </SafeAreaView>
     );
 }
@@ -31,18 +24,6 @@ const TransactionSuccessful = () => {
                 &#8358;2,000.00 has been completed
             </Text>
             <DoneButton onPress={() => navigation.navigate('WalletScreen')} text='Done' />
-        </View>
-    )
-};
-const TransactionFailed = () => {
-    return (
-        <View style={styles.success}>
-            <Text style={styles.successTitle}>Failed!</Text>
-            <Text style={styles.successText}>
-                The transaction to fund your wallet with the amount:
-                &#8358;2,000.00 failed, please try again later.
-            </Text>
-            <DoneButton onPress={() => navigation.navigate('FundWalletScreen')} text='Try Again' />
         </View>
     )
 };
@@ -84,16 +65,16 @@ const styles = StyleSheet.create({
         fontFamily: 'graphik-bold',
         fontSize: normalize(30),
         color: '#151C2F',
-        alignItems:'center',
-        justifyContent:'center',
-        textAlign:'center'
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center'
     },
-  successText: {
+    successText: {
         fontFamily: 'graphik-regular',
         fontSize: normalize(13),
         color: '#4F4F4F',
-        alignItems:'center',
-        textAlign:'center',
+        alignItems: 'center',
+        textAlign: 'center',
         lineHeight: normalize(22),
         marginVertical: normalize(15)
     },
@@ -117,6 +98,6 @@ const styles = StyleSheet.create({
         fontSize: normalize(12),
         color: '#FFFF'
     },
-  
-   
+
+
 });

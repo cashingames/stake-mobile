@@ -1,42 +1,38 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import normalize from '../../utils/normalize';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
-import Input from '../../shared/Input';
-import { editPersonalDetails } from '../Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { getUser } from "../Auth/AuthSlice";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Input from '../../shared/Input';
+import { editPersonalDetails, getUser } from '../Auth/AuthSlice';
+import normalize from '../../utils/normalize';
+import { isTrue } from '../../utils/stringUtl';
 
 export default function EditProfileDetailsScreen({ navigation }) {
+    const dispatch = useDispatch();
+
     const user = useSelector(state => state.auth.user)
+
     const [saving, setSaving] = useState(false);
     const [email, setEmail] = useState(user.email);
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [username, setUsername] = useState(user.username);
-    const [dateOfBirth, setDateOfBirth] = useState(new Date(Date.parse(user.dateOfBirth)));
+    const [dateOfBirth, setDateOfBirth] = useState(isTrue(user.dateOfBirth) ? new Date(Date.parse(user.dateOfBirth)) : new Date(2003, 0, 1));
     const [gender, setGender] = useState(user.gender);
-    useEffect(() => {
-        // let msec = Date.parse(user.dateOfBirth);
-        // const d = Date.now();
-        // setDateOfBirth(new Date(d))
-        console.log(dateOfBirth);
-    }, [dateOfBirth]);
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
-    const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        // setShow(Platform.OS === 'ios');
+    const onChangeDateOfBirth = (event, selectedDate) => {
+        const currentDate = selectedDate || dateOfBirth;
         setDateOfBirth(currentDate);
+        setShowDatePicker(false);
     };
-    const dispatch = useDispatch();
 
     const onSavePersonalDetails = () => {
         setSaving(true);
-        console.log(firstName + 'fish')
         dispatch(editPersonalDetails({
             firstName,
             lastName,
@@ -46,8 +42,6 @@ export default function EditProfileDetailsScreen({ navigation }) {
         }))
             .then(unwrapResult)
             .then(result => {
-                console.log(result);
-                console.log("success");
                 dispatch(getUser())
                 Alert.alert('Personal details updated successfully')
                 navigation.navigate("UserProfile")
@@ -61,6 +55,8 @@ export default function EditProfileDetailsScreen({ navigation }) {
                 // console.log(rejectedValueOrSerializedError)
             });
     }
+
+    console.log(setShowDatePicker);
 
     return (
         <ScrollView style={styles.container}>
@@ -85,7 +81,6 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         value={username}
                         onChangeText={setUsername}
                         editable={false}
-                        style={styles.editable}
                     />
                     <Input
                         label='Phone number'
@@ -100,21 +95,28 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         value={email}
                         onChangeText={setEmail}
                         editable={false}
-                        style={styles.editable}
                     />
                     <View style={styles.detail}>
-                        <Text style={styles.inputLabel}>Date of Birth</Text>
-                        <DateTimePicker
-                            testID="dateTimePicker"
-                            value={dateOfBirth}
-                            mode={"date"}
-                            display="default"
-                            onChange={onChange}
-                            minimumDate={new Date(2003, 0, 1)}
 
-                            style={styles.date}
-                            textColor='#00000080'
-                        />
+                        {!showDatePicker ?
+                            <Input
+                                label='Date of Birth'
+                                value={dateOfBirth.toDateString()}
+                                onPressIn={() => setShowDatePicker(true)}
+                            />
+
+                            :
+
+                            <DateTimePicker
+                                value={dateOfBirth}
+                                mode={"date"}
+                                display="default"
+                                onChange={onChangeDateOfBirth}
+                                minimumDate={new Date(2003, 0, 1)}
+                                style={styles.dateOfBirth}
+                                textColor='#00000080'
+                            />
+                        }
                     </View>
                     <View style={styles.detail}>
                         <Text style={styles.inputLabel}>Select Gender</Text>
@@ -169,7 +171,7 @@ const styles = StyleSheet.create({
         color: '#000000',
 
     },
-    date: {
+    dateOfBirth: {
         borderColor: ' rgba(0, 0, 0, 0.1)',
         borderWidth: 1,
         borderRadius: 8,
@@ -180,17 +182,7 @@ const styles = StyleSheet.create({
         color: '#00000080',
         marginRight: 'auto',
     },
-    editable: {
-        height: normalize(38),
-        borderWidth: normalize(1),
-        borderRadius: normalize(10),
-        paddingLeft: normalize(10),
-        paddingRight: normalize(20),
-        borderColor: '#CDD4DF',
-        fontFamily: 'graphik-regular',
-        color: '#535761',
-        opacity: 0.3
-    },
+
     detail: {
         marginVertical: normalize(10)
     },
