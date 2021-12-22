@@ -58,8 +58,6 @@ export default function BankDetailsScreen({ navigation }) {
         }))
             .then(unwrapResult)
             .then(result => {
-                console.log(result);
-                console.log("success");
                 dispatch(getUser())
                 Alert.alert('Bank details updated successfully')
                 navigation.navigate("UserProfile")
@@ -68,9 +66,6 @@ export default function BankDetailsScreen({ navigation }) {
                 console.log(rejectedValueOrSerializedError);
                 setSaving(false);
                 Alert.alert('Invalid data provided')
-                // after login eager get commond data for the whole app
-                // console.log("failed");
-                // console.log(rejectedValueOrSerializedError)
             });
     }
 

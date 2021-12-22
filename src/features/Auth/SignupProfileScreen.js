@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import Input from '../../shared/Input';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
-import { registerUser, } from './AuthSlice';
+import { registerUser, setToken, } from './AuthSlice';
+import { saveToken } from '../../utils/ApiHelper';
 
 export default function SignupProfileScreen({ navigation }) {
 
     const dispatch = useDispatch();
+
+    const userCredentials = useSelector(state => state.auth.createAccount);
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -26,20 +28,33 @@ export default function SignupProfileScreen({ navigation }) {
     const onSend = async () => {
         setLoading(true);
 
-        dispatch(registerUser({
-            firstName,
-            lastName,
-            referrer,
-            username,
-        })).then(unwrapResult)
-            .then((originalPromiseResult) => {
-                setLoading(false);
-            })
-            .catch((rejectedValueOrSerializedError) => {
-                setLoading(false);
-                console.log(rejectedValueOrSerializedError)
-                setError("Email or Phone Number has already been taken");
-            })
+        registerUser({
+            first_name: firstName,
+            last_name: lastName,
+            referror: referrer,
+            username: username,
+            ...userCredentials
+        }
+        ).then(response => {
+            console.log(response);
+            saveToken(response.data.data)
+            dispatch(setToken(response.data.data))
+        }, err => {
+            if (!err || !err.response || err.response === undefined) {
+                setError("Your Network is Offline.");
+            }
+            else if (err.response.status === 500) {
+                setError("Service not currently available. Please contact support");
+            }
+            else {
+                const errors =
+                    err.response && err.response.data && err.response.data.errors;
+                const firstError = Object.values(errors, {})[0];
+                setError(firstError[0])
+            }
+        }).finally(() => {
+            setLoading(false);
+        });
     }
 
     useEffect(() => {
@@ -50,7 +65,7 @@ export default function SignupProfileScreen({ navigation }) {
         setFnameErr(!validFirstName);
         setLnameErr(!validLastName);
 
-        setCanSend(!validLastName && !validFirstName);
+        setCanSend(validLastName && validFirstName);
 
     }, [firstName, lastName, username])
 
@@ -99,7 +114,7 @@ export default function SignupProfileScreen({ navigation }) {
             </View>
 
             <View style={styles.button}>
-                <AppButton text={loading ? 'Creating...' : 'Create account'} onPress={onSend} disabled={!canSend} />
+                <AppButton text={loading ? 'Creating...' : 'Create account'} onPress={onSend} disabled={!canSend || loading} />
             </View>
 
         </ScrollView>

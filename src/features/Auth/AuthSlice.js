@@ -1,10 +1,9 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios, { Axios } from 'axios';
+import axios from 'axios';
 import {
     getIsLoggedInOnce,
     login as loginApi,
-    register as registerApi,
     verifyOtp as verifyOtpApi,
     verifyAccount as verifyAccountApi,
     resetPassword as resetPasswordApi,
@@ -12,14 +11,9 @@ import {
 } from '../../utils/ApiHelper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const registerUser = createAsyncThunk(
-    'auth/registerUser',
-    async (data, thunkAPI) => {
-        const response = await registerApi(data);
-        return response.data
-
-    }
-)
+export const registerUser = async (data) => {
+    return axios.post('auth/register', data);
+}
 
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
@@ -85,16 +79,7 @@ export const resetPassword = createAsyncThunk(
 export const changePassword = createAsyncThunk(
     'auth/user/changePassword',
     async (data, thunkAPI) => {
-        // console.log(data);
         const response = await axios.post('v2/profile/me/password/change', data)
-            // .catch(error => {
-            //     if (error.response) {
-            //         // The request was made and the server responded with a status code
-            //         // that falls out of the range of 2xx
-            //         // console.log(error.response.data);
-            //         return error.response.data;
-            //     }
-            // });
         return response.data
     }
 )
@@ -102,32 +87,14 @@ export const changePassword = createAsyncThunk(
 export const editPersonalDetails = createAsyncThunk(
     'auth/user/editPersonalDetails',
     async (data, thunkAPI) => {
-        // console.log(data);
         const response = await axios.post('v2/profile/me/edit-personal', data)
-            // .catch(error => {
-            //     if (error.response) {
-            //         // The request was made and the server responded with a status code
-            //         // that falls out of the range of 2xx
-            //         // console.log(error.response.data);
-            //         return error.response.data;
-            //     }
-            // });
         return response.data
     }
 )
 export const editBankDetails = createAsyncThunk(
     'auth/user/editBankDetails',
     async (data, thunkAPI) => {
-        // console.log(data);
         const response = await axios.post('v2/profile/me/edit-bank', data)
-            // .catch(error => {
-            //     if (error.response) {
-            //         // The request was made and the server responded with a status code
-            //         // that falls out of the range of 2xx
-            //         // console.log(error.response.data);
-            //         return error.response.data;
-            //     }
-            // });
         return response.data
     }
 )

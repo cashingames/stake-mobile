@@ -11,28 +11,26 @@ export default function AchievementsMilestoneScreen({ navigation }) {
     const achievements = useSelector(state => state.common.achievements);
     const user = useSelector(state => state.auth.user);
 
-    var nextLevel = achievements.find( item => item.point_milestone > user.points);
+    var nextLevel = achievements.find(item => item.point_milestone > user.points);
 
     return (
-            <ScrollView style={styles.container}>
-                <View style={styles.content}>
-                    <MilestoneStatus milestoneIcon={{ uri: `${backendUrl}/${nextLevel.medal}` }}
-                        pointsProgress={`${user.points}/${nextLevel.point_milestone}`}
-                        milestoneName={`${nextLevel.title}`}
-                        progress={0.08}
-                    />
-                    <View style={styles.cards}>
-                        {achievements.map((achievement, i) => <AchievementCard key= {i} userPoint={user.points} achievement={achievement} />)}
-                    </View>
+        <ScrollView style={styles.container}>
+            <View style={styles.content}>
+                <MilestoneStatus milestoneIcon={{ uri: `${backendUrl}/${nextLevel.medal}` }}
+                    pointsProgress={`${user.points}/${nextLevel.point_milestone}`}
+                    milestoneName={`${nextLevel.title}`}
+                    progress={0.08}
+                />
+                <View style={styles.cards}>
+                    {achievements.map((achievement, i) => <AchievementCard key={i} userPoint={user.points} achievement={achievement} />)}
                 </View>
-            </ScrollView>
+            </View>
+        </ScrollView>
     );
 }
 
 const MilestoneStatus = ({ milestoneIcon, pointsProgress, milestoneName, progress }) => {
 
-    console.log("here")
-    console.log(milestoneIcon)
     return (
         <View style={styles.status}>
             <View>
@@ -49,20 +47,20 @@ const MilestoneStatus = ({ milestoneIcon, pointsProgress, milestoneName, progres
             </View>
             <Image
                 source={milestoneIcon}
-                style= {styles.milestoneIcon}
+                style={styles.milestoneIcon}
             />
         </View>
     )
 }
 
-const AchievementCard = ({ achievement, userPoint,  }) => {
+const AchievementCard = ({ achievement, userPoint, }) => {
 
     const disabled = userPoint < achievement.point_milestone;
 
 
     return (
-        <View 
-                style={[styles.card, {opacity: disabled ? 0.5 : 1}, {backgroundColor: disabled ? '#C4C4C4' : '#FFFF'}]} disabled={disabled}>
+        <View
+            style={[styles.card, { opacity: disabled ? 0.5 : 1 }, { backgroundColor: disabled ? '#C4C4C4' : '#FFFF' }]} disabled={disabled}>
             <Image
                 source={{ uri: `${backendUrl}/${achievement.medal}` }}
                 style={styles.icon}
@@ -109,7 +107,7 @@ const styles = StyleSheet.create({
         height: normalize(180),
         borderRadius: 11,
         borderWidth: 1,
-        backgroundColor:'#FFFF',
+        backgroundColor: '#FFFF',
         borderColor: '#E0E0E0',
     },
     statusText: {

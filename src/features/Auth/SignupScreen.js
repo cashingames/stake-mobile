@@ -47,7 +47,7 @@ export default function SignupScreen({ navigation }) {
 
     const onNext = () => {
         //save this information in store
-        dispatch(saveCreatedUserCredentials({ email, password, phone }));
+        dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone }));
         navigation.navigate("SignupProfile")
     }
 

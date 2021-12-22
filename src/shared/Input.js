@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, Text, View } from 'react-native';
 import normalize from '../utils/normalize';
+
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -13,12 +14,15 @@ export default function (props) {
         setHidden(!hidden);
     }
 
+    //if the param is not passed or it is passed as true, then it is editable
+    const shouldUseEditableStyle = editable === undefined || editable === true;
+
     return (
         <>
             <Text style={styles.inputLabel} >{label}</Text>
             <View style={styles.inputContainer}>
                 <TextInput
-                    style={[styles.input, editable ?? styles.disabled]}
+                    style={[styles.input, shouldUseEditableStyle ? {} : styles.disabled]}
                     {...props}
                     secureTextEntry={hidden}
                 />

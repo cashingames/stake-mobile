@@ -22,6 +22,7 @@ const HomeRouter = () => {
 
     const AppMainHeaderOptions = () => {
         return {
+            drawerType: "slide",
             headerRight: (props) => <RightButtons {...props} />,
             headerRightContainerStyle: {
                 paddingRight: normalize(15),
@@ -36,7 +37,6 @@ const HomeRouter = () => {
     return (
         <HomeStack.Navigator
             initialRouteName="Home"
-            drawerHideStatusBarOnOpen="true"
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={AppMainHeaderOptions}>
             <HomeStack.Screen name="Game" component={GameScreen} options={{ title: 'Game' }} />

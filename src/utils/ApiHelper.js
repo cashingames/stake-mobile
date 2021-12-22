@@ -34,6 +34,8 @@ async function postData(url = '', data = {}) {
         body: JSON.stringify(data) // body data type must match "Content-Type" header
     });
     if (!response.ok) {
+        debugger;
+        console.log(response);
         throw new Error(response.json());
     }
 
@@ -56,6 +58,7 @@ async function getData(url = '') {
 
 async function register(data) {
     return postData('auth/register', data).then(response => {
+        console.log("here")
         saveToken(response.data);
         return response;
     });
