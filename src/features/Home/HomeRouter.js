@@ -139,6 +139,17 @@ function CustomDrawerContent(props) {
                     style={drawStyles.label}
                     labelContainerStyle
                 />
+                  <DrawerItem
+                    label={() =>
+                        <View style={drawStyles.item}>
+                            <Text style={drawStyles.itemLabel}>Support</Text>
+                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                        </View>}
+                    onPress={() => navigation.navigate('Support')}
+                    activeTintColor='#EF2F55'
+                    style={drawStyles.label}
+                    labelContainerStyle
+                />
             </View>
             <BorderlessButton onPress={onLogout} style={styles.logoutContainer}>
                 <Text style={drawStyles.logoutText}>Logout</Text>

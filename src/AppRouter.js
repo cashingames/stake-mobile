@@ -28,6 +28,8 @@ import AchievementsMilestoneScreen from './features/Profile/AchievementsMileston
 import BankDetailsScreen from './features/Profile/BankDetailsScreen';
 import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScreen';
 import { baseURL } from './utils/BaseUrl';
+import SupportQuestionsScreen from './screens/FAQ Pages/SupportQuestionsScreen';
+import SupportAnswerScreen from './screens/FAQ Pages/SupportAnswerScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -73,6 +75,8 @@ function AppRouter() {
                 <AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
                 <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
                 <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ headerShown: false }} />
+                <AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Support' }} />
+                <AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Support Details' }} />
 
                 <AppStack.Group >
                     <AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
