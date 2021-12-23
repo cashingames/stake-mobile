@@ -1,20 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 
 import { baseURL } from "./BaseUrl";
 import { isTrue } from "./stringUtl";
 
-(async function () {
-    axios.defaults.baseURL = baseURL;
-    const token = await AsyncStorage.getItem("token");
-    if (token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    } else {
-        axios.defaults.headers.common['Authorization'] = null;
-        /*if setting null does not remove `Authorization` header then try  */
-        delete axios.defaults.headers.common['Authorization'];
-    }
-})();
+
 
 // Example POST method implementation:
 async function postData(url = '', data = {}) {

@@ -25,6 +25,7 @@ function App() {
     return <AppLoading />
   }
 
+
   console.log("app restart");
 
   return (

@@ -10,6 +10,9 @@ import PageLoading from './shared/PageLoading';
 
 import { isTrue } from './utils/stringUtl';
 import { isLoggedIn } from './features/Auth/AuthSlice';
+
+import axios from "axios";
+
 import FundWalletScreen from './features/Transactions/FundWalletScreen';
 import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
 import TransactionScreen from './features/Transactions/TransactionScreen';
@@ -24,6 +27,7 @@ import ChangePasswordScreen from './features/Profile/ChangePasswordScreen';
 import AchievementsMilestoneScreen from './features/Profile/AchievementsMilestoneScreen';
 import BankDetailsScreen from './features/Profile/BankDetailsScreen';
 import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScreen';
+import { baseURL } from './utils/BaseUrl';
 
 
 const AppStack = createNativeStackNavigator();
@@ -34,6 +38,8 @@ function AppRouter() {
     const [loading, setLoading] = useState(true);
 
     const token = useSelector(state => state.auth.token);
+
+    boostStrapAxios(token); //sets basic api call params
 
     //during app restart, check localstorage for these info
     useEffect(() => {
@@ -50,7 +56,6 @@ function AppRouter() {
     if (!isTrue(token)) {
         return <AuthRouter />;
     }
-
 
     return (
         <AppStack.Navigator>
@@ -88,3 +93,14 @@ function AppRouter() {
 
 
 export default AppRouter;
+
+const boostStrapAxios = async function (token) {
+    axios.defaults.baseURL = baseURL;
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+        axios.defaults.headers.common['Authorization'] = null;
+        /*if setting null does not remove `Authorization` header then try  */
+        delete axios.defaults.headers.common['Authorization'];
+    }
+};
