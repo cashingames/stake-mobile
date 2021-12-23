@@ -25,7 +25,7 @@ export default function SignupProfileScreen({ navigation }) {
     const [error, setError] = useState('');
 
 
-    const onSend = async () => {
+    const onSend = () => {
         setLoading(true);
 
         registerUser({
@@ -34,9 +34,7 @@ export default function SignupProfileScreen({ navigation }) {
             referror: referrer,
             username: username,
             ...userCredentials
-        }
-        ).then(response => {
-            console.log(response);
+        }).then(response => {
             saveToken(response.data.data)
             dispatch(setToken(response.data.data))
         }, err => {
@@ -52,7 +50,6 @@ export default function SignupProfileScreen({ navigation }) {
                 const firstError = Object.values(errors, {})[0];
                 setError(firstError[0])
             }
-        }).finally(() => {
             setLoading(false);
         });
     }
