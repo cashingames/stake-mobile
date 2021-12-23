@@ -72,7 +72,7 @@ function AppRouter() {
                 <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
                 <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ headerShown: false }} />
                 <AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Support' }} />
-                <AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Support Details' }} />
+                <AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
 
                 <AppStack.Group >
                     <AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { normalize } from './../../utils/normalize';
+import normalize from './../../utils/normalize';
 
 export default function SupportAnswerScreen({ route }) {
 
