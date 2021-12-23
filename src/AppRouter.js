@@ -37,7 +37,7 @@ function AppRouter() {
 
     const token = useSelector(state => state.auth.token);
 
-    boostStrapAxios(token); //sets basic api call params
+    booststrapAxios(token); //sets basic api call params
 
     //during app restart, check localstorage for these info
     useEffect(() => {
@@ -94,7 +94,7 @@ function AppRouter() {
 
 export default AppRouter;
 
-const boostStrapAxios = async function (token) {
+const booststrapAxios = async function (token) {
     axios.defaults.baseURL = baseURL;
     if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
