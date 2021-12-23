@@ -1,7 +1,6 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { postData } from '../../utils/ApiHelper';
 
 const initialState = {
     boosts: [],
@@ -18,7 +17,7 @@ export const buyBoostFromWallet = createAsyncThunk(
         // .then(value => {
         //     console.log("success")
         //     console.log(value);
-        // }).catch( err => {
+        // }).catch(err => {
         //     console.log("error");
         //     console.log(err.toJSON());
         // })

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
 import WalletBalance from './WalletBalance';
+import { formatNumber } from '../../utils/stringUtl';
 
 export default function WalletScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -51,7 +52,7 @@ const UserEarnings = ({ point }) => {
         <View style={styles.earnings}>
             <Text style={styles.earningText}>Your available point balance</Text>
             <View style={styles.earningContainer}>
-                <Text style={styles.earningAmount}>{point}pts</Text>
+                <Text style={styles.earningAmount}>{formatNumber(point)} pts</Text>
             </View>
         </View>
     )

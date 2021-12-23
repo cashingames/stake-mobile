@@ -2,19 +2,12 @@ import React from "react";
 import { StyleSheet, Text, Pressable } from 'react-native';
 
 
-export default function AppButton({ onPress, text, disabled }) {
+export default function AppButton({ onPress, text, disabled, style }) {
     return (
 
         <Pressable
             onPress={onPress}
-            style={() => [
-                {
-                    backgroundColor: disabled
-                        ? '#DFCBCF'
-                        : '#EF2F55'
-                },
-                styles.button
-            ]}
+            style={[styles.button, disabled ? styles.disabled : {}, style]}
             disabled={disabled}
         >
             <Text style={styles.text}>{text}</Text>
@@ -32,6 +25,7 @@ const styles = StyleSheet.create({
         marginVertical: 30,
         borderRadius: 12,
         elevation: 3,
+        backgroundColor: '#EF2F55'
     },
     text: {
 
@@ -41,6 +35,9 @@ const styles = StyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: 18
     },
+    disabled: {
+        backgroundColor: '#DFCBCF'
+    }
 
 });
 

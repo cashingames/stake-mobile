@@ -67,7 +67,7 @@ function AppRouter() {
                 <AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
                 <AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
                 <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
-                <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ title: 'Purchase' }} />
+                <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ headerShown: false }} />
 
                 <AppStack.Group >
                     <AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />

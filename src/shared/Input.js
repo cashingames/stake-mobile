@@ -65,10 +65,8 @@ const styles = StyleSheet.create({
     passwordIcon: {
         position: 'absolute',
         right: '5%',
-        top: '40%',
-        transform: [{ translateY: normalize(-8) }],
-        zIndex: 2,
-
+        top: '33%',
+        // transform: [{ translateY: normalize(-5) }],
     },
     error: {
         fontFamily: 'graphik-regular',
@@ -76,7 +74,8 @@ const styles = StyleSheet.create({
         fontSize: normalize(10)
     },
     disabled: {
-        color: '#535761',
-        opacity: 0.3
+        borderColor: '#fff',
+        paddingLeft: 0,
+        // borderColor: '#ede4e4',
     },
 });

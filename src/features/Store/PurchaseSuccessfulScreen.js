@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
-import normalize from '../../utils/normalize';
+import React from 'react';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
+
+import AppButton from '../../shared/AppButton';
+import normalize from '../../utils/normalize';
 
 const PurchaseSuccessfulScreen = () => {
     const user = useSelector(state => state.auth.user)
@@ -22,12 +23,8 @@ const PurchaseSuccessfulScreen = () => {
             </View>
             <Text style={styles.message}>You have successfully purchased a boost to play a game and climb up the leaderboard</Text>
             <View style={styles.congratsButtons}>
-                <Pressable onPress={() => navigation.navigate('Game')} style={styles.optionButton}>
-                    <Text style={styles.nextButton}>Play a Game</Text>
-                </Pressable>
-                <Pressable onPress={() => navigation.navigate('MyBoosts')} style={styles.optionButton}>
-                    <Text style={styles.nextButton}>My Boosts</Text>
-                </Pressable>
+                <AppButton text={"Play a Game"} onPress={() => navigation.navigate('Game')} style={styles.actionButton} />
+                <AppButton text={"My Boosts"} onPress={() => navigation.navigate('MyBoosts')} style={styles.actionButton} />
             </View>
         </View>
     )
@@ -71,20 +68,11 @@ const styles = StyleSheet.create({
     },
     congratsButtons: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         marginTop: normalize(45)
     },
-    optionButton: {
-        backgroundColor: '#EF2F55',
-        width: normalize(100),
-        paddingVertical: normalize(15),
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    nextButton: {
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(12),
-        textAlign: 'center',
-        color: '#FFFF',
+    actionButton: {
+        marginHorizontal: normalize(15),
+        // width: normalize(80),
     }
 });

@@ -1,8 +1,12 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Share, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
+import * as Clipboard from 'expo-clipboard';
+import { appUrl } from '../utils/BaseUrl';
+import { useSelector } from 'react-redux';
+
 
 export default function InviteFriendsScreen({ navigation }) {
 
@@ -36,22 +40,36 @@ const Instructions = () => {
 }
 
 const InviteLink = () => {
+    const user = useSelector(state => state.auth.user);
+
+    const referralUrl = `${appUrl}/sign-up/${user.referralCode}`
+
+    const onShare = async () => {
+        try {
+            await Share.share({
+                message: referralUrl,
+            });
+        } catch (error) {
+            Alert.alert("Notice", error.message);
+        }
+    };
+
     return (
         <View>
             <Text style={styles.inviteLink}>Your invite link</Text>
             <View style={styles.linkContainer} >
-                <Text style={styles.link}>https://cashin.gm/sg.ly</Text>
+                <Text style={styles.link}>{referralUrl}</Text>
                 <View style={styles.shareIcons}>
-                    <ShareLink iconName="md-copy" text='Copy' />
-                    <ShareLink iconName="md-share-social" text='Share' />
+                    <ShareLink iconName="md-copy" text='Copy' onPress={() => Clipboard.setString(referralUrl)} />
+                    <ShareLink iconName="md-share-social" text='Share' onPress={onShare} />
                 </View>
             </View>
         </View>
     )
 }
-const ShareLink = ({ iconName, text }) => {
+const ShareLink = ({ iconName, text, onPress }) => {
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onPress}>
             <View style={styles.icon}>
                 <Ionicons name={iconName} size={20} color="#EB5757" />
                 <Text style={styles.iconText}>{text}</Text>
@@ -92,6 +110,7 @@ const styles = StyleSheet.create({
         fontSize: normalize(11),
         fontFamily: 'graphik-medium',
         color: '#151C2F',
+        width: '80%',
     },
     inviteLink: {
         color: 'rgba(0, 0, 0, 0.6)',

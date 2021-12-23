@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, Alert } from 'react-native';
 import normalize from '../../utils/normalize';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { backendUrl } from '../../utils/BaseUrl';
@@ -10,6 +10,7 @@ import { buyBoostFromWallet } from "./StoreSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
+import AppButton from "../../shared/AppButton";
 
 
 export default function () {
@@ -31,7 +32,7 @@ export default function () {
 const BoostCard = ({ boost }) => {
     const refRBSheet = useRef();
     return (
-        <TouchableOpacity onPress={() => refRBSheet.current.open()}>
+        <TouchableOpacity activeOpacity={0.8} onPress={() => refRBSheet.current.open()}>
             <View style={styles.boostContainer}>
                 <View style={styles.iconContainer}>
                     <Image
@@ -72,15 +73,18 @@ const BoostCard = ({ boost }) => {
     )
 }
 
-const BuyBoost = ({ boost, onClose, disabled }) => {
+const BuyBoost = ({ boost, onClose }) => {
     const [loading, setLoading] = useState(false);
-    const [canPay, setCanPay] = useState(false);
+    const userBalance = useSelector(state => state.auth.user.walletBalance);
+
+    const canPay = Number(userBalance) >= Number(boost.currency_value);
+
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
     const buyBoostWallet = () => {
         setLoading(true);
-        setCanPay(false);
+
         dispatch(buyBoostFromWallet(boost.id))
             .then(unwrapResult)
             .then(result => {
@@ -91,9 +95,8 @@ const BuyBoost = ({ boost, onClose, disabled }) => {
             })
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);
-                setCanPay(true);
                 // after login eager get commond data for the whole app
-                console.log("failed");
+                Alert.alert("Notice", "Operation could not be completed, please try again");
                 console.log(rejectedValueOrSerializedError)
             });
     }
@@ -103,21 +106,8 @@ const BuyBoost = ({ boost, onClose, disabled }) => {
             <Text style={styles.buyBoostTitle}>Buy Boosts</Text>
             <Text style={styles.buyQuestion}>Are you sure you want to purchase this boost?</Text>
             <View style={styles.buyOption}>
-                <Pressable onPress={buyBoostWallet} style={() => [
-                    {
-                        backgroundColor: disabled
-                            ? '#EF2F55'
-                            : '#DFCBCF'
-                    },
-                    styles.optionButton
-                ]}
-                    disabled={canPay}
-                >
-                    <Text style={styles.buyButton}>{loading ? 'Buying...' : 'Pay'}</Text>
-                </Pressable>
-                <Pressable onPress={onClose} style={styles.optionButton}>
-                    <Text style={styles.buyButton}>Cancel</Text>
-                </Pressable>
+                <AppButton text={loading ? 'Buying...' : 'Pay'} onPress={buyBoostWallet} disabled={!canPay || loading} style={styles.actionButton} />
+                <AppButton text={'Cancel'} onPress={onClose} />
             </View>
         </View>
     )
@@ -233,20 +223,10 @@ const styles = StyleSheet.create({
     },
     buyOption: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginVertical: normalize(25)
+        justifyContent: 'center',
     },
-    optionButton: {
-        backgroundColor: '#EF2F55',
-        paddingHorizontal: normalize(15),
-        width: normalize(80),
-        paddingVertical: normalize(10),
-        borderRadius: 10,
-        alignItems: 'center'
+    actionButton: {
+        marginHorizontal: normalize(15),
+        width: normalize(100),
     },
-    buyButton: {
-        fontFamily: 'graphik-bold',
-        fontSize: normalize(10),
-        color: '#FFFF',
-    }
 });

@@ -1,12 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import normalize from '../../utils/normalize';
-// import currency from "../services/currency";
+import { formatCurrency } from '../../utils/stringUtl';
+
 const WalletBalance = ({ balance }) => {
     return (
         <View style={styles.balance}>
             <Text style={styles.walletTitle}>Wallet Balance</Text>
-            <Text style={styles.availableAmount}>&#8358;{balance}</Text>
+            <Text style={styles.availableAmount}>&#8358;{formatCurrency(balance)}</Text>
         </View>
     )
 };
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
         fontSize: normalize(30),
         color: '#333333'
     },
-   
+
 });
 
 export default WalletBalance;

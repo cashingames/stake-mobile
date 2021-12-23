@@ -11,7 +11,8 @@ export default function AchievementsMilestoneScreen({ navigation }) {
     const achievements = useSelector(state => state.common.achievements);
     const user = useSelector(state => state.auth.user);
 
-    var nextLevel = achievements.find(item => item.point_milestone > user.points);
+    const nextLevel = achievements.find(item => item.point_milestone > user.points);
+    const nextLevelProgress = user.points / nextLevel.point_milestone;
 
     return (
         <ScrollView style={styles.container}>
@@ -19,7 +20,7 @@ export default function AchievementsMilestoneScreen({ navigation }) {
                 <MilestoneStatus milestoneIcon={{ uri: `${backendUrl}/${nextLevel.medal}` }}
                     pointsProgress={`${user.points}/${nextLevel.point_milestone}`}
                     milestoneName={`${nextLevel.title}`}
-                    progress={0.08}
+                    progress={nextLevelProgress}
                 />
                 <View style={styles.cards}>
                     {achievements.map((achievement, i) => <AchievementCard key={i} userPoint={user.points} achievement={achievement} />)}
