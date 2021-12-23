@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-import HomeRouter from './features/Home/HomeRouter';
-import AuthRouter from './features/Auth/AuthRouter';
-
-import ExtendedLeaderboard from './features/Leaderboard/ExtendedLeaderboard';
-import PageLoading from './shared/PageLoading';
-
-import { isTrue } from './utils/stringUtl';
-import { isLoggedIn } from './features/Auth/AuthSlice';
-
 import axios from "axios";
 
+import PageLoading from './shared/PageLoading';
+import HomeRouter from './features/Home/HomeRouter';
+import AuthRouter from './features/Auth/AuthRouter';
+import ExtendedLeaderboard from './features/Leaderboard/ExtendedLeaderboard';
 import FundWalletScreen from './features/Transactions/FundWalletScreen';
 import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
 import TransactionScreen from './features/Transactions/TransactionScreen';
@@ -27,10 +21,12 @@ import ChangePasswordScreen from './features/Profile/ChangePasswordScreen';
 import AchievementsMilestoneScreen from './features/Profile/AchievementsMilestoneScreen';
 import BankDetailsScreen from './features/Profile/BankDetailsScreen';
 import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScreen';
-import { baseURL } from './utils/BaseUrl';
-import SupportQuestionsScreen from './screens/FAQ Pages/SupportQuestionsScreen';
-import SupportAnswerScreen from './screens/FAQ Pages/SupportAnswerScreen';
+import SupportQuestionsScreen from './features/Support/SupportQuestionsScreen';
+import SupportAnswerScreen from './features/Support/SupportAnswerScreen';
 
+import { isLoggedIn } from './features/Auth/AuthSlice';
+import { baseURL } from './utils/BaseUrl';
+import { isTrue } from './utils/stringUtl';
 
 const AppStack = createNativeStackNavigator();
 

@@ -1,17 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import normalize from '../../utils/normalize';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
-import { isTrue } from '../../utils/stringUtl';
-import { backendUrl } from '../../utils/BaseUrl';
+
+import { normalize } from './../../utils/normalize';
+
 import document from './support-content.json'
-
-
-
 
 export default function SupportQuestionsScreen({ navigation }) {
 
@@ -22,6 +17,19 @@ export default function SupportQuestionsScreen({ navigation }) {
             </View>
         </ScrollView>
     );
+}
+
+
+const QuestionTabs = () => {    
+    return (
+        <View style={styles.profileTabs}>
+            {document.map((faq, index) => <QuestionTab
+                key={index}
+                question={faq.question}
+                answer={faq.answer} />
+            )}
+        </View>
+    )
 }
 
 const QuestionTab = ({ question, answer }) => {
@@ -39,20 +47,6 @@ const QuestionTab = ({ question, answer }) => {
         </TouchableOpacity >
     )
 }
-
-const QuestionTabs = () => {    
-    return (
-        <View style={styles.profileTabs}>
-            {document.map((faq, index) => <QuestionTab
-                key={index}
-                question={faq.question}
-                answer={faq.answer} />
-            )}
-        </View>
-    )
-}
-
-
 
 
 const styles = StyleSheet.create({

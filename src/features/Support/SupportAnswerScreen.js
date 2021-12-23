@@ -1,12 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import normalize from '../../utils/normalize';
-import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
-import { isTrue } from '../../utils/stringUtl';
-import { backendUrl } from '../../utils/BaseUrl';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { normalize } from './../../utils/normalize';
 
 export default function SupportAnswerScreen({ route }) {
 
