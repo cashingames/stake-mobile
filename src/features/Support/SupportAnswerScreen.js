@@ -7,8 +7,6 @@ export default function SupportAnswerScreen({ route }) {
     const question = JSON.parse(route.params.question);
     const answer = JSON.parse(route.params.answer);
 
-    console.log(answer);
-
     return (
         <ScrollView style={styles.container}>
             <View style={styles.content}>
