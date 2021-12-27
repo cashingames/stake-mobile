@@ -10,13 +10,11 @@ export default function CategoryLeaderboard({ category, leaders }) {
         return <></>
     }
     return (
-        <ScrollView>
-            <View style={styles.category}>
-                <Text style={styles.categoryTitle}>{category}</Text>
-                <CategoryTopLeaders leaders={leaders} />
-                <OtherLeaders leaders={leaders} />
-            </View>
-        </ScrollView>
+        <View style={styles.category}>
+            <Text style={styles.categoryTitle}>{category}</Text>
+            <CategoryTopLeaders leaders={leaders} />
+            <OtherLeaders leaders={leaders} />
+        </View>
     )
 }
 
