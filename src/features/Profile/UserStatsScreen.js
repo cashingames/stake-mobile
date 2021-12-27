@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { isTrue, formatCurrency } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
@@ -11,10 +11,9 @@ export default function UserStatsScreen({ navigation }) {
     const user = useSelector(state => state.auth.user)
 
     return (
-            <ScrollView>
-                <View style={styles.content}>
-                    <UserRank userPoint={user.points} />
-                    <Detail
+        <ScrollView style={styles.container}>
+                <UserRank userPoint={user.points} />
+                <Detail
                     username={user.username}
                     firstName={user.firstName}
                     lastName={user.lastName}
@@ -23,17 +22,16 @@ export default function UserStatsScreen({ navigation }) {
                     winRate={user.winRate}
                     position={user.badge}
                     challengesPlayed={user.totalChallenges}
-                     />
-                    <RecentlyPlayedCards games={user.recentGames} />
-                </View>
-            </ScrollView>
+                />
+                <RecentlyPlayedCards games={user.recentGames} />
+        </ScrollView>
     );
 }
 
-const UserRank = ({userPoint }) => {
+const UserRank = ({ userPoint }) => {
     return (
         <View style={styles.rank}>
-            <View>
+            <View style={styles.rankPoints}>
                 <Text style={styles.rankText}>Rank by Points</Text>
                 <Text style={styles.pointText}>{userPoint}points</Text>
             </View>
@@ -46,9 +44,9 @@ const UserRank = ({userPoint }) => {
 }
 
 const Detail = ({
-    username, 
-    firstName, 
-    lastName, 
+    username,
+    firstName,
+    lastName,
     gamesPlayed,
     globalRanking,
     winRate,
@@ -124,9 +122,11 @@ function RecentlyPlayedCards({ games }) {
 }
 
 const styles = StyleSheet.create({
-  
-    content: {
-        marginHorizontal: normalize(18),
+
+    container: {
+        flex: 1,
+        backgroundColor: '#F2F5FF',
+        paddingHorizontal: normalize(18),
         paddingVertical: normalize(25),
         marginBottom: normalize(20)
     },
@@ -138,6 +138,9 @@ const styles = StyleSheet.create({
         paddingVertical: normalize(25),
         paddingHorizontal: normalize(15),
         borderRadius: 16
+    },
+    rankPoints: {
+        flexDirection: 'column'
     },
     rankText: {
         fontSize: normalize(20),
@@ -172,19 +175,19 @@ const styles = StyleSheet.create({
     },
     gameInfo: {
         backgroundColor: '#EA5038',
-        flexDirection:'row',
-        alignItems:'center',
+        flexDirection: 'row',
+        alignItems: 'center',
         paddingVertical: normalize(10),
         paddingLeft: normalize(10),
         paddingRight: normalize(15),
         borderRadius: 9,
         marginBottom: normalize(10),
-      
+
     },
     gamesPlayed: {
-        flexDirection:'row',
-        flexWrap:'wrap',
-        justifyContent:'space-between'
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between'
     },
     gamesTitle: {
         fontSize: normalize(15),

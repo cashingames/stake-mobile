@@ -76,7 +76,7 @@ const AchievementCard = ({ achievement, userPoint, }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#E5E5E5',
+        backgroundColor: '#F2F5FF',
     },
     content: {
         marginHorizontal: normalize(18),

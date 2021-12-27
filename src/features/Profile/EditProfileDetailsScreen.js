@@ -64,8 +64,6 @@ export default function EditProfileDetailsScreen({ navigation }) {
                 <TouchableOpacity onPress={onSavePersonalDetails}>
                     <Text style={styles.saveChanges}>{saving ? 'Saving' : 'Save Changes'}</Text>
                 </TouchableOpacity>
-                {/* <DetailsInput /> */}
-                <View>
                     <Input
                         label='First name'
                         value={firstName}
@@ -117,7 +115,6 @@ export default function EditProfileDetailsScreen({ navigation }) {
                                 textColor='#00000080'
                             />
                         }
-                    </View>
                     <View style={styles.detail}>
                         <Text style={styles.inputLabel}>Select Gender</Text>
                         <Picker

@@ -17,12 +17,11 @@ export default function WalletScreen({ navigation }) {
     }, []);
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
+        <ScrollView style={styles.container}>
                 <WalletBalance balance={user.walletBalance} />
                 <FundButton />
                 <UserEarnings point={user.points} />
-                <TransactionLink /></View>
+                <TransactionLink />
         </ScrollView>
     );
 }

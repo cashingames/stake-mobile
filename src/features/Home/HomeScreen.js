@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useNavigation } from '@react-navigation/native';
-
+import { copilot, walkthroughable, CopilotStep } from "react-native-copilot";
 import GlobalTopLeaders from '../../shared/GlobalTopLeaders';
 import normalize from '../../utils/normalize';
 import { getData } from '../../utils/ApiHelper';
@@ -13,7 +13,11 @@ import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCommonData } from '../CommonSlice';
-export default function HomeScreen({ navigation }) {
+
+const WalkthroughableText = walkthroughable(Text);
+const WalkthroughableImage = walkthroughable(Image);
+
+const HomeScreen = ({ navigation }) => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
@@ -39,13 +43,22 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <ScrollView>
+            {/* <CopilotStep
+                text="This is a hello world example!"
+                order={1}
+                name="hello"
+            >
+                <CopilotText>Hello world!</CopilotText>
+            </CopilotStep> */}
             <UserDetails user={user} />
             <GameCards games={gameTypes} />
             <RecentlyPlayedCards games={user.recentGames} />
             <Leaderboard leaders={leaders} />
         </ScrollView>
     );
+
 }
+export default copilot()(HomeScreen);
 
 
 const UserDetails = ({ user }) => {
@@ -181,8 +194,6 @@ const Leaderboard = ({ leaders }) => {
         </View>
     )
 }
-
-
 
 
 

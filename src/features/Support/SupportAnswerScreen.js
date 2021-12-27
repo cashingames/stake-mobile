@@ -7,14 +7,10 @@ export default function SupportAnswerScreen({ route }) {
     const question = JSON.parse(route.params.question);
     const answer = JSON.parse(route.params.answer);
 
-    console.log(answer);
-
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.content}>
                 <Text style={styles.question}>{question}</Text>
                 <Text style={styles.answer}>{answer}</Text>
-            </View>
         </ScrollView>
     );
 }
@@ -22,14 +18,9 @@ export default function SupportAnswerScreen({ route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E5E5E5',
-        // marginVertical: normalize(20)
-    },
-    content: {
-        marginHorizontal: normalize(18),
+        backgroundColor: '#F2F5FF',
+        paddingHorizontal: normalize(18),
         paddingVertical: normalize(25),
-        marginBottom: normalize(20)
-
     },
     question: {
         fontFamily: 'graphik-medium',

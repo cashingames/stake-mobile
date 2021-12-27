@@ -32,26 +32,23 @@ export default function ExtendedLeaderboard({ navigation }) {
     const categories = Object.keys(categoryLeaders);
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView contentContainerStyle={styles.leaderboards}>
+            <ScrollView style={styles.container}>
                 <SwiperFlatList showPagination paginationActiveColor='red' renderAll={true} >
                     <GlobalLeaderboard leaders={leaders} />
                     {categories.map((c, i) => <CategoryLeaderboard key={i} category={c} leaders={categoryLeaders[c]} />)}
                 </SwiperFlatList>
             </ScrollView>
-        </SafeAreaView>
     )
 }
 
 function GlobalLeaderboard({ leaders }) {
     return (
-        <ScrollView>
             <View style={styles.global}>
                 <Text style={styles.title}>Global Leaderboard</Text>
                 <GlobalTopLeaders leaders={leaders} />
                 <OtherLeaders leaders={leaders} />
             </View>
-        </ScrollView>
+
     )
 }
 

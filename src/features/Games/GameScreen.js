@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import AppButton from '../../shared/AppButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { backendUrl } from '../../utils/BaseUrl';
+import { formatNumber, isTrue } from '../../utils/stringUtl';
 
 
 const Toptab = createMaterialTopTabNavigator();
@@ -13,15 +16,10 @@ const Toptab = createMaterialTopTabNavigator();
 export default function GameScreen({ navigation }) {
 
     return (
-        <ScrollView>
-            <View style={styles.contentContainer}>
-                <View style={styles.content}>
+        <ScrollView style={styles.container}>
                     <WinBig />
                     <ProgressMessage />
                     <SelectCategory />
-                    <AppButton text='Proceed to Play' onPress={() => navigation.navigate('GameMode')} />
-                </View>
-            </View>
         </ScrollView>
     );
 }
@@ -42,7 +40,7 @@ const ProgressMessage = () => {
         <View style={styles.progress}>
             <View style={styles.progressText}>
                 <Text style={styles.progressTitle}>Great going!</Text>
-                <Text style={styles.text}>Your result was up 75% last week. You can try harder this week.</Text>
+                <Text style={styles.text}>Continue playing to gain more points and climb up the leaderboard.</Text>
             </View>
             <Image
                 source={require('../../../assets/images/treasure_chest.png')}
@@ -54,153 +52,15 @@ const ProgressMessage = () => {
 const SelectCategory = () => {
     return (
         <View style={styles.selectCategory}>
-            <Text style={styles.categoryTitle}>Select Category</Text>
-            <CreateQuiz />
             <GamesTabs />
         </View>
     )
 }
 
-const CreateQuiz = () => {
-    const navigation = useNavigation();
-    return (
-        <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
-            <View style={styles.createQuiz}>
-                <View style={styles.quiz}>
-                    <Ionicons name="add-outline" size={20} color="#EF2F55" />
-                    <Text style={styles.create}>Create a quiz</Text>
-                </View>
-                <Ionicons name="md-arrow-forward-sharp" size={24} color="#EF2F55" />
-            </View>
-        </TouchableOpacity>
-    )
-};
 
-const AvailableGames = ({ }) => {
-    return (
-        <View>
-            <Text style={styles.title}>Choose Topic</Text>
-            <View style={styles.available}>
-                <AvailableGame gameName="Naija Music" />
-                <AvailableGame gameName="The Rest Of The World" />
-            </View>
-        </View>
-    )
-};
-
-const AvailableGame = ({ gameName, onPress, disabledState }) => {
-    const [isClicked, setIsclicked] = useState(false);
-    return (
-        <View>
-            <Pressable
-                style={() => [
-                    {
-                        backgroundColor:
-                            '#E0E0E0'
-                    },
-                    styles.clickButton
-                ]}            >
-                <Text style={styles.gameButton}>{gameName}</Text>
-            </Pressable>
-        </View>
-    )
-};
-
-const GameCategoryCard = ({ category, onSelect, isSelected }) => {
-    // console.log(category)
-    return (
-        <View style={styles.selected}>
-            <TouchableWithoutFeedback onPress={() => onSelect(category)} style={styles.card}>
-                <View style={styles.select}>
-                    <Image
-                        style={styles.cardIcon}
-                        source={require('../../../assets/images/music.png')}
-                    />
-                    {!isSelected ? <Ionicons name="md-ellipse" size={24} color="#FFFF" /> :
-                        <Ionicons name="md-checkmark-sharp" size={20} color="#FFFF" style={styles.checkIcon} />
-                    }
-                </View>
-                <Text style={styles.cardTitle}>{category.title}</Text>
-                <Text style={styles.cardInstruction}>Number of times played {category.timesPlayed}</Text>
-            </TouchableWithoutFeedback>
-            {/* <View>
-                    {isSelected ? <AvailableGames /> : <Text></Text>}
-                </View> */}
-        </View>
-    )
-};
-
-
-const Categories = () => {
-
-    const [activeCategory, setActiveCategory] = useState();
-
-    const onCategorySelected = (category) => {
-        // console.log("before state change")
-        // console.log(activeCategory);
-
-        setActiveCategory(category);
-
-        // console.log("after state change")
-        // console.log(activeCategory);
-
-
-        // console.log("clicked")
-        // console.log(category);
-    }
-    // console.log("refresh")
-    // console.log(activeCategory);
-
-    const categories = [
-        {
-            id: 1,
-            title: "Football",
-            gameIcon: "/music.png",
-            timesPlayed: 62
-        },
-        {
-            id: 2,
-            title: "Football",
-            gameIcon: "/music.png",
-            timesPlayed: 62
-        }
-    ]
-    return (
-        <View style={styles.games}>
-            <Text style={styles.title}>Choose Category</Text>
-            <View style={styles.cards}>
-                {categories.map((category, i) => <GameCategoryCard key= {i}
-                    category={category}
-                    isSelected={activeCategory?.id === category.id}
-                    onSelect={onCategorySelected}
-                />
-                )}
-                {/* <GameCategoryCard gameTitle='Football' gameIcon={require('../../assets/images/music.png')}
-                    timesPlayed='62' onSelect={onCategorySelected} />
-                <GameCategoryCard gameTitle='Music' gameIcon={require('../../assets/images/soccer.png')}
-                    timesPlayed='25' onSelect={onCategorySelected} /> */}
-            </View>
-            <View>
-                {activeCategory !== undefined ? <AvailableGames /> : <Text></Text>}
-            </View>
-        </View>
-
-    )
-};
-
-const MyQuiz = () => {
-    return (
-        <View style={styles.myQuiz}>
-            <Image
-                source={require('../../../assets/images/myquiz.png')}
-            />
-            <Text style={styles.didYouKnow}>Did you know?</Text>
-            <Text style={styles.editQuiz}>Edit Quiz</Text>
-        </View>
-    )
-}
 
 const GamesTabs = () => {
+    const gameTypes = useSelector(state => state.common.gameTypes)
 
     return (
         <Toptab.Navigator screenOptions={{
@@ -211,27 +71,129 @@ const GamesTabs = () => {
             tabBarIndicatorStyle: { backgroundColor: '#EF2F55' },
         }}
             sceneContainerStyle={{ backgroundColor: '#F8F9FD' }}
-            style={{ height: normalize(420) }}
-        // height: Dimensions.get('window').height
+            style={{ height: normalize(380) }}
+        // height: Dimensions.get('window').height 
         >
-            <Toptab.Screen name="Multiple Select" component={Categories} />
-            <Toptab.Screen name="True Or False" component={Categories} />
-            <Toptab.Screen name="My Quiz" component={MyQuiz} />
+            {gameTypes.map((game, i) =>
+                <Toptab.Screen
+                    name={game.name}
+                    key={i}
+                    component={CategoriesScreen}
+                    options={{ title: game.displayName }}
+                    initialParams={{ currentGame: game }}
+                />
+            )}
         </Toptab.Navigator>
     )
 };
 
 
+const CategoriesScreen = ({ navigation, route }) => {
+
+
+    const currentGame = route.params.currentGame;
+
+    const [activeCategory, setActiveCategory] = useState();
+    const [activeSubcategory, setActiveSubcategory] = useState();
+
+    const onCategorySelected = (category) => {
+        setActiveCategory(category);
+        setActiveSubcategory(undefined)
+    }
+
+    const onSubCategorySelected = (subcategory) => {
+        setActiveSubcategory(subcategory);
+    }
+
+    
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('tabPress', () => {
+            setActiveCategory(undefined);
+            setActiveSubcategory(undefined);
+        });
+    
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+      }, [navigation]);
+
+    return (
+        <View style={styles.games}>
+            <Text style={styles.title}>Choose Category</Text>
+            <View style={styles.cards}>
+                {currentGame.categories.map((category, i) => <GameCategoryCard key={i}
+                    category={category}
+                    isSelected={activeCategory?.id === category.id}
+                    onSelect={onCategorySelected}
+                />
+                )}
+            </View>
+            <View>
+                { isTrue(activeCategory) &&  <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />}
+            </View>
+
+            <AppButton text='Proceed to Play' onPress={() => navigation.navigate('GameMode')} disabled={!isTrue(activeSubcategory)} />
+
+        </View>
+
+    )
+};
+
+
+const GameCategoryCard = ({ category, onSelect, isSelected }) => {
+    return (
+        <TouchableWithoutFeedback onPress={() => onSelect(category)} style={[styles.card, { backgroundColor: category.bgColor }]}>
+            <View style={styles.categoryCardTopRow}>
+                <Image
+                    style={styles.cardIcon}
+                    source={{ uri: `${backendUrl}/${category.icon}` }}
+                />
+                <Ionicons name={isSelected ? "md-ellipse-sharp" : "md-ellipse"} size={24} color={isSelected ? "#EF2F55" : "#FFFF"} /> 
+            </View>
+            <Text style={styles.cardTitle}>{category.name}</Text>
+            <Text style={styles.cardInstruction}>{formatNumber(category.played)} times played </Text> 
+        </TouchableWithoutFeedback>
+    )
+};
+
+ 
+
+const SubCategories = ({category, onSubCategorySelected, selectedSubcategory }) => {
+    console.log(selectedSubcategory);
+    return (
+        <>
+            <Text style={styles.title}>Choose Topic</Text>
+            <View style={styles.subcategories}>
+                {category.subcategories.map( (subcategory, i) =>  <SubCategory 
+                    key={i} 
+                    subcategory={subcategory} 
+                    onSubCategorySelected={onSubCategorySelected} 
+                    isSelected={subcategory === selectedSubcategory}   /> )}
+            </View>
+        </>
+    )
+};
+
+
+const SubCategory = ({ subcategory, onSubCategorySelected, isSelected }) => {
+    const [isClicked, setIsclicked] = useState(false);
+    console.log(isSelected);
+    return (
+            <Pressable
+                style={[styles.subcategory, isSelected ? styles.activeSubcategory : {}]}
+                onPress={() => onSubCategorySelected(subcategory)}    
+                 >
+                <Text style={[styles.gameButton, isSelected ? {color: "#FFF"}: {}]}>{subcategory.name}</Text>
+            </Pressable>
+    )
+};
 
 
 const styles = StyleSheet.create({
 
-    contentContainer: {
+   container: {
         flex: 1,
         backgroundColor: '#F8F9FD',
-    },
-    content: {
-        marginHorizontal: normalize(18),
+        paddingHorizontal: normalize(18),
 
     },
     winBig: {
@@ -311,20 +273,23 @@ const styles = StyleSheet.create({
         color: '#EF2F55',
     },
     card: {
-        backgroundColor: '#9C3DB8',
         paddingHorizontal: normalize(15),
         paddingVertical: normalize(15),
         width: normalize(130),
         borderRadius: normalize(7),
         marginBottom: normalize(15),
     },
-    cardIcon: {},
+    cardIcon: {
+        width: 50,
+        height: 50,
+        borderRadius: normalize(10)
+    },
     cardTitle: {
         fontSize: normalize(12),
         color: '#FFFF',
         fontFamily: 'graphik-bold',
         lineHeight: normalize(17),
-        marginTop: normalize(8),
+        marginVertical: normalize(8),
     },
     cardInstruction: {
         fontSize: normalize(10),
@@ -353,10 +318,10 @@ const styles = StyleSheet.create({
     checkbox: {
         // backgroundColor: '#FFFF',
     },
-    select: {
+    categoryCardTopRow: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     checkIcon: {
         backgroundColor: '#EF2F55',
@@ -365,43 +330,29 @@ const styles = StyleSheet.create({
         width: normalize(16),
         textAlign: 'center',
     },
-    uncheckIcon: {
-        backgroundColor: '#FFFF',
-    },
-    selected: {
-        display: 'flex'
-    },
-    clickButton: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: normalize(7),
-        paddingHorizontal: normalize(18),
-        borderRadius: 20,
-    },
     gameButton: {
         fontFamily: 'graphik-medium',
         fontSize: normalize(11),
         color: '#151C2F',
         textAlign: 'center'
     },
-    available: {
+    subcategories: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        flexWrap: 'wrap',
     },
-    myQuiz: {
-        display: 'flex',
-        flexDirection: 'column',
-        marginTop: normalize(50)
+    activeSubcategory: {
+        color: '#FFF',
+        backgroundColor:  '#EF2F55',
     },
-    didYouKnow: {
-        fontFamily: 'graphik-bold',
-        fontSize: normalize(13),
-        color: '#333333',
+    subcategory: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: normalize(7),
+        paddingHorizontal: normalize(18),
+        borderRadius: 20,
+        marginRight: normalize(10),
+        marginBottom: normalize(10),
+        backgroundColor:  '#E0E0E0',
     },
-    editQuiz: {
-        fontFamily: 'graphik-bold',
-        fontSize: normalize(11),
-        color: '#EF2F55',
-    }
 });
