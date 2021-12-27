@@ -184,7 +184,7 @@ const drawStyles = StyleSheet.create({
         borderBottomColor: "rgba(0, 0, 0, 0.1)",
         paddingTop: normalize(35),
         paddingBottom: normalize(15),
-        backgroundColor: '#F8F9FD',
+        backgroundColor: '#F2F5FF',
     },
     avatar: {
         // resizeMode: 'cover',

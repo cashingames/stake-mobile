@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: normalize(18),
         paddingVertical: normalize(10),
-        backgroundColor: "#F8F9FD",
+        backgroundColor: "#F2F5FF",
     },
     saveChanges: {
         fontSize: normalize(12),
