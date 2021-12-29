@@ -158,7 +158,7 @@ const GameCategoryCard = ({ category, onSelect, isSelected }) => {
  
 
 const SubCategories = ({category, onSubCategorySelected, selectedSubcategory }) => {
-    console.log(selectedSubcategory);
+    // console.log(selectedSubcategory);
     return (
         <>
             <Text style={styles.title}>Choose Topic</Text>
@@ -176,7 +176,7 @@ const SubCategories = ({category, onSubCategorySelected, selectedSubcategory }) 
 
 const SubCategory = ({ subcategory, onSubCategorySelected, isSelected }) => {
     const [isClicked, setIsclicked] = useState(false);
-    console.log(isSelected);
+    // console.log(isSelected);
     return (
             <Pressable
                 style={[styles.subcategory, isSelected ? styles.activeSubcategory : {}]}

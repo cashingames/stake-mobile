@@ -27,6 +27,10 @@ import SupportAnswerScreen from './features/Support/SupportAnswerScreen';
 import { isLoggedIn } from './features/Auth/AuthSlice';
 import { baseURL } from './utils/BaseUrl';
 import { isTrue } from './utils/stringUtl';
+import GameModeScreen from './features/Games/GameModeScreen';
+import GameInstructionsScreen from './features/Games/GameInstructionsScreen';
+import StartGameCountdownScreen from './features/Games/StartGameCountdownScreen';
+import GameInProgressScreen from './features/Games/GameInProgressScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -81,6 +85,13 @@ function AppRouter() {
                     <AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ title: 'Stats' }} />
                     <AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ title: 'Milestones' }} />
                     <AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
+                </AppStack.Group>
+
+                <AppStack.Group >
+                <AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
+                <AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
+                <AppStack.Screen name="StartGameCountdown" component={StartGameCountdownScreen} options={{ title: '' }} />
+                <AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
                 </AppStack.Group>
 
             </AppStack.Group>

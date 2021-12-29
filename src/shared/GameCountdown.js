@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { normalize } from '../constants/NormalizeFont';
+import normalize from '../utils/normalize';
 import CountDown from 'react-native-countdown-component';
 const GameCountdown = ({onFinish}) => {
     return (
