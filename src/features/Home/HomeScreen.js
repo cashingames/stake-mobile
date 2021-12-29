@@ -26,6 +26,8 @@ const HomeScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
 
 
+
+
     useEffect(() => {
 
         var _1 = dispatch(getUser('v3/user/profile'));
