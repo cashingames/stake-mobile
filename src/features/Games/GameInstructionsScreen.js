@@ -1,11 +1,16 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
 import normalize from "../../utils/normalize";
 import { formatNumber } from '../../utils/stringUtl';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import AppButton from "../../shared/AppButton";
+import { startGame } from "../CommonSlice";
+import { unwrapResult } from '@reduxjs/toolkit';
+import { backendUrl } from '../../utils/BaseUrl';
+
+
 
 export default function GameInstructionsScreen({ navigation, route }) {
     const gameMode = route.params.mode;
@@ -95,12 +100,13 @@ const ChallengeInstructions = () => {
     )
 };
 
-const AvailableBoost = ({ boost, boostIcon }) => {
+const AvailableBoost = ({ boost }) => {
     return (
         <View style={styles.boostContent}>
             <View style={styles.boostAmount}>
                 <Image
-                    source={boostIcon}
+                    source={{ uri: `${backendUrl}/${boost.icon}` }}
+                    style={styles.boostIcon}
                 />
                 <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
             </View>
@@ -113,15 +119,36 @@ const AvailableBoost = ({ boost, boostIcon }) => {
 }
 
 
-const AvailableBoosts = ({onClose}) => {
+const AvailableBoosts = ({ onClose }) => {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const boosts = useSelector(state => state.auth.user.boosts);
-    console.log(boosts)
+    const gameCategoryId = useSelector(state => state.game.gameCategoryId)
+    console.log(gameCategoryId)
 
-    const startGame = () => {
-        onClose();
-        navigation.navigate('StartGameCountdown')
+    const onStartGame = () => {
+        dispatch(startGame({
+            category: 102,
+            type: 1,
+            mode: 1
+        }))
+        console.log(categoryId)
+            .then(unwrapResult)
+            .then(result => {
+                console.log("success")
+                onClose();
+                navigation.navigate("GameInProgress")
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                console.log(rejectedValueOrSerializedError);
+                Alert.alert('failed to start game')
+                // after login eager get commond data for the whole app
+                // console.log("failed");
+                // console.log(rejectedValueOrSerializedError)
+            });
     }
+
+
 
     const visitStore = () => {
         onClose();
@@ -132,20 +159,19 @@ const AvailableBoosts = ({onClose}) => {
         <View style={styles.availableBoosts}>
             <Text style={styles.title}>Available Boosts</Text>
             <View style={styles.boosts}>
-                {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i}
-                    boostIcon={require('../../../assets/images/time_freeze.png')} />
+                {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i} />
                 )}
             </View>
             <GoToStore onPress={visitStore} />
-            <AppButton text='Start Game' onPress={startGame} />
+            <AppButton text='Start Game' onPress={onStartGame} />
         </View>
     )
 }
 
-const GoToStore = ({onPress}) => {
+const GoToStore = ({ onPress }) => {
     const navigation = useNavigation();
-    
-  
+
+
     return (
         <View style={styles.moreBoost}>
 
@@ -277,4 +303,8 @@ const styles = StyleSheet.create({
     startContainer: {
         marginTop: normalize(50),
     },
+    boostIcon: {
+        width: normalize(30),
+        height: normalize(30)
+    }
 });

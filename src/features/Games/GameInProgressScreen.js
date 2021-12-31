@@ -8,6 +8,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
+import { backendUrl } from '../../utils/BaseUrl';
+
 
 
 
@@ -104,8 +106,9 @@ const AvailableBoost = ({ boostIcon, boost }) => {
     return (
         <TouchableOpacity>
             <View style={styles.availableBoost}>
-                <Image
-                    source={boostIcon}
+            <Image
+                    source={{ uri: `${backendUrl}/${boost.icon}` }}
+                    style={styles.boostIcon}
                 />
                 <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
             </View>
@@ -121,8 +124,8 @@ const AvailableBoosts = () => {
                 <Text style={styles.title}>Boost</Text>
             </View>
             {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i}
-                    boostIcon={require('../../../assets/images/time_freeze.png')} />
-                )}
+                boostIcon={require('../../../assets/images/time_freeze.png')} />
+            )}
         </View>
     )
 }
@@ -172,13 +175,13 @@ const AnswerOptions = () => {
     )
 }
 
-const GameBoost = ({ boost, boostIcon }) => {
+const GameBoost = ({ boost }) => {
     return (
         <View style={styles.boostContent}>
             <View style={styles.boostAmount}>
-                <Image
-                    // source={require('../../assets/images/bomb.png')}
-                    source={boostIcon}
+            <Image
+                    source={{ uri: `${backendUrl}/${boost.icon}` }}
+                    style={styles.boostIcon}
                 />
                 <Text style={styles.amount1}>x{formatNumber(boost.count)}</Text>
             </View>
@@ -198,8 +201,7 @@ const GameBoosts = () => {
         <View style={styles.availableBoosts1}>
             <Text style={styles.title1}>Available Boosts</Text>
             <View style={styles.boosts}>
-                {boosts.map((boost, i) => <GameBoost boost={boost} key={i}
-                    boostIcon={require('../../../assets/images/time_freeze.png')} />
+                {boosts.map((boost, i) => <GameBoost boost={boost} key={i} />
                 )}
             </View>
         </View>
@@ -208,14 +210,12 @@ const GameBoosts = () => {
 
 const BoostsInfo = ({ text, onPress }) => {
     return (
-        <Pressable onPress={onPress}>
-            <View style={styles.boostDialog}>
-                <Text style={styles.infoText}>
-                    See available boosts description
-                </Text>
-                <Ionicons name="md-arrow-forward-sharp" size={20} color="#FF9900" />
-            </View>
-        </Pressable>
+        <View style={styles.boostDialog}>
+            <Text onPress={onPress} style={styles.infoText}>
+                See available boosts description
+            </Text>
+            <Ionicons name="md-arrow-forward-sharp" size={20} color="#FF9900" />
+        </View>
     )
 }
 
@@ -391,7 +391,8 @@ const styles = StyleSheet.create({
     boostDialog: {
         display: 'flex',
         flexDirection: 'row',
-        marginTop: normalize(10)
+        marginTop: normalize(10),
+        alignItems:'center'
     },
     title1: {
         fontSize: normalize(13),
@@ -404,5 +405,9 @@ const styles = StyleSheet.create({
         fontSize: normalize(10),
         fontFamily: 'graphik-medium',
         color: '#FFFF',
+    },
+    boostIcon: {
+        width: normalize(30),
+        height: normalize(30)
     }
 });
