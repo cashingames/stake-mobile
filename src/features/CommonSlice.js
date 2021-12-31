@@ -1,6 +1,7 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { getData, postData } from '../utils/ApiHelper'
+import axios from 'axios';
 
 export const getCommonData = createAsyncThunk(
     'common/get',
@@ -11,14 +12,22 @@ export const getCommonData = createAsyncThunk(
 )
 
 export const getBankData = createAsyncThunk(
-        'common/bank/get',
-        async (thunkAPI) => {
-            const response = await getData('v2/wallet/banks')
-            // console.log(response.data)
-            return response.data
-        }
-    )
-    
+    'common/bank/get',
+    async (thunkAPI) => {
+        const response = await getData('v2/wallet/banks')
+        // console.log(response.data)
+        return response.data
+    }
+)
+
+export const startGame = createAsyncThunk(
+    'common/startGame',
+    async (data, thunkAPI) => {
+        const response = await axios.post('v2/game/start/single-player', data)
+        return response.data
+    }
+)
+
 
 
 const initialState = {

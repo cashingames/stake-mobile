@@ -6,7 +6,8 @@ export default function StartGameCountdownScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <GameCountdown onFinish={() => navigation.navigate('GameInProgress')} />
+            
+            {/* <GameCountdown onFinish={() => navigation.navigate('GameInProgress')} /> */}
         </View>
     );
 }
