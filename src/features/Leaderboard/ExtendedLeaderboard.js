@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import CategoryLeaderboard from '../../shared/CategoryLeaderboard';
 import normalize from '../../utils/normalize';
@@ -9,21 +8,30 @@ import PageLoading from '../../shared/PageLoading';
 import { getData } from '../../utils/ApiHelper';
 import GlobalTopLeaders from '../../shared/GlobalTopLeaders';
 import OtherLeaders from '../../shared/OtherLeaders';
+import { getGlobalLeaders } from '../CommonSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function ExtendedLeaderboard({ navigation }) {
 
-    const [leaders, setLeaders] = useState([]);
+    const dispatch = useDispatch();
+    const leaders = useSelector(state => state.common.globalLeaders)
     const [categoryLeaders, setCategoryLeaders] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        var _3 = getData('v2/leaders/global').then(response => setLeaders(response.data))
         var _2 = getData('v2/leaders/categories').then(response => setCategoryLeaders(response.data))
 
-        Promise.all([_3, _2]).then(values => {
+        Promise.all([_2]).then(values => {
             setLoading(false);
         });
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            dispatch(getGlobalLeaders())
+        }, [])
+    );
 
     if (loading) {
         return <PageLoading />
@@ -32,22 +40,22 @@ export default function ExtendedLeaderboard({ navigation }) {
     const categories = Object.keys(categoryLeaders);
 
     return (
-            <ScrollView style={styles.container}>
-                <SwiperFlatList showPagination paginationActiveColor='red' renderAll={true} >
-                    <GlobalLeaderboard leaders={leaders} />
-                    {categories.map((c, i) => <CategoryLeaderboard key={i} category={c} leaders={categoryLeaders[c]} />)}
-                </SwiperFlatList>
-            </ScrollView>
+        <ScrollView style={styles.container}>
+            <SwiperFlatList showPagination paginationActiveColor='red' renderAll={true} >
+                <GlobalLeaderboard leaders={leaders} />
+                {categories.map((c, i) => <CategoryLeaderboard key={i} category={c} leaders={categoryLeaders[c]} />)}
+            </SwiperFlatList>
+        </ScrollView>
     )
 }
 
 function GlobalLeaderboard({ leaders }) {
     return (
-            <View style={styles.global}>
-                <Text style={styles.title}>Global Leaderboard</Text>
-                <GlobalTopLeaders leaders={leaders} />
-                <OtherLeaders leaders={leaders} />
-            </View>
+        <View style={styles.global}>
+            <Text style={styles.title}>Global Leaderboard</Text>
+            <GlobalTopLeaders leaders={leaders} />
+            <OtherLeaders leaders={leaders} />
+        </View>
 
     )
 }

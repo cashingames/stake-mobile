@@ -20,14 +20,16 @@ export const getBankData = createAsyncThunk(
     }
 )
 
-export const startGame = createAsyncThunk(
-    'common/startGame',
-    async (data, thunkAPI) => {
-        const response = await axios.post('v2/game/start/single-player', data)
+
+
+export const getGlobalLeaders = createAsyncThunk(
+    'common/globalLeaders/get',
+    async (thunkAPI) => {
+        console.log("getting leaders");
+        const response = await axios.get('v2/leaders/global');
         return response.data
     }
 )
-
 
 
 const initialState = {
@@ -36,6 +38,7 @@ const initialState = {
     gameTypes: [],
     gameModes: [],
     banks: [],
+    globalLeaders: [],
 }
 
 export const CommonSlice = createSlice({
@@ -55,6 +58,9 @@ export const CommonSlice = createSlice({
             })
             .addCase(getBankData.fulfilled, (state, action) => {
                 state.banks = action.payload;
+            })
+            .addCase(getGlobalLeaders.fulfilled, (state, action) => {
+                state.globalLeaders = action.payload.data
             })
     },
 });

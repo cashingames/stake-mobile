@@ -5,10 +5,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { backendUrl } from '../../utils/BaseUrl';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setGameMode } from './GameSlice';
 
 export default function GameModeScreen({ navigation }) {
+    const dispatch = useDispatch();
     const gameModes = useSelector(state => state.common.gameModes);
+
+
+    const onSelectGameMode = (mode) => {
+        dispatch(setGameMode(mode));
+        navigation.navigate('GameInstructions')
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -16,7 +24,7 @@ export default function GameModeScreen({ navigation }) {
             <View>
                 {gameModes.map((gameMode, i) =>
                     <AvailableMode key={i} gameMode={gameMode}
-                        onPress={() => navigation.navigate('GameInstructions', { mode: gameMode })}
+                        onPress={() => onSelectGameMode(gameMode)}
                     />
                 )}
             </View>

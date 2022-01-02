@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Pressable, Alert, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -12,9 +12,6 @@ import { formatNumber, isTrue } from '../../utils/stringUtl';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { setGameCategory, setGameType } from './GameSlice';
 import { normalizeText } from 'react-native-elements/dist/helpers';
-import PurchaseBoostsScreen from '../Store/PurchaseBoostsScreen';
-import MyBoostsScreen from '../Store/MyBoostsScreen';
-import { Tab, TabView } from 'react-native-elements';
 
 
 const Toptab = createMaterialTopTabNavigator();
@@ -24,10 +21,8 @@ export default function GameScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             {/* <WinBig /> */}
-            <ProgressMessage />
-
-            {/* <GamesTabs /> */}
-            <ElementsTab />
+            {/* <ProgressMessage /> */}
+            <SelectCategory />
             <GlobalTopLeadersHero />
         </ScrollView>
     );
@@ -58,89 +53,57 @@ const ProgressMessage = () => {
     )
 }
 
+const SelectCategory = () => {
+    return (
+        <View style={styles.selectCategory}>
+            <GamesTabs />
+        </View>
+    )
+}
 
 
 
 const GamesTabs = () => {
 
-    return (
-        <Toptab.Navigator
-            screenOptions={{
-                tabBarLabelStyle: { fontSize: 12, fontFamily: 'graphik-medium', },
-                tabBarStyle: { backgroundColor: '#FFFF' },
-                tabBarIndicatorStyle: { backgroundColor: '#EB5757' },
-                tabBarPressColor: "#fff" // compulsory, fixes wrong/slow color when tabbing between screens
-            }}
-            transitionStyle={{}}
-            tab
-            sceneContainerStyle={{
-                backgroundColor: '#F8F9FD'
-            }}
-        >
-            <Toptab.Screen name="PurchaseBoosts" component={PurchaseBoostsScreen} options={{ tabBarLabel: 'Purchase', }} />
-            <Toptab.Screen name="MyBoosts" component={MyBoostsScreen} options={{ tabBarLabel: 'My Items' }} />
-        </Toptab.Navigator>
-    );
-};
-
-const ElementsTab = () => {
     const dispatch = useDispatch();
-    const [index, setIndex] = React.useState(0);
     const gameTypes = useSelector(state => state.common.gameTypes)
-
-    const onTabChanged = (e) => {
-        setIndex(e);
-        dispatch(setGameType(gameTypes[e]));
-    }
+    dispatch(setGameType(gameTypes[0]));
 
     return (
-        <>
-            <Tab
-                value={index}
-                onChange={(e) => onTabChanged(e)}
-                indicatorStyle={{
-                    backgroundColor: '#EF2F55',
-                    height: 1,
-                }}
-
-            >
-                {gameTypes.map((game, i) =>
-                    <Tab.Item
-                        containerStyle={{
-                            borderBottomWidth: 1,
-                            borderBottomColor: "#C4C4C4",
-                            backgroundColor: "#F8F9FD"
-                        }}
-                        title={game.displayName}
-                        titleStyle={{ fontSize: 11, fontFamily: 'graphik-medium' }}
-                        key={i}
-                    />
-                )}
-            </Tab>
-
-            <TabView value={index} onChange={setIndex} animationType="spring">
-                {gameTypes.map((game, i) =>
-                    <TabView.Item key={i} style={styles.games}>
-                        <CategoriesScreen currentGame={game} />
-                    </TabView.Item>
-                )}
-            </TabView>
-        </>
-    );
+        <Toptab.Navigator screenOptions={{
+            tabBarLabelStyle: { fontSize: 11, fontFamily: 'graphik-medium', },
+            tabBarStyle: { backgroundColor: '#F8F9FD' },
+            tabBarInactiveTintColor: '#C4C4C4',
+            tabBarActiveTintColor: '#EF2F55',
+            tabBarIndicatorStyle: { backgroundColor: '#EF2F55' },
+        }}
+            sceneContainerStyle={{ backgroundColor: '#F8F9FD' }}
+            style={{ height: normalize(380) }}
+        // height: Dimensions.get('window').height 
+        >
+            {gameTypes.map((game, i) =>
+                <Toptab.Screen
+                    name={game.name}
+                    key={i}
+                    component={CategoriesScreen}
+                    options={{ title: game.displayName }}
+                    initialParams={{ currentGame: game }}
+                />
+            )}
+        </Toptab.Navigator>
+    )
 };
 
 
-const CategoriesScreen = ({ currentGame }) => {
+const CategoriesScreen = ({ navigation, route }) => {
 
     const dispatch = useDispatch();
-    const navigation = useNavigation();
+    const currentGame = route.params.currentGame;
 
     const [activeCategory, setActiveCategory] = useState();
     const activeSubcategory = useSelector(state => state.game.gameCategory);
-    const activeGame = useSelector(state => state.game.gameType);
 
     const onCategorySelected = (category) => {
-        console.log("selected")
         setActiveCategory(category);
         dispatch(setGameCategory(undefined));
     }
@@ -150,14 +113,16 @@ const CategoriesScreen = ({ currentGame }) => {
     }
 
 
-    useEffect(() => {
-        console.log(activeGame)
-        setActiveCategory(undefined); //category
-        dispatch(setGameCategory(undefined)); //sucategory
-    }, [activeGame]);
+    React.useEffect(() => {
+        return navigation.addListener('tabPress', () => {
+            setActiveCategory(undefined);
+            dispatch(setGameCategory(undefined));
+            dispatch(setGameType(currentGame));
+        });
+    }, [navigation, currentGame]);
 
     return (
-        <>
+        <View style={styles.games}>
             <Text style={styles.title}>Choose Category</Text>
             <View style={styles.cards}>
                 {currentGame.categories.map((category, i) => <GameCategoryCard key={i}
@@ -173,7 +138,7 @@ const CategoriesScreen = ({ currentGame }) => {
 
             <AppButton text='Proceed to Play' onPress={() => navigation.navigate('GameMode')} disabled={!isTrue(activeSubcategory)} />
 
-        </>
+        </View>
 
     )
 };
@@ -233,8 +198,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F8F9FD',
         paddingHorizontal: normalize(18),
-        // paddingVertical: normalize(22),
-        // marginBottom: normalize(20)
+        paddingVertical: normalize(22),
     },
     winBig: {
         display: 'flex',
@@ -262,7 +226,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingVertical: normalize(7),
         paddingHorizontal: normalize(15),
-        marginVertical: normalize(22),
+        marginTop: normalize(22),
 
         borderRadius: 8,
         borderWidth: normalize(1),
@@ -313,28 +277,12 @@ const styles = StyleSheet.create({
         fontSize: normalize(12),
         color: '#EF2F55',
     },
-    games: {
-        paddingVertical: normalize(10),
-        // marginRight: normalize(5),
-        // backgroundColor: "red",
-        width: "88%",
-    },
-    title: {
-        fontSize: normalize(13),
-        color: '#151C2F',
-        fontFamily: 'graphik-bold',
-        marginVertical: normalize(10),
-    },
-    cards: {
-        display: 'flex',
-        flexDirection: 'row',
-    },
     card: {
+        paddingHorizontal: normalize(15),
+        paddingVertical: normalize(15),
         width: normalize(130),
-        padding: normalize(15),
         borderRadius: normalize(7),
         marginBottom: normalize(15),
-        marginRight: normalize(10)
     },
     cardIcon: {
         width: 50,
@@ -352,6 +300,25 @@ const styles = StyleSheet.create({
         fontSize: normalize(10),
         color: '#FFFF',
         fontFamily: 'graphik-regular',
+    },
+    games: {
+        paddingVertical: normalize(10),
+        marginRight: normalize(5)
+    },
+    title: {
+        fontSize: normalize(13),
+        color: '#151C2F',
+        fontFamily: 'graphik-bold',
+        marginVertical: normalize(10),
+    },
+    cards: {
+        display: 'flex',
+        flexDirection: 'row',
+        // marginTop: normalize(18),
+        justifyContent: 'space-between',
+        flexWrap: 'wrap'
+    },
+    tabs: {
     },
     checkbox: {
         // backgroundColor: '#FFFF',

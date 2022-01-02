@@ -1,37 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import { useNavigation } from '@react-navigation/native';
-import { copilot, walkthroughable, CopilotStep } from "react-native-copilot";
-import GlobalTopLeaders from '../../shared/GlobalTopLeaders';
+import { useFocusEffect } from '@react-navigation/native';
+import { copilot } from "react-native-copilot";
 import normalize from '../../utils/normalize';
-import { getData } from '../../utils/ApiHelper';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCommonData } from '../CommonSlice';
+import { getCommonData, getGlobalLeaders } from '../CommonSlice';
+import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 
-const WalkthroughableText = walkthroughable(Text);
-const WalkthroughableImage = walkthroughable(Image);
-
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     const gameTypes = useSelector(state => state.common.gameTypes)
-    const [leaders, setLeaders] = useState([]);
     const [loading, setLoading] = useState(true);
-
-
-
 
     useEffect(() => {
 
         var _1 = dispatch(getUser('v3/user/profile'));
-        var _3 = getData('v2/leaders/global').then(response => setLeaders(response.data))
+        var _3 = dispatch(getGlobalLeaders());
         var _2 = dispatch(getCommonData());
 
         Promise.all([_1, _2, _3]).then(values => {
@@ -39,23 +30,24 @@ const HomeScreen = ({ navigation }) => {
         });
     }, []);
 
+    useFocusEffect(
+        React.useCallback(() => {
+            //@TODO: Fix the double global leader call for the first visit after login
+            dispatch(getGlobalLeaders())
+        }, [])
+    );
     if (loading) {
         return <PageLoading />
     }
 
     return (
         <ScrollView>
-            {/* <CopilotStep
-                text="This is a hello world example!"
-                order={1}
-                name="hello"
-            >
-                <CopilotText>Hello world!</CopilotText>
-            </CopilotStep> */}
             <UserDetails user={user} />
-            <GameCards games={gameTypes} />
-            <RecentlyPlayedCards games={user.recentGames} />
-            <Leaderboard leaders={leaders} />
+            <View style={styles.container}>
+                <GameCards games={gameTypes} />
+                <RecentlyPlayedCards games={user.recentGames} />
+                <GlobalTopLeadersHero />
+            </View>
         </ScrollView>
     );
 
@@ -178,31 +170,10 @@ function RecentlyPlayedCard({ game }) {
 }
 
 
-
-const Leaderboard = ({ leaders }) => {
-    const navigation = useNavigation();
-    return (
-        <View style={styles.leaderboard}>
-            <View style={styles.leaderboardHeader}>
-                <Text style={styles.title}>Leaderboard</Text>
-                <View style={styles.extended}>
-                    <Text onPress={() => navigation.navigate('Leaderboard')}>
-                        <Text style={styles.extendedText}>Extended Leaderboard</Text>
-                    </Text>
-                    <Ionicons name="md-arrow-forward-sharp" size={24} color="#EF2F55" />
-                </View>
-            </View>
-            <GlobalTopLeaders leaders={leaders} />
-        </View>
-    )
-}
-
-
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        paddingHorizontal: normalize(18),
     },
     userDetails: {
         backgroundColor: '#151C2F',
@@ -276,7 +247,6 @@ const styles = StyleSheet.create({
         fontSize: normalize(10),
     },
     games: {
-        paddingHorizontal: normalize(20),
         paddingTop: normalize(10),
     },
     title: {
@@ -333,26 +303,5 @@ const styles = StyleSheet.create({
         lineHeight: 17,
         marginTop: normalize(8),
     },
-    leaderboard: {
-        paddingHorizontal: normalize(20),
-        paddingTop: normalize(20),
-        marginBottom: normalize(30)
-    },
-    leaderboardHeader: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: normalize(8)
-    },
-    extended: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    extendedText: {
-        fontSize: normalize(9),
-        color: '#EF2F55',
-        fontFamily: 'graphik-bold',
-    },
+
 });

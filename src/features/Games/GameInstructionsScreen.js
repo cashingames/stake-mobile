@@ -6,16 +6,14 @@ import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import AppButton from "../../shared/AppButton";
-import { startGame } from "../CommonSlice";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { backendUrl } from '../../utils/BaseUrl';
+import { startGame } from "./GameSlice";
 
 
 
 export default function GameInstructionsScreen({ navigation, route }) {
-    const gameMode = route.params.mode;
-
-
+    const gameMode = useSelector(state => state.game.gameMode);
     const refRBSheet = useRef();
 
     return (
@@ -123,25 +121,29 @@ const AvailableBoosts = ({ onClose }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const boosts = useSelector(state => state.auth.user.boosts);
-    const gameCategoryId = useSelector(state => state.game.gameCategoryId)
-    console.log(gameCategoryId)
+    const gameCategoryId = useSelector(state => state.game.gameCategory.id);
+    const gameTypeId = useSelector(state => state.game.gameType.id);
+    const gameModeId = useSelector(state => state.game.gameMode.id);
+    const [loading, setLoading] = useState(false);
 
     const onStartGame = () => {
+        setLoading(true);
         dispatch(startGame({
-            category: 102,
-            type: 1,
-            mode: 1
+            category: gameCategoryId,
+            type: gameTypeId,
+            mode: gameModeId
         }))
-        console.log(categoryId)
             .then(unwrapResult)
             .then(result => {
-                console.log("success")
+                console.log(result)
+                setLoading(false);
                 onClose();
                 navigation.navigate("GameInProgress")
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError);
                 Alert.alert('failed to start game')
+                setLoading(false);
                 // after login eager get commond data for the whole app
                 // console.log("failed");
                 // console.log(rejectedValueOrSerializedError)
@@ -163,7 +165,7 @@ const AvailableBoosts = ({ onClose }) => {
                 )}
             </View>
             <GoToStore onPress={visitStore} />
-            <AppButton text='Start Game' onPress={onStartGame} />
+            <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />
         </View>
     )
 }
