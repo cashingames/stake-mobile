@@ -4,6 +4,7 @@ import axios from 'axios'
 export const startGame = createAsyncThunk(
     'game/startGame',
     async (data, thunkAPI) => {
+        console.log(data)
         const response = await axios.post('v2/game/start/single-player', data)
         return response.data
     }
@@ -32,6 +33,7 @@ export const GameSlice = createSlice({
             state.gameMode = action.payload;
         },
         setGameType: (state, action) => {
+            console.log("setting game type", action.payload)
             state.gameType = action.payload;
         },
         setGameCategory: (state, action) => {

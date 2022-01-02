@@ -171,9 +171,6 @@ const AvailableBoosts = ({ onClose }) => {
 }
 
 const GoToStore = ({ onPress }) => {
-    const navigation = useNavigation();
-
-
     return (
         <View style={styles.moreBoost}>
 

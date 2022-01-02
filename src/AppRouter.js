@@ -89,11 +89,11 @@ function AppRouter() {
                 </AppStack.Group>
 
                 <AppStack.Group >
-                <AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
-                <AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
-                <AppStack.Screen name="StartGameCountdown" component={StartGameCountdownScreen} options={{ headerShown: false }} />
-                <AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
-                <AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
+                    <AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
+                    <AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
+                    <AppStack.Screen name="StartGameCountdown" component={StartGameCountdownScreen} options={{ headerShown: false }} />
+                    <AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
+                    <AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
 
                 </AppStack.Group>
 

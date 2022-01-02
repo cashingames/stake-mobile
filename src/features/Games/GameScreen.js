@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Pressable, Alert, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Tab, TabView } from 'react-native-elements';
 import AppButton from '../../shared/AppButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { backendUrl } from '../../utils/BaseUrl';
 import { formatNumber, isTrue } from '../../utils/stringUtl';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { setGameCategory, setGameType } from './GameSlice';
-import { normalizeText } from 'react-native-elements/dist/helpers';
 import PurchaseBoostsScreen from '../Store/PurchaseBoostsScreen';
 import MyBoostsScreen from '../Store/MyBoostsScreen';
-import { Tab, TabView } from 'react-native-elements';
 
 
 const Toptab = createMaterialTopTabNavigator();
@@ -88,9 +87,12 @@ const ElementsTab = () => {
     const [index, setIndex] = React.useState(0);
     const gameTypes = useSelector(state => state.common.gameTypes)
 
+    useEffect(() => {
+        dispatch(setGameType(gameTypes[index]));
+    }, [index])
+
     const onTabChanged = (e) => {
         setIndex(e);
-        dispatch(setGameType(gameTypes[e]));
     }
 
     return (
