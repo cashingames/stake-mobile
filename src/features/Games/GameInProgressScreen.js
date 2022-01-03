@@ -9,8 +9,11 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
+import { AnimatedCircularProgress } from "react-native-circular-progress";
+import { questionAnswered } from "./GameSlice";
 
 
+var base64 = require('base-64');
 
 
 export default function GameInProgressScreen({ navigation }) {
@@ -22,7 +25,6 @@ export default function GameInProgressScreen({ navigation }) {
                 <BoostsInfo onPress={() => refRBSheet.current.open()} />
                 <GameProgressAndBoosts />
                 <GameQuestions />
-                <AnswerOptions />
                 <RBSheet
                     ref={refRBSheet}
                     closeOnDragDown={true}
@@ -60,37 +62,46 @@ const PlayGameHeader = () => {
     )
 };
 
+const BoostsInfo = ({ onPress }) => {
+    return (
+        <View style={styles.boostDialog}>
+            <Text onPress={onPress} style={styles.infoText}>
+                See available boosts description
+            </Text>
+            <Ionicons name="md-arrow-forward-sharp" size={20} color="#FF9900" />
+        </View>
+    )
+}
+
+
+const GameProgressAndBoosts = () => {
+    const gameCategory = useSelector(state => state.game.gameCategory)
+    return (
+        <View style={styles.gameProgressAndBoost}>
+            <GameTopicProgress gameTopic="" gameCategory={gameCategory.name} />
+            <AvailableBoosts />
+        </View>
+    )
+}
+
 const GameTopicProgress = ({ gameTopic, gameCategory }) => {
+
+    const navigation = useNavigation();
+
     return (
         <View style={styles.topicProgress}>
             <Text style={styles.title}>{gameCategory} {gameTopic}</Text>
-            <QuestionsProgress />
-            <TimeCountdown />
-        </View>
-    )
-}
 
-const QuestionsProgress = () => {
-    return (
-        <View style={styles.questionsProgress}>
-            <Text style={styles.questionsAnswered}>1/10</Text>
-        </View>
-    )
-}
+            <AnsweredGameProgress />
 
-const TimeCountdown = () => {
-    const navigation = useNavigation();
-    return (
-        <View>
             <CountdownCircleTimer
                 isPlaying
-                duration={30}
-                colors={[
-                    ['#2D9CDB', 0.4],
-                ]}
+                duration={60}
+                colors={[["#fff", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
+                trailColor="#2D9CDB"
                 size={60}
                 strokeWidth={5}
-                onComplete={() => navigation.navigate('GameEndResult')}
+            // onComplete={() => navigation.navigate('GameEndResult')}
             >
                 {({ remainingTime, animatedColor }) => (
                     <Animated.Text style={styles.timeText}>
@@ -98,22 +109,32 @@ const TimeCountdown = () => {
                     </Animated.Text>
                 )}
             </CountdownCircleTimer>
-        </View >
+        </View>
     )
 }
 
-const AvailableBoost = ({ boostIcon, boost }) => {
+const AnsweredGameProgress = () => {
+
+    const index = useSelector(state => state.game.currentQuestionPosition);
+    const total = useSelector(state => state.game.totalQuestionCount);
+
     return (
-        <TouchableOpacity>
-            <View style={styles.availableBoost}>
-            <Image
-                    source={{ uri: `${backendUrl}/${boost.icon}` }}
-                    style={styles.boostIcon}
-                />
-                <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
-            </View>
-        </TouchableOpacity>
-    )
+        <AnimatedCircularProgress
+            size={60}
+            width={5}
+            fill={((index + 1) / total * 100)}
+            tintColor="#2D9CDB"
+            onAnimationComplete={() => console.log('onAnimationComplete')}
+            backgroundColor="#fff">
+            {
+                (fill) => (
+                    <Text style={styles.questionsAnswered}>
+                        {`${index + 1}/${total}`}
+                    </Text>
+                )
+            }
+        </AnimatedCircularProgress>
+    );
 }
 
 const AvailableBoosts = () => {
@@ -123,78 +144,28 @@ const AvailableBoosts = () => {
             <View style={styles.boostinfo}>
                 <Text style={styles.title}>Boost</Text>
             </View>
-            {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i}
-                boostIcon={require('../../../assets/images/time_freeze.png')} />
-            )}
+            {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i} />)}
         </View>
     )
 }
 
-const InfoIcon = () => {
+const AvailableBoost = ({ boost }) => {
     return (
-        <Pressable style={styles.information}>
-            <Ionicons name="md-information-circle-sharp" size={26} color="#FFFF" />
-        </Pressable>
-    )
-}
-
-const GameProgressAndBoosts = () => {
-    return (
-        <View style={styles.gameProgressAndBoost}>
-            <GameTopicProgress gameTopic="(Hip hop)" gameCategory="Music" />
-            <AvailableBoosts />
-        </View>
-    )
-}
-
-const GameQuestions = () => {
-    return (
-        <View style={styles.gameQuestions}>
-            <Text style={styles.questions}>Who directed the dance choreogrpahy of Michael Jackason’s hit single Thriller?</Text>
-        </View>
-    )
-}
-
-const Answer = ({ answer }) => {
-    return (
-        <View>
-            <TouchableOpacity style={styles.answer}>
-                <Text style={styles.answerText}>{answer}</Text>
-            </TouchableOpacity>
-        </View>
-    )
-}
-const AnswerOptions = () => {
-    return (
-        <View style={styles.options}>
-            <Answer answer="Jay Z" />
-            <Answer answer="Micheal Jackson" />
-            <Answer answer="Chris Brown" />
-            <Answer answer="Usher" />
-        </View>
-    )
-}
-
-const GameBoost = ({ boost }) => {
-    return (
-        <View style={styles.boostContent}>
-            <View style={styles.boostAmount}>
-            <Image
+        <TouchableOpacity>
+            <View style={styles.availableBoost}>
+                <Image
                     source={{ uri: `${backendUrl}/${boost.icon}` }}
                     style={styles.boostIcon}
                 />
-                <Text style={styles.amount1}>x{formatNumber(boost.count)}</Text>
+                <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
             </View>
-            <View style={styles.boostDetails}>
-                <Text style={styles.boostName}>{boost.name}</Text>
-                <Text style={styles.boostDescription}>{boost.description}</Text>
-            </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
+
 const GameBoosts = () => {
-    const navigation = useNavigation();
+
     const boosts = useSelector(state => state.auth.user.boosts);
 
     return (
@@ -208,17 +179,51 @@ const GameBoosts = () => {
     )
 }
 
-const BoostsInfo = ({ text, onPress }) => {
+const GameBoost = ({ boost }) => {
     return (
-        <View style={styles.boostDialog}>
-            <Text onPress={onPress} style={styles.infoText}>
-                See available boosts description
-            </Text>
-            <Ionicons name="md-arrow-forward-sharp" size={20} color="#FF9900" />
+        <View style={styles.boostContent}>
+            <View style={styles.boostAmount}>
+                <Image
+                    source={{ uri: `${backendUrl}/${boost.icon}` }}
+                    style={styles.boostIcon}
+                />
+                <Text style={styles.amount1}>x{formatNumber(boost.count)}</Text>
+            </View>
+            <View style={styles.boostDetails}>
+                <Text style={styles.boostName}>{boost.name}</Text>
+                <Text style={styles.boostDescription}>{boost.description}</Text>
+            </View>
         </View>
     )
 }
 
+
+const GameQuestions = () => {
+    const position = useSelector(state => state.game.currentQuestionPosition);
+    const questions = useSelector(state => state.game.questions);
+    const displayedOptions = useSelector(state => state.game.displayedOptions);
+
+    const question = questions[position];
+    return (
+        <>
+            <View style={styles.gameQuestions}>
+                <Text style={styles.questions}>{base64.decode(question.label)}</Text>
+            </View>
+            <View style={styles.options}>
+                {displayedOptions.map((option, i) => <Answer option={option} key={i} />)}
+            </View>
+        </>
+    )
+}
+
+const Answer = ({ option }) => {
+
+    return (
+        <TouchableOpacity style={[styles.answer, option.isSelected ? styles.selectedOption : {}]} onPress={() => dispatch(questionAnswered(option))}>
+            <Text style={styles.answerText}>{base64.decode(option.title)}</Text>
+        </TouchableOpacity>
+    )
+}
 
 const styles = StyleSheet.create({
 
@@ -392,7 +397,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         marginTop: normalize(10),
-        alignItems:'center'
+        alignItems: 'center'
     },
     title1: {
         fontSize: normalize(13),

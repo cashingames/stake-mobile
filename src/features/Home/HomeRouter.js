@@ -15,6 +15,7 @@ import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
 import { backendUrl } from '../../utils/BaseUrl';
+import GameInProgressScreen from '../Games/GameInProgressScreen';
 
 const HomeStack = createDrawerNavigator();
 
@@ -39,7 +40,7 @@ const HomeRouter = () => {
             initialRouteName="Home"
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={AppMainHeaderOptions}>
-            <HomeStack.Screen name="Game" component={GameScreen} options={{ title: 'Game' }} />
+            <HomeStack.Screen name="Game" component={GameInProgressScreen} options={{ title: 'Game' }} />
             <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
         </HomeStack.Navigator>
@@ -139,7 +140,7 @@ function CustomDrawerContent(props) {
                     style={drawStyles.label}
                     labelContainerStyle
                 />
-                  <DrawerItem
+                <DrawerItem
                     label={() =>
                         <View style={drawStyles.item}>
                             <Text style={drawStyles.itemLabel}>Support</Text>
