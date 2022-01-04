@@ -40,7 +40,7 @@ const HomeRouter = () => {
             initialRouteName="Home"
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={AppMainHeaderOptions}>
-            <HomeStack.Screen name="Game" component={GameScreen} options={{ title: 'Game' }} />
+            {/* <HomeStack.Screen name="Game" component={GameScreen} options={{ title: 'Game' }} /> */}
             <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
         </HomeStack.Navigator>

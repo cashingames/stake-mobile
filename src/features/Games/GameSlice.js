@@ -631,7 +631,7 @@ const initialState = {
     currentQuestionPosition: 0,
     totalQuestionCount: 10,
     chosenOptions: [],
-    displayedOptions: state.questions[currentQuestionPosition].options
+    displayedOptions: [],
 }
 
 export const GameSlice = createSlice({
@@ -666,6 +666,7 @@ export const GameSlice = createSlice({
         builder
             .addCase(startGame.fulfilled, (state, action) => {
                 state.questions = action.payload.data.questions;
+                state.displayedOptions = state.questions[state.currentQuestionPosition].options
             })
 
     },
