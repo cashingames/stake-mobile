@@ -40,7 +40,7 @@ const HomeRouter = () => {
             initialRouteName="Home"
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={AppMainHeaderOptions}>
-            {/* <HomeStack.Screen name="Game" component={GameScreen} options={{ title: 'Game' }} /> */}
+            <HomeStack.Screen name="Game" component={GameScreen} options={{ title: 'Game' }} />
             <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
         </HomeStack.Navigator>
@@ -58,9 +58,9 @@ const RightButtons = ({ options }) => {
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                 <Ionicons style={[styles.pageIcon, routeName === 'Home' ? styles.activePageIcon : {}]} name='home-outline' size={24} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Game')}>
+            {/* <TouchableOpacity onPress={() => navigation.navigate('Game')}>
                 <Ionicons style={[styles.pageIcon, routeName === 'Game' ? styles.activePageIcon : {}]} name='game-controller-outline' size={24} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={() => navigation.navigate('Wallet')}>
                 <Ionicons style={[styles.pageIcon, routeName === 'Wallet' ? styles.activePageIcon : {}]} name='wallet-outline' size={24} />
             </TouchableOpacity>
