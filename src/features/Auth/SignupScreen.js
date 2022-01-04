@@ -119,8 +119,8 @@ export default function SignupScreen({ navigation }) {
                 <AppButton text='Continue' onPress={onNext} disabled={!canSend} />
             </View>
 
-            {/* <SocialSigninDivider signInText='sign up' /> */}
-            {/* <SocialSignUp action={() => navigation.navigate('Login')} /> */}
+            <SocialSigninDivider signInText='sign up' />
+            <SocialSignUp action={() => navigation.navigate('Login')} />
             <SignIn />
         </ScrollView >
     );

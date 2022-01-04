@@ -89,13 +89,13 @@ export default function LoginScreen({ navigation }) {
                         onChangeText={text => { onChangePassword(text) }}
                     />
 
-                    {/* <RenderForgotPassword /> */}
+                    <RenderForgotPassword />
 
                 </View>
 
                 <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={onLogin} disabled={!canLogin} />
-                {/* <SocialSigninDivider signInText='sign in' /> */}
-                {/* <SocialSignUp action={() => navigation.navigate('SignIn')} /> */}
+                <SocialSigninDivider signInText='sign in' />
+                <SocialSignUp action={() => navigation.navigate('SignIn')} />
                 <RenderCreateAccount />
             </ScrollView >
         </SafeAreaView>

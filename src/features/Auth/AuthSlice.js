@@ -10,6 +10,7 @@ import {
     getData,
 } from '../../utils/ApiHelper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { isTrue } from '../../utils/stringUtl';
 
 export const registerUser = async (data) => {
     return axios.post('auth/register', data);
@@ -41,7 +42,7 @@ export const isLoggedIn = createAsyncThunk(
 export const shouldShowIntro = createAsyncThunk(
     'auth/shouldShowIntro',
     async (thunkAPI) => {
-        return getIsLoggedInOnce();
+        return AsyncStorage.getItem("used");
     }
 )
 
@@ -162,7 +163,7 @@ export const AuthSlice = createSlice({
                 state.token = action.payload;
             })
             .addCase(shouldShowIntro.fulfilled, (state, action) => {
-                state.showIntro = !action.payload;
+                state.showIntro = !isTrue(action.payload);
             })
             .addCase(verifyAccount.fulfilled, (state, action) => {
                 state.passwordReset.code = action.payload.data;

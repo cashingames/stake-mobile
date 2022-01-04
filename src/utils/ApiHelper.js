@@ -93,9 +93,5 @@ async function saveToken(data) {
     await AsyncStorage.setItem("used", "token");
 }
 
-async function getIsLoggedInOnce() {
-    return AsyncStorage.getItem("used").then(result => isTrue(result));
-}
-
-export { login, register, verifyUsername, saveToken, getIsLoggedInOnce, verifyAccount, verifyFunding, resetPassword, verifyOtp };
+export { login, register, verifyUsername, saveToken, verifyAccount, verifyFunding, resetPassword, verifyOtp };
 export { getData, postData };

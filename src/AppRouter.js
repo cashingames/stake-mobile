@@ -5,7 +5,6 @@ import axios from "axios";
 
 import PageLoading from './shared/PageLoading';
 import HomeRouter from './features/Home/HomeRouter';
-import AuthRouter from './features/Auth/AuthRouter';
 import ExtendedLeaderboard from './features/Leaderboard/ExtendedLeaderboard';
 import FundWalletScreen from './features/Transactions/FundWalletScreen';
 import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
@@ -24,7 +23,7 @@ import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScree
 import SupportQuestionsScreen from './features/Support/SupportQuestionsScreen';
 import SupportAnswerScreen from './features/Support/SupportAnswerScreen';
 
-import { isLoggedIn } from './features/Auth/AuthSlice';
+import { isLoggedIn, shouldShowIntro } from './features/Auth/AuthSlice';
 import { baseURL } from './utils/BaseUrl';
 import { isTrue } from './utils/stringUtl';
 import GameModeScreen from './features/Games/GameModeScreen';
@@ -32,6 +31,14 @@ import GameInstructionsScreen from './features/Games/GameInstructionsScreen';
 import StartGameCountdownScreen from './features/Games/StartGameCountdownScreen';
 import GameInProgressScreen from './features/Games/GameInProgressScreen';
 import GameEndResultScreen from './features/Games/GameEndResultScreen';
+import IntroSlide from './features/Auth/IntroSlide';
+import LoginScreen from './features/Auth/LoginScreen';
+import SignupScreen from './features/Auth/SignupScreen';
+import SignupProfileScreen from './features/Auth/SignupProfileScreen';
+import ForgotPasswordScreen from './features/Auth/ForgotPasswordScreen';
+import VerifyEmailScreen from './features/Auth/VerifyEmailScreen';
+import ResetPasswordScreen from './features/Auth/ResetPasswordScreen';
+import ResetPasswordSuccessScreen from './features/Auth/ResetPasswordSuccessScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -41,12 +48,16 @@ function AppRouter() {
     const [loading, setLoading] = useState(true);
 
     const token = useSelector(state => state.auth.token);
+    const showIntro = useSelector(state => state.auth.showIntro);
 
     booststrapAxios(token); //sets basic api call params
 
     //during app restart, check localstorage for these info
     useEffect(() => {
-        dispatch(isLoggedIn()).then(() => {
+        const _1 = dispatch(isLoggedIn());
+        const _2 = dispatch(shouldShowIntro());
+
+        Promise.all([_1, _2]).then(values => {
             setLoading(false);
         });
     }, []);
@@ -55,52 +66,69 @@ function AppRouter() {
         return <PageLoading />
     }
 
-
-    if (!isTrue(token)) {
-        return <AuthRouter />;
+    if (showIntro) {
+        return <IntroSlide />;
     }
 
     return (
         <AppStack.Navigator>
+            {isTrue(token) ?
+                (
+                    <>
+                        <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
-            <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
+                        <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Extended Leaderboard' }} />
 
-            <AppStack.Group >
-                <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Extended Leaderboard' }} />
-                <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
-                <AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
+                        {/** game **/}
+                        <AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
+                        <AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
+                        <AppStack.Screen name="StartGameCountdown" component={StartGameCountdownScreen} options={{ headerShown: false }} />
+                        <AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
+                        <AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
 
-                <AppStack.Screen name="GameStore" component={GameStoreRouter} options={{ title: 'Store', headerShadowVisible: false }} />
-                <AppStack.Screen name="Terms" component={TermsAndConditionsScreen} options={{ title: 'Terms & Conditions' }} />
-                <AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
-                <AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
-                <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
-                <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ headerShown: false }} />
-                <AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Support' }} />
-                <AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
+                        {/** wallet */}
+                        <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
+                        <AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
+                        <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
+                        <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ headerShown: false }} />
 
-                <AppStack.Group >
-                    <AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
-                    <AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Edit Details' }} />
-                    <AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Change Password' }} />
-                    <AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ title: 'Stats' }} />
-                    <AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ title: 'Milestones' }} />
-                    <AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
-                </AppStack.Group>
+                        {/** user profile **/}
+                        <AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
+                        <AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Edit Details' }} />
+                        <AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Change Password' }} />
+                        <AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ title: 'Stats' }} />
+                        <AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ title: 'Milestones' }} />
+                        <AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
 
-                <AppStack.Group >
-                    <AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
-                    <AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
-                    <AppStack.Screen name="StartGameCountdown" component={StartGameCountdownScreen} options={{ headerShown: false }} />
-                    <AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
-                    <AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
+                        {/** store */}
+                        <AppStack.Screen name="GameStore" component={GameStoreRouter} options={{ title: 'Store', headerShadowVisible: false }} />
 
-                </AppStack.Group>
+                        <AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
+                    </>
+                ) :
+                (
 
-            </AppStack.Group>
+                    <AppStack.Group screenOptions={{ title: "", headerShadowVisible: false }}>
+                        {/** unauthenticated **/}
+                        <AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+                        <AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
+                        <AppStack.Screen name="SignupScreen" component={SignupScreen} />
+                        <AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
+                        <AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+                        <AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
+                        <AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+                        <AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} />
+                    </AppStack.Group >
+                )
+            }
 
+            {/** general */}
+            <AppStack.Screen name="Terms" component={TermsAndConditionsScreen} options={{ title: 'Terms & Conditions' }} />
+            <AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
+            <AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Support' }} />
+            <AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
 
-        </AppStack.Navigator>
+        </AppStack.Navigator >
     )
 
 }
