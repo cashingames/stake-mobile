@@ -109,8 +109,8 @@ export default function SignupScreen({ navigation }) {
                 onPress={() => setChecked(!checked)}
                 title={
                     <Text>I agree to the
-                        <Link style={styles.linkText} to={{ screen: 'TermsAndConditions' }}> terms & condition </Link> and
-                        <Link style={styles.linkText} to={{ screen: 'PrivacyPolicy' }}> privacy Policy</Link>
+                        <Link style={styles.linkText} to={{ screen: 'Terms' }}> terms & condition </Link> and
+                        <Link style={styles.linkText} to={{ screen: 'Privacy' }}> privacy Policy</Link>
                     </Text>
                 }
             />
@@ -119,8 +119,8 @@ export default function SignupScreen({ navigation }) {
                 <AppButton text='Continue' onPress={onNext} disabled={!canSend} />
             </View>
 
-            <SocialSigninDivider signInText='sign up' />
-            <SocialSignUp action={() => navigation.navigate('Login')} />
+            {/* <SocialSigninDivider signInText='sign up' /> */}
+            {/* <SocialSignUp action={() => navigation.navigate('Login')} /> */}
             <SignIn />
         </ScrollView >
     );

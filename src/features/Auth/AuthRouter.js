@@ -10,6 +10,8 @@ import ResetPasswordScreen from './ResetPasswordScreen';
 import ResetPasswordSuccessScreen from './ResetPasswordSuccessScreen';
 import SignupScreen from './SignupScreen';
 import SignupProfileScreen from './SignupProfileScreen';
+import PrivacyPolicyScreen from '../../screens/PrivacyPolicyScreen';
+import TermsAndConditionsScreen from '../../screens/TermsAndConditionsScreen';
 
 const AuthStack = createNativeStackNavigator();
 
@@ -39,7 +41,8 @@ const AuthRouter = () => {
             <AuthStack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
             <AuthStack.Screen name="ResetPassword" component={ResetPasswordScreen} />
             <AuthStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} />
-
+            <AuthStack.Screen name="Terms" component={TermsAndConditionsScreen} options={{ title: 'Terms & Conditions' }} />
+            <AuthStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
         </AuthStack.Navigator>
     );
 }
