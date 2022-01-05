@@ -37,6 +37,7 @@ const initialState = {
     achievements: [],
     gameTypes: [],
     gameModes: [],
+    gamePlans: [],
     banks: [],
     globalLeaders: [],
 }
@@ -53,8 +54,10 @@ export const CommonSlice = createSlice({
             .addCase(getCommonData.fulfilled, (state, action) => {
                 state.boosts = action.payload.boosts;
                 state.achievements = action.payload.achievements;
+                state.plans = action.payload.plans;
                 state.gameTypes = action.payload.gameTypes;
                 state.gameModes = action.payload.gameModes;
+
             })
             .addCase(getBankData.fulfilled, (state, action) => {
                 state.banks = action.payload;

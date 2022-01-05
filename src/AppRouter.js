@@ -39,6 +39,8 @@ import ForgotPasswordScreen from './features/Auth/ForgotPasswordScreen';
 import VerifyEmailScreen from './features/Auth/VerifyEmailScreen';
 import ResetPasswordScreen from './features/Auth/ResetPasswordScreen';
 import ResetPasswordSuccessScreen from './features/Auth/ResetPasswordSuccessScreen';
+import PurchaseBoostsScreen from './features/Store/PurchaseBoostsScreen';
+import GamePlanSuccessfulScreen from './features/Store/GamePlanSuccessfulScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -90,7 +92,6 @@ function AppRouter() {
                         <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
                         <AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
                         <AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
-                        <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ headerShown: false }} />
 
                         {/** user profile **/}
                         <AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
@@ -101,7 +102,9 @@ function AppRouter() {
                         <AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
 
                         {/** store */}
-                        <AppStack.Screen name="GameStore" component={GameStoreRouter} options={{ title: 'Store', headerShadowVisible: false }} />
+                        <AppStack.Screen name="GameStore" component={PurchaseBoostsScreen} options={{ title: 'Store', headerShadowVisible: false }} />
+                        <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ headerShown: false }} />
+                        <AppStack.Screen name="GamePurchaseSuccessful" component={GamePlanSuccessfulScreen} options={{ headerShown: false }} />
 
                         <AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
                     </>

@@ -25,6 +25,22 @@ export const buyBoostFromWallet = createAsyncThunk(
     }
 )
 
+export const buyPlanFromWallet = createAsyncThunk(
+    'store/wallet/purchaseGamePlan',
+    async (planId, thunkAPI) => {
+        const response = await axios.post(`v2/plan/subscribe/${planId}`)
+        // v2/plan/subscribe/{planId}
+        // .then(value => {
+        //     console.log("success")
+        //     console.log(value);
+        // }).catch(err => {
+        //     console.log("error");
+        //     console.log(err.toJSON());
+        // })
+        return response.data;
+    }
+)
+
 export const StoreSlice = createSlice({
     name: 'store',
     initialState,
