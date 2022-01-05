@@ -12,8 +12,8 @@ import { backendUrl } from '../../utils/BaseUrl';
 import { formatNumber, isTrue } from '../../utils/stringUtl';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { setGameCategory, setGameType } from './GameSlice';
-import PurchaseBoostsScreen from '../Store/PurchaseBoostsScreen';
 import MyBoostsScreen from '../Store/MyBoostsScreen';
+import GameStoreScreen from '../Store/GameStoreScreen';
 
 
 const Toptab = createMaterialTopTabNavigator();
@@ -76,7 +76,7 @@ const GamesTabs = () => {
                 backgroundColor: '#F8F9FD'
             }}
         >
-            <Toptab.Screen name="PurchaseBoosts" component={PurchaseBoostsScreen} options={{ tabBarLabel: 'Purchase', }} />
+            <Toptab.Screen name="PurchaseBoosts" component={GameStoreScreen} options={{ tabBarLabel: 'Purchase', }} />
             <Toptab.Screen name="MyBoosts" component={MyBoostsScreen} options={{ tabBarLabel: 'My Items' }} />
         </Toptab.Navigator>
     );
