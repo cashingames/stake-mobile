@@ -1,19 +1,60 @@
-import React from "react";
+import React, {useState } from "react";
 import { StyleSheet, Image, TouchableOpacity, Text, View } from 'react-native';
 import normalize from '../utils/normalize';
+import * as Google from 'expo-google-app-auth';
+import { loginWithGoogle, setToken } from "../features/Auth/AuthSlice";
+import { useDispatch } from 'react-redux';
+import { saveToken } from "../utils/ApiHelper";
+import { iosClientId, androidClientId } from "../utils/BaseUrl";
+import { ActivityIndicator } from "react-native";
 
 
-export default function SocialSignUp({ action }) {
+export default function SocialSignUp() {
+    const dispatch = useDispatch();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleGoogleSignIn = () => {
+    
+        setIsSubmitting(true);
+        const config = {
+            iosClientId: iosClientId,
+            androidClientId: androidClientId,
+            scopes: ["profile", "email"]
+        };
+        Google.logInAsync(config).then((result) => {
+            setIsSubmitting(true);
+            const { type, user } = result;
+            if (type == 'success') {
+                loginWithGoogle({
+                    email: user.email,
+                    first_name: user.givenName,
+                    last_name: user.familyName,
+                }).then(response => {
+                    saveToken(response.data.data)
+                    dispatch(setToken(response.data.data))
+                });
+            } else {
+                console.log('cancelled')
+            }
+            setIsSubmitting(false);
+        }).catch(error => {
+            setIsSubmitting(false);
+            console.log(error)
+        })
+    }
 
     return (
         <View style={styles.socialIcons}>
-            <TouchableOpacity onPress={action} >
-                <Image
-                    style={{ ...styles.icon, width: 20, height: 20 }}
-                    source={require('../../assets/images/google_icon.png')}
-                />
-                <Text style={styles.social}>Google</Text>
-            </TouchableOpacity>
+            {isSubmitting ? <ActivityIndicator size="large" color="#0000ff" /> :
+                <TouchableOpacity onPress={handleGoogleSignIn} >
+                    <Image
+                        style={{ ...styles.icon, width: 20, height: 20 }}
+                        source={require('../../assets/images/google_icon.png')}
+                    />
+                    <Text style={styles.social}>Google</Text>
+
+                </TouchableOpacity>
+            }
             {/* <TouchableOpacity onPress={action} >
                 <Image
                     style={{ ...styles.icon, width: 11, height: 23 }}
