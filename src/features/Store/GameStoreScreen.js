@@ -129,7 +129,7 @@ const BuyGamePlan = ({ plan, onClose }) => {
                 console.log(result);
                 dispatch(getUser())
                 onClose()
-                navigation.navigate("GamePurchaseSuccessful")
+                navigation.navigate("GamePlanPurchaseSuccessful")
             })
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);
@@ -247,7 +247,7 @@ const BuyBoost = ({ boost, onClose }) => {
                 console.log(result);
                 dispatch(getUser())
                 onClose()
-                navigation.navigate("PurchaseSuccessful")
+                navigation.navigate("GameBoostPurchaseSuccessful")
             })
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);

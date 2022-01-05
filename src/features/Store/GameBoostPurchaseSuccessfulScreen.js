@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 
-const PurchaseSuccessfulScreen = () => {
+const GameBoostPurchaseSuccessfulScreen = () => {
     const user = useSelector(state => state.auth.user)
     const navigation = useNavigation();
     return (
@@ -24,12 +24,12 @@ const PurchaseSuccessfulScreen = () => {
             <Text style={styles.message}>You have successfully purchased a boost to play a game and climb up the leaderboard</Text>
             <View style={styles.congratsButtons}>
                 <AppButton text={"Play a Game"} onPress={() => navigation.navigate('Game')} style={styles.actionButton} />
-                <AppButton text={"Game Store"} onPress={() => navigation.navigate('GameStore')} style={styles.actionButton} />
+                <AppButton text={"Store"} onPress={() => navigation.navigate('GameStore')} style={styles.actionButton} />
             </View>
         </View>
     )
 }
-export default PurchaseSuccessfulScreen;
+export default GameBoostPurchaseSuccessfulScreen;
 
 
 const styles = StyleSheet.create({

@@ -37,7 +37,7 @@ const initialState = {
     achievements: [],
     gameTypes: [],
     gameModes: [],
-    gamePlans: [],
+    plans: [],
     banks: [],
     globalLeaders: [],
 }

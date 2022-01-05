@@ -9,8 +9,6 @@ import ExtendedLeaderboard from './features/Leaderboard/ExtendedLeaderboard';
 import FundWalletScreen from './features/Transactions/FundWalletScreen';
 import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
 import TransactionScreen from './features/Transactions/TransactionScreen';
-import GameStoreRouter from './features/Store/GameStoreRouter';
-import PurchaseSuccessfulScreen from './features/Store/PurchaseSuccessfulScreen';
 import TermsAndConditionsScreen from './screens/TermsAndConditionsScreen';
 import PrivacyPolicyScreen from './screens/PrivacyPolicyScreen';
 import InviteFriendsScreen from './screens/InviteFriendsScreen';
@@ -39,8 +37,9 @@ import ForgotPasswordScreen from './features/Auth/ForgotPasswordScreen';
 import VerifyEmailScreen from './features/Auth/VerifyEmailScreen';
 import ResetPasswordScreen from './features/Auth/ResetPasswordScreen';
 import ResetPasswordSuccessScreen from './features/Auth/ResetPasswordSuccessScreen';
-import PurchaseBoostsScreen from './features/Store/PurchaseBoostsScreen';
-import GamePlanSuccessfulScreen from './features/Store/GamePlanSuccessfulScreen';
+import GameBoostPurchaseSuccessfulScreen from './features/Store/GameBoostPurchaseSuccessfulScreen';
+import GamePlanPurchaseSuccessfulScreen from './features/Store/GamePlanPurchaseSuccessfulScreen';
+import GameStoreScreen from './features/Store/GameStoreScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -102,9 +101,9 @@ function AppRouter() {
                         <AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
 
                         {/** store */}
-                        <AppStack.Screen name="GameStore" component={PurchaseBoostsScreen} options={{ title: 'Store', headerShadowVisible: false }} />
-                        <AppStack.Screen name="PurchaseSuccessful" component={PurchaseSuccessfulScreen} options={{ headerShown: false }} />
-                        <AppStack.Screen name="GamePurchaseSuccessful" component={GamePlanSuccessfulScreen} options={{ headerShown: false }} />
+                        <AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ title: 'Store', headerShadowVisible: false }} />
+                        <AppStack.Screen name="GameBoostPurchaseSuccessful" component={GameBoostPurchaseSuccessfulScreen} options={{ headerShown: false }} />
+                        <AppStack.Screen name="GamePlanPurchaseSuccessful" component={GamePlanPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 
                         <AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
                     </>
