@@ -120,7 +120,7 @@ export default function SignupScreen({ navigation }) {
             </View>
 
             <SocialSigninDivider signInText='sign up' />
-            <SocialSignUp action={() => navigation.navigate('Login')} />
+            <SocialSignUp />
             <SignIn />
         </ScrollView >
     );

@@ -7,6 +7,7 @@ import {
     verifyOtp as verifyOtpApi,
     verifyAccount as verifyAccountApi,
     resetPassword as resetPasswordApi,
+    signInWithGoogle as googleSignIn,
     getData,
 } from '../../utils/ApiHelper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,6 +24,10 @@ export const loginUser = createAsyncThunk(
         return response.data
     }
 )
+
+export const loginWithGoogle = async (data) => {
+    return axios.post("/auth/google/login", data);
+}
 
 export const logoutUser = createAsyncThunk(
     'auth/logoutUser',
