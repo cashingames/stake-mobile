@@ -105,6 +105,15 @@ export const editBankDetails = createAsyncThunk(
     }
 )
 
+export const editProfileAvatar = createAsyncThunk(
+    'auth/user/editProfileAvatar',
+    async (data, thunkAPI) => {
+        const response = await axios.post('v2/profile/me/picture', data)
+        console.log(response)
+        return response.data
+    }
+)
+
 export const getUser = createAsyncThunk(
     'auth/user/get',
     async (thunkAPI) => {

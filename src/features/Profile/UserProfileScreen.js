@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { isTrue } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
-
-
-
+import * as ImagePicker from 'expo-image-picker';
+import { getUser, editProfileAvatar } from '../Auth/AuthSlice';
 
 
 export default function UserProfileScreen({ navigation }) {
@@ -30,18 +29,50 @@ export default function UserProfileScreen({ navigation }) {
 
 const UserAvatar = () => {
     const user = useSelector(state => state.auth.user)
+    console.log(user.avatar);
+    const dispatch = useDispatch();
+    const [image, setImage] = useState(user.avatar);
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        console.log('before')
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.cancelled) {
+            dispatch(editProfileAvatar({ avatar: result.uri }));
+            dispatch(getUser());
+            setImage(result.uri);
+        };
+    }
+    useEffect(() => {
+        setImage(user.avatar);
+    }, [])
+
     return (
         <View style={styles.userAvatar}>
-            <Image
-                style={styles.avatar}
-                source={isTrue(user.avatar) ? { uri: `${backendUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
-            />
-            <TouchableOpacity style={styles.camera}>
+            {/* {image && <Image source={isTrue(user.avatar) ? { uri: image } : require("../../../assets/images/user-icon.png")} style={styles.avatar} />} */}
+            {image && <Image source={{ uri: `${backendUrl}/${image}` }} style={{ width: 200, height: 200 }} />}
+            {/* { uri: `${backendUrl}/${user.avatar}` } */}
+            {/* source={{ uri: image }} */}
+            <TouchableOpacity style={styles.camera} onPress={pickImage}>
                 <Ionicons name="camera-sharp" size={26} color="#FFFF" />
             </TouchableOpacity>
         </View>
     )
 }
+
+// const ChangeProfileImage = () => {
+
+//     return (
+//         <View></View>
+//     )
+// }
 
 const ProfileTab = ({ tabName, onPress }) => {
     return (
