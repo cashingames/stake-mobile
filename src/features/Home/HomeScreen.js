@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import { copilot } from "react-native-copilot";
@@ -11,8 +11,10 @@ import { getUser } from '../Auth/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
+import UserItems from '../../shared/UserPurchasedItems';
+import { useNavigation } from '@react-navigation/native';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
@@ -44,6 +46,14 @@ const HomeScreen = () => {
         <ScrollView>
             <UserDetails user={user} />
             <View style={styles.container}>
+                <>
+                    <Text style={styles.title}>Games</Text>
+                    <Text style={styles.planInstruction}>You can only play 10 free games daily, 
+                    Buy Games to enjoy playing without interruptons.
+                    <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}> Buy More</Text>
+                    </Text>
+                    <UserItems />
+                </>
                 <GameCards games={gameTypes} />
                 <RecentlyPlayedCards games={user.recentGames} />
                 <GlobalTopLeadersHero />
@@ -115,7 +125,7 @@ function GameCards({ games }) {
 
     return (
         <View style={styles.games}>
-            <Text style={styles.title}>Games</Text>
+            <Text style={styles.title}>Play New Games</Text>
             <View style={styles.cards}>
                 {/* <SwiperFlatList autoplay autoplayDelay={2} autoplayLoop> */}
                 {games.map((game, i) => <GameCard key={i} game={game} />)}
@@ -303,5 +313,16 @@ const styles = StyleSheet.create({
         lineHeight: 17,
         marginTop: normalize(8),
     },
+    planInstruction: {
+        color: '#151C2F',
+        fontSize: normalize(10),
+        fontFamily: 'graphik-medium',
+        lineHeight: 17,
+        opacity: 0.7,
+        marginVertical: normalize(10),
+    },
+    buyMore: {
+        color:'#EF2F55'
+    }
 
 });

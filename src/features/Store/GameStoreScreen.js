@@ -11,6 +11,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 import AppButton from "../../shared/AppButton";
+import UserItems from "../../shared/UserPurchasedItems";
 
 
 export default function () {
@@ -24,53 +25,21 @@ export default function () {
     );
 }
 
-const UserItems = () => {
+// const UserItems = () => {
 
-    return (
-        <View style={styles.userItemsContainer}>
-            <Image
-                source={require('../../../assets/images/shooting-star.png')}
-            />
-            <View>
-                <UserGamePlans />
-                <View style={styles.hr}><Text></Text></View>
-                <UserBoosts />
-            </View>
-        </View>
-    )
-}
-const UserBoosts = () => {
-    var boosts = useSelector(state => state.auth.user.boosts);
-    return (
-        <View style={styles.userBoosts}>
-            {boosts.map((boost, i) => <UserBoost key={i} boost={boost} />)}
-        </View>
-    )
-}
-const UserBoost = ({ boost }) => {
-    return (
-        <>
-            <Text style={styles.userAvailableItems}>{formatNumber(boost.count)} {boost.name},</Text>
-        </>
-    )
-}
-const UserGamePlans = () => {
-    var plans = useSelector(state => state.auth.user.activePlans);
-    console.log(plans)
-    return (
-        <View style={styles.userGamePlans}>
-            {plans.map((plan, i) => <UserGamePlan key={i} plan={plan} />)}
-        </View>
-    )
-}
-const UserGamePlan = ({ plan }) => {
-    return (
-        <View style={styles.userGamePlan}>
-            <Text style={styles.userAvailableItems}>{plan.name}</Text>
-            <Text style={styles.userAvailableItems}>{plan.description}</Text>
-        </View>
-    )
-}
+//     return (
+//         <View style={styles.userItemsContainer}>
+//             <Image
+//                 source={require('../../../assets/images/shooting-star.png')}
+//             />
+//             <View>
+//                 <UserGamePlans />
+//                 <View style={styles.hr}><Text></Text></View>
+//                 <UserBoosts />
+//             </View>
+//         </View>
+//     )
+// }
 const GamePlanCard = ({ plan }) => {
     const refRBSheet = useRef();
     return (
@@ -416,32 +385,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
-    userItemsContainer: {
-        backgroundColor: '#518EF8',
-        borderRadius: 15,
-        paddingHorizontal: normalize(5),
-        paddingVertical: normalize(18),
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: normalize(15)
-    },
-    userAvailableGames: {
-
-    },
-    userBoosts: {
-        flexDirection: 'row',
-        marginTop: normalize(10)
-    },
-    userGamePlans: {
-        flexDirection: 'row',
-        flexWrap:'wrap'
-    },
-    userAvailableItems: {
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(11)
-    },
     walletBalance: {
         flexDirection: 'row',
         borderWidth: 1,
@@ -469,14 +412,6 @@ const styles = StyleSheet.create({
         width: normalize(25),
         height: normalize(25),
     },
-userGamePlan: {
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 15,
-    paddingVertical: normalize(15),
-    width: normalize(80),
-    alignItems:'center',
-    marginLeft: normalize(10)
-}
+
 
 });
