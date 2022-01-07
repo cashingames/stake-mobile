@@ -104,11 +104,37 @@ export const editBankDetails = createAsyncThunk(
         return response.data
     }
 )
+const getMimeType = (ext) => {
+    // mime type mapping for few of the sample file types
+    switch (ext) {
+      case 'pdf': return 'application/pdf';
+      case 'jpg': return 'image/jpeg';
+      case 'jpeg': return 'image/jpeg';
+      case 'png': return 'image/png';
+    }
+  }
 
-export const editProfileAvatar = async (avatar) => {
-    return axios.post('v2/profile/me/picture', avatar);
-}
-
+export const editProfileAvatar = createAsyncThunk(
+    'auth/user/avatarUpdate',
+    async (data, thunkAPI) => {
+        console.log("we are here")
+        let filename = data.uri.split('/').pop();
+        const extArr = /\.(\w+)$/.exec(filename);
+        const type = getMimeType(extArr[1]);
+        let formData = new FormData();
+        formData.append('avatar', `data:${type};base64,`+data.base64);
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        const response = await axios.post('v2/profile/me/picture', formData, config).catch(e=>{
+            console.log(e);
+        });
+        console.log("update result ", response.data)
+        return response.data
+    }
+)
 
 export const getUser = createAsyncThunk(
     'auth/user/get',

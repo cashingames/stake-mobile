@@ -35,23 +35,30 @@ const UserAvatar = () => {
 
     const pickImage = async () => {
 
-        console.log('before')
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
+            base64: true
         });
 
-        console.log(result);
+        // console.log(result);
 
-        if (!result.cancelled) {
-            editProfileAvatar(result.uri);
-            dispatch(getUser());
-            setImage(result.uri);
-        };
+        if (result.cancelled) {
+            return;
+        }
+
+        dispatch(editProfileAvatar(result)).then( result => {
+            dispatch(getUser()).then(x=>{
+                //set loading to false
+            });
+        }).catch(ex => {
+            console.log("erroring", ex)
+        });
     }
-    
+
+
     useEffect(() => {
         setImage(user.avatar);
     }, [])
