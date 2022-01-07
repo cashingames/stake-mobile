@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
-import { copilot } from "react-native-copilot";
+import PropTypes from 'prop-types';
+import { copilot, CopilotStep } from "react-native-copilot";
+// import { joyride, JoyrideStep } from 'react-native-joyride';
 import normalize from '../../utils/normalize';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
@@ -18,6 +20,27 @@ const HomeScreen = () => {
     const user = useSelector(state => state.auth.user)
     const gameTypes = useSelector(state => state.common.gameTypes)
     const [loading, setLoading] = useState(true);
+
+    let propTypes = {
+        start: PropTypes.func.isRequired,
+        copilotEvents: PropTypes.shape({
+            on: PropTypes.func.isRequired,
+        }).isRequired,
+    };
+
+    // state = {
+    //     secondStepActive: true,
+    // };
+console.log(propTypes)
+    useEffect(() => {
+        propTypes.copilotEvents.on('stepChange');
+        propTypes.start()
+    }, [])
+
+
+    // handleStepChange = (step) => {
+    //     console.log(`Current step is: ${step.name}`);
+    // }
 
     useEffect(() => {
 
@@ -46,7 +69,13 @@ const HomeScreen = () => {
             <View style={styles.container}>
                 <GameCards games={gameTypes} />
                 <RecentlyPlayedCards games={user.recentGames} />
-                <GlobalTopLeadersHero />
+                <CopilotStep
+                    text="This is a hello world example!"
+                    order={1}
+                    name="hello"
+                >
+                    <GlobalTopLeadersHero />
+                </CopilotStep>
             </View>
         </ScrollView>
     );

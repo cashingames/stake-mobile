@@ -5,13 +5,15 @@ import { StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import GlobalTopLeaders from "./GlobalTopLeaders";
+import { copilot, CopilotStep } from "react-native-copilot";
 
-export default function GlobalTopLeadersHero() {
+
+const GlobalTopLeadersHero = ({ copilot }) => {
     const navigation = useNavigation();
     const leaders = useSelector(state => state.common.globalLeaders)
 
     return (
-        <View style={styles.leaderboard}>
+        <View style={styles.leaderboard} {...copilot}>
             <View style={styles.leaderboardHeader}>
                 <Text style={styles.title}>Global Leaders</Text>
                 <View style={styles.extended}>
@@ -25,6 +27,7 @@ export default function GlobalTopLeadersHero() {
         </View>
     )
 }
+export default  copilot()(GlobalTopLeadersHero);
 
 const styles = StyleSheet.create({
     leaderboard: {

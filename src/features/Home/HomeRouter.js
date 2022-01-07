@@ -6,7 +6,6 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { BorderlessButton, TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
-
 import normalize from '../../utils/normalize';
 import HomeScreen from './HomeScreen';
 import WalletScreen from '../Transactions/WalletScreen';
@@ -68,7 +67,7 @@ const RightButtons = ({ options }) => {
     )
 }
 
-function CustomDrawerContent(props) {
+function CustomDrawerContent({ props, joyride }) {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
@@ -88,10 +87,7 @@ function CustomDrawerContent(props) {
                 />
                 <Text style={drawStyles.userTitle}> {user.fullName}</Text>
                 <Text style={drawStyles.userName}> @{user.username}</Text>
-                <TouchableOpacity style={drawStyles.profile}
-                    onPress={() => navigation.navigate('UserProfile')}>
-                    <Text style={drawStyles.viewProfile}>View Profile</Text>
-                </TouchableOpacity>
+                <ViewProfileButton />
             </View>
 
 
@@ -155,8 +151,18 @@ function CustomDrawerContent(props) {
             <BorderlessButton onPress={onLogout} style={styles.logoutContainer}>
                 <Text style={drawStyles.logoutText}>Logout</Text>
             </BorderlessButton>
-        </DrawerContentScrollView>
+        </DrawerContentScrollView >
     );
+}
+
+const ViewProfileButton = () => {
+    const navigation = useNavigation();
+    return (
+        <TouchableOpacity style={drawStyles.profile}
+            onPress={() => navigation.navigate('UserProfile')}>
+            <Text style={drawStyles.viewProfile}>View Profile</Text>
+        </TouchableOpacity>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -250,4 +256,4 @@ const drawStyles = StyleSheet.create({
 });
 
 
-export default HomeRouter
+export default HomeRouter;
