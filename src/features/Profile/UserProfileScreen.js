@@ -32,8 +32,9 @@ const UserAvatar = () => {
     console.log(user.avatar);
     const dispatch = useDispatch();
     const [image, setImage] = useState(user.avatar);
+
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
+
         console.log('before')
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -45,11 +46,12 @@ const UserAvatar = () => {
         console.log(result);
 
         if (!result.cancelled) {
-            dispatch(editProfileAvatar({ avatar: result.uri }));
+            editProfileAvatar(result.uri);
             dispatch(getUser());
             setImage(result.uri);
         };
     }
+    
     useEffect(() => {
         setImage(user.avatar);
     }, [])
