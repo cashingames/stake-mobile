@@ -17,7 +17,7 @@ import UserItems from "../../shared/UserPurchasedItems";
 export default function () {
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <UserItems />
             <GamePlans />
             <GameBoosts />
@@ -25,21 +25,6 @@ export default function () {
     );
 }
 
-// const UserItems = () => {
-
-//     return (
-//         <View style={styles.userItemsContainer}>
-//             <Image
-//                 source={require('../../../assets/images/shooting-star.png')}
-//             />
-//             <View>
-//                 <UserGamePlans />
-//                 <View style={styles.hr}><Text></Text></View>
-//                 <UserBoosts />
-//             </View>
-//         </View>
-//     )
-// }
 const GamePlanCard = ({ plan }) => {
     const refRBSheet = useRef();
     return (
@@ -213,16 +198,13 @@ const BuyBoost = ({ boost, onClose }) => {
         dispatch(buyBoostFromWallet(boost.id))
             .then(unwrapResult)
             .then(result => {
-                console.log(result);
                 dispatch(getUser())
                 onClose()
                 navigation.navigate("GameBoostPurchaseSuccessful")
             })
-            .catch((rejectedValueOrSerializedError) => {
+            .catch(rejectedValueOrSerializedError => {
                 setLoading(false);
-                // after login eager get commond data for the whole app
                 Alert.alert("Notice", "Operation could not be completed, please try again");
-                console.log(rejectedValueOrSerializedError)
             });
     }
 
@@ -262,7 +244,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: normalize(20),
     },
     storeItems: {
-        marginBottom: normalize(20),
+        marginTop: normalize(20),
         flexDirection: 'column'
     },
     title: {
@@ -342,7 +324,6 @@ const styles = StyleSheet.create({
         color: '#151C2F',
     },
     buyBoost: {
-        // alignItems:'center',
         paddingHorizontal: normalize(18),
         paddingVertical: normalize(15)
     },

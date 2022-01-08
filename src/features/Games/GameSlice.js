@@ -10,6 +10,12 @@ export const startGame = createAsyncThunk(
     }
 )
 
+export const endGame = createAsyncThunk(
+    'game/endGame',
+    async (data, thunkAPI) => {
+        return true;
+    }
+)
 
 //This is to store the currently ongoing active game
 const initialState = {
@@ -630,8 +636,43 @@ const initialState = {
     ],
     currentQuestionPosition: 0,
     totalQuestionCount: 10,
+    isLastQuestion: false,
     chosenOptions: [],
-    displayedOptions: [],
+    isEnded: true,
+    displayedOptions: [
+        {
+            "id": 166,
+            "question_id": "42",
+            "title": "MTA=",
+            "is_correct": "MA=="
+        },
+        {
+            "id": 168,
+            "question_id": "42",
+            "title": "MTM=",
+            "is_correct": "MQ=="
+        },
+        {
+            "id": 167,
+            "question_id": "42",
+            "title": "MTE=",
+            "is_correct": "MA=="
+        },
+        {
+            "id": 165,
+            "question_id": "42",
+            "title": "MTU=",
+            "is_correct": "MA=="
+        }
+    ],
+    displayedQuestion: {
+        "id": 27,
+        "label": "TWFuY2hlc3RlciBjaXR5IGZjIHdlcmUga25vY2tlZCBvdXQgb2Ygd2hpY2ggcm91bmQgaW4gdGhlIDIwMTctMjAxOCBVRUZBIENoYW1waW9ucyBsZWFndWUgPw==",
+        "level": "ZWFzeQ==",
+        "game_type_id": "2",
+        "category_id": "102",
+        "created_by": null,
+    }
 }
 
 export const GameSlice = createSlice({
@@ -654,11 +695,18 @@ export const GameSlice = createSlice({
             state.gameCategory = action.payload;
         },
         questionAnswered: (state, action) => {
-            state.displayedOptions = state.displayedOptions.map(x => {
+            state.displayedOptions.map(x => {
                 x.isSelected = x.id === action.payload.id
+                return x;
             })
-            state.chosenOptions = state.chosenOptions.push(action.payload)
-        }
+            state.chosenOptions.push(action.payload)
+        },
+        nextQuestion: (state) => {
+            state.currentQuestionPosition += 1;
+            state.displayedQuestion = state.questions[state.currentQuestionPosition]
+            state.displayedOptions = state.questions[state.currentQuestionPosition].options
+            state.isLastQuestion = state.currentQuestionPosition === state.totalQuestionCount - 1
+        },
     },
 
     extraReducers: (builder) => {
@@ -666,12 +714,16 @@ export const GameSlice = createSlice({
         builder
             .addCase(startGame.fulfilled, (state, action) => {
                 state.questions = action.payload.data.questions;
+                state.displayedQuestion = state.questions[state.currentQuestionPosition]
                 state.displayedOptions = state.questions[state.currentQuestionPosition].options
+            })
+            .addCase(endGame.fulfilled, (state, action) => {
+                state.isEnded = true
             })
 
     },
 })
 
-export const { setGameType, setGameMode, setGameCategory, questionAnswered } = GameSlice.actions
+export const { setGameType, setGameMode, setGameCategory, questionAnswered, nextQuestion } = GameSlice.actions
 
 export default GameSlice.reducer

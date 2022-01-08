@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import { copilot } from "react-native-copilot";
@@ -12,9 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
-import { useNavigation } from '@react-navigation/native';
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
@@ -23,21 +22,20 @@ const HomeScreen = ({navigation}) => {
 
     useEffect(() => {
 
-        var _1 = dispatch(getUser('v3/user/profile'));
-        var _3 = dispatch(getGlobalLeaders());
+        var _1 = dispatch(getUser());
         var _2 = dispatch(getCommonData());
 
-        Promise.all([_1, _2, _3]).then(values => {
+        Promise.all([_1, _2]).then(values => {
             setLoading(false);
         });
     }, []);
 
     useFocusEffect(
         React.useCallback(() => {
-            //@TODO: Fix the double global leader call for the first visit after login
             dispatch(getGlobalLeaders())
         }, [])
     );
+
     if (loading) {
         return <PageLoading />
     }
@@ -48,11 +46,10 @@ const HomeScreen = ({navigation}) => {
             <View style={styles.container}>
                 <>
                     <Text style={styles.title}>Games</Text>
-                    <Text style={styles.planInstruction}>You can only play 10 free games daily, 
-                    Buy Games to enjoy playing without interruptons.
-                    <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}> Buy More</Text>
+                    <Text style={styles.planInstruction}>You can only play 10 free games daily,
+                        Buy Games to enjoy playing without interruptons.
                     </Text>
-                    <UserItems />
+                    <UserItems showBuy={true} />
                 </>
                 <GameCards games={gameTypes} />
                 <RecentlyPlayedCards games={user.recentGames} />
@@ -260,10 +257,9 @@ const styles = StyleSheet.create({
         paddingTop: normalize(10),
     },
     title: {
-        fontSize: normalize(15),
+        fontSize: normalize(24),
         color: '#151C2F',
         fontFamily: 'graphik-bold',
-        lineHeight: normalize(15),
         marginTop: normalize(10),
     },
     cards: {
@@ -315,14 +311,10 @@ const styles = StyleSheet.create({
     },
     planInstruction: {
         color: '#151C2F',
-        fontSize: normalize(10),
-        fontFamily: 'graphik-medium',
-        lineHeight: 17,
+        fontSize: normalize(14),
+        fontFamily: 'graphik-regular',
+        lineHeight: normalize(24),
         opacity: 0.7,
         marginVertical: normalize(10),
     },
-    buyMore: {
-        color:'#EF2F55'
-    }
-
 });

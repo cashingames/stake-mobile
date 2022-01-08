@@ -1,116 +1,78 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, Alert } from 'react-native';
-import normalize from "../utils/normalize";
-import { formatNumber } from '../utils/stringUtl';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 
+import { formatNumber } from '../utils/stringUtl';
+import normalize from "../utils/normalize";
+import { useNavigation } from '@react-navigation/native';
 
+const UserItems = ({ showBuy }) => {
 
-const UserItems = () => {
+    const navigation = useNavigation();
 
-    return (
-        <View style={styles.userItemsContainer}>
-            <Image
-                source={require('../../assets/images/shooting-star.png')}
-            />
-            <View>
-                <UserGamePlans />
-                <View style={styles.hr}><Text></Text></View>
-                <UserBoosts />
-            </View>
-        </View>
-    )
-}
-const UserBoosts = () => {
-    var boosts = useSelector(state => state.auth.user.boosts);
-    return (
-        <View style={styles.userBoosts}>
-            {boosts.map((boost, i) => <UserBoost key={i} boost={boost} />)}
-        </View>
-    )
-}
-const UserBoost = ({ boost }) => {
-    return (
-        <>
-            <Text style={styles.userAvailableItems}>{formatNumber(boost.count)} {boost.name} </Text>
-        </>
-    )
-}
-const UserGamePlans = () => {
     var plans = useSelector(state => state.auth.user.activePlans);
-    console.log(plans)
+    const reducer = (accumulator, curr) => accumulator + curr;
+    const sumOfPlans = plans.map(a => a.game_count).reduce(reducer);
+
+    var boostsString = "";
+    var boosts = useSelector(state => state.auth.user.boosts);
+    boosts.map((boost, i) => {
+        boostsString += `${formatNumber(boost.count)} ${boost.name}${i == boosts.length - 1 ? '' : ','} `
+    });
+
     return (
-        <View style={styles.userGamePlans}>
-            {plans.map((plan, i) => <UserGamePlan key={i} plan={plan} />)}
+        <View style={styles.container}>
+            <View style={styles.contentTop}>
+                <Image
+                    source={require('../../assets/images/shooting-star.png')}
+                />
+                <View style={styles.leftContainer}>
+                    <Text style={[styles.commonRow, styles.firstRow]}>You have {formatNumber(sumOfPlans)} games remaining</Text>
+                    <Text style={[styles.commonRow, styles.secondRow]}>{boostsString}</Text>
+                </View>
+            </View>
+
+            {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy More</Text>}
+
         </View>
     )
 }
-const UserGamePlan = ({ plan }) => {
-    return (
-        <View style={styles.userGamePlan}>
-            <Text style={styles.userAvailableItems}>{plan.name}</Text>
-            <Text style={styles.userAvailableItems}>{plan.description}</Text>
-        </View>
-    )
-};
-const styles = StyleSheet.create({
 
-    playedTitle: {
-        fontSize: 15,
-        color: '#4F4F4F',
-        fontFamily: 'graphik-bold',
-        lineHeight: 17,
-        marginTop: normalize(8),
-    },
-    planInstruction: {
-        color: '#151C2F',
-        fontSize: normalize(10),
-        fontFamily: 'graphik-medium',
-        lineHeight: 17,
-        opacity: 0.7,
-        marginVertical: normalize(10)
-    },
-    userGamePlan: {
-        borderWidth: 1,
-        borderColor: '#E0E0E0',
+const styles = StyleSheet.create({
+    container: {
         borderRadius: 15,
-        paddingVertical: normalize(10),
-        width: normalize(80),
-        alignItems: 'center',
-        marginLeft: normalize(10)
-    },
-    userGamePlans: {
-        flexDirection: 'row',
-        // flexWrap: 'wrap'
-    },
-    userItemsContainer: {
         backgroundColor: '#518EF8',
-        borderRadius: 15,
-        paddingHorizontal: normalize(5),
         paddingVertical: normalize(12),
-        flexDirection: 'row',
-        // justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: normalize(15)
     },
-    hr: {
+    contentTop: {
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    leftContainer: {
+        marginHorizontal: normalize(20)
+    },
+    commonRow: {
+        color: '#FFFF',
+        textAlign: 'center',
+        fontSize: normalize(14),
+        fontFamily: 'graphik-medium',
+    },
+    firstRow: {
+        marginBottom: normalize(5),
+        paddingBottom: normalize(5),
         borderBottomColor: '#B1CEFF',
         borderBottomWidth: normalize(1),
-        width: normalize(180)
     },
-    userBoosts: {
-        flexDirection: 'row',
-        marginTop: normalize(10),
-        justifyContent:'flex-end'
+    secondRow: {
     },
-    userAvailableItems: {
-        color: '#FFFF',
+    buyMore: {
+        alignSelf: 'flex-end',
+        color: '#151C2F',
+        textAlign: 'right',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(11),
-        textAlign:'center'
-    },
-    planInformation: {
-        alignItems:'center'
+        marginRight: normalize(16),
+        fontSize: normalize(14),
     }
 });
+
 export default UserItems;

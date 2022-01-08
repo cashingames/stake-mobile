@@ -10,7 +10,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import { AnimatedCircularProgress } from "react-native-circular-progress";
-import { questionAnswered } from "./GameSlice";
+import { endGame, nextQuestion, questionAnswered } from "./GameSlice";
+import AppButton from "../../shared/AppButton";
 
 
 var base64 = require('base-64');
@@ -25,6 +26,7 @@ export default function GameInProgressScreen({ navigation }) {
                 <BoostsInfo onPress={() => refRBSheet.current.open()} />
                 <GameProgressAndBoosts />
                 <GameQuestions />
+                <NextButton />
                 <RBSheet
                     ref={refRBSheet}
                     closeOnDragDown={true}
@@ -48,7 +50,7 @@ export default function GameInProgressScreen({ navigation }) {
             </ScrollView>
         </ImageBackground>
     );
-};
+}
 
 const PlayGameHeader = () => {
     const navigation = useNavigation();
@@ -86,8 +88,8 @@ const GameProgressAndBoosts = () => {
 
 const GameTopicProgress = ({ gameTopic, gameCategory }) => {
 
-    const navigation = useNavigation();
-
+    const dispatch = useDispatch();
+    // 'GameEndResult'
     return (
         <View style={styles.topicProgress}>
             <Text style={styles.title}>{gameCategory} {gameTopic}</Text>
@@ -101,8 +103,7 @@ const GameTopicProgress = ({ gameTopic, gameCategory }) => {
                 trailColor="#2D9CDB"
                 size={60}
                 strokeWidth={5}
-            // onComplete={() => navigation.navigate('GameEndResult')}
-            >
+                onComplete={() => { console.log("timer, end game"); dispatch(endGame()); }} >
                 {({ remainingTime, animatedColor }) => (
                     <Animated.Text style={styles.timeText}>
                         {remainingTime}
@@ -199,29 +200,43 @@ const GameBoost = ({ boost }) => {
 
 
 const GameQuestions = () => {
-    const position = useSelector(state => state.game.currentQuestionPosition);
-    const questions = useSelector(state => state.game.questions);
+    const dispatch = useDispatch();
+    const displayedQuestion = useSelector(state => state.game.displayedQuestion);
     const displayedOptions = useSelector(state => state.game.displayedOptions);
 
-    const question = questions[position];
+    const optionSelected = (option) => {
+        dispatch(questionAnswered(option));
+    }
+
     return (
         <>
             <View style={styles.gameQuestions}>
-                <Text style={styles.questions}>{base64.decode(question.label)}</Text>
+                <Text style={styles.questions}>{base64.decode(displayedQuestion.label)}</Text>
             </View>
             <View style={styles.options}>
-                {displayedOptions.map((option, i) => <Answer option={option} key={i} />)}
+                {displayedOptions.map((option, i) => <Answer option={option} key={i} onSelected={() => optionSelected(option)} />)}
             </View>
         </>
     )
 }
 
-const Answer = ({ option }) => {
+const Answer = ({ option: { title, isSelected }, onSelected }) => {
+    return (
+        <TouchableOpacity style={[styles.answer, isSelected ? styles.selectedOption : {}]} onPress={onSelected}>
+            <Text style={styles.answerText}>{base64.decode(title)}</Text>
+        </TouchableOpacity>
+    )
+}
+
+const NextButton = () => {
+    const dispatch = useDispatch()
+    const isLastQuestion = useSelector(state => state.game.isLastQuestion);
 
     return (
-        <TouchableOpacity style={[styles.answer, option.isSelected ? styles.selectedOption : {}]} onPress={() => dispatch(questionAnswered(option))}>
-            <Text style={styles.answerText}>{base64.decode(option.title)}</Text>
-        </TouchableOpacity>
+        <AppButton
+            text={isLastQuestion ? 'Finish' : 'Next'}
+            onPress={() => dispatch(isLastQuestion ? endGame() : nextQuestion())}
+        />
     )
 }
 
@@ -317,24 +332,25 @@ const styles = StyleSheet.create({
         fontSize: normalize(14),
         lineHeight: normalize(26)
     },
+    options: {
+        // paddingBottom: normalize(80),
+    },
     answer: {
         backgroundColor: '#FFFF',
         marginBottom: normalize(8),
         padding: normalize(12),
         borderRadius: 16,
         borderBottomColor: '#C97AE0',
-        borderBottomWidth: 10,
-    },
-    options: {
-        paddingBottom: normalize(80),
+        borderBottomWidth: 7,
     },
     answerText: {
         color: '#151C2F',
         fontFamily: 'graphik-medium',
         fontSize: normalize(11),
+        textAlign: 'center',
     },
     selectedOption: {
-        backgroundColor: 'black'
+        backgroundColor: '#F5D2FF'
     },
     questionsProgress: {
         borderRadius: 50,
