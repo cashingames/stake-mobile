@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import normalize from '../../utils/normalize';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+
+import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+
 import { Tab, TabView } from 'react-native-elements';
 import AppButton from '../../shared/AppButton';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +15,7 @@ import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { setGameCategory, setGameType } from './GameSlice';
 import MyBoostsScreen from '../Store/MyBoostsScreen';
 import GameStoreScreen from '../Store/GameStoreScreen';
-
+import normalize from '../../utils/normalize';
 
 const Toptab = createMaterialTopTabNavigator();
 
@@ -56,9 +57,6 @@ const ProgressMessage = () => {
         </View>
     )
 }
-
-
-
 
 const GamesTabs = () => {
 

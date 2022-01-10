@@ -1,6 +1,6 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { getData, postData } from '../utils/ApiHelper'
+import { getData } from '../utils/ApiHelper'
 import axios from 'axios';
 
 export const getCommonData = createAsyncThunk(
@@ -25,7 +25,6 @@ export const getBankData = createAsyncThunk(
 export const getGlobalLeaders = createAsyncThunk(
     'common/globalLeaders/get',
     async (thunkAPI) => {
-        console.log("getting leaders");
         const response = await axios.get('v2/leaders/global');
         return response.data
     }

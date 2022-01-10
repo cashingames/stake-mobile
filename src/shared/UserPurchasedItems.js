@@ -20,6 +20,8 @@ const UserItems = ({ showBuy }) => {
         boostsString += `${formatNumber(boost.count)} ${boost.name}${i == boosts.length - 1 ? '' : ','} `
     });
 
+    boostsString = boosts.length > 0 ? boostsString : "You have no boosts";
+
     return (
         <View style={styles.container}>
             <View style={styles.contentTop}>
@@ -28,11 +30,11 @@ const UserItems = ({ showBuy }) => {
                 />
                 <View style={styles.leftContainer}>
                     <Text style={[styles.commonRow, styles.firstRow]}>You have {formatNumber(sumOfPlans)} games remaining</Text>
-                    <Text style={[styles.commonRow, styles.secondRow]}>{boostsString}</Text>
+                    <Text style={[styles.commonRow, boosts.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
+                    {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy more</Text>}
                 </View>
             </View>
 
-            {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy More</Text>}
 
         </View>
     )
@@ -45,17 +47,17 @@ const styles = StyleSheet.create({
         paddingVertical: normalize(12),
     },
     contentTop: {
-        alignItems: 'center',
         flexDirection: 'row',
     },
     leftContainer: {
-        marginHorizontal: normalize(20)
+        marginHorizontal: normalize(20),
+        paddingTop: normalize(10),
     },
     commonRow: {
         color: '#FFFF',
         textAlign: 'center',
         fontSize: normalize(14),
-        fontFamily: 'graphik-medium',
+        fontFamily: 'graphik-regular',
     },
     firstRow: {
         marginBottom: normalize(5),
@@ -65,13 +67,15 @@ const styles = StyleSheet.create({
     },
     secondRow: {
     },
+    emptyRow: {
+        fontStyle: "italic"
+    },
     buyMore: {
         alignSelf: 'flex-end',
         color: '#151C2F',
-        textAlign: 'right',
         fontFamily: 'graphik-medium',
-        marginRight: normalize(16),
         fontSize: normalize(14),
+        marginTop: normalize(12),
     }
 });
 

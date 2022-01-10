@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Dimensions } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import { copilot } from "react-native-copilot";
@@ -41,7 +41,7 @@ const HomeScreen = ({ navigation }) => {
     }
 
     return (
-        <ScrollView>
+        <ScrollView contentContainerStyle={styles.scrollView}>
             <UserDetails user={user} />
             <View style={styles.container}>
                 <>
@@ -122,11 +122,11 @@ function GameCards({ games }) {
 
     return (
         <View style={styles.games}>
-            <Text style={styles.title}>Play New Games</Text>
+            <Text style={styles.lightTitle}>Play game</Text>
             <View style={styles.cards}>
-                {/* <SwiperFlatList autoplay autoplayDelay={2} autoplayLoop> */}
-                {games.map((game, i) => <GameCard key={i} game={game} />)}
-                {/* </SwiperFlatList> */}
+                <SwiperFlatList >
+                    {games.map((game, i) => <GameCard key={i} game={game} />)}
+                </SwiperFlatList>
             </View>
         </View>
 
@@ -135,13 +135,16 @@ function GameCards({ games }) {
 
 function GameCard({ game }) {
     return (
-        <View style={[styles.card, { backgroundColor: game.bgColor }]} >
+        <View style={[styles.card]} >
             <Image
                 style={styles.cardIcon}
                 source={{ uri: `${backendUrl}/${game.icon}` }}
+                resizeMode='contain'
             />
-            <Text style={styles.cardTitle}>{game.displayName}</Text>
-            <Text style={styles.cardInstruction}>{game.description}</Text>
+            <View style={styles.cardContent}>
+                <Text style={styles.cardTitle}>{game.displayName}</Text>
+                <Text style={styles.cardInstruction}>{game.description}</Text>
+            </View>
         </View>
     );
 }
@@ -152,7 +155,7 @@ function RecentlyPlayedCards({ games }) {
         return <></>;
     return (
         <View style={styles.games}>
-            <Text style={styles.title}>Recently Played Games</Text>
+            <Text style={styles.lightTitle}>Recently played games</Text>
             <View style={styles.cards}>
                 <SwiperFlatList autoplay autoplayDelay={2} autoplayLoop>
                     {games.map((game, i) => <RecentlyPlayedCard key={i} game={game} />)}
@@ -167,17 +170,24 @@ function RecentlyPlayedCard({ game }) {
     return (
         <View style={[styles.card, { backgroundColor: game.bgColor }]} >
             <Image
-                style={styles.cardIcon}
+                style={[styles.cardIcon, styles.cardIconBigger]}
                 source={{ uri: `${backendUrl}/${game.icon}` }}
+                resizeMode='contain'
             />
-            <Text style={styles.playedTitle}>{game.name}</Text>
-            <Text style={styles.replay}>Replay</Text>
+            <View style={styles.cardContent}>
+                <Text style={styles.cardTitle}>{game.name}</Text>
+                <Text style={styles.replay}>Replay</Text>
+            </View>
         </View>
     );
 }
 
 
 const styles = StyleSheet.create({
+    scrollView: {
+        paddingBottom: normalize(30),
+        backgroundColor: '#F8F9FD',
+    },
     container: {
         flex: 1,
         paddingHorizontal: normalize(18),
@@ -195,7 +205,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     walletText: {
-        fontSize: normalize(16),
+        fontSize: normalize(18),
         color: '#FFFF',
         fontFamily: 'graphik-medium',
         marginLeft: normalize(8),
@@ -219,13 +229,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     userPoint: {
-        fontSize: normalize(20),
+        fontSize: normalize(26),
         color: '#FFFF',
         fontFamily: 'graphik-medium',
     },
     pointDetail: {
-        color: '#FFFF',
-        fontSize: normalize(10),
+        color: '#e3e3e3',
+        fontSize: normalize(12),
         fontFamily: 'graphik-medium',
     },
     userRanking: {
@@ -244,14 +254,14 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end'
     },
     rankNumber: {
-        fontSize: normalize(20),
+        fontSize: normalize(26),
         color: '#151C2F',
         fontFamily: 'graphik-medium',
     },
     rankDetail: {
         color: '#151c2f73',
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(10),
+        fontFamily: 'graphik-bold',
+        fontSize: normalize(11),
     },
     games: {
         paddingTop: normalize(10),
@@ -259,47 +269,60 @@ const styles = StyleSheet.create({
     title: {
         fontSize: normalize(24),
         color: '#151C2F',
-        fontFamily: 'graphik-bold',
+        fontFamily: 'graphik-medium',
+        marginTop: normalize(10),
+    },
+    lightTitle: {
+        fontSize: normalize(18),
+        color: '#151C2F',
+        fontFamily: 'graphik-regular',
         marginTop: normalize(10),
     },
     cards: {
         display: 'flex',
-        flexDirection: 'row',
         marginTop: normalize(18),
     },
     card: {
-        backgroundColor: '#9C3DB8',
+        backgroundColor: '#fff',
         paddingHorizontal: normalize(15),
-        paddingVertical: normalize(15),
-        width: normalize(133),
-        borderRadius: normalize(7),
+        paddingVertical: normalize(10),
+        borderRadius: normalize(10),
         marginRight: normalize(15),
+        flexDirection: "row",
+        borderColor: '#0F000000',
     },
     cardIcon: {
-        width: 50,
-        height: 50,
-        borderRadius: normalize(10)
+        width: normalize(30),
+        height: normalize(30),
+        alignSelf: 'center',
     },
-    cardInstruction: {
-        fontSize: normalize(10),
-        color: '#FFFF',
-        fontFamily: 'graphik-regular',
+    cardIconBigger: {
+        width: normalize(48),
+        height: normalize(48),
+    },
+    cardContent: {
+        marginLeft: normalize(10),
+        width: Dimensions.get('window').width * 0.4,
+        height: normalize(55),
+        justifyContent: "space-evenly"
     },
     cardTitle: {
+        fontSize: normalize(14),
+        color: '#151C2F',
+        fontFamily: 'graphik-medium',
+    },
+    cardInstruction: {
         fontSize: normalize(12),
-        color: '#FFFF',
-        fontFamily: 'graphik-bold',
-        lineHeight: normalize(17),
-        marginTop: normalize(8),
+        color: '#151C2F',
+        fontFamily: 'graphik-regular',
+        lineHeight: normalize(18),
+        opacity: .7,
     },
     replay: {
-        fontSize: normalize(10),
+        fontSize: normalize(11),
         color: '#EF2F55',
-        fontFamily: 'graphik-regular',
-    },
-    musicIcon: {
-        width: 50,
-        height: 50,
+        fontFamily: 'graphik-medium',
+        textTransform: 'uppercase'
     },
 
     playedTitle: {

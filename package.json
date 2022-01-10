@@ -43,7 +43,6 @@
     "react-native-copilot": "^2.5.1",
     "react-native-countdown-circle-timer": "^2.5.4",
     "react-native-countdown-component": "^2.7.1",
-    "react-native-dotenv": "^3.3.0",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-pager-view": "5.4.6",
