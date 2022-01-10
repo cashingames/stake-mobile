@@ -157,7 +157,7 @@ function RecentlyPlayedCards({ games }) {
         <View style={styles.games}>
             <Text style={styles.lightTitle}>Recently played games</Text>
             <View style={styles.cards}>
-                <SwiperFlatList autoplay autoplayDelay={2} autoplayLoop>
+                <SwiperFlatList >
                     {games.map((game, i) => <RecentlyPlayedCard key={i} game={game} />)}
                 </SwiperFlatList>
             </View>

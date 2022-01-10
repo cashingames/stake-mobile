@@ -13,7 +13,7 @@ export default function GlobalTopLeadersHero() {
     return (
         <View style={styles.leaderboard}>
             <View style={styles.leaderboardHeader}>
-                <Text style={styles.title}>Global Leaders</Text>
+                <Text style={styles.title}>Leaderboard</Text>
                 <View style={styles.extended}>
                     <Text onPress={() => navigation.navigate('Leaderboard')}>
                         <Text style={styles.extendedText}>Extended Leaderboard</Text>
@@ -28,16 +28,14 @@ export default function GlobalTopLeadersHero() {
 
 const styles = StyleSheet.create({
     leaderboard: {
-        // paddingHorizontal: normalize(20),
         paddingTop: normalize(20),
-        // marginBottom: normalize(30)
     },
     leaderboardHeader: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: normalize(8)
+        marginBottom: normalize(12)
     },
     extended: {
         display: 'flex',
@@ -45,15 +43,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     extendedText: {
-        fontSize: normalize(9),
+        fontSize: normalize(12),
         color: '#EF2F55',
         fontFamily: 'graphik-bold',
     },
     title: {
-        fontSize: normalize(15),
+        fontSize: normalize(20),
         color: '#151C2F',
         fontFamily: 'graphik-bold',
-        lineHeight: normalize(15),
-        marginTop: normalize(10),
     },
 })
