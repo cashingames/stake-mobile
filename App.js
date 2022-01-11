@@ -10,7 +10,7 @@ import store from './src/store';
 import AppRouter from './src/AppRouter';
 
 function App() {
-
+  
   let [fontsLoaded] = useFonts({
     'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     'graphik-regular': require('./assets/fonts/GraphikRegular.otf'),

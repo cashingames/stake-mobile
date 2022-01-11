@@ -4,6 +4,8 @@ import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import { copilot } from "react-native-copilot";
 import normalize from '../../utils/normalize';
+// import * as Analytics from 'expo-firebase-analytics';
+import { Analytics, ScreenHit } from 'expo-analytics';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
@@ -28,6 +30,20 @@ const HomeScreen = ({ navigation }) => {
         Promise.all([_1, _2]).then(values => {
             setLoading(false);
         });
+
+    //---> Analytics with expo-firebase-analytics package
+
+            // Analytics.logEvent('VisitedDashboard', {
+            //     user: user.username,
+            // });
+            // console.log('analytics logged')
+
+    //---> Analytics with expo-analytics package
+    
+        const analytics = new Analytics('G-HS6WN6JQVT');
+        analytics.hit(new ScreenHit('Home'))
+            .then(() => console.log("success"))
+            .catch(e => console.log(e.message));
     }, []);
 
     useFocusEffect(
@@ -39,6 +55,7 @@ const HomeScreen = ({ navigation }) => {
     if (loading) {
         return <PageLoading />
     }
+
 
     return (
         <ScrollView contentContainerStyle={styles.scrollView}>
