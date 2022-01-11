@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Animated, Pressable } from 'react-native';
 import normalize from "../../utils/normalize";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
@@ -214,13 +214,13 @@ const GameQuestions = () => {
                 <Text style={styles.questions}>{base64.decode(displayedQuestion.label)}</Text>
             </View>
             <View style={styles.options}>
-                {displayedOptions.map((option, i) => <Answer option={option} key={i} onSelected={() => optionSelected(option)} />)}
+                {displayedOptions.map((option, i) => <Option option={option} key={i} onSelected={() => optionSelected(option)} />)}
             </View>
         </>
     )
 }
 
-const Answer = ({ option: { title, isSelected }, onSelected }) => {
+const Option = ({ option: { title, isSelected }, onSelected }) => {
     return (
         <TouchableOpacity style={[styles.answer, isSelected ? styles.selectedOption : {}]} onPress={onSelected}>
             <Text style={styles.answerText}>{base64.decode(title)}</Text>

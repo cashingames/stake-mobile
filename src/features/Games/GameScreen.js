@@ -22,12 +22,10 @@ const Toptab = createMaterialTopTabNavigator();
 export default function GameScreen({ navigation }) {
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             {/* <WinBig /> */}
             <ProgressMessage />
-
-            {/* <GamesTabs /> */}
-            <ElementsTab />
+            <GameTabs />
             <GlobalTopLeadersHero />
         </ScrollView>
     );
@@ -58,29 +56,7 @@ const ProgressMessage = () => {
     )
 }
 
-const GamesTabs = () => {
-
-    return (
-        <Toptab.Navigator
-            screenOptions={{
-                tabBarLabelStyle: { fontSize: 12, fontFamily: 'graphik-medium', },
-                tabBarStyle: { backgroundColor: '#FFFF' },
-                tabBarIndicatorStyle: { backgroundColor: '#EB5757' },
-                tabBarPressColor: "#fff" // compulsory, fixes wrong/slow color when tabbing between screens
-            }}
-            transitionStyle={{}}
-            tab
-            sceneContainerStyle={{
-                backgroundColor: '#F8F9FD'
-            }}
-        >
-            <Toptab.Screen name="PurchaseBoosts" component={GameStoreScreen} options={{ tabBarLabel: 'Purchase', }} />
-            <Toptab.Screen name="MyBoosts" component={MyBoostsScreen} options={{ tabBarLabel: 'My Items' }} />
-        </Toptab.Navigator>
-    );
-};
-
-const ElementsTab = () => {
+const GameTabs = () => {
     const dispatch = useDispatch();
     const [index, setIndex] = React.useState(0);
     const gameTypes = useSelector(state => state.common.gameTypes)
@@ -140,7 +116,6 @@ const CategoriesScreen = ({ currentGame }) => {
     const activeGame = useSelector(state => state.game.gameType);
 
     const onCategorySelected = (category) => {
-        console.log("selected")
         setActiveCategory(category);
         dispatch(setGameCategory(undefined));
     }
@@ -151,7 +126,6 @@ const CategoriesScreen = ({ currentGame }) => {
 
 
     useEffect(() => {
-        console.log(activeGame)
         setActiveCategory(undefined); //category
         dispatch(setGameCategory(undefined)); //sucategory
     }, [activeGame]);
@@ -231,10 +205,13 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#F8F9FD',
-        paddingHorizontal: normalize(18),
         // paddingVertical: normalize(22),
         // marginBottom: normalize(20)
+    },
+    contentContainer: {
+        backgroundColor: '#F8F9FD',
+        paddingHorizontal: normalize(18),
+        paddingBottom: normalize(40),
     },
     winBig: {
         display: 'flex',

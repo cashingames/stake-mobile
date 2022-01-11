@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import normalize from '../../utils/normalize';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { backendUrl } from '../../utils/BaseUrl';
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,7 +17,7 @@ export default function GameModeScreen({ navigation }) {
     }
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.chooseMode}>Choose your mode</Text>
             <View>
                 {gameModes.map((gameMode, i) =>

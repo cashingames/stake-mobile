@@ -13,9 +13,28 @@ export const startGame = createAsyncThunk(
 export const endGame = createAsyncThunk(
     'game/endGame',
     async (data, thunkAPI) => {
+
+        //make a network request to the server
+        //identify the appropriate fields to pass as data
+
         return true;
     }
 )
+
+//This is to store the currently ongoing active game
+// const initialState = {
+//     gameMode: {},
+//     gameCategory: {},
+//     gameType: {},
+//     questions: [],
+//     currentQuestionPosition: 0,
+//     totalQuestionCount: 10,
+//     isLastQuestion: false,
+//     chosenOptions: [],
+//     isEnded: true,
+//     displayedOptions: [],
+//     displayedQuestion: {}
+// }
 
 //This is to store the currently ongoing active game
 const initialState = {
@@ -675,20 +694,15 @@ const initialState = {
     }
 }
 
+
 export const GameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
-        // setGameParameters: (state, action) => {
-        //     state.gameMode = action.payload.gameMode;
-        //     state.gameCategory = action.payload.gameCategory;
-        //     state.gameType = action.payload.gameType;
-        // },
         setGameMode: (state, action) => {
             state.gameMode = action.payload;
         },
         setGameType: (state, action) => {
-            console.log("setting game type", action.payload)
             state.gameType = action.payload;
         },
         setGameCategory: (state, action) => {
@@ -704,7 +718,7 @@ export const GameSlice = createSlice({
         nextQuestion: (state) => {
             state.currentQuestionPosition += 1;
             state.displayedQuestion = state.questions[state.currentQuestionPosition]
-            state.displayedOptions = state.questions[state.currentQuestionPosition].options
+            state.displayedOptions = state.displayedQuestion.options
             state.isLastQuestion = state.currentQuestionPosition === state.totalQuestionCount - 1
         },
     },
@@ -715,7 +729,7 @@ export const GameSlice = createSlice({
             .addCase(startGame.fulfilled, (state, action) => {
                 state.questions = action.payload.data.questions;
                 state.displayedQuestion = state.questions[state.currentQuestionPosition]
-                state.displayedOptions = state.questions[state.currentQuestionPosition].options
+                state.displayedOptions = state.displayedQuestion.options
             })
             .addCase(endGame.fulfilled, (state, action) => {
                 state.isEnded = true
