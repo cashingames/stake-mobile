@@ -6,14 +6,14 @@ import {
     Image,
     ImageBackground
 } from 'react-native';
-import normalize from '../utils/normalize';
+import normalize from '../../utils/normalize';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AppButton from '../shared/AppButton';
+import AppButton from '../../shared/AppButton';
 
 const FirstTimeUserBonus = ({navigation}) => {
     return (
-        <ImageBackground source={require('../../assets/images/confetti1.png')} style={styles.image} resizeMode='contain'>
+        <ImageBackground source={require('../../../assets/images/confetti1.png')} style={styles.image} resizeMode='contain'>
             <ScrollView>
                 <View style={styles.headerContainer}>
                     <Text style={styles.userDetails}>Congrats, John</Text>

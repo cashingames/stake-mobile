@@ -142,7 +142,7 @@ export const AuthSlice = createSlice({
         },
         saveCreatedUserCredentials: (state, action) => {
             state.createAccount = action.payload
-        }
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed

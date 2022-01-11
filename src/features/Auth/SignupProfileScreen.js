@@ -37,6 +37,8 @@ export default function SignupProfileScreen({ navigation }) {
         }).then(response => {
             saveToken(response.data.data)
             dispatch(setToken(response.data.data))
+            navigation.navigate('FirstTimeBonus')
+
         }, err => {
             if (!err || !err.response || err.response === undefined) {
                 setError("Your Network is Offline.");

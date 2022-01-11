@@ -40,7 +40,7 @@ import ResetPasswordSuccessScreen from './features/Auth/ResetPasswordSuccessScre
 import GameBoostPurchaseSuccessfulScreen from './features/Store/GameBoostPurchaseSuccessfulScreen';
 import GamePlanPurchaseSuccessfulScreen from './features/Store/GamePlanPurchaseSuccessfulScreen';
 import GameStoreScreen from './features/Store/GameStoreScreen';
-import FirstTimeUserBonus from './screens/FirstTimeUserBonus';
+import FirstTimeUserBonus from './features/Auth/FirstTimeUserBonus';
 
 const AppStack = createNativeStackNavigator();
 
