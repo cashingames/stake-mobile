@@ -141,11 +141,11 @@ function GameCard({ game }) {
 }
 
 
-function RecentlyPlayedCards({ games, copilot }) {
+function RecentlyPlayedCards({ games }) {
     if (!isTrue(games) || games.length === 0)
         return <></>;
     return (
-        <View {...copilot} style={styles.games}>
+        <View style={styles.games}>
             <Text style={styles.title}>Recently Played Games</Text>
             <View style={styles.cards}>
                 <SwiperFlatList autoplay autoplayDelay={2} autoplayLoop>
@@ -305,10 +305,6 @@ const styles = StyleSheet.create({
         marginTop: normalize(8),
     },
 
-    example: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: normalize(24),
-    }
+    
 
 });
