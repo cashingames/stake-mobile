@@ -12,7 +12,7 @@ import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const HomeScreen = (props) => {
+const HomeScreen = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
