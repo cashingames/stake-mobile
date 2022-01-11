@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useNavigation } from '@react-navigation/core';
@@ -57,7 +57,7 @@ const RightButtons = ({ options }) => {
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                 <Ionicons style={[styles.pageIcon, routeName === 'Home' ? styles.activePageIcon : {}]} name='home-outline' size={24} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Game')}>
+            <TouchableOpacity onPress={() => navigation.navigate('FirstTimeBonus')}>
                 <Ionicons style={[styles.pageIcon, routeName === 'Game' ? styles.activePageIcon : {}]} name='game-controller-outline' size={24} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Wallet')}>
@@ -67,7 +67,7 @@ const RightButtons = ({ options }) => {
     )
 }
 
-function CustomDrawerContent({ props, joyride }) {
+function CustomDrawerContent({ props}) {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();

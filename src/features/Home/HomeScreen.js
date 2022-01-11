@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
-import PropTypes from 'prop-types';
-import { copilot, CopilotStep } from "react-native-copilot";
-// import { joyride, JoyrideStep } from 'react-native-joyride';
 import normalize from '../../utils/normalize';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
@@ -13,34 +10,15 @@ import { getUser } from '../Auth/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const HomeScreen = () => {
+const HomeScreen = (props) => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     const gameTypes = useSelector(state => state.common.gameTypes)
     const [loading, setLoading] = useState(true);
 
-    let propTypes = {
-        start: PropTypes.func.isRequired,
-        copilotEvents: PropTypes.shape({
-            on: PropTypes.func.isRequired,
-        }).isRequired,
-    };
-
-    // state = {
-    //     secondStepActive: true,
-    // };
-console.log(propTypes)
-    useEffect(() => {
-        propTypes.copilotEvents.on('stepChange');
-        propTypes.start()
-    }, [])
-
-
-    // handleStepChange = (step) => {
-    //     console.log(`Current step is: ${step.name}`);
-    // }
 
     useEffect(() => {
 
@@ -69,19 +47,13 @@ console.log(propTypes)
             <View style={styles.container}>
                 <GameCards games={gameTypes} />
                 <RecentlyPlayedCards games={user.recentGames} />
-                <CopilotStep
-                    text="This is a hello world example!"
-                    order={1}
-                    name="hello"
-                >
-                    <GlobalTopLeadersHero />
-                </CopilotStep>
+                <GlobalTopLeadersHero />
             </View>
         </ScrollView>
     );
 
 }
-export default copilot()(HomeScreen);
+export default HomeScreen;
 
 
 const UserDetails = ({ user }) => {
@@ -169,11 +141,11 @@ function GameCard({ game }) {
 }
 
 
-function RecentlyPlayedCards({ games }) {
+function RecentlyPlayedCards({ games, copilot }) {
     if (!isTrue(games) || games.length === 0)
         return <></>;
     return (
-        <View style={styles.games}>
+        <View {...copilot} style={styles.games}>
             <Text style={styles.title}>Recently Played Games</Text>
             <View style={styles.cards}>
                 <SwiperFlatList autoplay autoplayDelay={2} autoplayLoop>
@@ -198,8 +170,8 @@ function RecentlyPlayedCard({ game }) {
     );
 }
 
-
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
         paddingHorizontal: normalize(18),
@@ -332,5 +304,11 @@ const styles = StyleSheet.create({
         lineHeight: 17,
         marginTop: normalize(8),
     },
+
+    example: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: normalize(24),
+    }
 
 });

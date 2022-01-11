@@ -40,6 +40,7 @@ import ResetPasswordSuccessScreen from './features/Auth/ResetPasswordSuccessScre
 import GameBoostPurchaseSuccessfulScreen from './features/Store/GameBoostPurchaseSuccessfulScreen';
 import GamePlanPurchaseSuccessfulScreen from './features/Store/GamePlanPurchaseSuccessfulScreen';
 import GameStoreScreen from './features/Store/GameStoreScreen';
+import FirstTimeUserBonus from './screens/FirstTimeUserBonus';
 
 const AppStack = createNativeStackNavigator();
 
@@ -106,6 +107,8 @@ function AppRouter() {
                         <AppStack.Screen name="GamePlanPurchaseSuccessful" component={GamePlanPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 
                         <AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
+                        <AppStack.Screen name="FirstTimeBonus" component={FirstTimeUserBonus} options={{ headerShown: false }} />
+
                     </>
                 ) :
                 (
