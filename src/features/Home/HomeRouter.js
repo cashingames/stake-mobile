@@ -57,7 +57,7 @@ const RightButtons = ({ options }) => {
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                 <Ionicons style={[styles.pageIcon, routeName === 'Home' ? styles.activePageIcon : {}]} name='home-outline' size={24} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('FirstTimeBonus')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Game')}>
                 <Ionicons style={[styles.pageIcon, routeName === 'Game' ? styles.activePageIcon : {}]} name='game-controller-outline' size={24} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Wallet')}>
