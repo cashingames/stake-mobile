@@ -66,12 +66,11 @@ const UserAvatar = () => {
     return (
         <View style={styles.userAvatar}>
             {/* {image && <Image source={isTrue(user.avatar) ? { uri: image } : require("../../../assets/images/user-icon.png")} style={styles.avatar} />} */}
-            {image && <Image source={{ uri: `${backendUrl}/${image}` }} style={{ width: 200, height: 200 }} />}
+            {image && <Image source={{ uri: `${backendUrl}/${image}` }} style={styles.avatar} />}
             {/* { uri: `${backendUrl}/${user.avatar}` } */}
-            {/* source={{ uri: image }} */}
-            <TouchableOpacity style={styles.camera} onPress={pickImage}>
+            {/* <TouchableOpacity style={styles.camera} onPress={pickImage}>
                 <Ionicons name="camera-sharp" size={26} color="#FFFF" />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     )
 }
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderColor: ' rgba(0, 0, 0, 0.1)',
         borderWidth: 1,
-        marginRight: normalize(30)
+        // marginRight: normalize(30)
     },
     camera: {
         backgroundColor: '#EF2F55',
