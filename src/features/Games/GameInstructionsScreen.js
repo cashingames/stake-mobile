@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import AppButton from "../../shared/AppButton";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { backendUrl } from '../../utils/BaseUrl';
-import { startGame } from "./GameSlice";
+import { startGame, setGameSessionToken } from "./GameSlice";
 
 
 
@@ -135,12 +135,13 @@ const AvailableBoosts = ({ onClose }) => {
         }))
             .then(unwrapResult)
             .then(result => {
-                console.log(result)
+                console.log(result);
                 setLoading(false);
                 onClose();
                 navigation.navigate("GameInProgress")
             })
             .catch((rejectedValueOrSerializedError) => {
+                console.log('erroooooiii');
                 console.log(rejectedValueOrSerializedError);
                 Alert.alert('failed to start game')
                 setLoading(false);
