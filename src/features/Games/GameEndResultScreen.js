@@ -2,23 +2,25 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground } from 'react-native';
 import normalize from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { resetPoints} from "./GameSlice";
 
 export default function GameEndResultScreen({ navigation }) {
+    const user = useSelector(state => state.auth.user);
+    const pointsGained = useSelector(state => state.game.pointsGained);
 
     return (
-        <ImageBackground source={require(',,/../../assets/images/game_end.png')} style={styles.image} resizeMode="cover">
-            <ScrollView style={styles.container}>
-                <View style={styles.content}>
-                    <UserResultEmoji userEmoji={require('../../../assets/images/sad-face-emoji.png')} />
-                    <Username userName='Joy' />
-                    <UserResultInfo pointsGained='6' />
-                    <SeeRank />
-                    <FinalScore pointsGained='6' />
-                    <GameButtons />
-                </View>
-            </ScrollView>
-        </ImageBackground>
+
+        <ScrollView style={styles.container}>
+            <UserResultEmoji userEmoji={require('../../../assets/images/thumbs_up.png')} />
+            <Username userName={user.firstName} />
+            <UserResultInfo pointsGained={pointsGained} />
+            <SeeRank />
+            <FinalScore pointsGained={pointsGained} />
+            <GameButtons />
+        </ScrollView>
+
     );
 }
 
@@ -51,6 +53,7 @@ const UserResultInfo = ({ pointsGained }) => {
 
 const SeeRank = () => {
     const navigation = useNavigation();
+
     return (
         <TouchableOpacity
             onPress={() => navigation.navigate('ExtendedLeaderboard')}
@@ -104,11 +107,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#9C3DB8',
-    },
-    content: {
-        marginHorizontal: normalize(18),
+        paddingVertical: normalize(40),
+        paddingHorizontal: normalize(18),
         display: 'flex',
-        justifyContent: 'space-between',
         marginTop: normalize(40)
     },
     image: {
@@ -119,8 +120,8 @@ const styles = StyleSheet.create({
         marginBottom: normalize(18)
     },
     emoji: {
-        width: normalize(60),
-        height: normalize(60)
+        width: normalize(66),
+        height: normalize(70)
     },
     nameContainer: {
         alignItems: 'center',
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
         color: '#FFFF',
         fontFamily: 'graphik-regular',
         fontSize: normalize(16),
-        lineHeight: normalize(26)
+        lineHeight: normalize(24)
     },
     seeRank: {
         display: 'flex',

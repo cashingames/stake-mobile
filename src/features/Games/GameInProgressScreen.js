@@ -1,8 +1,9 @@
-import React, { useRef } from "react";
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Animated, Pressable } from 'react-native';
+import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert } from 'react-native';
 import normalize from "../../utils/normalize";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { useNavigation } from '@react-navigation/native';
+import { unwrapResult } from '@reduxjs/toolkit';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -10,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import { AnimatedCircularProgress } from "react-native-circular-progress";
-import { endGame, nextQuestion, questionAnswered } from "./GameSlice";
+import { endGame, nextQuestion, questionAnswered , setPointsGained} from "./GameSlice";
 import AppButton from "../../shared/AppButton";
 
 
@@ -18,15 +19,41 @@ var base64 = require('base-64');
 
 
 export default function GameInProgressScreen({ navigation }) {
+    const dispatch = useDispatch();
     const refRBSheet = useRef();
+    const gameSessionToken = useSelector(state => state.game.gameSessionToken);
+    const chosenOptions = useSelector(state => state.game.chosenOptions);
+    const consumedBoosts = useSelector(state => state.game.consumedBoosts);
+    const [ending, setEnding] = useState(false);
+
+    const onEndGame = () => {
+        setEnding(true);
+        dispatch(endGame({
+            token: gameSessionToken,
+            chosenOptions,
+            consumedBoosts
+        }))
+            .then(unwrapResult)
+            .then(result => {
+                setEnding(false);
+                dispatch(setPointsGained(result.data.points_gained));
+                navigation.navigate('GameEndResult');
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                setEnding(false);
+                console.log(rejectedValueOrSerializedError);
+                Alert.alert('failed to end game')
+            });
+    }
+
     return (
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">
             <ScrollView>
-                <PlayGameHeader />
+                <PlayGameHeader onPress={() => onEndGame()} />
                 <BoostsInfo onPress={() => refRBSheet.current.open()} />
-                <GameProgressAndBoosts />
+                <GameProgressAndBoosts onComplete={() => onEndGame()} />
                 <GameQuestions />
-                <NextButton />
+                <NextButton onPress={() => onEndGame()} ending={ending} />
                 <RBSheet
                     ref={refRBSheet}
                     closeOnDragDown={true}
@@ -52,12 +79,12 @@ export default function GameInProgressScreen({ navigation }) {
     );
 }
 
-const PlayGameHeader = () => {
-    const navigation = useNavigation();
+const PlayGameHeader = ({ onPress }) => {
+
     return (
         <View style={styles.header}>
             <Text style={styles.headerTitle}>Game Mode</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('GameEndResult')}>
+            <TouchableOpacity onPress={onPress}>
                 <Text style={styles.headerTitle}>Exit</Text>
             </TouchableOpacity>
         </View>
@@ -76,17 +103,17 @@ const BoostsInfo = ({ onPress }) => {
 }
 
 
-const GameProgressAndBoosts = () => {
+const GameProgressAndBoosts = ({ onComplete }) => {
     const gameCategory = useSelector(state => state.game.gameCategory)
     return (
         <View style={styles.gameProgressAndBoost}>
-            <GameTopicProgress gameTopic="" gameCategory={gameCategory.name} />
+            <GameTopicProgress gameTopic="" gameCategory={gameCategory.name} onComplete={onComplete} />
             <AvailableBoosts />
         </View>
     )
 }
 
-const GameTopicProgress = ({ gameTopic, gameCategory }) => {
+const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
 
     const dispatch = useDispatch();
     // 'GameEndResult'
@@ -103,7 +130,7 @@ const GameTopicProgress = ({ gameTopic, gameCategory }) => {
                 trailColor="#2D9CDB"
                 size={60}
                 strokeWidth={5}
-                onComplete={() => { console.log("timer, end game"); dispatch(endGame()); }} >
+                onComplete={onComplete} >
                 {({ remainingTime, animatedColor }) => (
                     <Animated.Text style={styles.timeText}>
                         {remainingTime}
@@ -228,14 +255,15 @@ const Option = ({ option: { title, isSelected }, onSelected }) => {
     )
 }
 
-const NextButton = () => {
+const NextButton = ({ onPress, ending }) => {
     const dispatch = useDispatch()
     const isLastQuestion = useSelector(state => state.game.isLastQuestion);
 
     return (
         <AppButton
+            disabled={ending}
             text={isLastQuestion ? 'Finish' : 'Next'}
-            onPress={() => dispatch(isLastQuestion ? endGame() : nextQuestion())}
+            onPress={() => dispatch(isLastQuestion ? onPress : nextQuestion())}
         />
     )
 }

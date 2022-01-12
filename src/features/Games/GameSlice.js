@@ -13,24 +13,28 @@ export const startGame = createAsyncThunk(
 export const endGame = createAsyncThunk(
     'game/endGame',
     async (data, thunkAPI) => {
-
         //make a network request to the server
-        //identify the appropriate fields to pass as data
+        const response = await axios.post('v2/game/end/single-player', data)
+        console.log('game ended' );
+        return response.data
 
-        return true;
+        //return true;
     }
 )
 
-//This is to store the currently ongoing active game
+// This is to store the currently ongoing active game
 // const initialState = {
 //     gameMode: {},
 //     gameCategory: {},
 //     gameType: {},
+//     gameSessionToken:'',
 //     questions: [],
 //     currentQuestionPosition: 0,
 //     totalQuestionCount: 10,
 //     isLastQuestion: false,
 //     chosenOptions: [],
+ //     consumedBoosts:[],
+ //    pointsGained:0,
 //     isEnded: true,
 //     displayedOptions: [],
 //     displayedQuestion: {}
@@ -43,6 +47,7 @@ const initialState = {
         name: "Premier Leaque football"
     },
     gameType: {},
+    gameSessionToken:'',
     questions: [
         {
             "id": 42,
@@ -657,6 +662,8 @@ const initialState = {
     totalQuestionCount: 10,
     isLastQuestion: false,
     chosenOptions: [],
+    consumedBoosts:[],
+    pointsGained:0,
     isEnded: true,
     displayedOptions: [
         {
@@ -708,6 +715,12 @@ export const GameSlice = createSlice({
         setGameCategory: (state, action) => {
             state.gameCategory = action.payload;
         },
+        setGameSessionToken: (state, action) =>{
+            state.gameSessionToken = action.payload;
+        },
+        setPointsGained: (state, action) => {
+            state.pointsGained = action.payload;
+        },
         questionAnswered: (state, action) => {
             state.displayedOptions.map(x => {
                 x.isSelected = x.id === action.payload.id
@@ -721,6 +734,7 @@ export const GameSlice = createSlice({
             state.displayedOptions = state.displayedQuestion.options
             state.isLastQuestion = state.currentQuestionPosition === state.totalQuestionCount - 1
         },
+       
     },
 
     extraReducers: (builder) => {
@@ -738,6 +752,6 @@ export const GameSlice = createSlice({
     },
 })
 
-export const { setGameType, setGameMode, setGameCategory, questionAnswered, nextQuestion } = GameSlice.actions
+export const { setGameType, setGameMode, setGameCategory, setGameSessionToken,setPointsGained, questionAnswered, nextQuestion, } = GameSlice.actions
 
 export default GameSlice.reducer

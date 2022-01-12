@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import AppButton from "../../shared/AppButton";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { backendUrl } from '../../utils/BaseUrl';
-import { startGame } from "./GameSlice";
+import { startGame, setGameSessionToken } from "./GameSlice";
 
 
 
@@ -136,6 +136,9 @@ const AvailableBoosts = ({ onClose }) => {
             .then(unwrapResult)
             .then(result => {
                 console.log(result)
+                dispatch(setGameSessionToken(result.data.game.token))
+
+                console.log(result.data.game.token + '    ..session ')
                 setLoading(false);
                 onClose();
                 navigation.navigate("GameInProgress")
