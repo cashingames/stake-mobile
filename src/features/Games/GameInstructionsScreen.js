@@ -135,15 +135,13 @@ const AvailableBoosts = ({ onClose }) => {
         }))
             .then(unwrapResult)
             .then(result => {
-                console.log(result)
-                dispatch(setGameSessionToken(result.data.game.token))
-
-                console.log(result.data.game.token + '    ..session ')
+                console.log(result);
                 setLoading(false);
                 onClose();
                 navigation.navigate("GameInProgress")
             })
             .catch((rejectedValueOrSerializedError) => {
+                console.log('erroooooiii');
                 console.log(rejectedValueOrSerializedError);
                 Alert.alert('failed to start game')
                 setLoading(false);

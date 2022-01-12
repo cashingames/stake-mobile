@@ -34,9 +34,8 @@ export default function GameInProgressScreen({ navigation }) {
             consumedBoosts
         }))
             .then(unwrapResult)
-            .then(result => {
+            .then(() => {
                 setEnding(false);
-                dispatch(setPointsGained(result.data.points_gained));
                 navigation.navigate('GameEndResult');
             })
             .catch((rejectedValueOrSerializedError) => {

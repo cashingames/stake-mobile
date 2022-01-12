@@ -715,9 +715,6 @@ export const GameSlice = createSlice({
         setGameCategory: (state, action) => {
             state.gameCategory = action.payload;
         },
-        setGameSessionToken: (state, action) =>{
-            state.gameSessionToken = action.payload;
-        },
         setPointsGained: (state, action) => {
             state.pointsGained = action.payload;
         },
@@ -744,14 +741,16 @@ export const GameSlice = createSlice({
                 state.questions = action.payload.data.questions;
                 state.displayedQuestion = state.questions[state.currentQuestionPosition]
                 state.displayedOptions = state.displayedQuestion.options
+                state.gameSessionToken = action.payload.data.game.token
             })
             .addCase(endGame.fulfilled, (state, action) => {
-                state.isEnded = true
+                state.isEnded = true;
+                state.pointsGained = action.payload.data.points_gained;
             })
 
     },
 })
 
-export const { setGameType, setGameMode, setGameCategory, setGameSessionToken,setPointsGained, questionAnswered, nextQuestion, } = GameSlice.actions
+export const { setGameType, setGameMode, setGameCategory, setPointsGained, questionAnswered, nextQuestion, } = GameSlice.actions
 
 export default GameSlice.reducer
