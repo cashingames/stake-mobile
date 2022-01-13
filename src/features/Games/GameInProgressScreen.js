@@ -115,6 +115,7 @@ const GameProgressAndBoosts = ({ onComplete }) => {
 const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
 
     const dispatch = useDispatch();
+    const countdownKey = useSelector(state => state.game.countdownKey);
     // 'GameEndResult'
     return (
         <View style={styles.topicProgress}>
@@ -129,6 +130,7 @@ const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
                 trailColor="#2D9CDB"
                 size={60}
                 strokeWidth={5}
+                key={countdownKey}
                 onComplete={onComplete} >
                 {({ remainingTime, animatedColor }) => (
                     <Animated.Text style={styles.timeText}>

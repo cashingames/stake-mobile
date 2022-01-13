@@ -1,14 +1,23 @@
-import * as React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground } from 'react-native';
 import normalize from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { resetPoints} from "./GameSlice";
+import RBSheet from "react-native-raw-bottom-sheet";
+import { NoGames } from './GameScreen';
+import { getUser } from '../Auth/AuthSlice';
+import { startGameReplay } from './GameSlice';
+
 
 export default function GameEndResultScreen({ navigation }) {
+    const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
     const pointsGained = useSelector(state => state.game.pointsGained);
+
+    useEffect(() => {
+        dispatch(getUser());
+    }, []);
 
     return (
 
@@ -90,15 +99,57 @@ const GameButton = ({ buttonText, onPress }) => {
 }
 
 const GameButtons = () => {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
+    const refRBSheet = useRef();
+
+    const openBottomSheet = () => {
+        refRBSheet.current.open()
+    }
+
+    const closeBottomSheet = () => {
+        refRBSheet.current.close()
+    }
+
+    const onPlayButtonClick = () => {
+        if (hasActivePlan) {
+            dispatch(startGameReplay());
+            navigation.navigate('GameInProgress')
+        } else {
+            openBottomSheet();
+        }
+    }
+
     return (
         <View style={styles.gameButtons}>
             <GameButton buttonText='Return to Home'
-                onPress={() => navigation.navigate('Home')}
+                onPress={() => { navigation.navigate('Home') }}
             />
             <GameButton buttonText='Play Again'
-                onPress={() => navigation.navigate('GameInProgress')}
+                onPress={onPlayButtonClick}
             />
+            <RBSheet
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                height={400}
+                customStyles={{
+                    wrapper: {
+                        backgroundColor: "rgba(0, 0, 0, 0.5)"
+                    },
+                    draggableIcon: {
+                        backgroundColor: "#000",
+                    },
+                    container: {
+                        borderTopStartRadius: 25,
+                        borderTopEndRadius: 25,
+                    }
+                }}
+            >
+                <NoGames closeSheet={closeBottomSheet} />
+            </RBSheet>
+
         </View>
     )
 }

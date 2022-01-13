@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { StyleSheet, Text, View, Image, Alert } from 'react-native';
 import normalize from '../../utils/normalize';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -15,6 +15,11 @@ import UserItems from "../../shared/UserPurchasedItems";
 
 
 export default function () {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getUser());
+    }, []);
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -109,6 +114,7 @@ const BuyGamePlan = ({ plan, onClose }) => {
 
 const GamePlans = () => {
     const plans = useSelector(state => state.common.plans);
+
     return (
         <View style={styles.storeItems}>
             <Text style={styles.title}>Buy Games</Text>
