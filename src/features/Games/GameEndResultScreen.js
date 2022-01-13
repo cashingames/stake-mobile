@@ -7,6 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { NoGames } from './GameScreen';
 import { getUser } from '../Auth/AuthSlice';
+import { startGameReplay } from './GameSlice';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -98,7 +99,7 @@ const GameButton = ({ buttonText, onPress }) => {
 }
 
 const GameButtons = () => {
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
     const refRBSheet = useRef();
@@ -112,7 +113,12 @@ const GameButtons = () => {
     }
 
     const onPlayButtonClick = () => {
-        hasActivePlan ? navigation.navigate('GameInProgress') : openBottomSheet();
+        if (hasActivePlan) {
+            dispatch(startGameReplay());
+            navigation.navigate('GameInProgress')
+        } else {
+            openBottomSheet();
+        }
     }
 
     return (
