@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
@@ -13,34 +13,46 @@ import { backendUrl } from '../../utils/BaseUrl';
 import { formatNumber, isTrue } from '../../utils/stringUtl';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { setGameCategory, setGameType } from './GameSlice';
-import MyBoostsScreen from '../Store/MyBoostsScreen';
-import GameStoreScreen from '../Store/GameStoreScreen';
+import RBSheet from "react-native-raw-bottom-sheet";
+// import MyBoostsScreen from '../Store/MyBoostsScreen';
+// import GameStoreScreen from '../Store/GameStoreScreen';
 import normalize from '../../utils/normalize';
 
 const Toptab = createMaterialTopTabNavigator();
 
 export default function GameScreen({ navigation }) {
-
+    
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             {/* <WinBig /> */}
             <ProgressMessage />
             <GameTabs />
             <GlobalTopLeadersHero />
+
         </ScrollView>
     );
 }
 
-const WinBig = () => {
+export const NoGames = ({closeSheet}) => {
+    const navigation = useNavigation();
+    
     return (
-        <View style={styles.winBig}>
-            <Text style={styles.winText}>Play today to win big</Text>
-            <Image
-                source={require('../../../assets/images/big_gamepad.png')}
+        <View style={styles.noGames}>
+            <Image style={styles.sadEmoji}
+                source={require('../../../assets/images/sad-face-emoji.png')}
+
             />
+            <Text style={styles.noGamesText}>Sorry,</Text>
+            <Text style={styles.noGamesText}>You have exhausted your games</Text>
+            <Pressable onPress={()=> {closeSheet; navigation.navigate('GameStore')}}>
+                <Text style={styles.needGames}>Need more games?
+                    <Text style={styles.storeLink}> Go to Store</Text>
+                </Text>
+            </Pressable>
         </View>
     )
 }
+
 
 const ProgressMessage = () => {
     return (
@@ -110,10 +122,12 @@ const CategoriesScreen = ({ currentGame }) => {
 
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const refRBSheet = useRef();
 
     const [activeCategory, setActiveCategory] = useState();
     const activeSubcategory = useSelector(state => state.game.gameCategory);
     const activeGame = useSelector(state => state.game.gameType);
+    const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
 
     const onCategorySelected = (category) => {
         setActiveCategory(category);
@@ -124,6 +138,18 @@ const CategoriesScreen = ({ currentGame }) => {
         dispatch(setGameCategory(subcategory));
     }
 
+    const openBottomSheet = () => {
+        refRBSheet.current.open()
+    }
+    
+    const closeBottomSheet = () => {
+        refRBSheet.current.close()
+    }
+
+
+    const onPlayButtonClick = () => {
+        hasActivePlan ? navigation.navigate('GameMode') : openBottomSheet();
+    }
 
     useEffect(() => {
         setActiveCategory(undefined); //category
@@ -145,7 +171,28 @@ const CategoriesScreen = ({ currentGame }) => {
                 {isTrue(activeCategory) && <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />}
             </View>
 
-            <AppButton text='Proceed to Play' onPress={() => navigation.navigate('GameMode')} disabled={!isTrue(activeSubcategory)} />
+            <AppButton text='Proceed to Play' onPress={onPlayButtonClick} disabled={!isTrue(activeSubcategory)} />
+
+            <RBSheet
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                height={400}
+                customStyles={{
+                    wrapper: {
+                        backgroundColor: "rgba(0, 0, 0, 0.5)"
+                    },
+                    draggableIcon: {
+                        backgroundColor: "#000",
+                    },
+                    container: {
+                        borderTopStartRadius: 25,
+                        borderTopEndRadius: 25,
+                    }
+                }}
+            >
+               <NoGames closeSheet={ closeBottomSheet}/>
+            </RBSheet>
 
         </>
 
@@ -225,11 +272,13 @@ const styles = StyleSheet.create({
         borderWidth: normalize(1),
         borderColor: 'rgba(0, 0, 0, 0.15)',
     },
-    winText: {
+    noGamesText: {
         fontFamily: 'graphik-medium',
         fontSize: normalize(16),
-        color: '#151C2F',
         width: normalize(130),
+        textAlign:'center',
+        color: '#000',
+        lineHeight: normalize(24)
     },
     progress: {
         display: 'flex',
@@ -370,4 +419,30 @@ const styles = StyleSheet.create({
         marginBottom: normalize(10),
         backgroundColor: '#E0E0E0',
     },
+    noGames:{
+        backgroundColor: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: normalize(14),
+        paddingHorizontal: normalize(15),
+    },
+    sadEmoji:{
+        width:normalize(50),
+        height:normalize(50),
+        marginBottom: normalize(20)
+    },
+    needGames: {
+        fontSize: normalize(12),
+        fontFamily: 'graphik-regular',
+        color: '#000',
+        marginTop:normalize(15)
+    },
+    storeLink: {
+        fontSize: normalize(12),
+        fontFamily: 'graphik-medium',
+        color: '#EF2F55',
+    },
+    
 });

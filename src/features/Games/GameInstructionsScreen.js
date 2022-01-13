@@ -141,7 +141,6 @@ const AvailableBoosts = ({ onClose }) => {
                 navigation.navigate("GameInProgress")
             })
             .catch((rejectedValueOrSerializedError) => {
-                console.log('erroooooiii');
                 console.log(rejectedValueOrSerializedError);
                 Alert.alert('failed to start game')
                 setLoading(false);

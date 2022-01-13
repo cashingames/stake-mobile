@@ -12,7 +12,7 @@ const UserItems = ({ showBuy }) => {
 
     var plans = useSelector(state => state.auth.user.activePlans);
     const reducer = (accumulator, curr) => accumulator + curr;
-    const sumOfPlans = plans.map(a => a.game_count).reduce(reducer);
+    const sumOfPlans = plans.map(a => a.game_count).reduce(reducer, 0);
 
     var boostsString = "";
     var boosts = useSelector(state => state.auth.user.boosts);
