@@ -93,7 +93,8 @@ export const GameSlice = createSlice({
             .addCase(endGame.fulfilled, (state, action) => {
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
-                
+                state.currentQuestionPosition = 0;
+                state.isLastQuestion = false;
             })
 
     },
