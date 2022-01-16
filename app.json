@@ -17,10 +17,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "bundleIdentifier": "com.cashingames.cashingames",
-      "buildNumber": "1.0.1"
-    },
+    "platforms": [
+      "android"
+    ],
     "android": {
       "package": "com.cashingames.cashingames",
       "versionCode": 1,
