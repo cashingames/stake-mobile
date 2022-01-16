@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useDispatch, useSelector, ScrollView } from 'react-redux';
 import Input from '../../shared/Input';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';

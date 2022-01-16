@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
 
@@ -18,10 +18,10 @@ export default function WalletScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
-                <WalletBalance balance={user.walletBalance} />
-                <FundButton />
-                <UserEarnings point={user.points} />
-                <TransactionLink />
+            <WalletBalance balance={user.walletBalance} />
+            <FundButton />
+            <UserEarnings point={user.points} />
+            <TransactionLink />
         </ScrollView>
     );
 }
@@ -60,12 +60,12 @@ const UserEarnings = ({ point }) => {
 const TransactionLink = () => {
     const navigation = useNavigation();
     return (
-        <TouchableOpacity onPress={() => navigation.navigate('Transactions')}>
+        <Pressable onPress={() => navigation.navigate('Transactions')}>
             <View style={styles.link}>
                 <Text style={styles.linkTitle}>See Transactions</Text>
                 <Ionicons name="md-arrow-forward-sharp" size={24} color="#EF2F55" />
             </View>
-        </TouchableOpacity>
+        </Pressable>
     )
 };
 

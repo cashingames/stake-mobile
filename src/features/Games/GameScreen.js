@@ -4,7 +4,6 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import AppButton from '../../shared/AppButton';
 import { useDispatch, useSelector } from 'react-redux';
@@ -182,7 +181,7 @@ const CategoriesScreen = ({ navigation, route }) => {
 
 const GameCategoryCard = ({ category, onSelect, isSelected }) => {
     return (
-        <TouchableWithoutFeedback onPress={() => onSelect(category)} style={[styles.card, { backgroundColor: category.bgColor }]}>
+        <Pressable onPress={() => onSelect(category)} style={[styles.card, { backgroundColor: category.bgColor }]}>
             <View style={styles.categoryCardTopRow}>
                 <Image
                     style={styles.cardIcon}
@@ -192,7 +191,7 @@ const GameCategoryCard = ({ category, onSelect, isSelected }) => {
             </View>
             <Text style={styles.cardTitle}>{category.name}</Text>
             <Text style={styles.cardInstruction}>{formatNumber(category.played)} times played </Text>
-        </TouchableWithoutFeedback>
+        </Pressable>
     )
 };
 

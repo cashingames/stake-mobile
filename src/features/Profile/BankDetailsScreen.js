@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { editBankDetails, getUser } from '../Auth/AuthSlice';
 import { getBankData } from '../CommonSlice';
@@ -72,9 +71,9 @@ export default function BankDetailsScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.content}>
-                <TouchableOpacity onPress={onSaveBankDetails} disabled={!canSave}>
+                <Pressable onPress={onSaveBankDetails} disabled={!canSave}>
                     <Text style={styles.saveChanges}>{saving ? 'Saving' : 'Save Changes'}</Text>
-                </TouchableOpacity>
+                </Pressable>
                 <View>
                     <Input
                         label='Account Number'

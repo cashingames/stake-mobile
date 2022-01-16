@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
 import normalize from '../../utils/normalize';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { backendUrl } from '../../utils/BaseUrl';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGameMode } from './GameSlice';
@@ -12,6 +11,7 @@ export default function GameModeScreen({ navigation }) {
 
 
     const onSelectGameMode = (mode) => {
+        console.log("here")
         dispatch(setGameMode(mode));
         navigation.navigate('GameInstructions')
     }
@@ -32,7 +32,7 @@ export default function GameModeScreen({ navigation }) {
 
 const AvailableMode = ({ gameMode, onPress }) => {
     return (
-        <TouchableOpacity
+        <Pressable
             style={[styles.modeContainer, { backgroundColor: gameMode.bgColor }]}
             onPress={onPress}
         >
@@ -44,7 +44,7 @@ const AvailableMode = ({ gameMode, onPress }) => {
                 source={{ uri: `${backendUrl}/${gameMode.icon}` }}
                 style={styles.gameModeIcon}
             />
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 

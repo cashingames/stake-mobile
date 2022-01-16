@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, Pressable, View, ScrollView } from 'react-native';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
-import { ScrollView } from 'react-native-gesture-handler';
 import SocialSignUp from '../../shared/SocialSignUp';
 import { Link, useNavigation } from '@react-navigation/native';
 import AuthBanner from '../../shared/AuthBanner';
@@ -130,9 +129,9 @@ const SignIn = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.signIn}><Text style={styles.signInText}>Have an account already ? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')} >
+            <Pressable onPress={() => navigation.navigate('Login')} >
                 <Text style={{ ...styles.linkText, fontFamily: 'graphik-medium', marginLeft: normalize(15) }}>Sign in</Text>
-            </TouchableOpacity>
+            </Pressable>
         </View>
     )
 }

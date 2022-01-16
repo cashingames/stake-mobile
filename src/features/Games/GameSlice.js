@@ -61,6 +61,7 @@ export const GameSlice = createSlice({
             state.gameCategory = action.payload;
         },
         setGameMode: (state, action) => {
+            console.log("here")
             state.gameMode = action.payload;
         },
         setPointsGained: (state, action) => {

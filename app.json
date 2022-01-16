@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "cashingames-mobile",
-    "slug": "cashingames-mobile",
+    "name": "Cashingames",
+    "slug": "Cashingames",
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,6 +10,10 @@
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#C2185B",
+      "translucent": false
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -28,6 +32,9 @@
         "backgroundColor": "#FFFFFF"
       }
     },
-    "sdkVersion": "43.0.0"
+    "sdkVersion": "44.0.0",
+    "ios": {
+      "bundleIdentifier": "com.cashingames.cashingames"
+    }
   }
 }

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 
@@ -95,7 +94,7 @@ export default function LoginScreen({ navigation }) {
 
                 <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={onLogin} disabled={!canLogin} />
                 <SocialSigninDivider signInText='sign in' />
-                <SocialSignUp/>
+                <SocialSignUp />
                 <RenderCreateAccount />
             </ScrollView >
         </SafeAreaView>
@@ -118,9 +117,9 @@ const RenderCreateAccount = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.signIn}><Text style={styles.signInText}>Don't have an account ? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')} >
+            <Pressable onPress={() => navigation.navigate('Signup')} >
                 <Text style={styles.linkText}>Create one</Text>
-            </TouchableOpacity>
+            </Pressable>
         </View>
     )
 }

@@ -1,9 +1,8 @@
 import React, { useRef, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
 import normalize from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { NoGames } from './GameScreen';
 import { getUser } from '../Auth/AuthSlice';
@@ -64,7 +63,7 @@ const SeeRank = () => {
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity
+        <Pressable
             onPress={() => navigation.navigate('ExtendedLeaderboard')}
             style={styles.goToLeaderboard}
         >
@@ -74,7 +73,7 @@ const SeeRank = () => {
                 />
                 <Text style={styles.seeRankText}>Check the leaderboard to see your rank</Text>
             </View>
-        </TouchableOpacity>
+        </Pressable>
 
     )
 }
@@ -90,11 +89,11 @@ const FinalScore = ({ pointsGained }) => {
 
 const GameButton = ({ buttonText, onPress }) => {
     return (
-        <TouchableOpacity onPress={onPress}>
+        <Pressable onPress={onPress}>
             <View style={styles.gameButton}>
                 <Text style={styles.buttonText}>{buttonText}</Text>
             </View>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 
