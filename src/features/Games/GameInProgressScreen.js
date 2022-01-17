@@ -10,8 +10,9 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
+import { getUser } from "../Auth/AuthSlice";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
-import { endGame, nextQuestion, questionAnswered , setPointsGained} from "./GameSlice";
+import { endGame, nextQuestion, questionAnswered, consumeBoost, pauseGame, skipQuestion, boostReleased } from "./GameSlice";
 import AppButton from "../../shared/AppButton";
 
 
@@ -36,7 +37,7 @@ export default function GameInProgressScreen({ navigation }) {
             .then(unwrapResult)
             .then(() => {
                 setEnding(false);
-                navigation.navigate('GameEndResult');
+                //navigation.navigate('GameEndResult');
             })
             .catch((rejectedValueOrSerializedError) => {
                 setEnding(false);
@@ -113,10 +114,9 @@ const GameProgressAndBoosts = ({ onComplete }) => {
 }
 
 const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
-
-    const dispatch = useDispatch();
     const countdownKey = useSelector(state => state.game.countdownKey);
-    // 'GameEndResult'
+    const isGamePaused = useSelector(state => state.game.countdownFrozen);
+
     return (
         <View style={styles.topicProgress}>
             <Text style={styles.title}>{gameCategory} {gameTopic}</Text>
@@ -124,7 +124,7 @@ const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
             <AnsweredGameProgress />
 
             <CountdownCircleTimer
-                isPlaying
+                isPlaying={!isGamePaused}
                 duration={60}
                 colors={[["#fff", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
                 trailColor="#2D9CDB"
@@ -167,20 +167,54 @@ const AnsweredGameProgress = () => {
 }
 
 const AvailableBoosts = () => {
+    const dispatch = useDispatch();
     const boosts = useSelector(state => state.auth.user.boosts);
+    const gameType = useSelector(state => state.game.gameType);
+
+    const boostsToDisplay = () => {
+        //bomb is only applicable to multiple choices
+        if (gameType.name.toUpperCase() !== "MULTIPLE_CHOICE") {
+            return boosts.filter(x => x.name.toUpperCase() !== "BOMB");
+        }
+        return boosts;
+    }
+
+    const boostApplied = (data) => {
+        dispatch(consumeBoost(data));
+        const name = data.name.toUpperCase();
+        if (name === 'TIME FREEZE') {
+            dispatch(pauseGame(true));
+            setTimeout(() => {
+                dispatch(pauseGame(false))
+                dispatch(boostReleased())
+            }, 10000);
+            dispatch(getUser());
+        }
+        if (name === 'SKIP') {
+            dispatch(skipQuestion());
+            dispatch(boostReleased());
+            dispatch(getUser());
+        }
+    }
+
     return (
         <View style={styles.availableBoosts}>
             <View style={styles.boostinfo}>
                 <Text style={styles.title}>Boost</Text>
             </View>
-            {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i} />)}
+            {boostsToDisplay().map((boost, index) =>
+                <AvailableBoost boost={boost} key={index} onConsume={boostApplied} />
+            )}
         </View>
     )
 }
 
-const AvailableBoost = ({ boost }) => {
+const AvailableBoost = ({ boost, onConsume }) => {
+    const activeBoost = useSelector(state => state.game.activeBoost);
+    const isActive = activeBoost.id === boost.id;
+
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => isActive ? {} : onConsume(boost)}>
             <View style={styles.availableBoost}>
                 <Image
                     source={{ uri: `${backendUrl}/${boost.icon}` }}

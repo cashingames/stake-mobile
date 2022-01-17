@@ -22,13 +22,6 @@ export const endGame = createAsyncThunk(
     }
 )
 
-// export const resetGame = createAsyncThunk(
-//     'game/reset',
-//     async (thunkAPI) => {
-//         return initialState;
-//     }
-// )
-
 
 //This is to store the currently ongoing active game
 const initialState = {
@@ -41,8 +34,10 @@ const initialState = {
     totalQuestionCount: 10,
     isLastQuestion: false,
     countdownKey: 0,
+    countdownFrozen: false,
     chosenOptions: [],
     consumedBoosts: [],
+    activeBoost: [],
     pointsGained: 0,
     isEnded: true,
     displayedOptions: [],
@@ -82,6 +77,25 @@ export const GameSlice = createSlice({
         startGameReplay: (state) => {
             state.countdownKey += 1;
             state.pointsGained = 0;
+        },
+        consumeBoost: (state, action) => {
+            state.consumedBoosts = [...state.consumedBoosts,
+            {
+                boost: action.payload
+            }];
+            state.activeBoost = action.payload;
+        },
+        pauseGame: (state, action) => {
+            state.countdownFrozen = action.payload
+        },
+        skipQuestion: (state) => {
+            const q = state.questions.filter(x => x.id !== state.displayedQuestion.id);
+            state.questions = q,
+            state.displayedQuestion = state.questions[state.currentQuestionPosition]
+            state.displayedOptions = state.displayedQuestion.options
+        },
+        boostReleased: (state) => {
+            state.activeBoost = {}
         }
     },
 
@@ -105,6 +119,8 @@ export const GameSlice = createSlice({
     },
 })
 
-export const { setGameType, setGameMode, setGameCategory, setPointsGained, questionAnswered, nextQuestion,startGameReplay } = GameSlice.actions
+export const { setGameType, setGameMode, setGameCategory,
+    setPointsGained, questionAnswered, nextQuestion,
+    startGameReplay, consumeBoost, pauseGame,skipQuestion, boostReleased } = GameSlice.actions
 
 export default GameSlice.reducer
