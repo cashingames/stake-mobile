@@ -1,6 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 
+var base64 = require('base-64');
+
+const shuffleArray = array => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
 export const startGame = createAsyncThunk(
     'game/startGame',
     async (data, thunkAPI) => {
@@ -91,8 +103,14 @@ export const GameSlice = createSlice({
         skipQuestion: (state) => {
             const q = state.questions.filter(x => x.id !== state.displayedQuestion.id);
             state.questions = q,
-            state.displayedQuestion = state.questions[state.currentQuestionPosition]
+                state.displayedQuestion = state.questions[state.currentQuestionPosition]
             state.displayedOptions = state.displayedQuestion.options
+        },
+        bombOptions: (state) => {
+            const correctOption = state.displayedOptions.find(option => base64.decode(option.is_correct) === '1')
+            const falseOptions = state.displayedOptions.filter(option => base64.decode(option.is_correct) === '0')
+            const randomWrongOption = falseOptions[Math.floor(Math.random() * falseOptions.length)];
+            state.displayedOptions = shuffleArray([correctOption, randomWrongOption]);
         },
         boostReleased: (state) => {
             state.activeBoost = {}
@@ -121,6 +139,6 @@ export const GameSlice = createSlice({
 
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion,
-    startGameReplay, consumeBoost, pauseGame,skipQuestion, boostReleased } = GameSlice.actions
+    startGameReplay, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions } = GameSlice.actions
 
 export default GameSlice.reducer

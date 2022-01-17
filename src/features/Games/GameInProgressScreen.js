@@ -12,7 +12,10 @@ import { formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import { getUser } from "../Auth/AuthSlice";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
-import { endGame, nextQuestion, questionAnswered, consumeBoost, pauseGame, skipQuestion, boostReleased } from "./GameSlice";
+import {
+    endGame, nextQuestion, questionAnswered, consumeBoost,
+    pauseGame, skipQuestion, boostReleased, bombOptions
+} from "./GameSlice";
 import AppButton from "../../shared/AppButton";
 
 
@@ -37,7 +40,7 @@ export default function GameInProgressScreen({ navigation }) {
             .then(unwrapResult)
             .then(() => {
                 setEnding(false);
-                //navigation.navigate('GameEndResult');
+                navigation.navigate('GameEndResult');
             })
             .catch((rejectedValueOrSerializedError) => {
                 setEnding(false);
@@ -192,6 +195,11 @@ const AvailableBoosts = () => {
         }
         if (name === 'SKIP') {
             dispatch(skipQuestion());
+            dispatch(boostReleased());
+            dispatch(getUser());
+        }
+        if (name === "BOMB") {
+            dispatch(bombOptions());
             dispatch(boostReleased());
             dispatch(getUser());
         }
