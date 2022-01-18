@@ -5,7 +5,6 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { useNavigation } from '@react-navigation/native';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
@@ -16,6 +15,7 @@ import {
     endGame, nextQuestion, questionAnswered, consumeBoost,
     pauseGame, skipQuestion, boostReleased, bombOptions
 } from "./GameSlice";
+
 import AppButton from "../../shared/AppButton";
 
 
@@ -87,9 +87,9 @@ const PlayGameHeader = ({ onPress }) => {
     return (
         <View style={styles.header}>
             <Text style={styles.headerTitle}>Game Mode</Text>
-            <TouchableOpacity onPress={onPress}>
+            <Pressable onPress={onPress}>
                 <Text style={styles.headerTitle}>Exit</Text>
-            </TouchableOpacity>
+            </Pressable>
         </View>
     )
 };
@@ -222,7 +222,7 @@ const AvailableBoost = ({ boost, onConsume }) => {
     const isActive = activeBoost.id === boost.id;
 
     return (
-        <TouchableOpacity onPress={() => isActive ? {} : onConsume(boost)}>
+        <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
             <View style={styles.availableBoost}>
                 <Image
                     source={{ uri: `${backendUrl}/${boost.icon}` }}
@@ -230,7 +230,7 @@ const AvailableBoost = ({ boost, onConsume }) => {
                 />
                 <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
             </View>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 
@@ -292,9 +292,9 @@ const GameQuestions = () => {
 
 const Option = ({ option: { title, isSelected }, onSelected }) => {
     return (
-        <TouchableOpacity style={[styles.answer, isSelected ? styles.selectedOption : {}]} onPress={onSelected}>
+        <Pressable style={[styles.answer, isSelected ? styles.selectedOption : {}]} onPress={onSelected}>
             <Text style={styles.answerText}>{base64.decode(title)}</Text>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 

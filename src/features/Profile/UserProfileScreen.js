@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector, useDispatch } from 'react-redux';
 import { isTrue } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
@@ -49,8 +48,8 @@ const UserAvatar = () => {
             return;
         }
 
-        dispatch(editProfileAvatar(result)).then( result => {
-            dispatch(getUser()).then(x=>{
+        dispatch(editProfileAvatar(result)).then(result => {
+            dispatch(getUser()).then(x => {
                 //set loading to false
             });
         }).catch(ex => {
@@ -68,9 +67,9 @@ const UserAvatar = () => {
             {/* {image && <Image source={isTrue(user.avatar) ? { uri: image } : require("../../../assets/images/user-icon.png")} style={styles.avatar} />} */}
             {image && <Image source={{ uri: `${backendUrl}/${image}` }} style={styles.avatar} />}
             {/* { uri: `${backendUrl}/${user.avatar}` } */}
-            {/* <TouchableOpacity style={styles.camera} onPress={pickImage}>
+            {/* <Pressable style={styles.camera} onPress={pickImage}>
                 <Ionicons name="camera-sharp" size={26} color="#FFFF" />
-            </TouchableOpacity> */}
+            </Pressable> */}
         </View>
     )
 }
@@ -84,10 +83,10 @@ const UserAvatar = () => {
 
 const ProfileTab = ({ tabName, onPress }) => {
     return (
-        <TouchableOpacity onPress={onPress} style={styles.profileTab}>
+        <Pressable onPress={onPress} style={styles.profileTab}>
             <Text style={styles.tabText}>{tabName}</Text>
             <Ionicons name="chevron-forward-outline" size={20} color="#524D4D" />
-        </TouchableOpacity >
+        </Pressable >
     )
 }
 

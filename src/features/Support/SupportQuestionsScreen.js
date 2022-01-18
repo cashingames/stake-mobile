@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import normalize from './../../utils/normalize';
 
@@ -31,7 +30,7 @@ const QuestionTab = ({ question, answer }) => {
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity
+        <Pressable
             onPress={() => navigation.navigate('Answer', {
                 question: JSON.stringify(question),
                 answer: JSON.stringify(answer)
@@ -39,7 +38,7 @@ const QuestionTab = ({ question, answer }) => {
             style={styles.tab}>
             <Text style={styles.tabText}>{question}</Text>
             <Ionicons name="chevron-forward-outline" size={20} color="#524D4D" />
-        </TouchableOpacity >
+        </Pressable >
     )
 }
 
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFFF',
         padding: normalize(20),
-    },  
+    },
     titleContainer: {
         // marginTop: normalize(20),
     },

@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, Alert, Pressable, ScrollView } from 'react-native';
 import normalize from '../../utils/normalize';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { backendUrl } from '../../utils/BaseUrl';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -34,7 +33,7 @@ const GamePlanCard = ({ plan }) => {
     const refRBSheet = useRef();
     return (
 
-        <TouchableOpacity activeOpacity={0.8} onPress={() => refRBSheet.current.open()}>
+        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}>
             {!plan.is_free &&
                 <View style={styles.storeItemContainer}>
                     <Text style={styles.planCount}>{plan.game_count}</Text>
@@ -65,7 +64,7 @@ const GamePlanCard = ({ plan }) => {
                     </RBSheet>
                 </View>
             }
-        </TouchableOpacity>
+        </Pressable>
 
     )
 }
@@ -148,7 +147,7 @@ const GameBoosts = () => {
 const BoostCard = ({ boost }) => {
     const refRBSheet = useRef();
     return (
-        <TouchableOpacity activeOpacity={0.8} onPress={() => refRBSheet.current.open()}>
+        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}>
             <View style={styles.storeItemContainer}>
                 <Image
                     source={{ uri: `${backendUrl}/${boost.icon}` }}
@@ -185,7 +184,7 @@ const BoostCard = ({ boost }) => {
                     <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} />
                 </RBSheet>
             </View>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 

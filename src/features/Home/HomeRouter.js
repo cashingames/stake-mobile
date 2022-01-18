@@ -2,8 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useNavigation } from '@react-navigation/core';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { BorderlessButton, TouchableOpacity } from 'react-native-gesture-handler';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
 
@@ -16,6 +15,7 @@ import { isTrue } from '../../utils/stringUtl';
 
 import { backendUrl } from '../../utils/BaseUrl';
 import GameInProgressScreen from '../Games/GameInProgressScreen';
+import AppButton from '../../shared/AppButton';
 
 const HomeStack = createDrawerNavigator();
 
@@ -60,15 +60,15 @@ const RightButtons = ({ options }) => {
 
     return (
         <View style={styles.headerIcons}>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Pressable onPress={() => navigation.navigate('Home')}>
                 <Ionicons style={[styles.pageIcon, routeName === 'Home' ? styles.activePageIcon : {}]} name='home-outline' size={32} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Game')}>
+            </Pressable>
+            <Pressable onPress={() => navigation.navigate('Game')}>
                 <Ionicons style={[styles.pageIcon, routeName === 'Game' ? styles.activePageIcon : {}]} name='game-controller-outline' size={32} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Wallet')}>
+            </Pressable>
+            <Pressable onPress={() => navigation.navigate('Wallet')}>
                 <Ionicons style={[styles.pageIcon, routeName === 'Wallet' ? styles.activePageIcon : {}]} name='wallet-outline' size={32} />
-            </TouchableOpacity>
+            </Pressable>
         </View>
     )
 }
@@ -93,10 +93,10 @@ function CustomDrawerContent(props) {
                 />
                 <Text style={drawStyles.userTitle}> {user.fullName}</Text>
                 <Text style={drawStyles.userName}> @{user.username}</Text>
-                <TouchableOpacity style={drawStyles.profile}
+                <Pressable style={drawStyles.profile}
                     onPress={() => navigation.navigate('UserProfile')}>
                     <Text style={drawStyles.viewProfile}>View Profile</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
 
 
@@ -157,9 +157,9 @@ function CustomDrawerContent(props) {
                     labelContainerStyle
                 />
             </View>
-            <BorderlessButton onPress={onLogout} style={styles.logoutContainer}>
+            <Pressable onPress={onLogout} style={styles.logoutContainer}>
                 <Text style={drawStyles.logoutText}>Logout</Text>
-            </BorderlessButton>
+            </Pressable>
         </DrawerContentScrollView>
     );
 }
@@ -176,7 +176,8 @@ const styles = StyleSheet.create({
     },
     activePageIcon: {
         color: '#000'
-    }
+    },
+    logoutContainer: {}
 });
 
 const drawStyles = StyleSheet.create({

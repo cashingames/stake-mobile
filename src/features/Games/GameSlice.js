@@ -28,9 +28,7 @@ export const endGame = createAsyncThunk(
         //make a network request to the server
         const response = await axios.post('v2/game/end/single-player', data)
         console.log('game ended');
-        return response.data
-
-        //return true;
+        return response.data;
     }
 )
 
@@ -61,14 +59,17 @@ export const GameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
-        setGameMode: (state, action) => {
-            state.gameMode = action.payload;
-        },
         setGameType: (state, action) => {
             state.gameType = action.payload;
+            state.gameCategory = null;
         },
         setGameCategory: (state, action) => {
+            console.log("seeting")
             state.gameCategory = action.payload;
+        },
+        setGameMode: (state, action) => {
+            console.log("here")
+            state.gameMode = action.payload;
         },
         setPointsGained: (state, action) => {
             state.pointsGained = action.payload;
@@ -140,5 +141,6 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion,
     startGameReplay, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions } = GameSlice.actions
+
 
 export default GameSlice.reducer

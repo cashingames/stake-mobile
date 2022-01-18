@@ -26,7 +26,6 @@ import { baseURL } from './utils/BaseUrl';
 import { isTrue } from './utils/stringUtl';
 import GameModeScreen from './features/Games/GameModeScreen';
 import GameInstructionsScreen from './features/Games/GameInstructionsScreen';
-import StartGameCountdownScreen from './features/Games/StartGameCountdownScreen';
 import GameInProgressScreen from './features/Games/GameInProgressScreen';
 import GameEndResultScreen from './features/Games/GameEndResultScreen';
 import IntroSlide from './features/Auth/IntroSlide';
@@ -83,7 +82,6 @@ function AppRouter() {
                         {/** game **/}
                         <AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
                         <AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
-                        <AppStack.Screen name="StartGameCountdown" component={StartGameCountdownScreen} options={{ headerShown: false }} />
                         <AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
                         <AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Alert, Pressable } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -61,60 +60,60 @@ export default function EditProfileDetailsScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.content}>
-                <TouchableOpacity onPress={onSavePersonalDetails}>
+                <Pressable onPress={onSavePersonalDetails}>
                     <Text style={styles.saveChanges}>{saving ? 'Saving' : 'Save Changes'}</Text>
-                </TouchableOpacity>
-                    <Input
-                        label='First name'
-                        value={firstName}
-                        onChangeText={setFirstName}
-                    />
-                    <Input
-                        label='Last name'
-                        value={lastName}
-                        onChangeText={setLastName}
-                    />
-                    <Input
-                        label='Username'
-                        value={username}
-                        onChangeText={setUsername}
-                        editable={false}
-                    />
-                    <Input
-                        label='Phone number'
-                        value={phoneNumber}
-                        onChangeText={setPhoneNumber}
-                        type="phone"
-                        maxLength={11}
-                        keyboardType='numeric'
-                    />
-                    <Input
-                        label='Email'
-                        value={email}
-                        onChangeText={setEmail}
-                        editable={false}
-                    />
-                    <View style={styles.detail}>
+                </Pressable>
+                <Input
+                    label='First name'
+                    value={firstName}
+                    onChangeText={setFirstName}
+                />
+                <Input
+                    label='Last name'
+                    value={lastName}
+                    onChangeText={setLastName}
+                />
+                <Input
+                    label='Username'
+                    value={username}
+                    onChangeText={setUsername}
+                    editable={false}
+                />
+                <Input
+                    label='Phone number'
+                    value={phoneNumber}
+                    onChangeText={setPhoneNumber}
+                    type="phone"
+                    maxLength={11}
+                    keyboardType='numeric'
+                />
+                <Input
+                    label='Email'
+                    value={email}
+                    onChangeText={setEmail}
+                    editable={false}
+                />
+                <View style={styles.detail}>
 
-                        {!showDatePicker ?
-                            <Input
-                                label='Date of Birth'
-                                value={dateOfBirth.toDateString()}
-                                onPressIn={() => setShowDatePicker(true)}
-                            />
+                    {!showDatePicker ?
+                        <Input
+                            label='Date of Birth'
+                            value={dateOfBirth.toDateString()}
+                            onPressIn={() => setShowDatePicker(true)}
+                        />
 
-                            :
+                        :
 
-                            <DateTimePicker
-                                value={dateOfBirth}
-                                mode={"date"}
-                                display="default"
-                                onChange={onChangeDateOfBirth}
-                                minimumDate={new Date(2003, 0, 1)}
-                                style={styles.dateOfBirth}
-                                textColor='#00000080'
-                            />
-                        }
+                        <DateTimePicker
+                            value={dateOfBirth}
+                            mode={"date"}
+                            display="default"
+                            onChange={onChangeDateOfBirth}
+                            minimumDate={new Date(2003, 0, 1)}
+                            style={styles.dateOfBirth}
+                            textColor='#00000080'
+                        />
+                    }
                     <View style={styles.detail}>
                         <Text style={styles.inputLabel}>Select Gender</Text>
                         <Picker

@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import normalize from '../../utils/normalize';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
 
@@ -21,7 +20,7 @@ export default function () {
 
 const MyItem = ({ boost }) => {
     return (
-        <TouchableOpacity>
+        <Pressable>
             <View style={styles.boostContainer}>
                 <View style={styles.iconContainer}>
                     <Image
@@ -34,7 +33,7 @@ const MyItem = ({ boost }) => {
                 <Text style={styles.number}>x{formatNumber(boost.count)}</Text>
                 <Text style={styles.description}>{boost.description}</Text>
             </View>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, ScrollView, Share, Alert } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, ScrollView, Share, Alert, Pressable } from 'react-native';
 import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
@@ -69,12 +68,12 @@ const InviteLink = () => {
 }
 const ShareLink = ({ iconName, text, onPress }) => {
     return (
-        <TouchableOpacity onPress={onPress}>
+        <Pressable onPress={onPress}>
             <View style={styles.icon}>
                 <Ionicons name={iconName} size={20} color="#EB5757" />
                 <Text style={styles.iconText}>{text}</Text>
             </View>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 

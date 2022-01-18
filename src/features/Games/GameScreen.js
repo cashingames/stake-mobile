@@ -1,12 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState, useRef } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-import { Tab, TabView } from 'react-native-elements';
 import AppButton from '../../shared/AppButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { backendUrl } from '../../utils/BaseUrl';
@@ -14,14 +12,12 @@ import { formatNumber, isTrue } from '../../utils/stringUtl';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { setGameCategory, setGameType } from './GameSlice';
 import RBSheet from "react-native-raw-bottom-sheet";
-// import MyBoostsScreen from '../Store/MyBoostsScreen';
-// import GameStoreScreen from '../Store/GameStoreScreen';
 import normalize from '../../utils/normalize';
 
 const Toptab = createMaterialTopTabNavigator();
 
 export default function GameScreen({ navigation }) {
-    
+
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             {/* <WinBig /> */}
@@ -33,9 +29,9 @@ export default function GameScreen({ navigation }) {
     );
 }
 
-export const NoGames = ({closeSheet}) => {
+export const NoGames = ({ closeSheet }) => {
     const navigation = useNavigation();
-    
+
     return (
         <View style={styles.noGames}>
             <Image style={styles.sadEmoji}
@@ -44,7 +40,7 @@ export const NoGames = ({closeSheet}) => {
             />
             <Text style={styles.noGamesText}>Sorry,</Text>
             <Text style={styles.noGamesText}>You have exhausted your games</Text>
-            <Pressable onPress={()=> {closeSheet; navigation.navigate('GameStore')}}>
+            <Pressable onPress={() => { closeSheet(); navigation.navigate('GameStore') }}>
                 <Text style={styles.needGames}>Need more games?
                     <Text style={styles.storeLink}> Go to Store</Text>
                 </Text>
@@ -69,61 +65,40 @@ const ProgressMessage = () => {
 }
 
 const GameTabs = () => {
-    const dispatch = useDispatch();
-    const [index, setIndex] = React.useState(0);
+
     const gameTypes = useSelector(state => state.common.gameTypes)
 
-    useEffect(() => {
-        dispatch(setGameType(gameTypes[index]));
-    }, [index])
-
-    const onTabChanged = (e) => {
-        setIndex(e);
-    }
-
     return (
-        <>
-            <Tab
-                value={index}
-                onChange={(e) => onTabChanged(e)}
-                indicatorStyle={{
-                    backgroundColor: '#EF2F55',
-                    height: 1,
-                }}
-
-            >
-                {gameTypes.map((game, i) =>
-                    <Tab.Item
-                        containerStyle={{
-                            borderBottomWidth: 1,
-                            borderBottomColor: "#C4C4C4",
-                            backgroundColor: "#F8F9FD"
-                        }}
-                        title={game.displayName}
-                        titleStyle={{ fontSize: 11, fontFamily: 'graphik-medium' }}
-                        key={i}
-                    />
-                )}
-            </Tab>
-
-            <TabView value={index} onChange={setIndex} animationType="spring">
-                {gameTypes.map((game, i) =>
-                    <TabView.Item key={i} style={styles.games}>
-                        <CategoriesScreen currentGame={game} />
-                    </TabView.Item>
-                )}
-            </TabView>
-        </>
-    );
+        <Toptab.Navigator screenOptions={{
+            tabBarLabelStyle: { fontSize: 11, fontFamily: 'graphik-medium', },
+            tabBarStyle: { backgroundColor: '#F8F9FD' },
+            tabBarInactiveTintColor: '#C4C4C4',
+            tabBarActiveTintColor: '#EF2F55',
+            tabBarIndicatorStyle: { backgroundColor: '#EF2F55' },
+        }}
+            sceneContainerStyle={{ backgroundColor: '#F8F9FD' }}
+            style={{ height: normalize(380) }}
+        // height: Dimensions.get('window').height 
+        >
+            {gameTypes.map((game, i) =>
+                <Toptab.Screen
+                    name={game.name}
+                    key={i}
+                    component={CategoriesScreen}
+                    options={{ title: game.displayName }}
+                    initialParams={{ currentGame: game }}
+                />
+            )}
+        </Toptab.Navigator>
+    )
 };
 
-
-const CategoriesScreen = ({ currentGame }) => {
+const CategoriesScreen = ({ navigation, route }) => {
 
     const dispatch = useDispatch();
-    const navigation = useNavigation();
     const refRBSheet = useRef();
 
+    const currentGame = route.params.currentGame;
     const [activeCategory, setActiveCategory] = useState();
     const activeSubcategory = useSelector(state => state.game.gameCategory);
     const activeGame = useSelector(state => state.game.gameType);
@@ -141,19 +116,24 @@ const CategoriesScreen = ({ currentGame }) => {
     const openBottomSheet = () => {
         refRBSheet.current.open()
     }
-    
+
     const closeBottomSheet = () => {
         refRBSheet.current.close()
     }
-
 
     const onPlayButtonClick = () => {
         hasActivePlan ? navigation.navigate('GameMode') : openBottomSheet();
     }
 
+    useFocusEffect(
+        React.useCallback(() => {
+            setActiveCategory(undefined);
+            dispatch(setGameType(currentGame));
+        }, [])
+    );
+
     useEffect(() => {
         setActiveCategory(undefined); //category
-        dispatch(setGameCategory(undefined)); //sucategory
     }, [activeGame]);
 
     return (
@@ -191,7 +171,7 @@ const CategoriesScreen = ({ currentGame }) => {
                     }
                 }}
             >
-               <NoGames closeSheet={ closeBottomSheet}/>
+                <NoGames closeSheet={closeBottomSheet} />
             </RBSheet>
 
         </>
@@ -199,10 +179,9 @@ const CategoriesScreen = ({ currentGame }) => {
     )
 };
 
-
 const GameCategoryCard = ({ category, onSelect, isSelected }) => {
     return (
-        <TouchableWithoutFeedback onPress={() => onSelect(category)} style={[styles.card, { backgroundColor: category.bgColor }]}>
+        <Pressable onPress={() => onSelect(category)} style={[styles.card, { backgroundColor: category.bgColor }]}>
             <View style={styles.categoryCardTopRow}>
                 <Image
                     style={styles.cardIcon}
@@ -212,7 +191,7 @@ const GameCategoryCard = ({ category, onSelect, isSelected }) => {
             </View>
             <Text style={styles.cardTitle}>{category.name}</Text>
             <Text style={styles.cardInstruction}>{formatNumber(category.played)} times played </Text>
-        </TouchableWithoutFeedback>
+        </Pressable>
     )
 };
 
@@ -276,7 +255,7 @@ const styles = StyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: normalize(16),
         width: normalize(130),
-        textAlign:'center',
+        textAlign: 'center',
         color: '#000',
         lineHeight: normalize(24)
     },
@@ -419,7 +398,7 @@ const styles = StyleSheet.create({
         marginBottom: normalize(10),
         backgroundColor: '#E0E0E0',
     },
-    noGames:{
+    noGames: {
         backgroundColor: '#fff',
         display: 'flex',
         flexDirection: 'column',
@@ -428,21 +407,21 @@ const styles = StyleSheet.create({
         paddingVertical: normalize(14),
         paddingHorizontal: normalize(15),
     },
-    sadEmoji:{
-        width:normalize(50),
-        height:normalize(50),
+    sadEmoji: {
+        width: normalize(50),
+        height: normalize(50),
         marginBottom: normalize(20)
     },
     needGames: {
         fontSize: normalize(12),
         fontFamily: 'graphik-regular',
         color: '#000',
-        marginTop:normalize(15)
+        marginTop: normalize(15)
     },
     storeLink: {
         fontSize: normalize(12),
         fontFamily: 'graphik-medium',
         color: '#EF2F55',
     },
-    
+
 });
