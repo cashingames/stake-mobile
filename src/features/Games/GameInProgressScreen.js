@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert } from 'react-native';
 import normalize from "../../utils/normalize";
-import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
+import { Analytics, Event } from 'expo-analytics';
 import { useNavigation } from '@react-navigation/native';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { Ionicons } from '@expo/vector-icons';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
-import { backendUrl } from '../../utils/BaseUrl';
+import { backendUrl, gaTrackingId } from '../../utils/BaseUrl';
 import { getUser } from "../Auth/AuthSlice";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import {
@@ -28,6 +29,7 @@ export default function GameInProgressScreen({ navigation }) {
     const gameSessionToken = useSelector(state => state.game.gameSessionToken);
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
+    const gameCategory = useSelector(state => state.game.gameCategory);
     const [ending, setEnding] = useState(false);
 
     const onEndGame = () => {
@@ -48,6 +50,13 @@ export default function GameInProgressScreen({ navigation }) {
                 Alert.alert('failed to end game')
             });
     }
+
+    useEffect(() => {
+        const analytics = new Analytics(gaTrackingId);
+        analytics.event(new Event('Playing', 'Game', gameCategory.name))
+            .then(() => console.log("GA game hit sucess"))
+            .catch(e => console.log(e.message));
+    }, [])
 
     return (
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">
