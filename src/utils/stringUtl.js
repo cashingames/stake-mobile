@@ -1,3 +1,4 @@
+import EStyleSheet from "react-native-extended-stylesheet";
 
 export function isTrue(value) {
     return value != "" && value !== undefined && value !== null
@@ -10,4 +11,8 @@ export function formatCurrency(value) {
 
 export function formatNumber(value) {
     return Number(value).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+}
+
+export function scalableRem(value) {
+    return `${EStyleSheet.value(value)}rem`;
 }

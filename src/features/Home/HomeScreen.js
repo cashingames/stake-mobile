@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, Text, View, Image, ScrollView, Dimensions } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import { copilot } from "react-native-copilot";
+import EStyleSheet from 'react-native-extended-stylesheet';
+
 import normalize from '../../utils/normalize';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
-import { useDispatch, useSelector } from 'react-redux';
 import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
@@ -183,14 +185,14 @@ function RecentlyPlayedCard({ game }) {
 }
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     scrollView: {
         paddingBottom: normalize(30),
         backgroundColor: '#F8F9FD',
     },
     container: {
         flex: 1,
-        paddingHorizontal: normalize(18),
+        paddingHorizontal: '1rem',
     },
     userDetails: {
         backgroundColor: '#151C2F',

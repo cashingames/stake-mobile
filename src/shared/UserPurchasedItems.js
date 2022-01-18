@@ -1,10 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 import { formatNumber } from '../utils/stringUtl';
 import normalize from "../utils/normalize";
-import { useNavigation } from '@react-navigation/native';
 
 const UserItems = ({ showBuy }) => {
 
@@ -24,40 +25,44 @@ const UserItems = ({ showBuy }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.contentTop}>
-                <Image
-                    source={require('../../assets/images/shooting-star.png')}
-                />
-                <View style={styles.leftContainer}>
-                    <Text style={[styles.commonRow, styles.firstRow]}>You have {formatNumber(sumOfPlans)} games remaining</Text>
-                    <Text style={[styles.commonRow, boosts.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
-                    {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy more</Text>}
-                </View>
+            <Image
+                style={styles.image}
+                resizeMode='contain'
+                source={require('../../assets/images/shooting-star.png')}
+            />
+            <View style={styles.leftContainer}>
+                <Text style={[styles.commonRow, styles.firstRow]}>You have {formatNumber(sumOfPlans)} games remaining</Text>
+                <Text style={[styles.commonRow, boosts.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
+                {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy more</Text>}
             </View>
-
-
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         borderRadius: 15,
+        flexDirection: 'row',
         backgroundColor: '#518EF8',
         paddingVertical: normalize(12),
     },
-    contentTop: {
-        flexDirection: 'row',
+    image: {
+        flex: 1
     },
     leftContainer: {
-        marginHorizontal: normalize(20),
+        alignItems: 'center',
         paddingTop: normalize(10),
+        paddingHorizontal: '1rem',
+        // backgroundColor: "red",
+        flex: 2,
     },
     commonRow: {
         color: '#FFFF',
         textAlign: 'center',
-        fontSize: normalize(14),
         fontFamily: 'graphik-regular',
+        fontSize: '1rem',
+        width: '100%',
+        // backgroundColor: "red"
     },
     firstRow: {
         marginBottom: normalize(5),

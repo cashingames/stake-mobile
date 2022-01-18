@@ -8,6 +8,15 @@ import { Provider } from 'react-redux';
 
 import store from './src/store';
 import AppRouter from './src/AppRouter';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import { Dimensions } from 'react-native';
+
+let { height, width } = Dimensions.get('window');
+EStyleSheet.build({
+  $rem: width > 400 ? 18 : 14
+});
+
+console.log(width, width > 400 ? 18 : 16);
 
 function App() {
 
@@ -40,3 +49,8 @@ function App() {
 
 
 export default App;
+
+module.hot.accept(() => {
+  EStyleSheet.clearCache();
+  EStyleSheet.build();
+});

@@ -9,7 +9,7 @@ const {
 const scale = SCREEN_WIDTH / 320;
 
 export default function normalize(size) {
-  const newSize = size * scale 
+  const newSize = size * scale
   return Math.round(PixelRatio.roundToNearestPixel(newSize))
 
   // if (Platform.OS === 'ios') {

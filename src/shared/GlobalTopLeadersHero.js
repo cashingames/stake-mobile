@@ -5,6 +5,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import GlobalTopLeaders from "./GlobalTopLeaders";
+import EStyleSheet from 'react-native-extended-stylesheet';
+import { scalableRem } from '../utils/stringUtl';
 
 export default function GlobalTopLeadersHero() {
     const navigation = useNavigation();
@@ -26,7 +28,7 @@ export default function GlobalTopLeadersHero() {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     leaderboard: {
         paddingTop: normalize(20),
     },
@@ -43,12 +45,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     extendedText: {
-        fontSize: normalize(12),
+        fontSize: '1rem',
         color: '#EF2F55',
         fontFamily: 'graphik-bold',
     },
     title: {
-        fontSize: normalize(20),
+        fontSize: scalableRem(1.5),
         color: '#151C2F',
         fontFamily: 'graphik-bold',
     },
