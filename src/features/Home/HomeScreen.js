@@ -5,10 +5,11 @@ import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import { copilot } from "react-native-copilot";
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { Analytics, PageHit } from 'expo-analytics';
 
 import normalize from '../../utils/normalize';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
-import { backendUrl } from '../../utils/BaseUrl';
+import { backendUrl , gaTrackingId } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, getGlobalLeaders } from '../CommonSlice';
@@ -30,6 +31,12 @@ const HomeScreen = ({ navigation }) => {
         Promise.all([_1, _2]).then(values => {
             setLoading(false);
         });
+
+        //Google Analytics
+        const analytics = new Analytics(gaTrackingId);
+        analytics.hit(new PageHit('Home'))
+            .then(() => console.log("GA page hit success"))
+            .catch(e => console.log(e.message));
     }, []);
 
     useFocusEffect(

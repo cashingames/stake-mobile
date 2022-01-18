@@ -1,5 +1,5 @@
 import React, {useState } from "react";
-import { StyleSheet, Image, TouchableOpacity, Text, View } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, Text, View, Pressable } from 'react-native';
 import normalize from '../utils/normalize';
 import * as Google from 'expo-google-app-auth';
 import { loginWithGoogle, setToken } from "../features/Auth/AuthSlice";
@@ -14,7 +14,6 @@ export default function SocialSignUp() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleGoogleSignIn = () => {
-    
         setIsSubmitting(true);
         const config = {
             iosClientId: iosClientId,
@@ -40,20 +39,21 @@ export default function SocialSignUp() {
         }).catch(error => {
             setIsSubmitting(false);
             console.log(error)
+
         })
     }
 
     return (
         <View style={styles.socialIcons}>
             {isSubmitting ? <ActivityIndicator size="large" color="#0000ff" /> :
-                <TouchableOpacity onPress={handleGoogleSignIn} >
+                <Pressable onPress={handleGoogleSignIn} >
                     <Image
                         style={{ ...styles.icon, width: 20, height: 20 }}
                         source={require('../../assets/images/google_icon.png')}
                     />
                     <Text style={styles.social}>Google</Text>
 
-                </TouchableOpacity>
+                </Pressable>
             }
             {/* <TouchableOpacity onPress={action} >
                 <Image
