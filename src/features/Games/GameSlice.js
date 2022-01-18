@@ -1,6 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 
+var base64 = require('base-64');
+
+const shuffleArray = array => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
 export const startGame = createAsyncThunk(
     'game/startGame',
     async (data, thunkAPI) => {
@@ -20,13 +32,6 @@ export const endGame = createAsyncThunk(
     }
 )
 
-// export const resetGame = createAsyncThunk(
-//     'game/reset',
-//     async (thunkAPI) => {
-//         return initialState;
-//     }
-// )
-
 
 //This is to store the currently ongoing active game
 const initialState = {
@@ -39,8 +44,10 @@ const initialState = {
     totalQuestionCount: 10,
     isLastQuestion: false,
     countdownKey: 0,
+    countdownFrozen: false,
     chosenOptions: [],
     consumedBoosts: [],
+    activeBoost: [],
     pointsGained: 0,
     isEnded: true,
     displayedOptions: [],
@@ -83,6 +90,31 @@ export const GameSlice = createSlice({
         startGameReplay: (state) => {
             state.countdownKey += 1;
             state.pointsGained = 0;
+        },
+        consumeBoost: (state, action) => {
+            state.consumedBoosts = [...state.consumedBoosts,
+            {
+                boost: action.payload
+            }];
+            state.activeBoost = action.payload;
+        },
+        pauseGame: (state, action) => {
+            state.countdownFrozen = action.payload
+        },
+        skipQuestion: (state) => {
+            const q = state.questions.filter(x => x.id !== state.displayedQuestion.id);
+            state.questions = q,
+                state.displayedQuestion = state.questions[state.currentQuestionPosition]
+            state.displayedOptions = state.displayedQuestion.options
+        },
+        bombOptions: (state) => {
+            const correctOption = state.displayedOptions.find(option => base64.decode(option.is_correct) === '1')
+            const falseOptions = state.displayedOptions.filter(option => base64.decode(option.is_correct) === '0')
+            const randomWrongOption = falseOptions[Math.floor(Math.random() * falseOptions.length)];
+            state.displayedOptions = shuffleArray([correctOption, randomWrongOption]);
+        },
+        boostReleased: (state) => {
+            state.activeBoost = {}
         }
     },
 
@@ -106,6 +138,9 @@ export const GameSlice = createSlice({
     },
 })
 
-export const { setGameType, setGameMode, setGameCategory, setPointsGained, questionAnswered, nextQuestion, startGameReplay } = GameSlice.actions
+export const { setGameType, setGameMode, setGameCategory,
+    setPointsGained, questionAnswered, nextQuestion,
+    startGameReplay, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions } = GameSlice.actions
+
 
 export default GameSlice.reducer
