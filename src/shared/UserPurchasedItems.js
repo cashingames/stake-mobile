@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import { formatNumber } from '../utils/stringUtl';
-import normalize from "../utils/normalize";
+import normalize, { responsiveHeight, responsiveScreenWidth } from "../utils/normalize";
 
 const UserItems = ({ showBuy }) => {
 
@@ -31,7 +31,7 @@ const UserItems = ({ showBuy }) => {
                 source={require('../../assets/images/shooting-star.png')}
             />
             <View style={styles.leftContainer}>
-                <Text style={[styles.commonRow, styles.firstRow]}>You have {formatNumber(sumOfPlans)} games remaining</Text>
+                <Text style={[styles.commonRow, styles.firstRow]}>You have {formatNumber(sumOfPlans)} games remanining</Text>
                 <Text style={[styles.commonRow, boosts.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
                 {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy more</Text>}
             </View>
@@ -52,23 +52,21 @@ const styles = EStyleSheet.create({
     leftContainer: {
         alignItems: 'center',
         paddingTop: normalize(10),
-        paddingHorizontal: '1rem',
-        // backgroundColor: "red",
-        flex: 2,
+        marginRight: responsiveScreenWidth(3),
+        flex: 3,
     },
     commonRow: {
         color: '#FFFF',
         textAlign: 'center',
         fontFamily: 'graphik-regular',
-        fontSize: '1rem',
+        fontSize: '0.9rem',
         width: '100%',
-        // backgroundColor: "red"
     },
     firstRow: {
-        marginBottom: normalize(5),
-        paddingBottom: normalize(5),
+        marginBottom: normalize(12),
+        paddingBottom: normalize(12),
         borderBottomColor: '#B1CEFF',
-        borderBottomWidth: normalize(1),
+        borderBottomWidth: normalize(3),
     },
     secondRow: {
     },
@@ -78,9 +76,9 @@ const styles = EStyleSheet.create({
     buyMore: {
         alignSelf: 'flex-end',
         color: '#151C2F',
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(14),
-        marginTop: normalize(12),
+        fontFamily: 'graphik-bold',
+        fontSize: '0.8rem',
+        marginTop: responsiveHeight(2),
     }
 });
 

@@ -1,17 +1,19 @@
 import React from 'react';
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View, PixelRatio } from "react-native";
 import { useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import GlobalTopLeaders from "./GlobalTopLeaders";
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { scalableRem } from '../utils/stringUtl';
 
 export default function GlobalTopLeadersHero() {
     const navigation = useNavigation();
     const leaders = useSelector(state => state.common.globalLeaders)
-
+    console.log("pixel ratio", PixelRatio.get());
+    console.log("font scale", PixelRatio.getFontScale());
+    console.log("pixel size for 12", PixelRatio.getPixelSizeForLayoutSize(12));
+    console.log("nearest pixel for 12", PixelRatio.roundToNearestPixel(22));
     return (
         <View style={styles.leaderboard}>
             <View style={styles.leaderboardHeader}>
@@ -39,19 +41,21 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         marginBottom: normalize(12)
     },
+    title: {
+        fontSize: '1rem',
+        lineHeight: '1.3rem',
+        color: '#151C2F',
+        fontFamily: 'graphik-bold',
+    },
+    extendedText: {
+        fontSize: '0.6rem',
+        // lineHeight: '1.3rem',
+        color: '#EF2F55',
+        fontFamily: 'graphik-bold',
+    },
     extended: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center'
-    },
-    extendedText: {
-        fontSize: '1rem',
-        color: '#EF2F55',
-        fontFamily: 'graphik-bold',
-    },
-    title: {
-        fontSize: scalableRem(1.5),
-        color: '#151C2F',
-        fontFamily: 'graphik-bold',
     },
 })

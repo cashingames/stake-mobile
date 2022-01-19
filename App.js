@@ -9,12 +9,33 @@ import { Provider } from 'react-redux';
 import store from './src/store';
 import AppRouter from './src/AppRouter';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Dimensions } from 'react-native';
+import { Dimensions, PixelRatio } from 'react-native';
 
 let { height, width } = Dimensions.get('window');
+let fontScale = PixelRatio.getFontScale();
+
 EStyleSheet.build({
-  $rem: width > 400 ? 18 : 14
+  $rem: getRem()
 });
+
+function getRem() {
+  let rem = width > 400 ? 18 : 14
+
+  if (fontScale < 0.81) {
+    rem = rem + 3;
+  }
+  else if (fontScale < 1) {
+    rem = rem + 2;
+  }
+  else if (fontScale > 1.2) {
+    rem = rem - 4;
+  }
+  else if (fontScale > 1.1) {
+    rem = rem - 2;
+  }
+
+  return rem;
+}
 
 console.log(width, width > 400 ? 18 : 16);
 

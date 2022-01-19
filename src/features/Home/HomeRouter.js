@@ -14,8 +14,7 @@ import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
 import { backendUrl } from '../../utils/BaseUrl';
-import GameInProgressScreen from '../Games/GameInProgressScreen';
-import AppButton from '../../shared/AppButton';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 const HomeStack = createDrawerNavigator();
 
@@ -61,13 +60,13 @@ const RightButtons = ({ options }) => {
     return (
         <View style={styles.headerIcons}>
             <Pressable onPress={() => navigation.navigate('Home')}>
-                <Ionicons style={[styles.pageIcon, routeName === 'Home' ? styles.activePageIcon : {}]} name='home-outline' size={32} />
+                <Image resizeMode='contain' style={[styles.pageIcon, routeName === 'Home' ? styles.activePageIcon : {}]} source={require('../../../assets/images/Home.png')} />
             </Pressable>
             <Pressable onPress={() => navigation.navigate('Game')}>
-                <Ionicons style={[styles.pageIcon, routeName === 'Game' ? styles.activePageIcon : {}]} name='game-controller-outline' size={32} />
+                <Image resizeMode='contain' style={[styles.pageIcon, routeName === 'Game' ? styles.activePageIcon : {}]} source={require('../../../assets/images/gamepad.png')} />
             </Pressable>
             <Pressable onPress={() => navigation.navigate('Wallet')}>
-                <Ionicons style={[styles.pageIcon, routeName === 'Wallet' ? styles.activePageIcon : {}]} name='wallet-outline' size={32} />
+                <Image resizeMode='contain' style={[styles.pageIcon, routeName === 'Wallet' ? styles.activePageIcon : {}]} source={require('../../../assets/images/smallpurse.png')} />
             </Pressable>
         </View>
     )
@@ -164,18 +163,19 @@ function CustomDrawerContent(props) {
     );
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     headerIcons: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
     },
     pageIcon: {
-        marginLeft: normalize(20),
-        color: '#aaa'
+        marginLeft: '1.6rem',
+        width: '1.6rem',
+        opacity: 0.4,
     },
     activePageIcon: {
-        color: '#000'
+        opacity: 1
     },
     logoutContainer: {}
 });

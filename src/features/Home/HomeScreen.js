@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { StyleSheet, Text, View, Image, ScrollView, Dimensions } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
-import { copilot } from "react-native-copilot";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Analytics, PageHit } from 'expo-analytics';
 
-import normalize from '../../utils/normalize';
+import normalize, { responsiveFontSize, responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
-import { backendUrl , gaTrackingId } from '../../utils/BaseUrl';
+import { backendUrl, gaTrackingId } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
@@ -66,10 +65,9 @@ const HomeScreen = ({ navigation }) => {
             </View>
         </ScrollView>
     );
-
 }
-export default copilot()(HomeScreen);
 
+export default HomeScreen;
 
 const UserDetails = ({ user }) => {
     return (
@@ -107,6 +105,7 @@ const UserPoints = ({ points }) => {
         </View>
     );
 }
+
 
 const UserRanking = ({ gamesCount, ranking }) => {
     return (
@@ -179,7 +178,7 @@ function RecentlyPlayedCard({ game }) {
     return (
         <View style={[styles.card, { backgroundColor: game.bgColor }]} >
             <Image
-                style={[styles.cardIcon, styles.cardIconBigger]}
+                style={[styles.cardIconBigger]}
                 source={{ uri: `${backendUrl}/${game.icon}` }}
                 resizeMode='contain'
             />
@@ -199,14 +198,12 @@ const styles = EStyleSheet.create({
     },
     container: {
         flex: 1,
-        paddingHorizontal: '1rem',
+        paddingHorizontal: '1.2rem',
     },
     userDetails: {
         backgroundColor: '#151C2F',
-        paddingTop: normalize(30),
-        paddingRight: normalize(20),
-        paddingLeft: normalize(20),
-        paddingBottom: normalize(15),
+        paddingVertical: normalize(30),
+        paddingHorizontal: normalize(20),
     },
     wallet: {
         display: 'flex',
@@ -214,7 +211,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
     },
     walletText: {
-        fontSize: normalize(18),
+        fontSize: '1.2rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
         marginLeft: normalize(8),
@@ -222,29 +219,31 @@ const styles = EStyleSheet.create({
     points: {
         backgroundColor: '#01A7DB',
         borderRadius: normalize(10),
-        marginTop: normalize(30),
+        marginTop: responsiveScreenHeight(6),
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingBottom: normalize(8),
-        paddingRight: normalize(15),
-        paddingLeft: normalize(6),
+        paddingVertical: normalize(15),
+        paddingRight: normalize(30),
+        paddingLeft: normalize(20),
     },
     trophy: {
-        // width: 100
+        position: 'relative',
+        zIndex: 2,
+        marginTop: normalize(-25)
     },
     pointsNumber: {
         alignItems: 'flex-end',
         justifyContent: 'center'
     },
     userPoint: {
-        fontSize: normalize(26),
+        fontSize: '1.6rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
     },
     pointDetail: {
         color: '#e3e3e3',
-        fontSize: normalize(12),
+        fontSize: '0.8rem',
         fontFamily: 'graphik-medium',
     },
     userRanking: {
@@ -254,7 +253,8 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: normalize(15),
+        paddingVertical: normalize(20),
+        paddingHorizontal: normalize(30),
     },
     gamesPlayed: {
 
@@ -263,26 +263,35 @@ const styles = EStyleSheet.create({
         alignItems: 'flex-end'
     },
     rankNumber: {
-        fontSize: normalize(26),
+        fontSize: '1.5rem',
         color: '#151C2F',
         fontFamily: 'graphik-medium',
     },
     rankDetail: {
         color: '#151c2f73',
         fontFamily: 'graphik-bold',
-        fontSize: normalize(11),
+        fontSize: '0.7rem',
     },
     games: {
-        paddingTop: normalize(10),
+        paddingTop: normalize(10, "height"),
     },
     title: {
-        fontSize: normalize(24),
+        fontSize: '1.3rem',
+        lineHeight: '1.3rem',
         color: '#151C2F',
         fontFamily: 'graphik-medium',
-        marginTop: normalize(10),
+        marginTop: responsiveHeight(3),
+    },
+    planInstruction: {
+        color: '#151C2F',
+        fontSize: '0.8rem',
+        fontFamily: 'graphik-regular',
+        lineHeight: responsiveHeight(3),
+        opacity: 0.7,
+        marginVertical: responsiveHeight(2),
     },
     lightTitle: {
-        fontSize: normalize(18),
+        fontSize: '1rem',
         color: '#151C2F',
         fontFamily: 'graphik-regular',
         marginTop: normalize(10),
@@ -292,61 +301,57 @@ const styles = EStyleSheet.create({
         marginTop: normalize(18),
     },
     card: {
+        flex: 1,
         backgroundColor: '#fff',
-        paddingHorizontal: normalize(15),
         paddingVertical: normalize(10),
         borderRadius: normalize(10),
-        marginRight: normalize(15),
+        marginRight: responsiveWidth(3),
         flexDirection: "row",
         borderColor: '#0F000000',
+        width: responsiveScreenWidth(70),
+        '@media (min-height: 781) and (max-height: 1200)': {
+            height: responsiveHeight(10),
+        },
+        '@media (min-height: 300) and (max-height: 780)': {
+            height: responsiveHeight(8),
+        },
     },
     cardIcon: {
-        width: normalize(30),
-        height: normalize(30),
+        flex: 1,
+        height: '2rem',
+        width: '2rem',
         alignSelf: 'center',
     },
     cardIconBigger: {
+        flex: 2,
         width: normalize(48),
         height: normalize(48),
+        alignSelf: 'center',
     },
     cardContent: {
-        marginLeft: normalize(10),
-        width: Dimensions.get('window').width * 0.4,
-        height: normalize(55),
-        justifyContent: "space-evenly"
+        flex: 4,
+        paddingHorizontal: responsiveScreenWidth(1),
+        justifyContent: "space-evenly",
     },
     cardTitle: {
-        fontSize: normalize(14),
+        fontSize: responsiveFontSize(2),
         color: '#151C2F',
         fontFamily: 'graphik-medium',
     },
     cardInstruction: {
-        fontSize: normalize(12),
+        fontSize: '0.7rem',
         color: '#151C2F',
         fontFamily: 'graphik-regular',
-        lineHeight: normalize(18),
+        lineHeight: '1.1rem',
         opacity: .7,
+        flex: 1,
+        flexWrap: 'wrap',
+        flexShrink: 1
     },
     replay: {
-        fontSize: normalize(11),
+        fontSize: '0.7rem',
         color: '#EF2F55',
         fontFamily: 'graphik-medium',
         textTransform: 'uppercase'
-    },
-
-    playedTitle: {
-        fontSize: 15,
-        color: '#4F4F4F',
-        fontFamily: 'graphik-bold',
-        lineHeight: 17,
-        marginTop: normalize(8),
-    },
-    planInstruction: {
-        color: '#151C2F',
-        fontSize: normalize(14),
-        fontFamily: 'graphik-regular',
-        lineHeight: normalize(24),
-        opacity: 0.7,
-        marginVertical: normalize(10),
     },
 });
