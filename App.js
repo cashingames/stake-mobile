@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useRef } from 'react';
+import { NavigationContainer, useNavigationContainerRef, } from '@react-navigation/native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -10,6 +10,8 @@ import store from './src/store';
 import AppRouter from './src/AppRouter';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Dimensions, PixelRatio } from 'react-native';
+import { Analytics, PageHit } from 'expo-analytics';
+import { gaTrackingId } from './src/utils/BaseUrl';
 
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();
@@ -41,6 +43,9 @@ console.log(width, width > 400 ? 18 : 16);
 
 function App() {
 
+  const navigationRef = useNavigationContainerRef();
+  const routeNameRef = useRef();
+
   let [fontsLoaded] = useFonts({
     'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     'graphik-regular': require('./assets/fonts/GraphikRegular.otf'),
@@ -54,12 +59,30 @@ function App() {
     return <AppLoading />
   }
 
+  const onRouteChange = () => {
+    const previousRouteName = routeNameRef.current;
+    const currentRouteName = navigationRef.getCurrentRoute().name;
+
+    if (previousRouteName !== currentRouteName) {
+      const analytics = new Analytics(gaTrackingId);
+      analytics.hit(new PageHit(currentRouteName))
+        .then(() => console.log("GA page hit successful on " + currentRouteName))
+        .catch(e => console.log(e.message));
+    }
+    routeNameRef.current = currentRouteName;
+  }
 
   console.log("app restart");
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() => {
+          routeNameRef.current = 'intro';
+        }}
+        onStateChange={onRouteChange}
+      >
         <SafeAreaProvider>
           <AppRouter />
         </SafeAreaProvider>

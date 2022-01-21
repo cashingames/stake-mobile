@@ -53,7 +53,7 @@ export default function GameInProgressScreen({ navigation }) {
 
     useEffect(() => {
         const analytics = new Analytics(gaTrackingId);
-        analytics.event(new Event('Playing', 'Game', gameCategory.name))
+        analytics.event(new Event('Playing', gameCategory.name, 'in progress'))
             .then(() => console.log("GA game hit sucess"))
             .catch(e => console.log(e.message));
     }, [])

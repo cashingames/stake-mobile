@@ -13,7 +13,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function SocialSignUp() {
     const dispatch = useDispatch();
-    const [googleToken, setGoogleToken] = useState('');
+    const [googleToken, setGoogleToken] = useState(null);
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         androidClientId: androidClientId,
@@ -28,23 +28,25 @@ export default function SocialSignUp() {
 
 
     useEffect(() => {
-        fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-            method: "GET",
-            headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${googleToken}`,
-                'Content-Type': 'application/json'
-            },
-        }).then(response => response.json()).then(user => {
-            loginWithGoogle({
-                email: user.email,
-                first_name: user.given_name,
-                last_name: user.family_name,
-            }).then(response => {
-                saveToken(response.data.data)
-                dispatch(setToken(response.data.data))
+        if (googleToken !== null) {
+            fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                method: "GET",
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${googleToken}`,
+                    'Content-Type': 'application/json'
+                },
+            }).then(response => response.json()).then(user => {
+                loginWithGoogle({
+                    email: user.email,
+                    first_name: user.given_name,
+                    last_name: user.family_name,
+                }).then(response => {
+                    saveToken(response.data.data)
+                    dispatch(setToken(response.data.data))
+                });
             });
-        });
+        }
     }, [googleToken])
 
     return (

@@ -11,6 +11,8 @@ import { Paystack } from 'react-native-paystack-webview';
 import { paystackKey } from '../../utils/BaseUrl';
 import { verifyFunding } from '../../utils/ApiHelper';
 import Input from '../../shared/Input';
+import { Analytics, Event } from 'expo-analytics';
+import { gaTrackingId } from '../../utils/BaseUrl';
 
 
 export default function FundWalletScreen() {
@@ -29,8 +31,11 @@ export default function FundWalletScreen() {
                 console.log(result);
                 dispatch(getUser())
                 navigation.navigate('Wallet')
-            })
-       
+            });
+        const analytics = new Analytics(gaTrackingId);
+        analytics.event(new Event('Wallet Funded', 'Success'))
+            .then(() => console.log("GA game hit sucess"))
+            .catch(e => console.log(e.message));
     }
 
     return (
