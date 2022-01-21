@@ -1,52 +1,58 @@
-import React, {useState } from "react";
-import { StyleSheet, Image, TouchableOpacity, Text, View, Pressable } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Image, Text, View, Pressable } from 'react-native';
 import normalize from '../utils/normalize';
-import * as Google from 'expo-google-app-auth';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
 import { loginWithGoogle, setToken } from "../features/Auth/AuthSlice";
 import { useDispatch } from 'react-redux';
 import { saveToken } from "../utils/ApiHelper";
-import { iosClientId, androidClientId } from "../utils/BaseUrl";
+import { androidClientId } from "../utils/BaseUrl";
 import { ActivityIndicator } from "react-native";
 
+WebBrowser.maybeCompleteAuthSession();
 
 export default function SocialSignUp() {
     const dispatch = useDispatch();
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [googleToken, setGoogleToken] = useState('');
 
-    const handleGoogleSignIn = () => {
-        setIsSubmitting(true);
-        const config = {
-            iosClientId: iosClientId,
-            androidClientId: androidClientId,
-            scopes: ["profile", "email"]
-        };
-        Google.logInAsync(config).then((result) => {
-            setIsSubmitting(true);
-            const { type, user } = result;
-            if (type == 'success') {
-                loginWithGoogle({
-                    email: user.email,
-                    first_name: user.givenName,
-                    last_name: user.familyName,
-                }).then(response => {
-                    saveToken(response.data.data)
-                    dispatch(setToken(response.data.data))
-                });
-            } else {
-                console.log('cancelled')
-            }
-            setIsSubmitting(false);
-        }).catch(error => {
-            setIsSubmitting(false);
-            console.log(error)
+    const [request, response, promptAsync] = Google.useAuthRequest({
+        androidClientId: androidClientId,
+    });
 
-        })
-    }
+    useEffect(() => {
+        if (response?.type === 'success') {
+            const { authentication } = response;
+            setGoogleToken(authentication.accessToken)
+        }
+    }, [response]);
+
+
+    useEffect(() => {
+        fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+            method: "GET",
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${googleToken}`,
+                'Content-Type': 'application/json'
+            },
+        }).then(response => response.json()).then(user => {
+            loginWithGoogle({
+                email: user.email,
+                first_name: user.given_name,
+                last_name: user.family_name,
+            }).then(response => {
+                saveToken(response.data.data)
+                dispatch(setToken(response.data.data))
+            });
+        });
+    }, [googleToken])
 
     return (
         <View style={styles.socialIcons}>
-            {isSubmitting ? <ActivityIndicator size="large" color="#0000ff" /> :
-                <Pressable onPress={handleGoogleSignIn} >
+            {!request ? <ActivityIndicator size="large" color="#0000ff" /> :
+                <Pressable onPress={() => {
+                    promptAsync();
+                }}>
                     <Image
                         style={{ ...styles.icon, width: 20, height: 20 }}
                         source={require('../../assets/images/google_icon.png')}

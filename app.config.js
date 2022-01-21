@@ -32,9 +32,11 @@ export default {
       foregroundImage: "./assets/images/icon.png",
       backgroundColor: "#FFFFFF"
     }
+  },
+  expo: {
+    scheme: 'cashingames'
   }
 }
-
 
 function getAppName() {
   if (env === "development") {
