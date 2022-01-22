@@ -2,11 +2,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useNavigation } from '@react-navigation/core';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
 
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import HomeScreen from './HomeScreen';
 import WalletScreen from '../Transactions/WalletScreen';
 import GameScreen from '../Games/GameScreen';
@@ -15,6 +15,7 @@ import { isTrue } from '../../utils/stringUtl';
 
 import { backendUrl } from '../../utils/BaseUrl';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import AppButton from '../../shared/AppButton';
 
 const HomeStack = createDrawerNavigator();
 
@@ -23,19 +24,19 @@ const HomeRouter = () => {
     const AppMainHeaderOptions = () => {
         return {
             drawerType: "slide",
+            drawerStyle: {
+                width: '85%',
+            },
             headerRight: (props) => <RightButtons {...props} />,
             headerRightContainerStyle: {
-                paddingRight: normalize(15),
+                paddingRight: normalize(20),
             },
             headerTitleStyle: {
                 fontSize: normalize(20),
                 color: "#000000",
                 fontFamily: 'graphik-medium',
             },
-            // headerShadowVisible: false,
-            headerStyle: {
-                // paddingTop: normalize(20)
-            },
+            headerShadowVisible: true,
         };
     }
 
@@ -92,10 +93,8 @@ function CustomDrawerContent(props) {
                 />
                 <Text style={drawStyles.userTitle}> {user.fullName}</Text>
                 <Text style={drawStyles.userName}> @{user.username}</Text>
-                <Pressable style={drawStyles.profile}
-                    onPress={() => navigation.navigate('UserProfile')}>
-                    <Text style={drawStyles.viewProfile}>View Profile</Text>
-                </Pressable>
+                <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} />
+
             </View>
 
 
@@ -107,28 +106,6 @@ function CustomDrawerContent(props) {
                             <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                         </View>}
                     onPress={() => navigation.navigate('GameStore')}
-                    activeTintColor='#EF2F55'
-                    style={drawStyles.label}
-                    labelContainerStyle
-                />
-                <DrawerItem
-                    label={() =>
-                        <View style={drawStyles.item}>
-                            <Text style={drawStyles.itemLabel}>Terms & Conditions</Text>
-                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                        </View>}
-                    onPress={() => navigation.navigate('Terms')}
-                    activeTintColor='#EF2F55'
-                    style={drawStyles.label}
-                    labelContainerStyle
-                />
-                <DrawerItem
-                    label={() =>
-                        <View style={drawStyles.item}>
-                            <Text style={drawStyles.itemLabel}>Privacy Policy</Text>
-                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                        </View>}
-                    onPress={() => navigation.navigate('Privacy')}
                     activeTintColor='#EF2F55'
                     style={drawStyles.label}
                     labelContainerStyle
@@ -156,9 +133,11 @@ function CustomDrawerContent(props) {
                     labelContainerStyle
                 />
             </View>
-            <Pressable onPress={onLogout} style={styles.logoutContainer}>
+
+            <Pressable onPress={onLogout} style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.logoutText}>Logout</Text>
             </Pressable>
+
         </DrawerContentScrollView>
     );
 }
@@ -177,64 +156,60 @@ const styles = EStyleSheet.create({
     activePageIcon: {
         opacity: 1
     },
-    logoutContainer: {}
 });
 
-const drawStyles = StyleSheet.create({
+const drawStyles = EStyleSheet.create({
     container: {
         flex: 1,
     },
     sideHeader: {
-        // flex: 2,
+        flex: 3,
         alignItems: 'center',
         borderBottomWidth: 1,
         borderBottomColor: "rgba(0, 0, 0, 0.1)",
-        paddingTop: normalize(35),
-        paddingBottom: normalize(15),
+        paddingTop: responsiveScreenHeight(10),
+        paddingBottom: responsiveScreenHeight(2),
         backgroundColor: '#F2F5FF',
     },
     avatar: {
         // resizeMode: 'cover',
-        width: normalize(70),
-        height: normalize(70),
+        width: normalize(90),
+        height: normalize(90),
         borderWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.1)',
         borderRadius: 100
     },
     userTitle: {
-        fontSize: normalize(16),
-        fontFamily: 'graphik-bold',
+        fontSize: '0.9rem',
+        lineHeight: '0.9rem',
+        fontFamily: 'graphik-medium',
         color: '#000000',
-        marginVertical: normalize(10)
     },
     userName: {
         color: '#333333',
-        fontSize: normalize(12),
+        fontSize: '0.7rem',
+        lineHeight: '0.7rem',
         fontFamily: 'graphik-regular',
-        marginBottom: normalize(10),
-        opacity: 0.5
+        opacity: 0.5,
+        marginVertical: normalize(10)
     },
     profile: {
         backgroundColor: '#EF2F55',
-        paddingVertical: normalize(8),
-        paddingHorizontal: normalize(18),
+        paddingVertical: normalize(10),
+        marginVertical: 0,
         borderRadius: 32,
-        marginVertical: normalize(10)
     },
-    viewProfile: {
-        fontSize: normalize(10),
-        color: '#fff',
-        fontFamily: 'graphik-medium',
-        textAlign: 'center',
+    profileText: {
+        fontSize: '0.6rem',
+        lineHeight: '0.6rem',
     },
     menu: {
-        flex: 2,
+        flex: 7,
     },
     label: {
         borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.1)',
-        paddingVertical: normalize(10),
-
+        paddingVertical: responsiveScreenHeight(0.7),
     },
     item: {
         flexDirection: 'row',
@@ -242,13 +217,16 @@ const drawStyles = StyleSheet.create({
     },
     itemLabel: {
         color: '#151C2F',
-        fontSize: normalize(16),
+        fontSize: '0.9rem',
         fontFamily: 'graphik-regular',
+    },
+    logoutContainer: {
+        flex: 1,
     },
     logoutText: {
         color: 'red',
         textAlign: 'center',
-        fontSize: normalize(14),
+        fontSize: '0.8rem',
         fontFamily: 'graphik-medium',
         // backgroundColor: 'green',
         paddingVertical: normalize(20),

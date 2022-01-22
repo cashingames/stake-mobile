@@ -27,12 +27,17 @@ function getRem() {
   else if (fontScale < 1) {
     rem = rem + 2;
   }
+  else if (fontScale > 1.29) {
+    rem = rem - 5;
+  }
   else if (fontScale > 1.2) {
     rem = rem - 4;
   }
   else if (fontScale > 1.1) {
     rem = rem - 2;
   }
+
+  console.log(rem);
 
   return rem;
 }

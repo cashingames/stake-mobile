@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 
@@ -59,45 +58,43 @@ export default function LoginScreen({ navigation }) {
 
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView style={styles.container}>
+        <ScrollView style={styles.container}>
 
-                <AuthBanner />
+            <AuthBanner />
 
-                <View style={styles.headerBox}>
-                    <AuthTitle text='Sign in' />
-                </View>
+            <View style={styles.headerBox}>
+                <AuthTitle text='Sign in' />
+            </View>
 
-                <View style={styles.inputContainer} >
-                    {error.length > 0 &&
-                        <Text style={styles.errorBox}>{error}</Text>
-                    }
+            <View style={styles.inputContainer} >
+                {error.length > 0 &&
+                    <Text style={styles.errorBox}>{error}</Text>
+                }
 
-                    <Input
-                        label='Email or username'
-                        placeholder="johndoe or johndoe@example.com"
-                        value={email}
-                        onChangeText={text => onChangeEmail(text)}
-                    />
+                <Input
+                    label='Email or username'
+                    placeholder="johndoe or johndoe@example.com"
+                    value={email}
+                    onChangeText={text => onChangeEmail(text)}
+                />
 
-                    <Input
-                        type="password"
-                        label='Password'
-                        value={password}
-                        placeholder="Enter password"
-                        onChangeText={text => { onChangePassword(text) }}
-                    />
+                <Input
+                    type="password"
+                    label='Password'
+                    value={password}
+                    placeholder="Enter password"
+                    onChangeText={text => { onChangePassword(text) }}
+                />
 
-                    <RenderForgotPassword />
+                <RenderForgotPassword />
 
-                </View>
+            </View>
 
-                <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={onLogin} disabled={!canLogin} />
-                <SocialSigninDivider signInText='sign in' />
-                <SocialSignUp />
-                <RenderCreateAccount />
-            </ScrollView >
-        </SafeAreaView>
+            <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={onLogin} disabled={!canLogin} />
+            <SocialSigninDivider signInText='sign in' />
+            <SocialSignUp />
+            <RenderCreateAccount />
+        </ScrollView >
     );
 }
 

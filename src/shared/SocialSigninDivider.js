@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet,  Text, TouchableOpacity, View } from 'react-native';
-import normalize from '../utils/normalize';
+import { Text, View } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-const SocialSigninDivider = ({signInText}) => {
+const SocialSigninDivider = ({ signInText }) => {
     return (
         <View style={styles.divider}>
             <View style={styles.hr}><Text></Text></View>
@@ -12,24 +12,24 @@ const SocialSigninDivider = ({signInText}) => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
 
     divider: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     hr: {
-        borderBottomColor: '#CDD4DF',
-        borderBottomWidth: normalize(1),
-        paddingHorizontal: normalize(41),
-        marginBottom: normalize(5)
+        height: 2,
+        flex: 1,
+        backgroundColor: '#CDD4DF',
     },
     signUpOption: {
+        flex: 2,
+        textAlign: 'center',
         color: 'rgba(0, 0, 0, 0.5)',
-        marginTop: normalize(15),
-        marginHorizontal: normalize(25),
-        fontFamily: 'graphik-medium'
+        fontFamily: 'graphik-medium',
     },
 });
 export default SocialSigninDivider;

@@ -1,8 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, Pressable } from 'react-native';
+import { Text, Pressable } from 'react-native';
+import EStyleSheet from "react-native-extended-stylesheet";
 
 
-export default function AppButton({ onPress, text, disabled, style }) {
+export default function AppButton({ onPress, text, disabled, style, textStyle }) {
     return (
 
         <Pressable
@@ -10,13 +11,13 @@ export default function AppButton({ onPress, text, disabled, style }) {
             style={[styles.button, disabled ? styles.disabled : {}, style]}
             disabled={disabled}
         >
-            <Text style={styles.text}>{text}</Text>
+            <Text style={[styles.text, textStyle]}>{text}</Text>
         </Pressable>
     );
 
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
