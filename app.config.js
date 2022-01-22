@@ -8,6 +8,7 @@ export default {
   icon: "./assets/images/icon.png",
   jsEngine: "hermes",
   sdkVersion: "44.0.0",
+  scheme: 'cashingames',
   splash: {
     image: "./assets/images/splash.png",
     resizeMode: "contain",
@@ -32,9 +33,6 @@ export default {
       foregroundImage: "./assets/images/icon.png",
       backgroundColor: "#FFFFFF"
     }
-  },
-  expo: {
-    scheme: 'cashingames'
   },
   extra: {
     environment: process.env.APP_VARIANT,
