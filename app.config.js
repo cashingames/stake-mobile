@@ -2,8 +2,8 @@ const env = process.env.APP_VARIANT;
 
 export default {
   name: getAppName(),
-  slug: "cashingames",
-  version: "1.0.3",
+  slug: getSlug(),
+  version: "1.0.4",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   jsEngine: "hermes",
@@ -33,23 +33,27 @@ export default {
       foregroundImage: "./assets/images/icon.png",
       backgroundColor: "#FFFFFF"
     }
-  },
-  extra: {
-    environment: process.env.APP_VARIANT,
-    isProd: !isTrue(process.env.APP_VARIANT),
-    isDev: process.env.APP_VARIANT === 'development',
-    isPreview: process.env.APP_VARIANT === 'preview',
-    androidClientId: getAndroidClientID()
-  },
+  }
 }
 
 function getAppName() {
   if (env === "development") {
     return "Cashingames Dev";
   } else if (env === "preview") {
+    console.log("here")
     return "Cashingames Test";
   } else {
     return "Cashingames";
+  }
+}
+
+function getSlug() {
+  if (env === "development") {
+    return "cashingames-dev";
+  } else if (env === "preview") {
+    return "cashingames-test";
+  } else {
+    return "cashingames";
   }
 }
 

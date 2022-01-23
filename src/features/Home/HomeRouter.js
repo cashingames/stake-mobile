@@ -184,6 +184,7 @@ const drawStyles = EStyleSheet.create({
         lineHeight: '0.9rem',
         fontFamily: 'graphik-medium',
         color: '#000000',
+        marginTop: 10,
     },
     userName: {
         color: '#333333',
@@ -191,11 +192,11 @@ const drawStyles = EStyleSheet.create({
         lineHeight: '0.7rem',
         fontFamily: 'graphik-regular',
         opacity: 0.5,
-        marginVertical: normalize(10)
+        marginVertical: 10
     },
     profile: {
         backgroundColor: '#EF2F55',
-        paddingVertical: normalize(10),
+        paddingVertical: 10,
         marginVertical: 0,
         borderRadius: 32,
     },
