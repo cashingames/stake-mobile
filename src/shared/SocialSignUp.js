@@ -4,7 +4,6 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useDispatch } from 'react-redux';
-import Constants from 'expo-constants';
 
 import normalize from '../utils/normalize';
 import { loginWithGoogle, setToken } from "../features/Auth/AuthSlice";
@@ -15,20 +14,21 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function SocialSignUp() {
     const dispatch = useDispatch();
-    const [googleToken, setGoogleToken] = useState('');
-
     const [request, response, promptAsync] = Google.useAuthRequest({
         androidClientId: androidClientId,
     });
-
-    useEffect(() => {
+    const loginSocial = () => {
+        console.log("here");
         if (response?.type === 'success') {
+            console.log("2");
             const { authentication } = response;
-            setGoogleToken(authentication.accessToken)
+            loginViaGoogle(authentication.accessToken)
         }
-    }, [response]);
+        console.log("3");
+        promptAsync();
+    }
 
-    useEffect(() => {
+    const loginViaGoogle = (googleToken) => {
         fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
             method: "GET",
             headers: {
@@ -46,37 +46,19 @@ export default function SocialSignUp() {
                 dispatch(setToken(res.data.data))
             });
         });
-    }, [googleToken])
+    }
+
 
     return (
         <View style={styles.socialIcons}>
-            {!request ?
-                <ActivityIndicator size="large" color="#0000ff" /> :
-                <Pressable onPress={() => {
-                    promptAsync();
-                }} style={styles.socialContainer} >
-                    <Image
-                        style={{ ...styles.icon, width: 20, height: 20 }}
-                        source={require('../../assets/images/google_icon.png')}
-                    />
-                    <Text style={styles.socialText}>Google</Text>
+            <Pressable onPress={() => loginSocial()} style={styles.socialContainer} >
+                <Image
+                    style={{ ...styles.icon, width: 20, height: 20 }}
+                    source={require('../../assets/images/google_icon.png')}
+                />
+                <Text style={styles.socialText}>Google</Text>
 
-                </Pressable>
-            }
-            {/* <TouchableOpacity onPress={action} >
-                <Image
-                    style={{ ...styles.icon, width: 11, height: 23 }}
-                    source={require('../../assets/images/facebook_icon.png')}
-                />
-                <Text style={styles.social}>Facebook</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={action} >
-                <Image
-                    style={styles.icon}
-                    source={require('../../assets/images/apple_icon.png')}
-                />
-                <Text style={styles.social}>Apple</Text>
-            </TouchableOpacity> */}
+            </Pressable>
         </View>
     );
 }

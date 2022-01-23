@@ -1,4 +1,7 @@
 {
+  "name": "cashingames",
+  "private": true,
+  "version": "1.0.0",
   "scripts": {
     "start": "cross-env APP_VARIANT=development expo start --dev-client",
     "build": "cross-env APP_VARIANT=preview eas build --platform android --profile preview",
@@ -75,8 +78,6 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.0"
   },
-  "private": true,
-  "version": "1.0.0",
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",

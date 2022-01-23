@@ -93,7 +93,7 @@ function CustomDrawerContent(props) {
                 />
                 <Text style={drawStyles.userTitle}> {user.fullName}</Text>
                 <Text style={drawStyles.userName}> @{user.username}</Text>
-                <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} />
+                <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
 
             </View>
 

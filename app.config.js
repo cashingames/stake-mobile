@@ -8,7 +8,7 @@ export default {
   icon: "./assets/images/icon.png",
   jsEngine: "hermes",
   sdkVersion: "44.0.0",
-  scheme: 'cashingames',
+  scheme: getAppIdentifier(),
   splash: {
     image: "./assets/images/splash.png",
     resizeMode: "contain",
@@ -56,17 +56,6 @@ function getSlug() {
     return "cashingames";
   }
 }
-
-function getAndroidClientID() {
-  if (env === "development") {
-    return '125752028373-ik9v848h4d8n8c95bq5lrva1k5anffdo.apps.googleusercontent.com';
-  } else if (env === "preview") {
-    return "125752028373-f3pls3bjaq22s82p9elsg57bd7bc0kbh.apps.googleusercontent.com";
-  } else {
-    return "125752028373-mmdihc58hbubpt4obl59875tun5633or.apps.googleusercontent.com";
-  }
-}
-
 
 function getAppIdentifier() {
   if (env === "development") {

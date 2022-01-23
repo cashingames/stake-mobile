@@ -90,9 +90,9 @@ export default function LoginScreen({ navigation }) {
 
             </View>
 
-            <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={onLogin} disabled={!canLogin} />
-            <SocialSigninDivider signInText='sign in' />
-            <SocialSignUp />
+            <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
+            {/* <SocialSigninDivider signInText='sign in' /> */}
+            {/* <SocialSignUp /> */}
             <RenderCreateAccount />
         </ScrollView >
     );
