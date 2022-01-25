@@ -6,7 +6,7 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "releaseChannel": "internal",
+      "releaseChannel": "development",
       "android": {
         "buildType": "apk"
       },
@@ -16,7 +16,7 @@
     },
     "preview": {
       "distribution": "internal",
-      "releaseChannel": "internal",
+      "releaseChannel": "preview",
       "android": {
         "buildType": "apk"
       },
@@ -24,7 +24,12 @@
         "APP_VARIANT": "preview"
       }
     },
-    "production": {}
+    "production": {
+      "releaseChannel": "production",
+      "android": {
+        "buildType": "apk"
+      }
+    }
   },
   "submit": {
     "production": {}

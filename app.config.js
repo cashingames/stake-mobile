@@ -3,7 +3,7 @@ const env = process.env.APP_VARIANT;
 export default {
   name: getAppName(),
   slug: getSlug(),
-  version: "1.0.12",
+  version: "1.0.13",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   jsEngine: "hermes",
@@ -28,7 +28,7 @@ export default {
   ],
   android: {
     package: getAppIdentifier(),
-    versionCode: 12,
+    versionCode: 13,
     adaptiveIcon: {
       foregroundImage: "./assets/images/icon.png",
       backgroundColor: "#FFFFFF"
@@ -48,13 +48,7 @@ function getAppName() {
 }
 
 function getSlug() {
-  if (env === "development") {
-    return "cashingames-dev";
-  } else if (env === "preview") {
-    return "cashingames-test";
-  } else {
-    return "cashingames";
-  }
+  return "cashingames";
 }
 
 function getAppIdentifier() {

@@ -176,7 +176,7 @@ function RecentlyPlayedCards({ games }) {
 
 function RecentlyPlayedCard({ game }) {
     return (
-        <View style={[styles.card, { backgroundColor: game.bgColor }]} >
+        <View style={[styles.card, { backgroundColor: 'red' }]} >
             <Image
                 style={[styles.cardIconBigger]}
                 source={{ uri: `${backendUrl}/${game.icon}` }}
