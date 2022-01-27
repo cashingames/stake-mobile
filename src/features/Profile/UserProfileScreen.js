@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         marginLeft: normalize(15),
     },
     userAvatar: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderColor: ' rgba(0, 0, 0, 0.1)',
         borderWidth: 1,
-        // marginRight: normalize(30)
+        marginBottom: normalize(10)
     },
     camera: {
         backgroundColor: '#EF2F55',
