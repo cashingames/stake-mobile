@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
+import React, { useState} from 'react';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { isTrue } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import * as ImagePicker from 'expo-image-picker';
 import { getUser, editProfileAvatar } from '../Auth/AuthSlice';
@@ -28,58 +27,54 @@ export default function UserProfileScreen({ navigation }) {
 
 const UserAvatar = () => {
     const user = useSelector(state => state.auth.user)
-    console.log(user.avatar);
     const dispatch = useDispatch();
-    const [image, setImage] = useState(user.avatar);
+    const [loading, setLoading] = useState(false);
 
     const pickImage = async () => {
-
+        setLoading(true);
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
-            base64: true
         });
 
-        // console.log(result);
-
         if (result.cancelled) {
+            setLoading(false);
             return;
         }
 
-        dispatch(editProfileAvatar(result)).then(result => {
+        let localUri = result.uri;
+        let filename = localUri.split('/').pop();
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+
+        let formData = new FormData();
+        formData.append('avatar', { uri: localUri, name: filename, type });
+
+        dispatch(editProfileAvatar(formData)).then(result => {
             dispatch(getUser()).then(x => {
-                //set loading to false
+                setLoading(false)
             });
         }).catch(ex => {
-            console.log("erroring", ex)
+            console.log("erroring", ex);
+            setLoading(false);
         });
     }
 
-
-    useEffect(() => {
-        setImage(user.avatar);
-    }, [])
-
     return (
         <View style={styles.userAvatar}>
-            {/* {image && <Image source={isTrue(user.avatar) ? { uri: image } : require("../../../assets/images/user-icon.png")} style={styles.avatar} />} */}
-            {image && <Image source={{ uri: `${backendUrl}/${image}` }} style={styles.avatar} />}
-            {/* { uri: `${backendUrl}/${user.avatar}` } */}
-            {/* <Pressable style={styles.camera} onPress={pickImage}>
-                <Ionicons name="camera-sharp" size={26} color="#FFFF" />
-            </Pressable> */}
+            <Image
+                style={styles.avatar}
+                source={{ uri: `${backendUrl}/${user.avatar}` }}
+            />
+            {!loading ?
+                <Pressable style={styles.camera} onPress={pickImage}>
+                    <Ionicons name="camera-sharp" size={26} color="#FFFF" />
+                </Pressable> : <ActivityIndicator size="large" color="#0000ff" />}
         </View>
     )
 }
-
-// const ChangeProfileImage = () => {
-
-//     return (
-//         <View></View>
-//     )
-// }
 
 const ProfileTab = ({ tabName, onPress }) => {
     return (
