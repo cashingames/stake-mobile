@@ -11,6 +11,7 @@ import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 import AppButton from "../../shared/AppButton";
 import UserItems from "../../shared/UserPurchasedItems";
+import EStyleSheet from "react-native-extended-stylesheet";
 
 
 export default function () {
@@ -241,7 +242,7 @@ const UserWalletBalance = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
 
     container: {
         backgroundColor: '#F2F5FF',

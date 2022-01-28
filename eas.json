@@ -29,6 +29,10 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "releaseChannel": "production",
+      "serviceAccountKeyPath": "",
+      "track": "production"
+    }
   }
 }

@@ -33,14 +33,24 @@ export default {
       foregroundImage: "./assets/images/icon.png",
       backgroundColor: "#FFFFFF"
     }
-  }
+  },
+  extra: {
+    isDevelopment: env === 'development' || false,
+    isProduction: !isTrue(env),
+    isPreview: env === 'preview' || false,
+    socialLoginClientID: getSocialLoginClientID(),
+    gaTrackingID: getGATrackingID(),
+    paystackKey: getPaystackKey(),
+    apiBaseUrl: getApiUrl(),
+    appDomain: getDomain(),
+    assetBaseUrl: getAssetsBaseUrl(),
+  },
 }
 
 function getAppName() {
   if (env === "development") {
     return "Cashingames Dev";
   } else if (env === "preview") {
-    console.log("here")
     return "Cashingames Test";
   } else {
     return "Cashingames";
@@ -59,6 +69,56 @@ function getAppIdentifier() {
   } else {
     return "com.cashingames.cashingames";
   }
+}
+
+function getSocialLoginClientID() {
+  if (env === "development") {
+    return '125752028373-ik9v848h4d8n8c95bq5lrva1k5anffdo.apps.googleusercontent.com';
+  } else if (env === "preview") {
+    return "125752028373-f3pls3bjaq22s82p9elsg57bd7bc0kbh.apps.googleusercontent.com";
+  } else {
+    return "125752028373-mmdihc58hbubpt4obl59875tun5633or.apps.googleusercontent.com";
+  }
+}
+
+function getGATrackingID() {
+  if (env === "development" || env === "preview") {
+    return 'UA-173622310-2';
+  }
+
+  return 'UA-173622310-1'
+}
+
+function getPaystackKey() {
+  if (env === "development" || env === "preview") {
+    return 'pk_test_3ebf811326f87025dafdbe6829bdcbdaf8ebfd84';
+  }
+
+  return 'pk_live_cee2bb8cae2f3f0ff16923b581c2bc1460ded991'
+}
+
+function getApiUrl() {
+  if (env === "development" || env === "preview") {
+    return 'https://stg-api.cashingames.com/api';
+  }
+
+  return 'https://api.cashingames.com/api'
+}
+
+function getDomain() {
+  if (env === "development" || env === "preview") {
+    return 'https://stg.cashingames.com';
+  }
+
+  return 'https://www.cashingames.com'
+}
+
+function getAssetsBaseUrl() {
+  if (env === "development" || env === "preview") {
+    return 'https://stg-api.cashingames.com';
+  }
+
+  return 'https://api.cashingames.com';
 }
 
 function isTrue(value) {
