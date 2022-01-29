@@ -32,9 +32,9 @@ const HomeScreen = () => {
         });
 
         //Google Analytics
-        const analytics = new Analytics(gaTrackingId);
+        const analytics = new Analytics(gaTrackingId, null, { debug: true });
         analytics.hit(new PageHit('Home'))
-            .then(() => console.log("GA page hit success"))
+            .then(() => console.log("expo-analytics"))
             .catch(e => console.log(e.message));
     }, []);
 

@@ -6,8 +6,7 @@ export const backendAPI = isStaging ? 'https://stg-api.cashingames.com/api' : 'h
 export const appUrl = isStaging ? 'https://stg.cashingames.com' : 'https://www.cashingames.com';
 export const paystackKey = isStaging ? 'pk_test_3ebf811326f87025dafdbe6829bdcbdaf8ebfd84' : 'pk_live_cee2bb8cae2f3f0ff16923b581c2bc1460ded991';
 export const androidClientId = getAndroidClientId();
-export const gaTrackingId = isStaging ? 'UA-173622310-2' : 'UA-173622310-1';
-
+export const gaTrackingId = getGATrackingID();
 
 
 function getAndroidClientId() {
@@ -18,5 +17,15 @@ function getAndroidClientId() {
         return "125752028373-f3pls3bjaq22s82p9elsg57bd7bc0kbh.apps.googleusercontent.com";
     } else {
         return "125752028373-mmdihc58hbubpt4obl59875tun5633or.apps.googleusercontent.com";
+    }
+}
+
+function getGATrackingID() {
+    if (env === "development") {
+        return 'UA-173622310-2';
+    } else if (env === "preview") {
+        return 'UA-173622310-2';
+    } else {
+        return 'UA-173622310-1';
     }
 }

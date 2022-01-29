@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useRef } from 'react';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -46,6 +47,10 @@ console.log(width, width > 400 ? 18 : 16);
 
 function App() {
 
+
+  const routeNameRef = useRef();
+  const navigationRef = useNavigationContainerRef();
+
   let [fontsLoaded] = useFonts({
     'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     'graphik-regular': require('./assets/fonts/GraphikRegular.otf'),
@@ -54,6 +59,19 @@ function App() {
     'graphik-medium': require('./assets/fonts/GraphikMedium.otf'),
   });
 
+  const onRouteChange = async () => {
+    const previousRouteName = routeNameRef.current;
+    const currentRouteName = navigationRef.getCurrentRoute().name;
+    console.log(previousRouteName, currentRouteName)
+    if (previousRouteName !== currentRouteName) {
+      console.log("Logging to analytics", currentRouteName)
+      await analytics().logScreenView({
+        screen_name: currentRouteName,
+        screen_class: currentRouteName,
+      });
+    }
+    routeNameRef.current = currentRouteName;
+  }
 
   if (!fontsLoaded) {
     return <AppLoading />
@@ -64,7 +82,13 @@ function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() => {
+          routeNameRef.current = navigationRef.getCurrentRoute()?.name;
+        }}
+        onStateChange={onRouteChange}
+      >
         <SafeAreaProvider>
           <AppRouter />
         </SafeAreaProvider>

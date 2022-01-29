@@ -13,6 +13,8 @@ import normalize from '../../utils/normalize';
 import { loginUser } from './AuthSlice';
 import Input from '../../shared/Input';
 import { isStaging } from '../../utils/BaseUrl';
+import crashlytics from '@react-native-firebase/crashlytics';
+import analytics from '@react-native-firebase/analytics';
 
 export default function LoginScreen({ navigation }) {
 
@@ -32,7 +34,14 @@ export default function LoginScreen({ navigation }) {
         setPassword(value)
     }
 
-    const onLogin = () => {
+    const onLogin = async () => {
+        crashlytics().log('User signed in.');
+        await analytics().logEvent('LoginClicked', {
+            id: 3745092,
+            item: 'mens grey t-shirt',
+            description: ['round neck', 'long sleeved'],
+            size: 'L',
+        })
         setLoading(true);
         setCanLogin(false);
         setError("");

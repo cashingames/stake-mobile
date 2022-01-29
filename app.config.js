@@ -3,10 +3,10 @@ const env = process.env.APP_VARIANT;
 export default {
   name: getAppName(),
   slug: getSlug(),
-  version: "1.0.13",
+  version: "1.0.15",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
-  jsEngine: "hermes",
+  // jsEngine: "hermes",
   sdkVersion: "44.0.0",
   scheme: getAppIdentifier(),
   splash: {
@@ -28,12 +28,17 @@ export default {
   ],
   android: {
     package: getAppIdentifier(),
-    versionCode: 13,
+    versionCode: 15,
+    googleServicesFile: "./google-services.json",
     adaptiveIcon: {
       foregroundImage: "./assets/images/icon.png",
       backgroundColor: "#FFFFFF"
     }
   },
+  plugins: [
+    "@react-native-firebase/app",
+    "@react-native-firebase/crashlytics",
+  ],
   extra: {
     isDevelopment: env === 'development' || false,
     isProduction: !isTrue(env),

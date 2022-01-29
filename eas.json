@@ -28,11 +28,5 @@
       "releaseChannel": "production"
     }
   },
-  "submit": {
-    "production": {
-      "releaseChannel": "production",
-      "serviceAccountKeyPath": "",
-      "track": "production"
-    }
-  }
+  "submit": {}
 }
