@@ -2921,13 +2921,6 @@ expand-brackets@^2.1.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-expo-analytics@^1.0.18:
-  version "1.0.18"
-  resolved "https://registry.npmjs.org/expo-analytics/-/expo-analytics-1.0.18.tgz"
-  integrity sha512-sLhtOc3ZmypCzqsQ9vLThVyWrTLDuIDdbbJX9kxw0rek/mr5g+kCfH8KHfw4KBjBnzPYgAjFXCioevpc3ISEOw==
-  dependencies:
-    expo-constants "^12.1.2"
-
 expo-app-auth@~11.1.0:
   version "11.1.0"
   resolved "https://registry.npmjs.org/expo-app-auth/-/expo-app-auth-11.1.0.tgz"
@@ -2975,14 +2968,6 @@ expo-clipboard@~2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/expo-clipboard/-/expo-clipboard-2.1.0.tgz"
   integrity sha512-wJLATd1roEUsatx+GNREBtS8g5vkPWS/0jsLoaPTDVjBVib7RgavaMHj5Wob430qujg+leQmnhPViFk1BXzLYw==
-
-expo-constants@^12.1.2:
-  version "12.2.0"
-  resolved "https://registry.npmjs.org/expo-constants/-/expo-constants-12.2.0.tgz"
-  integrity sha512-RVUOq4WUeejoNftai21Dm5RG0LKiEcWRC1Y+E8WiVtLz97MBlLv8k0Bjv1SD4LByH3frrkNsHBGfBAPLkGSGUQ==
-  dependencies:
-    "@expo/config" "^6.0.6"
-    uuid "^3.3.2"
 
 expo-constants@~13.0.0:
   version "13.0.0"

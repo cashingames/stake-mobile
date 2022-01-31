@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert } from 'react-native';
 import normalize from "../../utils/normalize";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
-import { Analytics, Event } from 'expo-analytics';
-import { useNavigation } from '@react-navigation/native';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { Ionicons } from '@expo/vector-icons';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -50,13 +48,6 @@ export default function GameInProgressScreen({ navigation }) {
                 Alert.alert('failed to end game')
             });
     }
-
-    useEffect(() => {
-        const analytics = new Analytics(gaTrackingId);
-        analytics.event(new Event('Playing', 'Game', gameCategory.name))
-            .then(() => console.log("GA game hit sucess"))
-            .catch(e => console.log(e.message));
-    }, [])
 
     return (
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">

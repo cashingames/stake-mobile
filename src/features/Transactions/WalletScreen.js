@@ -8,18 +8,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
 import WalletBalance from './WalletBalance';
 import { formatNumber } from '../../utils/stringUtl';
-import { gaTrackingId } from '../../utils/BaseUrl';
-import { Analytics, PageHit } from 'expo-analytics';
 
 export default function WalletScreen({ navigation }) {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     useEffect(() => {
         dispatch(getUser());
-        const analytics = new Analytics(gaTrackingId, null, { debug: true });
-        analytics.hit(new PageHit('Wallet'))
-            .then(() => console.log("expo-analytics"))
-            .catch(e => console.log(e.message));
     }, []);
 
     return (

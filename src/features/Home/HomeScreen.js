@@ -4,11 +4,10 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Analytics, PageHit } from 'expo-analytics';
 
 import normalize, { responsiveFontSize, responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
-import { backendUrl, gaTrackingId } from '../../utils/BaseUrl';
+import { backendUrl } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, getGlobalLeaders } from '../CommonSlice';
@@ -30,12 +29,6 @@ const HomeScreen = () => {
         Promise.all([_1, _2]).then(values => {
             setLoading(false);
         });
-
-        //Google Analytics
-        const analytics = new Analytics(gaTrackingId, null, { debug: true });
-        analytics.hit(new PageHit('Home'))
-            .then(() => console.log("expo-analytics"))
-            .catch(e => console.log(e.message));
     }, []);
 
     useFocusEffect(

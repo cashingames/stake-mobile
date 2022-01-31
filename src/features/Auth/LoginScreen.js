@@ -36,12 +36,7 @@ export default function LoginScreen({ navigation }) {
 
     const onLogin = async () => {
         crashlytics().log('User signed in.');
-        await analytics().logEvent('LoginClicked', {
-            id: 3745092,
-            item: 'mens grey t-shirt',
-            description: ['round neck', 'long sleeved'],
-            size: 'L',
-        })
+        await analytics().logEvent('LoginClicked')
         setLoading(true);
         setCanLogin(false);
         setError("");
