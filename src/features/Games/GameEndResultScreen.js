@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
 import normalize from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { NoGames } from './GameScreen';
 import { getUser } from '../Auth/AuthSlice';
-import { startGameReplay } from './GameSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { incrementCountdownResetIndex, startGame } from './GameSlice';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -100,7 +101,11 @@ const GameButton = ({ buttonText, onPress }) => {
 const GameButtons = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const gameCategoryId = useSelector(state => state.game.gameCategory.id);
+    const gameTypeId = useSelector(state => state.game.gameType.id);
+    const gameModeId = useSelector(state => state.game.gameMode.id);
     const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
+    const [loading, setLoading] = useState(false);
     const refRBSheet = useRef();
 
     const openBottomSheet = () => {
@@ -113,9 +118,24 @@ const GameButtons = () => {
 
     const onPlayButtonClick = () => {
         if (hasActivePlan) {
-            dispatch(startGameReplay());
-            navigation.navigate('GameInProgress')
+            setLoading(true);
+            dispatch(startGame({
+                category: gameCategoryId,
+                type: gameTypeId,
+                mode: gameModeId
+            }))
+                .then(unwrapResult)
+                .then(result => {
+                    setLoading(false);
+                    dispatch(incrementCountdownResetIndex());
+                    navigation.navigate("GameInProgress")
+                })
+                .catch(() => {
+                    Alert.alert('failed to restart game')
+                    setLoading(false);
+                });
         } else {
+            setLoading(false);
             openBottomSheet();
         }
     }
@@ -125,8 +145,9 @@ const GameButtons = () => {
             <GameButton buttonText='Return to Home'
                 onPress={() => { navigation.navigate('Home') }}
             />
-            <GameButton buttonText='Play Again'
+            <GameButton buttonText={ loading ? 'loading...':'Play Again'}
                 onPress={onPlayButtonClick}
+                disabled={loading}
             />
             <RBSheet
                 ref={refRBSheet}

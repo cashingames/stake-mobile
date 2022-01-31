@@ -87,9 +87,8 @@ export const GameSlice = createSlice({
             state.displayedOptions = state.displayedQuestion.options
             state.isLastQuestion = state.currentQuestionPosition === state.totalQuestionCount - 1
         },
-        startGameReplay: (state) => {
+        incrementCountdownResetIndex: (state) => {
             state.countdownKey += 1;
-            state.pointsGained = 0;
         },
         consumeBoost: (state, action) => {
             state.consumedBoosts = [...state.consumedBoosts,
@@ -140,7 +139,7 @@ export const GameSlice = createSlice({
 
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion,
-    startGameReplay, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions } = GameSlice.actions
+    incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions } = GameSlice.actions
 
 
 export default GameSlice.reducer

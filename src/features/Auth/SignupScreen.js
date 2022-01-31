@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, Pressable, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
-import SocialSignUp from '../../shared/SocialSignUp';
-import { Link, useNavigation } from '@react-navigation/native';
+// import SocialSignUp from '../../shared/SocialSignUp';
+import { Link} from '@react-navigation/native';
 import AuthBanner from '../../shared/AuthBanner';
 import Input from '../../shared/Input';
-import SocialSigninDivider from '../../shared/SocialSigninDivider';
+// import SocialSigninDivider from '../../shared/SocialSigninDivider';
 import { CheckBox } from 'react-native-elements'
 import AuthTitle from '../../shared/AuthTitle';
 import { useDispatch } from 'react-redux';
@@ -118,23 +118,23 @@ export default function SignupScreen({ navigation }) {
                 <AppButton text='Continue' onPress={onNext} disabled={!canSend} />
             </View>
 
-            <SocialSigninDivider signInText='sign up' />
+            {/* <SocialSigninDivider signInText='sign up' />
             <SocialSignUp />
-            <SignIn />
+            <SignIn /> */}
         </ScrollView >
     );
 }
 
-const SignIn = () => {
-    const navigation = useNavigation();
-    return (
-        <View style={styles.signIn}><Text style={styles.signInText}>Have an account already ? </Text>
-            <Pressable onPress={() => navigation.navigate('Login')} >
-                <Text style={{ ...styles.linkText, fontFamily: 'graphik-medium', marginLeft: normalize(15) }}>Sign in</Text>
-            </Pressable>
-        </View>
-    )
-}
+// const SignIn = () => {
+//     const navigation = useNavigation();
+//     return (
+//         <View style={styles.signIn}><Text style={styles.signInText}>Have an account already ? </Text>
+//             <Pressable onPress={() => navigation.navigate('Login')} >
+//                 <Text style={{ ...styles.linkText, fontFamily: 'graphik-medium', marginLeft: normalize(15) }}>Sign in</Text>
+//             </Pressable>
+//         </View>
+//     )
+// }
 
 
 
