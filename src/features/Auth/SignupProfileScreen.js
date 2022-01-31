@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { useDispatch, useSelector, ScrollView } from 'react-redux';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { useDispatch, useSelector} from 'react-redux';
 import Input from '../../shared/Input';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
@@ -65,8 +65,9 @@ export default function SignupProfileScreen({ navigation }) {
 
     }, [firstName, lastName, username])
 
+
     return (
-        <ScrollView style={styles.container}>
+                <ScrollView style={styles.container}>
 
             <Text style={styles.headerTextStyle}>
                 Let's get to know you
@@ -114,9 +115,10 @@ export default function SignupProfileScreen({ navigation }) {
             </View>
 
         </ScrollView>
-    );
-}
+    )
 
+
+}
 
 const styles = StyleSheet.create({
     container: {

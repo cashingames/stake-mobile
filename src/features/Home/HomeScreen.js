@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -13,6 +13,7 @@ import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
+import { useNavigation } from '@react-navigation/core';
 
 const HomeScreen = () => {
 
@@ -168,6 +169,7 @@ function RecentlyPlayedCards({ games }) {
 }
 
 function RecentlyPlayedCard({ game }) {
+    const navigation = useNavigation();
     return (
         <View style={[styles.card, { backgroundColor: game.bgColor }]} >
             <Image
@@ -177,7 +179,7 @@ function RecentlyPlayedCard({ game }) {
             />
             <View style={styles.cardContent}>
                 <Text style={styles.cardTitle}>{game.name}</Text>
-                <Text style={styles.replay}>Replay</Text>
+                <Pressable onPress={() => navigation.navigate('Game')}><Text style={styles.replay}>Replay</Text></Pressable>
             </View>
         </View>
     );
