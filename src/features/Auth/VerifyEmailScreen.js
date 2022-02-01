@@ -5,18 +5,21 @@ import {
     Text,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch } from 'react-redux';
+import { useDispatch} from 'react-redux';
 
 import AppButton from '../../shared/AppButton';
 import Input from '../../shared/Input';
 import normalize from '../../utils/normalize';
-import { setUserPasswordResetToken } from './AuthSlice';
+import { setUserPasswordResetToken, verifyOtp } from './AuthSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 export default function VerifyEmailScreen({ navigation, route }) {
 
     const dispatch = useDispatch();
     const [codes, setCodes] = useState([]);
     const [active, setActive] = useState(false);
+    const token = codes.join("");
+    const [error, setError] = useState('');
 
     const onChangeInput1 = (text) => {
         console.log(text);
@@ -33,12 +36,14 @@ export default function VerifyEmailScreen({ navigation, route }) {
     }
 
     const onChangeInput3 = (text) => {
+        console.log(text);
         let newArr = [...codes];
         newArr[2] = text;
         setCodes(newArr)
     }
 
     const onChangeInput4 = (text) => {
+        console.log(text);
         let newArr = [...codes];
         newArr[3] = text;
         setCodes(newArr)
@@ -51,8 +56,19 @@ export default function VerifyEmailScreen({ navigation, route }) {
     }
 
     const nextAction = () => {
-        dispatch(setUserPasswordResetToken(codes.join("")));
-        navigation.navigate('ResetPassword')
+        setActive(false);
+        setError('')
+        dispatch(setUserPasswordResetToken(token));
+        dispatch(verifyOtp({ token })).then(unwrapResult)
+            .then((originalPromiseResult) => {
+                setActive(true);
+                console.log(originalPromiseResult)
+                navigation.navigate('ResetPassword');
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                setActive(true);
+                setError("Your passcode is not correct");
+            })
     }
 
     useEffect(() => {
@@ -72,39 +88,39 @@ export default function VerifyEmailScreen({ navigation, route }) {
             </Text>
 
             <Text style={styles.instructionTextStyle}>Enter the One-time passcode we sent  to the email you provided</Text>
-
+            {error.length > 0 &&
+                <Text style={styles.errorBox}>{error}</Text>
+            }
             <View style={styles.form}>
-
                 <Input
-                    style={styles.input}
                     onChangeText={text => onChangeInput1(text)}
                     maxLength={1}
+                    returnKeyType="next"
                     keyboardType="numeric"
                 />
 
                 <Input
-                    style={styles.input}
                     onChangeText={text => onChangeInput2(text)}
                     maxLength={1}
+                    returnKeyType="next"
                     keyboardType="numeric"
                 />
 
                 <Input
-                    style={styles.input}
                     onChangeText={text => onChangeInput3(text)}
                     maxLength={1}
+                    returnKeyType="next"
                     keyboardType="numeric"
                 />
 
                 <Input
-                    style={styles.input}
                     onChangeText={text => onChangeInput4(text)}
                     maxLength={1}
+                    returnKeyType="next"
                     keyboardType="numeric"
                 />
 
                 <Input
-                    style={styles.input}
                     onChangeText={text => onChangeInput5(text)}
                     maxLength={1}
                     returnKeyType={"done"}
@@ -141,6 +157,16 @@ const styles = StyleSheet.create({
         fontFamily: 'graphik-regular',
         lineHeight: 20,
         marginTop: normalize(7),
+    },
+    errorBox: {
+        marginVertical: normalize(20),
+        backgroundColor: '#F442741A',
+        paddingVertical: normalize(6),
+        borderRadius: normalize(8),
+        textAlign: 'center',
+        fontFamily: 'graphik-regular',
+        color: '#EF2F55',
+        fontSize: normalize(10)
     },
     form: {
         flex: 1,
