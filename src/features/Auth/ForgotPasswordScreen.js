@@ -7,6 +7,7 @@ import normalize from '../../utils/normalize';
 import Input from '../../shared/Input';
 import { verifyAccount } from './AuthSlice';
 import { isStaging } from '../../utils/BaseUrl';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 export default function ({ navigation }) {
     const dispatch = useDispatch();
@@ -24,16 +25,21 @@ export default function ({ navigation }) {
         setLoading(true);
         setCanSend(false);
         setError('');
-
-        const result = (await dispatch(verifyAccount({ email }))).payload
-        console.info(result);
-        setLoading(false);
-        setCanSend(true);
-        if (result.success === true) {
+        
+        dispatch(verifyAccount({email})).then(unwrapResult)
+        .then((originalPromiseResult) => {
+            setLoading(false);
+            setCanSend(true);
+            console.log(originalPromiseResult);
             navigation.navigate("VerifyEmail");
-        } else {
-            setError(result.message);
-        }
+        })
+        .catch((rejectedValueOrSerializedError) => {
+            setLoading(false);
+            setCanSend(true);
+            console.log(rejectedValueOrSerializedError)
+            setError("Please Use Registered Email Address");
+        })
+
     }
 
     useEffect(() => {

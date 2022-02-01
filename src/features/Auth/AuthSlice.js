@@ -53,12 +53,9 @@ export const shouldShowIntro = createAsyncThunk(
 
 export const verifyAccount = createAsyncThunk(
     'auth/verifyAccount',
-    async (data, { rejectWithValue }) => {
-        try {
-            return (await verifyAccountApi(data)).data;
-        } catch (err) {
-            return rejectWithValue(err.response.data)
-        }
+    async (data, thunkAPI) => {
+        const response = await verifyAccountApi(data)
+        return response.data
     }
 )
 
@@ -72,13 +69,9 @@ export const verifyOtp = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
     'auth/resetPassword',
-    async (data, { rejectWithValue }) => {
-        console.log(data)
-        try {
-            return (await resetPasswordApi(data)).data;
-        } catch (err) {
-            return rejectWithValue(err.response.data)
-        }
+    async (data, thunkAPI) => {
+        const response = await resetPasswordApi(data);
+        return response.data
     }
 )
 
@@ -113,7 +106,7 @@ export const editProfileAvatar = createAsyncThunk(
                 'content-type': 'multipart/form-data'
             }
         }
-        const response = await axios.post('v2/profile/me/picture', data, config).catch(e=>{
+        const response = await axios.post('v2/profile/me/picture', data, config).catch(e => {
             console.log(e);
         });
         console.log("update result ", response.data)
@@ -187,7 +180,6 @@ export const AuthSlice = createSlice({
                 state.showIntro = !isTrue(action.payload);
             })
             .addCase(verifyAccount.fulfilled, (state, action) => {
-                state.passwordReset.code = action.payload.data;
                 state.passwordReset.email = action.meta.arg.email;
             })
     },

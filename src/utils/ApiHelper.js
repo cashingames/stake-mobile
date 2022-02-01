@@ -69,9 +69,13 @@ async function verifyUsername(username) {
         });
 }
 
-async function verifyAccount(data) {
-    return axios.post(`auth/password/email`, data);
+async function verifyAccount(email) {
+    return postData(`auth/password/email`, email)
+        .then(response => {
+            return response;
+        });
 }
+
 async function verifyFunding(data) {
     return getData('v2/wallet/me/transaction/verify/' + data)
         .then(response => {
@@ -80,12 +84,18 @@ async function verifyFunding(data) {
         });
 }
 
-async function verifyOtp(data) {
-    return axios.post(`auth/token/verify`, data)
+async function verifyOtp(token) {
+    return postData(`auth/token/verify`, token)
+        .then(response => {
+            return response;
+        });
 }
 
 async function resetPassword(data) {
-    return axios.post(`auth/password/reset/${data.email}`, data)
+    return postData(`auth/password/reset`,data)
+        .then(response => {
+            return response;
+        });
 }
 
 async function saveToken(data) {
@@ -93,8 +103,8 @@ async function saveToken(data) {
     await AsyncStorage.setItem("used", "token");
 }
 
-async function signInWithGoogle(email,first_name,last_name) {
-    return postData("/auth/google/login", {email,first_name,last_name})
+async function signInWithGoogle(email, first_name, last_name) {
+    return postData("/auth/google/login", { email, first_name, last_name })
         .then(response => {
             saveToken(response.data);
             console.log(response + ' in apiiiidjdjd')
@@ -102,5 +112,5 @@ async function signInWithGoogle(email,first_name,last_name) {
         });
 }
 
-export { login, register, verifyUsername, saveToken, verifyAccount, verifyFunding, resetPassword, verifyOtp,signInWithGoogle };
+export { login, register, verifyUsername, saveToken, verifyAccount, verifyFunding, resetPassword, verifyOtp, signInWithGoogle };
 export { getData, postData };

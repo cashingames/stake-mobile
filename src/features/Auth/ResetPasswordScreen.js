@@ -7,16 +7,18 @@ import normalize from '../../utils/normalize';
 import Input from '../../shared/Input';
 import { resetPassword } from './AuthSlice';
 import { isStaging } from '../../utils/BaseUrl';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 export default function ({ navigation }) {
     const dispatch = useDispatch();
 
-    const [password, setPassword] = useState(isStaging ? 'AAkinkunmi@1' : '');
+    const [password, setPassword] = useState(isStaging ? 'zubby1234' : '');
     const [canSend, setCanSend] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const email = useSelector(state => state.auth.passwordReset.email)
+    const email = useSelector(state => state.auth.passwordReset.email);
+    const code = useSelector(state => state.auth.passwordReset.userCode);
 
     const onChangePassword = (value) => {
         setPassword(value)
@@ -27,15 +29,18 @@ export default function ({ navigation }) {
         setCanSend(false);
         setError('');
 
-        const result = (await dispatch(resetPassword({ email, password, password_confirmation: password }))).payload
-        console.info(result);
-        setLoading(false);
-        setCanSend(true);
-        if (result.success === true) {
-            navigation.navigate("Login");
-        } else {
-            setError(result.message);
-        }
+        dispatch(resetPassword({ password, email, code , password_confirmation:password}))
+        .then(unwrapResult)
+        .then((originalPromiseResult) => {
+            setLoading(false);
+            setCanSend(true);
+            navigation.navigate('Login');
+        })
+        .catch((rejectedValueOrSerializedError) => {
+            console.log(rejectedValueOrSerializedError)
+            setError("Network Error");
+            setLoading(false);
+        })
     }
 
     useEffect(() => {
@@ -64,7 +69,7 @@ export default function ({ navigation }) {
 
                 </View>
                 <View style={styles.button}>
-                    <AppButton onPress={() => onSend()} text={loading ? 'Sending...' : 'GET OTP'} disabled={!canSend} />
+                    <AppButton onPress={() => onSend()} text={loading ? 'Sending...' : 'RESET'} disabled={!canSend} />
                 </View>
             </View>
         </ScrollView>
