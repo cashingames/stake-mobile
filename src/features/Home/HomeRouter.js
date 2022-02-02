@@ -229,7 +229,6 @@ const drawStyles = EStyleSheet.create({
         textAlign: 'center',
         fontSize: '0.8rem',
         fontFamily: 'graphik-medium',
-        backgroundColor: 'green',
         paddingVertical: responsiveScreenHeight(1),
         
     },
