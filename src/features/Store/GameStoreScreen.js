@@ -258,7 +258,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.7rem',
         fontFamily: 'graphik-regular',
         opacity: 0.6,
-        lineHeight: responsiveScreenHeight(3.5),
+        lineHeight: responsiveScreenHeight(2.6),
         marginTop: normalize(10)
     },
     storeCards: {
@@ -295,11 +295,11 @@ const styles = EStyleSheet.create({
         fontSize: '0.73rem',
         color: '#828282',
         lineHeight: responsiveScreenHeight(2.5),
-        width: responsiveScreenWidth(45)
+        width: responsiveScreenWidth(38)
     },
     buyWithCash: {
         fontFamily: 'graphik-bold',
-        fontSize: '0.63rem',
+        fontSize: '0.69rem',
         color: '#151C2F',
     },
     buyBoost: {
