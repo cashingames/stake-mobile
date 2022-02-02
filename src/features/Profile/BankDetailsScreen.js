@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import {Text, View, ScrollView, Pressable } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { Picker } from '@react-native-picker/picker';
 import { editBankDetails, getUser } from '../Auth/AuthSlice';
 import { getBankData } from '../CommonSlice';
@@ -102,7 +103,7 @@ export default function BankDetailsScreen({ navigation }) {
 
                         >
                             {banks && banks.map((bank, i) =>
-                                <Picker.Item label={bank.name} key={i} value={bank.name} />
+                                <Picker.Item label={bank.name} key={i} value={bank.name} style={styles.pickerItem} />
                             )}
                         </Picker>
                     </View>
@@ -113,14 +114,14 @@ export default function BankDetailsScreen({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         paddingHorizontal: normalize(18),
         paddingVertical: normalize(10),
         backgroundColor: "#F2F5FF",
     },
     saveChanges: {
-        fontSize: normalize(12),
+        fontSize: '0.75rem',
         fontFamily: 'graphik-medium',
         color: '#EF2F55',
         marginLeft: 'auto'
@@ -137,7 +138,11 @@ const styles = StyleSheet.create({
     bankLabel: {
         fontFamily: 'graphik-medium',
         color: '#000000B2',
-        marginBottom: normalize(8)
+        marginBottom: normalize(8),
+        fontSize: '0.76rem',
     },
+    pickerItem: {
+        fontSize: '0.75rem', 
+    }
 
 });

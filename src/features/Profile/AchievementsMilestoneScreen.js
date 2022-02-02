@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import {Text, View, Image, ScrollView } from 'react-native';
 import normalize from '../../utils/normalize';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { backendUrl } from '../../utils/BaseUrl';
 import * as Progress from 'react-native-progress';
 import { useSelector } from 'react-redux';
@@ -74,7 +75,7 @@ const AchievementCard = ({ achievement, userPoint, }) => {
 
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         backgroundColor: '#F2F5FF',
     },
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
         borderColor: '#E0E0E0',
     },
     statusText: {
-        fontSize: normalize(10),
+        fontSize: '0.69rem',
         marginTop: normalize(8),
         fontFamily: 'graphik-regular',
         color: 'black',
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
         marginTop: normalize(20),
     },
     name: {
-        fontSize: normalize(10),
+        fontSize: '0.69rem',
         marginVertical: normalize(10),
         fontFamily: 'graphik-medium',
         color: '#EB5757',
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
     point: {
         borderTopWidth: 1,
         borderTopColor: '#828282',
-        fontSize: normalize(13),
+        fontSize: '0.76rem',
         marginVertical: normalize(10),
         fontFamily: 'graphik-medium',
         color: '#151C2F',

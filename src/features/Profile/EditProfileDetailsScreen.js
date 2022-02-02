@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Alert, Pressable } from 'react-native';
+import { Text, View, ScrollView, Alert, Pressable } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -125,7 +126,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                             style={styles.select}
                         >
                             <Picker.Item label="Male" value="male" style={styles.pickerItem} />
-                            <Picker.Item label="Female" value="female" />
+                            <Picker.Item label="Female" value="female" style={styles.pickerItem}  />
                         </Picker>
                     </View>
                 </View>
@@ -135,7 +136,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
 }
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFF',
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
         marginBottom: normalize(20),
     },
     inputLabel: {
-        fontSize: normalize(10),
+        fontSize: '0.7rem',
         fontFamily: 'graphik-medium',
         color: 'rgba(0, 0, 0, 0.7)',
         marginBottom: normalize(5)
@@ -155,7 +156,8 @@ const styles = StyleSheet.create({
         fontSize: normalize(12),
         fontFamily: 'graphik-medium',
         color: '#EF2F55',
-        marginLeft: 'auto'
+        marginLeft: 'auto',
+        fontSize: '0.7rem'
     },
     input: {
         borderColor: ' rgba(0, 0, 0, 0.1)',
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingLeft: normalize(6),
         width: normalize(285),
-        fontSize: normalize(10),
+        fontSize: '0.75rem',
         fontFamily: 'graphik-regular',
         color: '#00000080',
         marginRight: 'auto',
@@ -183,12 +185,13 @@ const styles = StyleSheet.create({
         marginVertical: normalize(10)
     },
     select: {
-        borderColor: ' rgba(0, 0, 0, 0.1)',
-        borderWidth: 1,
-        borderRadius: 8,
+        color: '#000000B2',
+        borderStyle: 'solid',
+        borderWidth: 5,
+        backgroundColor: "#ebeff5",
     },
     pickerItem: {
-        height: normalize(20)
+        fontSize: '0.75rem', 
     }
 
 });
