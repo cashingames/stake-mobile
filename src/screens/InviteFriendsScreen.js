@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, ScrollView, Share, Alert, Pressable } from 'react-native';
+import {Text, View, ScrollView, Share, Alert, Pressable } from 'react-native';
 import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import { appUrl } from '../utils/BaseUrl';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from 'react-redux';
 
 
@@ -78,7 +79,7 @@ const ShareLink = ({ iconName, text, onPress }) => {
 }
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         backgroundColor: '#F8F9FD',
         paddingHorizontal: normalize(18)
@@ -88,35 +89,36 @@ const styles = StyleSheet.create({
         marginVertical: normalize(30),
     },
     value: {
-        fontSize: normalize(20),
+        fontSize: '1.5rem',
         fontFamily: 'graphik-medium',
         color: '#151C2F',
     },
     points: {
-        fontSize: normalize(20),
+        fontSize: '1.5rem',
         fontFamily: 'graphik-medium',
         color: '#EF2F55',
     },
     instructions: {
-        fontSize: normalize(13),
+        fontSize: '0.95rem',
         fontFamily: 'graphik-regular',
         color: '#151C2F',
-        lineHeight: 24,
+        lineHeight: '1.7rem',
         opacity: 0.6,
         marginBottom: normalize(40),
     },
-    link: {
-        fontSize: normalize(11),
-        fontFamily: 'graphik-medium',
-        color: '#151C2F',
-        width: '80%',
-    },
     inviteLink: {
         color: 'rgba(0, 0, 0, 0.6)',
-        fontSize: normalize(12),
+        fontSize: '0.79rem',
         fontFamily: 'graphik-medium',
-        lineHeight: 16,
+        lineHeight: '1.2rem',
         marginBottom: normalize(12),
+    },
+    link: {
+        fontSize: '0.73rem',
+        fontFamily: 'graphik-medium',
+        lineHeight: '1.1rem',
+        color: '#151C2F',
+        width: '80%',
     },
     linkContainer: {
         backgroundColor: '#FFFF',
@@ -134,7 +136,7 @@ const styles = StyleSheet.create({
     },
     iconText: {
         color: '#EB5757',
-        fontSize: normalize(8),
+        fontSize: '0.55rem',
         fontFamily: 'graphik-bold',
     },
     icon: {
