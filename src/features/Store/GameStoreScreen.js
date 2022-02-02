@@ -350,8 +350,8 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(10),
     },
     actionButton: {
-       paddingVertical: normalize(16),
-       marginTop: responsiveScreenHeight(6)
+       paddingVertical: responsiveScreenHeight(2.3),
+       marginTop: responsiveScreenHeight(5)
     },
     boostIcon: {
         marginTop: normalize(12),

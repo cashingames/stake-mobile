@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, Pressable } from 'react-native';
+import normalize from "../utils/normalize";
 import EStyleSheet from "react-native-extended-stylesheet";
 
 
@@ -21,8 +22,8 @@ const styles = EStyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 20,
-        paddingHorizontal: 32,
+        paddingVertical: normalize(15),
+        paddingHorizontal: normalize(28),
         marginVertical: 30,
         borderRadius: 12,
         elevation: 3,
@@ -30,11 +31,11 @@ const styles = EStyleSheet.create({
     },
     text: {
 
-        lineHeight: 21,
+        lineHeight: '1rem',
         letterSpacing: 0.25,
         color: 'white',
         fontFamily: 'graphik-medium',
-        fontSize: 18
+        fontSize: '0.9rem'
     },
     disabled: {
         backgroundColor: '#DFCBCF'
