@@ -55,7 +55,7 @@ const InviteLink = () => {
     };
 
     return (
-        <View>
+        <>
             <Text style={styles.inviteLink}>Your invite link</Text>
             <View style={styles.linkContainer} >
                 <Text style={styles.link}>{referralUrl}</Text>
@@ -64,7 +64,7 @@ const InviteLink = () => {
                     <ShareLink iconName="md-share-social" text='Share' onPress={onShare} />
                 </View>
             </View>
-        </View>
+        </>
     )
 }
 const ShareLink = ({ iconName, text, onPress }) => {
