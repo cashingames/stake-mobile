@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useDispatch, useSelector } from 'react-redux';
 import { buyBoostFromWallet, buyPlanFromWallet } from "./StoreSlice";
+import { Ionicons } from '@expo/vector-icons';
 import { unwrapResult } from "@reduxjs/toolkit";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
@@ -53,17 +54,12 @@ const GamePlanCard = ({ plan }) => {
 
         <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}
             style={styles.storeItemContainer}>
-            <Text style={styles.planCount}>{plan.game_count}</Text>
-            <View style={styles.boostDetailsContainer}>
-                <Text style={styles.storeItemName}>{plan.name}</Text>
-                <Text style={styles.cardDescription}>{plan.description}</Text>
-            </View>
-            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(plan.price)}</Text>
+            <PlanCardDetails plan={plan} />
             <RBSheet
                 ref={refRBSheet}
                 closeOnDragDown={true}
                 closeOnPressMask={true}
-                height={380}
+                height={440}
                 customStyles={{
                     wrapper: {
                         backgroundColor: "rgba(0, 0, 0, 0.5)"
@@ -114,16 +110,30 @@ const BuyGamePlan = ({ plan, onClose }) => {
 
     return (
         <View style={styles.buyBoost}>
-            <Text style={styles.buyBoostTitle}>Subscribe to {plan.name} Plan</Text>
-            <Text style={styles.buyQuestion}>Are you sure you want to purchase this game plan?</Text>
-            <UserWalletBalance />
-            <View style={styles.buyOption}>
-                <AppButton text={loading ? 'Buying...' : 'Pay'} onPress={buyPlanWallet} disabled={!canPay || loading} style={styles.actionButton} />
-                <AppButton text={'Cancel'} onPress={onClose} />
+            <View style={styles.buyItemHeader}>
+                <Text style={styles.buyItemTitle}>Buy Game</Text>
+                <Ionicons name="close-outline" size={20} color="#292D32" onPress={onClose} />
             </View>
+            <View style={styles.buyItemCard}>
+                <PlanCardDetails plan={plan} />
+            </View>
+            <UserWalletBalance />
+            <AppButton text={loading ? 'Buying...' : 'Confirm'} onPress={buyPlanWallet} disabled={!canPay || loading} style={styles.actionButton} />
         </View>
     )
 
+}
+const PlanCardDetails = ({ plan }) => {
+    return (
+        <>
+            <Text style={styles.planCount}>{plan.game_count}</Text>
+            <View style={styles.boostDetailsContainer}>
+                <Text style={styles.storeItemName}>{plan.name}</Text>
+                <Text style={styles.cardDescription}>{plan.description}</Text>
+            </View>
+            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(plan.price)}</Text>
+        </>
+    )
 }
 
 
@@ -147,23 +157,12 @@ const BoostCard = ({ boost }) => {
     const refRBSheet = useRef();
     return (
         <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()} style={styles.storeItemContainer}>
-            <Image
-                source={{ uri: `${backendUrl}/${boost.icon}` }}
-                style={styles.boostIcon}
-            />
-            <View style={styles.boostDetailsContainer}>
-                <View style={styles.boostNameCount}>
-                    <Text style={styles.storeItemName}>{boost.name}</Text>
-                    <Text style={styles.number}>x{formatNumber(boost.pack_count)}</Text>
-                </View>
-                <Text style={styles.cardDescription}>{boost.description}</Text>
-            </View>
-            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(boost.currency_value)}</Text>
+            <BoostCardDetails boost={boost} />
             <RBSheet
                 ref={refRBSheet}
                 closeOnDragDown={true}
                 closeOnPressMask={true}
-                height={380}
+                height={440}
                 customStyles={{
                     wrapper: {
                         backgroundColor: "rgba(0, 0, 0, 0.5)"
@@ -210,16 +209,38 @@ const BuyBoost = ({ boost, onClose }) => {
 
     return (
         <View style={styles.buyBoost}>
-            <Text style={styles.buyBoostTitle}>Buy {boost.name} Boost</Text>
-            <Text style={styles.buyQuestion}>Are you sure you want to purchase this boost?</Text>
-            <UserWalletBalance />
-            <View style={styles.buyOption}>
-                <AppButton text={loading ? 'Buying...' : 'Pay'} onPress={buyBoostWallet} disabled={!canPay || loading} style={styles.actionButton} />
-                <AppButton text={'Cancel'} onPress={onClose} />
+            <View style={styles.buyItemHeader}>
+                <Text style={styles.buyItemTitle}>Buy Boost</Text>
+                <Ionicons name="close-outline" size={20} color="#292D32" onPress={onClose} />
             </View>
+            <View style={styles.buyItemCard}>
+                <BoostCardDetails boost={boost} />
+            </View>
+            <UserWalletBalance />
+            <AppButton text={loading ? 'Buying...' : 'Confirm'} onPress={buyBoostWallet} disabled={!canPay || loading} style={styles.actionButton} />
         </View>
     )
 }
+
+const BoostCardDetails = ({ boost }) => {
+    return (
+        <>
+            <Image
+                source={{ uri: `${backendUrl}/${boost.icon}` }}
+                style={styles.boostIcon}
+            />
+            <View style={styles.boostDetailsContainer}>
+                <View style={styles.boostNameCount}>
+                    <Text style={styles.storeItemName}>{boost.name}</Text>
+                    <Text style={styles.number}>x{formatNumber(boost.pack_count)}</Text>
+                </View>
+                <Text style={styles.cardDescription}>{boost.description}</Text>
+            </View>
+            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(boost.currency_value)}</Text>
+        </>
+    )
+}
+
 const UserWalletBalance = () => {
     const userBalance = useSelector(state => state.auth.user.walletBalance);
     return (
@@ -259,7 +280,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         opacity: 0.6,
         lineHeight: responsiveScreenHeight(2.6),
-        marginTop: normalize(10)
+        marginVertical: normalize(18)
     },
     storeCards: {
         display: 'flex',
@@ -279,6 +300,18 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         elevation: 3.3,
+    },
+    buyItemCard: {
+        alignItems: 'center',
+        backgroundColor: '#F8F9FD',
+        borderRadius: 11,
+        marginVertical: normalize(22),
+        borderWidth: normalize(1),
+        borderColor: '#E0E0E0',
+        paddingVertical: normalize(13),
+        paddingHorizontal: normalize(15),
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     planCount: {
         fontFamily: 'graphik-bold',
@@ -306,27 +339,19 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(18),
         paddingVertical: normalize(15)
     },
-    buyBoostTitle: {
+    buyItemHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    buyItemTitle: {
         fontFamily: 'graphik-medium',
         fontSize: '1rem',
         color: '#151C2F',
         marginBottom: normalize(10),
-        textAlign: 'center'
-    },
-    buyQuestion: {
-        fontFamily: 'graphik-regular',
-        fontSize: '0.77rem',
-        color: '#151C2F',
-        marginBottom: normalize(30),
-        textAlign: 'center'
-    },
-    buyOption: {
-        flexDirection: 'row',
-        justifyContent: 'center',
     },
     actionButton: {
-        marginHorizontal: normalize(15),
-        width: responsiveScreenWidth(30),
+       paddingVertical: normalize(16),
+       marginTop: responsiveScreenHeight(6)
     },
     boostIcon: {
         marginTop: normalize(12),
@@ -351,10 +376,11 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         borderWidth: 1,
         borderColor: '#E0E0E0',
-        paddingVertical: normalize(12),
+        paddingVertical: normalize(15),
         borderRadius: 15,
         paddingHorizontal: normalize(10),
-        alignItems: 'center'
+        alignItems: 'center',
+        marginVertical: normalize(15)
     },
     purseIcon: {
         width: normalize(25),
