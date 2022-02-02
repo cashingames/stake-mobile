@@ -163,8 +163,9 @@ const drawStyles = EStyleSheet.create({
         flex: 1,
     },
     sideHeader: {
-        flex: 3,
+        // flex: 5,
         alignItems: 'center',
+        justifyContent:'flex-end',
         borderBottomWidth: 1,
         borderBottomColor: "rgba(0, 0, 0, 0.1)",
         paddingTop: responsiveScreenHeight(10),
@@ -223,14 +224,17 @@ const drawStyles = EStyleSheet.create({
     },
     logoutContainer: {
         flex: 1,
+        justifyContent:'flex-end'
+        // marginBottom:5
     },
     logoutText: {
         color: 'red',
         textAlign: 'center',
         fontSize: '0.8rem',
         fontFamily: 'graphik-medium',
-        // backgroundColor: 'green',
-        paddingVertical: normalize(20),
+        backgroundColor: 'green',
+        paddingVertical: responsiveScreenHeight(1),
+        
     },
 });
 

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { StyleSheet, Text, View, Image, Alert, Pressable, ScrollView } from 'react-native';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { backendUrl } from '../../utils/BaseUrl';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -30,41 +30,55 @@ export default function () {
     );
 }
 
+const GamePlans = () => {
+    const plans = useSelector(state => state.common.plans);
+
+    return (
+        <View style={styles.storeItems}>
+            <Text style={styles.title}>Buy Games</Text>
+            <Text style={styles.storeItemsDescription}>
+                You can only play 10 free games daily, Buy Games to enjoy
+                playing without interruptons
+            </Text>
+            <View style={styles.storeCards}>
+                {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} />)}
+            </View>
+        </View>
+    )
+}
+
 const GamePlanCard = ({ plan }) => {
     const refRBSheet = useRef();
     return (
 
-        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}>
-            {!plan.is_free &&
-                <View style={styles.storeItemContainer}>
-                    <Text style={styles.planCount}>{plan.game_count}</Text>
-                    <View>
-                        <Text style={styles.storeItemName}>{plan.name}</Text>
-                        <Text style={styles.description}>{plan.description}</Text>
-                    </View>
-                    <Text style={styles.buyWithCash}>&#8358;{formatCurrency(plan.price)}</Text>
-                    <RBSheet
-                        ref={refRBSheet}
-                        closeOnDragDown={true}
-                        closeOnPressMask={true}
-                        height={380}
-                        customStyles={{
-                            wrapper: {
-                                backgroundColor: "rgba(0, 0, 0, 0.5)"
-                            },
-                            draggableIcon: {
-                                backgroundColor: "#000",
-                            },
-                            container: {
-                                borderTopStartRadius: 25,
-                                borderTopEndRadius: 25,
-                            }
-                        }}
-                    >
-                        <BuyGamePlan plan={plan} onClose={() => refRBSheet.current.close()} />
-                    </RBSheet>
-                </View>
-            }
+        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}
+            style={styles.storeItemContainer}>
+            <Text style={styles.planCount}>{plan.game_count}</Text>
+            <View>
+                <Text style={styles.storeItemName}>{plan.name}</Text>
+                <Text style={styles.cardDescription}>{plan.description}</Text>
+            </View>
+            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(plan.price)}</Text>
+            <RBSheet
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                height={380}
+                customStyles={{
+                    wrapper: {
+                        backgroundColor: "rgba(0, 0, 0, 0.5)"
+                    },
+                    draggableIcon: {
+                        backgroundColor: "#000",
+                    },
+                    container: {
+                        borderTopStartRadius: 25,
+                        borderTopEndRadius: 25,
+                    }
+                }}
+            >
+                <BuyGamePlan plan={plan} onClose={() => refRBSheet.current.close()} />
+            </RBSheet>
         </Pressable>
 
     )
@@ -100,7 +114,7 @@ const BuyGamePlan = ({ plan, onClose }) => {
 
     return (
         <View style={styles.buyBoost}>
-            <Text style={styles.buyBoostTitle}>Buy Game</Text>
+            <Text style={styles.buyBoostTitle}>Subscribe to {plan.name} Plan</Text>
             <Text style={styles.buyQuestion}>Are you sure you want to purchase this game plan?</Text>
             <UserWalletBalance />
             <View style={styles.buyOption}>
@@ -112,22 +126,6 @@ const BuyGamePlan = ({ plan, onClose }) => {
 
 }
 
-const GamePlans = () => {
-    const plans = useSelector(state => state.common.plans);
-
-    return (
-        <View style={styles.storeItems}>
-            <Text style={styles.title}>Buy Games</Text>
-            <Text style={styles.storeItemsDescription}>
-                You can only play 10 free games daily, Buy Games to enjoy
-                playing without interruptons
-            </Text>
-            <View style={styles.boostCards}>
-                {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} />)}
-            </View>
-        </View>
-    )
-}
 
 const GameBoosts = () => {
     const boosts = useSelector(state => state.common.boosts);
@@ -138,7 +136,7 @@ const GameBoosts = () => {
                 Boost gives you super powers when you’re playing quizes.
                 Buy boosts to let you win more games
             </Text>
-            <View style={styles.boostCards}>
+            <View style={styles.storeCards}>
                 {boosts.map((boost, i) => <BoostCard key={i} boost={boost} />)}
             </View>
         </View>
@@ -148,43 +146,39 @@ const GameBoosts = () => {
 const BoostCard = ({ boost }) => {
     const refRBSheet = useRef();
     return (
-        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}>
-            <View style={styles.storeItemContainer}>
-                <Image
-                    source={{ uri: `${backendUrl}/${boost.icon}` }}
-                    style={styles.boostIcon}
-                />
-                <View>
-                    <View style={styles.boostNameCount}>
-                        <Text style={styles.storeItemName}>{boost.name}</Text>
-                        <Text style={styles.number}>x{formatNumber(boost.pack_count)}</Text>
-                    </View>
-                    <Text style={styles.description}>{boost.description}</Text>
+        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()} style={styles.storeItemContainer}>
+            <Image
+                source={{ uri: `${backendUrl}/${boost.icon}` }}
+                style={styles.boostIcon}
+            />
+            <View>
+                <View style={styles.boostNameCount}>
+                    <Text style={styles.storeItemName}>{boost.name}</Text>
+                    <Text style={styles.number}>x{formatNumber(boost.pack_count)}</Text>
                 </View>
-                <View style={styles.buy}>
-                    <Text style={styles.buyWithCash}>&#8358;{formatCurrency(boost.currency_value)}</Text>
-                </View>
-                <RBSheet
-                    ref={refRBSheet}
-                    closeOnDragDown={true}
-                    closeOnPressMask={true}
-                    height={380}
-                    customStyles={{
-                        wrapper: {
-                            backgroundColor: "rgba(0, 0, 0, 0.5)"
-                        },
-                        draggableIcon: {
-                            backgroundColor: "#000",
-                        },
-                        container: {
-                            borderTopStartRadius: 25,
-                            borderTopEndRadius: 25,
-                        }
-                    }}
-                >
-                    <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} />
-                </RBSheet>
+                <Text style={styles.cardDescription}>{boost.description}</Text>
             </View>
+            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(boost.currency_value)}</Text>
+            <RBSheet
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                height={380}
+                customStyles={{
+                    wrapper: {
+                        backgroundColor: "rgba(0, 0, 0, 0.5)"
+                    },
+                    draggableIcon: {
+                        backgroundColor: "#000",
+                    },
+                    container: {
+                        borderTopStartRadius: 25,
+                        borderTopEndRadius: 25,
+                    }
+                }}
+            >
+                <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} />
+            </RBSheet>
         </Pressable>
     )
 }
@@ -216,7 +210,7 @@ const BuyBoost = ({ boost, onClose }) => {
 
     return (
         <View style={styles.buyBoost}>
-            <Text style={styles.buyBoostTitle}>Buy Boosts</Text>
+            <Text style={styles.buyBoostTitle}>Buy {boost.name} Boost</Text>
             <Text style={styles.buyQuestion}>Are you sure you want to purchase this boost?</Text>
             <UserWalletBalance />
             <View style={styles.buyOption}>
@@ -251,82 +245,61 @@ const styles = EStyleSheet.create({
     },
     storeItems: {
         marginTop: normalize(20),
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     title: {
         fontFamily: 'graphik-bold',
         fontWeight: '900',
-        fontSize: normalize(18),
+        fontSize: '1.2rem',
         color: '#151C2F',
     },
-    boostCards: {
+    storeItemsDescription: {
+        color: '#151C2F',
+        fontSize: '0.7rem',
+        fontFamily: 'graphik-regular',
+        opacity: 0.6,
+        lineHeight: responsiveScreenHeight(3.5),
+        marginTop: normalize(10)
+    },
+    storeCards: {
         display: 'flex',
         flexDirection: 'column',
-        flexWrap: 'wrap',
         justifyContent: 'space-between',
         marginTop: normalize(15),
-
     },
     storeItemContainer: {
         alignItems: 'center',
         backgroundColor: '#FFFF',
         borderRadius: 11,
         marginBottom: normalize(15),
-        width: normalize(285),
         borderWidth: normalize(1),
         borderColor: '#E0E0E0',
-        paddingVertical: normalize(15),
-        paddingHorizontal: normalize(10),
+        paddingVertical: normalize(13),
+        paddingHorizontal: normalize(15),
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        elevation: 3.3,
     },
-
-    iconContainer: {
-        backgroundColor: '#FFFF',
-        alignItems: 'center',
-        height: normalize(75),
-        width: normalize(55),
-        borderRadius: 10,
-        elevation: 12,
-    },
-    boostIcon: {
-        marginTop: normalize(12),
-        width: normalize(30),
-        height: normalize(30),
-    },
-    hr: {
-        borderBottomColor: '#B1CEFF',
-        borderBottomWidth: normalize(1),
-        width: normalize(180)
+    planCount: {
+        fontFamily: 'graphik-bold',
+        fontSize: '2.1rem',
+        color: '#2F80ED',
     },
     storeItemName: {
         fontFamily: 'graphik-medium',
-        fontSize: normalize(11),
+        fontSize: '0.78rem',
         color: '#EF2F55',
-        // marginVertical: normalize(10),
     },
-    number: {
-        fontFamily: 'graphik-bold',
-        fontSize: normalize(10),
-        color: '#FF932F',
-        marginTop: normalize(4),
-        marginLeft: normalize(10)
-    },
-    description: {
+    cardDescription: {
         fontFamily: 'graphik-medium',
-        fontSize: normalize(8),
+        fontSize: '0.73rem',
         color: '#828282',
-        marginVertical: normalize(4),
-        textAlign: 'center',
-        lineHeight: normalize(12)
-    },
-    buy: {
-        alignItems: 'center',
-        marginTop: normalize(4),
+        lineHeight: responsiveScreenHeight(2.5),
+        width: responsiveScreenWidth(45)
     },
     buyWithCash: {
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(10),
+        fontFamily: 'graphik-bold',
+        fontSize: '0.63rem',
         color: '#151C2F',
     },
     buyBoost: {
@@ -335,14 +308,14 @@ const styles = EStyleSheet.create({
     },
     buyBoostTitle: {
         fontFamily: 'graphik-medium',
-        fontSize: normalize(15),
+        fontSize: '1rem',
         color: '#151C2F',
-        marginBottom: normalize(15),
+        marginBottom: normalize(10),
         textAlign: 'center'
     },
     buyQuestion: {
         fontFamily: 'graphik-regular',
-        fontSize: normalize(12),
+        fontSize: '0.77rem',
         color: '#151C2F',
         marginBottom: normalize(30),
         textAlign: 'center'
@@ -353,33 +326,36 @@ const styles = EStyleSheet.create({
     },
     actionButton: {
         marginHorizontal: normalize(15),
-        width: normalize(100),
+        width: responsiveScreenWidth(30),
     },
-    storeItemsDescription: {
-        color: '#151C2F',
-        fontSize: normalize(10),
-        fontFamily: 'graphik-regular',
-        opacity: 0.6,
-        lineHeight: normalize(18),
-        marginTop: normalize(10)
-    },
-    planCount: {
-        fontFamily: 'graphik-bold',
-        fontSize: normalize(45),
-        color: '#2F80ED'
+    boostIcon: {
+        marginTop: normalize(12),
+        width: responsiveScreenHeight(6),
+        height: responsiveScreenHeight(6),
     },
     boostNameCount: {
         flexDirection: 'row',
         alignItems: 'center'
     },
+    number: {
+        fontFamily: 'graphik-bold',
+        fontSize: '0.6rem',
+        color: '#FF932F',
+        marginTop: normalize(4),
+        marginLeft: normalize(10)
+    },
     walletBalance: {
         flexDirection: 'row',
         borderWidth: 1,
         borderColor: '#E0E0E0',
-        paddingVertical: normalize(18),
+        paddingVertical: normalize(12),
         borderRadius: 15,
         paddingHorizontal: normalize(10),
         alignItems: 'center'
+    },
+    purseIcon: {
+        width: normalize(25),
+        height: normalize(25),
     },
     userBalance: {
         marginLeft: normalize(20),
@@ -387,18 +363,12 @@ const styles = EStyleSheet.create({
     balanceText: {
         color: '#7C7D7F',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(10)
+        fontSize: '0.7rem'
     },
     balance: {
         color: '#000000',
         fontFamily: 'graphik-bold',
-        fontSize: normalize(15),
+        fontSize: '0.9rem',
         marginTop: normalize(5)
     },
-    purseIcon: {
-        width: normalize(25),
-        height: normalize(25),
-    },
-
-
 });
