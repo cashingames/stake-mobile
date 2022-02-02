@@ -163,7 +163,6 @@ const drawStyles = EStyleSheet.create({
         flex: 1,
     },
     sideHeader: {
-        // flex: 5,
         alignItems: 'center',
         justifyContent:'flex-end',
         borderBottomWidth: 1,
@@ -173,7 +172,6 @@ const drawStyles = EStyleSheet.create({
         backgroundColor: '#F2F5FF',
     },
     avatar: {
-        // resizeMode: 'cover',
         width: normalize(90),
         height: normalize(90),
         borderWidth: 1,
@@ -225,7 +223,6 @@ const drawStyles = EStyleSheet.create({
     logoutContainer: {
         flex: 1,
         justifyContent:'flex-end'
-        // marginBottom:5
     },
     logoutText: {
         color: 'red',

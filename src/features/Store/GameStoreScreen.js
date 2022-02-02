@@ -54,7 +54,7 @@ const GamePlanCard = ({ plan }) => {
         <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}
             style={styles.storeItemContainer}>
             <Text style={styles.planCount}>{plan.game_count}</Text>
-            <View>
+            <View style={styles.boostDetailsContainer}>
                 <Text style={styles.storeItemName}>{plan.name}</Text>
                 <Text style={styles.cardDescription}>{plan.description}</Text>
             </View>
@@ -151,7 +151,7 @@ const BoostCard = ({ boost }) => {
                 source={{ uri: `${backendUrl}/${boost.icon}` }}
                 style={styles.boostIcon}
             />
-            <View>
+            <View style={styles.boostDetailsContainer}>
                 <View style={styles.boostNameCount}>
                     <Text style={styles.storeItemName}>{boost.name}</Text>
                     <Text style={styles.number}>x{formatNumber(boost.pack_count)}</Text>
@@ -332,6 +332,9 @@ const styles = EStyleSheet.create({
         marginTop: normalize(12),
         width: responsiveScreenHeight(6),
         height: responsiveScreenHeight(6),
+    },
+    boostDetailsContainer: {
+        flexDirection: 'column'
     },
     boostNameCount: {
         flexDirection: 'row',

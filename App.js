@@ -99,8 +99,3 @@ function App() {
 
 
 export default App;
-
-module.hot.accept(() => {
-  EStyleSheet.clearCache();
-  EStyleSheet.build();
-});
