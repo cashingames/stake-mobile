@@ -48,10 +48,9 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-bold',
     },
     extendedText: {
-        fontSize: '0.6rem',
-        // lineHeight: '1.3rem',
+        fontSize: '0.7rem',
         color: '#EF2F55',
-        fontFamily: 'graphik-bold',
+        fontFamily: 'graphik-medium',
     },
     extended: {
         display: 'flex',

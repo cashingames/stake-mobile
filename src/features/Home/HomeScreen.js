@@ -124,7 +124,7 @@ function GameCards({ games }) {
 
     return (
         <View style={styles.games}>
-            <Text style={styles.lightTitle}>Play game</Text>
+            <Text style={styles.lightTitle}>Play New Game</Text>
             <View style={styles.cards}>
                 <SwiperFlatList >
                     {games.map((game, i) => <GameCard key={i} game={game} />)}
@@ -157,7 +157,7 @@ function RecentlyPlayedCards({ games }) {
         return <></>;
     return (
         <View style={styles.games}>
-            <Text style={styles.lightTitle}>Recently played games</Text>
+            <Text style={styles.lightTitle}>Recently Played</Text>
             <View style={styles.cards}>
                 <SwiperFlatList >
                     {games.map((game, i) => <RecentlyPlayedCard key={i} game={game} />)}
@@ -251,9 +251,6 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(20),
         paddingHorizontal: normalize(30),
     },
-    gamesPlayed: {
-
-    },
     globalRanking: {
         alignItems: 'flex-end'
     },
@@ -298,8 +295,8 @@ const styles = EStyleSheet.create({
     card: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingVertical: normalize(10),
         borderRadius: normalize(10),
+        alignItems:'center',
         marginRight: responsiveWidth(3),
         flexDirection: "row",
         borderColor: '#0F000000',
@@ -308,7 +305,7 @@ const styles = EStyleSheet.create({
             height: responsiveHeight(10),
         },
         '@media (min-height: 300) and (max-height: 780)': {
-            height: responsiveHeight(8),
+            height: responsiveHeight(11),
         },
     },
     cardIcon: {
@@ -329,7 +326,7 @@ const styles = EStyleSheet.create({
         justifyContent: "space-evenly",
     },
     cardTitle: {
-        fontSize: responsiveFontSize(2),
+        fontSize: '0.9rem',
         color: '#151C2F',
         fontFamily: 'graphik-medium',
     },
@@ -337,9 +334,8 @@ const styles = EStyleSheet.create({
         fontSize: '0.7rem',
         color: '#151C2F',
         fontFamily: 'graphik-regular',
-        lineHeight: '1.1rem',
+        lineHeight: '1rem',
         opacity: .7,
-        flex: 1,
         flexWrap: 'wrap',
         flexShrink: 1
     },
