@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { Text, View, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
-import normalize, {responsiveScreenWidth} from '../../utils/normalize';
+import normalize from '../../utils/normalize';
+import { formatCurrency } from '../../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function TransactionScreen({ navigation }) {
@@ -32,7 +33,7 @@ const FundTransactions = ({ transaction }) => {
                 <View style={styles.naration}>
                     <Text style={styles.narationTitle}>{transaction.type}</Text>
                 </View>
-                <Text style={transaction.type === "DEBIT" ? styles.transactionAmountWithdraw : styles.transactionAmountReceived}>{transaction.amount}</Text>
+                <Text style={transaction.type === "DEBIT" ? styles.transactionAmountWithdraw : styles.transactionAmountReceived}>&#8358;{formatCurrency(transaction.amount)}</Text>
             </View>
             <View style={styles.typeAndDate}>
                 <Text style={styles.transactionType}>{transaction.description}</Text>

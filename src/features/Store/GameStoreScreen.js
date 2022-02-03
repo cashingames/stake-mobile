@@ -299,7 +299,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(15),
         flexDirection: 'row',
         justifyContent: 'space-between',
-        elevation: 3.3,
+        elevation: 2.5,
     },
     buyItemCard: {
         alignItems: 'center',

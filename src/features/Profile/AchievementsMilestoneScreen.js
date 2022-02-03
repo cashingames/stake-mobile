@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {Text, View, Image, ScrollView } from 'react-native';
-import normalize from '../../utils/normalize';
+import { Text, View, Image, ScrollView } from 'react-native';
+import normalize, {responsiveScreenHeight, responsiveScreenWidth} from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { backendUrl } from '../../utils/BaseUrl';
 import * as Progress from 'react-native-progress';
 import { useSelector } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
@@ -69,6 +70,11 @@ const AchievementCard = ({ achievement, userPoint, }) => {
             />
             <Text style={styles.name}>{achievement.title}</Text>
             <Text style={styles.point}>{achievement.point_milestone}</Text>
+            {disabled ?
+                <Ionicons name="lock-closed" size={30} color="#7C7D7F" />
+                :
+                <Text style={styles.unlocked}>Unlocked</Text>
+            }
         </View>
     )
 }
@@ -104,9 +110,9 @@ const styles = EStyleSheet.create({
     },
     card: {
         alignItems: 'center',
-        width: normalize(130),
+        width: responsiveScreenWidth(41),
         marginBottom: normalize(20),
-        height: normalize(180),
+        height: responsiveScreenHeight(30),
         borderRadius: 11,
         borderWidth: 1,
         backgroundColor: '#FFFF',
@@ -141,5 +147,10 @@ const styles = EStyleSheet.create({
     milestoneIcon: {
         width: normalize(40),
         height: normalize(40),
+    },
+    unlocked: {
+        fontSize: '0.69rem',
+        color: '#EB5757',
+        fontFamily: 'graphik-medium',
     }
 });
