@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {Text, View } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from '../../utils/normalize';
 import { formatCurrency } from '../../utils/stringUtl';
 
@@ -12,7 +13,7 @@ const WalletBalance = ({ balance }) => {
     )
 };
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     balance: {
         display: 'flex',
         justifyContent: 'center',
@@ -24,12 +25,12 @@ const styles = StyleSheet.create({
     },
     walletTitle: {
         fontFamily: 'graphik-medium',
-        fontSize: normalize(10),
+        fontSize: '0.7rem',
         color: '#7C7D7F'
     },
     availableAmount: {
         fontFamily: 'graphik-bold',
-        fontSize: normalize(30),
+        fontSize: '2.3rem',
         color: '#333333'
     },
 

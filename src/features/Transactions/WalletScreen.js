@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import { Text, View, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
-
+import AppButton from "../../shared/AppButton";
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
@@ -70,7 +71,7 @@ const TransactionLink = () => {
 };
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F2F5FF'
@@ -95,20 +96,24 @@ const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: normalize(12),
-        paddingHorizontal: normalize(32),
+        paddingVertical: normalize(15),
+        paddingHorizontal: normalize(28),
         marginHorizontal: normalize(18),
         borderRadius: 12,
         elevation: 3,
+        marginVertical: 30,
+       
     },
     fundButton: {
+        // lineHeight: '1rem',
+        letterSpacing: 0.25,
+        color: 'white',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(12),
-        color: '#FFFF'
+        fontSize: '0.9rem'
     },
     earnings: {
         backgroundColor: '#fff',
-        paddingVertical: normalize(10),
+        paddingVertical: normalize(12),
         paddingHorizontal: normalize(15),
         marginHorizontal: normalize(18),
         marginVertical: normalize(18),
@@ -118,34 +123,23 @@ const styles = StyleSheet.create({
     },
     earningText: {
         fontFamily: 'graphik-medium',
-        fontSize: normalize(10),
+        fontSize: '0.65rem',
         color: 'rgba(0, 0, 0, 0.5)'
     },
     earningAmount: {
         fontFamily: 'graphik-medium',
-        fontSize: normalize(22),
+        fontSize: '1.6rem',
         color: 'black'
-    },
-    earningContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    earningLink: {
-        color: '#EF2F55',
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(12),
     },
     link: {
         backgroundColor: '#E5E5E5',
-        paddingVertical: normalize(8),
+        paddingVertical: normalize(12),
         paddingHorizontal: normalize(15),
         marginHorizontal: normalize(18),
         marginVertical: normalize(5),
         borderRadius: 8,
-        borderWidth: normalize(1),
-        borderColor: 'rgba(0, 0, 0, 0.15)',
+        borderWidth: normalize(2),
+        borderColor: '#E5E5E5',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between'
@@ -153,6 +147,6 @@ const styles = StyleSheet.create({
     linkTitle: {
         color: '#EF2F55',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(12),
+        fontSize: '0.75rem',
     }
 });
