@@ -1,16 +1,17 @@
 import 'react-native-gesture-handler';
 import React, { useRef } from 'react';
+import { Dimensions, PixelRatio } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
+import Constants from 'expo-constants';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 import store from './src/store';
 import AppRouter from './src/AppRouter';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import { Dimensions, PixelRatio } from 'react-native';
 
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();
@@ -99,3 +100,11 @@ function App() {
 
 
 export default App;
+
+//Enable hotreload of EStylesheet
+if (Constants.manifest.extra.isDevelopment) {
+  module.hot.accept(() => {
+    EStyleSheet.clearCache();
+    EStyleSheet.build();
+  });
+}
