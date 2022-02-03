@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, ScrollView, Alert, Pressable } from 'react-native';
+import { Text, View, ScrollView, Alert} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import Input from '../../shared/Input';
 import { editPersonalDetails, getUser } from '../Auth/AuthSlice';
 import normalize from '../../utils/normalize';
 import { isTrue } from '../../utils/stringUtl';
+import AppButton from '../../shared/AppButton';
 
 export default function EditProfileDetailsScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -61,9 +62,6 @@ export default function EditProfileDetailsScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.content}>
-                <Pressable onPress={onSavePersonalDetails}>
-                    <Text style={styles.saveChanges}>{saving ? 'Saving' : 'Save Changes'}</Text>
-                </Pressable>
                 <Input
                     label='First name'
                     value={firstName}
@@ -130,6 +128,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         </Picker>
                     </View>
                 </View>
+                <AppButton text={saving ? 'Saving' : 'Save Changes'} onPress={onSavePersonalDetails} />
             </View>
         </ScrollView>
     );
@@ -140,34 +139,14 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFF',
-    },
-    content: {
-        marginHorizontal: normalize(18),
-        marginVertical: normalize(10),
-        marginBottom: normalize(20),
+        paddingHorizontal: normalize(18),
+       paddingVertical: normalize(20),
     },
     inputLabel: {
         fontSize: '0.7rem',
         fontFamily: 'graphik-medium',
         color: 'rgba(0, 0, 0, 0.7)',
         marginBottom: normalize(5)
-    },
-    saveChanges: {
-        fontSize: normalize(12),
-        fontFamily: 'graphik-medium',
-        color: '#EF2F55',
-        marginLeft: 'auto',
-        fontSize: '0.7rem'
-    },
-    input: {
-        borderColor: ' rgba(0, 0, 0, 0.1)',
-        borderWidth: 1,
-        borderRadius: 8,
-        padding: normalize(6),
-        fontSize: normalize(10),
-        fontFamily: 'graphik-regular',
-        color: '#000000',
-
     },
     dateOfBirth: {
         borderColor: ' rgba(0, 0, 0, 0.1)',

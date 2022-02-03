@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Text, View, ScrollView, Pressable } from 'react-native';
+import { Text, View, ScrollView, Pressable, Alert } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Picker } from '@react-native-picker/picker';
 import { editBankDetails, getUser } from '../Auth/AuthSlice';
@@ -8,6 +8,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import Input from '../../shared/Input';
 import normalize from '../../utils/normalize';
 import { useDispatch, useSelector } from 'react-redux';
+import AppButton from '../../shared/AppButton';
 
 export default function BankDetailsScreen({ navigation }) {
 
@@ -71,45 +72,38 @@ export default function BankDetailsScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.content}>
-                <Pressable onPress={onSaveBankDetails} disabled={!canSave}>
-                    <Text style={styles.saveChanges}>{saving ? 'Saving' : 'Save Changes'}</Text>
-                </Pressable>
-                <View>
-                    <Input
-                        label='Account Number'
-                        value={accountNumber}
-                        onChangeText={text => { onChangeAccountNumber(text) }}
-                        maxLength={10}
-                        keyboardType='numeric'
-                        error={accountNumberErr && '*account number must not be less than 10 digits'}
-                    />
-                    <Input
-                        label='Name on Account'
-                        value={accountName}
-                        onChangeText={text => { onChangeAccountName(text) }}
-                        error={accountNameErr && '*account name must not be empty'}
-                    />
-                    <View style={styles.banksContainer}>
-                        <Text style={styles.bankLabel}>Select Bank</Text>
+            <Input
+                label='Account Number'
+                value={accountNumber}
+                onChangeText={text => { onChangeAccountNumber(text) }}
+                maxLength={10}
+                keyboardType='numeric'
+                error={accountNumberErr && '*account number must not be less than 10 digits'}
+            />
+            <Input
+                label='Name on Account'
+                value={accountName}
+                onChangeText={text => { onChangeAccountName(text) }}
+                error={accountNameErr && '*account name must not be empty'}
+            />
+            <View style={styles.banksContainer}>
+                <Text style={styles.bankLabel}>Select Bank</Text>
 
-                        <Picker
-                            style={styles.bankPicker}
-                            selectedValue={bankName}
-                            onValueChange={(itemValue, itemIndex) =>
-                                setBankName(itemValue)
-                            }
-                            mode='dropdown'
+                <Picker
+                    style={styles.bankPicker}
+                    selectedValue={bankName}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setBankName(itemValue)
+                    }
+                    mode='dropdown'
 
-                        >
-                            {banks && banks.map((bank, i) =>
-                                <Picker.Item label={bank.name} key={i} value={bank.name} style={styles.pickerItem} />
-                            )}
-                        </Picker>
-                    </View>
-
-                </View>
+                >
+                    {banks && banks.map((bank, i) =>
+                        <Picker.Item label={bank.name} key={i} value={bank.name} style={styles.pickerItem} />
+                    )}
+                </Picker>
             </View>
+            <AppButton text={saving ? 'Saving' : 'Save Changes'} onPress={onSaveBankDetails} disabled={!canSave} />
         </ScrollView>
     );
 }
@@ -119,12 +113,6 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(18),
         paddingVertical: normalize(10),
         backgroundColor: "#F2F5FF",
-    },
-    saveChanges: {
-        fontSize: '0.75rem',
-        fontFamily: 'graphik-medium',
-        color: '#EF2F55',
-        marginLeft: 'auto'
     },
     banksContainer: {
         marginVertical: normalize(10)
@@ -142,7 +130,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.76rem',
     },
     pickerItem: {
-        fontSize: '0.75rem', 
+        fontSize: '0.75rem',
     }
 
 });
