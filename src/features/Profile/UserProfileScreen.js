@@ -1,6 +1,7 @@
 import React, { useState} from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Pressable, ActivityIndicator } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -101,35 +102,17 @@ const ProfileTabs = () => {
 
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFF',
         // marginVertical: normalize(20)
-    },
-    contentContainer: {
-        backgroundColor: '#F8F9FD',
     },
     content: {
         marginHorizontal: normalize(18),
         paddingVertical: normalize(25),
         marginBottom: normalize(20)
 
-    },
-    header: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderColor: 'rgba(0, 0, 0, 0.15)',
-        borderBottomWidth: normalize(1),
-        paddingHorizontal: normalize(20),
-        paddingTop: normalize(15),
-    },
-    headerTextStyle: {
-        fontSize: normalize(14),
-        fontFamily: 'graphik-medium',
-        color: 'black',
-        marginLeft: normalize(15),
     },
     userAvatar: {
         flexDirection: 'column',
@@ -156,10 +139,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomColor: 'rgba(0, 0, 0, 0.1)',
         borderBottomWidth: 1,
-        paddingVertical: normalize(15)
+        paddingVertical: normalize(20)
     },
     tabText: {
-        fontSize: normalize(14),
+        fontSize: '0.93rem',
         fontFamily: 'graphik-regular',
         color: '#151C2F',
     },

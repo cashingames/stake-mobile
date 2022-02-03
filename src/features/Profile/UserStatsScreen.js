@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import React from 'react';
+import {Text, View, ScrollView, Image } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from '../../utils/normalize';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
-import { isTrue, formatCurrency } from '../../utils/stringUtl';
+import { isTrue } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
@@ -93,19 +93,6 @@ const Detail = ({
     )
 }
 
-function RecentlyPlayedCard({ game }) {
-    return (
-        <View style={[styles.card, { backgroundColor: game.bgColor }]} >
-            <Image
-                style={styles.cardIcon}
-                source={{ uri: `${backendUrl}/${game.icon}` }}
-            />
-            <Text style={styles.playedTitle}>{game.name}</Text>
-            <Text style={styles.replay}>Replay</Text>
-        </View>
-    );
-}
-
 function RecentlyPlayedCards({ games }) {
     if (!isTrue(games) || games.length === 0)
         return <></>;
@@ -121,7 +108,21 @@ function RecentlyPlayedCards({ games }) {
     )
 }
 
-const styles = StyleSheet.create({
+function RecentlyPlayedCard({ game }) {
+    return (
+        <View style={[styles.card, { backgroundColor: game.bgColor }]} >
+            <Image
+                style={styles.cardIcon}
+                source={{ uri: `${backendUrl}/${game.icon}` }}
+            />
+            <Text style={styles.playedTitle}>{game.name}</Text>
+            <Text style={styles.replay}>Replay</Text>
+        </View>
+    );
+}
+
+
+const styles = EStyleSheet.create({
 
     container: {
         flex: 1,
@@ -143,12 +144,12 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     rankText: {
-        fontSize: normalize(20),
+        fontSize: '1.25rem',
         fontFamily: 'graphik-medium',
         color: '#FFFF',
     },
     pointText: {
-        fontSize: normalize(12),
+        fontSize: '0.66rem',
         fontFamily: 'graphik-medium',
         color: '#828282',
         marginVertical: normalize(10)
@@ -163,13 +164,14 @@ const styles = StyleSheet.create({
         paddingVertical: normalize(15)
     },
     detailText: {
-        fontSize: normalize(12),
-        fontFamily: 'graphik-regular',
+        fontSize: '0.75rem',
+        fontFamily: 'graphik-medium',
         color: '#757575',
         marginBottom: normalize(10),
+        opacity : 0.8
     },
     responseText: {
-        fontSize: normalize(12),
+        fontSize: '0.75rem',
         fontFamily: 'graphik-medium',
         color: '#151C2F',
     },
@@ -206,9 +208,9 @@ const styles = StyleSheet.create({
         paddingTop: normalize(10),
     },
     title: {
-        fontSize: normalize(15),
+        fontSize: '0.89rem',
         color: '#151C2F',
-        fontFamily: 'graphik-bold',
+        fontFamily: 'graphik-regular',
         lineHeight: normalize(15),
         marginTop: normalize(10),
     },
@@ -226,8 +228,8 @@ const styles = StyleSheet.create({
         marginRight: normalize(15),
     },
     cardIcon: {
-        width: 50,
-        height: 50,
+        width: normalize(40),
+        height: normalize(40),
         borderRadius: normalize(10)
     },
     cardInstruction: {
@@ -242,16 +244,17 @@ const styles = StyleSheet.create({
         lineHeight: normalize(17),
         marginTop: normalize(8),
     },
-    replay: {
-        fontSize: normalize(10),
-        color: '#EF2F55',
-        fontFamily: 'graphik-regular',
-    },
+
     playedTitle: {
-        fontSize: 15,
+        fontSize: '0.75rem',
         color: '#4F4F4F',
         fontFamily: 'graphik-bold',
         lineHeight: 17,
         marginTop: normalize(8),
+    },
+    replay: {
+        fontSize: '0.6rem',
+        color: '#EF2F55',
+        fontFamily: 'graphik-regular',
     },
 });

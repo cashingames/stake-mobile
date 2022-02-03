@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Alert } from 'react-native';
+import {Text, View, ScrollView, Alert } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../../shared/AppButton';
@@ -114,7 +115,7 @@ const PasswordRequirement = () => {
 
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFF',
@@ -198,13 +199,13 @@ const styles = StyleSheet.create({
 
     },
     requirementTitle: {
-        fontSize: normalize(10),
+        fontSize: '0.76rem',
         fontFamily: 'graphik-medium',
         color: '#000000',
         marginBottom: normalize(8)
     },
     requirement: {
-        fontSize: normalize(10),
+        fontSize: '0.75rem',
         fontFamily: 'graphik-regular',
         color: '#000000',
         opacity: 0.4,

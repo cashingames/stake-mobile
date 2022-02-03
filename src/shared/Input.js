@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, Text, View } from 'react-native';
+import { TextInput, Text, View } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from '../utils/normalize';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -43,7 +44,13 @@ export default function (props) {
     );
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
+    inputLabel: {
+        fontFamily: 'graphik-medium',
+        color: '#000000B2',
+        fontSize:'0.76rem',
+        marginBottom: normalize(8)
+    },
     inputContainer: {
         marginBottom: normalize(15),
     },
@@ -55,12 +62,8 @@ const styles = StyleSheet.create({
         paddingRight: normalize(20),
         borderColor: '#CDD4DF',
         fontFamily: 'graphik-regular',
-        color: '#00000080'
-    },
-    inputLabel: {
-        fontFamily: 'graphik-medium',
-        color: '#000000B2',
-        marginBottom: normalize(8)
+        color: '#00000080',
+        fontSize: '0.75rem'
     },
     passwordIcon: {
         position: 'absolute',
