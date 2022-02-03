@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import { backendUrl } from '../utils/BaseUrl';
 import normalize from '../utils/normalize';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { isTrue } from '../utils/stringUtl';
 
 function TopLeader({ avatar, podPosition, name, point }) {
@@ -26,10 +27,10 @@ function TopLeader({ avatar, podPosition, name, point }) {
 }
 export default TopLeader;
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     avatar: {
-        width: normalize(30),
-        height: normalize(30),
+        width: normalize(40),
+        height: normalize(40),
         backgroundColor: '#FFFF',
         borderRadius: 50,
     },
@@ -54,8 +55,8 @@ const styles = StyleSheet.create({
     },
     leaderName: {
         color: '#535761',
-        fontSize: normalize(10),
-        fontFamily: 'graphik-bold',
+        fontSize: '0.6rem',
+        fontFamily: 'graphik-medium',
         width: normalize(75),
         textAlign: 'center',
     }

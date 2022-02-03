@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import normalize from '../utils/normalize';
 import { formatNumber } from '../utils/stringUtl';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import TopLeader from './TopLeader';
 
 
@@ -36,38 +37,7 @@ function GlobalTopLeaders({ leaders }) {
 }
 export default GlobalTopLeaders;
 
-const styles = StyleSheet.create({
-
-    title: {
-        fontSize: normalize(15),
-        color: '#151C2F',
-        fontFamily: 'graphik-bold',
-        lineHeight: normalize(15),
-        marginTop: normalize(10),
-    },
-
-    leaderboard: {
-        paddingHorizontal: normalize(20),
-        paddingTop: normalize(20),
-        marginBottom: normalize(30)
-    },
-    leaderboardHeader: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: normalize(8)
-    },
-    extended: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    extendedText: {
-        fontSize: normalize(9),
-        color: '#EF2F55',
-        fontFamily: 'graphik-bold',
-    },
+const styles = EStyleSheet.create({
     content: {
         display: 'flex',
         flexDirection: 'row',
@@ -76,8 +46,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FAC502',
         paddingHorizontal: normalize(30),
         paddingTop: normalize(25),
-        borderTopEndRadius: 10,
-        borderTopStartRadius: 10,
+        borderRadius: 10,
     },
 
 });
