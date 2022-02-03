@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
-import normalize from '../../utils/normalize';
+import normalize, {responsiveScreenWidth} from '../../utils/normalize';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function TransactionScreen({ navigation }) {
 
@@ -43,7 +44,7 @@ const FundTransactions = ({ transaction }) => {
 }
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -66,6 +67,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
+    narationTitle: {
+        fontFamily: 'graphik-medium',
+        fontSize: '0.75rem',
+        color: '#4F4F4F'
+    },
     typeAndDate: {
         display: 'flex',
         flexDirection: 'row',
@@ -75,22 +81,17 @@ const styles = StyleSheet.create({
     },
     transactionAmountReceived: {
         fontFamily: 'graphik-bold',
-        fontSize: normalize(14),
+        fontSize: '0.8rem',
         color: '#219653'
     },
     transactionAmountWithdraw: {
         fontFamily: 'graphik-bold',
-        fontSize: normalize(14),
+        fontSize: '0.8rem',
         color: '#EB5757'
-    },
-    narationTitle: {
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(12),
-        color: '#4F4F4F'
     },
     transactionType: {
         fontFamily: 'graphik-regular',
-        fontSize: normalize(10),
+        fontSize:'0.6rem',
         color: '#C4C4C4'
     },
 });
