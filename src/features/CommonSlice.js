@@ -33,8 +33,8 @@ export const getGlobalLeaders = createAsyncThunk(
 export const fetchFaqAndAnswers = createAsyncThunk(
     'common/faq/get',
     async (thunkAPI) => {
-        const response = await getData('v2/faq/fetch');
-        return response.data
+        const response = await axios.get('v2/faq/fetch');
+        return response.data.data
     }
 )
 
