@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, View, Image, ScrollView } from 'react-native';
-import normalize, {responsiveScreenHeight, responsiveScreenWidth} from '../../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { backendUrl } from '../../utils/BaseUrl';
 import * as Progress from 'react-native-progress';
@@ -62,19 +62,24 @@ const AchievementCard = ({ achievement, userPoint, }) => {
 
 
     return (
-        <View
-            style={[styles.card, { opacity: disabled ? 0.5 : 1 }, { backgroundColor: disabled ? '#C4C4C4' : '#FFFF' }]} disabled={disabled}>
-            <Image
-                source={{ uri: `${backendUrl}/${achievement.medal}` }}
-                style={styles.icon}
-            />
-            <Text style={styles.name}>{achievement.title}</Text>
-            <Text style={styles.point}>{achievement.point_milestone}</Text>
-            {disabled ?
-                <Ionicons name="lock-closed" size={30} color="#7C7D7F" />
-                :
-                <Text style={styles.unlocked}>Unlocked</Text>
-            }
+        <View style={styles.cardContainer}>
+            <View
+                style={[styles.card, { opacity: disabled ? 0.5 : 1 }, { backgroundColor: disabled ? '#C4C4C4' : '#FFFF' }]} disabled={disabled}>
+                <Image
+                    source={{ uri: `${backendUrl}/${achievement.medal}` }}
+                    style={styles.icon}
+                />
+                <Text style={styles.name}>{achievement.title}</Text>
+                <Text style={styles.point}>{achievement.point_milestone}</Text>
+                {disabled ?
+                    <Image
+                    source={require('../../../assets/images/padlock.png')}
+                    style={styles.padlock}
+                />
+                    :
+                    <Text style={styles.unlocked}>Unlocked</Text>
+                }
+            </View>
         </View>
     )
 }
@@ -107,6 +112,10 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         marginVertical: normalize(35)
+    },
+    cardContainer: {
+        flexDirection: 'column',
+        alignItems: 'center'
     },
     card: {
         alignItems: 'center',
@@ -152,5 +161,9 @@ const styles = EStyleSheet.create({
         fontSize: '0.69rem',
         color: '#EB5757',
         fontFamily: 'graphik-medium',
+    },
+    padlock: {
+        width:normalize(35),
+        height: normalize(35)
     }
 });
