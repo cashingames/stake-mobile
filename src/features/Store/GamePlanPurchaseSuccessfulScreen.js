@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import {Text, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import AppButton from '../../shared/AppButton';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 const GamePlanPurchaseSuccessfulScreen = () => {
     const user = useSelector(state => state.auth.user)
@@ -13,15 +14,12 @@ const GamePlanPurchaseSuccessfulScreen = () => {
         <View style={styles.container}>
             <View style={styles.image}>
                 <Image
-                    style={styles.thumbs}
-                    source={require('../../../assets/images/thumbs_up.png')}
+                    style={styles.success}
+                    source={require('../../../assets/images/success.png')}
                 />
             </View>
-            <View style={styles.congratsText}>
-                <Text style={styles.congratulations}>Congratulations!!!</Text>
-                <Text style={styles.congratulations}>{user.firstName}</Text>
-            </View>
-            <Text style={styles.message}>You have successfully purchased a game plan to continue playing games, climb up the leaderboard and win great prizes</Text>
+            <Text style={styles.paymentHeader}>Payment Successful</Text>
+            <Text style={styles.message}>You successfully purchased a game plan to continue playing games, climb up the leaderboard and win great prizes</Text>
             <View style={styles.congratsButtons}>
                 <AppButton text={"Play a Game"} onPress={() => navigation.navigate('Game')} style={styles.actionButton} />
                 <AppButton text={"Store"} onPress={() => navigation.navigate('GameStore')} style={styles.actionButton} />
@@ -32,47 +30,43 @@ const GamePlanPurchaseSuccessfulScreen = () => {
 export default GamePlanPurchaseSuccessfulScreen;
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#9C3DB8',
-        paddingVertical: normalize(80),
-        paddingHorizontal: normalize(20),
+        backgroundColor: '#FFFF',
+        paddingVertical: responsiveScreenWidth(20),
+        paddingHorizontal: responsiveScreenWidth(5),
     },
     image: {
         alignItems: 'center',
         marginVertical: normalize(15)
     },
-    thumbs: {
-        width: normalize(60),
+   success: {
+        width: normalize(65),
         height: normalize(65),
         marginVertical: normalize(10),
     },
-    congratulations: {
+    paymentHeader: {
         fontFamily: 'graphik-medium',
-        fontSize: normalize(30),
-        color: '#FFFF',
-        lineHeight: 50
-    },
-    congratsText: {
-        alignItems: 'center',
-        marginVertical: normalize(15)
+        fontSize: '1rem',
+        textAlign: 'center',
+        color: '#151C2F',
     },
     message: {
         fontFamily: 'graphik-regular',
         fontSize: normalize(15),
         textAlign: 'center',
-        color: '#FFFF',
-        lineHeight: 30,
+        color: '#535761',
+        lineHeight: '1.6rem',
         marginTop: normalize(35)
     },
     congratsButtons: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'center',
-        marginTop: normalize(45)
+        marginTop: responsiveScreenWidth(40)
     },
     actionButton: {
         marginHorizontal: normalize(15),
-        // width: normalize(80),
-    }
+        marginVertical: normalize(10)
+    },
 });
