@@ -1,13 +1,19 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import normalize from './../../utils/normalize';
-
-import document from './support-content.json'
+import { fetchFaqAndAnswers } from '../CommonSlice';
+import { useDispatch, useSelector} from 'react-redux';
 
 export default function SupportQuestionsScreen({ navigation }) {
+    const dispatch = useDispatch();
+    const faqs = useSelector(state => state.common.faqAndAnswers);
+    
+    useEffect(() => {
+        dispatch(fetchFaqAndAnswers());
+    },[]);
 
     return (
         <ScrollView style={styles.container}>
@@ -16,7 +22,7 @@ export default function SupportQuestionsScreen({ navigation }) {
                 <Text style={styles.title}>Go through our FAQs</Text>
             </View>
             <View style={styles.profileTabs}>
-                {document.map((faq, index) => <QuestionTab
+                {faqs.map((faq, index) => <QuestionTab
                     key={index}
                     question={faq.question}
                     answer={faq.answer} />
