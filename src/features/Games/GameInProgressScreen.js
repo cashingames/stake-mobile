@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert } from 'react-native';
-import normalize from "../../utils/normalize";
+import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,6 +16,7 @@ import {
 } from "./GameSlice";
 
 import AppButton from "../../shared/AppButton";
+import EStyleSheet from "react-native-extended-stylesheet";
 
 
 var base64 = require('base-64');
@@ -311,7 +312,7 @@ const NextButton = ({ onPress, ending }) => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
 
     image: {
         flex: 1,
@@ -326,15 +327,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     headerTitle: {
-        fontSize: normalize(12),
+        fontSize: '0.82rem',
         fontFamily: 'graphik-medium',
         color: '#FFFF',
-    },
-    headerTextStyle: {
-        fontSize: normalize(14),
-        fontFamily: 'graphik-medium',
-        color: 'black',
-        marginLeft: normalize(15),
     },
     gameProgressAndBoost: {
         display: 'flex',
@@ -367,25 +362,22 @@ const styles = StyleSheet.create({
     timeText: {
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(9)
+        fontSize: '0.7rem'
     },
     title: {
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(11)
+        fontSize: '0.8rem'
     },
     boostinfo: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center'
     },
-    information: {
-        marginLeft: normalize(10)
-    },
     amount: {
         color: '#FFFF',
         fontFamily: 'graphik-bold',
-        fontSize: normalize(9),
+        fontSize: '0.6rem',
     },
     gameQuestions: {
         // width: normalize(270),
@@ -400,7 +392,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(14),
+        fontSize: '0.9rem',
         lineHeight: normalize(26)
     },
     options: {
@@ -417,7 +409,7 @@ const styles = StyleSheet.create({
     answerText: {
         color: '#151C2F',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(11),
+        fontSize: '0.75rem',
         textAlign: 'center',
     },
     selectedOption: {
@@ -435,7 +427,7 @@ const styles = StyleSheet.create({
     questionsAnswered: {
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(9),
+        fontSize: '0.75rem',
     },
     boostContent: {
         display: 'flex',
@@ -468,17 +460,17 @@ const styles = StyleSheet.create({
         marginBottom: normalize(15)
     },
     boostName: {
-        fontSize: normalize(10),
+        fontSize: '0.69rem',
         fontFamily: 'graphik-bold',
         color: '#151C2F',
-        lineHeight: 21,
+        lineHeight: '1.2rem',
     },
     boostDescription: {
-        fontSize: normalize(10),
+        fontSize: '0.69rem',
         fontFamily: 'graphik-regular',
         color: '#828282',
-        lineHeight: 21,
-        width: normalize(170),
+        lineHeight: '1.2rem',
+        width: responsiveScreenWidth(60),
     },
     boostDialog: {
         display: 'flex',
@@ -487,19 +479,19 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     title1: {
-        fontSize: normalize(13),
-        fontFamily: 'graphik-bold',
+        fontSize: '0.82rem',
+        fontFamily: 'graphik-medium',
         color: '#000',
-        lineHeight: 23,
+        lineHeight: '1rem',
         marginBottom: normalize(15)
     },
     infoText: {
-        fontSize: normalize(10),
+        fontSize: '0.63rem',
         fontFamily: 'graphik-medium',
         color: '#FFFF',
     },
     boostIcon: {
-        width: normalize(30),
-        height: normalize(30)
+        width: normalize(35),
+        height: normalize(35)
     }
 });

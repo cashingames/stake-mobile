@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState, useRef } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
+import {Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import AppButton from '../../shared/AppButton';
@@ -12,7 +12,8 @@ import { formatNumber, isTrue } from '../../utils/stringUtl';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { setGameCategory, setGameType } from './GameSlice';
 import RBSheet from "react-native-raw-bottom-sheet";
-import normalize from '../../utils/normalize';
+import normalize, {responsiveScreenWidth} from '../../utils/normalize';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 const Toptab = createMaterialTopTabNavigator();
 
@@ -27,6 +28,20 @@ export default function GameScreen({ navigation }) {
 
         </ScrollView>
     );
+}
+
+const ProgressMessage = () => {
+    return (
+        <View style={styles.progress}>
+            <View style={styles.progressText}>
+                <Text style={styles.progressTitle}>Great going!</Text>
+                <Text style={styles.text}>Continue playing to gain more points and climb up the leaderboard.</Text>
+            </View>
+            <Image
+                source={require('../../../assets/images/treasure_chest.png')}
+            />
+        </View>
+    )
 }
 
 export const NoGames = ({ closeSheet }) => {
@@ -50,27 +65,13 @@ export const NoGames = ({ closeSheet }) => {
 }
 
 
-const ProgressMessage = () => {
-    return (
-        <View style={styles.progress}>
-            <View style={styles.progressText}>
-                <Text style={styles.progressTitle}>Great going!</Text>
-                <Text style={styles.text}>Continue playing to gain more points and climb up the leaderboard.</Text>
-            </View>
-            <Image
-                source={require('../../../assets/images/treasure_chest.png')}
-            />
-        </View>
-    )
-}
-
 const GameTabs = () => {
 
     const gameTypes = useSelector(state => state.common.gameTypes)
 
     return (
         <Toptab.Navigator screenOptions={{
-            tabBarLabelStyle: { fontSize: 11, fontFamily: 'graphik-medium', },
+            tabBarLabelStyle: { fontSize: 11, fontFamily: 'graphik-medium' },
             tabBarStyle: { backgroundColor: '#F8F9FD' },
             tabBarInactiveTintColor: '#C4C4C4',
             tabBarActiveTintColor: '#EF2F55',
@@ -227,12 +228,10 @@ const SubCategory = ({ subcategory, onSubCategorySelected, isSelected }) => {
 };
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
 
     container: {
         flex: 1,
-        // paddingVertical: normalize(22),
-        // marginBottom: normalize(20)
     },
     contentContainer: {
         backgroundColor: '#F8F9FD',
@@ -251,6 +250,34 @@ const styles = StyleSheet.create({
         borderWidth: normalize(1),
         borderColor: 'rgba(0, 0, 0, 0.15)',
     },
+    progress: {
+        display: 'flex',
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: normalize(10),
+        paddingHorizontal: normalize(15),
+        marginVertical: normalize(22),
+        borderRadius: 8,
+        borderWidth: normalize(3),
+        borderColor: '#E5E5E5',
+    },
+    progressText: {
+        width: responsiveScreenWidth(45),
+    },
+    progressTitle: {
+        fontFamily: 'graphik-medium',
+        fontSize: '1.3rem',
+        color: '#151C2F',
+    },
+    text: {
+        fontFamily: 'graphik-regular',
+        fontSize: '0.68rem',
+        color: '#7C7D7F',
+        lineHeight:'1rem',
+        marginTop: normalize(8)
+    },
     noGamesText: {
         fontFamily: 'graphik-medium',
         fontSize: normalize(16),
@@ -258,33 +285,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#000',
         lineHeight: normalize(24)
-    },
-    progress: {
-        display: 'flex',
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingVertical: normalize(7),
-        paddingHorizontal: normalize(15),
-        marginVertical: normalize(22),
-
-        borderRadius: 8,
-        borderWidth: normalize(1),
-        borderColor: 'rgba(0, 0, 0, 0.15)',
-    },
-    progressText: {
-        width: normalize(160),
-    },
-    progressTitle: {
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(20),
-        color: '#151C2F',
-    },
-    text: {
-        fontFamily: 'graphik-regular',
-        fontSize: normalize(10),
-        color: '#7C7D7F',
     },
     createQuiz: {
         display: 'flex',
@@ -325,9 +325,9 @@ const styles = StyleSheet.create({
         width: "88%",
     },
     title: {
-        fontSize: normalize(13),
+        fontSize: '0.89rem',
         color: '#151C2F',
-        fontFamily: 'graphik-bold',
+        fontFamily: 'graphik-medium',
         marginVertical: normalize(10),
     },
     cards: {
@@ -347,14 +347,14 @@ const styles = StyleSheet.create({
         borderRadius: normalize(10)
     },
     cardTitle: {
-        fontSize: normalize(12),
+        fontSize: '0.87rem',
         color: '#FFFF',
         fontFamily: 'graphik-bold',
         lineHeight: normalize(17),
         marginVertical: normalize(8),
     },
     cardInstruction: {
-        fontSize: normalize(10),
+        fontSize: '0.73rem',
         color: '#FFFF',
         fontFamily: 'graphik-regular',
     },
@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
     },
     gameButton: {
         fontFamily: 'graphik-medium',
-        fontSize: normalize(11),
+        fontSize: '0.73rem',
         color: '#151C2F',
         textAlign: 'center'
     },
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     subcategory: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: normalize(7),
+        paddingVertical: normalize(10),
         paddingHorizontal: normalize(18),
         borderRadius: 20,
         marginRight: normalize(10),
