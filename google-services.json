@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:950406412749:android:03eff4934d94f924f46c84",
+        "mobilesdk_app_id": "1:950406412749:android:8fa929425c703b67f46c84",
         "android_client_info": {
           "package_name": "com.cashingames.cashingames"
         }
@@ -85,14 +85,6 @@
         }
       },
       "oauth_client": [
-        {
-          "client_id": "950406412749-ge677c78mt7u2gkc1p6a3hbmqu9lmf7r.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cashingames.test",
-            "certificate_hash": "b6055fc1ca61bf5056a7151d62c817a3c19da043"
-          }
-        },
         {
           "client_id": "950406412749-rhlhhduqut0c8cmic22ibkbka2q0oapp.apps.googleusercontent.com",
           "client_type": 3

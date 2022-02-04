@@ -12,11 +12,11 @@ export const gaTrackingId = getGATrackingID();
 function getAndroidClientId() {
 
     if (env === "development") {
-        return '125752028373-ik9v848h4d8n8c95bq5lrva1k5anffdo.apps.googleusercontent.com';
+        return '123011216040-2ngfo5n6380jb945b4jq4v0fmech16sv.apps.googleusercontent.com';
     } else if (env === "preview") {
-        return "125752028373-f3pls3bjaq22s82p9elsg57bd7bc0kbh.apps.googleusercontent.com";
+        return "123011216040-b88f0f2hg926lvo4e69rt1vfp6a0ob48.apps.googleusercontent.com";
     } else {
-        return "125752028373-mmdihc58hbubpt4obl59875tun5633or.apps.googleusercontent.com";
+        return "123011216040-og5ikpld5slid535nv0blrrh9rnuhfoo.apps.googleusercontent.com";
     }
 }
 
