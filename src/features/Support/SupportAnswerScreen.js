@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, ScrollView } from 'react-native';
+import {Text, ScrollView } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from './../../utils/normalize';
 
 export default function SupportAnswerScreen({ route }) {
@@ -15,7 +16,7 @@ export default function SupportAnswerScreen({ route }) {
     );
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F2F5FF',
@@ -24,14 +25,14 @@ const styles = StyleSheet.create({
     },
     question: {
         fontFamily: 'graphik-medium',
-        fontSize: normalize(14),
+        fontSize: '0.9rem',
         marginVertical: normalize(20),
         color: '#000000'
     },
     answer: {
         fontFamily: 'graphik-regular',
-        fontSize: normalize(14),
+        fontSize: '0.9rem',
         color: '#151C2F',
-        lineHeight: normalize(28)
+        lineHeight: '2.1rem'
     }
 });
