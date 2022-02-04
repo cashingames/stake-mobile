@@ -30,6 +30,14 @@ export const getGlobalLeaders = createAsyncThunk(
     }
 )
 
+export const fetchFaqAndAnswers = createAsyncThunk(
+    'common/faq/get',
+    async (thunkAPI) => {
+        const response = await axios.get('v2/faq/fetch');
+        return response.data.data
+    }
+)
+
 
 const initialState = {
     boosts: [],
@@ -39,6 +47,7 @@ const initialState = {
     plans: [],
     banks: [],
     globalLeaders: [],
+    faqAndAnswers:[]
 }
 
 export const CommonSlice = createSlice({
@@ -63,6 +72,9 @@ export const CommonSlice = createSlice({
             })
             .addCase(getGlobalLeaders.fulfilled, (state, action) => {
                 state.globalLeaders = action.payload.data
+            })
+            .addCase(fetchFaqAndAnswers.fulfilled,(state, action) => {
+                state.faqAndAnswers = action.payload
             })
     },
 });
