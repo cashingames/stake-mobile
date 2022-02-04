@@ -61,11 +61,9 @@ const UserEarnings = ({ point }) => {
 const TransactionLink = () => {
     const navigation = useNavigation();
     return (
-        <Pressable onPress={() => navigation.navigate('Transactions')}>
-            <View style={styles.link}>
-                <Text style={styles.linkTitle}>See Transactions</Text>
-                <Ionicons name="md-arrow-forward-sharp" size={24} color="#EF2F55" />
-            </View>
+        <Pressable onPress={() => navigation.navigate('Transactions')} style={styles.link}>
+            <Text style={styles.linkTitle}>See Transactions</Text>
+            <Ionicons name="md-arrow-forward-sharp" size={24} color="#EF2F55" />
         </Pressable>
     )
 };
@@ -89,8 +87,8 @@ const styles = EStyleSheet.create({
     },
     buttonContainer: {
         borderColor: 'rgba(0, 0, 0, 0.15)',
-        borderBottomWidth: normalize(1),
-        paddingVertical: normalize(20),
+        borderBottomWidth: normalize(3),
+        paddingBottom: normalize(10),
         backgroundColor: '#fff',
     },
     button: {
@@ -102,14 +100,14 @@ const styles = EStyleSheet.create({
         borderRadius: 12,
         elevation: 3,
         marginVertical: 30,
-       
+
     },
     fundButton: {
         // lineHeight: '1rem',
         letterSpacing: 0.25,
         color: 'white',
         fontFamily: 'graphik-medium',
-        fontSize: '0.9rem'
+        fontSize: '0.85rem'
     },
     earnings: {
         backgroundColor: '#fff',
@@ -118,7 +116,7 @@ const styles = EStyleSheet.create({
         marginHorizontal: normalize(18),
         marginVertical: normalize(18),
         borderRadius: 8,
-        borderWidth: normalize(1),
+        borderWidth: normalize(3),
         borderColor: 'rgba(0, 0, 0, 0.15)',
     },
     earningText: {
@@ -138,8 +136,8 @@ const styles = EStyleSheet.create({
         marginHorizontal: normalize(18),
         marginVertical: normalize(5),
         borderRadius: 8,
-        borderWidth: normalize(2),
-        borderColor: '#E5E5E5',
+        borderWidth: normalize(3),
+        borderColor: 'rgba(0, 0, 0, 0.15)',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between'
