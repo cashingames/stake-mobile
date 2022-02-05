@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
-import {Text, View, ScrollView, Pressable, TouchableOpacity, TextInput, Image } from 'react-native';
+import { Text, View, ScrollView, Pressable, TouchableOpacity, TextInput, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize, {responsiveScreenHeight} from '../../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import { Paystack } from 'react-native-paystack-webview';
 import { paystackKey } from '../../utils/BaseUrl';
 import { verifyFunding } from '../../utils/ApiHelper';
 import Input from '../../shared/Input';
+import { formatCurrency } from '../../utils/stringUtl';
 
 
 export default function FundWalletScreen() {
@@ -32,17 +33,17 @@ export default function FundWalletScreen() {
                 dispatch(getUser())
                 navigation.navigate('Wallet')
             })
-       
+
     }
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <WalletBalance balance={user.walletBalance} />
                 <View style={styles.balance}>
+                    <UserWalletBalance balance={user.walletBalance} />
                     <Text style={styles.walletTitle}>How much do you want to deposit ? (&#8358;)</Text>
                     <Input
-                        style={styles.availableAmount}
+                        style={styles.fundAmount}
                         value={amount}
                         keyboardType="numeric"
                         onChangeText={setAmount}
@@ -56,7 +57,7 @@ export default function FundWalletScreen() {
                         <Text style={styles.flagText}>NGN</Text>
                     </View>
                 </View>
-                <AppButton text='Fund Wallet' onPress={() => paystackWebViewRef.current.startTransaction()}  style={styles.actionButton} />
+                <AppButton text='Fund Wallet' onPress={() => paystackWebViewRef.current.startTransaction()} style={styles.actionButton} />
                 <Paystack
                     paystackKey={paystackKey}
                     billingEmail={user.email}
@@ -70,11 +71,17 @@ export default function FundWalletScreen() {
                     }}
 
                     ref={paystackWebViewRef}
-                    
+
                 />
             </ScrollView>
         </SafeAreaView>
     );
+}
+
+const UserWalletBalance = ({ balance }) => {
+    return (
+        <Text style={styles.availableAmount}>Bal: &#8358;{formatCurrency(balance)}</Text>
+    )
 }
 
 const styles = EStyleSheet.create({
@@ -95,11 +102,22 @@ const styles = EStyleSheet.create({
         color: '#7C7D7F'
     },
     availableAmount: {
+        fontFamily: 'graphik-medium',
+        fontSize: '0.8rem',
+        color: '#01A7DB',
+        textAlign: 'center',
+        backgroundColor: '#F3F3F3',
+        marginBottom: normalize(40),
+        paddingVertical: normalize(12),
+        paddingHorizontal: responsiveScreenWidth(8),
+        borderRadius: 64
+    },
+    fundAmount: {
         fontFamily: 'graphik-bold',
-        fontSize: '2.3rem',
+        fontSize: '2.2rem',
         color: '#333333',
         marginVertical: normalize(20),
-        width: normalize(100),
+        width: responsiveScreenWidth(100),
         textAlign: 'center',
     },
     flag: {

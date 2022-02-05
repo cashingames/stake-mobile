@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { formatCurrency } from '../../utils/stringUtl';
 
 const WalletBalance = ({ balance }) => {
@@ -18,9 +18,9 @@ const styles = EStyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: normalize(38),
-        borderColor: 'rgba(0, 0, 0, 0.15)',
-        borderBottomWidth: normalize(1),
+        paddingVertical: responsiveScreenWidth(15),
+        borderColor: '#E5E5E5',
+        borderBottomWidth: normalize(3),
         backgroundColor: '#fff',
     },
     walletTitle: {
@@ -30,7 +30,7 @@ const styles = EStyleSheet.create({
     },
     availableAmount: {
         fontFamily: 'graphik-bold',
-        fontSize: '2.3rem',
+        fontSize: '2.2rem',
         color: '#333333'
     },
 
