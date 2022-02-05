@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -8,6 +8,7 @@ import { NoGames } from './GameScreen';
 import { getUser } from '../Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { incrementCountdownResetIndex, startGame } from './GameSlice';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -174,14 +175,13 @@ const GameButtons = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#9C3DB8',
         paddingVertical: normalize(40),
         paddingHorizontal: normalize(18),
         display: 'flex',
-        marginTop: normalize(40)
     },
     image: {
         flex: 1,
@@ -202,20 +202,20 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(30),
+        fontSize: '2.3rem',
     },
     infoContainer: {
         alignItems: 'center',
         textAlign: 'center',
         marginHorizontal: normalize(25),
-        marginBottom: normalize(15)
+        marginBottom: responsiveScreenWidth(15)
     },
     info: {
         textAlign: 'center',
         color: '#FFFF',
         fontFamily: 'graphik-regular',
-        fontSize: normalize(16),
-        lineHeight: normalize(24)
+        fontSize: '1rem',
+        lineHeight: '1.5rem'
     },
     seeRank: {
         display: 'flex',
@@ -224,15 +224,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     seeRankText: {
-        // textAlign: 'center',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(10),
+        fontSize: '0.7rem',
     },
     goToLeaderboard: {
         backgroundColor: '#701F88',
         borderRadius: 8,
-        padding: normalize(13),
+        padding: normalize(15),
         marginBottom: normalize(15)
     },
     finalScore: {
@@ -243,25 +242,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#F9E821',
         padding: normalize(10),
         borderRadius: 16,
-        marginBottom: normalize(75)
+        marginBottom: responsiveScreenWidth(27)
     },
     finalScoreText: {
-        // textAlign: 'center',
         color: '#9236AD',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(11),
+        fontSize: '0.75rem',
     },
     point: {
-        // textAlign: 'center',
         color: '#9236AD',
         fontFamily: 'graphik-bold',
-        fontSize: normalize(65),
+        fontSize: '4rem',
     },
     gameButton: {
         borderColor: '#FFFF',
         borderWidth: 1,
-        width: normalize(130),
-        height: normalize(40),
+        width: responsiveScreenWidth(35),
+        height: responsiveScreenHeight(6.5),
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
@@ -278,7 +275,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        fontSize: normalize(11),
+        fontSize: '0.72rem',
     }
 
 });

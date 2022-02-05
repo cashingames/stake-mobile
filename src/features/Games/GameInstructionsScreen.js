@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
-import normalize from "../../utils/normalize";
+import { Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
+import normalize, {responsiveScreenWidth} from "../../utils/normalize";
 import { formatNumber } from '../../utils/stringUtl';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -9,6 +9,7 @@ import AppButton from "../../shared/AppButton";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { backendUrl } from '../../utils/BaseUrl';
 import { startGame, setGameSessionToken } from "./GameSlice";
+import EStyleSheet from "react-native-extended-stylesheet";
 
 
 
@@ -186,7 +187,7 @@ const GoToStore = ({ onPress }) => {
 
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F2F5FF',
@@ -198,27 +199,27 @@ const styles = StyleSheet.create({
         marginBottom: normalize(20)
     },
     instructionHeader: {
-        fontSize: normalize(12),
+        fontSize: '0.9rem',
         fontFamily: 'graphik-regular',
         color: '#4F4F4F',
-        lineHeight: normalize(18),
+        lineHeight: '1.4rem',
         textAlign: 'justify',
-        width: normalize(250),
+        width: responsiveScreenWidth(80),
         marginBottom: normalize(35)
     },
     unicode: {
-        fontSize: normalize(28),
+        fontSize: '1.5rem',
         fontFamily: 'graphik-bold',
         color: '#4F4F4F',
         marginRight: normalize(10)
     },
     instructionText: {
-        fontSize: normalize(12),
+        fontSize: '0.9rem',
         fontFamily: 'graphik-regular',
         color: '#4F4F4F',
-        lineHeight: normalize(18),
+        lineHeight: '1.4rem',
         textAlign: 'justify',
-        width: normalize(250)
+        width: responsiveScreenWidth(80)
     },
     buttonContainer: {
         marginTop: normalize(90),
@@ -234,12 +235,12 @@ const styles = StyleSheet.create({
 
     amount: {
         fontFamily: 'graphik-bold',
-        fontSize: normalize(12),
+        fontSize: '0.8rem',
         color: '#FF932F'
     },
     title: {
-        fontSize: normalize(13),
-        fontFamily: 'graphik-bold',
+        fontSize: '0.85rem',
+        fontFamily: 'graphik-medium',
         color: '#000',
         lineHeight: 23,
         marginBottom: normalize(15)
@@ -272,27 +273,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     boostName: {
-        fontSize: normalize(10),
+        fontSize: '0.69rem',
         fontFamily: 'graphik-bold',
         color: '#151C2F',
-        lineHeight: 21,
+        lineHeight: '1.2rem',
     },
     boostDescription: {
-        fontSize: normalize(10),
+        fontSize: '0.69rem',
         fontFamily: 'graphik-regular',
         color: '#828282',
-        lineHeight: 21,
-        width: normalize(170),
-        // textAlign:'right'
-
+        lineHeight: '1.2rem',
+        width: responsiveScreenWidth(60),
     },
     storeLink: {
-        fontSize: normalize(12),
+        fontSize: '0.69rem',
         fontFamily: 'graphik-medium',
         color: '#EF2F55',
     },
     needBoost: {
-        fontSize: normalize(12),
+        fontSize: '0.69rem',
         fontFamily: 'graphik-regular',
         color: '#000',
     },
@@ -303,7 +302,7 @@ const styles = StyleSheet.create({
         marginTop: normalize(50),
     },
     boostIcon: {
-        width: normalize(30),
-        height: normalize(30)
+        width: normalize(35),
+        height: normalize(35)
     }
 });

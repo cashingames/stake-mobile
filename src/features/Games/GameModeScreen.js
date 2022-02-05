@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
+import {Text, View, Image, ScrollView, Pressable } from 'react-native';
 import normalize from '../../utils/normalize';
 import { backendUrl } from '../../utils/BaseUrl';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGameMode } from './GameSlice';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function GameModeScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const AvailableMode = ({ gameMode, onPress }) => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F8F9FD',
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: normalize(18),
     },
     chooseMode: {
-        fontSize: normalize(20),
+        fontSize: '1.1rem',
         color: '#000',
         fontFamily: 'graphik-medium',
         marginVertical: normalize(10),
@@ -75,12 +76,12 @@ const styles = StyleSheet.create({
         marginVertical: normalize(10)
     },
     modeTitle: {
-        fontSize: normalize(14),
+        fontSize: '0.9rem',
         color: '#151C2F',
         fontFamily: 'graphik-medium',
     },
     modeDescription: {
-        fontSize: normalize(10),
+        fontSize: '0.69rem',
         color: '#4F4F4F',
         fontFamily: 'graphik-medium',
         opacity: 0.7
