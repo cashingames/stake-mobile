@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import normalize from './../../utils/normalize';
 import { fetchFaqAndAnswers } from '../CommonSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function SupportQuestionsScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -52,7 +53,7 @@ const QuestionTab = ({ question, answer }) => {
 }
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFF',
@@ -62,9 +63,9 @@ const styles = StyleSheet.create({
         // marginTop: normalize(20),
     },
     title: {
-        fontSize: normalize(14),
+        fontSize: '0.95rem',
         fontFamily: 'graphik-medium',
-        marginTop: normalize(10),
+        marginTop: normalize(9),
     },
     profileTabs: {
         paddingVertical: normalize(20)
@@ -78,10 +79,10 @@ const styles = StyleSheet.create({
         paddingVertical: normalize(20),
     },
     tabText: {
-        fontSize: normalize(14),
+        fontSize: '0.87rem',
         fontFamily: 'graphik-regular',
         color: '#151C2F',
-        lineHeight: normalize(20),
+        lineHeight: '1.5rem',
         width: normalize(250)
     },
 
