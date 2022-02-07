@@ -114,6 +114,13 @@ export const GameSlice = createSlice({
         },
         boostReleased: (state) => {
             state.activeBoost = {}
+        },
+        resetGameStats : (state) => {
+            state.chosenOptions = [];
+            state.pointsGained = 0;
+            state.consumedBoosts = [];
+            state.currentQuestionPosition = 0;
+            state.isLastQuestion = false;
         }
     },
 
@@ -125,13 +132,10 @@ export const GameSlice = createSlice({
                 state.displayedQuestion = state.questions[state.currentQuestionPosition]
                 state.displayedOptions = state.displayedQuestion.options
                 state.gameSessionToken = action.payload.data.game.token
-                state.pointsGained = 0
             })
             .addCase(endGame.fulfilled, (state, action) => {
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
-                state.currentQuestionPosition = 0;
-                state.isLastQuestion = false;
             })
 
     },
@@ -139,7 +143,9 @@ export const GameSlice = createSlice({
 
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion,
-    incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions } = GameSlice.actions
+    incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
+    resetGameStats,
+ } = GameSlice.actions
 
 
 export default GameSlice.reducer
