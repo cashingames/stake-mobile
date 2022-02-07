@@ -20,6 +20,8 @@ export default function GameEndResultScreen({ navigation }) {
         dispatch(getUser());
     }, []);
 
+    
+
     return (
 
         <ScrollView style={styles.container}>
@@ -117,7 +119,7 @@ const GameButtons = () => {
 
     const onPlayButtonClick = () => {
         setLoading(true);
-        dispatch(resetGameStats());
+       
         if (hasActivePlan) {
             dispatch(startGame({
                 category: gameCategoryId,
@@ -127,16 +129,18 @@ const GameButtons = () => {
                 .then(unwrapResult)
                 .then(result => {
                     setLoading(false);
+                    dispatch(resetGameStats());
                     dispatch(incrementCountdownResetIndex());
                     navigation.navigate("GameInProgress")
                 })
                 .catch(() => {
                     Alert.alert('failed to restart game')
-
+                    dispatch(resetGameStats());
                     setLoading(false);
                 });
         } else {
             setLoading(false);
+            dispatch(resetGameStats());
             openBottomSheet();
         }
     }
