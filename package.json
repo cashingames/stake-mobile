@@ -1,6 +1,5 @@
 {
   "name": "cashingames",
-  "private": true,
   "version": "1.0.0",
   "scripts": {
     "start": "cross-env APP_VARIANT=development expo start --dev-client",
@@ -33,6 +32,7 @@
     "@react-navigation/stack": "^6.0.11",
     "@reduxjs/toolkit": "^1.6.2",
     "axios": "^0.24.0",
+    "axios-cache-adapter": "^2.7.3",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "base-64": "^1.0.0",
     "connected-react-router": "^6.9.1",
