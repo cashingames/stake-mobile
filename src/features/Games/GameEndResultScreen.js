@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -149,6 +149,28 @@ const GameButtons = () => {
         dispatch(resetGameStats()); 
         navigation.navigate('Home')
     }
+
+    useEffect(
+        () =>
+            navigation.addListener('beforeRemove', (e) => {
+                e.preventDefault();
+                Alert.alert(
+                    'Game Has ended',
+                    'View Final Score?',
+                    [
+                        { text: "Yes", style: 'cancel', onPress: () => { } },
+                        {
+                            text: 'Go Home',
+                            style: 'destructive',
+                            onPress: () => {
+                                navigation.navigate('Home')
+                            },
+                        },
+                    ]
+                );
+            }),
+        [navigation]
+    );
 
     return (
         <View style={styles.gameButtons}>
