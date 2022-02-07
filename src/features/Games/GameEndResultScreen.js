@@ -89,12 +89,10 @@ const FinalScore = ({ pointsGained }) => {
     )
 }
 
-const GameButton = ({ buttonText, onPress }) => {
+const GameButton = ({ buttonText, onPress, disabled }) => {
     return (
-        <Pressable onPress={onPress}>
-            <View style={styles.gameButton}>
-                <Text style={styles.buttonText}>{buttonText}</Text>
-            </View>
+        <Pressable onPress={onPress} style={[styles.gameButton, disabled ? styles.gameButtonDisabled : {}]} >
+            <Text style={styles.buttonText}>{buttonText}</Text>
         </Pressable>
     )
 }
@@ -118,8 +116,8 @@ const GameButtons = () => {
     }
 
     const onPlayButtonClick = () => {
+        setLoading(true);
         if (hasActivePlan) {
-            setLoading(true);
             dispatch(startGame({
                 category: gameCategoryId,
                 type: gameTypeId,
@@ -146,7 +144,7 @@ const GameButtons = () => {
             <GameButton buttonText='Return to Home'
                 onPress={() => { navigation.navigate('Home') }}
             />
-            <GameButton buttonText={ loading ? 'loading...':'Play Again'}
+            <GameButton buttonText={loading ? 'loading...' : 'Play Again'}
                 onPress={onPlayButtonClick}
                 disabled={loading}
             />
@@ -263,6 +261,9 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
+    },
+    gameButtonDisabled: {
+        backgroundColor: '#DFCBCF'
     },
     gameButtons: {
         display: 'flex',
