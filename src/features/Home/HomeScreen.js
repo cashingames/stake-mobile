@@ -10,6 +10,7 @@ import { backendUrl } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, getGlobalLeaders } from '../CommonSlice';
+import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
 import { useNavigation } from '@react-navigation/core';
@@ -22,7 +23,8 @@ const HomeScreen = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-
+        dispatch(resetGameStats());
+        
         var _1 = dispatch(getUser());
         var _2 = dispatch(getCommonData());
 
