@@ -7,7 +7,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { NoGames } from './GameScreen';
 import { getUser } from '../Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { incrementCountdownResetIndex, startGame } from './GameSlice';
+import { incrementCountdownResetIndex, startGame , resetGameStats} from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 
@@ -118,6 +118,7 @@ const GameButtons = () => {
     }
 
     const onPlayButtonClick = () => {
+        dispatch(resetGameStats());
         if (hasActivePlan) {
             setLoading(true);
             dispatch(startGame({
@@ -133,6 +134,7 @@ const GameButtons = () => {
                 })
                 .catch(() => {
                     Alert.alert('failed to restart game')
+
                     setLoading(false);
                 });
         } else {
@@ -141,10 +143,15 @@ const GameButtons = () => {
         }
     }
 
+    const onHomeButtonClick = () => {
+        dispatch(resetGameStats()); 
+        navigation.navigate('Home')
+    }
+
     return (
         <View style={styles.gameButtons}>
             <GameButton buttonText='Return to Home'
-                onPress={() => { navigation.navigate('Home') }}
+                onPress={onHomeButtonClick}
             />
             <GameButton buttonText={ loading ? 'loading...':'Play Again'}
                 onPress={onPlayButtonClick}
