@@ -151,7 +151,14 @@ export const AuthSlice = createSlice({
         },
         saveCreatedUserCredentials: (state, action) => {
             state.createAccount = action.payload
-        }
+        },
+        reduceBoostCount : (state, action) => {
+            state.user.boosts.map(boost =>{
+                if( boost.id === action.payload ){
+                    return boost.count -= 1
+                }
+            })
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
@@ -185,6 +192,6 @@ export const AuthSlice = createSlice({
     },
 });
 
-export const { setToken, setUser, showLogin, setUserPasswordResetToken, saveCreatedUserCredentials } = AuthSlice.actions
+export const { setToken, setUser, showLogin, setUserPasswordResetToken, saveCreatedUserCredentials, reduceBoostCount } = AuthSlice.actions
 
 export default AuthSlice.reducer

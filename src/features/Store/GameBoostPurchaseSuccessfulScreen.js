@@ -1,15 +1,22 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import AppButton from '../../shared/AppButton';
+import { getUser } from '../Auth/AuthSlice';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 const GameBoostPurchaseSuccessfulScreen = () => {
-    const user = useSelector(state => state.auth.user)
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+  
+
+    useEffect(() => {
+        dispatch(getUser());
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.image}>

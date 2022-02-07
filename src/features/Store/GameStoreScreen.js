@@ -193,7 +193,6 @@ const BuyBoost = ({ boost, onClose }) => {
 
     const buyBoostWallet = () => {
         setLoading(true);
-
         dispatch(buyBoostFromWallet(boost.id))
             .then(unwrapResult)
             .then(result => {

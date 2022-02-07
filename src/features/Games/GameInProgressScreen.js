@@ -8,7 +8,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
 import { backendUrl, gaTrackingId } from '../../utils/BaseUrl';
-import { getUser } from "../Auth/AuthSlice";
+import { getUser, reduceBoostCount } from "../Auth/AuthSlice";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import {
     endGame, nextQuestion, questionAnswered, consumeBoost,
@@ -185,6 +185,7 @@ const AvailableBoosts = () => {
 
     const boostApplied = (data) => {
         dispatch(consumeBoost(data));
+        dispatch(reduceBoostCount(data.id))
         const name = data.name.toUpperCase();
         if (name === 'TIME FREEZE') {
             dispatch(pauseGame(true));
@@ -192,17 +193,14 @@ const AvailableBoosts = () => {
                 dispatch(pauseGame(false))
                 dispatch(boostReleased())
             }, 10000);
-            dispatch(getUser());
         }
         if (name === 'SKIP') {
             dispatch(skipQuestion());
             dispatch(boostReleased());
-            dispatch(getUser());
         }
         if (name === "BOMB") {
             dispatch(bombOptions());
             dispatch(boostReleased());
-            dispatch(getUser());
         }
     }
 
@@ -212,6 +210,7 @@ const AvailableBoosts = () => {
                 <Text style={styles.title}>Boost</Text>
             </View>
             {boostsToDisplay().map((boost, index) =>
+                boost.count >= 1 &&
                 <AvailableBoost boost={boost} key={index} onConsume={boostApplied} />
             )}
         </View>
@@ -224,7 +223,7 @@ const AvailableBoost = ({ boost, onConsume }) => {
 
     return (
         <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
-            <View style={styles.availableBoost}>
+            <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
                 <Image
                     source={{ uri: `${backendUrl}/${boost.icon}` }}
                     style={styles.boostIcon}
@@ -358,6 +357,12 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: normalize(20),
+    },
+    boostActive: {
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: normalize(5),
+        padding:normalize(7)
     },
     timeText: {
         color: '#FFFF',
