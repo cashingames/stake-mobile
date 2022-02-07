@@ -8,7 +8,7 @@ export default {
   icon: "./assets/images/icon.png",
   // jsEngine: "hermes",
   sdkVersion: "44.0.0",
-  scheme: getAppIdentifier(),
+  scheme: "cashingames",
   splash: {
     image: "./assets/images/splash.png",
     resizeMode: "contain",
