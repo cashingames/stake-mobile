@@ -65,13 +65,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-
-    headerTextStyle: {
-        fontSize: normalize(14),
-        fontFamily: 'graphik-medium',
-        color: 'black',
-        marginLeft: normalize(15),
-    },
     leaderboards: {
         // display: 'flex',
         // flexDirection: 'row',
