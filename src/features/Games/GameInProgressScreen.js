@@ -50,6 +50,21 @@ export default function GameInProgressScreen({ navigation }) {
             });
     }
 
+    const onGoBackTrigger = () => {
+        dispatch(endGame({
+            token: gameSessionToken,
+            chosenOptions,
+            consumedBoosts
+        }))
+            .then(unwrapResult)
+            .then(() => {
+                console.log('game terminated on go back');
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                console.log(rejectedValueOrSerializedError);
+            });
+    }
+
     useEffect(
         () =>
             navigation.addListener('beforeRemove', (e) => {
@@ -66,6 +81,7 @@ export default function GameInProgressScreen({ navigation }) {
                             text: 'Exit',
                             style: 'destructive',
                             onPress: () => {
+                                onGoBackTrigger();
                                 navigation.navigate('Game')
                             },
                         },
