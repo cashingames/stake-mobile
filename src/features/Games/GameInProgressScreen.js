@@ -28,8 +28,8 @@ export default function GameInProgressScreen({ navigation }) {
     const gameSessionToken = useSelector(state => state.game.gameSessionToken);
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
-    const gameCategory = useSelector(state => state.game.gameCategory);
     const [ending, setEnding] = useState(false);
+    const gameEnded = useSelector(state => state.game.isEnded);
 
     const onEndGame = () => {
         setEnding(true);
@@ -50,6 +50,30 @@ export default function GameInProgressScreen({ navigation }) {
             });
     }
 
+    useEffect(
+        () =>
+            navigation.addListener('beforeRemove', (e) => {
+                if (gameEnded) {
+                    return;
+                }
+                e.preventDefault();
+                Alert.alert(
+                    'Discard Game?',
+                    'You have an ongoing game. Do you want to discard game and leave the screen?',
+                    [
+                        { text: "Continue playing", style: 'cancel', onPress: () => { } },
+                        {
+                            text: 'Exit',
+                            style: 'destructive',
+                            onPress: () => {
+                                navigation.navigate('Game')
+                            },
+                        },
+                    ]
+                );
+            }),
+        [navigation, gameEnded]
+    );
     return (
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">
             <ScrollView>
@@ -362,7 +386,7 @@ const styles = EStyleSheet.create({
         borderWidth: 1,
         borderColor: 'rgba(255, 255, 255, 0.2)',
         borderRadius: normalize(5),
-        padding:normalize(7)
+        padding: normalize(7)
     },
     timeText: {
         color: '#FFFF',

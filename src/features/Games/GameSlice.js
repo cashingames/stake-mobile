@@ -132,6 +132,7 @@ export const GameSlice = createSlice({
                 state.displayedQuestion = state.questions[state.currentQuestionPosition]
                 state.displayedOptions = state.displayedQuestion.options
                 state.gameSessionToken = action.payload.data.game.token
+                state.isEnded = false
             })
             .addCase(endGame.fulfilled, (state, action) => {
                 state.isEnded = true;
