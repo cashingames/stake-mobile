@@ -137,8 +137,10 @@ function GameCards({ games }) {
 }
 
 function GameCard({ game }) {
+    const navigation = useNavigation();
+
     return (
-        <View style={[styles.card]} >
+        <Pressable onPress={() => navigation.navigate('Game')} style={[styles.card]} >
             <Image
                 style={styles.cardIcon}
                 source={{ uri: `${backendUrl}/${game.icon}` }}
@@ -148,7 +150,7 @@ function GameCard({ game }) {
                 <Text style={styles.cardTitle}>{game.displayName}</Text>
                 <Text style={styles.cardInstruction}>{game.description}</Text>
             </View>
-        </View>
+        </Pressable>
     );
 }
 
