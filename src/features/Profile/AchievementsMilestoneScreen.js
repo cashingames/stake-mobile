@@ -5,6 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { backendUrl } from '../../utils/BaseUrl';
 import * as Progress from 'react-native-progress';
 import { useSelector } from 'react-redux';
+import { formatNumber } from '../../utils/stringUtl';
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -20,7 +21,7 @@ export default function AchievementsMilestoneScreen({ navigation }) {
         <ScrollView style={styles.container}>
             <View style={styles.content}>
                 <MilestoneStatus milestoneIcon={{ uri: `${backendUrl}/${nextLevel.medal}` }}
-                    pointsProgress={`${user.points}/${nextLevel.point_milestone}`}
+                    pointsProgress={`${formatNumber(user.points)}/${formatNumber(nextLevel.point_milestone)}`}
                     milestoneName={`${nextLevel.title}`}
                     progress={nextLevelProgress}
                 />
@@ -70,7 +71,8 @@ const AchievementCard = ({ achievement, userPoint, }) => {
                     style={styles.icon}
                 />
                 <Text style={styles.name}>{achievement.title}</Text>
-                <Text style={styles.point}>{achievement.point_milestone}</Text>
+                <Text style={styles.point}>{formatNumber(achievement.point_milestone)}</Text>
+
                 {disabled ?
                     <Image
                     source={require('../../../assets/images/padlock.png')}

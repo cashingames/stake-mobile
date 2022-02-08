@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable, Alert, BackHandler } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { NoGames } from './GameScreen';
 import { getUser } from '../Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { incrementCountdownResetIndex, startGame , resetGameStats} from './GameSlice';
+import { incrementCountdownResetIndex, startGame, resetGameStats } from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 
@@ -20,7 +20,7 @@ export default function GameEndResultScreen({ navigation }) {
         dispatch(getUser());
     }, []);
 
-    
+
 
     return (
 
@@ -68,7 +68,7 @@ const SeeRank = () => {
 
     return (
         <Pressable
-            onPress={() => navigation.navigate('ExtendedLeaderboard')}
+            onPress={() => navigation.navigate('Leaderboard')}
             style={styles.goToLeaderboard}
         >
             <View style={styles.seeRank}>
@@ -106,6 +106,7 @@ const GameButtons = () => {
     const gameTypeId = useSelector(state => state.game.gameType.id);
     const gameModeId = useSelector(state => state.game.gameMode.id);
     const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
+    const isGameEnded = useSelector(state => state.game.isEnded);
     const [loading, setLoading] = useState(false);
     const refRBSheet = useRef();
 
@@ -119,7 +120,7 @@ const GameButtons = () => {
 
     const onPlayButtonClick = () => {
         setLoading(true);
-       
+
         if (hasActivePlan) {
             dispatch(startGame({
                 category: gameCategoryId,
@@ -146,9 +147,26 @@ const GameButtons = () => {
     }
 
     const onHomeButtonClick = () => {
-        dispatch(resetGameStats()); 
+        dispatch(resetGameStats());
         navigation.navigate('Home')
     }
+
+    useFocusEffect(
+        React.useCallback(() => {
+            const onBackPress = () => {
+                if (isGameEnded) {
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+            return () =>
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [isGameEnded])
+    );
+
 
     return (
         <View style={styles.gameButtons}>

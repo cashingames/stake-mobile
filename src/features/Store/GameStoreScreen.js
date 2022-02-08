@@ -103,7 +103,8 @@ const BuyGamePlan = ({ plan, onClose }) => {
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);
                 // after login eager get commond data for the whole app
-                Alert.alert("Notice", "Operation could not be completed, please try again");
+                navigation.navigate("GameStoreItemsPurchaseFailed")
+                // Alert.alert("Notice", "Operation could not be completed, please try again");
                 console.log(rejectedValueOrSerializedError)
             });
     }
@@ -202,7 +203,8 @@ const BuyBoost = ({ boost, onClose }) => {
             })
             .catch(rejectedValueOrSerializedError => {
                 setLoading(false);
-                Alert.alert("Notice", "Operation could not be completed, please try again");
+                // Alert.alert("Notice", "Operation could not be completed, please try again");
+                navigation.navigate("GameStoreItemsPurchaseFailed")
             });
     }
 

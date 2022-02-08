@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useRef } from 'react';
-import { Dimensions, PixelRatio } from 'react-native';
+import { Dimensions, PixelRatio, Text } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import AppLoading from 'expo-app-loading';
@@ -9,12 +9,14 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import * as Linking from 'expo-linking';
 
 import store from './src/store';
 import AppRouter from './src/AppRouter';
 
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();
+const prefix = Linking.createURL('/');
 
 EStyleSheet.build({
   $rem: getRem()
@@ -39,15 +41,19 @@ function getRem() {
     rem = rem - 2;
   }
 
-  console.log(rem);
+  console.log("rem", rem);
 
   return rem;
 }
 
-console.log(width, width > 400 ? 18 : 16);
+console.log("widtha and initial rem", width, width > 400 ? 18 : 16);
+
 
 function App() {
 
+  const linking = {
+    prefixes: [prefix],
+  };
 
   const routeNameRef = useRef();
   const navigationRef = useNavigationContainerRef();
@@ -89,6 +95,7 @@ function App() {
           routeNameRef.current = navigationRef.getCurrentRoute()?.name;
         }}
         onStateChange={onRouteChange}
+        linking={linking} fallback={<Text>Loading...</Text>}
       >
         <SafeAreaProvider>
           <AppRouter />
