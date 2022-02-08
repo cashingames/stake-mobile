@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, Image } from 'react-native';
 import { backendUrl } from '../utils/BaseUrl';
-import normalize from '../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { isTrue } from '../utils/stringUtl';
 
@@ -34,7 +34,6 @@ const styles = EStyleSheet.create({
         backgroundColor: '#FFFF',
         borderRadius: 50,
     },
-    icon: {},
     position: {
         display: 'flex',
         alignItems: 'center',
@@ -44,7 +43,7 @@ const styles = EStyleSheet.create({
     },
     point: {
         color: '#FFFF',
-        fontSize: normalize(8),
+        fontSize: '0.55rem',
         fontFamily: 'graphik-regular',
         backgroundColor: '#828282',
         paddingVertical: normalize(2),
@@ -55,9 +54,9 @@ const styles = EStyleSheet.create({
     },
     leaderName: {
         color: '#535761',
-        fontSize: '0.6rem',
+        fontSize: '0.65rem',
         fontFamily: 'graphik-medium',
-        width: normalize(75),
+        width: responsiveScreenWidth(24),
         textAlign: 'center',
     }
 });
