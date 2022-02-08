@@ -48,12 +48,27 @@ function getRem() {
 
 console.log("widtha and initial rem", width, width > 400 ? 18 : 16);
 
+const config = {
+  screens: {
+    Signup: 'signup/:referralCode',
+    AppRouter: {
+      screens: {
+        Home: 'home',
+      },
+    },
+    GameStore: 'store'
+  },
+};
+
+
+const linking = {
+  prefixes: [prefix],
+  config
+};
+
+
 
 function App() {
-
-  const linking = {
-    prefixes: [prefix],
-  };
 
   const routeNameRef = useRef();
   const navigationRef = useNavigationContainerRef();

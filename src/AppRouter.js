@@ -114,7 +114,6 @@ function AppRouter() {
                         {/** unauthenticated **/}
                         <AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
                         <AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
-                        <AppStack.Screen name="SignupScreen" component={SignupScreen} />
                         <AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
                         <AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
                         <AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} />

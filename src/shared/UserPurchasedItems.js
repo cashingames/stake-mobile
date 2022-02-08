@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -11,17 +11,24 @@ const UserItems = ({ showBuy }) => {
 
     const navigation = useNavigation();
 
-    var plans = useSelector(state => state.auth.user.activePlans);
-    const reducer = (accumulator, curr) => accumulator + curr;
-    const sumOfPlans = plans.map(a => a.game_count).reduce(reducer, 0);
+    var plans = useSelector(state => state.auth.user.activePlans ?? []);
+    var boosts = useSelector(state => state.auth.user.boosts ?? []);
+    const [sumOfPlans, setSumOfPlans] = useState(0);
+    const [boostsString, setBboostsString] = useState('');
 
-    var boostsString = "";
-    var boosts = useSelector(state => state.auth.user.boosts);
-    boosts.map((boost, i) => {
-        boostsString += `${formatNumber(boost.count)} ${boost.name}${i == boosts.length - 1 ? '' : ','} `
-    });
+    useEffect(() => {
+        const reducer = (accumulator, curr) => accumulator + curr;
+        var x = plans && plans.map(a => a.game_count).reduce(reducer, 0);
+        setSumOfPlans(x ?? 0);
 
-    boostsString = boosts.length > 0 ? boostsString : "You have no boosts";
+        var boostResult = ''
+        boosts && boosts.map((boost, i) => {
+            boostResult += `${formatNumber(boost.count)} ${boost.name}${i == boosts.length - 1 ? '' : ','} `
+        });
+
+        setBboostsString(boostResult?.length > 0 ? boostResult : "You have no boosts");
+
+    }, [boosts, plans]);
 
     return (
         <View style={styles.container}>
@@ -32,7 +39,7 @@ const UserItems = ({ showBuy }) => {
             />
             <View style={styles.leftContainer}>
                 <Text style={[styles.commonRow, styles.firstRow]}>You have {formatNumber(sumOfPlans)} games remanining</Text>
-                <Text style={[styles.commonRow, boosts.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
+                <Text style={[styles.commonRow, boosts?.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
                 {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy more</Text>}
             </View>
         </View>
