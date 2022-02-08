@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 import { backendUrl } from '../utils/BaseUrl';
-import normalize from '../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber, isTrue } from '../utils/stringUtl';
 import OtherLeaders from './OtherLeaders';
 
@@ -67,23 +68,18 @@ function CategoryTopLeader({ avatar, name, position, point, topLeaderStyle }) {
     )
 }
 
-const styles = StyleSheet.create({
-    categories: {
-        display: 'flex',
-        flexDirection: 'row',
-    },
+const styles = EStyleSheet.create({
     categoryTitle: {
-        fontSize: normalize(16),
+        fontSize: '0.9rem',
         color: '#000',
         fontFamily: 'graphik-medium',
-        lineHeight: normalize(30),
+        lineHeight:'2rem',
         textAlign: 'center',
         marginVertical: normalize(10)
     },
     category: {
-        // paddingVertical: normalize(20),
-        paddingHorizontal: normalize(15),
-        marginRight: normalize(5)
+        paddingHorizontal: normalize(12),
+        // marginRight: normalize(1)
     },
     topLeader: {
         display: 'flex',
@@ -96,21 +92,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#9C3DB8',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
-        paddingHorizontal: normalize(30),
-        paddingTop: normalize(40),
-        paddingBottom: normalize(25),
+        paddingHorizontal: responsiveScreenWidth(8),
+        paddingTop: responsiveScreenWidth(13),
+        paddingBottom: responsiveScreenWidth(10),
         borderTopEndRadius: 10,
         borderTopStartRadius: 10,
-    },
-    icon: {
-
     },
     leaderPoint: {
         alignItems: 'center',
     },
     point: {
         color: '#FFFF',
-        fontSize: normalize(8),
+        fontSize: '0.5rem',
         fontFamily: 'graphik-regular',
         backgroundColor: '#828282',
         paddingVertical: normalize(2),
@@ -121,7 +114,7 @@ const styles = StyleSheet.create({
     },
     leaderName: {
         color: '#FFFF',
-        fontSize: normalize(10),
+        fontSize: '0.6rem',
         fontFamily: 'graphik-bold',
         width: normalize(75),
         textAlign: 'center',
@@ -148,6 +141,7 @@ const styles = StyleSheet.create({
         height: normalize(16),
         color: 'white',
         fontFamily: 'graphik-regular',
+        fontSize:'0.55rem'
     },
     firstPosition: {
         top: normalize(-30)

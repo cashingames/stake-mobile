@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import normalize from '../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import TopLeader from './TopLeader';
@@ -44,9 +44,10 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-end',
         backgroundColor: '#FAC502',
-        paddingHorizontal: normalize(30),
-        paddingTop: normalize(25),
-        borderRadius: 10,
+        paddingHorizontal: responsiveScreenWidth(7),
+        paddingTop: responsiveScreenWidth(7),
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
     },
 
 });

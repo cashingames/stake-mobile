@@ -11,6 +11,7 @@ import OtherLeaders from '../../shared/OtherLeaders';
 import { getGlobalLeaders } from '../CommonSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function ExtendedLeaderboard({ navigation }) {
 
@@ -60,25 +61,20 @@ function GlobalLeaderboard({ leaders }) {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-    },
-    leaderboards: {
-        // display: 'flex',
-        // flexDirection: 'row',
-        // justifyContent: 'center'
     },
     global: {
         paddingHorizontal: normalize(15),
         marginBottom: normalize(10),
     },
     title: {
-        fontSize: normalize(16),
+        fontSize: '0.9rem',
         color: '#000',
         fontFamily: 'graphik-medium',
-        lineHeight: normalize(30),
+        lineHeight:'2rem',
         textAlign: 'center',
         marginVertical: normalize(10)
     },
