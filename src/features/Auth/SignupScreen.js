@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import AppButton from '../../shared/AppButton';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 // import SocialSignUp from '../../shared/SocialSignUp';
 import { Link} from '@react-navigation/native';
 import AuthBanner from '../../shared/AuthBanner';
@@ -11,6 +11,7 @@ import { CheckBox } from 'react-native-elements'
 import AuthTitle from '../../shared/AuthTitle';
 import { useDispatch } from 'react-redux';
 import { saveCreatedUserCredentials } from './AuthSlice';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function SignupScreen({ navigation }) {
 
@@ -107,8 +108,8 @@ export default function SignupScreen({ navigation }) {
                 checked={checked}
                 onPress={() => setChecked(!checked)}
                 title={
-                    <Text>I agree to the
-                        <Link style={styles.linkText} to={{ screen: 'Terms' }}> terms & condition </Link> and
+                    <Text style={styles.permission}>I agree to the
+                        <Link style={styles.linkText} to={{ screen: 'Terms' }}> terms & condition </Link>and
                         <Link style={styles.linkText} to={{ screen: 'Privacy' }}> privacy Policy</Link>
                     </Text>
                 }
@@ -138,18 +139,18 @@ export default function SignupScreen({ navigation }) {
 
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
 
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingTop: normalize(15),
-        paddingHorizontal: normalize(15),
+        paddingTop: responsiveScreenWidth(4),
+        paddingHorizontal: responsiveScreenWidth(4),
 
     },
     headerBox: {
-        marginTop: normalize(50),
-        paddingTop: normalize(40)
+        marginTop: responsiveScreenWidth(13),
+        paddingTop: responsiveScreenWidth(10)
     },
     image: {
         flex: 1,
@@ -158,51 +159,13 @@ const styles = StyleSheet.create({
         left: normalize(10),
         top: normalize(10)
     },
-
-    err: {
-        fontFamily: 'graphik-regular',
-        color: '#EF2F55',
-        fontSize: normalize(10)
-    },
     inputContainer: {
-        marginTop: normalize(60),
-    },
-
-    input: {
-        height: normalize(38),
-        marginBottom: normalize(15),
-        borderWidth: normalize(1),
-        borderRadius: normalize(10),
-        paddingLeft: normalize(10),
-        paddingRight: normalize(20),
-        borderColor: '#CDD4DF',
-        fontFamily: 'graphik-regular',
-        color: '#00000080'
-
-    },
-    inputLabel: {
-        fontFamily: 'graphik-medium',
-        color: '#000000B2',
-        marginBottom: normalize(8)
-    },
-    passwordIcon: {
-        left: '90%',
-        top: '64%',
-        transform: [{ translateY: normalize(-8) }],
-        position: 'absolute',
-        zIndex: 2,
-
-    },
-    confirmPassIcon: {
-        left: '90%',
-        top: '89%',
-        transform: [{ translateY: normalize(-8) }],
-        position: 'absolute',
-        zIndex: 2,
+        marginTop: responsiveScreenWidth(13),
     },
     linkText: {
         color: '#EF2F55',
-        fontFamily: 'graphik-regular'
+        fontFamily: 'graphik-regular',
+        fontSize:'0.85rem'
     },
 
     agreement: {
@@ -211,34 +174,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderColor: '#fff'
     },
-
-    errorMsg: {
+    permission: {
+        color: '#000000',
         fontFamily: 'graphik-regular',
-        color: '#EF2F55',
-        textAlign: 'center',
-        marginTop: normalize(15),
-        fontSize: normalize(10)
-    },
-    touchable: {
-        // marginLeft: normalize(8),
-        // marginTop: normalize(8)
+        fontSize:'0.85rem'
     },
     divider: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center'
-    },
-    hr: {
-        borderBottomColor: '#CDD4DF',
-        borderBottomWidth: normalize(1),
-        paddingHorizontal: normalize(41),
-        marginBottom: normalize(5)
-    },
-    signUpOption: {
-        color: 'rgba(0, 0, 0, 0.5)',
-        marginTop: normalize(15),
-        marginHorizontal: normalize(25),
-        fontFamily: 'graphik-medium'
     },
     signIn: {
         display: 'flex',
@@ -250,15 +194,5 @@ const styles = StyleSheet.create({
         color: '#00000080',
         fontFamily: 'graphik-medium',
         marginBottom: normalize(40)
-    },
-    errorBox: {
-        marginVertical: normalize(20),
-        backgroundColor: '#F442741A',
-        paddingVertical: normalize(6),
-        borderRadius: normalize(8),
-        textAlign: 'center',
-        fontFamily: 'graphik-regular',
-        color: '#EF2F55',
-        fontSize: normalize(10)
     },
 });

@@ -9,12 +9,13 @@ import SocialSignUp from '../../shared/SocialSignUp';
 import AuthBanner from '../../shared/AuthBanner';
 import AuthTitle from '../../shared/AuthTitle';
 import AppButton from '../../shared/AppButton';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { loginUser } from './AuthSlice';
 import Input from '../../shared/Input';
 import { isStaging } from '../../utils/BaseUrl';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function LoginScreen({ navigation }) {
 
@@ -117,8 +118,8 @@ const RenderForgotPassword = () => {
 const RenderCreateAccount = () => {
     const navigation = useNavigation();
     return (
-        <View style={styles.signIn}><Text style={styles.signInText}>Don't have an account ? </Text>
-            <Pressable onPress={() => navigation.navigate('Signup')} >
+        <View style={styles.signIn}><Text style={styles.signInText}>Don't have an account ?</Text>
+            <Pressable onPress={() => navigation.navigate('Signup')}>
                 <Text style={styles.linkText}>Create one</Text>
             </Pressable>
         </View>
@@ -126,88 +127,53 @@ const RenderCreateAccount = () => {
 }
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
 
     container: {
         flex: 1,
-        paddingHorizontal: normalize(20),
+        paddingHorizontal: responsiveScreenWidth(3),
 
     },
     headerBox: {
-        marginTop: normalize(120),
+        marginTop: responsiveScreenWidth(30),
     },
     inputContainer: {
-        marginTop: normalize(25),
+        marginTop: responsiveScreenWidth(10),
     },
 
     errorBox: {
-        marginVertical: normalize(20),
+        marginVertical: responsiveScreenWidth(5),
         backgroundColor: '#F442741A',
         paddingVertical: normalize(6),
         borderRadius: normalize(8),
         textAlign: 'center',
         fontFamily: 'graphik-regular',
         color: '#EF2F55',
-        fontSize: normalize(10)
-    },
-    input: {
-        height: normalize(38),
-        marginBottom: normalize(15),
-        borderWidth: normalize(1),
-        borderRadius: normalize(10),
-        paddingLeft: normalize(10),
-        paddingRight: normalize(20),
-        borderColor: '#CDD4DF',
-        fontFamily: 'graphik-regular',
-        color: '#00000080'
-
+        fontSize: '0.7rem'
     },
     textRight: {
         textAlign: "right"
     },
-    inputLabel: {
-        fontFamily: 'graphik-medium',
-        color: '#000000B2',
-        marginBottom: normalize(8)
-    },
-
     linkText: {
         color: '#EF2F55',
         fontFamily: 'graphik-medium',
-        marginLeft: normalize(15)
-    },
-    errorMsg: {
-        fontFamily: 'graphik-regular',
-        color: '#EF2F55',
-        textAlign: 'center',
-        marginTop: normalize(15),
-        fontSize: normalize(10)
+        marginLeft: normalize(15),
+        fontSize: '0.87rem'
     },
     divider: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center'
     },
-    hr: {
-        borderBottomColor: '#CDD4DF',
-        borderBottomWidth: normalize(1),
-        paddingHorizontal: normalize(41),
-        marginBottom: normalize(5)
-    },
-    signUpOption: {
-        color: 'rgba(0, 0, 0, 0.5)',
-        marginTop: normalize(15),
-        marginHorizontal: normalize(25),
-        fontFamily: 'graphik-medium'
-    },
     signIn: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: normalize(25)
+        marginTop: responsiveScreenWidth(5)
     },
     signInText: {
         color: '#00000080',
         fontFamily: 'graphik-medium',
-        marginBottom: normalize(40)
+        marginBottom: responsiveScreenWidth(15),
+        fontSize: '0.87rem'
     },
 });
