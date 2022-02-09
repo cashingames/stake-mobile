@@ -5,7 +5,8 @@ import {
     View,
     Text,
 } from 'react-native';
-import normalize from '../utils/normalize';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import normalize, { responsiveScreenWidth } from '../utils/normalize';
 
 
 const PrivacyPolicyScreen = ({ navigation }) => {
@@ -364,32 +365,27 @@ const PrivacyPolicyScreen = ({ navigation }) => {
 }
 export default PrivacyPolicyScreen;
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     content: {
         justifyContent: 'space-between',
-        paddingLeft: 30,
-        paddingRight: 30,
-        paddingBottom: 50,
+        paddingHorizontal: responsiveScreenWidth(5),
+        paddingBottom: responsiveScreenWidth(20),
     },
     display: {
         flexDirection: 'row',
     },
-    unicode: {
-        color: '#151C2F',
-        fontSize: 18,
-        fontFamily: 'graphik-bold',
-    },
     title: {
         flex: 1,
-        paddingLeft: 5,
+        marginLeft: responsiveScreenWidth(2),
         color: '#151C2F',
-        fontSize: 18,
+        fontSize: '1.1rem',
         fontFamily: 'graphik-bold',
+        marginVertical: responsiveScreenWidth(1.5)
     },
     paragraph: {
         color: '#6c757dcc',
         fontFamily: 'graphik-regular',
-        fontSize: 14,
-        lineHeight: 22,
+        fontSize: '0.9rem',
+        lineHeight: '1.6rem',
     },
 })

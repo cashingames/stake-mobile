@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet , Text, View} from 'react-native';
+import {Text, View} from 'react-native';
+import EStyleSheet from "react-native-extended-stylesheet";
 // import { Text, View } from './Themed';
 import normalize from '../utils/normalize';
 
@@ -15,11 +16,11 @@ export default function AuthTitle({ text }) {
 
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     titleText: {
         textAlign: 'center',
         fontFamily: 'graphik-bold',
-        fontSize: 25,
+        fontSize: '1.55rem',
     },
 
 });
