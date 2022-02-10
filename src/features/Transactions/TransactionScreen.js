@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
-import normalize from '../../utils/normalize';
-import { formatCurrency } from '../../utils/stringUtl';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
+import { formatCurrency, isTrue } from '../../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function TransactionScreen({ navigation }) {
@@ -15,6 +15,18 @@ export default function TransactionScreen({ navigation }) {
         dispatch(getUser());
     }, []);
 
+    if (!isTrue(transactions) || transactions.length === 0)
+        return (
+            <View style={styles.noTransactionContainer}>
+                <Image
+                    style={styles.unavailable}
+                    source={require('../../../assets/images/cart-icon1.png')}
+                />
+                <Text style={styles.noTransaction}>
+                    No available transaction. Buy boost , buy game plan and fund your wallet to see transactions
+                </Text>
+            </View>
+        );
     return (
         <ScrollView style={styles.container}>
             {transactions && (
@@ -57,6 +69,25 @@ const styles = EStyleSheet.create({
         borderColor: 'rgba(0, 0, 0, 0.15)',
         borderBottomWidth: normalize(1),
     },
+    noTransactionContainer: {
+        display: 'flex',
+        marginVertical: responsiveScreenWidth(40),
+        paddingHorizontal: normalize(18),
+        alignItems:'center'
+    },
+    unavailable: {
+        width: normalize(100),
+        height: normalize(100),
+        marginVertical: normalize(10),
+    },
+    noTransaction: {
+        fontFamily: 'graphik-regular',
+        fontSize: '1rem',
+        color: '#4F4F4F',
+        lineHeight:'1.5rem',
+        textAlign: 'center',
+        marginTop: responsiveScreenWidth(8)
+    },
     narationDetails: {
         display: 'flex',
         flexDirection: 'row',
@@ -92,7 +123,7 @@ const styles = EStyleSheet.create({
     },
     transactionType: {
         fontFamily: 'graphik-regular',
-        fontSize:'0.6rem',
+        fontSize: '0.6rem',
         color: '#C4C4C4'
     },
 });

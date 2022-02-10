@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Alert } from 'react-native';
 
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
@@ -15,13 +15,15 @@ export default function ({ navigation }) {
     const [password, setPassword] = useState(isStaging ? 'zubby1234' : '');
     const [canSend, setCanSend] = useState(false);
     const [error, setError] = useState('');
+    const [passErr, setPassError] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const email = useSelector(state => state.auth.passwordReset.email);
     const code = useSelector(state => state.auth.passwordReset.userCode);
 
-    const onChangePassword = (value) => {
-        setPassword(value)
+    const onChangePassword = (text) => {
+        text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
+        setPassword(text)
     }
 
     const onSend = async () => {
@@ -34,20 +36,21 @@ export default function ({ navigation }) {
         .then((originalPromiseResult) => {
             setLoading(false);
             setCanSend(true);
+            Alert.alert('Password reset successful')
             navigation.navigate('Login');
         })
         .catch((rejectedValueOrSerializedError) => {
             console.log(rejectedValueOrSerializedError)
-            setError("Network Error");
+            setError("Password reset failed, try again");
             setLoading(false);
         })
     }
 
     useEffect(() => {
-        var valid = password.length > 5;
-        setCanSend(valid);
+        var invalid = passErr;
+        setCanSend(!invalid);
         setError('');
-    }, [password]);
+    }, [passErr]);
 
     return (
         <ScrollView style={styles.container}>
@@ -62,9 +65,10 @@ export default function ({ navigation }) {
                     <Input
                         label='Enter new password'
                         type="password"
-                        placeholder="johndoe or johndoe@example.com"
+                        error={passErr && '*password must not be less than 8 digits'}
+                        placeholder="password must not be less than 8 characters"
                         value={password}
-                        onChangeText={text => onChangePassword(text)}
+                        onChangeText={text => { onChangePassword(text) }}
                     />
 
                 </View>
