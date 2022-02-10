@@ -4,7 +4,7 @@ export const baseURL = isStaging ? 'https://stg-api.cashingames.com/api' : 'http
 export const backendUrl = isStaging ? 'https://stg-api.cashingames.com' : 'https://api.cashingames.com';
 export const backendAPI = isStaging ? 'https://stg-api.cashingames.com/api' : 'https://api.cashingames.com/api';
 export const appUrl = isStaging ? 'https://stg.cashingames.com' : 'https://www.cashingames.com';
-export const paystackKey = isStaging ? 'pk_test_3ebf811326f87025dafdbe6829bdcbdaf8ebfd84' : 'pk_live_cee2bb8cae2f3f0ff16923b581c2bc1460ded991';
+export const paystackKey = isStaging ? 'pk_test_965f5765e86ccbbf918507efddf3b87eeed1ede8' : 'pk_live_2d9dd66f608599b9a17847de55759f731a3c9b3b';
 export const androidClientId = getAndroidClientId();
 export const gaTrackingId = getGATrackingID();
 
