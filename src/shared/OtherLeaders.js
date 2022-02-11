@@ -17,6 +17,7 @@ export default function OtherLeaders({ leaders }) {
                 position={formatNumber(i + 4)}
                 indexArrow={require('../../assets/images/up_arrow.png')}
             />)}
+            {currentLeadedrs.length === 0 && <Text style={otherLeaderStyles.noData}>No data</Text>}
         </View>
     );
 }
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#F2F5FF',
         paddingHorizontal: responsiveScreenWidth(4),
-        paddingVertical:responsiveScreenWidth(6),
+        paddingVertical: responsiveScreenWidth(6),
         borderBottomEndRadius: 10,
         borderBottomStartRadius: 10,
         marginBottom: responsiveScreenWidth(19)
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
 });
 
 
-const otherLeaderStyles =EStyleSheet.create({
+const otherLeaderStyles = EStyleSheet.create({
     container: {
         display: 'flex',
         flexDirection: 'row',
@@ -110,4 +111,10 @@ const otherLeaderStyles =EStyleSheet.create({
         fontSize: '0.55rem',
         fontFamily: 'graphik-bold',
     },
+    noData: {
+        textAlign:'center',
+        color: '#BDBDBD',
+        fontSize: '0.9rem',
+        fontFamily: 'graphik-bold',
+    }
 });
