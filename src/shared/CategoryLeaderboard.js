@@ -22,30 +22,30 @@ export default function CategoryLeaderboard({ category, leaders }) {
 function CategoryTopLeaders({ leaders }) {
 
     const topLeaders = leaders?.slice(0, 3) ?? null;
-    const firstLeader = topLeaders[0] ?? { username: "..." };
-    const secondLeader = topLeaders[1] ?? { username: "..." };
-    const thirdLeader = topLeaders[2] ?? { username: "..." };
+    const firstLeader = topLeaders[0] ?? { first_name: "..." };
+    const secondLeader = topLeaders[1] ?? { first_name: "..." };
+    const thirdLeader = topLeaders[2] ?? { first_name: "..." };
 
     return (
         <View style={styles.topLeaders}>
             <CategoryTopLeader
                 position='3'
-                name={`${thirdLeader.username}`}
-                point={`${thirdLeader.points ? `${thirdLeader.points}` : 0}`}
+                name={`${thirdLeader.first_name} ${thirdLeader.last_name}`}
+                point={thirdLeader.points}
                 avatar={thirdLeader.avatar}
             />
             <CategoryTopLeader
                 position='1'
-                name={`${firstLeader.username}`}
-                point={`${firstLeader.points ? `${firstLeader.points}` : 0}`}
+                name={`${firstLeader.first_name} ${firstLeader.last_name}`}
+                point={firstLeader.points}
                 avatar={firstLeader.avatar}
                 topLeaderStyle={styles.firstPosition}
             />
 
             <CategoryTopLeader
                 position='2'
-                name={`${secondLeader.username}`}
-                point={`${secondLeader.points ? `${secondLeader.points}` : 0}`}
+                name={`${secondLeader.first_name} ${secondLeader.last_name}`}
+                point={secondLeader.points}
                 avatar={secondLeader.avatar}
             />
         </View>
