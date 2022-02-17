@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-
 import CategoryLeaderboard from '../../shared/CategoryLeaderboard';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import PageLoading from '../../shared/PageLoading';
 import { getData } from '../../utils/ApiHelper';
 import GlobalTopLeaders from '../../shared/GlobalTopLeaders';
 import OtherLeaders from '../../shared/OtherLeaders';
-import { getGlobalLeaders } from '../CommonSlice';
+import { getGlobalLeaders} from '../CommonSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -19,6 +18,7 @@ export default function ExtendedLeaderboard({ navigation }) {
     const leaders = useSelector(state => state.common.globalLeaders)
     const [categoryLeaders, setCategoryLeaders] = useState([]);
     const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
         var _2 = getData('v2/leaders/categories').then(response => setCategoryLeaders(response.data))
@@ -51,6 +51,7 @@ export default function ExtendedLeaderboard({ navigation }) {
 }
 
 function GlobalLeaderboard({ leaders }) {
+    const dispatch = useDispatch();
     return (
         <View style={styles.global}>
             <Text style={styles.title}>Global Leaderboard</Text>
@@ -74,8 +75,16 @@ const styles = EStyleSheet.create({
         fontSize: '0.9rem',
         color: '#000',
         fontFamily: 'graphik-medium',
-        lineHeight:'2rem',
+        lineHeight: '2rem',
         textAlign: 'center',
         marginVertical: normalize(10)
     },
+    dateRange: {
+        borderRadius: 5,
+        borderColor: '#CDD4DF',
+        borderWidth: 1,
+        alignItems: 'center',
+        marginBottom: responsiveScreenWidth(5),
+        marginTop: responsiveScreenWidth(3)
+    }
 });

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import normalize from '../../utils/normalize';
 import { backendUrl } from '../../utils/BaseUrl';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,13 +9,21 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 export default function GameModeScreen({ navigation }) {
     const dispatch = useDispatch();
     const gameModes = useSelector(state => state.common.gameModes);
+    console.log(gameModes);
 
 
     const onSelectGameMode = (mode) => {
-        console.log("here")
         dispatch(setGameMode(mode));
-        navigation.navigate('GameInstructions')
-    }
+        console.log("here")
+        if (mode.name === "EXHIBITION") {
+            navigation.navigate('GameInstructions')
+        }
+        else if (mode.name === "CHALLENGE") {
+            navigation.navigate('DuelSelectPlayer')
+        }
+
+    };
+
 
     return (
         <ScrollView contentContainerStyle={styles.container}>

@@ -40,6 +40,9 @@ import GameBoostPurchaseSuccessfulScreen from './features/Store/GameBoostPurchas
 import GamePlanPurchaseSuccessfulScreen from './features/Store/GamePlanPurchaseSuccessfulScreen';
 import GameStoreScreen from './features/Store/GameStoreScreen';
 import GameStoreItemsPurchaseFailed from './features/Store/GameStoreItemsPurchaseFailedScreen';
+import DuelSelectPlayerScreen from './features/Games/DuelSelectPlayerScreen';
+import DuelScreen from './features/Games/DuelScreen';
+
 
 const AppStack = createNativeStackNavigator();
 
@@ -85,6 +88,8 @@ function AppRouter() {
                         <AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
                         <AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
                         <AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
+                        <AppStack.Screen name="DuelSelectPlayer" component={DuelSelectPlayerScreen} options={{title: 'Duel - Select a player' }} />
+                        <AppStack.Screen name="DuelScreen" component={DuelScreen} options={{title: 'Duel' }} />
 
                         {/** wallet */}
                         <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />

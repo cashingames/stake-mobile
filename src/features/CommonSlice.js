@@ -30,6 +30,7 @@ export const getGlobalLeaders = createAsyncThunk(
     }
 )
 
+
 export const fetchFaqAndAnswers = createAsyncThunk(
     'common/faq/get',
     async (thunkAPI) => {
