@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, View, Image, ScrollView, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, Image, ScrollView, TextInput, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
@@ -10,10 +10,32 @@ import { useSelector, useDispatch } from 'react-redux';
 import { backendUrl, } from '../../utils/BaseUrl';
 import AppButton from '../../shared/AppButton';
 import { isTrue } from '../../utils/stringUtl';
+import { sendFriendInvite, setSelectedFriend } from './GameSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 export default function DuelSelectPlayerScreen({ navigation }) {
     const friends = useSelector(state => state.auth.user.friends)
-    const [filteredFriends, setFilteredFriends] = useState('');
+    const [searchText, setSearchText] = useState('');
+    const [filteredFriends, setFilteredFriends] = useState(friends);
+    useEffect(() => {
+
+        if (searchText == '') {
+            setFilteredFriends(friends);
+            return;
+        }
+
+        var result = friends.filter(friend => {
+            if (friend.username.toLowerCase().includes(searchText.toLowerCase()) ||
+                friend.fullName.toLowerCase().includes(searchText.toLowerCase())
+            ) {
+                return true;
+            }
+            return false;
+        });
+
+        setFilteredFriends(result);
+
+    }, [searchText])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -23,21 +45,13 @@ export default function DuelSelectPlayerScreen({ navigation }) {
                     <TextInput
                         style={styles.input}
                         placeholder="Search your friend’s name"
-                        onChangeText={setFilteredFriends}
+                        onChangeText={setSearchText}
                         keyboardType="default"
                     />
                 </View>
                 <View>
-                    <Text style={styles.select}>Select Player</Text>
                     <View style={styles.players}>
-                        {friends.filter((friend) => {
-                            if (filteredFriends == '') {
-                                return friend
-                            } else if (friend.username.toLowerCase().includes(filteredFriends.toLowerCase()) ||
-                                (friend.fullName.toLowerCase().includes(filteredFriends.toLowerCase()))) {
-                                return friend
-                            }
-                        }).map((friend, i) => <FriendDetails friend={friend} key={i} />)}
+                        {filteredFriends.map((friend, i) => <FriendDetails friend={friend} key={i} />)}
                     </View>
                 </View>
                 <SendInvites />
@@ -47,23 +61,53 @@ export default function DuelSelectPlayerScreen({ navigation }) {
 }
 
 
-const FriendDetails = ({ friend, selected }) => {
+const FriendDetails = ({ friend }) => {
+    const dispatch = useDispatch();
+    const opponentId = useSelector(state => state.game.selectedFriend.id)
+    const selectedFriend = (friend) => {
+        dispatch(setSelectedFriend(friend));
+        console.log("mountain")
+        console.log(friend)
+    }
     return (
-        <View style={[styles.friendDetails, selected ? styles.selected : {}]}>
+        <Pressable style={[styles.friendDetails, opponentId=== friend.id ? styles.selected : {}]} onPress={() => { selectedFriend(friend) }}>
             <Image
                 source={isTrue(friend.avatar) ? { uri: `${backendUrl}/${friend.avatar}` } : require("../../../assets/images/user-icon.png")}
                 style={styles.avatar}
             />
-            <Text style={[styles.friendName, selected ? styles.selectedText : {}]}>{friend.username}</Text>
-        </View>
+            <Text style={[styles.friendName, opponentId=== friend.id ? styles.selectedText : {}]}>{friend.username}</Text>
+        </Pressable>
     )
 }
 
 const SendInvites = () => {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const opponentId = useSelector(state => state.game.selectedFriend.id)
+    const categoryId = useSelector(state => state.game.gameCategory.id)
+    const gameTypeId = useSelector(state => state.game.gameType.id)
+    console.log(JSON.stringify(categoryId) + 'this is category');
+    console.log(JSON.stringify(gameTypeId) + 'this is type');
+    console.log(JSON.stringify(opponentId) + 'this is opponent');
     const sendInvite = () => {
-        navigation.navigate('DuelScreen')
+        dispatch(sendFriendInvite({
+            opponentId,
+            categoryId,
+            gameTypeId
+        }))
+            .then(unwrapResult)
+            .then(() => {
+                console.log('sent')
+                navigation.navigate('DuelScreen');
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                console.log(rejectedValueOrSerializedError);
+                Alert.alert('failed to send invite')
+                navigation.navigate('Home');
+            });
+
     }
+
     return (
         <AppButton onPress={sendInvite} text='Send Invite' />
     )
@@ -104,7 +148,7 @@ const styles = EStyleSheet.create({
     },
     select: {
         fontSize: '0.8rem',
-        fontFamily: 'graphik-bold',
+        fontFamily: 'graphik-medium',
         color: '#219653',
         marginBottom: responsiveScreenWidth(5)
     },
@@ -114,13 +158,13 @@ const styles = EStyleSheet.create({
     friendDetails: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: normalize(16),
         backgroundColor: '#E9E8E8',
         borderRadius: 45,
         paddingVertical: responsiveScreenWidth(2),
-        paddingHorizontal: normalize(30)
+        paddingHorizontal: normalize(15),
     },
     selected: {
         backgroundColor: '#151C2F',
@@ -128,12 +172,13 @@ const styles = EStyleSheet.create({
         borderColor: '#EF2F55',
     },
     avatar: {
-        width: normalize(35),
-        height: normalize(35),
+        width: normalize(30),
+        height: normalize(30),
         backgroundColor: '#FFFF',
         borderRadius: 50,
         borderColor: '#6FCF97',
         borderWidth: 1,
+        marginRight: normalize(12)
     },
     selectedText: {
         color: '#FFFF'

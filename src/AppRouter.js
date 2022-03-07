@@ -88,8 +88,8 @@ function AppRouter() {
                         <AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
                         <AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
                         <AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
-                        <AppStack.Screen name="DuelSelectPlayer" component={DuelSelectPlayerScreen} options={{title: 'Duel - Select a player' }} />
-                        <AppStack.Screen name="DuelScreen" component={DuelScreen} options={{title: 'Duel' }} />
+                        <AppStack.Screen name="DuelSelectPlayer" component={DuelSelectPlayerScreen} options={{title: 'Challenge - Select a player' }} />
+                        <AppStack.Screen name="DuelScreen" component={DuelScreen} options={{title: 'Challenge' }} />
 
                         {/** wallet */}
                         <AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
