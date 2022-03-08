@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, Alert, Pressable, ScrollView } from 'react-native';
+import { Text, View, Image, Pressable, ScrollView } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { backendUrl } from '../../utils/BaseUrl';
 import { useNavigation } from '@react-navigation/native';
