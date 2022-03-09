@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Text, View, ScrollView, Share, Alert, Pressable } from 'react-native';
+import { Text, View, ScrollView, Share, Alert, Pressable } from 'react-native';
 import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
@@ -23,7 +23,7 @@ const Heading = () => {
     return (
         <View style={styles.heading}>
             <Text style={styles.value}>We value friendship</Text>
-            <Text style={styles.points}>at exactly 50 pts</Text>
+            <Text style={styles.points}>with your referrals</Text>
         </View>
     )
 }
@@ -32,8 +32,8 @@ const Instructions = () => {
     return (
         <>
             <Text style={styles.instructions}>
-                Refer your friends to us and they will each get 50 points.
-                On top of that, we’ll give you N150 bonus for each friend that tops up and plays a game
+                Refer your friends to us and get 2 bonus games for each friend referred, and has played at least 1 game,
+                and also stand a chance of winning exciting prizes.
             </Text>
         </>
     )
@@ -42,7 +42,7 @@ const Instructions = () => {
 const InviteLink = () => {
     const user = useSelector(state => state.auth.user);
 
-    const referralUrl = `${appUrl}/sign-up/${user.referralCode}`
+    const referralUrl = (user.referralCode)
 
     const onShare = async () => {
         try {
@@ -54,13 +54,18 @@ const InviteLink = () => {
         }
     };
 
+    const copyToClipboard = () => {
+        Clipboard.setString(referralUrl);
+        Alert.alert('Copied to clipboard')
+    };
+
     return (
         <>
             <Text style={styles.inviteLink}>Your invite link</Text>
             <View style={styles.linkContainer} >
                 <Text style={styles.link}>{referralUrl}</Text>
                 <View style={styles.shareIcons}>
-                    <ShareLink iconName="md-copy" text='Copy' onPress={() => Clipboard.setString(referralUrl)} />
+                    <ShareLink iconName="md-copy" text='Copy' onPress={copyToClipboard} />
                     <ShareLink iconName="md-share-social" text='Share' onPress={onShare} />
                 </View>
             </View>

@@ -17,6 +17,7 @@ export default function SignupProfileScreen({ navigation }) {
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
     const [referrer, setReferrer] = useState('');
+    console.log(referrer)
     const [loading, setLoading] = useState(false);
     const [canSend, setCanSend] = useState(true);
     const [fNameErr, setFnameErr] = useState(false);
@@ -30,7 +31,7 @@ export default function SignupProfileScreen({ navigation }) {
         registerUser({
             first_name: firstName,
             last_name: lastName,
-            referror: referrer,
+            referrer: referrer,
             username: username,
             ...userCredentials
         }).then(response => {
