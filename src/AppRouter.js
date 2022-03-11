@@ -40,6 +40,7 @@ import GameBoostPurchaseSuccessfulScreen from './features/Store/GameBoostPurchas
 import GamePlanPurchaseSuccessfulScreen from './features/Store/GamePlanPurchaseSuccessfulScreen';
 import GameStoreScreen from './features/Store/GameStoreScreen';
 import GameStoreItemsPurchaseFailed from './features/Store/GameStoreItemsPurchaseFailedScreen';
+import FirstTimeUserBonus from './features/Auth/FirstTimeUserBonus';
 
 const AppStack = createNativeStackNavigator();
 
@@ -128,6 +129,7 @@ function AppRouter() {
             <AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
             <AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Support' }} />
             <AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
+            <AppStack.Screen name="FirstTimeBonus" component={FirstTimeUserBonus} options={{ headerShown: false }} />
 
         </AppStack.Navigator >
     )

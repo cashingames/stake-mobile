@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize, { responsiveFontSize, responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
@@ -15,16 +15,18 @@ import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
 import { useNavigation } from '@react-navigation/core';
 
+
 const HomeScreen = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     const gameTypes = useSelector(state => state.common.gameTypes)
     const [loading, setLoading] = useState(true);
+   
 
     useEffect(() => {
         dispatch(resetGameStats());
-        
+
         var _1 = dispatch(getUser());
         var _2 = dispatch(getCommonData());
 
@@ -32,6 +34,7 @@ const HomeScreen = () => {
             setLoading(false);
         });
     }, []);
+
 
     useFocusEffect(
         React.useCallback(() => {
@@ -137,10 +140,9 @@ function GameCards({ games }) {
 }
 
 function GameCard({ game }) {
-    const navigation = useNavigation();
 
     return (
-        <Pressable onPress={() => navigation.navigate('Game')} style={[styles.card]} >
+        <Pressable   style={[styles.card]} >
             <Image
                 style={styles.cardIcon}
                 source={{ uri: `${backendUrl}/${game.icon}` }}
@@ -150,8 +152,17 @@ function GameCard({ game }) {
                 <Text style={styles.cardTitle}>{game.displayName}</Text>
                 <Text style={styles.cardInstruction}>{game.description}</Text>
             </View>
+
         </Pressable>
     );
+}
+
+const Test = () => {
+    return (
+        <>
+            <Text>week</Text>
+        </>
+    )
 }
 
 
@@ -299,7 +310,7 @@ const styles = EStyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         borderRadius: normalize(10),
-        alignItems:'center',
+        alignItems: 'center',
         marginRight: responsiveWidth(3),
         flexDirection: "row",
         borderColor: '#0F000000',
