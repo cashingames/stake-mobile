@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import {Text, View, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { backendUrl } from '../utils/BaseUrl';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber, isTrue } from '../utils/stringUtl';
 import OtherLeaders from './OtherLeaders';
 
-export default function CategoryLeaderboard({ category, leaders }) {
+export default function CategoryLeaderboard({ category, leaders}) {
     if (leaders === null || leaders === undefined || leaders.length === 0) {
         return <></>
     }
@@ -28,26 +28,29 @@ function CategoryTopLeaders({ leaders }) {
 
     return (
         <View style={styles.topLeaders}>
-            <CategoryTopLeader
-                position='3'
-                name={`${thirdLeader.username}`}
-                point={`${thirdLeader.points ? `${thirdLeader.points}` : 0}`}
-                avatar={thirdLeader.avatar}
-            />
-            <CategoryTopLeader
-                position='1'
-                name={`${firstLeader.username}`}
-                point={`${firstLeader.points ? `${firstLeader.points}` : 0}`}
-                avatar={firstLeader.avatar}
-                topLeaderStyle={styles.firstPosition}
-            />
+            {topLeaders.length > 0 ? <>
+                <CategoryTopLeader
+                    position='3'
+                    name={`${thirdLeader.username}`}
+                    point={`${thirdLeader.points ? `${thirdLeader.points}` : 0}`}
+                    avatar={thirdLeader.avatar}
+                />
+                <CategoryTopLeader
+                    position='1'
+                    name={`${firstLeader.username}`}
+                    point={`${firstLeader.points ? `${firstLeader.points}` : 0}`}
+                    avatar={firstLeader.avatar}
+                    topLeaderStyle={styles.firstPosition}
+                />
 
-            <CategoryTopLeader
-                position='2'
-                name={`${secondLeader.username}`}
-                point={`${secondLeader.points ? `${secondLeader.points}` : 0}`}
-                avatar={secondLeader.avatar}
-            />
+                <CategoryTopLeader
+                    position='2'
+                    name={`${secondLeader.username}`}
+                    point={`${secondLeader.points ? `${secondLeader.points}` : 0}`}
+                    avatar={secondLeader.avatar}
+                />
+            </> : <></>
+            }
         </View>
     )
 }
@@ -73,7 +76,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.9rem',
         color: '#000',
         fontFamily: 'graphik-medium',
-        lineHeight:'2rem',
+        lineHeight: '2rem',
         textAlign: 'center',
         marginVertical: normalize(10)
     },
@@ -141,7 +144,7 @@ const styles = EStyleSheet.create({
         height: normalize(16),
         color: 'white',
         fontFamily: 'graphik-regular',
-        fontSize:'0.55rem'
+        fontSize: '0.55rem'
     },
     firstPosition: {
         top: normalize(-30)
