@@ -1,34 +1,17 @@
 import * as React from 'react';
 import {Text, View, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import DatePicker from 'react-native-date-ranges';
 import { backendUrl } from '../utils/BaseUrl';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber, isTrue } from '../utils/stringUtl';
 import OtherLeaders from './OtherLeaders';
 
-export default function CategoryLeaderboard({ category, leaders, onClicked }) {
+export default function CategoryLeaderboard({ category, leaders}) {
     if (leaders === null || leaders === undefined || leaders.length === 0) {
-        return <Text>No Data</Text>
+        return <></>
     }
     return (
         <View style={styles.category}>
-            <DatePicker
-                style={styles.filterContainer}
-                customStyles={{
-                    placeholderText: { fontSize: 13 },
-                    headerStyle: { backgroundColor: '#FAC502' },
-                    headerMarkTitle: { fontSize: 15 },
-                    headerDateTitle: { fontSize: 15 },
-                }}
-                centerAlign
-                allowFontScaling={false}
-                placeholder={'Filter by Date :'}
-                mode={'range'}
-                markText={'Select date'}
-                onConfirm={onClicked}
-                selectedBgColor={'#EF2F55'}
-            />
             <Text style={styles.categoryTitle}>{category}</Text>
             <CategoryTopLeaders leaders={leaders} />
             <OtherLeaders leaders={leaders} />
@@ -100,12 +83,6 @@ const styles = EStyleSheet.create({
     category: {
         paddingHorizontal: normalize(12),
         // marginRight: normalize(1)
-    },
-    filterContainer: {
-        height: responsiveScreenWidth(8),
-        marginTop: responsiveScreenWidth(5),
-        borderRadius: '.2rem',
-        borderWidth: .5
     },
     topLeader: {
         display: 'flex',
