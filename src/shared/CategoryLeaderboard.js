@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import {Text, View, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import DatePicker from 'react-native-date-ranges';
 import { backendUrl } from '../utils/BaseUrl';
@@ -17,18 +17,17 @@ export default function CategoryLeaderboard({ category, leaders, onClicked }) {
                 style={styles.filterContainer}
                 customStyles={{
                     placeholderText: { fontSize: 13 },
-                    headerStyle: {},
-                    headerMarkTitle: {}, // title mark style 
-                    headerDateTitle: {}, // title Date style
-                    contentInput: {}, //content text container style
-                    contentText: {}, //after selected text Style
-                }} // optional 
-                centerAlign // optional text will align center or not
-                allowFontScaling={false} // optional
+                    headerStyle: { backgroundColor: '#FAC502' },
+                    headerMarkTitle: { fontSize: 15 },
+                    headerDateTitle: { fontSize: 15 },
+                }}
+                centerAlign
+                allowFontScaling={false}
                 placeholder={'Filter by Date :'}
                 mode={'range'}
                 markText={'Select date'}
                 onConfirm={onClicked}
+                selectedBgColor={'#EF2F55'}
             />
             <Text style={styles.categoryTitle}>{category}</Text>
             <CategoryTopLeaders leaders={leaders} />

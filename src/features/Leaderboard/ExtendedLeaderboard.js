@@ -28,8 +28,6 @@ export default function ExtendedLeaderboard({ navigation }) {
         const startDate = Math.floor(new Date(dateRange.startDate).getTime() / 1000);
         const endDate = Math.floor(new Date(dateRange.endDate).getTime() / 1000);
 
-        console.log(startDate + '  ' + endDate + 'this is extended');
-
         const sortedGlobalLeaders = () => {
             dispatch(getGlobalLeadersByDate({
                 startDate,
@@ -37,7 +35,6 @@ export default function ExtendedLeaderboard({ navigation }) {
             }
             )).then(unwrapResult)
                 .then((originalPromiseResult) => {
-                    console.log("fetched");
                 })
                 .catch((rejectedValueOrSerializedError) => {
                     console.log(rejectedValueOrSerializedError)
@@ -50,8 +47,6 @@ export default function ExtendedLeaderboard({ navigation }) {
         const startDate = Math.floor(new Date(dateRange.startDate).getTime() / 1000);
         const endDate = Math.floor(new Date(dateRange.endDate).getTime() / 1000);
 
-        console.log(startDate + '  ' + endDate + 'this is categories');
-
         const sortedCategoryLeaders = () => {
             dispatch(getCategoryLeadersByDate({
                 startDate,
@@ -59,8 +54,6 @@ export default function ExtendedLeaderboard({ navigation }) {
             }
             )).then(unwrapResult)
                 .then((originalPromiseResult) => {
-                    console.log(categoryLeaders);
-                    console.log("fetched categories");
                 })
                 .catch((rejectedValueOrSerializedError) => {
                     console.log(rejectedValueOrSerializedError)
@@ -103,19 +96,17 @@ function GlobalLeaderboard({ leaders, onClicked }) {
             <DatePicker
                 style={styles.filterContainer}
                 customStyles={{
-                    placeholderText: { fontSize: 13 }, // placeHolder style
-                    headerStyle: {backgroundColor: '#FAC502'},			// title container style
-                    headerMarkTitle: {fontSize: 15 }, // title mark style 
-                    headerDateTitle: {fontSize: 15 }, // title Date style
-                    contentText: {}, //after selected text Style
-                }} // optional 
-                centerAlign // optional text will align center or not
-                allowFontScaling={false} // optional
+                    placeholderText: { fontSize: 13 },
+                    headerStyle: {backgroundColor: '#FAC502'},
+                    headerMarkTitle: {fontSize: 15 },
+                    headerDateTitle: {fontSize: 15 },
+                }}
+                centerAlign
+                allowFontScaling={false} 
                 placeholder={'Filter by Date :'}
                 mode={'range'}
                 markText={'Select date'}
                 onConfirm={onClicked}
-                buttonText={'ok'}
                 selectedBgColor={'#EF2F55'}
             />
             <Text style={styles.title}>Global Leaderboard</Text>
