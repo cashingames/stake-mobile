@@ -41,6 +41,7 @@ import GamePlanPurchaseSuccessfulScreen from './features/Store/GamePlanPurchaseS
 import GameStoreScreen from './features/Store/GameStoreScreen';
 import GameStoreItemsPurchaseFailed from './features/Store/GameStoreItemsPurchaseFailedScreen';
 import FirstTimeUserBonus from './features/Auth/FirstTimeUserBonus';
+import LeaderBoardFilter from './features/Leaderboard/LeaderBoardFilter';
 
 const AppStack = createNativeStackNavigator();
 
@@ -79,7 +80,7 @@ function AppRouter() {
                     <>
                         <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
-                        <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Extended Leaderboard' }} />
+                        <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ headerTitle: (props) => <LeaderBoardFilter {...props} />}} />
 
                         {/** game **/}
                         <AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
