@@ -3,7 +3,7 @@ const env = process.env.APP_VARIANT;
 export default {
   name: getAppName(),
   slug: getSlug(),
-  version: "1.0.18",
+  version: "1.0.19",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   // jsEngine: "hermes",
@@ -28,12 +28,17 @@ export default {
   ],
   android: {
     package: getAppIdentifier(),
-    versionCode: 18,
+    versionCode: 19,
     googleServicesFile: "./google-services.json",
     adaptiveIcon: {
       foregroundImage: "./assets/images/icon.png",
       backgroundColor: "#FFFFFF"
     }
+  },
+  ios: {
+    bundleIdentifier: getAppIdentifier(),
+    versionCode: 19,
+    googleServicesFile: "./GoogleService-Info.plist",
   },
   plugins: [
     "@react-native-firebase/app",
