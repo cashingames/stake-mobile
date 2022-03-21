@@ -108,7 +108,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                             mode={"date"}
                             display="default"
                             onChange={onChangeDateOfBirth}
-                            minimumDate={new Date(2003, 0, 1)}
+                            maximumDate={new Date(2003, 0, 1)}
                             style={styles.dateOfBirth}
                             textColor='#00000080'
                         />

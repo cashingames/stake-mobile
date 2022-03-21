@@ -142,7 +142,7 @@ function GameCards({ games }) {
 function GameCard({ game }) {
 
     return (
-        <Pressable   style={[styles.card]} >
+        <Pressable style={[styles.card]} onPress={() => navigation.navigate('Game')}>
             <Image
                 style={styles.cardIcon}
                 source={{ uri: `${backendUrl}/${game.icon}` }}
