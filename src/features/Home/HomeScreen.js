@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
@@ -22,7 +22,7 @@ const HomeScreen = () => {
     const user = useSelector(state => state.auth.user)
     const gameTypes = useSelector(state => state.common.gameTypes)
     const [loading, setLoading] = useState(true);
-   
+
 
     useEffect(() => {
         dispatch(resetGameStats());
@@ -140,7 +140,7 @@ function GameCards({ games }) {
 }
 
 function GameCard({ game }) {
-
+    const navigation = useNavigation();
     return (
         <Pressable style={[styles.card]} onPress={() => navigation.navigate('Game')}>
             <Image
@@ -157,13 +157,6 @@ function GameCard({ game }) {
     );
 }
 
-const Test = () => {
-    return (
-        <>
-            <Text>week</Text>
-        </>
-    )
-}
 
 
 function RecentlyPlayedCards({ games }) {
