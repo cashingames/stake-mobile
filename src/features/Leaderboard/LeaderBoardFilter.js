@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Pressable, View, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
@@ -9,12 +9,10 @@ import {
 import DatePicker from 'react-native-date-ranges';
 import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import PageLoading from '../../shared/PageLoading';
 
 
 const LeaderBoardFilter = () => {
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(true);
 
     const onFilterLeaders = (dateRange) => {
         const startDate = Math.floor(new Date(dateRange.startDate).getTime() / 1000);
@@ -33,7 +31,6 @@ const LeaderBoardFilter = () => {
                 endDate
             }
             ))
-            setLoading(false)
                 .then(unwrapResult)
                 .then((originalPromiseResult) => {
                     console.log('fetched')
