@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, View, Text } from 'react-native';
+import { Pressable, View, Text, Button } from 'react-native';
 import { useDispatch } from 'react-redux';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import {
@@ -42,6 +42,11 @@ const LeaderBoardFilter = () => {
         sortedLeaders();
     }
 
+    const customButton = (onConfirm) => (
+        <Pressable onPress={onConfirm}>
+            <Text>hhh</Text>
+        </Pressable>
+    )
 
 
     return (
@@ -62,6 +67,7 @@ const LeaderBoardFilter = () => {
                     mode={'range'}
                     markText={'Select date'}
                     onConfirm={onFilterLeaders}
+                    customButton={customButton}
                     selectedBgColor={'#EF2F55'}
                 />
             </Pressable>
