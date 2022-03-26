@@ -37,7 +37,6 @@ export default {
   },
   ios: {
     bundleIdentifier: getAppIdentifier(),
-    versionCode: 19,
     googleServicesFile: "./GoogleService-Info.plist",
   },
   plugins: [
