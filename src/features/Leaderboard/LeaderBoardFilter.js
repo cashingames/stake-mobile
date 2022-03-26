@@ -43,8 +43,8 @@ const LeaderBoardFilter = () => {
     }
 
     const customButton = (onConfirm) => (
-        <Pressable onPress={onConfirm}>
-            <Text>hhh</Text>
+        <Pressable onPress={onConfirm} style={styles.confirmButton}>
+            <Text style={styles.confirmText}>OK</Text>
         </Pressable>
     )
 
@@ -96,6 +96,17 @@ const styles = EStyleSheet.create({
         borderTopWidth: 0,
         borderWidth: 0,
         backgroundColor: '#FFFF',
+    },
+    confirmButton: {
+        backgroundColor: '#EF2F55',
+        paddingHorizontal: '3rem',
+        paddingVertical: '.5rem',
+        borderRadius: 5,
+        textAlign: 'center'
+    },
+    confirmText: {
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
     },
 
 });
