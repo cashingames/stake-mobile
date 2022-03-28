@@ -12,8 +12,7 @@
       },
       "ios": {
         "buildConfiguration": "Debug",
-        "cocoapods": "1.11.3",
-        "simulator": true
+        "cocoapods": "1.11.3"
       },
       "env": {
         "APP_VARIANT": "development"
