@@ -67,7 +67,8 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(10),
         paddingHorizontal: normalize(20),
         borderColor: 'rgba(0, 0, 0, 0.15)',
-        borderBottomWidth: normalize(1),
+        borderBottomWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3)
+
     },
     noTransactionContainer: {
         display: 'flex',

@@ -275,7 +275,7 @@ const styles = EStyleSheet.create({
         paddingTop: normalize(10, "height"),
     },
     title: {
-        fontSize: '1.3rem',
+        fontSize: Platform.OS === 'ios' ? '1.4rem' : '1.3rem',
         lineHeight: '1.3rem',
         color: '#151C2F',
         fontFamily: 'graphik-medium',
@@ -283,7 +283,7 @@ const styles = EStyleSheet.create({
     },
     planInstruction: {
         color: '#151C2F',
-        fontSize: '0.8rem',
+        fontSize: Platform.OS === 'ios' ? '0.9rem' : '0.8rem',
         fontFamily: 'graphik-regular',
         lineHeight: responsiveHeight(3),
         opacity: 0.7,
@@ -333,23 +333,26 @@ const styles = EStyleSheet.create({
         justifyContent: "space-evenly",
     },
     cardTitle: {
-        fontSize: '0.9rem',
+        fontSize: '0.93rem',
         color: '#151C2F',
         fontFamily: 'graphik-medium',
     },
     cardInstruction: {
-        fontSize: '0.7rem',
+        fontSize: '0.75rem',
         color: '#151C2F',
         fontFamily: 'graphik-regular',
         lineHeight: '1rem',
         opacity: .7,
         flexWrap: 'wrap',
-        flexShrink: 1
+        flexShrink: 1,
+        marginTop: Platform.OS === 'ios' ? normalize(2) : normalize(1),
+
     },
     replay: {
         fontSize: '0.7rem',
         color: '#EF2F55',
         fontFamily: 'graphik-medium',
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
+        marginTop: Platform.OS === 'ios' ? normalize(5) : normalize(1),
     },
 });

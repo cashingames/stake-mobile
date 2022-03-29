@@ -40,17 +40,17 @@ const styles = EStyleSheet.create({
     },
     leaderPoint: {
         alignItems: 'center',
+        borderRadius: 10,
+        backgroundColor: '#828282',
+        paddingVertical: normalize(2.3),
+        paddingHorizontal: normalize(6),
+        position: 'absolute',
+        bottom: 10,
     },
     point: {
         color: '#FFFF',
         fontSize: '0.55rem',
         fontFamily: 'graphik-regular',
-        backgroundColor: '#828282',
-        paddingVertical: normalize(2),
-        paddingHorizontal: normalize(6),
-        borderRadius: 10,
-        position: 'absolute',
-        bottom: 10,
     },
     leaderName: {
         color: '#535761',
@@ -58,5 +58,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         width: responsiveScreenWidth(24),
         textAlign: 'center',
+        marginTop: Platform.OS === 'ios' ? normalize(4) : normalize(2),
+
     }
 });

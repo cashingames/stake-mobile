@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
+import { useNavigation } from '@react-navigation/native';
 // import SocialSignUp from '../../shared/SocialSignUp';
 import { Link} from '@react-navigation/native';
 import AuthBanner from '../../shared/AuthBanner';
@@ -118,7 +119,7 @@ export default function SignupScreen({ navigation }) {
             <View>
                 <AppButton text='Continue' onPress={onNext} disabled={!canSend} />
             </View>
-
+            <SignIn />
             {/* <SocialSigninDivider signInText='sign up' />
             <SocialSignUp />
             <SignIn /> */}
@@ -126,16 +127,16 @@ export default function SignupScreen({ navigation }) {
     );
 }
 
-// const SignIn = () => {
-//     const navigation = useNavigation();
-//     return (
-//         <View style={styles.signIn}><Text style={styles.signInText}>Have an account already ? </Text>
-//             <Pressable onPress={() => navigation.navigate('Login')} >
-//                 <Text style={{ ...styles.linkText, fontFamily: 'graphik-medium', marginLeft: normalize(15) }}>Sign in</Text>
-//             </Pressable>
-//         </View>
-//     )
-// }
+const SignIn = () => {
+    const navigation = useNavigation();
+    return (
+        <View style={styles.signIn}><Text style={styles.signInText}>Have an account already ?</Text>
+            <Pressable onPress={() => navigation.navigate('Login')} >
+                <Text style={{ ...styles.linkText, fontFamily: 'graphik-medium', marginLeft: normalize(7) }}>Sign in</Text>
+            </Pressable>
+        </View>
+    )
+}
 
 
 
@@ -188,7 +189,7 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: normalize(25)
+        marginTop: normalize(3),
     },
     signInText: {
         color: '#00000080',

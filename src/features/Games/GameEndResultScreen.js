@@ -267,9 +267,9 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: '#F9E821',
-        padding: normalize(10),
         borderRadius: 16,
-        marginBottom: responsiveScreenWidth(27)
+        marginBottom: responsiveScreenWidth(27),
+        padding: Platform.OS === 'ios' ? normalize(15) : normalize(10),
     },
     finalScoreText: {
         color: '#9236AD',

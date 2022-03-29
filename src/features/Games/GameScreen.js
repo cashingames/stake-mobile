@@ -260,7 +260,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(15),
         marginVertical: normalize(22),
         borderRadius: 8,
-        borderWidth: normalize(3),
+        borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
         borderColor: '#E5E5E5',
     },
     progressText: {

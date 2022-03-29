@@ -97,6 +97,7 @@ const styles = EStyleSheet.create({
         fontSize: '1.5rem',
         fontFamily: 'graphik-medium',
         color: '#151C2F',
+        marginBottom: Platform.OS === 'ios' ? normalize(10) : normalize(0),
     },
     points: {
         fontSize: '1.5rem',

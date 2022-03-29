@@ -97,7 +97,7 @@ const otherLeaderStyles = EStyleSheet.create({
     },
     rank: {
         backgroundColor: '#C4C4C4',
-        paddingHorizontal: normalize(7),
+        paddingHorizontal: Platform.OS === 'ios' ? normalize(7) : normalize(8.6),
         paddingVertical: normalize(3),
         borderRadius: 5
     },
@@ -112,7 +112,7 @@ const otherLeaderStyles = EStyleSheet.create({
         fontFamily: 'graphik-bold',
     },
     noData: {
-        textAlign:'center',
+        textAlign: 'center',
         color: '#BDBDBD',
         fontSize: '0.9rem',
         fontFamily: 'graphik-bold',

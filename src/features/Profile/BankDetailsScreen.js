@@ -119,8 +119,8 @@ const styles = EStyleSheet.create({
     },
     bankPicker: {
         color: '#000000B2',
-        borderStyle: 'solid',
-        borderWidth: 5,
+        borderWidth: 1,
+        borderColor: '#CDD4DF',
         backgroundColor: "#ebeff5",
     },
     bankLabel: {
