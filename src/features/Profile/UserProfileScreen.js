@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { Text, View, Image, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { backendUrl } from '../../utils/BaseUrl';
 import * as ImagePicker from 'expo-image-picker';
+import { isTrue } from '../../utils/stringUtl';
 import { getUser, editProfileAvatar } from '../Auth/AuthSlice';
 
 
@@ -67,7 +68,8 @@ const UserAvatar = () => {
         <View style={styles.userAvatar}>
             <Image
                 style={styles.avatar}
-                source={{ uri: `${backendUrl}/${user.avatar}` }}
+                source={isTrue(user.avatar) ? { uri: `${backendUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+
             />
             {!loading ?
                 <Pressable style={styles.camera} onPress={pickImage}>

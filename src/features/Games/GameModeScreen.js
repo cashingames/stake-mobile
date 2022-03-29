@@ -71,7 +71,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(10),
         borderRadius: 9,
         alignItems: 'flex-end',
-        borderWidth: normalize(1),
+        borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
         borderColor: 'rgba(0, 0, 0, 0.15)',
         marginVertical: normalize(10)
     },

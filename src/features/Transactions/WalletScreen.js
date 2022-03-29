@@ -51,9 +51,7 @@ const UserEarnings = ({ point }) => {
     return (
         <View style={styles.earnings}>
             <Text style={styles.earningText}>Your available point balance</Text>
-            <View style={styles.earningContainer}>
-                <Text style={styles.earningAmount}>{formatNumber(point)} pts</Text>
-            </View>
+            <Text style={styles.earningAmount}>{formatNumber(point)} pts</Text>
         </View>
     )
 };
@@ -87,7 +85,7 @@ const styles = EStyleSheet.create({
     },
     buttonContainer: {
         borderColor: 'rgba(0, 0, 0, 0.15)',
-        borderBottomWidth: normalize(3),
+        borderBottomWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
         paddingBottom: normalize(10),
         backgroundColor: '#fff',
     },
@@ -111,23 +109,24 @@ const styles = EStyleSheet.create({
     },
     earnings: {
         backgroundColor: '#fff',
-        paddingVertical: normalize(12),
+        paddingVertical: Platform.OS === 'ios' ? normalize(15) : normalize(12),
         paddingHorizontal: normalize(15),
         marginHorizontal: normalize(18),
         marginVertical: normalize(18),
         borderRadius: 8,
-        borderWidth: normalize(3),
+        borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
         borderColor: 'rgba(0, 0, 0, 0.15)',
     },
     earningText: {
         fontFamily: 'graphik-medium',
-        fontSize: '0.65rem',
-        color: 'rgba(0, 0, 0, 0.5)'
+        fontSize: '0.68rem',
+        color: 'rgba(0, 0, 0, 0.5)',
     },
     earningAmount: {
         fontFamily: 'graphik-medium',
         fontSize: '1.6rem',
-        color: 'black'
+        color: 'black',
+        marginTop: Platform.OS === 'ios' ? normalize(8) : normalize(0),
     },
     link: {
         backgroundColor: '#E5E5E5',
@@ -136,11 +135,12 @@ const styles = EStyleSheet.create({
         marginHorizontal: normalize(18),
         marginVertical: normalize(5),
         borderRadius: 8,
-        borderWidth: normalize(3),
+        borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
         borderColor: 'rgba(0, 0, 0, 0.15)',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems:'center'
     },
     linkTitle: {
         color: '#EF2F55',

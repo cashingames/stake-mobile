@@ -12,7 +12,6 @@ import WalletScreen from '../Transactions/WalletScreen';
 import GameScreen from '../Games/GameScreen';
 import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
-
 import { backendUrl } from '../../utils/BaseUrl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import AppButton from '../../shared/AppButton';
