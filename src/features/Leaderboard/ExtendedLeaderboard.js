@@ -22,6 +22,7 @@ export default function ExtendedLeaderboard({ navigation }) {
     const categoryLeaders = useSelector(state => state.common.categoryLeaders)
     const [loading, setLoading] = useState(true);
 
+
     useEffect(() => {
         dispatch(getCategoryLeaders())
         setLoading(false);
@@ -53,6 +54,7 @@ export default function ExtendedLeaderboard({ navigation }) {
 
 
 function GlobalLeaderboard({ leaders }) {
+    const dispatch = useDispatch();
     return (
         <View style={styles.global}>
             <Text style={styles.title}>Global Leaderboard</Text>
@@ -80,4 +82,12 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         marginVertical: normalize(10)
     },
+    dateRange: {
+        borderRadius: 5,
+        borderColor: '#CDD4DF',
+        borderWidth: 1,
+        alignItems: 'center',
+        marginBottom: responsiveScreenWidth(5),
+        marginTop: responsiveScreenWidth(3)
+    }
 });

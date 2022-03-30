@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable,Button } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -13,6 +13,7 @@ import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
+import DatePicker from 'react-native-date-ranges';
 import { useNavigation } from '@react-navigation/core';
 
 
@@ -66,6 +67,15 @@ const HomeScreen = () => {
 }
 
 export default HomeScreen;
+
+// const CustomButton = () => {
+//     <Button
+//     // onPress={onConfirm}
+//     // style={{ container:{ width:'80%', marginHorizontal:'3%' }, text:{ fontSize: 20 } }}
+//     primary
+//     text={'fish'}
+// />
+// }
 
 const UserDetails = ({ user }) => {
     return (

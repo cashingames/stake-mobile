@@ -3,13 +3,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, PixelRatio } from "react-native";
 import { useSelector } from "react-redux";
-import normalize from "../utils/normalize";
+import normalize, { responsiveScreenWidth } from "../utils/normalize";
 import GlobalTopLeaders from "./GlobalTopLeaders";
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function GlobalTopLeadersHero() {
     const navigation = useNavigation();
     const leaders = useSelector(state => state.common.globalLeaders)
+   
     console.log("pixel ratio", PixelRatio.get());
     console.log("font scale", PixelRatio.getFontScale());
     console.log("pixel size for 12", PixelRatio.getPixelSizeForLayoutSize(12));
@@ -57,4 +58,5 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
+  
 })

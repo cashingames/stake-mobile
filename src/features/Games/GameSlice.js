@@ -32,6 +32,17 @@ export const endGame = createAsyncThunk(
     }
 )
 
+export const sendFriendInvite = createAsyncThunk(
+    'game/sendFriendInvite',
+    async (data, thunkAPI) => {
+        console.log('before invite');
+        //make a network request to the server
+        const response = await axios.post('v2/game/challenge/invite', data)
+        console.log('invite sent');
+        return response;
+    }
+)
+
 
 //This is to store the currently ongoing active game
 const initialState = {
@@ -51,7 +62,8 @@ const initialState = {
     pointsGained: 0,
     isEnded: true,
     displayedOptions: [],
-    displayedQuestion: {}
+    displayedQuestion: {},
+    selectedFriend: ''
 }
 
 
@@ -70,6 +82,10 @@ export const GameSlice = createSlice({
         setGameMode: (state, action) => {
             console.log("here")
             state.gameMode = action.payload;
+        },
+        setSelectedFriend: (state, action) => {
+            console.log("main")
+            state.selectedFriend = action.payload;
         },
         setPointsGained: (state, action) => {
             state.pointsGained = action.payload;
@@ -145,7 +161,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    resetGameStats,
+    resetGameStats, setSelectedFriend,
  } = GameSlice.actions
 
 
