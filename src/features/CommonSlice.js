@@ -30,6 +30,30 @@ export const getGlobalLeaders = createAsyncThunk(
     }
 )
 
+export const getGlobalLeadersByDate = createAsyncThunk(
+    'common/globalLeadersByDate/get',
+    async (data, thunkAPI) => {
+        const response = await axios.get(`v2/leaders/global/${data.startDate}/${data.endDate}`);
+        console.log(response.data);
+        return response.data
+    }
+)
+export const getCategoryLeaders = createAsyncThunk(
+    'common/categoryLeaders/get',
+    async (thunkAPI) => {
+        const response = await axios.get('v2/leaders/categories');
+        return response.data
+    }
+)
+
+export const getCategoryLeadersByDate = createAsyncThunk(
+    'common/categoryLeadersByDate/get',
+    async (data, thunkAPI) => {
+        const response = await axios.get(`v2/leaders/categories/${data.startDate}/${data.endDate}`);
+        console.log(response.data);
+        return response.data
+    }
+)
 
 export const fetchFaqAndAnswers = createAsyncThunk(
     'common/faq/get',
@@ -47,15 +71,18 @@ const initialState = {
     gameModes: [],
     plans: [],
     banks: [],
+    categoryLeaders: [],
     globalLeaders: [],
-    faqAndAnswers:[]
+    faqAndAnswers: []
 }
 
 export const CommonSlice = createSlice({
     name: 'common',
     initialState,
     reducers: {
-
+        setGlobalLeadersByDate: (state, action) => {
+            state.globalLeaders = action.payload.data;
+        },
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
@@ -74,7 +101,16 @@ export const CommonSlice = createSlice({
             .addCase(getGlobalLeaders.fulfilled, (state, action) => {
                 state.globalLeaders = action.payload.data
             })
-            .addCase(fetchFaqAndAnswers.fulfilled,(state, action) => {
+            .addCase(getGlobalLeadersByDate.fulfilled, (state, action) => {
+                state.globalLeaders = action.payload.data
+            })
+            .addCase(getCategoryLeaders.fulfilled, (state, action) => {
+                state.categoryLeaders = action.payload.data
+            })
+            .addCase(getCategoryLeadersByDate.fulfilled, (state, action) => {
+                state.categoryLeaders = action.payload.data
+            })
+            .addCase(fetchFaqAndAnswers.fulfilled, (state, action) => {
                 state.faqAndAnswers = action.payload
             })
     },

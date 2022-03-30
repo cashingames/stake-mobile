@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, ScrollView, Alert} from 'react-native';
+import { Text, View, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
@@ -102,16 +102,18 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         />
 
                         :
-
-                        <DateTimePicker
-                            value={dateOfBirth}
-                            mode={"date"}
-                            display="default"
-                            onChange={onChangeDateOfBirth}
-                            minimumDate={new Date(2003, 0, 1)}
-                            style={styles.dateOfBirth}
-                            textColor='#00000080'
-                        />
+                        <>
+                            <Text style={styles.inputLabel}>Date of Birth</Text>
+                            <DateTimePicker
+                                value={dateOfBirth}
+                                mode={"date"}
+                                display="default"
+                                onChange={onChangeDateOfBirth}
+                                maximumDate={new Date(2003, 0, 1)}
+                                style={styles.dateOfBirth}
+                                textColor='#00000080'
+                            />
+                        </>
                     }
                     <View style={styles.detail}>
                         <Text style={styles.inputLabel}>Select Gender</Text>
@@ -124,7 +126,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                             style={styles.select}
                         >
                             <Picker.Item label="Male" value="male" style={styles.pickerItem} />
-                            <Picker.Item label="Female" value="female" style={styles.pickerItem}  />
+                            <Picker.Item label="Female" value="female" style={styles.pickerItem} />
                         </Picker>
                     </View>
                 </View>
@@ -140,13 +142,13 @@ const styles = EStyleSheet.create({
         flex: 1,
         backgroundColor: '#FFFF',
         paddingHorizontal: normalize(18),
-       paddingVertical: normalize(20),
+        paddingVertical: normalize(20),
     },
     inputLabel: {
-        fontSize: '0.7rem',
         fontFamily: 'graphik-medium',
-        color: 'rgba(0, 0, 0, 0.7)',
-        marginBottom: normalize(5)
+        color: '#000000B2',
+        fontSize:'0.76rem',
+        marginBottom: normalize(8)
     },
     dateOfBirth: {
         borderColor: ' rgba(0, 0, 0, 0.1)',
@@ -165,12 +167,12 @@ const styles = EStyleSheet.create({
     },
     select: {
         color: '#000000B2',
-        borderStyle: 'solid',
-        borderWidth: 5,
+        borderWidth: 1,
+        borderColor: '#CDD4DF',
         backgroundColor: "#ebeff5",
     },
     pickerItem: {
-        fontSize: '0.75rem', 
+        fontSize: '0.75rem',
     }
 
 });

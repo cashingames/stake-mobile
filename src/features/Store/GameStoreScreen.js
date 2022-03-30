@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, Alert, Pressable, ScrollView } from 'react-native';
+import { Text, View, Image, Pressable, ScrollView } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { backendUrl } from '../../utils/BaseUrl';
 import { useNavigation } from '@react-navigation/native';
@@ -294,20 +294,24 @@ const styles = EStyleSheet.create({
         backgroundColor: '#FFFF',
         borderRadius: 11,
         marginBottom: normalize(15),
-        borderWidth: normalize(1),
+        borderWidth: Platform.OS === 'ios' ? normalize(0.5) : normalize(1),
         borderColor: '#E0E0E0',
         paddingVertical: normalize(13),
+        paddingVertical: Platform.OS === 'ios' ? normalize(14) : normalize(13),
         paddingHorizontal: normalize(15),
         flexDirection: 'row',
         justifyContent: 'space-between',
         elevation: 2.5,
+        shadowColor: '#000',
+        shadowOffset: {width: 0.5, height: 2},
+        shadowOpacity: 0.2,
     },
     buyItemCard: {
         alignItems: 'center',
         backgroundColor: '#F8F9FD',
         borderRadius: 11,
         marginVertical: normalize(22),
-        borderWidth: normalize(1),
+        borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(2.4),
         borderColor: '#E0E0E0',
         paddingVertical: normalize(13),
         paddingHorizontal: normalize(15),

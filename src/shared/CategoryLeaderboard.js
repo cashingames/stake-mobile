@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { backendUrl } from '../utils/BaseUrl';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
@@ -28,26 +28,29 @@ function CategoryTopLeaders({ leaders }) {
 
     return (
         <View style={styles.topLeaders}>
-            <CategoryTopLeader
-                position='3'
-                name={`${thirdLeader.username}`}
-                point={`${thirdLeader.points ? `${thirdLeader.points}` : 0}`}
-                avatar={thirdLeader.avatar}
-            />
-            <CategoryTopLeader
-                position='1'
-                name={`${firstLeader.username}`}
-                point={`${firstLeader.points ? `${firstLeader.points}` : 0}`}
-                avatar={firstLeader.avatar}
-                topLeaderStyle={styles.firstPosition}
-            />
+            {topLeaders.length > 0 ? <>
+                <CategoryTopLeader
+                    position='3'
+                    name={`${thirdLeader.username}`}
+                    point={`${thirdLeader.points ? `${thirdLeader.points}` : 0}`}
+                    avatar={thirdLeader.avatar}
+                />
+                <CategoryTopLeader
+                    position='1'
+                    name={`${firstLeader.username}`}
+                    point={`${firstLeader.points ? `${firstLeader.points}` : 0}`}
+                    avatar={firstLeader.avatar}
+                    topLeaderStyle={styles.firstPosition}
+                />
 
-            <CategoryTopLeader
-                position='2'
-                name={`${secondLeader.username}`}
-                point={`${secondLeader.points ? `${secondLeader.points}` : 0}`}
-                avatar={secondLeader.avatar}
-            />
+                <CategoryTopLeader
+                    position='2'
+                    name={`${secondLeader.username}`}
+                    point={`${secondLeader.points ? `${secondLeader.points}` : 0}`}
+                    avatar={secondLeader.avatar}
+                />
+            </> : <></>
+            }
         </View>
     )
 }
@@ -59,7 +62,9 @@ function CategoryTopLeader({ avatar, name, position, point, topLeaderStyle }) {
                 style={styles.avatar}
                 source={isTrue(avatar) ? { uri: `${backendUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
             />
-            <Text style={styles.number}>{formatNumber(position)}</Text>
+            <View style={styles.numberContainer}>
+                <Text style={styles.number}>{formatNumber(position)}</Text>
+            </View>
             <Text style={styles.leaderName}>{name}</Text>
             <View style={styles.leaderPoint}>
                 <Text style={styles.point}>{formatNumber(point)} pts</Text>
@@ -73,7 +78,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.9rem',
         color: '#000',
         fontFamily: 'graphik-medium',
-        lineHeight:'2rem',
+        lineHeight: '2rem',
         textAlign: 'center',
         marginVertical: normalize(10)
     },
@@ -100,16 +105,18 @@ const styles = EStyleSheet.create({
     },
     leaderPoint: {
         alignItems: 'center',
+        backgroundColor: '#828282',
+        paddingVertical: normalize(2),
+        paddingHorizontal: normalize(6),
+        borderRadius: 10,
+        marginTop: normalize(6),
     },
     point: {
         color: '#FFFF',
         fontSize: '0.5rem',
         fontFamily: 'graphik-regular',
-        backgroundColor: '#828282',
-        paddingVertical: normalize(2),
-        paddingHorizontal: normalize(6),
-        borderRadius: 10,
-        marginTop: normalize(8),
+     
+        
         textAlign: 'center',
     },
     leaderName: {
@@ -126,22 +133,25 @@ const styles = EStyleSheet.create({
         borderRadius: 50,
         marginBottom: normalize(5)
     },
-    number: {
+    numberContainer: {
         backgroundColor: '#f0b802',
         paddingVertical: normalize(1),
+        paddingTop: Platform.OS === 'ios' ? normalize(2) : normalize(1),
         paddingHorizontal: normalize(1),
-        textAlign: 'center',
         position: 'absolute',
         right: 10,
         top: 0,
         borderWidth: 2,
         borderColor: 'white',
         borderRadius: 50,
-        width: normalize(16),
-        height: normalize(16),
+        width: normalize(17),
+        height: normalize(17),
+    },
+    number: {
+        textAlign: 'center',
         color: 'white',
         fontFamily: 'graphik-regular',
-        fontSize:'0.55rem'
+        fontSize: Platform.OS === 'ios' ? '0.55rem' : '0.5rem',
     },
     firstPosition: {
         top: normalize(-30)

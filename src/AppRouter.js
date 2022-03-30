@@ -42,7 +42,8 @@ import GameStoreScreen from './features/Store/GameStoreScreen';
 import GameStoreItemsPurchaseFailed from './features/Store/GameStoreItemsPurchaseFailedScreen';
 import DuelSelectPlayerScreen from './features/Games/DuelSelectPlayerScreen';
 import DuelScreen from './features/Games/DuelScreen';
-
+import FirstTimeUserBonus from './features/Auth/FirstTimeUserBonus';
+import LeaderBoardFilter from './features/Leaderboard/LeaderBoardFilter';
 
 const AppStack = createNativeStackNavigator();
 
@@ -81,7 +82,7 @@ function AppRouter() {
                     <>
                         <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
-                        <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Extended Leaderboard' }} />
+                        <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ headerTitle: (props) => <LeaderBoardFilter {...props} />}} />
 
                         {/** game **/}
                         <AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
@@ -133,6 +134,7 @@ function AppRouter() {
             <AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
             <AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Support' }} />
             <AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
+            <AppStack.Screen name="FirstTimeBonus" component={FirstTimeUserBonus} options={{ headerShown: false }} />
 
         </AppStack.Navigator >
     )

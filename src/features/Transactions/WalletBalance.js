@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View } from 'react-native';
+import {Text, View, Platform } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { formatCurrency } from '../../utils/stringUtl';
@@ -20,8 +20,8 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         paddingVertical: responsiveScreenWidth(15),
         borderColor: '#E5E5E5',
-        borderBottomWidth: normalize(3),
         backgroundColor: '#fff',
+        borderBottomWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3)
     },
     walletTitle: {
         fontFamily: 'graphik-medium',
