@@ -10,7 +10,7 @@ export default {
   sdkVersion: "44.0.0",
   scheme: "cashingames",
   splash: {
-    image: "./assets/images/splash.png",
+    image: "./assets/images/splash2.png",
     resizeMode: "contain",
     backgroundColor: "#ffffff"
   },
