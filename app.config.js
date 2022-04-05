@@ -3,7 +3,7 @@ const env = process.env.APP_VARIANT;
 export default {
   name: getAppName(),
   slug: getSlug(),
-  version: "1.0.21",
+  version: "1.0.22",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   // jsEngine: "hermes",

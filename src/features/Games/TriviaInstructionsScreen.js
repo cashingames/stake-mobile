@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
-import normalize, {responsiveScreenWidth} from "../../utils/normalize";
+import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { formatNumber } from '../../utils/stringUtl';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -13,14 +13,12 @@ import EStyleSheet from "react-native-extended-stylesheet";
 
 
 
-export default function GameInstructionsScreen({ navigation, route }) {
-    const gameMode = useSelector(state => state.game.gameMode);
+export default function TriviaInstructionsScreen({ navigation, route }) {
     const refRBSheet = useRef();
 
     return (
         <ScrollView style={styles.container}>
-            {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
-            {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
+            <TriviaInstructions />
             <AppButton onPress={() => refRBSheet.current.open()} text='Proceed' />
             <RBSheet
                 ref={refRBSheet}
@@ -45,59 +43,26 @@ export default function GameInstructionsScreen({ navigation, route }) {
         </ScrollView>
     );
 };
-const ExhibitionInstructions = () => {
+const TriviaInstructions = () => {
     return (
         <>
             <View style={styles.instruction}>
                 <Text style={styles.unicode}>{'\u0031'}.</Text>
-                <Text style={styles.instructionText}>There are 10 questions per session.
-                    You are required to answer these 10 questions in 60 seconds</Text>
+                <Text style={styles.instructionText}>This trivia consists of 10 rounds; 1 question per round.</Text>
             </View>
             <View style={styles.instruction}>
                 <Text style={styles.unicode}>{'\u0032'}.</Text>
-                <Text style={styles.instructionText}>Click on the “Next” button after answering each question to
-                    progress to the next question.</Text>
+                <Text style={styles.instructionText}>You have 30 seconds to answer each question. Answer questions as correctly
+                    and as rapidly as you can to stay at the top of the leaderboard.</Text>
             </View>
             <View style={styles.instruction}>
                 <Text style={styles.unicode}>{'\u0033'}.</Text>
-                <Text style={styles.instructionText}>At the end of the session, you would see your total score</Text>
-            </View>
-            <View style={styles.instruction}>
-                <Text style={styles.unicode}>{'\u0034'}.</Text>
-                <Text style={styles.instructionText}>Click “Play again” to start another session in winning
-                    more points to climb the leader board.</Text>
+                <Text style={styles.instructionText}>Use boosts to increase your chances of winning the grand prize.</Text>
             </View>
         </>
     )
 };
 
-const ChallengeInstructions = () => {
-    return (
-        <>
-            <Text style={styles.instructionHeader}>Ready to start winning? Let’s get started
-                by reading the following instructions carefully.
-            </Text>
-            <View style={styles.instruction}>
-                <Text style={styles.unicode}>{'\u0031'}.</Text>
-                <Text style={styles.instructionText}>There are 10 questions per session.
-                    You are required to answer these 10 questions in 60 seconds</Text>
-            </View>
-            <View style={styles.instruction}>
-                <Text style={styles.unicode}>{'\u0032'}.</Text>
-                <Text style={styles.instructionText}>Click on the “Next” button after answering each question to
-                    progress to the next question. You can also see your competitor’s progress
-                    opposite yours on the upper right corner of your screen.
-                </Text>
-            </View>
-            <View style={styles.instruction}>
-                <Text style={styles.unicode}>{'\u0033'}.</Text>
-                <Text style={styles.instructionText}>At the end of the session, you would see
-                    your total score against that of your competitor.
-                </Text>
-            </View>
-        </>
-    )
-};
 
 
 
@@ -160,6 +125,11 @@ const AvailableBoosts = ({ onClose }) => {
         navigation.navigate('GameStore')
     }
 
+    const endResult = () => {
+        onClose();
+        navigation.navigate('TriviaEndResult')
+    }
+
     return (
         <View style={styles.availableBoosts}>
             <Text style={styles.title}>Available Boosts</Text>
@@ -168,7 +138,7 @@ const AvailableBoosts = ({ onClose }) => {
                 )}
             </View>
             <GoToStore onPress={visitStore} />
-            <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />
+            <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={endResult} disabled={loading} />
         </View>
     )
 }
