@@ -21,7 +21,7 @@ export default function LoginScreen({ navigation }) {
 
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState(isStaging ? 'arunajoy2602@gmail.com' : '');
+    const [email, setEmail] = useState(isStaging ? 'arunajoy2602@gmail.com' : '' );
     const [password, setPassword] = useState(isStaging ? '12345678' : '');
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);

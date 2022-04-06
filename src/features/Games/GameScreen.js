@@ -65,41 +65,47 @@ export const NoGames = ({ closeSheet }) => {
 }
 
 
+// const GameTabs = () => {
+
+//     const gameTypes = useSelector(state => state.common.gameTypes)
+
+//     return (
+//         <Toptab.Navigator screenOptions={{
+//             tabBarLabelStyle: { fontSize: 11, fontFamily: 'graphik-medium' },
+//             tabBarStyle: { backgroundColor: '#F8F9FD' },
+//             tabBarInactiveTintColor: '#C4C4C4',
+//             tabBarActiveTintColor: '#EF2F55',
+//             tabBarIndicatorStyle: { backgroundColor: '#EF2F55' },
+//         }}
+//             sceneContainerStyle={{ backgroundColor: '#F8F9FD' }}
+//             style={{ height: normalize(380) }}
+//         // height: Dimensions.get('window').height 
+//         >
+//             {gameTypes.map((game, i) =>
+//                 <Toptab.Screen
+//                     name={game.name}
+//                     key={i}
+//                     component={CategoriesScreen}
+//                     options={{ title: game.displayName }}
+//                     initialParams={{ currentGame: game }}
+//                 />
+//             )}
+//         </Toptab.Navigator>
+//     )
+// };
+
+
 const GameTabs = () => {
-
     const gameTypes = useSelector(state => state.common.gameTypes)
-
-    return (
-        <Toptab.Navigator screenOptions={{
-            tabBarLabelStyle: { fontSize: 11, fontFamily: 'graphik-medium' },
-            tabBarStyle: { backgroundColor: '#F8F9FD' },
-            tabBarInactiveTintColor: '#C4C4C4',
-            tabBarActiveTintColor: '#EF2F55',
-            tabBarIndicatorStyle: { backgroundColor: '#EF2F55' },
-        }}
-            sceneContainerStyle={{ backgroundColor: '#F8F9FD' }}
-            style={{ height: normalize(380) }}
-        // height: Dimensions.get('window').height 
-        >
-            {gameTypes.map((game, i) =>
-                <Toptab.Screen
-                    name={game.name}
-                    key={i}
-                    component={CategoriesScreen}
-                    options={{ title: game.displayName }}
-                    initialParams={{ currentGame: game }}
-                />
-            )}
-        </Toptab.Navigator>
-    )
+    return <CategoriesScreen currentGame={gameTypes[0]} />;
 };
-
-const CategoriesScreen = ({ navigation, route }) => {
+const CategoriesScreen = ({ currentGame }) => {
 
     const dispatch = useDispatch();
+    const navigation = useNavigation();
     const refRBSheet = useRef();
 
-    const currentGame = route.params.currentGame;
+    // const currentGame = route.params.currentGame;
     const [activeCategory, setActiveCategory] = useState();
     const activeSubcategory = useSelector(state => state.game.gameCategory);
     const activeGame = useSelector(state => state.game.gameType);
