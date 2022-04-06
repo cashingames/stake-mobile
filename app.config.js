@@ -5,7 +5,7 @@ export default {
   slug: getSlug(),
   version: "1.0.22",
   orientation: "portrait",
-  icon: "./assets/images/icon.png",
+  icon: "./assets/images/adaptive-icon2.png",
   // jsEngine: "hermes",
   sdkVersion: "44.0.0",
   scheme: "cashingames",
@@ -31,7 +31,7 @@ export default {
     versionCode: 21,
     googleServicesFile: "./google-services.json",
     adaptiveIcon: {
-      foregroundImage: "./assets/images/icon.png",
+      foregroundImage: "./assets/images/adaptive-icon2.png",
       backgroundColor: "#FFFFFF"
     }
   },
