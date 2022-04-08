@@ -6424,6 +6424,14 @@ react-native-pager-view@5.4.9:
   resolved "https://registry.npmjs.org/react-native-pager-view/-/react-native-pager-view-5.4.9.tgz"
   integrity sha512-D6tzxpwMGdl6CXgtskGWhKRc5cJakCazESRGt7PkqnpyiH3N35ft1KmR82pCSQetAFlytFiToeu3a/dG5CELvA==
 
+react-native-paystack-popup@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-paystack-popup/-/react-native-paystack-popup-1.0.0.tgz#fd2253e2a1aa2592580408f60076edd509812937"
+  integrity sha512-RwFtx0dgdjcoUhBuJ2C68iRCf8hmKtgXsVQN8vMHDow3FtSmALcEUQKo2agjFAhLDsWixxI8y5m1ctqDQv/4sQ==
+  dependencies:
+    prop-types "^15.7.2"
+    react-native-webview "^10.7.0"
+
 react-native-paystack-webview@^4.0.3:
   version "4.0.3"
   resolved "https://registry.npmjs.org/react-native-paystack-webview/-/react-native-paystack-webview-4.0.3.tgz"
@@ -6546,6 +6554,14 @@ react-native-webview@*, react-native-webview@11.15.0:
   version "11.15.0"
   resolved "https://registry.npmjs.org/react-native-webview/-/react-native-webview-11.15.0.tgz"
   integrity sha512-0Wv+8qu8XuACx1xZwzc2Yfl+rOvxUouLcPxUKdkhaMVNpwoM5/ePpczCQZ3LpiRnSoEtjaUkfyQHbJQ+x4dDJQ==
+  dependencies:
+    escape-string-regexp "2.0.0"
+    invariant "2.2.4"
+
+react-native-webview@^10.7.0:
+  version "10.10.2"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-10.10.2.tgz#13208aef17c9ccfd28355363688f4cbe2143f10a"
+  integrity sha512-98Dh7q1gEflicFZ8KNL3nK5XRjx50OZXqw87jHofVjKfjbK0LKmvI5X8ymgUMGg61JVgI3AF+g8qpDvqjgQsfg==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
