@@ -63,6 +63,18 @@ export default function EditProfileDetailsScreen({ navigation }) {
         <ScrollView style={styles.container}>
             <View style={styles.content}>
                 <Input
+                    label='Username'
+                    value={username}
+                    onChangeText={setUsername}
+                    editable={false}
+                />
+                <Input
+                    label='Email'
+                    value={email}
+                    onChangeText={setEmail}
+                    editable={false}
+                />
+                <Input
                     label='First name'
                     value={firstName}
                     onChangeText={setFirstName}
@@ -73,24 +85,12 @@ export default function EditProfileDetailsScreen({ navigation }) {
                     onChangeText={setLastName}
                 />
                 <Input
-                    label='Username'
-                    value={username}
-                    onChangeText={setUsername}
-                    editable={false}
-                />
-                <Input
                     label='Phone number'
                     value={phoneNumber}
                     onChangeText={setPhoneNumber}
                     type="phone"
                     maxLength={11}
                     keyboardType='numeric'
-                />
-                <Input
-                    label='Email'
-                    value={email}
-                    onChangeText={setEmail}
-                    editable={false}
                 />
                 <View style={styles.detail}>
 
@@ -147,7 +147,7 @@ const styles = EStyleSheet.create({
     inputLabel: {
         fontFamily: 'graphik-medium',
         color: '#000000B2',
-        fontSize:'0.76rem',
+        fontSize: '0.76rem',
         marginBottom: normalize(8)
     },
     dateOfBirth: {
