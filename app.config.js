@@ -24,7 +24,8 @@ export default {
     "**/*"
   ],
   platforms: [
-    "android"
+    "android",
+    "ios"
   ],
   android: {
     package: getAppIdentifier(),

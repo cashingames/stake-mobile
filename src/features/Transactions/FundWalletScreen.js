@@ -1,15 +1,13 @@
 import React, { useState, useRef } from 'react';
-import { Text, View, ScrollView, Pressable, TouchableOpacity, TextInput, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Text, View, ScrollView, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
-import WalletBalance from './WalletBalance';
 import AppButton from "../../shared/AppButton";
-import { Paystack } from 'react-native-paystack-webview';
+import PaystackWebView from 'react-native-paystack-popup';
 import { paystackKey } from '../../utils/BaseUrl';
 import { verifyFunding } from '../../utils/ApiHelper';
 import Input from '../../shared/Input';
@@ -18,17 +16,19 @@ import { formatCurrency } from '../../utils/stringUtl';
 
 export default function FundWalletScreen() {
     const dispatch = useDispatch();
-
-    const [amount, setAmount] = useState('');
-    const user = useSelector(state => state.auth.user)
     const navigation = useNavigation();
 
-    const paystackWebViewRef = useRef();
+    const user = useSelector(state => state.auth.user)
+    const [amount, setAmount] = useState('');
+    const [showPayment, setShowPayment] = React.useState(false);
+
+    const ref = useRef(null);
 
     const transactionCompleted = (res) => {
-        verifyFunding(res.data.transactionRef.reference);
+        verifyFunding(res.reference);
         dispatch(getUser())
             .then(result => {
+                setShowPayment(false);
                 console.log(result);
                 dispatch(getUser())
                 navigation.navigate('Wallet')
@@ -36,9 +36,12 @@ export default function FundWalletScreen() {
 
     }
 
+    console.log("show payment", showPayment)
+
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
+        // <ScrollView style={styles.container}>
+        <>
+            {!showPayment && <View style={styles.container}>
                 <View style={styles.balance}>
                     <UserWalletBalance balance={user.walletBalance} />
                     <Text style={styles.walletTitle}>How much do you want to deposit ? (&#8358;)</Text>
@@ -57,24 +60,28 @@ export default function FundWalletScreen() {
                         <Text style={styles.flagText}>NGN</Text>
                     </View>
                 </View>
-                <AppButton text='Fund Wallet' onPress={() => paystackWebViewRef.current.startTransaction()} style={styles.actionButton} />
-                <Paystack
-                    paystackKey={paystackKey}
-                    billingEmail={user.email}
-                    amount={amount}
-                    onCancel={(e) => {
-                        // handle response here
-                        console.log(e)
-                    }}
-                    onSuccess={(res) => {
-                        transactionCompleted(res);
-                    }}
+                <AppButton text='Fund Wallet' onPress={() => setShowPayment(true)} style={styles.actionButton} />
+            </View>
+            }
 
-                    ref={paystackWebViewRef}
 
-                />
-            </ScrollView>
-        </SafeAreaView>
+            {showPayment && <PaystackWebView
+                ref={ref}
+                onError={() => {
+                    setShowPayment(false);
+                    alert("Failed...")
+                }}
+                onDismissed={() => {
+                    setShowPayment(false)
+                }}
+                onSuccess={(response) => {
+                    transactionCompleted(response)
+                }}
+
+                paystackKey={paystackKey} customerEmail={user.email} amount={Number.parseFloat(amount)} />}
+
+
+        </>
     );
 }
 
