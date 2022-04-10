@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { Text, View, ScrollView, Image } from 'react-native';
+import { Text, View, Image, Alert } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
@@ -32,10 +31,17 @@ export default function FundWalletScreen() {
                 dispatch(getUser())
                 navigation.navigate('Wallet')
             })
-
     }
 
-    console.log("show payment", showPayment)
+    const startPayment = () => {
+        var cleanedAmount = amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
+
+        if (cleanedAmount < 500) {
+            Alert.alert("Amount cannot be less than 500");
+            return false;
+        }
+        setShowPayment(true);
+    }
 
     return (
         <>
@@ -47,9 +53,10 @@ export default function FundWalletScreen() {
                         style={styles.fundAmount}
                         value={amount}
                         keyboardType="numeric"
-                        onChangeText={setAmount}
+                        onChangeText={(setAmount)}
                         autoFocus={true}
                         placeholder='500'
+                        min
                     />
                     <View style={styles.flag}>
                         <Image
@@ -58,7 +65,7 @@ export default function FundWalletScreen() {
                         <Text style={styles.flagText}>NGN</Text>
                     </View>
                 </View>
-                <AppButton text='Fund Wallet' onPress={() => setShowPayment(true)} style={styles.actionButton} />
+                <AppButton text='Fund Wallet' onPress={startPayment} style={styles.actionButton} />
             </View>
             }
 
