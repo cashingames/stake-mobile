@@ -29,7 +29,6 @@ export default function FundWalletScreen() {
         dispatch(getUser())
             .then(result => {
                 setShowPayment(false);
-                console.log(result);
                 dispatch(getUser())
                 navigation.navigate('Wallet')
             })
@@ -39,7 +38,6 @@ export default function FundWalletScreen() {
     console.log("show payment", showPayment)
 
     return (
-        // <ScrollView style={styles.container}>
         <>
             {!showPayment && <View style={styles.container}>
                 <View style={styles.balance}>
