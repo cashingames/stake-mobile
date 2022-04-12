@@ -8,18 +8,23 @@ import { useSelector, useDispatch } from 'react-redux';
 import AppButton from "../../shared/AppButton";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { backendUrl } from '../../utils/BaseUrl';
-import { startGame, setGameSessionToken } from "./GameSlice";
+import { startGame, setGameSessionToken, setIsPlayingTrivia } from "./GameSlice";
 import EStyleSheet from "react-native-extended-stylesheet";
 
 
 
 export default function TriviaInstructionsScreen({ navigation, route }) {
+    const params = route.params;
+    console.log(params);
     const refRBSheet = useRef();
+    const onProceed = () => {
+        refRBSheet.current.open()
+    }
 
     return (
         <ScrollView style={styles.container}>
             <TriviaInstructions />
-            <AppButton onPress={() => refRBSheet.current.open()} text='Proceed' />
+            <AppButton onPress={onProceed} text='Proceed' />
             <RBSheet
                 ref={refRBSheet}
                 closeOnDragDown={true}
@@ -38,7 +43,7 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
                     }
                 }}
             >
-                <AvailableBoosts onClose={() => refRBSheet.current.close()} />
+                <AvailableBoosts onClose={() => refRBSheet.current.close()} params={params} />
             </RBSheet>
         </ScrollView>
     );
@@ -48,7 +53,7 @@ const TriviaInstructions = () => {
         <>
             <View style={styles.instruction}>
                 <Text style={styles.unicode}>{'\u0031'}.</Text>
-                <Text style={styles.instructionText}>This trivia consists of 10 rounds; 1 question per round.</Text>
+                <Text style={styles.instructionText}>This trivia consists of 10 questions</Text>
             </View>
             <View style={styles.instruction}>
                 <Text style={styles.unicode}>{'\u0032'}.</Text>
@@ -85,28 +90,31 @@ const AvailableBoost = ({ boost }) => {
 }
 
 
-const AvailableBoosts = ({ onClose }) => {
+const AvailableBoosts = ({ onClose, params }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const boosts = useSelector(state => state.auth.user.boosts);
-    const gameCategoryId = useSelector(state => state.game.gameCategory.id);
-    const gameTypeId = useSelector(state => state.game.gameType.id);
-    const gameModeId = useSelector(state => state.game.gameMode.id);
     const [loading, setLoading] = useState(false);
 
     const onStartGame = () => {
         setLoading(true);
+        dispatch(setIsPlayingTrivia(true))
         dispatch(startGame({
-            category: gameCategoryId,
-            type: gameTypeId,
-            mode: gameModeId
+            category: params.category,
+            type: params.type,
+            mode: params.mode,
+            trivia: params.trivia
         }))
             .then(unwrapResult)
             .then(result => {
                 console.log(result);
                 setLoading(false);
                 onClose();
-                navigation.navigate("GameInProgress")
+                navigation.navigate("GameInProgress",
+                    {
+                        triviaId: params.trivia,
+                    }
+                )
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError);
@@ -138,7 +146,7 @@ const AvailableBoosts = ({ onClose }) => {
                 )}
             </View>
             <GoToStore onPress={visitStore} />
-            <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={endResult} disabled={loading} />
+            <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />
         </View>
     )
 }

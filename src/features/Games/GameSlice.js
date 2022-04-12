@@ -16,7 +16,7 @@ const shuffleArray = array => {
 export const startGame = createAsyncThunk(
     'game/startGame',
     async (data, thunkAPI) => {
-        console.log(data)
+        // console.log(data)
         const response = await axios.post('v2/game/start/single-player', data)
         return response.data
     }
@@ -28,6 +28,16 @@ export const endGame = createAsyncThunk(
         //make a network request to the server
         const response = await axios.post('v2/game/end/single-player', data)
         console.log('game ended');
+        return response.data;
+    }
+)
+export const getTriviaData = createAsyncThunk(
+    'game/getTriviaData',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.get(`v3/trivia/leaders/${data}`);
+        // console.log(response.data);
+        // console.log(data, 'marttttttttttt');
         return response.data;
     }
 )
@@ -63,7 +73,15 @@ const initialState = {
     isEnded: true,
     displayedOptions: [],
     displayedQuestion: {},
-    selectedFriend: ''
+    selectedFriend: '',
+    isPlayingTrivia: false,
+    triviaLeaders: [],
+    triviaPosition: 0,
+    triviaCategory: '',
+    triviaType: '',
+    triviaMode: '',
+    triviaId: ''
+
 }
 
 
@@ -89,6 +107,9 @@ export const GameSlice = createSlice({
         },
         setPointsGained: (state, action) => {
             state.pointsGained = action.payload;
+        },
+        setIsPlayingTrivia: (state, action) => {
+            state.isPlayingTrivia = action.payload;
         },
         questionAnswered: (state, action) => {
             state.displayedOptions.map(x => {
@@ -154,6 +175,10 @@ export const GameSlice = createSlice({
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
             })
+            .addCase(getTriviaData.fulfilled, (state, action) => {
+                state.triviaLeaders = action.payload.data.leaders;
+                state.triviaPosition = action.payload.data.position;
+            })
 
     },
 })
@@ -161,7 +186,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    resetGameStats, setSelectedFriend,
+    resetGameStats, setSelectedFriend, setIsPlayingTrivia,
  } = GameSlice.actions
 
 

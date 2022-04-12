@@ -120,7 +120,7 @@ function CustomDrawerContent(props) {
                     style={drawStyles.label}
                     labelContainerStyle
                 />
-                  {/* <DrawerItem
+                <DrawerItem
                     label={() =>
                         <View style={drawStyles.item}>
                             <Text style={drawStyles.itemLabel}>Tournament</Text>
@@ -130,7 +130,7 @@ function CustomDrawerContent(props) {
                     activeTintColor='#EF2F55'
                     style={drawStyles.label}
                     labelContainerStyle
-                /> */}
+                />
                 <DrawerItem
                     label={() =>
                         <View style={drawStyles.item}>
@@ -174,7 +174,7 @@ const drawStyles = EStyleSheet.create({
     },
     sideHeader: {
         alignItems: 'center',
-        justifyContent:'flex-end',
+        justifyContent: 'flex-end',
         borderBottomWidth: 1,
         borderBottomColor: "rgba(0, 0, 0, 0.1)",
         paddingTop: responsiveScreenHeight(10),
@@ -232,7 +232,7 @@ const drawStyles = EStyleSheet.create({
     },
     logoutContainer: {
         flex: 1,
-        justifyContent:'flex-end'
+        justifyContent: 'flex-end'
     },
     logoutText: {
         color: 'red',
@@ -240,7 +240,7 @@ const drawStyles = EStyleSheet.create({
         fontSize: '0.8rem',
         fontFamily: 'graphik-medium',
         paddingVertical: responsiveScreenHeight(1),
-        
+
     },
 });
 
