@@ -63,6 +63,16 @@ export const fetchFaqAndAnswers = createAsyncThunk(
     }
 )
 
+export const fetchTrivia = createAsyncThunk(
+    'common/fetchTrivia',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.get('v3/fetch/trivia', data)
+        console.log('trivia started');
+        return response.data;
+    }
+)
+
 
 const initialState = {
     boosts: [],
@@ -74,7 +84,9 @@ const initialState = {
     banks: [],
     categoryLeaders: [],
     globalLeaders: [],
-    faqAndAnswers: []
+    faqAndAnswers: [],
+    hasLiveTrivia: false,
+    trivia: []
 }
 
 export const CommonSlice = createSlice({
@@ -95,6 +107,7 @@ export const CommonSlice = createSlice({
                 state.gameTypes = action.payload.gameTypes;
                 state.gameModes = action.payload.gameModes;
                 state.gameCategories = action.payload.gameCategories;
+                state.hasLiveTrivia= action.payload.hasLiveTrivia;
 
             })
             .addCase(getBankData.fulfilled, (state, action) => {
@@ -114,6 +127,9 @@ export const CommonSlice = createSlice({
             })
             .addCase(fetchFaqAndAnswers.fulfilled, (state, action) => {
                 state.faqAndAnswers = action.payload
+            })
+            .addCase(fetchTrivia.fulfilled, (state, action) => {
+                state.trivia = action.payload.data;
             })
     },
 });

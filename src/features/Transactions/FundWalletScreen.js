@@ -35,14 +35,13 @@ export default function FundWalletScreen() {
 
     const startPayment = () => {
         var cleanedAmount = amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
-
+        console.log(Number.parseFloat(amount));
         if (cleanedAmount < 500) {
             Alert.alert("Amount cannot be less than 500");
             return false;
         }
         setShowPayment(true);
     }
-
     return (
         <>
             {!showPayment && <View style={styles.container}>
@@ -83,7 +82,7 @@ export default function FundWalletScreen() {
                     transactionCompleted(response)
                 }}
 
-                paystackKey={paystackKey} customerEmail={user.email} amount={Number.parseFloat(amount)} />}
+                paystackKey={paystackKey} customerEmail={user.email} amount={Number.parseFloat(amount) * 100} />}
 
 
         </>

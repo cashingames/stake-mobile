@@ -44,9 +44,10 @@ import DuelSelectPlayerScreen from './features/Games/DuelSelectPlayerScreen';
 import DuelScreen from './features/Games/DuelScreen';
 import FirstTimeUserBonus from './features/Auth/FirstTimeUserBonus';
 import LeaderBoardFilter from './features/Leaderboard/LeaderBoardFilter';
-import TournamentScreen from './features/Profile/TournamentScreen';
 import TriviaInstructionsScreen from './features/Games/TriviaInstructionsScreen';
 import TriviaEndResultScreen from './features/Games/TriviaEndResultScreen';
+import TriviaScreen from './features/Games/TriviaScreen';
+import TournamentScreen from './features/Games/TournamentScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -95,7 +96,7 @@ function AppRouter() {
                         <AppStack.Screen name="DuelSelectPlayer" component={DuelSelectPlayerScreen} options={{title: 'Challenge - Select a player' }} />
                         <AppStack.Screen name="DuelScreen" component={DuelScreen} options={{title: 'Challenge' }} />
                         <AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{title: 'Game Instructions' }} />
-                        <AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen}  options={{title: 'Game Instructions' }} />
+                        <AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen}  options={{ headerShown: false }} />
 
 
                         {/** wallet */}
@@ -143,6 +144,8 @@ function AppRouter() {
             <AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
             <AppStack.Screen name="FirstTimeBonus" component={FirstTimeUserBonus} options={{ headerShown: false }} />
             <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} />
+            <AppStack.Screen name="Trivia" component={TriviaScreen} options={{ title: 'Trivia' }} />
+
 
 
         </AppStack.Navigator >

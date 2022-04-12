@@ -14,6 +14,7 @@ import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
 import { useNavigation } from '@react-navigation/core';
+import { NavigationType } from 'react-router';
 
 const HomeScreen = () => {
 
@@ -21,6 +22,8 @@ const HomeScreen = () => {
     const user = useSelector(state => state.auth.user)
     const gameTypes = useSelector(state => state.common.gameTypes)
     const [loading, setLoading] = useState(true);
+    const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia)
+    console.log(hasLiveTrivia);
 
 
     useEffect(() => {
@@ -50,6 +53,9 @@ const HomeScreen = () => {
             <UserDetails user={user} />
             <View style={styles.container}>
                 <>
+                {hasLiveTrivia &&
+                    <LiveTriviaLink />
+                }
                     <Text style={styles.title}>Games</Text>
                     <Text style={styles.planInstruction}>You can only play 10 free games daily,
                         Buy Games to enjoy playing without interruptons.
@@ -67,6 +73,21 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 
+const LiveTriviaLink = () => {
+    const navigation = useNavigation();
+    const liveTriviaOpen =() => {
+       navigation.navigate('Trivia')
+    }
+    return (
+        <View style={styles.liveTriviaContainer}>
+            <Text style={styles.liveTriviaText}>Live Trivia is on, compete with others to win exciting prices.
+                <Text onPress={liveTriviaOpen} style={
+                    styles.liveTriviaLink
+                }> Click to join</Text>
+            </Text>
+        </View>
+    )
+}
 const UserDetails = ({ user }) => {
     return (
         <View style={styles.userDetails}>
@@ -201,6 +222,26 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: '1.2rem',
+    },
+    liveTriviaContainer: {
+        marginTop: normalize(15),
+        flexDirection: 'row'
+    },
+    liveTriviaText: {
+        color: '#EF2F55',
+        fontSize: Platform.OS === 'ios' ? '0.9rem' : '0.8rem',
+        fontFamily: 'graphik-regular',
+        lineHeight: responsiveHeight(3),
+        opacity: 0.7,
+    },
+    liveTriviaLink: {
+        color: '#EF2F55',
+        fontSize: Platform.OS === 'ios' ? '0.9rem' : '0.8rem',
+        fontFamily: 'graphik-bold',
+        lineHeight: responsiveHeight(3),
+    },
+    liveTriviaLinkContainer: {
+        marginTop: normalize(10)
     },
     userDetails: {
         backgroundColor: '#151C2F',

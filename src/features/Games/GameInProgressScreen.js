@@ -22,7 +22,8 @@ import EStyleSheet from "react-native-extended-stylesheet";
 var base64 = require('base-64');
 
 
-export default function GameInProgressScreen({ navigation }) {
+export default function GameInProgressScreen({ navigation, route }) {
+    const params = route.params;
     const dispatch = useDispatch();
     const refRBSheet = useRef();
     const gameSessionToken = useSelector(state => state.game.gameSessionToken);
@@ -30,6 +31,8 @@ export default function GameInProgressScreen({ navigation }) {
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
     const [ending, setEnding] = useState(false);
     const gameEnded = useSelector(state => state.game.isEnded);
+    const isPlayingTrivia = useSelector(state => state.game.isPlayingTrivia);
+    console.log(isPlayingTrivia, 'this is playing trivia');
 
     const onEndGame = () => {
         setEnding(true);
@@ -41,7 +44,11 @@ export default function GameInProgressScreen({ navigation }) {
             .then(unwrapResult)
             .then(() => {
                 setEnding(false);
-                navigation.navigate('GameEndResult');
+                isPlayingTrivia ?
+                    navigation.navigate('TriviaEndResult', {
+                        triviaId: params.triviaId,
+                    }) :
+                    navigation.navigate('GameEndResult')
             })
             .catch((rejectedValueOrSerializedError) => {
                 setEnding(false);
@@ -217,9 +224,9 @@ const AvailableBoosts = () => {
 
     const boostsToDisplay = () => {
         //bomb is only applicable to multiple choices
-        if (gameType.name.toUpperCase() !== "MULTIPLE_CHOICE") {
-            return boosts.filter(x => x.name.toUpperCase() !== "BOMB");
-        }
+        // if (gameType.name.toUpperCase() !== "MULTIPLE_CHOICE") {
+        //     return boosts.filter(x => x.name.toUpperCase() !== "BOMB");
+        // }
         return boosts;
     }
 

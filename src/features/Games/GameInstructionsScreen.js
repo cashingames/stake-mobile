@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import AppButton from "../../shared/AppButton";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { backendUrl } from '../../utils/BaseUrl';
-import { startGame, setGameSessionToken } from "./GameSlice";
+import { startGame, setGameSessionToken, setIsPlayingTrivia } from "./GameSlice";
 import EStyleSheet from "react-native-extended-stylesheet";
 
 
@@ -131,6 +131,7 @@ const AvailableBoosts = ({ onClose }) => {
 
     const onStartGame = () => {
         setLoading(true);
+        dispatch(setIsPlayingTrivia(false))
         dispatch(startGame({
             category: gameCategoryId,
             type: gameTypeId,

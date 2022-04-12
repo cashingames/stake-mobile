@@ -36,9 +36,6 @@
       "ios": {
         "cocoapods": "1.11.3"
       },
-      "android": {
-        "buildType": "apk"
-      },
       "env": {
         "APP_VARIANT": "production"
       }
