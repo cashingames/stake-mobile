@@ -120,7 +120,7 @@ function CustomDrawerContent(props) {
                     style={drawStyles.label}
                     labelContainerStyle
                 />
-                <DrawerItem
+                {/* <DrawerItem
                     label={() =>
                         <View style={drawStyles.item}>
                             <Text style={drawStyles.itemLabel}>Tournament</Text>
@@ -130,7 +130,7 @@ function CustomDrawerContent(props) {
                     activeTintColor='#EF2F55'
                     style={drawStyles.label}
                     labelContainerStyle
-                />
+                /> */}
                 <DrawerItem
                     label={() =>
                         <View style={drawStyles.item}>
