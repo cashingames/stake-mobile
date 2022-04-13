@@ -24,7 +24,7 @@ const HomeScreen = () => {
     const [loading, setLoading] = useState(true);
     const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia)
     const hasPlayedTrivia = useSelector(state => state.game.hasPlayedTrivia)
-    console.log(hasLiveTrivia);
+    console.log(hasPlayedTrivia);
 
 
     useEffect(() => {

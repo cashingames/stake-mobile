@@ -76,7 +76,7 @@ const initialState = {
     selectedFriend: '',
     isPlayingTrivia: false,
     triviaLeaders: [],
-    triviaPosition: 0,
+    triviaPosition: '',
     triviaCategory: '',
     triviaType: '',
     triviaMode: '',

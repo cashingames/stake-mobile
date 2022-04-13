@@ -57,7 +57,7 @@ const TriviaInstructions = () => {
             </View>
             <View style={styles.instruction}>
                 <Text style={styles.unicode}>{'\u0032'}.</Text>
-                <Text style={styles.instructionText}>You have 30 seconds to answer each question. Answer questions as correctly
+                <Text style={styles.instructionText}>You have 60 seconds to answer each question. Answer questions as correctly
                     and as rapidly as you can to stay at the top of the leaderboard.</Text>
             </View>
             <View style={styles.instruction}>
