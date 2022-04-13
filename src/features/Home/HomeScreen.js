@@ -23,6 +23,7 @@ const HomeScreen = () => {
     const gameTypes = useSelector(state => state.common.gameTypes)
     const [loading, setLoading] = useState(true);
     const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia)
+    const hasPlayedTrivia = useSelector(state => state.game.hasPlayedTrivia)
     console.log(hasLiveTrivia);
 
 
@@ -53,7 +54,7 @@ const HomeScreen = () => {
             <UserDetails user={user} />
             <View style={styles.container}>
                 <>
-                {hasLiveTrivia &&
+                {hasLiveTrivia && !hasPlayedTrivia &&
                     <LiveTriviaLink />
                 }
                     <Text style={styles.title}>Games</Text>

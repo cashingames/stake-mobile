@@ -80,7 +80,8 @@ const initialState = {
     triviaCategory: '',
     triviaType: '',
     triviaMode: '',
-    triviaId: ''
+    triviaId: '',
+    hasPlayedTrivia: false,
 
 }
 
@@ -110,6 +111,9 @@ export const GameSlice = createSlice({
         },
         setIsPlayingTrivia: (state, action) => {
             state.isPlayingTrivia = action.payload;
+        },
+        setHasPlayedTrivia: (state, action) => {
+            state.hasPlayedTrivia = action.payload;
         },
         questionAnswered: (state, action) => {
             state.displayedOptions.map(x => {
@@ -152,7 +156,7 @@ export const GameSlice = createSlice({
         boostReleased: (state) => {
             state.activeBoost = {}
         },
-        resetGameStats : (state) => {
+        resetGameStats: (state) => {
             state.chosenOptions = [];
             state.pointsGained = 0;
             state.consumedBoosts = [];
@@ -186,8 +190,8 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    resetGameStats, setSelectedFriend, setIsPlayingTrivia,
- } = GameSlice.actions
+    resetGameStats, setSelectedFriend, setIsPlayingTrivia,setHasPlayedTrivia
+} = GameSlice.actions
 
 
 export default GameSlice.reducer

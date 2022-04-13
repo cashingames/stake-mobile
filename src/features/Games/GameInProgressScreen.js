@@ -12,7 +12,7 @@ import { getUser, reduceBoostCount } from "../Auth/AuthSlice";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import {
     endGame, nextQuestion, questionAnswered, consumeBoost,
-    pauseGame, skipQuestion, boostReleased, bombOptions
+    pauseGame, skipQuestion, boostReleased, bombOptions, setHasPlayedTrivia
 } from "./GameSlice";
 
 import AppButton from "../../shared/AppButton";
@@ -44,11 +44,15 @@ export default function GameInProgressScreen({ navigation, route }) {
             .then(unwrapResult)
             .then(() => {
                 setEnding(false);
-                isPlayingTrivia ?
+                if(isPlayingTrivia ){
+                    dispatch(setHasPlayedTrivia(true));
                     navigation.navigate('TriviaEndResult', {
                         triviaId: params.triviaId,
-                    }) :
-                    navigation.navigate('GameEndResult')
+                    })
+                } else {
+                    navigation.navigate('GameEndResult');
+                }
+              
             })
             .catch((rejectedValueOrSerializedError) => {
                 setEnding(false);
