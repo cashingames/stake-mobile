@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import AppButton from "../../shared/AppButton";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { backendUrl } from '../../utils/BaseUrl';
-import { startGame, setGameSessionToken, setIsPlayingTrivia } from "./GameSlice";
+import { startGame, setGameSessionToken, setIsPlayingTrivia, setQuestionsCount, setGameDuration } from "./GameSlice";
 import EStyleSheet from "react-native-extended-stylesheet";
 
 
@@ -53,11 +53,11 @@ const TriviaInstructions = () => {
         <>
             <View style={styles.instruction}>
                 <Text style={styles.unicode}>{'\u0031'}.</Text>
-                <Text style={styles.instructionText}>This trivia consists of 10 questions</Text>
+                <Text style={styles.instructionText}>This trivia consists of  questions</Text>
             </View>
             <View style={styles.instruction}>
                 <Text style={styles.unicode}>{'\u0032'}.</Text>
-                <Text style={styles.instructionText}>You have 60 seconds to answer each question. Answer questions as correctly
+                <Text style={styles.instructionText}>You have limited time to answer these questions. Answer questions as correctly
                     and as rapidly as you can to stay at the top of the leaderboard.</Text>
             </View>
             <View style={styles.instruction}>
@@ -99,6 +99,8 @@ const AvailableBoosts = ({ onClose, params }) => {
     const onStartGame = () => {
         setLoading(true);
         dispatch(setIsPlayingTrivia(true))
+        dispatch(setQuestionsCount(params.questionCount));
+        dispatch(setGameDuration(params.gameDuration));
         dispatch(startGame({
             category: params.category,
             type: params.type,

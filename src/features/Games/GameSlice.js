@@ -82,7 +82,7 @@ const initialState = {
     triviaMode: '',
     triviaId: '',
     hasPlayedTrivia: false,
-
+    gameDuration: 60
 }
 
 
@@ -105,6 +105,12 @@ export const GameSlice = createSlice({
         setSelectedFriend: (state, action) => {
             console.log("main")
             state.selectedFriend = action.payload;
+        },
+        setGameDuration:(state,action)=>{
+            state.gameDuration=action.payload;
+        },
+        setQuestionsCount:(state,action)=>{
+            state.totalQuestionCount=action.payload;
         },
         setPointsGained: (state, action) => {
             state.pointsGained = action.payload;
@@ -162,6 +168,8 @@ export const GameSlice = createSlice({
             state.consumedBoosts = [];
             state.currentQuestionPosition = 0;
             state.isLastQuestion = false;
+            state.totalQuestionCount = 10;
+            state.gameDuration = 60;
         }
     },
 
@@ -190,7 +198,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    resetGameStats, setSelectedFriend, setIsPlayingTrivia,setHasPlayedTrivia
+    resetGameStats, setSelectedFriend, setIsPlayingTrivia,setHasPlayedTrivia, setGameDuration,setQuestionsCount
 } = GameSlice.actions
 
 

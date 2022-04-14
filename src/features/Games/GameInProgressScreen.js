@@ -171,6 +171,7 @@ const GameProgressAndBoosts = ({ onComplete }) => {
 const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
     const countdownKey = useSelector(state => state.game.countdownKey);
     const isGamePaused = useSelector(state => state.game.countdownFrozen);
+    const gameDuration = useSelector(state=>state.game.gameDuration);
 
     return (
         <View style={styles.topicProgress}>
@@ -180,7 +181,7 @@ const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
 
             <CountdownCircleTimer
                 isPlaying={!isGamePaused}
-                duration={60}
+                duration={gameDuration}
                 colors={[["#fff", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
                 trailColor="#2D9CDB"
                 size={60}
@@ -224,13 +225,13 @@ const AnsweredGameProgress = () => {
 const AvailableBoosts = () => {
     const dispatch = useDispatch();
     const boosts = useSelector(state => state.auth.user.boosts);
-    const gameType = useSelector(state => state.game.gameType);
+    const displayedOptions = useSelector(state => state.game.displayedOptions);
 
     const boostsToDisplay = () => {
-        //bomb is only applicable to multiple choices
-        // if (gameType.name.toUpperCase() !== "MULTIPLE_CHOICE") {
-        //     return boosts.filter(x => x.name.toUpperCase() !== "BOMB");
-        // }
+      //  bomb is only applicable to multiple choices
+        if (displayedOptions.length === 2) {
+            return boosts.filter(x => x.name.toUpperCase() !== "BOMB");
+        }
         return boosts;
     }
 

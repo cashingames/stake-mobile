@@ -79,6 +79,8 @@ const TriviaBoard = ({ trivia }) => {
                             mode: trivia.game_mode_id,
                             category:trivia.category_id,
                             trivia:trivia.id,
+                            questionCount: trivia.question_count,
+                            gameDuration: trivia.game_duration
                           })} disabled={!canPlay}>
                         <Text style={styles.triviaStage}>Join Live Trivia</Text>
                     </Pressable>
