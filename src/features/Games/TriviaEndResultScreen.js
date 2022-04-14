@@ -5,7 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTriviaData, setIsPlayingTrivia } from './GameSlice';
+import { getTriviaData, resetGameStats, setIsPlayingTrivia } from './GameSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { formatNumber } from '../../utils/stringUtl';
 import { getCommonData } from '../CommonSlice';
@@ -125,10 +125,15 @@ const TriviaParticipants = ({ triviaLeaders }) => {
 }
 
 const TriviaButton = () => {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const returnToHomeButton = () => {
+        dispatch(resetGameStats());
+        navigation.navigate('Home')
+    }
     return (
         <View style={styles.triviaButton}>
-            <AppButton text='Return to Dashboard' onPress={() => navigation.navigate('Home')}  />
+            <AppButton text='Return to Dashboard' onPress={returnToHomeButton}  />
         </View>
     )
 }
