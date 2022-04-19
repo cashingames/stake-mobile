@@ -3,7 +3,7 @@ const env = process.env.APP_VARIANT;
 export default {
   name: getAppName(),
   slug: getSlug(),
-  version: "1.0.25",
+  version: "1.0.26",
   orientation: "portrait",
   icon: "./assets/images/adaptive-icon2.png",
   // jsEngine: "hermes",
@@ -29,7 +29,7 @@ export default {
   ],
   android: {
     package: getAppIdentifier(),
-    versionCode: 25,
+    versionCode: 26,
     googleServicesFile: "./google-services.json",
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon2.png",
