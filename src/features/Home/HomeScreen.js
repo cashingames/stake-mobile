@@ -38,6 +38,14 @@ const HomeScreen = () => {
         });
     }, []);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            dispatch(getCommonData());
+            console.log('i am running')
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
 
     useFocusEffect(
         React.useCallback(() => {
@@ -54,9 +62,9 @@ const HomeScreen = () => {
             <UserDetails user={user} />
             <View style={styles.container}>
                 <>
-                {hasLiveTrivia && !hasPlayedTrivia &&
-                    <LiveTriviaLink />
-                }
+                    {hasLiveTrivia && !hasPlayedTrivia &&
+                        <LiveTriviaLink />
+                    }
                     <Text style={styles.title}>Games</Text>
                     <Text style={styles.planInstruction}>You can only play 10 free games daily,
                         Buy Games to enjoy playing without interruptons.
@@ -76,8 +84,8 @@ export default HomeScreen;
 
 const LiveTriviaLink = () => {
     const navigation = useNavigation();
-    const liveTriviaOpen =() => {
-       navigation.navigate('Trivia')
+    const liveTriviaOpen = () => {
+        navigation.navigate('Trivia')
     }
     return (
         <View style={styles.liveTriviaContainer}>
