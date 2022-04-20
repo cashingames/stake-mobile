@@ -44,7 +44,7 @@ const HomeScreen = () => {
             console.log('i am running')
         }, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [hasLiveTrivia]);
 
 
     useFocusEffect(
