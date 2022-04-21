@@ -19,7 +19,7 @@ const TriviaScreen = () => {
     return (
         <ScrollView style={styles.container}>
             <View>
-                <TriviaHeaderTitle />
+                {/* <TriviaHeaderTitle /> */}
                 <TriviaBoards trivia={trivia} />
             </View>
         </ScrollView>
@@ -53,9 +53,9 @@ const TriviaHeaderTitle = () => {
 // }
 const TriviaBoards = ({ trivia }) => {
     return (
-        <>
+        <View style={styles.boards}>
             {trivia.map((trivia, i) => <TriviaBoard key={i} trivia={trivia} />)}
-        </>
+        </View>
     )
 }
 
@@ -63,6 +63,9 @@ const TriviaBoard = ({ trivia }) => {
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user)
     const canPlay = (user.points) >= (trivia.point_eligibility);
+    const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia)
+    const hasPlayedTrivia = useSelector(state => state.game.hasPlayedTrivia)
+
 
     return (
         <>{!canPlay &&
@@ -71,19 +74,26 @@ const TriviaBoard = ({ trivia }) => {
             </Text>
         }
             <View style={styles.boardContainer}>
+                {!trivia.is_active &&
+                    <>
+                        <Text style={styles.expired}>This trivia has expired</Text>
+                    </>
+                }
                 <View style={styles.boardheader}>
                     <Text style={styles.competitionName}>{trivia.name}</Text>
-                    <Pressable style={[styles.triviaStageContainer, !canPlay ? styles.disabled : {}]}
-                        onPress={() => navigation.navigate('TriviaInstructions', {
-                            type: trivia.game_type_id,
-                            mode: trivia.game_mode_id,
-                            category:trivia.category_id,
-                            trivia:trivia.id,
-                            questionCount: trivia.question_count,
-                            gameDuration: trivia.game_duration
-                          })} disabled={!canPlay}>
-                        <Text style={styles.triviaStage}>Join Live Trivia</Text>
-                    </Pressable>
+                    {trivia.is_active &&
+                        <Pressable style={[styles.triviaStageContainer, !canPlay ? styles.disabled : {}, hasPlayedTrivia ? styles.disabled : {}]}
+                            onPress={() => navigation.navigate('TriviaInstructions', {
+                                type: trivia.game_type_id,
+                                mode: trivia.game_mode_id,
+                                category: trivia.category_id,
+                                trivia: trivia.id,
+                                questionCount: trivia.question_count,
+                                gameDuration: trivia.game_duration
+                            })} disabled={!canPlay || hasPlayedTrivia}>
+                            <Text style={styles.triviaStage}>Join Live Trivia</Text>
+                        </Pressable>
+                    }
                 </View>
                 <View style={styles.prizeContainer}>
                     <Text style={styles.prizeHeader}>Grand Prize</Text>
@@ -102,18 +112,31 @@ const TriviaBoard = ({ trivia }) => {
                             style={styles.icon}
                             source={require('../../../assets/images/calendar.png')}
                         />
-                        <Text style={styles.dates}>End: {trivia.start_time}</Text>
+                        <Text style={styles.dates}>Start: {trivia.start_time}</Text>
                     </View>
                     <View style={styles.dateSubContainer}>
                         <Image
                             style={styles.icon}
                             source={require('../../../assets/images/calendar.png')}
                         />
-                        <Text style={styles.dates}>Start: {trivia.end_time}</Text>
+                        <Text style={styles.dates}>End: {trivia.end_time}</Text>
+                        <TriviaLeaderBoard trivia={trivia} />
                     </View>
                 </View>
                 {/* <TriviaParticipants /> */}
+        
             </View>
+        </>
+    )
+}
+
+const TriviaLeaderBoard = ({trivia}) => {
+    const navigation = useNavigation();
+    return (
+        <>
+            <Pressable style={styles.leaderboardContainer} onPress={() => navigation.navigate('TriviaLeaderboard', {triviaId: trivia.id})}>
+                <Text style={styles.leaderboardLink}>View trivia leaderboard</Text>
+            </Pressable>
         </>
     )
 }
@@ -237,5 +260,22 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         lineHeight: responsiveScreenHeight(3),
         opacity: 0.7,
+    },
+    expired: {
+        color: '#EF2F55',
+        fontSize: Platform.OS === 'ios' ? '0.7rem' : '0.6rem',
+        fontFamily: 'graphik-regular',
+        lineHeight: responsiveScreenHeight(3),
+        opacity: 0.7,
+    },
+    leaderboardLink: {
+        color: '#EF2F55',
+        fontSize: Platform.OS === 'ios' ? '0.8rem' : '0.7rem',
+        fontFamily: 'graphik-bold',
+        lineHeight: responsiveScreenHeight(3),
+        opacity: 0.7,
+    },
+    leaderboardContainer: {
+        marginLeft: 'auto'
     }
 });
