@@ -63,7 +63,7 @@ const LeaderBoardFilter = () => {
                     }}
                     centerAlign
                     allowFontScaling={false}
-                    placeholder={'Sort by Date'}
+                    placeholder={'Filter by Date'}
                     mode={'range'}
                     markText={'Select date'}
                     onConfirm={onFilterLeaders}
