@@ -5,20 +5,18 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTriviaData, resetGameStats, setIsPlayingTrivia } from './GameSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { formatNumber } from '../../utils/stringUtl';
+import { getTriviaData } from '../Games/GameSlice';
 import { getCommonData } from '../CommonSlice';
-import AppButton from '../../shared/AppButton';
 
 
 
-const TriviaEndResultScreen = ({ route }) => {
+const TriviaLeaderBoard = ({route}) => {
     const params = route.params;
     const dispatch = useDispatch();
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
     const triviaPosition = useSelector(state => state.game.triviaPosition)
-    const isGameEnded = useSelector(state => state.game.isEnded);
 
 
     useEffect(() => {
@@ -36,29 +34,13 @@ const TriviaEndResultScreen = ({ route }) => {
     }, []);
 
 
-    useFocusEffect(
-        React.useCallback(() => {
-            const onBackPress = () => {
-                if (isGameEnded) {
-                    return true;
-                } else {
-                    return false;
-                }
-            };
-            BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-            return () =>
-                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-        }, [isGameEnded])
-    );
 
 
     return (
         <ScrollView style={styles.container}>
             <ResultContainer triviaPosition={triviaPosition} />
-            {/* <UserResultAnalytics /> */}
             <TriviaParticipants triviaLeaders={triviaLeaders} />
-            <TriviaButton />
         </ScrollView>
     )
 }
@@ -72,40 +54,10 @@ const ResultContainer = ({ triviaPosition }) => {
                 style={styles.icon}
                 source={require('../../../assets/images/trivia-cup.png')}
             />
-            <Text style={styles.positionText}>Your current position is {triviaPosition}</Text>
-            {/* {hasLiveTrivia ? */}
-            {/* <Text style={styles.resultMessage}>Thanks for playing, play again to climb up the trivia leaderboard and,
-                    win exciting prizes</Text>
-
-                : */}
-            <Text style={styles.resultMessage}>Thanks for completing the live trivia session today.
-                View the final leaderboard at the end of the trivia to know your final position and
-                stay tuned for upcoming live trivia sessions</Text>
-            {/* } */}
+            {/* <Text style={styles.positionText}>Your current position is {triviaPosition}</Text> */}
         </View>
     )
 }
-
-// const UserResultAnalytics = () => {
-//     var userResult =
-//     {
-//         correctAnswer: 5,
-//         totalQuestions: 10,
-//         votingTime: '2:48'
-//     }
-//     return (
-//         <View style={styles.userResult}>
-//             <View style={styles.answerContainer}>
-//                 <Text style={styles.resultText}>Correct answers</Text>
-//                 <Text style={styles.resultResponse}>{userResult.correctAnswer}/{userResult.totalQuestions}</Text>
-//             </View>
-//             <View style={styles.timeContainer}>
-//                 <Text style={styles.resultText}>Voting time</Text>
-//                 <Text style={styles.resultResponse}>{userResult.votingTime}</Text>
-//             </View>
-//         </View>
-//     )
-// }
 
 const TriviaParticipant = ({ player, position }) => {
     return (
@@ -121,28 +73,24 @@ const TriviaParticipant = ({ player, position }) => {
 
 const TriviaParticipants = ({ triviaLeaders }) => {
     return (
+        <>
+        {triviaLeaders.length > 0 ?
         <View style={styles.participants}>{triviaLeaders.map((player, i) => <TriviaParticipant key={i} player={player} position={formatNumber(i + 1)} />)}</View>
-    )
-}
+        :
+        <>
+        <Text style={styles.noData}>No Data</Text>
+        </>
+        }
 
-const TriviaButton = () => {
-    const dispatch = useDispatch();
-    const navigation = useNavigation();
-    const returnToHomeButton = () => {
-        dispatch(resetGameStats());
-        navigation.navigate('Home')
-    }
-    return (
-        <View style={styles.triviaButton}>
-            <AppButton text='Return to Dashboard' onPress={returnToHomeButton} />
-        </View>
+        </>
     )
 }
 
 
 
 
-export default TriviaEndResultScreen;
+
+export default TriviaLeaderBoard;
 
 const styles = EStyleSheet.create({
     container: {
@@ -155,8 +103,8 @@ const styles = EStyleSheet.create({
         paddingTop: responsiveScreenWidth(15),
     },
     icon: {
-        width: normalize(110),
-        height: normalize(110)
+        width: normalize(125),
+        height: normalize(115)
     },
     positionText: {
         fontSize: '1.1rem',
@@ -276,4 +224,11 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         fontFamily: 'graphik-medium',
     },
+    noData: {
+        textAlign:'center',
+        marginTop: responsiveScreenWidth(30),
+        fontSize: '1rem',
+        color: '#000000',
+        fontFamily: 'graphik-medium',
+    }
 });

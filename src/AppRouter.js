@@ -48,6 +48,7 @@ import TriviaInstructionsScreen from './features/Games/TriviaInstructionsScreen'
 import TriviaEndResultScreen from './features/Games/TriviaEndResultScreen';
 import TriviaScreen from './features/Games/TriviaScreen';
 import TournamentScreen from './features/Games/TournamentScreen';
+import TriviaLeaderBoard from './features/Leaderboard/TriviaLeaderboard';
 
 const AppStack = createNativeStackNavigator();
 
@@ -87,6 +88,8 @@ function AppRouter() {
                         <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
                         <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ headerTitle: (props) => <LeaderBoardFilter {...props} />}} />
+                        <AppStack.Screen name="TriviaLeaderboard" component={TriviaLeaderBoard} options={{ title: 'Leaderboard' }} />
+
 
                         {/** game **/}
                         <AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
@@ -97,6 +100,8 @@ function AppRouter() {
                         <AppStack.Screen name="DuelScreen" component={DuelScreen} options={{title: 'Challenge' }} />
                         <AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{title: 'Game Instructions' }} />
                         <AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen}  options={{ headerShown: false }} />
+                        <AppStack.Screen name="Trivia" component={TriviaScreen} options={{ title: 'Live Trivia' }} />
+
 
 
                         {/** wallet */}
@@ -144,8 +149,6 @@ function AppRouter() {
             <AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
             <AppStack.Screen name="FirstTimeBonus" component={FirstTimeUserBonus} options={{ headerShown: false }} />
             <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} />
-            <AppStack.Screen name="Trivia" component={TriviaScreen} options={{ title: 'Trivia' }} />
-
 
 
         </AppStack.Navigator >

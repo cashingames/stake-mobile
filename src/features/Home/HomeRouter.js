@@ -120,6 +120,17 @@ function CustomDrawerContent(props) {
                     style={drawStyles.label}
                     labelContainerStyle
                 />
+                  <DrawerItem
+                    label={() =>
+                        <View style={drawStyles.item}>
+                            <Text style={drawStyles.itemLabel}>Live Trivia</Text>
+                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                        </View>}
+                    onPress={() => navigation.navigate('Trivia')}
+                    activeTintColor='#EF2F55'
+                    style={drawStyles.label}
+                    labelContainerStyle
+                />
                 {/* <DrawerItem
                     label={() =>
                         <View style={drawStyles.item}>
