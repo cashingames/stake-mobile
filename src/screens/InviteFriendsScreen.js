@@ -61,7 +61,7 @@ const InviteLink = () => {
 
     return (
         <>
-            <Text style={styles.inviteLink}>Your invite link</Text>
+            <Text style={styles.inviteLink}>Your referral code</Text>
             <View style={styles.linkContainer} >
                 <Text style={styles.link}>{referralUrl}</Text>
                 <View style={styles.shareIcons}>

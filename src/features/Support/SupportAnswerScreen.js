@@ -27,12 +27,13 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '0.9rem',
         marginVertical: normalize(20),
-        color: '#000000'
+        color: '#000000',
+        lineHeight: '1.3rem'
     },
     answer: {
         fontFamily: 'graphik-regular',
         fontSize: '0.9rem',
         color: '#151C2F',
-        lineHeight: '2.1rem'
+        lineHeight: '1.3rem'
     }
 });
