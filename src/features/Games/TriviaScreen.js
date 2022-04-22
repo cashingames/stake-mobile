@@ -115,7 +115,7 @@ export default TriviaScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
+        backgroundColor: '#F2F5FF',
         paddingHorizontal: normalize(18),
     },
     titleContainer: {
@@ -133,7 +133,8 @@ const styles = EStyleSheet.create({
         borderWidth: 1,
         borderBottomWidth: 0,
         paddingHorizontal: normalize(15),
-        paddingVertical: normalize(18)
+        paddingVertical: normalize(18),
+        backgroundColor: '#FFFF',
     },
     mainContainer: {
         marginVertical: normalize(10),
@@ -145,10 +146,14 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(5),
     },
     disabled: {
-        backgroundColor: '#FFFFA1',
+        backgroundColor: '#2D9CDB',
         paddingVertical: normalize(5),
         // borderRadius: 15,
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#E5E5E5',
+        paddingHorizontal: normalize(15),
+        borderTopWidth: 0,
     },
     competitionName: {
         fontSize: '0.8rem',
@@ -168,7 +173,7 @@ const styles = EStyleSheet.create({
     },
     triviaClosed: {
         fontSize: '0.7rem',
-        color: '#000000',
+        color: '#FFFF',
         fontFamily: 'graphik-medium',
         textAlign: 'center'
     },
