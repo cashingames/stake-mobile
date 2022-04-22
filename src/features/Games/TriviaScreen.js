@@ -115,7 +115,7 @@ export default TriviaScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8F9FD',
+        backgroundColor: '#FFFF',
         paddingHorizontal: normalize(18),
     },
     titleContainer: {
