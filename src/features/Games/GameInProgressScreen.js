@@ -17,7 +17,7 @@ import {
 
 import AppButton from "../../shared/AppButton";
 import EStyleSheet from "react-native-extended-stylesheet";
-
+import { Base64 } from 'js-base64';
 
 var base64 = require('base-64');
 
@@ -333,7 +333,7 @@ const GameQuestions = () => {
     return (
         <>
             <View style={styles.gameQuestions}>
-                <Text style={styles.questions}>{base64.decode(displayedQuestion.label)}</Text>
+                <Text style={styles.questions}>{Base64.decode(displayedQuestion.label)}</Text>
             </View>
             <View style={styles.options}>
                 {displayedOptions.map((option, i) => <Option option={option} key={i} onSelected={() => optionSelected(option)} />)}
@@ -345,7 +345,7 @@ const GameQuestions = () => {
 const Option = ({ option: { title, isSelected }, onSelected }) => {
     return (
         <Pressable style={[styles.answer, isSelected ? styles.selectedOption : {}]} onPress={onSelected}>
-            <Text style={styles.answerText}>{base64.decode(title)}</Text>
+            <Text style={styles.answerText}>{Base64.decode(title)}</Text>
         </Pressable>
     )
 }
