@@ -18,39 +18,12 @@ const TriviaScreen = () => {
     }, []);
     return (
         <ScrollView style={styles.container}>
-            <View>
-                {/* <TriviaHeaderTitle /> */}
-                <TriviaBoards trivia={trivia} />
-            </View>
+            <TriviaBoards trivia={trivia} />
         </ScrollView>
     )
 }
 
-const TriviaHeaderTitle = () => {
-    return (
-        <View style={styles.titleContainer}>
-            <Text style={styles.title}>
-                Available Trivia
-            </Text>
-        </View>
-    )
-}
 
-// const TriviaParticipant = ({ participant }) => {
-//     return (
-//         <>
-//             <Text>{participant.image}</Text>
-//         </>
-//     )
-// }
-
-// const TriviaParticipants = () => {
-//     return (
-//         <>
-//             <Text></Text>
-//         </>
-//     )
-// }
 const TriviaBoards = ({ trivia }) => {
     return (
         <View style={styles.boards}>
@@ -68,74 +41,70 @@ const TriviaBoard = ({ trivia }) => {
 
 
     return (
-        <>{!canPlay &&
-            <Text style={styles.notEnoughPoints}>Sorry, your point balance of {user.points} is not enough to play this trivia,
-                increase your point and try again
-            </Text>
-        }
+        <View style={styles.mainContainer}>
             <View style={styles.boardContainer}>
-                {!trivia.is_active &&
-                    <>
-                        <Text style={styles.expired}>This trivia has expired</Text>
-                    </>
-                }
                 <View style={styles.boardheader}>
                     <Text style={styles.competitionName}>{trivia.name}</Text>
-                    {trivia.is_active &&
-                        <Pressable style={[styles.triviaStageContainer, !canPlay ? styles.disabled : {}, hasPlayedTrivia ? styles.disabled : {}]}
-                            onPress={() => navigation.navigate('TriviaInstructions', {
-                                type: trivia.game_type_id,
-                                mode: trivia.game_mode_id,
-                                category: trivia.category_id,
-                                trivia: trivia.id,
-                                questionCount: trivia.question_count,
-                                gameDuration: trivia.game_duration
-                            })} disabled={!canPlay || hasPlayedTrivia}>
-                            <Text style={styles.triviaStage}>Join Live Trivia</Text>
-                        </Pressable>
-                    }
+                    <TriviaLeaderBoard trivia={trivia} />
                 </View>
                 <View style={styles.prizeContainer}>
                     <Text style={styles.prizeHeader}>Grand Prize</Text>
                     <Text style={styles.prize}>&#8358;{formatCurrency(trivia.grand_price)}</Text>
                 </View>
-                <View style={styles.pointContainer}>
-                    <Image
-                        style={styles.icon}
-                        source={require('../../../assets/images/points-coin.png')}
-                    />
-                    <Text style={styles.points}>{trivia.point_eligibility}pts required</Text>
-                </View>
                 <View style={styles.dateContainer}>
-                    <View style={styles.dateSubContainer}>
+                    <View style={styles.pointContainer}>
                         <Image
                             style={styles.icon}
-                            source={require('../../../assets/images/calendar.png')}
+                            source={require('../../../assets/images/points-coin.png')}
                         />
-                        <Text style={styles.dates}>Start: {trivia.start_time}</Text>
+                        <Text style={styles.dates}>{trivia.point_eligibility}pts required</Text>
                     </View>
                     <View style={styles.dateSubContainer}>
                         <Image
                             style={styles.icon}
                             source={require('../../../assets/images/calendar.png')}
                         />
-                        <Text style={styles.dates}>End: {trivia.end_time}</Text>
-                        <TriviaLeaderBoard trivia={trivia} />
+                        <Text style={styles.dates}>{trivia.start_time}</Text>
                     </View>
                 </View>
-                {/* <TriviaParticipants /> */}
-        
             </View>
-        </>
+            {canPlay ?
+                <Pressable style={[trivia.is_active ? styles.triviaStageContainer : styles.disabled,
+                     !canPlay ? styles.disabled : {}, hasPlayedTrivia ? styles.disabled : {}]}
+                    onPress={() => navigation.navigate('TriviaInstructions', {
+                        type: trivia.game_type_id,
+                        mode: trivia.game_mode_id,
+                        category: trivia.category_id,
+                        trivia: trivia.id,
+                        questionCount: trivia.question_count,
+                        gameDuration: trivia.game_duration
+                    })} disabled={!canPlay || hasPlayedTrivia || !trivia.is_active}>
+                    {trivia.is_active && !hasPlayedTrivia ?
+                        <Text style={styles.triviaStage}>Join Now</Text>
+                        :
+                        <Text style={styles.triviaClosed}>Closed</Text>
+                    }
+                </Pressable>
+                :
+                <View style={styles.disabled}>
+                    {trivia.is_active ?
+                        <Text style={styles.triviaClosed}>Earn {trivia.point_eligibility - user.points} more points to join this live trivia</Text>
+                        :
+                        <Text style={styles.triviaClosed}>Closed</Text>
+                    }
+                </View>
+            }
+
+        </View>
     )
 }
 
-const TriviaLeaderBoard = ({trivia}) => {
+const TriviaLeaderBoard = ({ trivia }) => {
     const navigation = useNavigation();
     return (
         <>
-            <Pressable style={styles.leaderboardContainer} onPress={() => navigation.navigate('TriviaLeaderboard', {triviaId: trivia.id})}>
-                <Text style={styles.leaderboardLink}>View trivia leaderboard</Text>
+            <Pressable style={styles.leaderboardContainer} onPress={() => navigation.navigate('TriviaLeaderboard', { triviaId: trivia.id })}>
+                <Text style={styles.leaderboardLink}>Leaderboard</Text>
             </Pressable>
         </>
     )
@@ -158,12 +127,16 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
     },
     boardContainer: {
-        borderRadius: normalize(10),
+        borderTopRightRadius: normalize(10),
+        borderTopLeftRadius: normalize(10),
         borderColor: '#E5E5E5',
         borderWidth: 1,
-        marginVertical: normalize(10),
+        borderBottomWidth: 0,
         paddingHorizontal: normalize(15),
         paddingVertical: normalize(18)
+    },
+    mainContainer: {
+        marginVertical: normalize(10),
     },
     boardheader: {
         display: 'flex',
@@ -172,8 +145,10 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(5),
     },
     disabled: {
-        backgroundColor: '#000000',
-        opacity: 0.45
+        backgroundColor: '#FFFFA1',
+        paddingVertical: normalize(5),
+        // borderRadius: 15,
+        alignItems: 'center',
     },
     competitionName: {
         fontSize: '0.8rem',
@@ -186,16 +161,22 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
     },
     triviaStage: {
-        fontSize: '0.6rem',
+        fontSize: '0.7rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
         textAlign: 'center'
     },
+    triviaClosed: {
+        fontSize: '0.7rem',
+        color: '#000000',
+        fontFamily: 'graphik-medium',
+        textAlign: 'center'
+    },
     triviaStageContainer: {
-        backgroundColor: '#2D9CDB',
-        paddingVertical: normalize(7),
+        backgroundColor: '#EF2F55',
+        paddingVertical: normalize(20),
         paddingHorizontal: normalize(10),
-        borderRadius: 15,
+        // borderRadius: 15,
         alignItems: 'center'
     },
     stageContainer: {
@@ -234,8 +215,8 @@ const styles = EStyleSheet.create({
         opacity: 0.6
     },
     icon: {
-        width: normalize(11),
-        height: normalize(11)
+        width: normalize(9),
+        height: normalize(9)
     },
     dateSubContainer: {
         display: 'flex',
@@ -244,14 +225,14 @@ const styles = EStyleSheet.create({
     },
     dateContainer: {
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         justifyContent: 'space-between'
     },
     dates: {
         fontSize: '0.7rem',
         color: '#271212',
         fontFamily: 'graphik-regular',
-        marginLeft: normalize(5),
+        marginLeft: normalize(8),
         opacity: 0.6
     },
     notEnoughPoints: {
@@ -269,13 +250,18 @@ const styles = EStyleSheet.create({
         opacity: 0.7,
     },
     leaderboardLink: {
-        color: '#EF2F55',
-        fontSize: Platform.OS === 'ios' ? '0.8rem' : '0.7rem',
-        fontFamily: 'graphik-bold',
+        color: '#FFFF',
+        fontSize: Platform.OS === 'ios' ? '0.65rem' : '0.6rem',
+        fontFamily: 'graphik-medium',
         lineHeight: responsiveScreenHeight(3),
         opacity: 0.7,
+        textAlign: 'center'
     },
     leaderboardContainer: {
-        marginLeft: 'auto'
+        backgroundColor: '#808080',
+        borderRadius: 18,
+        paddingHorizontal: Platform.OS === 'ios' ? normalize(9) : normalize(10),
+        alignItems: 'center',
+        paddingVertical: Platform.OS === 'ios' ? normalize(.1) : normalize(3),
     }
 });
