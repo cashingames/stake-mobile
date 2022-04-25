@@ -36,8 +36,6 @@ const TriviaBoard = ({ trivia }) => {
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user)
     const canPlay = (user.points) >= (trivia.point_eligibility);
-    const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia)
-    const hasPlayedTrivia = useSelector(state => state.game.hasPlayedTrivia)
 
 
     return (
@@ -70,7 +68,7 @@ const TriviaBoard = ({ trivia }) => {
             </View>
             {canPlay ?
                 <Pressable style={[trivia.is_active ? styles.triviaStageContainer : styles.disabled,
-                     !canPlay ? styles.disabled : {}, hasPlayedTrivia ? styles.disabled : {}]}
+                     !canPlay ? styles.disabled : {}, trivia.has_played ? styles.disabled : {}]}
                     onPress={() => navigation.navigate('TriviaInstructions', {
                         type: trivia.game_type_id,
                         mode: trivia.game_mode_id,
@@ -78,8 +76,8 @@ const TriviaBoard = ({ trivia }) => {
                         trivia: trivia.id,
                         questionCount: trivia.question_count,
                         gameDuration: trivia.game_duration
-                    })} disabled={!canPlay || hasPlayedTrivia || !trivia.is_active}>
-                    {trivia.is_active && !hasPlayedTrivia ?
+                    })} disabled={!canPlay || trivia.has_played || !trivia.is_active}>
+                    {trivia.is_active && !trivia.has_played ?
                         <Text style={styles.triviaStage}>Join Now</Text>
                         :
                         <Text style={styles.triviaClosed}>Closed</Text>
