@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, Pressable, Button } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -14,7 +14,6 @@ import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
 import { useNavigation } from '@react-navigation/core';
-import { NavigationType } from 'react-router';
 
 const HomeScreen = () => {
 
@@ -23,8 +22,6 @@ const HomeScreen = () => {
     const gameTypes = useSelector(state => state.common.gameTypes)
     const [loading, setLoading] = useState(true);
     const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia)
-    // const hasPlayedTrivia = useSelector(state => state.game.hasPlayedTrivia)
-
 
     useEffect(() => {
         dispatch(resetGameStats());
@@ -32,7 +29,7 @@ const HomeScreen = () => {
         var _1 = dispatch(getUser());
         var _2 = dispatch(getCommonData());
 
-        Promise.all([_1, _2]).then(values => {
+        Promise.all([_1, _2]).then(() => {
             setLoading(false);
         });
     }, []);
@@ -40,7 +37,6 @@ const HomeScreen = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             dispatch(getCommonData());
-            console.log('i am running')
         }, 5000);
         return () => clearInterval(interval);
     }, [hasLiveTrivia]);
@@ -127,7 +123,7 @@ const UserPoints = ({ points }) => {
             />
             <View style={styles.pointsNumber}>
                 <Text style={styles.userPoint}>{formatNumber(points)}</Text>
-                <Text style={styles.pointDetail} >YOUR POINTS EARNED</Text>
+                <Text style={styles.pointDetail} >POINTS EARNED</Text>
             </View>
         </View>
     );

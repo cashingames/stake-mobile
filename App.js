@@ -40,13 +40,8 @@ function getRem() {
   else if (fontScale > 1.1) {
     rem = rem - 2;
   }
-
-  console.log("rem", rem);
-
   return rem;
 }
-
-console.log("widtha and initial rem", width, width > 400 ? 18 : 16);
 
 const config = {
   screens: {
@@ -84,7 +79,7 @@ function App() {
   const onRouteChange = async () => {
     const previousRouteName = routeNameRef.current;
     const currentRouteName = navigationRef.getCurrentRoute().name;
-    console.log(previousRouteName, currentRouteName)
+
     if (previousRouteName !== currentRouteName) {
       console.log("Logging to analytics", currentRouteName)
       await analytics().logScreenView({

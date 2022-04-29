@@ -15,7 +15,6 @@ export const getBankData = createAsyncThunk(
     'common/bank/get',
     async (thunkAPI) => {
         const response = await getData('v2/wallet/banks')
-        // console.log(response.data)
         return response.data
     }
 )
@@ -79,7 +78,7 @@ const initialState = {
     achievements: [],
     gameTypes: [],
     gameModes: [],
-    gameCategories:[],
+    gameCategories: [],
     plans: [],
     banks: [],
     categoryLeaders: [],
@@ -107,7 +106,7 @@ export const CommonSlice = createSlice({
                 state.gameTypes = action.payload.gameTypes;
                 state.gameModes = action.payload.gameModes;
                 state.gameCategories = action.payload.gameCategories;
-                state.hasLiveTrivia= action.payload.hasLiveTrivia;
+                state.hasLiveTrivia = action.payload.hasLiveTrivia;
 
             })
             .addCase(getBankData.fulfilled, (state, action) => {
