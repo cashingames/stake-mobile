@@ -34,13 +34,12 @@ const HomeScreen = () => {
         });
     }, []);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            dispatch(getCommonData());
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [hasLiveTrivia]);
-
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         dispatch(getCommonData());
+    //     }, 5000);
+    //     return () => clearInterval(interval);
+    // }, [hasLiveTrivia]);
 
     useFocusEffect(
         React.useCallback(() => {
