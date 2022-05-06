@@ -30,7 +30,7 @@ function OtherLeader({ leader, position, indexArrow }) {
                     source={isTrue(leader.avatar) ? { uri: `${backendUrl}/${leader.avatar}` } : require("../../assets/images/user-icon.png")}
                 />
                 <View style={otherLeaderStyles.username}>
-                    <Text style={otherLeaderStyles.names}>{`${leader.first_name} ${leader.last_name}`}</Text>
+                    <Text style={otherLeaderStyles.names}>{`${leader.username}`}</Text>
                     <Text style={otherLeaderStyles.point}>{formatNumber(leader.points)} pts</Text>
                 </View>
             </View>
