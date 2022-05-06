@@ -1,5 +1,5 @@
-import React from 'react';
-import { Pressable, View, Text, Button } from 'react-native';
+import React, { useRef } from 'react';
+import { Pressable, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import {
@@ -7,105 +7,102 @@ import {
     getGlobalLeadersByDate
 } from '../CommonSlice';
 import DatePicker from 'react-native-date-ranges';
-import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 
 const LeaderBoardFilter = () => {
     const dispatch = useDispatch();
+    const datePickerRef = useRef();
 
     const onFilterLeaders = (dateRange) => {
         const startDate = Math.floor(new Date(dateRange.startDate).getTime() / 1000);
         const endDate = Math.floor(new Date(dateRange.endDate).getTime() / 1000);
-        console.log(startDate);
-        console.log(endDate);
 
-        const sortedLeaders = () => {
-            dispatch(getGlobalLeadersByDate({
-                startDate,
-                endDate
-            }
-            ))
-            dispatch(getCategoryLeadersByDate({
-                startDate,
-                endDate
-            }
-            ))
-                .then(unwrapResult)
-                .then((originalPromiseResult) => {
-                    console.log('fetched')
-                })
-                .catch((rejectedValueOrSerializedError) => {
-                    console.log(rejectedValueOrSerializedError)
-                })
-        }
-        sortedLeaders();
+        dispatch(getGlobalLeadersByDate({
+            startDate,
+            endDate
+        }));
+        dispatch(getCategoryLeadersByDate({
+            startDate,
+            endDate
+        }));
     }
 
     const customButton = (onConfirm) => (
-        <Pressable onPress={onConfirm} style={styles.confirmButton}>
-            <Text style={styles.confirmText}>OK</Text>
-        </Pressable>
+        <>
+            <Pressable onPress={onConfirm} style={styles.confirmButton}>
+                <Text style={styles.confirmText}>OK</Text>
+            </Pressable>
+            <Pressable onPress={() => datePickerRef.current.setModalVisible(false)} style={styles.cancelButton}>
+                <Text style={styles.cancelText}>Cancel</Text>
+            </Pressable>
+        </>
+
     )
 
 
     return (
-        <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Extended Leaderboard</Text>
-            <Pressable style={styles.container}>
-                <DatePicker
-                    style={styles.filterContainer}
-                    customStyles={{
-                        placeholderText: { fontSize: 14, color: '#EF2F55' },
-                        headerStyle: { backgroundColor: '#FAC502' },
-                        headerMarkTitle: { fontSize: 15 },
-                        headerDateTitle: { fontSize: 15 },
-                    }}
-                    centerAlign
-                    allowFontScaling={false}
-                    placeholder={'Filter by Date'}
-                    mode={'range'}
-                    markText={'Select date'}
-                    onConfirm={onFilterLeaders}
-                    customButton={customButton}
-                    selectedBgColor={'#EF2F55'}
-                />
-            </Pressable>
-        </View>
+        <>
+
+            <DatePicker //Datepicker is hidden in favour of our custom text below
+                ref={datePickerRef}
+                style={styles.filterContainer}
+                customStyles={{
+                    placeholderText: { fontSize: 14, color: '#EF2F55', },
+                    headerStyle: { backgroundColor: '#FAC502' },
+                    headerMarkTitle: { fontSize: 15 },
+                    headerDateTitle: { fontSize: 15 },
+                    contentInput: { backgroundColor: '#FAC502', height: 0, width: 0 },
+                    contentText: { fontSize: 14, color: '#EF2F55', } //after selected daterange, this replaces the placeholder Style
+                }}
+                placeholder={"Yes"}
+                mode={'range'}
+                markText={'Select date'}
+                onConfirm={onFilterLeaders}
+                customButton={customButton}
+                selectedBgColor={'#EF2F55'}
+            />
+            <Text style={{ fontSize: 14, color: '#EF2F55' }} onPress={() => datePickerRef.current.setModalVisible(true)}> Filter by date</Text>
+
+        </>
     )
 }
 export default LeaderBoardFilter;
 
 const styles = EStyleSheet.create({
-    headerContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    headerText: {
-        fontSize: '.9rem',
-        color: "#000000",
-        fontFamily: 'graphik-medium',
-    },
-    container: {
-        marginLeft: responsiveScreenWidth(11),
-        width: normalize(80),
-    },
+
     filterContainer: {
+        marginLeft: responsiveScreenWidth(11),
+        width: 0,
         borderRadius: 0,
         borderTopWidth: 0,
         borderWidth: 0,
         backgroundColor: '#FFFF',
+
     },
     confirmButton: {
         backgroundColor: '#EF2F55',
         paddingHorizontal: '3rem',
         paddingVertical: '.5rem',
         borderRadius: 5,
-        textAlign: 'center'
+        textAlign: 'center',
+        marginRight: '1rem'
+    },
+    cancelButton: {
+        backgroundColor: '#FFFF',
+        paddingHorizontal: '3rem',
+        paddingVertical: '.5rem',
+        borderRadius: 5,
+        textAlign: 'center',
+        borderColor: '#EF2F55',
+        borderWidth: 1
     },
     confirmText: {
         color: '#FFFF',
+        fontFamily: 'graphik-medium',
+    },
+    cancelText: {
+        color: '#EF2F55',
         fontFamily: 'graphik-medium',
     },
 

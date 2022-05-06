@@ -15,7 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 
-export default function ExtendedLeaderboard({ navigation }) {
+export default function ExtendedLeaderboard() {
 
     const dispatch = useDispatch();
     const leaders = useSelector(state => state.common.globalLeaders)
@@ -54,7 +54,6 @@ export default function ExtendedLeaderboard({ navigation }) {
 
 
 function GlobalLeaderboard({ leaders }) {
-    const dispatch = useDispatch();
     return (
         <View style={styles.global}>
             <Text style={styles.title}>Global Leaderboard</Text>

@@ -87,7 +87,7 @@ function AppRouter() {
                     <>
                         <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
-                        <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ headerTitle: (props) => <LeaderBoardFilter {...props} />}} />
+                        <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Leaderboards', headerRight: () => <LeaderBoardFilter /> }} />
                         <AppStack.Screen name="TriviaLeaderboard" component={TriviaLeaderBoard} options={{ title: 'Leaderboard' }} />
 
 
@@ -96,10 +96,10 @@ function AppRouter() {
                         <AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
                         <AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
                         <AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
-                        <AppStack.Screen name="DuelSelectPlayer" component={DuelSelectPlayerScreen} options={{title: 'Challenge - Select a player' }} />
-                        <AppStack.Screen name="DuelScreen" component={DuelScreen} options={{title: 'Challenge' }} />
-                        <AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{title: 'Game Instructions' }} />
-                        <AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen}  options={{ headerShown: false }} />
+                        <AppStack.Screen name="DuelSelectPlayer" component={DuelSelectPlayerScreen} options={{ title: 'Challenge - Select a player' }} />
+                        <AppStack.Screen name="DuelScreen" component={DuelScreen} options={{ title: 'Challenge' }} />
+                        <AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{ title: 'Game Instructions' }} />
+                        <AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen} options={{ headerShown: false }} />
                         <AppStack.Screen name="Trivia" component={TriviaScreen} options={{ title: 'Live Trivia' }} />
 
 
