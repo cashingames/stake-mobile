@@ -3,13 +3,13 @@ import React, { useRef } from 'react';
 import { Dimensions, PixelRatio, Text } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
-import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as Linking from 'expo-linking';
+import * as SplashScreen from 'expo-splash-screen';
 
 import store from './src/store';
 import AppRouter from './src/AppRouter';
@@ -90,8 +90,10 @@ function App() {
     routeNameRef.current = currentRouteName;
   }
 
-  if (!fontsLoaded) {
-    return <AppLoading />
+  if (fontsLoaded) {
+    SplashScreen.hideAsync();
+  } else {
+    return null;
   }
 
 
