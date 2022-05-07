@@ -11,11 +11,13 @@ import { paystackKey } from '../../utils/BaseUrl';
 import { verifyFunding } from '../../utils/ApiHelper';
 import Input from '../../shared/Input';
 import { formatCurrency } from '../../utils/stringUtl';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
 export default function FundWalletScreen() {
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    useApplyHeaderWorkaround(navigation.setOptions);
 
     const user = useSelector(state => state.auth.user)
     const [amount, setAmount] = useState('');

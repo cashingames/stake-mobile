@@ -1,17 +1,19 @@
 import React from 'react';
-import {Text, ScrollView } from 'react-native';
+import { Text, ScrollView } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import normalize from './../../utils/normalize';
 
-export default function SupportAnswerScreen({ route }) {
+export default function SupportAnswerScreen({ navigation, route }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
 
     const question = JSON.parse(route.params.question);
     const answer = JSON.parse(route.params.answer);
 
     return (
         <ScrollView style={styles.container}>
-                <Text style={styles.question}>{question}</Text>
-                <Text style={styles.answer}>{answer}</Text>
+            <Text style={styles.question}>{question}</Text>
+            <Text style={styles.answer}>{answer}</Text>
         </ScrollView>
     );
 }

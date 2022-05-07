@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../shared/Input';
@@ -6,10 +6,11 @@ import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import { registerUser, setToken, } from './AuthSlice';
 import { saveToken } from '../../utils/ApiHelper';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
 export default function SignupProfileScreen({ navigation }) {
-
+    useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
 
     const userCredentials = useSelector(state => state.auth.createAccount);
@@ -154,7 +155,7 @@ export default function SignupProfileScreen({ navigation }) {
 // }
 
 
-const FirstTimeUserBonus = ({onClose}) => {
+const FirstTimeUserBonus = ({ onClose }) => {
     const navigation = useNavigation();
     const goToDashboard = () => {
         onClose()

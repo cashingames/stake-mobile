@@ -10,10 +10,12 @@ import { backendUrl } from '../../utils/BaseUrl';
 import * as ImagePicker from 'expo-image-picker';
 import { isTrue } from '../../utils/stringUtl';
 import { getUser, editProfileAvatar } from '../Auth/AuthSlice';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
 export default function UserProfileScreen({ navigation }) {
 
+    useApplyHeaderWorkaround(navigation.setOptions);
 
     return (
         <SafeAreaView style={styles.container}>

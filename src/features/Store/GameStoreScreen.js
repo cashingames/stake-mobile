@@ -13,10 +13,12 @@ import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 import AppButton from "../../shared/AppButton";
 import UserItems from "../../shared/UserPurchasedItems";
 import EStyleSheet from "react-native-extended-stylesheet";
+import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 
 
-export default function () {
+export default function ({ navigation }) {
     const dispatch = useDispatch();
+    useApplyHeaderWorkaround(navigation.setOptions);
 
     useEffect(() => {
         dispatch(getUser());
@@ -303,7 +305,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         elevation: 2.5,
         shadowColor: '#000',
-        shadowOffset: {width: 0.5, height: 2},
+        shadowOffset: { width: 0.5, height: 2 },
         shadowOpacity: 0.2,
     },
     buyItemCard: {
@@ -355,8 +357,8 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(10),
     },
     actionButton: {
-       paddingVertical: responsiveScreenHeight(2.3),
-       marginTop: responsiveScreenHeight(5)
+        paddingVertical: responsiveScreenHeight(2.3),
+        marginTop: responsiveScreenHeight(5)
     },
     boostIcon: {
         marginTop: normalize(12),

@@ -6,6 +6,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import { formatNumber } from '../utils/stringUtl';
 import normalize, { responsiveHeight, responsiveScreenWidth } from "../utils/normalize";
+import Animated, { BounceIn } from "react-native-reanimated";
 
 const UserItems = ({ showBuy }) => {
 
@@ -31,7 +32,7 @@ const UserItems = ({ showBuy }) => {
     }, [boosts, plans]);
 
     return (
-        <View style={styles.container}>
+        <Animated.View entering={BounceIn.duration(1000)} style={styles.container}>
             <Image
                 style={styles.image}
                 resizeMode='contain'
@@ -44,7 +45,7 @@ const UserItems = ({ showBuy }) => {
                 <Text style={[styles.commonRow, boosts?.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
                 {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy more</Text>}
             </View>
-        </View>
+        </Animated.View>
     )
 }
 

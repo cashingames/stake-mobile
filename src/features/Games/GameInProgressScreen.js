@@ -23,16 +23,16 @@ var base64 = require('base-64');
 
 
 export default function GameInProgressScreen({ navigation, route }) {
-    const params = route.params;
+
     const dispatch = useDispatch();
     const refRBSheet = useRef();
+    const params = route.params;
     const gameSessionToken = useSelector(state => state.game.gameSessionToken);
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
     const [ending, setEnding] = useState(false);
     const gameEnded = useSelector(state => state.game.isEnded);
     const isPlayingTrivia = useSelector(state => state.game.isPlayingTrivia);
-    console.log(isPlayingTrivia, 'this is playing trivia');
 
     const onEndGame = () => {
         setEnding(true);
@@ -44,7 +44,7 @@ export default function GameInProgressScreen({ navigation, route }) {
             .then(unwrapResult)
             .then(() => {
                 setEnding(false);
-                if(isPlayingTrivia ){
+                if (isPlayingTrivia) {
                     dispatch(setHasPlayedTrivia(true));
                     navigation.navigate('TriviaEndResult', {
                         triviaId: params.triviaId,
@@ -52,7 +52,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                 } else {
                     navigation.navigate('GameEndResult');
                 }
-              
+
             })
             .catch((rejectedValueOrSerializedError) => {
                 setEnding(false);
@@ -171,7 +171,7 @@ const GameProgressAndBoosts = ({ onComplete }) => {
 const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
     const countdownKey = useSelector(state => state.game.countdownKey);
     const isGamePaused = useSelector(state => state.game.countdownFrozen);
-    const gameDuration = useSelector(state=>state.game.gameDuration);
+    const gameDuration = useSelector(state => state.game.gameDuration);
 
     return (
         <View style={styles.topicProgress}>
@@ -228,7 +228,7 @@ const AvailableBoosts = () => {
     const displayedOptions = useSelector(state => state.game.displayedOptions);
 
     const boostsToDisplay = () => {
-      //  bomb is only applicable to multiple choices
+        //  bomb is only applicable to multiple choices
         if (displayedOptions.length === 2) {
             return boosts.filter(x => x.name.toUpperCase() !== "BOMB");
         }

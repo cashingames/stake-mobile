@@ -4,10 +4,13 @@ import normalize from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import { useNavigation } from '@react-navigation/core';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
 
 const TournamentScreen = () => {
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     return (
         <ScrollView style={styles.container}>
             <View>
@@ -277,7 +280,7 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent:'space-between'
+        justifyContent: 'space-between'
     },
     dates: {
         fontSize: '0.7rem',

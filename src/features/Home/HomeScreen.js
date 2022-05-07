@@ -14,6 +14,7 @@ import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
 import { useNavigation } from '@react-navigation/core';
+import Animated, { BounceIn, BounceInLeft, BounceInRight, BounceInUp, FadeInUp, Layout, SlideInLeft, SlideInRight, SlideInUp, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 
 const HomeScreen = () => {
 
@@ -55,16 +56,17 @@ const HomeScreen = () => {
         <ScrollView contentContainerStyle={styles.scrollView}>
             <UserDetails user={user} />
             <View style={styles.container}>
-                <>
-                    {hasLiveTrivia &&
-                        <LiveTriviaLink />
-                    }
+                {hasLiveTrivia &&
+                    <LiveTriviaLink />
+                }
+                <Animated.View entering={FadeInUp.delay(1000).duration(1000)}>
                     <Text style={styles.title}>Games</Text>
                     <Text style={styles.planInstruction}>You can only play 10 free games daily,
                         Buy Games to enjoy playing without interruptons.
                     </Text>
-                    <UserItems showBuy={true} />
-                </>
+                </Animated.View>
+
+                <UserItems showBuy={true} />
                 <GameCards games={gameTypes} />
                 <RecentlyPlayedCards games={user.recentGames} />
                 <GlobalTopLeadersHero />
@@ -103,35 +105,47 @@ const UserDetails = ({ user }) => {
 
 const UserWallet = ({ balance }) => {
     return (
-        <View style={styles.wallet}>
+        <Animated.View entering={BounceInRight.duration(2000)} style={styles.wallet}>
             <Image
                 style={styles.icon}
                 source={require('../../../assets/images/wallet.png')}
             />
             <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
-        </View>
+        </Animated.View>
     );
 }
 
 const UserPoints = ({ points }) => {
+    const rotation = useSharedValue(0);
+    rotation.value = withSequence(
+        withTiming(-10, { duration: 50 }),
+        withRepeat(withTiming(15, { duration: 100 }), 6, true),
+        withTiming(0, { duration: 50 })
+    );
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{ rotateZ: `${rotation.value}deg` }],
+        };
+    });
+
     return (
-        <View style={styles.points}>
-            <Image
-                style={styles.trophy}
+        <Animated.View entering={BounceInUp.delay(800)} style={styles.points}>
+            <Animated.Image
+                style={[styles.trophy, animatedStyle]}
                 source={require('../../../assets/images/point-trophy.png')}
             />
             <View style={styles.pointsNumber}>
                 <Text style={styles.userPoint}>{formatNumber(points)}</Text>
                 <Text style={styles.pointDetail} >POINTS EARNED</Text>
             </View>
-        </View>
+        </Animated.View>
     );
 }
 
 
 const UserRanking = ({ gamesCount, ranking }) => {
     return (
-        <View style={styles.userRanking}>
+        <Animated.View entering={BounceInLeft.delay(400)} style={styles.userRanking} >
             <View style={styles.gamesPlayed}>
                 <Text style={styles.rankNumber}>{formatNumber(gamesCount)}</Text>
                 <Text style={styles.rankDetail}>GAMES PLAYED</Text>
@@ -140,7 +154,7 @@ const UserRanking = ({ gamesCount, ranking }) => {
                 <Text style={styles.rankNumber}>{formatNumber(ranking)}</Text>
                 <Text style={styles.rankDetail}>GLOBAL RANKING</Text>
             </View>
-        </View>
+        </Animated.View>
     );
 }
 
@@ -151,14 +165,14 @@ function GameCards({ games }) {
         return <></>;
 
     return (
-        <View style={styles.games}>
+        <Animated.View entering={BounceIn.delay(1000)} style={styles.games}>
             <Text style={styles.lightTitle}>Play New Game</Text>
             <View style={styles.cards}>
                 <SwiperFlatList >
                     {games.map((game, i) => <GameCard key={i} game={game} />)}
                 </SwiperFlatList>
             </View>
-        </View>
+        </Animated.View>
 
     )
 }

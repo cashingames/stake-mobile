@@ -3,12 +3,13 @@ import { Text, View, ScrollView, Share, Alert, Pressable } from 'react-native';
 import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
-import { appUrl } from '../utils/BaseUrl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from 'react-redux';
+import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 
 
 export default function InviteFriendsScreen({ navigation }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
 
     return (
         <ScrollView style={styles.container}>

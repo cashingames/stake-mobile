@@ -10,12 +10,14 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { backendUrl } from '../../utils/BaseUrl';
 import { startGame, setGameSessionToken, setIsPlayingTrivia, setQuestionsCount, setGameDuration } from "./GameSlice";
 import EStyleSheet from "react-native-extended-stylesheet";
+import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 
 
 
 export default function TriviaInstructionsScreen({ navigation, route }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const params = route.params;
-    console.log(params);
     const refRBSheet = useRef();
     const onProceed = () => {
         refRBSheet.current.open()

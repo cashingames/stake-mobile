@@ -13,10 +13,11 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
-export default function ExtendedLeaderboard() {
-
+export default function ExtendedLeaderboard({ navigation }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
     const leaders = useSelector(state => state.common.globalLeaders)
     const categoryLeaders = useSelector(state => state.common.categoryLeaders)

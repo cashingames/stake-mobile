@@ -1,14 +1,17 @@
 import * as React from 'react';
-import {Text, View, Image, ScrollView, Pressable, ImageBackground } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, ImageBackground } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import AppButton from '../../shared/AppButton';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function DuelScreen({ navigation }) {
+
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const proccedToInstruction = () => {
-            navigation.navigate('GameInstructions')
- 
+        navigation.navigate('GameInstructions')
     }
 
     return (
@@ -152,5 +155,5 @@ const styles = EStyleSheet.create({
     startButton: {
         marginTop: responsiveScreenWidth(23),
     },
-  
+
 });

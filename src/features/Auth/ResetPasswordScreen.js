@@ -8,8 +8,10 @@ import Input from '../../shared/Input';
 import { resetPassword } from './AuthSlice';
 import { isStaging } from '../../utils/BaseUrl';
 import { unwrapResult } from '@reduxjs/toolkit';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function ({ navigation }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
 
     const [password, setPassword] = useState(isStaging ? 'zubby1234' : '');
@@ -31,19 +33,19 @@ export default function ({ navigation }) {
         setCanSend(false);
         setError('');
 
-        dispatch(resetPassword({ password, email, code , password_confirmation:password}))
-        .then(unwrapResult)
-        .then((originalPromiseResult) => {
-            setLoading(false);
-            setCanSend(true);
-            Alert.alert('Password reset successful')
-            navigation.navigate('Login');
-        })
-        .catch((rejectedValueOrSerializedError) => {
-            console.log(rejectedValueOrSerializedError)
-            setError("Password reset failed, try again");
-            setLoading(false);
-        })
+        dispatch(resetPassword({ password, email, code, password_confirmation: password }))
+            .then(unwrapResult)
+            .then((originalPromiseResult) => {
+                setLoading(false);
+                setCanSend(true);
+                Alert.alert('Password reset successful')
+                navigation.navigate('Login');
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                console.log(rejectedValueOrSerializedError)
+                setError("Password reset failed, try again");
+                setLoading(false);
+            })
     }
 
     useEffect(() => {

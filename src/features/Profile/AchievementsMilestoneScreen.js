@@ -6,11 +6,13 @@ import { backendUrl } from '../../utils/BaseUrl';
 import * as Progress from 'react-native-progress';
 import { useSelector } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
-import { Ionicons } from '@expo/vector-icons';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
 
 export default function AchievementsMilestoneScreen({ navigation }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const achievements = useSelector(state => state.common.achievements);
     const user = useSelector(state => state.auth.user);
 
@@ -75,9 +77,9 @@ const AchievementCard = ({ achievement, userPoint, }) => {
 
                 {disabled ?
                     <Image
-                    source={require('../../../assets/images/padlock.png')}
-                    style={styles.padlock}
-                />
+                        source={require('../../../assets/images/padlock.png')}
+                        style={styles.padlock}
+                    />
                     :
                     <Text style={styles.unlocked}>Unlocked</Text>
                 }
@@ -165,7 +167,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
     },
     padlock: {
-        width:normalize(35),
+        width: normalize(35),
         height: normalize(35)
     }
 });

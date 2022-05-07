@@ -31,7 +31,7 @@ const LeaderBoardFilter = () => {
     const customButton = (onConfirm) => (
         <>
             <Pressable onPress={onConfirm} style={styles.confirmButton}>
-                <Text style={styles.confirmText}>OK</Text>
+                <Text style={styles.confirmText}>Ok</Text>
             </Pressable>
             <Pressable onPress={() => datePickerRef.current.setModalVisible(false)} style={styles.cancelButton}>
                 <Text style={styles.cancelText}>Cancel</Text>

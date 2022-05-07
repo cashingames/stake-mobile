@@ -10,8 +10,11 @@ import { editPersonalDetails, getUser } from '../Auth/AuthSlice';
 import normalize from '../../utils/normalize';
 import { isTrue } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function EditProfileDetailsScreen({ navigation }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user)
@@ -56,8 +59,6 @@ export default function EditProfileDetailsScreen({ navigation }) {
                 // console.log(rejectedValueOrSerializedError)
             });
     }
-
-    console.log(setShowDatePicker);
 
     return (
         <ScrollView style={styles.container}>

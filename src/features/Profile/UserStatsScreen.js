@@ -1,29 +1,33 @@
 import React from 'react';
-import {Text, View, ScrollView, Image } from 'react-native';
+import { Text, View, ScrollView, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from '../../utils/normalize';
 import { useSelector } from 'react-redux';
 import { isTrue } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function UserStatsScreen({ navigation }) {
+
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const user = useSelector(state => state.auth.user)
 
     return (
         <ScrollView style={styles.container}>
-                <UserRank userPoint={user.points} />
-                <Detail
-                    username={user.username}
-                    firstName={user.firstName}
-                    lastName={user.lastName}
-                    gamesPlayed={user.gamesCount}
-                    globalRanking={user.globalRank}
-                    winRate={user.winRate}
-                    position={user.badge}
-                    challengesPlayed={user.totalChallenges}
-                />
-                <RecentlyPlayedCards games={user.recentGames} />
+            <UserRank userPoint={user.points} />
+            <Detail
+                username={user.username}
+                firstName={user.firstName}
+                lastName={user.lastName}
+                gamesPlayed={user.gamesCount}
+                globalRanking={user.globalRank}
+                winRate={user.winRate}
+                position={user.badge}
+                challengesPlayed={user.totalChallenges}
+            />
+            <RecentlyPlayedCards games={user.recentGames} />
         </ScrollView>
     );
 }
@@ -168,7 +172,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         color: '#757575',
         marginBottom: normalize(10),
-        opacity : 0.8
+        opacity: 0.8
     },
     responseText: {
         fontSize: '0.75rem',

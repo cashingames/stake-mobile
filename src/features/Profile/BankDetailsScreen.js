@@ -9,10 +9,12 @@ import Input from '../../shared/Input';
 import normalize from '../../utils/normalize';
 import { useDispatch, useSelector } from 'react-redux';
 import AppButton from '../../shared/AppButton';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function BankDetailsScreen({ navigation }) {
-
     const dispatch = useDispatch();
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const user = useSelector(state => state.auth.user)
     const banks = useSelector(state => state.common.banks)
 

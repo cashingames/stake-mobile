@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Text, View, ScrollView, Alert } from 'react-native';
+import { Text, View, ScrollView, Alert } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,16 +9,19 @@ import { useDispatch } from 'react-redux';
 import { changePassword } from '../Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { isStaging } from '../../utils/BaseUrl';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
 export default function ChangePasswordScreen({ navigation }) {
+    const dispatch = useDispatch();
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
     const [password, setPassword] = useState(isStaging ? '123456789' : '');
     const [new_password, setNewPassword] = useState(isStaging ? '12345678' : '');
     const [new_password_confirmation, setConfirmPassword] = useState(isStaging ? '12345678' : '');
     const [passErr, setPassError] = useState(false);
-    const dispatch = useDispatch();
 
 
     const onChangePassword = (text) => {

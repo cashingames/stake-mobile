@@ -5,10 +5,13 @@ import { getUser } from '../Auth/AuthSlice';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { formatCurrency, isTrue } from '../../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function TransactionScreen({ navigation }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
 
     const dispatch = useDispatch();
+
     const transactions = useSelector(state => state.auth.user.transactions);
 
     useEffect(() => {
@@ -74,7 +77,7 @@ const styles = EStyleSheet.create({
         display: 'flex',
         marginVertical: responsiveScreenWidth(40),
         paddingHorizontal: normalize(18),
-        alignItems:'center'
+        alignItems: 'center'
     },
     unavailable: {
         width: normalize(100),
@@ -85,7 +88,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         fontSize: '1rem',
         color: '#4F4F4F',
-        lineHeight:'1.5rem',
+        lineHeight: '1.5rem',
         textAlign: 'center',
         marginTop: responsiveScreenWidth(8)
     },

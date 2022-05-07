@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, ScrollView, Image, Pressable } from 'react-native';
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
+import { formatCurrency } from '../../utils/stringUtl';
 import { useNavigation } from '@react-navigation/core';
 import { fetchTrivia } from '../CommonSlice';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
 
-const TriviaScreen = () => {
+const TriviaScreen = ({ navigation }) => {
     const dispatch = useDispatch();
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const trivia = useSelector(state => state.common.trivia)
     console.log(trivia)
     useEffect(() => {
@@ -68,7 +71,7 @@ const TriviaBoard = ({ trivia }) => {
             </View>
             {canPlay ?
                 <Pressable style={[trivia.is_active ? styles.triviaStageContainer : styles.disabled,
-                     !canPlay ? styles.disabled : {}, trivia.has_played ? styles.disabled : {}]}
+                !canPlay ? styles.disabled : {}, trivia.has_played ? styles.disabled : {}]}
                     onPress={() => navigation.navigate('TriviaInstructions', {
                         type: trivia.game_type_id,
                         mode: trivia.game_mode_id,

@@ -7,11 +7,14 @@ import normalize from './../../utils/normalize';
 import { fetchFaqAndAnswers } from '../CommonSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function SupportQuestionsScreen({ navigation }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const dispatch = useDispatch();
     const faqs = useSelector(state => state.common.faqAndAnswers);
-    
+
     useEffect(() => {
         dispatch(fetchFaqAndAnswers());
     }, [])

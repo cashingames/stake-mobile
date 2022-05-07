@@ -5,9 +5,12 @@ import { backendUrl } from '../../utils/BaseUrl';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGameMode } from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function GameModeScreen({ navigation }) {
     const dispatch = useDispatch();
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const gameModes = useSelector(state => state.common.gameModes);
     console.log(gameModes);
 

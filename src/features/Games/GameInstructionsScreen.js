@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
-import normalize, {responsiveScreenWidth} from "../../utils/normalize";
+import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { formatNumber } from '../../utils/stringUtl';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -10,10 +10,13 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { backendUrl } from '../../utils/BaseUrl';
 import { startGame, setGameSessionToken, setIsPlayingTrivia } from "./GameSlice";
 import EStyleSheet from "react-native-extended-stylesheet";
+import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 
 
 
 export default function GameInstructionsScreen({ navigation, route }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const gameMode = useSelector(state => state.game.gameMode);
     const refRBSheet = useRef();
 

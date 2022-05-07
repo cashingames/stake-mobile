@@ -12,8 +12,11 @@ import AppButton from '../../shared/AppButton';
 import { isTrue } from '../../utils/stringUtl';
 import { sendFriendInvite, setSelectedFriend } from './GameSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function DuelSelectPlayerScreen({ navigation }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const friends = useSelector(state => state.auth.user.friends)
     const [searchText, setSearchText] = useState('');
     const [filteredFriends, setFilteredFriends] = useState(friends);
@@ -70,12 +73,12 @@ const FriendDetails = ({ friend }) => {
         console.log(friend)
     }
     return (
-        <Pressable style={[styles.friendDetails, opponentId=== friend.id ? styles.selected : {}]} onPress={() => { selectedFriend(friend) }}>
+        <Pressable style={[styles.friendDetails, opponentId === friend.id ? styles.selected : {}]} onPress={() => { selectedFriend(friend) }}>
             <Image
                 source={isTrue(friend.avatar) ? { uri: `${backendUrl}/${friend.avatar}` } : require("../../../assets/images/user-icon.png")}
                 style={styles.avatar}
             />
-            <Text style={[styles.friendName, opponentId=== friend.id ? styles.selectedText : {}]}>{friend.username}</Text>
+            <Text style={[styles.friendName, opponentId === friend.id ? styles.selectedText : {}]}>{friend.username}</Text>
         </Pressable>
     )
 }

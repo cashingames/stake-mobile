@@ -8,8 +8,10 @@ import Input from '../../shared/Input';
 import { verifyAccount } from './AuthSlice';
 import { isStaging } from '../../utils/BaseUrl';
 import { unwrapResult } from '@reduxjs/toolkit';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function ({ navigation }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
 
     const [email, setEmail] = useState(isStaging ? 'oyekunmi@gmail.com' : '');
@@ -25,20 +27,20 @@ export default function ({ navigation }) {
         setLoading(true);
         setCanSend(false);
         setError('');
-        
-        dispatch(verifyAccount({email})).then(unwrapResult)
-        .then((originalPromiseResult) => {
-            setLoading(false);
-            setCanSend(true);
-            console.log(originalPromiseResult);
-            navigation.navigate("VerifyEmail");
-        })
-        .catch((rejectedValueOrSerializedError) => {
-            setLoading(false);
-            setCanSend(true);
-            console.log(rejectedValueOrSerializedError)
-            setError("Please Use Registered Email Address");
-        })
+
+        dispatch(verifyAccount({ email })).then(unwrapResult)
+            .then((originalPromiseResult) => {
+                setLoading(false);
+                setCanSend(true);
+                console.log(originalPromiseResult);
+                navigation.navigate("VerifyEmail");
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                setLoading(false);
+                setCanSend(true);
+                console.log(rejectedValueOrSerializedError)
+                setError("Please Use Registered Email Address");
+            })
 
     }
 

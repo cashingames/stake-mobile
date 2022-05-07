@@ -9,12 +9,15 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { formatNumber } from '../../utils/stringUtl';
 import { getTriviaData } from '../Games/GameSlice';
 import { getCommonData } from '../CommonSlice';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
 
-const TriviaLeaderBoard = ({route}) => {
+const TriviaLeaderBoard = ({ navigation, route }) => {
     const params = route.params;
     const dispatch = useDispatch();
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
     const triviaPosition = useSelector(state => state.game.triviaPosition)
 
@@ -74,13 +77,13 @@ const TriviaParticipant = ({ player, position }) => {
 const TriviaParticipants = ({ triviaLeaders }) => {
     return (
         <>
-        {triviaLeaders.length > 0 ?
-        <View style={styles.participants}>{triviaLeaders.map((player, i) => <TriviaParticipant key={i} player={player} position={formatNumber(i + 1)} />)}</View>
-        :
-        <>
-        <Text style={styles.noData}>No Data</Text>
-        </>
-        }
+            {triviaLeaders.length > 0 ?
+                <View style={styles.participants}>{triviaLeaders.map((player, i) => <TriviaParticipant key={i} player={player} position={formatNumber(i + 1)} />)}</View>
+                :
+                <>
+                    <Text style={styles.noData}>No Data</Text>
+                </>
+            }
 
         </>
     )
@@ -225,7 +228,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
     },
     noData: {
-        textAlign:'center',
+        textAlign: 'center',
         marginTop: responsiveScreenWidth(30),
         fontSize: '1rem',
         color: '#000000',

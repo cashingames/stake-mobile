@@ -5,17 +5,19 @@ import {
     Text,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import AppButton from '../../shared/AppButton';
 import Input from '../../shared/Input';
 import normalize from '../../utils/normalize';
 import { setUserPasswordResetToken, verifyOtp } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function VerifyEmailScreen({ navigation, route }) {
-
+    useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
+
     const [codes, setCodes] = useState([]);
     const [active, setActive] = useState(false);
     const token = codes.join("");

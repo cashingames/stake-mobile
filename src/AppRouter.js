@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import axios from "axios";
 
 import PageLoading from './shared/PageLoading';
@@ -67,7 +68,7 @@ function AppRouter() {
         const _1 = dispatch(isLoggedIn());
         const _2 = dispatch(shouldShowIntro());
 
-        Promise.all([_1, _2]).then(values => {
+        Promise.all([_1, _2]).then(() => {
             setLoading(false);
         });
     }, []);
@@ -149,13 +150,9 @@ function AppRouter() {
             <AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
             <AppStack.Screen name="FirstTimeBonus" component={FirstTimeUserBonus} options={{ headerShown: false }} />
             <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} />
-
-
         </AppStack.Navigator >
     )
-
 }
-
 
 export default AppRouter;
 

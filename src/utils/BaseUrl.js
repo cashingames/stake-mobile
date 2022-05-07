@@ -8,7 +8,6 @@ export const paystackKey = isStaging ? 'pk_test_965f5765e86ccbbf918507efddf3b87e
 export const androidClientId = getAndroidClientId();
 export const gaTrackingId = getGATrackingID();
 
-
 function getAndroidClientId() {
 
     if (env === "development") {

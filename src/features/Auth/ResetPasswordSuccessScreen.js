@@ -7,8 +7,11 @@ import {
 } from 'react-native';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
+import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default ({ navigation }) => {
+    useApplyHeaderWorkaround(navigation.setOptions);
+
     return (
         <View style={styles.container}>
             <Image
