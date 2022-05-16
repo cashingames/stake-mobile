@@ -15,17 +15,18 @@ const LeaderBoardFilter = () => {
     const datePickerRef = useRef();
 
     const onFilterLeaders = (dateRange) => {
-        const startDate = Math.floor(new Date(dateRange.startDate).getTime() / 1000);
-        const endDate = Math.floor(new Date(dateRange.endDate).getTime() / 1000);
-
+        const startDate = dateRange.startDate
+        const endDate = dateRange.endDate
+        console.log(dateRange.startDate);
+        console.log(dateRange.endDate);
         dispatch(getGlobalLeadersByDate({
             startDate,
             endDate
-        }));
+         } ));
         dispatch(getCategoryLeadersByDate({
             startDate,
             endDate
-        }));
+    }));
     }
 
     const customButton = (onConfirm) => (
