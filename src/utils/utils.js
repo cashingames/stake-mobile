@@ -1,3 +1,4 @@
+import { nativeApplicationVersion } from "expo-application";
 import {
     BounceInDown, RotateInUpLeft, BounceInLeft, BounceInRight, BounceInUp, SlideInDown, SlideInLeft,
     SlideInRight, SlideInUp, RotateInUpRight, RotateInDownLeft, RotateInDownRight,
@@ -18,4 +19,16 @@ export const randomEnteringAnimation = () => {
     ];
 
     return randomElement(slides);
+}
+
+export const appNeedsUpdate = (minVersion) => {
+    var installedVersionCodes = nativeApplicationVersion.split(".");
+    var minVersionCodes = minVersion.split(".");
+
+    for (var i = 0; i < installedVersionCodes.length; i++) {
+        if (Number.parseInt(installedVersionCodes[i]) < Number.parseInt(minVersionCodes[i])) {
+            return true;
+        }
+    }
+    return false;
 }

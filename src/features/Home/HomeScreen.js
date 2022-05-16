@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, Alert, Linking } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -15,12 +15,14 @@ import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
 import { useNavigation } from '@react-navigation/core';
 import Animated, { BounceIn, BounceInLeft, BounceInRight, BounceInUp, FadeInUp, Layout, SlideInLeft, SlideInRight, SlideInUp, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import { appNeedsUpdate } from '../../utils/utils';
 
 const HomeScreen = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     const gameTypes = useSelector(state => state.common.gameTypes)
+    const minVersionCode = useSelector(state => state.common.minVersionCode)
     const [loading, setLoading] = useState(true);
     const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia)
 
@@ -50,6 +52,24 @@ const HomeScreen = () => {
 
     if (loading) {
         return <PageLoading />
+    }
+
+    if (appNeedsUpdate(minVersionCode)) {
+        Alert.alert(
+            "Updates available",
+            "Please update your app now to access new ways of winning more money",
+            [
+                {
+                    text: 'Skip',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {
+                    text: 'OK',
+                    onPress: () => Linking.openURL("https://play.google.com/store/apps/details?id=com.cashingames.cashingames"),
+                }
+            ]
+        );
     }
 
     return (

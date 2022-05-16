@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Text, View, ScrollView, Pressable, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,30 +8,41 @@ import { fetchFaqAndAnswers } from '../CommonSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import Animated, { FlipInXUp, SlideInRight } from 'react-native-reanimated';
+import PageLoading from '../../shared/PageLoading';
 
 export default function SupportQuestionsScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const dispatch = useDispatch();
     const faqs = useSelector(state => state.common.faqAndAnswers);
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        dispatch(fetchFaqAndAnswers());
+        dispatch(fetchFaqAndAnswers()).then(() => setLoading(false));
     }, [])
+
+    if (loading) {
+        return <PageLoading />
+    }
 
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.titleContainer}>
+            <Animated.View style={styles.titleContainer} entering={SlideInRight}>
                 <Text style={styles.title}>Need some help ?</Text>
                 <Text style={styles.title}>Go through our FAQs</Text>
-            </View>
+            </Animated.View>
             <View style={styles.profileTabs}>
 
-                {faqs.map((faq, index) => <QuestionTab
-                    key={index}
-                    question={faq.question}
-                    answer={faq.answer} />
+                {faqs.map((faq, index) =>
+                    <Animated.View
+                        key={index}
+                        entering={FlipInXUp.delay(100 * index)}>
+                        <QuestionTab
+                            question={faq.question}
+                            answer={faq.answer} />
+                    </Animated.View>
                 )}
             </View>
 
