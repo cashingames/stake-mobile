@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState, useRef } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
-import {Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import AppButton from '../../shared/AppButton';
@@ -12,8 +12,10 @@ import { formatNumber, isTrue } from '../../utils/stringUtl';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { setGameCategory, setGameType } from './GameSlice';
 import RBSheet from "react-native-raw-bottom-sheet";
-import normalize, {responsiveScreenWidth} from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { randomEnteringAnimation } from '../../utils/utils';
+import Animated from 'react-native-reanimated';
 
 const Toptab = createMaterialTopTabNavigator();
 
@@ -32,7 +34,7 @@ export default function GameScreen({ navigation }) {
 
 const ProgressMessage = () => {
     return (
-        <View style={styles.progress}>
+        <Animated.View style={styles.progress} entering={randomEnteringAnimation()}>
             <View style={styles.progressText}>
                 <Text style={styles.progressTitle}>Great going!</Text>
                 <Text style={styles.text}>Continue playing to gain more points and climb up the leaderboard.</Text>
@@ -40,7 +42,7 @@ const ProgressMessage = () => {
             <Image
                 source={require('../../../assets/images/treasure_chest.png')}
             />
-        </View>
+        </Animated.View>
     )
 }
 
@@ -158,7 +160,9 @@ const CategoriesScreen = ({ currentGame }) => {
                 {isTrue(activeCategory) && <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />}
             </View>
 
-            <AppButton text='Proceed to Play' onPress={onPlayButtonClick} disabled={!isTrue(activeSubcategory)} />
+            <Animated.View entering={randomEnteringAnimation()}>
+                <AppButton text='Proceed to Play' onPress={onPlayButtonClick} disabled={!isTrue(activeSubcategory)} />
+            </Animated.View>
 
             <RBSheet
                 ref={refRBSheet}
@@ -188,17 +192,19 @@ const CategoriesScreen = ({ currentGame }) => {
 
 const GameCategoryCard = ({ category, onSelect, isSelected }) => {
     return (
-        <Pressable onPress={() => onSelect(category)} style={[styles.card, { backgroundColor: category.bgColor }]}>
-            <View style={styles.categoryCardTopRow}>
-                <Image
-                    style={styles.cardIcon}
-                    source={{ uri: `${backendUrl}/${category.icon}` }}
-                />
-                <Ionicons name={isSelected ? "md-ellipse-sharp" : "md-ellipse"} size={24} color={isSelected ? "#EF2F55" : "#FFFF"} />
-            </View>
-            <Text style={styles.cardTitle}>{category.name}</Text>
-            <Text style={styles.cardInstruction}>{formatNumber(category.played)} times played </Text>
-        </Pressable>
+        <Animated.View style={[styles.card, { backgroundColor: category.bgColor }]} entering={randomEnteringAnimation().duration(1000)}>
+            <Pressable onPress={() => onSelect(category)} >
+                <View style={styles.categoryCardTopRow}>
+                    <Image
+                        style={styles.cardIcon}
+                        source={{ uri: `${backendUrl}/${category.icon}` }}
+                    />
+                    <Ionicons name={isSelected ? "md-ellipse-sharp" : "md-ellipse"} size={24} color={isSelected ? "#EF2F55" : "#FFFF"} />
+                </View>
+                <Text style={styles.cardTitle}>{category.name}</Text>
+                <Text style={styles.cardInstruction}>{formatNumber(category.played)} times played </Text>
+            </Pressable>
+        </Animated.View>
     )
 };
 
@@ -281,7 +287,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         fontSize: '0.68rem',
         color: '#7C7D7F',
-        lineHeight:'1rem',
+        lineHeight: '1rem',
         marginTop: normalize(8)
     },
     noGamesText: {

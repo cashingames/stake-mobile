@@ -1,22 +1,24 @@
 import React from 'react';
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Text, View, PixelRatio } from "react-native";
+import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
-import normalize, { responsiveScreenWidth } from "../utils/normalize";
+import normalize from "../utils/normalize";
 import GlobalTopLeaders from "./GlobalTopLeaders";
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Animated from 'react-native-reanimated';
+import { randomEnteringAnimation } from '../utils/utils';
 
 export default function GlobalTopLeadersHero() {
     const navigation = useNavigation();
     const leaders = useSelector(state => state.common.globalLeaders)
-   
-    console.log("pixel ratio", PixelRatio.get());
-    console.log("font scale", PixelRatio.getFontScale());
-    console.log("pixel size for 12", PixelRatio.getPixelSizeForLayoutSize(12));
-    console.log("nearest pixel for 12", PixelRatio.roundToNearestPixel(22));
+
+    // console.log("pixel ratio", PixelRatio.get());
+    // console.log("font scale", PixelRatio.getFontScale());
+    // console.log("pixel size for 12", PixelRatio.getPixelSizeForLayoutSize(12));
+    // console.log("nearest pixel for 12", PixelRatio.roundToNearestPixel(22));
     return (
-        <View style={styles.leaderboard}>
+        <Animated.View style={styles.leaderboard} entering={randomEnteringAnimation().duration(1000)}>
             <View style={styles.leaderboardHeader}>
                 <Text style={styles.title}>Leaderboard</Text>
                 <View style={styles.extended}>
@@ -27,7 +29,7 @@ export default function GlobalTopLeadersHero() {
                 </View>
             </View>
             <GlobalTopLeaders leaders={leaders} />
-        </View>
+        </Animated.View>
     )
 }
 
@@ -58,5 +60,5 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
-  
+
 })

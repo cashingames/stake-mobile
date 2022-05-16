@@ -14,6 +14,8 @@ import AppButton from "../../shared/AppButton";
 import UserItems from "../../shared/UserPurchasedItems";
 import EStyleSheet from "react-native-extended-stylesheet";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
+import Animated from "react-native-reanimated";
+import { randomEnteringAnimation } from "../../utils/utils";
 
 
 export default function ({ navigation }) {
@@ -53,10 +55,11 @@ const GamePlans = () => {
 const GamePlanCard = ({ plan }) => {
     const refRBSheet = useRef();
     return (
+        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}>
+            <Animated.View style={styles.storeItemContainer} entering={randomEnteringAnimation().duration(1000)}>
+                <PlanCardDetails plan={plan} />
+            </Animated.View>
 
-        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}
-            style={styles.storeItemContainer}>
-            <PlanCardDetails plan={plan} />
             <RBSheet
                 ref={refRBSheet}
                 closeOnDragDown={true}
@@ -79,6 +82,19 @@ const GamePlanCard = ({ plan }) => {
             </RBSheet>
         </Pressable>
 
+    )
+}
+
+const PlanCardDetails = ({ plan }) => {
+    return (
+        <>
+            <Text style={styles.planCount}>{plan.game_count}</Text>
+            <View style={styles.boostDetailsContainer}>
+                <Text style={styles.storeItemName}>{plan.name}</Text>
+                <Text style={styles.cardDescription}>{plan.description}</Text>
+            </View>
+            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(plan.price)}</Text>
+        </>
     )
 }
 
@@ -126,19 +142,6 @@ const BuyGamePlan = ({ plan, onClose }) => {
     )
 
 }
-const PlanCardDetails = ({ plan }) => {
-    return (
-        <>
-            <Text style={styles.planCount}>{plan.game_count}</Text>
-            <View style={styles.boostDetailsContainer}>
-                <Text style={styles.storeItemName}>{plan.name}</Text>
-                <Text style={styles.cardDescription}>{plan.description}</Text>
-            </View>
-            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(plan.price)}</Text>
-        </>
-    )
-}
-
 
 const GameBoosts = () => {
     const boosts = useSelector(state => state.common.boosts);
@@ -159,29 +162,50 @@ const GameBoosts = () => {
 const BoostCard = ({ boost }) => {
     const refRBSheet = useRef();
     return (
-        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()} style={styles.storeItemContainer}>
-            <BoostCardDetails boost={boost} />
-            <RBSheet
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={true}
-                height={440}
-                customStyles={{
-                    wrapper: {
-                        backgroundColor: "rgba(0, 0, 0, 0.5)"
-                    },
-                    draggableIcon: {
-                        backgroundColor: "#000",
-                    },
-                    container: {
-                        borderTopStartRadius: 25,
-                        borderTopEndRadius: 25,
-                    }
-                }}
-            >
-                <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} />
-            </RBSheet>
+        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}>
+            <Animated.View style={styles.storeItemContainer} entering={randomEnteringAnimation().duration(1000)}>
+                <BoostCardDetails boost={boost} />
+                <RBSheet
+                    ref={refRBSheet}
+                    closeOnDragDown={true}
+                    closeOnPressMask={true}
+                    height={440}
+                    customStyles={{
+                        wrapper: {
+                            backgroundColor: "rgba(0, 0, 0, 0.5)"
+                        },
+                        draggableIcon: {
+                            backgroundColor: "#000",
+                        },
+                        container: {
+                            borderTopStartRadius: 25,
+                            borderTopEndRadius: 25,
+                        }
+                    }}
+                >
+                    <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} />
+                </RBSheet>
+            </Animated.View>
         </Pressable>
+    )
+}
+
+const BoostCardDetails = ({ boost }) => {
+    return (
+        <>
+            <Image
+                source={{ uri: `${backendUrl}/${boost.icon}` }}
+                style={styles.boostIcon}
+            />
+            <View style={styles.boostDetailsContainer}>
+                <View style={styles.boostNameCount}>
+                    <Text style={styles.storeItemName}>{boost.name}</Text>
+                    <Text style={styles.number}>x{formatNumber(boost.pack_count)}</Text>
+                </View>
+                <Text style={styles.cardDescription}>{boost.description}</Text>
+            </View>
+            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(boost.currency_value)}</Text>
+        </>
     )
 }
 
@@ -222,25 +246,6 @@ const BuyBoost = ({ boost, onClose }) => {
             <UserWalletBalance />
             <AppButton text={loading ? 'Buying...' : 'Confirm'} onPress={buyBoostWallet} disabled={!canPay || loading} style={styles.actionButton} />
         </View>
-    )
-}
-
-const BoostCardDetails = ({ boost }) => {
-    return (
-        <>
-            <Image
-                source={{ uri: `${backendUrl}/${boost.icon}` }}
-                style={styles.boostIcon}
-            />
-            <View style={styles.boostDetailsContainer}>
-                <View style={styles.boostNameCount}>
-                    <Text style={styles.storeItemName}>{boost.name}</Text>
-                    <Text style={styles.number}>x{formatNumber(boost.pack_count)}</Text>
-                </View>
-                <Text style={styles.cardDescription}>{boost.description}</Text>
-            </View>
-            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(boost.currency_value)}</Text>
-        </>
     )
 }
 

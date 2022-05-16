@@ -6,7 +6,8 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import { formatNumber } from '../utils/stringUtl';
 import normalize, { responsiveHeight, responsiveScreenWidth } from "../utils/normalize";
-import Animated, { BounceIn } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
+import { randomEnteringAnimation } from "../utils/utils";
 
 const UserItems = ({ showBuy }) => {
 
@@ -32,7 +33,7 @@ const UserItems = ({ showBuy }) => {
     }, [boosts, plans]);
 
     return (
-        <Animated.View entering={BounceIn.duration(1000)} style={styles.container}>
+        <Animated.View entering={randomEnteringAnimation().duration(1000)} style={styles.container}>
             <Image
                 style={styles.image}
                 resizeMode='contain'

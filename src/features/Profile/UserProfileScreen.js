@@ -11,6 +11,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { isTrue } from '../../utils/stringUtl';
 import { getUser, editProfileAvatar } from '../Auth/AuthSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import Animated from 'react-native-reanimated';
+import { randomEnteringAnimation } from '../../utils/utils';
 
 
 export default function UserProfileScreen({ navigation }) {
@@ -81,15 +83,6 @@ const UserAvatar = () => {
     )
 }
 
-const ProfileTab = ({ tabName, onPress }) => {
-    return (
-        <Pressable onPress={onPress} style={styles.profileTab}>
-            <Text style={styles.tabText}>{tabName}</Text>
-            <Ionicons name="chevron-forward-outline" size={20} color="#524D4D" />
-        </Pressable >
-    )
-}
-
 const ProfileTabs = () => {
     const navigation = useNavigation();
     return (
@@ -104,7 +97,16 @@ const ProfileTabs = () => {
 }
 
 
-
+const ProfileTab = ({ tabName, onPress }) => {
+    return (
+        <Animated.View entering={randomEnteringAnimation().duration(1000)}>
+            <Pressable onPress={onPress} style={styles.profileTab}>
+                <Text style={styles.tabText}>{tabName}</Text>
+                <Ionicons name="chevron-forward-outline" size={20} color="#524D4D" />
+            </Pressable >
+        </Animated.View>
+    )
+}
 
 const styles = EStyleSheet.create({
     container: {

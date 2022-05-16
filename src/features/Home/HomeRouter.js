@@ -15,6 +15,7 @@ import { isTrue } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import AppButton from '../../shared/AppButton';
+import { nativeApplicationVersion } from 'expo-application';
 
 const HomeStack = createDrawerNavigator();
 
@@ -51,7 +52,7 @@ const HomeRouter = () => {
     );
 }
 
-const RightButtons = ({ options }) => {
+const RightButtons = () => {
     const navigation = useNavigation();
     const route = useRoute();
 
@@ -98,7 +99,7 @@ function CustomDrawerContent(props) {
 
 
             <View style={drawStyles.menu}>
-            <DrawerItem
+                <DrawerItem
                     label={() =>
                         <View style={drawStyles.item}>
                             <Text style={drawStyles.itemLabel}>Live Trivia</Text>
@@ -109,7 +110,7 @@ function CustomDrawerContent(props) {
                     style={drawStyles.label}
                     labelContainerStyle
                 />
-                
+
                 <DrawerItem
                     label={() =>
                         <View style={drawStyles.item}>
@@ -159,6 +160,7 @@ function CustomDrawerContent(props) {
 
             <Pressable onPress={onLogout} style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.logoutText}>Logout</Text>
+                <Text style={drawStyles.appVersion}>App version: {nativeApplicationVersion}</Text>
             </Pressable>
 
         </DrawerContentScrollView>
@@ -255,6 +257,15 @@ const drawStyles = EStyleSheet.create({
         paddingVertical: responsiveScreenHeight(1),
 
     },
+    appVersion: {
+        color: '#333333',
+        fontSize: '0.7rem',
+        lineHeight: '0.7rem',
+        fontFamily: 'graphik-regular',
+        opacity: 0.5,
+        marginVertical: 10,
+        textAlign: 'center',
+    }
 });
 
 
