@@ -4,7 +4,7 @@ export default {
   name: getAppName(),
   slug: getSlug(),
   version: "1.0.32",
-  runtimeVersion: "1.0.32",
+  // runtimeVersion: "1.0.32",
   orientation: "portrait",
   icon: "./assets/images/adaptive-icon2.png",
   // jsEngine: "hermes",
