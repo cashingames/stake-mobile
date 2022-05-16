@@ -24,7 +24,7 @@ export const getBankData = createAsyncThunk(
 export const getGlobalLeaders = createAsyncThunk(
     'common/globalLeaders/get',
     async (thunkAPI) => {
-        const response = await axios.get('v2/leaders/global');
+        const response = await axios.post('v2/leaders/global');
         return response.data
     }
 )
@@ -32,7 +32,7 @@ export const getGlobalLeaders = createAsyncThunk(
 export const getGlobalLeadersByDate = createAsyncThunk(
     'common/globalLeadersByDate/get',
     async (data, thunkAPI) => {
-        const response = await axios.get(`v2/leaders/global/${data.startDate}/${data.endDate}`);
+        const response = await axios.post('v2/leaders/global', data);
         console.log(response.data);
         return response.data
     }
@@ -40,7 +40,7 @@ export const getGlobalLeadersByDate = createAsyncThunk(
 export const getCategoryLeaders = createAsyncThunk(
     'common/categoryLeaders/get',
     async (thunkAPI) => {
-        const response = await axios.get('v2/leaders/categories');
+        const response = await axios.post('v2/leaders/categories');
         return response.data
     }
 )
@@ -48,7 +48,7 @@ export const getCategoryLeaders = createAsyncThunk(
 export const getCategoryLeadersByDate = createAsyncThunk(
     'common/categoryLeadersByDate/get',
     async (data, thunkAPI) => {
-        const response = await axios.get(`v2/leaders/categories/${data.startDate}/${data.endDate}`);
+        const response = await axios.post('v2/leaders/categories', data);
         console.log(response.data);
         return response.data
     }
