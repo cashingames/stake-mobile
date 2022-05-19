@@ -1,7 +1,7 @@
 import Constants from 'expo-constants';
 
 const env = process.env.APP_VARIANT;
-export const isStaging = !Constants.manifest.extra.isProduction
+export const isStaging = (Constants.manifest.extra.isDevelopment || Constants.manifest.extra.isPreview);
 export const baseURL = isStaging ? 'https://stg-api.cashingames.com/api' : 'https://api.cashingames.com/api';
 export const backendUrl = isStaging ? 'https://stg-api.cashingames.com' : 'https://api.cashingames.com';
 export const backendAPI = isStaging ? 'https://stg-api.cashingames.com/api' : 'https://api.cashingames.com/api';

@@ -3,8 +3,8 @@ const env = process.env.APP_VARIANT;
 export default {
   name: getAppName(),
   slug: getSlug(),
-  version: "1.0.34",
-  runtimeVersion: "1.34",
+  version: "1.0.35",
+  runtimeVersion: "1.35",
   orientation: "portrait",
   icon: "./assets/images/adaptive-icon2.png",
   // jsEngine: "hermes",
@@ -29,7 +29,7 @@ export default {
   ],
   android: {
     package: getAppIdentifier(),
-    versionCode: 34,
+    versionCode: 35,
     googleServicesFile: "./google-services.json",
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon2.png",
@@ -46,7 +46,7 @@ export default {
   ],
   extra: {
     isDevelopment: env === 'development' || false,
-    isProduction: !isTrue(env),
+    isProduction: env === 'production' || false,
     isPreview: env === 'preview' || false,
     socialLoginClientID: getSocialLoginClientID(),
     gaTrackingID: getGATrackingID(),
