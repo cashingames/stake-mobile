@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/core';
 import { Image, Pressable, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
+import Constants from 'expo-constants';
 
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import HomeScreen from './HomeScreen';
@@ -15,7 +16,7 @@ import { isTrue } from '../../utils/stringUtl';
 import { backendUrl } from '../../utils/BaseUrl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import AppButton from '../../shared/AppButton';
-import { nativeApplicationVersion } from 'expo-application';
+
 
 const HomeStack = createDrawerNavigator();
 
@@ -160,7 +161,7 @@ function CustomDrawerContent(props) {
 
             <Pressable onPress={onLogout} style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.logoutText}>Logout</Text>
-                <Text style={drawStyles.appVersion}>App version: {nativeApplicationVersion}</Text>
+                <Text style={drawStyles.appVersion}>App version: {Constants.manifest.runtimeVersion}</Text>
             </Pressable>
 
         </DrawerContentScrollView>
