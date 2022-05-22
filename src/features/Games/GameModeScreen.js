@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Text, View, Image, ScrollView, Pressable } from 'react-native';
-import normalize from '../../utils/normalize';
-import { backendUrl } from '../../utils/BaseUrl';
+import Constants from 'expo-constants';
 import { useSelector, useDispatch } from 'react-redux';
-import { setGameMode } from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
+
+import normalize from '../../utils/normalize';
+import { setGameMode } from './GameSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function GameModeScreen({ navigation }) {
@@ -53,7 +54,7 @@ const AvailableMode = ({ gameMode, onPress }) => {
                 <Text style={styles.modeDescription}>{gameMode.description}</Text>
             </View>
             <Image
-                source={{ uri: `${backendUrl}/${gameMode.icon}` }}
+                source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${gameMode.icon}` }}
                 style={styles.gameModeIcon}
             />
         </Pressable>

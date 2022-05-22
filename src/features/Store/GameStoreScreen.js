@@ -1,21 +1,22 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Text, View, Image, Pressable, ScrollView } from 'react-native';
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
-import { backendUrl } from '../../utils/BaseUrl';
+import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useDispatch, useSelector } from 'react-redux';
-import { buyBoostFromWallet, buyPlanFromWallet } from "./StoreSlice";
+import Animated from "react-native-reanimated";
 import { Ionicons } from '@expo/vector-icons';
 import { unwrapResult } from "@reduxjs/toolkit";
+import EStyleSheet from "react-native-extended-stylesheet";
+
+import { buyBoostFromWallet, buyPlanFromWallet } from "./StoreSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 import AppButton from "../../shared/AppButton";
 import UserItems from "../../shared/UserPurchasedItems";
-import EStyleSheet from "react-native-extended-stylesheet";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
-import Animated from "react-native-reanimated";
 import { randomEnteringAnimation } from "../../utils/utils";
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 
 
 export default function ({ navigation }) {
@@ -194,7 +195,7 @@ const BoostCardDetails = ({ boost }) => {
     return (
         <>
             <Image
-                source={{ uri: `${backendUrl}/${boost.icon}` }}
+                source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
                 style={styles.boostIcon}
             />
             <View style={styles.boostDetailsContainer}>

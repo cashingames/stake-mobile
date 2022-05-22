@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert } from 'react-native';
+import { Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert } from 'react-native';
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -7,9 +7,10 @@ import { Ionicons } from '@expo/vector-icons';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
-import { backendUrl, gaTrackingId } from '../../utils/BaseUrl';
-import { getUser, reduceBoostCount } from "../Auth/AuthSlice";
+import { reduceBoostCount } from "../Auth/AuthSlice";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
+import Constants from 'expo-constants';
+
 import {
     endGame, nextQuestion, questionAnswered, consumeBoost,
     pauseGame, skipQuestion, boostReleased, bombOptions, setHasPlayedTrivia
@@ -277,7 +278,7 @@ const AvailableBoost = ({ boost, onConsume }) => {
         <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
             <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
                 <Image
-                    source={{ uri: `${backendUrl}/${boost.icon}` }}
+                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
                     style={styles.boostIcon}
                 />
                 <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
@@ -307,7 +308,7 @@ const GameBoost = ({ boost }) => {
         <View style={styles.boostContent}>
             <View style={styles.boostAmount}>
                 <Image
-                    source={{ uri: `${backendUrl}/${boost.icon}` }}
+                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
                     style={styles.boostIcon}
                 />
                 <Text style={styles.amount1}>x{formatNumber(boost.count)}</Text>

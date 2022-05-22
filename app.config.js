@@ -48,6 +48,7 @@ export default {
     isDevelopment: env === 'development' || false,
     isProduction: env === 'production' || false,
     isPreview: env === 'preview' || false,
+    isStaging: env === "development" || env === "preview",
     socialLoginClientID: getSocialLoginClientID(),
     gaTrackingID: getGATrackingID(),
     paystackKey: getPaystackKey(),
@@ -101,10 +102,10 @@ function getGATrackingID() {
 
 function getPaystackKey() {
   if (env === "development" || env === "preview") {
-    return 'pk_test_3ebf811326f87025dafdbe6829bdcbdaf8ebfd84';
+    return 'pk_test_965f5765e86ccbbf918507efddf3b87eeed1ede8';
   }
 
-  return 'pk_live_cee2bb8cae2f3f0ff16923b581c2bc1460ded991'
+  return 'pk_live_2d9dd66f608599b9a17847de55759f731a3c9b3b'
 }
 
 function getApiUrl() {

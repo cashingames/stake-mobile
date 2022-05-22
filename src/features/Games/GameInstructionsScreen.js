@@ -1,17 +1,17 @@
 import React, { useRef, useState } from "react";
 import { Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
-import normalize, { responsiveScreenWidth } from "../../utils/normalize";
-import { formatNumber } from '../../utils/stringUtl';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
-import AppButton from "../../shared/AppButton";
 import { unwrapResult } from '@reduxjs/toolkit';
-import { backendUrl } from '../../utils/BaseUrl';
-import { startGame, setGameSessionToken, setIsPlayingTrivia } from "./GameSlice";
+import Constants from 'expo-constants';
 import EStyleSheet from "react-native-extended-stylesheet";
-import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 
+import { startGame, setIsPlayingTrivia } from "./GameSlice";
+import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
+import normalize, { responsiveScreenWidth } from "../../utils/normalize";
+import { formatNumber } from '../../utils/stringUtl';
+import AppButton from './../../shared/AppButton';
 
 
 export default function GameInstructionsScreen({ navigation, route }) {
@@ -109,7 +109,7 @@ const AvailableBoost = ({ boost }) => {
         <View style={styles.boostContent}>
             <View style={styles.boostAmount}>
                 <Image
-                    source={{ uri: `${backendUrl}/${boost.icon}` }}
+                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
                     style={styles.boostIcon}
                 />
                 <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>

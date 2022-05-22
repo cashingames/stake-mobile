@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { backendUrl } from '../utils/BaseUrl';
+import Constants from 'expo-constants';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber, isTrue } from '../utils/stringUtl';
 import OtherLeaders from './OtherLeaders';
@@ -60,7 +60,7 @@ function CategoryTopLeader({ avatar, name, position, point, topLeaderStyle }) {
         <View style={[styles.topLeader, topLeaderStyle]}>
             <Image
                 style={styles.avatar}
-                source={isTrue(avatar) ? { uri: `${backendUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
+                source={isTrue(avatar) ? { uri: `${Constants.manifest.extra.apiBaseUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
             />
             <View style={styles.numberContainer}>
                 <Text style={styles.number}>{formatNumber(position)}</Text>
@@ -115,8 +115,8 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         fontSize: '0.5rem',
         fontFamily: 'graphik-regular',
-     
-        
+
+
         textAlign: 'center',
     },
     leaderName: {

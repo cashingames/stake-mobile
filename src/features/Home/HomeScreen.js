@@ -1,30 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, Pressable, Alert, Linking } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize';
+import Constants from 'expo-constants';
+import { useNavigation } from '@react-navigation/core';
+import Animated, {
+    BounceIn, BounceInLeft, BounceInRight, BounceInUp, FadeInUp,
+    useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming
+} from 'react-native-reanimated';
+
+import normalize, {
+    responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth
+} from '../../utils/normalize';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
-import { backendUrl } from '../../utils/BaseUrl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
-import { useNavigation } from '@react-navigation/core';
-import Animated, { BounceIn, BounceInLeft, BounceInRight, BounceInUp, FadeInUp, Layout, SlideInLeft, SlideInRight, SlideInUp, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
-import { appNeedsUpdate } from '../../utils/utils';
+import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 
 const HomeScreen = () => {
 
     const dispatch = useDispatch();
-    const user = useSelector(state => state.auth.user)
-    const gameTypes = useSelector(state => state.common.gameTypes)
-    const minVersionCode = useSelector(state => state.common.minVersionCode)
+    const user = useSelector(state => state.auth.user);
+    const gameTypes = useSelector(state => state.common.gameTypes);
+    const minVersionCode = useSelector(state => state.common.minVersionCode);
+    const minVersionForce = useSelector(state => state.common.minVersionForce);
     const [loading, setLoading] = useState(true);
-    const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia)
+    const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia);
 
     useEffect(() => {
         dispatch(resetGameStats());
@@ -35,7 +42,14 @@ const HomeScreen = () => {
         Promise.all([_1, _2]).then(() => {
             setLoading(false);
         });
+
     }, []);
+
+    useEffect(() => {
+        //whethe we are forcing or not, show the first time
+        notifyOfStoreUpdates(minVersionCode, minVersionForce);
+    }, [minVersionCode]);
+
 
     // useEffect(() => {
     //     const interval = setInterval(() => {
@@ -47,29 +61,19 @@ const HomeScreen = () => {
     useFocusEffect(
         React.useCallback(() => {
             dispatch(getGlobalLeaders())
+            if (Constants.manifest.extra.isDevelopment) {
+                return;
+            }
+            notifyOfPublishedUpdates();
+            if (minVersionForce) {
+                //if we are forcing, anytime they come to home, show
+                notifyOfStoreUpdates(minVersionCode, minVersionForce);
+            }
         }, [])
     );
 
     if (loading) {
         return <PageLoading />
-    }
-
-    if (appNeedsUpdate(minVersionCode)) {
-        Alert.alert(
-            "Updates available",
-            "Please update your app now to access new ways of winning more money",
-            [
-                {
-                    text: 'Skip',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                },
-                {
-                    text: 'OK',
-                    onPress: () => Linking.openURL("https://play.google.com/store/apps/details?id=com.cashingames.cashingames"),
-                }
-            ]
-        );
     }
 
     return (
@@ -97,7 +101,6 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-
 const LiveTriviaLink = () => {
     const navigation = useNavigation();
     const liveTriviaOpen = () => {
@@ -113,6 +116,7 @@ const LiveTriviaLink = () => {
         </View>
     )
 }
+
 const UserDetails = ({ user }) => {
     return (
         <View style={styles.userDetails}>
@@ -162,7 +166,6 @@ const UserPoints = ({ points }) => {
     );
 }
 
-
 const UserRanking = ({ gamesCount, ranking }) => {
     return (
         <Animated.View entering={BounceInLeft.delay(400)} style={styles.userRanking} >
@@ -177,7 +180,6 @@ const UserRanking = ({ gamesCount, ranking }) => {
         </Animated.View>
     );
 }
-
 
 function GameCards({ games }) {
 
@@ -203,7 +205,7 @@ function GameCard({ game }) {
         <Pressable style={[styles.card]} onPress={() => navigation.navigate('Game')}>
             <Image
                 style={styles.cardIcon}
-                source={{ uri: `${backendUrl}/${game.icon}` }}
+                source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${game.icon}` }}
                 resizeMode='contain'
             />
             <View style={styles.cardContent}>
@@ -214,8 +216,6 @@ function GameCard({ game }) {
         </Pressable>
     );
 }
-
-
 
 function RecentlyPlayedCards({ games }) {
     if (!isTrue(games) || games.length === 0)
@@ -239,7 +239,7 @@ function RecentlyPlayedCard({ game }) {
         <View style={[styles.card, { backgroundColor: game.bgColor }]} >
             <Image
                 style={[styles.cardIconBigger]}
-                source={{ uri: `${backendUrl}/${game.icon}` }}
+                source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${game.icon}` }}
                 resizeMode='contain'
             />
             <View style={styles.cardContent}>
@@ -249,7 +249,6 @@ function RecentlyPlayedCard({ game }) {
         </View>
     );
 }
-
 
 const styles = EStyleSheet.create({
     scrollView: {

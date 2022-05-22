@@ -7,12 +7,12 @@ import { SearchBar } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector, useDispatch } from 'react-redux';
-import { backendUrl, } from '../../utils/BaseUrl';
 import AppButton from '../../shared/AppButton';
 import { isTrue } from '../../utils/stringUtl';
 import { sendFriendInvite, setSelectedFriend } from './GameSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import Constants from 'expo-constants';
 
 export default function DuelSelectPlayerScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -28,12 +28,8 @@ export default function DuelSelectPlayerScreen({ navigation }) {
         }
 
         var result = friends.filter(friend => {
-            if (friend.username.toLowerCase().includes(searchText.toLowerCase()) ||
-                friend.fullName.toLowerCase().includes(searchText.toLowerCase())
-            ) {
-                return true;
-            }
-            return false;
+            return friend.username.toLowerCase().includes(searchText.toLowerCase()) ||
+                friend.fullName.toLowerCase().includes(searchText.toLowerCase());
         });
 
         setFilteredFriends(result);
@@ -75,7 +71,7 @@ const FriendDetails = ({ friend }) => {
     return (
         <Pressable style={[styles.friendDetails, opponentId === friend.id ? styles.selected : {}]} onPress={() => { selectedFriend(friend) }}>
             <Image
-                source={isTrue(friend.avatar) ? { uri: `${backendUrl}/${friend.avatar}` } : require("../../../assets/images/user-icon.png")}
+                source={isTrue(friend.avatar) ? { uri: `${Constants.manifest.extra.apiBaseUrl}/${friend.avatar}` } : require("../../../assets/images/user-icon.png")}
                 style={styles.avatar}
             />
             <Text style={[styles.friendName, opponentId === friend.id ? styles.selectedText : {}]}>{friend.username}</Text>

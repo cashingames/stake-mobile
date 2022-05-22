@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, View, Text, ScrollView, Alert } from 'react-native';
+import Constants from 'expo-constants';
 
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import Input from '../../shared/Input';
 import { resetPassword } from './AuthSlice';
-import { isStaging } from '../../utils/BaseUrl';
 import { unwrapResult } from '@reduxjs/toolkit';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
@@ -14,7 +14,7 @@ export default function ({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
 
-    const [password, setPassword] = useState(isStaging ? 'zubby1234' : '');
+    const [password, setPassword] = useState(Constants.manifest.extra.isStaging ? 'zubby1234' : '');
     const [canSend, setCanSend] = useState(false);
     const [error, setError] = useState('');
     const [passErr, setPassError] = useState(false);

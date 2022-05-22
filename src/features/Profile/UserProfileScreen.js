@@ -6,7 +6,7 @@ import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { backendUrl } from '../../utils/BaseUrl';
+import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { isTrue } from '../../utils/stringUtl';
 import { getUser, editProfileAvatar } from '../Auth/AuthSlice';
@@ -72,7 +72,7 @@ const UserAvatar = () => {
         <View style={styles.userAvatar}>
             <Image
                 style={styles.avatar}
-                source={isTrue(user.avatar) ? { uri: `${backendUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+                source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
 
             />
             {!loading ?

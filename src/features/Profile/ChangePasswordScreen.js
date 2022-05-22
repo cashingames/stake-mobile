@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Alert } from 'react-native';
+import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch } from 'react-redux';
+import Constants from 'expo-constants';
+import normalize from '../../utils/normalize';
 import AppButton from '../../shared/AppButton';
 import Input from '../../shared/Input';
-import { useDispatch } from 'react-redux';
 import { changePassword } from '../Auth/AuthSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { isStaging } from '../../utils/BaseUrl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
@@ -18,9 +18,9 @@ export default function ChangePasswordScreen({ navigation }) {
 
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
-    const [password, setPassword] = useState(isStaging ? '123456789' : '');
-    const [new_password, setNewPassword] = useState(isStaging ? '12345678' : '');
-    const [new_password_confirmation, setConfirmPassword] = useState(isStaging ? '12345678' : '');
+    const [password, setPassword] = useState(Constants.manifest.extra.isStaging ? '123456789' : '');
+    const [new_password, setNewPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
+    const [new_password_confirmation, setConfirmPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
     const [passErr, setPassError] = useState(false);
 
 

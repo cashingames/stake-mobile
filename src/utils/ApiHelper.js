@@ -1,9 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from 'expo-constants';
 
-import { baseURL } from "./BaseUrl";
-import { isTrue } from "./stringUtl";
-
-
+const baseURL = Constants.manifest.extra.apiBaseUrl;
 
 // Example POST method implementation:
 async function postData(url = '', data = {}) {
@@ -92,7 +90,7 @@ async function verifyOtp(token) {
 }
 
 async function resetPassword(data) {
-    return postData(`auth/password/reset`,data)
+    return postData(`auth/password/reset`, data)
         .then(response => {
             return response;
         });

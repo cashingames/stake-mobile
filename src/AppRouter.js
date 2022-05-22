@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Constants from 'expo-constants';
 
 import axios from "axios";
 
@@ -23,7 +24,6 @@ import SupportQuestionsScreen from './features/Support/SupportQuestionsScreen';
 import SupportAnswerScreen from './features/Support/SupportAnswerScreen';
 
 import { isLoggedIn, shouldShowIntro } from './features/Auth/AuthSlice';
-import { baseURL } from './utils/BaseUrl';
 import { isTrue } from './utils/stringUtl';
 import GameModeScreen from './features/Games/GameModeScreen';
 import GameInstructionsScreen from './features/Games/GameInstructionsScreen';
@@ -157,7 +157,7 @@ function AppRouter() {
 export default AppRouter;
 
 const booststrapAxios = async function (token) {
-    axios.defaults.baseURL = baseURL;
+    axios.defaults.baseURL = Constants.manifest.extra.apiBaseUrl;
     if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {

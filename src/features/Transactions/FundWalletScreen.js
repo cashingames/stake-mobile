@@ -1,13 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { Text, View, Image, Alert } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
+import PaystackWebView from 'react-native-paystack-popup';
 import { useDispatch, useSelector } from 'react-redux';
+import Constants from 'expo-constants';
+
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { getUser } from '../Auth/AuthSlice';
 import AppButton from "../../shared/AppButton";
-import PaystackWebView from 'react-native-paystack-popup';
-import { paystackKey } from '../../utils/BaseUrl';
 import { verifyFunding } from '../../utils/ApiHelper';
 import Input from '../../shared/Input';
 import { formatCurrency } from '../../utils/stringUtl';
@@ -84,7 +85,7 @@ export default function FundWalletScreen() {
                     transactionCompleted(response)
                 }}
 
-                paystackKey={paystackKey} customerEmail={user.email} amount={Number.parseFloat(amount) * 100} />}
+                paystackKey={Constants.manifest.extra.paystackKey} customerEmail={user.email} amount={Number.parseFloat(amount) * 100} />}
 
 
         </>

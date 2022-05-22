@@ -1,21 +1,20 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState, useRef } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-
+import EStyleSheet from 'react-native-extended-stylesheet';
+import Animated from 'react-native-reanimated';
 import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import RBSheet from "react-native-raw-bottom-sheet";
+import { useDispatch, useSelector } from 'react-redux';
+import Constants from 'expo-constants';
 
 import AppButton from '../../shared/AppButton';
-import { useDispatch, useSelector } from 'react-redux';
-import { backendUrl } from '../../utils/BaseUrl';
 import { formatNumber, isTrue } from '../../utils/stringUtl';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { setGameCategory, setGameType } from './GameSlice';
-import RBSheet from "react-native-raw-bottom-sheet";
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import EStyleSheet from 'react-native-extended-stylesheet';
 import { randomEnteringAnimation } from '../../utils/utils';
-import Animated from 'react-native-reanimated';
 
 const Toptab = createMaterialTopTabNavigator();
 
@@ -197,7 +196,7 @@ const GameCategoryCard = ({ category, onSelect, isSelected }) => {
                 <View style={styles.categoryCardTopRow}>
                     <Image
                         style={styles.cardIcon}
-                        source={{ uri: `${backendUrl}/${category.icon}` }}
+                        source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${category.icon}` }}
                     />
                     <Ionicons name={isSelected ? "md-ellipse-sharp" : "md-ellipse"} size={24} color={isSelected ? "#EF2F55" : "#FFFF"} />
                 </View>

@@ -6,6 +6,7 @@ import { Image, Pressable, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import HomeScreen from './HomeScreen';
@@ -13,8 +14,7 @@ import WalletScreen from '../Transactions/WalletScreen';
 import GameScreen from '../Games/GameScreen';
 import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
-import { backendUrl } from '../../utils/BaseUrl';
-import EStyleSheet from 'react-native-extended-stylesheet';
+
 import AppButton from '../../shared/AppButton';
 
 
@@ -90,7 +90,7 @@ function CustomDrawerContent(props) {
             <View style={drawStyles.sideHeader}>
                 <Image
                     style={drawStyles.avatar}
-                    source={isTrue(user.avatar) ? { uri: `${backendUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+                    source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
                 />
                 <Text style={drawStyles.userTitle}> {user.fullName}</Text>
                 <Text style={drawStyles.userName}> @{user.username}</Text>

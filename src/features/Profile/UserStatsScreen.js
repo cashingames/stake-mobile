@@ -1,11 +1,12 @@
 import React from 'react';
 import { Text, View, ScrollView, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize from '../../utils/normalize';
 import { useSelector } from 'react-redux';
-import { isTrue } from '../../utils/stringUtl';
-import { backendUrl } from '../../utils/BaseUrl';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import Constants from 'expo-constants';
+
+import normalize from '../../utils/normalize';
+import { isTrue } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 export default function UserStatsScreen({ navigation }) {
@@ -117,14 +118,13 @@ function RecentlyPlayedCard({ game }) {
         <View style={[styles.card, { backgroundColor: game.bgColor }]} >
             <Image
                 style={styles.cardIcon}
-                source={{ uri: `${backendUrl}/${game.icon}` }}
+                source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${game.icon}` }}
             />
             <Text style={styles.playedTitle}>{game.name}</Text>
             <Text style={styles.replay}>Replay</Text>
         </View>
     );
 }
-
 
 const styles = EStyleSheet.create({
 

@@ -55,12 +55,10 @@ const config = {
   },
 };
 
-
 const linking = {
   prefixes: [prefix],
   config
 };
-
 
 
 function App() {
@@ -96,9 +94,6 @@ function App() {
     return null;
   }
 
-
-  console.log("app restart");
-
   return (
     <Provider store={store}>
       <NavigationContainer
@@ -116,7 +111,6 @@ function App() {
     </Provider>
   );
 }
-
 
 export default App;
 

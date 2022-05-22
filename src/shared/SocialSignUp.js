@@ -1,30 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { ActivityIndicator, Image, Text, View, Pressable } from 'react-native';
+import React from "react";
+import { Image, Text, View, Pressable } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useDispatch } from 'react-redux';
+import Constants from 'expo-constants';
 
 import normalize from '../utils/normalize';
-import { loginWithGoogle, setToken } from "../features/Auth/AuthSlice";
 import { saveToken } from "../utils/ApiHelper";
-import { androidClientId } from "../utils/BaseUrl";
+import { loginWithGoogle, setToken } from "../features/Auth/AuthSlice";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function SocialSignUp() {
     const dispatch = useDispatch();
     const [request, response, promptAsync] = Google.useAuthRequest({
-        androidClientId: androidClientId,
+        androidClientId: Constants.manifest.extra.socialLoginClientID,
     });
     const loginSocial = () => {
-        console.log("here");
         if (response?.type === 'success') {
-            console.log("2");
             const { authentication } = response;
             loginViaGoogle(authentication.accessToken)
         }
-        console.log("3");
         promptAsync();
     }
 

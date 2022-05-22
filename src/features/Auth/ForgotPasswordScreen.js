@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import Constants from 'expo-constants';
 
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import Input from '../../shared/Input';
 import { verifyAccount } from './AuthSlice';
-import { isStaging } from '../../utils/BaseUrl';
 import { unwrapResult } from '@reduxjs/toolkit';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
@@ -14,7 +14,7 @@ export default function ({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState(isStaging ? 'oyekunmi@gmail.com' : '');
+    const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'oyekunmi@gmail.com' : '');
     const [canSend, setCanSend] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);

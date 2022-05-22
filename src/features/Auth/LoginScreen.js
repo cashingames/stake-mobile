@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Pressable, Text, View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
+import Constants from 'expo-constants';
 
 import SocialSigninDivider from '../../shared/SocialSigninDivider';
 import SocialSignUp from '../../shared/SocialSignUp';
@@ -12,7 +13,6 @@ import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { loginUser } from './AuthSlice';
 import Input from '../../shared/Input';
-import { isStaging } from '../../utils/BaseUrl';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -21,8 +21,8 @@ export default function LoginScreen({ navigation }) {
 
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState(isStaging ? 'arunajoy2602@gmail.com' : '');
-    const [password, setPassword] = useState(isStaging ? '12345678' : '');
+    const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'arunajoy2602@gmail.com' : '');
+    const [password, setPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');

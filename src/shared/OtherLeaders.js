@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { backendUrl } from '../utils/BaseUrl';
+import Constants from 'expo-constants';
+
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber, isTrue } from '../utils/stringUtl';
 
@@ -27,7 +28,7 @@ function OtherLeader({ leader, position, indexArrow }) {
             <View style={otherLeaderStyles.avatar}>
                 <Image
                     style={otherLeaderStyles.profilePic}
-                    source={isTrue(leader.avatar) ? { uri: `${backendUrl}/${leader.avatar}` } : require("../../assets/images/user-icon.png")}
+                    source={isTrue(leader.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}}/${leader.avatar}` } : require("../../assets/images/user-icon.png")}
                 />
                 <View style={otherLeaderStyles.username}>
                     <Text style={otherLeaderStyles.names}>{`${leader.username}`}</Text>

@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Text, View, Image, ScrollView } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { backendUrl } from '../../utils/BaseUrl';
+import Constants from 'expo-constants';
+
 import * as Progress from 'react-native-progress';
 import { useSelector } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
@@ -22,7 +23,7 @@ export default function AchievementsMilestoneScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.content}>
-                <MilestoneStatus milestoneIcon={{ uri: `${backendUrl}/${nextLevel.medal}` }}
+                <MilestoneStatus milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
                     pointsProgress={`${formatNumber(user.points)}/${formatNumber(nextLevel.point_milestone)}`}
                     milestoneName={`${nextLevel.title}`}
                     progress={nextLevelProgress}
@@ -69,7 +70,7 @@ const AchievementCard = ({ achievement, userPoint, }) => {
             <View
                 style={[styles.card, { opacity: disabled ? 0.5 : 1 }, { backgroundColor: disabled ? '#C4C4C4' : '#FFFF' }]} disabled={disabled}>
                 <Image
-                    source={{ uri: `${backendUrl}/${achievement.medal}` }}
+                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${achievement.medal}` }}
                     style={styles.icon}
                 />
                 <Text style={styles.name}>{achievement.title}</Text>
