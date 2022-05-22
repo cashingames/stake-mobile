@@ -21,9 +21,11 @@ import AppButton from '../../shared/AppButton';
 const HomeStack = createDrawerNavigator();
 
 const HomeRouter = () => {
+    const user = useSelector(state => state.auth.user)
 
     const AppMainHeaderOptions = () => {
         return {
+            headerShown: isTrue(user) && isTrue(user.username),
             drawerType: "slide",
             drawerStyle: {
                 width: '85%',
@@ -44,6 +46,7 @@ const HomeRouter = () => {
     return (
         <HomeStack.Navigator
             initialRouteName="Home"
+
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={AppMainHeaderOptions}>
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
@@ -80,6 +83,7 @@ function CustomDrawerContent(props) {
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user)
+
 
     const onLogout = () => {
         dispatch(logoutUser());
