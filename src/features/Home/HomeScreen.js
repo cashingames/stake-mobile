@@ -46,6 +46,9 @@ const HomeScreen = () => {
     }, []);
 
     useEffect(() => {
+        if (Constants.manifest.extra.isDevelopment) {
+            return;
+        }
         //whethe we are forcing or not, show the first time
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }, [minVersionCode]);

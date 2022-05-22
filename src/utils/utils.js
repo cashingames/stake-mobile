@@ -63,22 +63,27 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
 
 export const notifyOfPublishedUpdates = async () => {
     try {
-        const update = await Updates.checkForUpdateAsync();
-        if (update.isAvailable) {
-            await Updates.fetchUpdateAsync();
-            Alert.alert(
-                "Updates available",
-                "Please reload to the app to enjoy the new experience we just added to cashingames",
-                [
-                    {
-                        text: 'Restart',
-                        onPress: async () => {
-                            await Updates.reloadAsync();
-                        },
-                    }
-                ]
-            );
-        }
+        Updates.checkForUpdateAsync().then(x => {
+
+            if (!x.isAvailable) {
+                return;
+            }
+
+            Updates.fetchUpdateAsync().then(() => {
+                Alert.alert(
+                    "Updates available",
+                    "Please reload to the app to enjoy the new experience we just added to cashingames",
+                    [
+                        {
+                            text: 'Restart',
+                            onPress: async () => {
+                                await Updates.reloadAsync();
+                            },
+                        }
+                    ]
+                );
+            });
+        });
     } catch (e) {
         // handle or log error
         console.log(e);
