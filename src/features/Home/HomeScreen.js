@@ -33,6 +33,7 @@ const HomeScreen = () => {
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const [loading, setLoading] = useState(true);
     const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia);
+    const trivia = useSelector(state => state.common.trivia)
 
     useEffect(() => {
         dispatch(resetGameStats());
@@ -82,7 +83,7 @@ const HomeScreen = () => {
 
     return (
         <ScrollView contentContainerStyle={styles.scrollView}>
-            <UserDetails user={user} />
+            <UserDetails user={user} trivia={trivia} />
             <View style={styles.container}>
                 {hasLiveTrivia &&
                     <LiveTriviaLink />
@@ -121,48 +122,56 @@ const LiveTriviaLink = () => {
     )
 }
 
-const UserDetails = ({ user }) => {
-    // const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia);
+const UserDetails = ({ user, trivia }) => {
+    const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia);
     return (
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance} />
-            {/* {hasLiveTrivia && */}
-            <LiveTriviaBoard />
-            {/* } */}
+            {hasLiveTrivia &&
+                <>
+                    {trivia.map((trivia, i) => <LiveTriviaBoard key={i} trivia={trivia} />)}
+                </>
+            }
             <UserPoints points={user.points} />
             <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} />
         </View>
     );
 }
 
-const LiveTriviaBoard = () => {
+
+const LiveTriviaBoard = ({ trivia }) => {
     const navigation = useNavigation();
     return (
-        <Animated.View entering={BounceInRight.duration(2000)}>
-            <Pressable onPress={() => navigation.navigate('Trivia')}>
-                <ImageBackground source={require('../../../assets/images/trivia-board1.png')} style={styles.image} resizeMode='cover'>
-                    <View style={styles.triviaTime}>
-                        <Text style={styles.triviaTimeText}>Join this 1 hour 30 mins contest</Text>
-                        <Image
-                            style={styles.icon}
-                            source={require('../../../assets/images/yellow-line1.png')}
-                        />
-                    </View>
-                    <Text style={styles.triviaTitle}>Weekly Contest 298</Text>
-                    <Text style={styles.triviaDate}>May 26, 2022 @ 4:30pm-8:30pm GTM</Text>
-                    <View style={styles.triviaBoardBottom}>
-                        <View style={styles.triviaTimeCountdown}>
-                            <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.icon} />
-                            <Text style={styles.triviaDate}>Start in 3d 13h 20m 18s</Text>
-                        </View>
-                        <Image
-                            style={styles.icon}
-                            source={require('../../../assets/images/yellow-line.png')}
-                        />
-                    </View>
-                </ImageBackground>
-            </Pressable>
-        </Animated.View>
+        <>
+            {trivia.is_active &&
+                <Animated.View entering={BounceInRight.duration(2000)}>
+                    <Pressable onPress={() => navigation.navigate('Trivia')}>
+                        <ImageBackground source={require('../../../assets/images/trivia-board1.png')} style={styles.image} resizeMode='cover'>
+                            <View style={styles.triviaTime}>
+                                <Text style={styles.triviaTimeText}>Join this {trivia.game_duration} seconds contest</Text>
+                                <Image
+                                    style={styles.icon}
+                                    source={require('../../../assets/images/yellow-line1.png')}
+                                />
+                            </View>
+                            <Text style={styles.triviaTitle}>{trivia.name}</Text>
+                            <Text style={styles.triviaTimeText}>Grand price: &#8358;{formatCurrency(trivia.grand_price)}</Text>
+                            <Text style={styles.triviaDate}>{trivia.start_time}</Text>
+                            <View style={styles.triviaBoardBottom}>
+                                <View style={styles.triviaTimeCountdown}>
+                                    <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.timeIcon} />
+                                    <Text style={styles.triviaDate}>Start in 3d 13h 20m 18s</Text>
+                                </View>
+                                <Image
+                                    style={styles.icon}
+                                    source={require('../../../assets/images/yellow-line.png')}
+                                />
+                            </View>
+                        </ImageBackground>
+                    </Pressable>
+                </Animated.View>
+            }
+        </>
     )
 }
 
@@ -334,29 +343,36 @@ const styles = EStyleSheet.create({
     triviaTime: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center'
     },
     triviaTimeText: {
         fontSize: '.75rem',
         color: '#FFFF',
+        opacity: 0.7,
         fontFamily: 'graphik-regular',
     },
     triviaTitle: {
-        fontSize: '1.2rem',
+        fontSize: '1.3rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        marginVertical: responsiveScreenWidth(.2)
     },
     triviaDate: {
-        fontSize: '.6rem',
+        fontSize: '.62rem',
         color: '#FFFF',
         fontFamily: 'graphik-regular',
+        opacity: 0.7,
     },
     triviaTimeCountdown: {
         flexDirection: 'row',
-        marginTop: '1rem'
+        marginTop: '.5rem',
+        marginBottom: '.3rem',
+
+    },
+    timeIcon: {
+        marginRight: '.15rem'
     },
     triviaBoardBottom: {
-        marginTop: responsiveScreenWidth(10)
+        marginTop: responsiveScreenWidth(14)
     },
     wallet: {
         display: 'flex',
