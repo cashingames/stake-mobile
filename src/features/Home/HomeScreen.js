@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, ImageBackground } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -22,6 +22,7 @@ import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
+import { Ionicons } from '@expo/vector-icons';
 
 const HomeScreen = () => {
 
@@ -121,13 +122,48 @@ const LiveTriviaLink = () => {
 }
 
 const UserDetails = ({ user }) => {
+    // const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia);
     return (
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance} />
+            {/* {hasLiveTrivia && */}
+            <LiveTriviaBoard />
+            {/* } */}
             <UserPoints points={user.points} />
             <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} />
         </View>
     );
+}
+
+const LiveTriviaBoard = () => {
+    const navigation = useNavigation();
+    return (
+        <Animated.View entering={BounceInRight.duration(2000)}>
+            <Pressable onPress={() => navigation.navigate('Trivia')}>
+                <ImageBackground source={require('../../../assets/images/trivia-board1.png')} style={styles.image} resizeMode='cover'>
+                    <View style={styles.triviaTime}>
+                        <Text style={styles.triviaTimeText}>Join this 1 hour 30 mins contest</Text>
+                        <Image
+                            style={styles.icon}
+                            source={require('../../../assets/images/yellow-line1.png')}
+                        />
+                    </View>
+                    <Text style={styles.triviaTitle}>Weekly Contest 298</Text>
+                    <Text style={styles.triviaDate}>May 26, 2022 @ 4:30pm-8:30pm GTM</Text>
+                    <View style={styles.triviaBoardBottom}>
+                        <View style={styles.triviaTimeCountdown}>
+                            <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.icon} />
+                            <Text style={styles.triviaDate}>Start in 3d 13h 20m 18s</Text>
+                        </View>
+                        <Image
+                            style={styles.icon}
+                            source={require('../../../assets/images/yellow-line.png')}
+                        />
+                    </View>
+                </ImageBackground>
+            </Pressable>
+        </Animated.View>
+    )
 }
 
 const UserWallet = ({ balance }) => {
@@ -286,6 +322,41 @@ const styles = EStyleSheet.create({
         backgroundColor: '#151C2F',
         paddingVertical: normalize(30),
         paddingHorizontal: normalize(20),
+    },
+    image: {
+        flex: 1,
+        justifyContent: "center",
+        paddingBottom: '1rem',
+        paddingTop: '.5rem',
+        paddingHorizontal: '1rem',
+        marginTop: responsiveScreenWidth(5)
+    },
+    triviaTime: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    triviaTimeText: {
+        fontSize: '.75rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-regular',
+    },
+    triviaTitle: {
+        fontSize: '1.2rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+        marginVertical: responsiveScreenWidth(.2)
+    },
+    triviaDate: {
+        fontSize: '.6rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-regular',
+    },
+    triviaTimeCountdown: {
+        flexDirection: 'row',
+        marginTop: '1rem'
+    },
+    triviaBoardBottom: {
+        marginTop: responsiveScreenWidth(10)
     },
     wallet: {
         display: 'flex',
