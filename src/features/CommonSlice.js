@@ -88,6 +88,7 @@ const initialState = {
     trivia: [],
     minVersionCode: '',
     minVersionForce: false,
+    upcomingTrivia: null
 }
 
 export const CommonSlice = createSlice({
@@ -111,6 +112,7 @@ export const CommonSlice = createSlice({
                 state.hasLiveTrivia = action.payload.hasLiveTrivia;
                 state.minVersionCode = action.payload.minVersionCode;
                 state.minVersionForce = action.payload.minVersionForce;
+                state.upcomingTrivia = action.payload.upcomingTrivia;
             })
             .addCase(getBankData.fulfilled, (state, action) => {
                 state.banks = action.payload;
