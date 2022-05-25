@@ -21,7 +21,7 @@ import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
-import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
+import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 
 const HomeScreen = () => {
 
@@ -52,6 +52,12 @@ const HomeScreen = () => {
         //whethe we are forcing or not, show the first time
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }, [minVersionCode]);
+
+    useEffect(() => {
+        if (!loading && !isTrue(user.walletBalance)) {
+            networkIssueNotify()
+        }
+    }, [user, loading])
 
 
     // useEffect(() => {
@@ -88,7 +94,7 @@ const HomeScreen = () => {
                 }
                 <Animated.View entering={FadeInUp.delay(1000).duration(1000)}>
                     <Text style={styles.title}>Games</Text>
-                    <Text style={styles.planInstruction}>You can only play 10 free games daily,
+                    <Text style={styles.planInstruction}>You can only play 5 free games daily,
                         Buy Games to enjoy playing without interruptons.
                     </Text>
                 </Animated.View>

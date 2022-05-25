@@ -4,7 +4,6 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Animated from 'react-native-reanimated';
 import { Text, View, Image, ScrollView, Pressable } from 'react-native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
@@ -14,11 +13,9 @@ import { formatNumber, isTrue } from '../../utils/stringUtl';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { setGameCategory, setGameType } from './GameSlice';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { randomEnteringAnimation } from '../../utils/utils';
+import { networkIssueNotify, randomEnteringAnimation } from '../../utils/utils';
 
-const Toptab = createMaterialTopTabNavigator();
-
-export default function GameScreen({ navigation }) {
+export default function GameScreen() {
 
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -65,41 +62,17 @@ export const NoGames = ({ closeSheet }) => {
     )
 }
 
-
-// const GameTabs = () => {
-
-//     const gameTypes = useSelector(state => state.common.gameTypes)
-
-//     return (
-//         <Toptab.Navigator screenOptions={{
-//             tabBarLabelStyle: { fontSize: 11, fontFamily: 'graphik-medium' },
-//             tabBarStyle: { backgroundColor: '#F8F9FD' },
-//             tabBarInactiveTintColor: '#C4C4C4',
-//             tabBarActiveTintColor: '#EF2F55',
-//             tabBarIndicatorStyle: { backgroundColor: '#EF2F55' },
-//         }}
-//             sceneContainerStyle={{ backgroundColor: '#F8F9FD' }}
-//             style={{ height: normalize(380) }}
-//         // height: Dimensions.get('window').height 
-//         >
-//             {gameTypes.map((game, i) =>
-//                 <Toptab.Screen
-//                     name={game.name}
-//                     key={i}
-//                     component={CategoriesScreen}
-//                     options={{ title: game.displayName }}
-//                     initialParams={{ currentGame: game }}
-//                 />
-//             )}
-//         </Toptab.Navigator>
-//     )
-// };
-
-
 const GameTabs = () => {
+
     const gameTypes = useSelector(state => state.common.gameTypes)
+    if (gameTypes.length === 0) {
+        networkIssueNotify()
+        return null;
+    }
+
     return <CategoriesScreen currentGame={gameTypes[0]} />;
 };
+
 const CategoriesScreen = ({ currentGame }) => {
 
     const dispatch = useDispatch();

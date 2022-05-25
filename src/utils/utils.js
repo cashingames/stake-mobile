@@ -89,3 +89,18 @@ export const notifyOfPublishedUpdates = async () => {
         console.log(e);
     }
 }
+
+export const networkIssueNotify = async () => {
+    Alert.alert(
+        "Problem detected",
+        "Please check your network connection and restart the app to continue playing game. If the issue still persists please contact support",
+        [
+            {
+                text: 'Restart',
+                onPress: async () => {
+                    await Updates.reloadAsync();
+                },
+            }
+        ]
+    )
+}

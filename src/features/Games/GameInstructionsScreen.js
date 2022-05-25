@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,6 +12,7 @@ import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { formatNumber } from '../../utils/stringUtl';
 import AppButton from './../../shared/AppButton';
+import { networkIssueNotify } from "../../utils/utils";
 
 
 export default function GameInstructionsScreen({ navigation, route }) {
@@ -149,11 +150,8 @@ const AvailableBoosts = ({ onClose }) => {
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError);
-                Alert.alert('failed to start game')
+                networkIssueNotify()
                 setLoading(false);
-                // after login eager get commond data for the whole app
-                // console.log("failed");
-                // console.log(rejectedValueOrSerializedError)
             });
     }
 
