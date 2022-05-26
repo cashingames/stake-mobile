@@ -15,7 +15,6 @@ const TriviaScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const trivia = useSelector(state => state.common.trivia)
-    console.log(trivia)
     useEffect(() => {
         dispatch(fetchTrivia());
     }, []);

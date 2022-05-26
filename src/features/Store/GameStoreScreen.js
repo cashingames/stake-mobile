@@ -43,7 +43,7 @@ const GamePlans = () => {
         <View style={styles.storeItems}>
             <Text style={styles.title}>Buy Games</Text>
             <Text style={styles.storeItemsDescription}>
-                You can only play 10 free games daily, Buy Games to enjoy
+                You can only play 5 free games daily, Buy Games to enjoy
                 playing without interruptons
             </Text>
             <View style={styles.storeCards}>

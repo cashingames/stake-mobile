@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, ImageBackground } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -21,6 +21,8 @@ import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
+import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
+import { Ionicons } from '@expo/vector-icons';
 import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 
 const HomeScreen = () => {
@@ -28,10 +30,11 @@ const HomeScreen = () => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
     const gameTypes = useSelector(state => state.common.gameTypes);
+    const upcomingTrivia = useSelector(state => state.common.upcomingTrivia);
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const [loading, setLoading] = useState(true);
-    const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia);
+
 
     useEffect(() => {
         dispatch(resetGameStats());
@@ -87,11 +90,8 @@ const HomeScreen = () => {
 
     return (
         <ScrollView contentContainerStyle={styles.scrollView}>
-            <UserDetails user={user} />
+            <UserDetails user={user} upcomingTrivia={upcomingTrivia} />
             <View style={styles.container}>
-                {hasLiveTrivia &&
-                    <LiveTriviaLink />
-                }
                 <Animated.View entering={FadeInUp.delay(1000).duration(1000)}>
                     <Text style={styles.title}>Games</Text>
                     <Text style={styles.planInstruction}>You can only play 5 free games daily,
@@ -110,31 +110,56 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-const LiveTriviaLink = () => {
-    const navigation = useNavigation();
-    const liveTriviaOpen = () => {
-        navigation.navigate('Trivia')
-    }
-    return (
-        <View style={styles.liveTriviaContainer}>
-            <Text style={styles.liveTriviaText}>Live Trivia is on, compete with others to win exciting prices.
-                <Text onPress={liveTriviaOpen} style={
-                    styles.liveTriviaLink
-                }> Click to join</Text>
-            </Text>
-        </View>
-    )
-}
-
-const UserDetails = ({ user }) => {
+const UserDetails = ({ user, upcomingTrivia }) => {
     return (
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance} />
+            <>
+                <LiveTriviaBoard upcomingTrivia={upcomingTrivia} />
+            </>
             <UserPoints points={user.points} />
             <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} />
         </View>
     );
 }
+
+
+const LiveTriviaBoard = ({ upcomingTrivia }) => {
+    const navigation = useNavigation();
+    return (
+        <>
+            {upcomingTrivia &&
+                <Animated.View entering={BounceInRight.duration(2000)}>
+                    <Pressable onPress={() => navigation.navigate('Trivia')}>
+                        <ImageBackground source={require('../../../assets/images/live-trivia-card-background.png')} style={styles.triviaBackground} resizeMode='cover'>
+                            <View style={styles.triviaTime}>
+                                <Text style={styles.triviaTimeText}>Join this {upcomingTrivia.game_duration} seconds contest</Text>
+                                <Image
+                                    style={styles.icon}
+                                    source={require('../../../assets/images/yellow-line-top.png')}
+                                />
+                            </View>
+                            <Text style={styles.triviaTitle}>{upcomingTrivia.name}</Text>
+                            <Text style={styles.triviaTimeText}>Grand price: &#8358;{formatCurrency(upcomingTrivia.grand_price)}</Text>
+                            <Text style={styles.triviaDate}>{upcomingTrivia.start_time}</Text>
+                            <View style={styles.triviaBoardBottom}>
+                                <View style={styles.triviaTimeCountdown}>
+                                    <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.timeIcon} />
+                                    <Text style={styles.triviaDate}>Points eligibility: {upcomingTrivia.point_eligibility}</Text>
+                                </View>
+                                <Image
+                                    style={styles.icon}
+                                    source={require('../../../assets/images/yellow-line-bottom.png')}
+                                />
+                            </View>
+                        </ImageBackground>
+                    </Pressable>
+                </Animated.View>
+            }
+        </>
+    )
+}
+
 
 const UserWallet = ({ balance }) => {
     return (
@@ -292,6 +317,49 @@ const styles = EStyleSheet.create({
         backgroundColor: '#151C2F',
         paddingVertical: normalize(30),
         paddingHorizontal: normalize(20),
+    },
+    triviaBackground: {
+        flex: 1,
+        justifyContent: "center",
+        paddingBottom: '1rem',
+        paddingTop: '.5rem',
+        paddingHorizontal: '1rem',
+        marginTop: responsiveScreenWidth(5)
+    },
+    triviaTime: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    triviaTimeText: {
+        fontSize: '.75rem',
+        color: '#FFFF',
+        opacity: 0.7,
+        fontFamily: 'graphik-regular',
+        lineHeight: '1rem'
+    },
+    triviaTitle: {
+        fontSize: '1.3rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+    },
+    triviaDate: {
+        fontSize: '.62rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-regular',
+        opacity: 0.7,
+    },
+    triviaTimeCountdown: {
+        flexDirection: 'row',
+        marginTop: '.5rem',
+        marginBottom: '.3rem',
+
+    },
+    timeIcon: {
+        marginRight: '.15rem'
+    },
+    triviaBoardBottom: {
+        marginTop: responsiveScreenWidth(14)
     },
     wallet: {
         display: 'flex',
