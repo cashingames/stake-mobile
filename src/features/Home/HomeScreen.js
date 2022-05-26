@@ -30,11 +30,9 @@ const HomeScreen = () => {
     const user = useSelector(state => state.auth.user);
     const gameTypes = useSelector(state => state.common.gameTypes);
     const upcomingTrivia = useSelector(state => state.common.upcomingTrivia);
-    console.log(upcomingTrivia)
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const [loading, setLoading] = useState(true);
-    const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia);
 
 
     useEffect(() => {
@@ -121,18 +119,17 @@ const UserDetails = ({ user, upcomingTrivia }) => {
 
 const LiveTriviaBoard = ({ upcomingTrivia }) => {
     const navigation = useNavigation();
-    const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia);
     return (
         <>
             {upcomingTrivia &&
                 <Animated.View entering={BounceInRight.duration(2000)}>
                     <Pressable onPress={() => navigation.navigate('Trivia')}>
-                        <ImageBackground source={require('../../../assets/images/trivia-board1.png')} style={styles.image} resizeMode='cover'>
+                        <ImageBackground source={require('../../../assets/images/live-trivia-card-background.png')} style={styles.triviaBackground} resizeMode='cover'>
                             <View style={styles.triviaTime}>
                                 <Text style={styles.triviaTimeText}>Join this {upcomingTrivia.game_duration} seconds contest</Text>
                                 <Image
                                     style={styles.icon}
-                                    source={require('../../../assets/images/yellow-line1.png')}
+                                    source={require('../../../assets/images/yellow-line-top.png')}
                                 />
                             </View>
                             <Text style={styles.triviaTitle}>{upcomingTrivia.name}</Text>
@@ -145,7 +142,7 @@ const LiveTriviaBoard = ({ upcomingTrivia }) => {
                                 </View>
                                 <Image
                                     style={styles.icon}
-                                    source={require('../../../assets/images/yellow-line.png')}
+                                    source={require('../../../assets/images/yellow-line-bottom.png')}
                                 />
                             </View>
                         </ImageBackground>
@@ -314,7 +311,7 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(30),
         paddingHorizontal: normalize(20),
     },
-    image: {
+    triviaBackground: {
         flex: 1,
         justifyContent: "center",
         paddingBottom: '1rem',
