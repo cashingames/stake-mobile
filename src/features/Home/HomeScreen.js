@@ -21,7 +21,6 @@ import { getCommonData, getGlobalLeaders } from '../CommonSlice';
 import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
-import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import { Ionicons } from '@expo/vector-icons';
 import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 
