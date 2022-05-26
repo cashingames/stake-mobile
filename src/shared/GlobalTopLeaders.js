@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
-import normalize, { responsiveScreenWidth } from '../utils/normalize';
+import { View } from 'react-native';
+import { responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import TopLeader from './TopLeader';

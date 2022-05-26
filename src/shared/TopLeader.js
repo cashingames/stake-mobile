@@ -7,13 +7,11 @@ import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { isTrue } from '../utils/stringUtl';
 
 function TopLeader({ avatar, podPosition, name, point }) {
-
-
     return (
         <View style={styles.position}>
             <Image
                 style={styles.avatar}
-                source={isTrue(avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}}/${avatar}` } : require("../../assets/images/user-icon.png")}
+                source={isTrue(avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
             />
             <Text style={styles.leaderName}>{name}</Text>
             <Image

@@ -23,6 +23,7 @@ import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import { Ionicons } from '@expo/vector-icons';
+import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 
 const HomeScreen = () => {
 
@@ -54,6 +55,12 @@ const HomeScreen = () => {
         //whethe we are forcing or not, show the first time
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }, [minVersionCode]);
+
+    useEffect(() => {
+        if (!loading && !isTrue(user.walletBalance)) {
+            networkIssueNotify()
+        }
+    }, [user, loading])
 
 
     // useEffect(() => {

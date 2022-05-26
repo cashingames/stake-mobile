@@ -28,7 +28,9 @@ function OtherLeader({ leader, position, indexArrow }) {
             <View style={otherLeaderStyles.avatar}>
                 <Image
                     style={otherLeaderStyles.profilePic}
-                    source={isTrue(leader.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}}/${leader.avatar}` } : require("../../assets/images/user-icon.png")}
+                    source={isTrue(leader.avatar) ?
+                        { uri: `${Constants.manifest.extra.assetBaseUrl}/${leader.avatar}` } :
+                        require("../../assets/images/user-icon.png")}
                 />
                 <View style={otherLeaderStyles.username}>
                     <Text style={otherLeaderStyles.names}>{`${leader.username}`}</Text>
