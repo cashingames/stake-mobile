@@ -130,7 +130,7 @@ const LiveTriviaBoard = ({ upcomingTrivia }) => {
             {upcomingTrivia &&
                 <Animated.View entering={BounceInRight.duration(2000)}>
                     <Pressable onPress={() => navigation.navigate('Trivia')}>
-                        <ImageBackground source={require('../../../assets/images/live-trivia-card-background.png')} style={styles.triviaBackground} resizeMode='cover'>
+                        <ImageBackground source={require('../../../assets/images/live-trivia-card-background-blue.png')} style={styles.triviaBackground} resizeMode='cover'>
                             <View style={styles.triviaTime}>
                                 <Text style={styles.triviaTimeText}>Join this {upcomingTrivia.game_duration} seconds contest</Text>
                                 <Image
@@ -320,10 +320,10 @@ const styles = EStyleSheet.create({
     triviaBackground: {
         flex: 1,
         justifyContent: "center",
-        paddingBottom: '1rem',
-        paddingTop: '.5rem',
-        paddingHorizontal: '1rem',
-        marginTop: responsiveScreenWidth(5)
+        paddingBottom: '.8rem',
+        paddingTop: '.3rem',
+        paddingHorizontal: '.8rem',
+        marginTop: responsiveScreenWidth(5),
     },
     triviaTime: {
         flexDirection: 'row',
