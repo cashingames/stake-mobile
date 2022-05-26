@@ -125,12 +125,14 @@ const UserDetails = ({ user, upcomingTrivia }) => {
 
 const LiveTriviaBoard = ({ upcomingTrivia }) => {
     const navigation = useNavigation();
+    // var triviaDuration = new Date(upcomingTrivia.start_time).toLocaleString();
+
     return (
         <>
             {upcomingTrivia &&
                 <Animated.View entering={BounceInRight.duration(2000)}>
                     <Pressable onPress={() => navigation.navigate('Trivia')}>
-                        <ImageBackground source={require('../../../assets/images/live-trivia-card-background.png')} style={styles.triviaBackground} resizeMode='cover'>
+                        <ImageBackground source={require('../../../assets/images/live-trivia-card-background-blue.png')} style={styles.triviaBackground} resizeMode='cover'>
                             <View style={styles.triviaTime}>
                                 <Text style={styles.triviaTimeText}>Join this {upcomingTrivia.game_duration} seconds contest</Text>
                                 <Image
@@ -145,6 +147,7 @@ const LiveTriviaBoard = ({ upcomingTrivia }) => {
                                 <View style={styles.triviaTimeCountdown}>
                                     <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.timeIcon} />
                                     <Text style={styles.triviaDate}>Points eligibility: {upcomingTrivia.point_eligibility}</Text>
+                                    <LiveTriviaCountdown/>
                                 </View>
                                 <Image
                                     style={styles.icon}
@@ -157,6 +160,38 @@ const LiveTriviaBoard = ({ upcomingTrivia }) => {
             }
         </>
     )
+}
+
+const LiveTriviaCountdown = ({ upcomingTrivia }) => {
+    var now = new Date().toLocaleString();
+    return (
+        <>
+        <Text>{now}</Text>
+        </>
+    )
+    // var countDownDate = new Date(upcomingTrivia.start_time).getTime();
+    // var x = setInterval(function () {
+    //     var now = new Date().getTime();
+
+    //     var distance = countDownDate - now;
+    //     var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    //     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    //     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    //     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    //     if (distance < 0) {
+    //         clearInterval(x);
+    //         return (
+    //             <View>Expired</View>
+    //         )
+    //     }
+
+    //     return (
+    //         days + "d " + hours + "h "
+    //         + minutes + "m " + seconds + "s "
+    //     );
+       
+    // }, 1000)
 }
 
 
@@ -320,9 +355,9 @@ const styles = EStyleSheet.create({
     triviaBackground: {
         flex: 1,
         justifyContent: "center",
-        paddingBottom: '1rem',
-        paddingTop: '.5rem',
-        paddingHorizontal: '1rem',
+        paddingBottom: '.8rem',
+        paddingTop: '.3rem',
+        paddingHorizontal: '0.7rem',
         marginTop: responsiveScreenWidth(5)
     },
     triviaTime: {
