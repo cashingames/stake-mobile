@@ -126,23 +126,23 @@ const UserDetails = ({ user, upcomingTrivia }) => {
 
 const LiveTriviaBoard = ({ upcomingTrivia }) => {
     const navigation = useNavigation();
-    const [timer, setTimer] = useState('');
-    const [startTime] = useState((upcomingTrivia.start_timespan) + new Date().getTime())
+    const [triviaTimer, setTriviaTimer] = useState('');
+    const [triviaStartTime] = useState((upcomingTrivia.start_timespan) + new Date().getTime())
 
     var x = setInterval(function () {
         var now = new Date().getTime();
-        var distance = startTime - now;
+        var triviaDifference = triviaStartTime - now;
 
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        var days = Math.floor(triviaDifference / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((triviaDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((triviaDifference % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((triviaDifference % (1000 * 60)) / 1000);
 
-        setTimer(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+        setTriviaTimer(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
 
-        if (distance < 0) {
+        if (triviaDifference < 0) {
             clearInterval(x);
-            setTimer("EXPIRED");
+            setTriviaTimer("EXPIRED");
         }
     }, 1000);
 
@@ -166,7 +166,7 @@ const LiveTriviaBoard = ({ upcomingTrivia }) => {
                             <View style={styles.triviaBoardBottom}>
                                 <View style={styles.triviaTimeCountdown}>
                                     <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.timeIcon} />
-                                    <Text style={styles.triviaDate}>Start in {timer}</Text>
+                                    <Text style={styles.triviaDate}>Start in {triviaTimer}</Text>
                                 </View>
                                 <Image
                                     style={styles.icon}
