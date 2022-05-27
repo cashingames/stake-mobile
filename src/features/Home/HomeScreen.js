@@ -30,6 +30,7 @@ const HomeScreen = () => {
     const user = useSelector(state => state.auth.user);
     const gameTypes = useSelector(state => state.common.gameTypes);
     const upcomingTrivia = useSelector(state => state.common.upcomingTrivia);
+    console.log(upcomingTrivia);
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const [loading, setLoading] = useState(true);
@@ -125,7 +126,25 @@ const UserDetails = ({ user, upcomingTrivia }) => {
 
 const LiveTriviaBoard = ({ upcomingTrivia }) => {
     const navigation = useNavigation();
-    // var triviaDuration = new Date(upcomingTrivia.start_time).toLocaleString();
+    const [timer, setTimer] = useState('');
+    const [startTime] = useState((upcomingTrivia.start_timespan) + new Date().getTime())
+
+    var x = setInterval(function () {
+        var now = new Date().getTime();
+        var distance = startTime - now;
+
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        setTimer(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+
+        if (distance < 0) {
+            clearInterval(x);
+            setTimer("EXPIRED");
+        }
+    }, 1000);
 
     return (
         <>
@@ -143,11 +162,11 @@ const LiveTriviaBoard = ({ upcomingTrivia }) => {
                             <Text style={styles.triviaTitle}>{upcomingTrivia.name}</Text>
                             <Text style={styles.triviaTimeText}>Grand price: &#8358;{formatCurrency(upcomingTrivia.grand_price)}</Text>
                             <Text style={styles.triviaDate}>{upcomingTrivia.start_time}</Text>
+                            <Text style={styles.triviaDate}>Points eligibility: {upcomingTrivia.point_eligibility}</Text>
                             <View style={styles.triviaBoardBottom}>
                                 <View style={styles.triviaTimeCountdown}>
                                     <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.timeIcon} />
-                                    <Text style={styles.triviaDate}>Points eligibility: {upcomingTrivia.point_eligibility}</Text>
-                                    <LiveTriviaCountdown/>
+                                    <Text style={styles.triviaDate}>Start in {timer}</Text>
                                 </View>
                                 <Image
                                     style={styles.icon}
@@ -162,37 +181,6 @@ const LiveTriviaBoard = ({ upcomingTrivia }) => {
     )
 }
 
-const LiveTriviaCountdown = ({ upcomingTrivia }) => {
-    var now = new Date().toLocaleString();
-    return (
-        <>
-        <Text>{now}</Text>
-        </>
-    )
-    // var countDownDate = new Date(upcomingTrivia.start_time).getTime();
-    // var x = setInterval(function () {
-    //     var now = new Date().getTime();
-
-    //     var distance = countDownDate - now;
-    //     var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    //     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    //     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    //     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    //     if (distance < 0) {
-    //         clearInterval(x);
-    //         return (
-    //             <View>Expired</View>
-    //         )
-    //     }
-
-    //     return (
-    //         days + "d " + hours + "h "
-    //         + minutes + "m " + seconds + "s "
-    //     );
-       
-    // }, 1000)
-}
 
 
 const UserWallet = ({ balance }) => {
