@@ -165,7 +165,7 @@ function CustomDrawerContent(props) {
 
             <Pressable onPress={onLogout} style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.logoutText}>Logout</Text>
-                <Text style={drawStyles.appVersion}>App version: {Constants.manifest.runtimeVersion}</Text>
+                <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
             </Pressable>
 
         </DrawerContentScrollView>
