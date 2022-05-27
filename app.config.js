@@ -1,10 +1,11 @@
 const env = process.env.APP_VARIANT;
+const version = "1.0.36"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
-  version: "1.0.35",
-  runtimeVersion: "1.35",
+  version: version, //For every publish and build update the version. Update for every publish and new build
+  runtimeVersion: "1.35", //All apps using the same runtime will get the published updates. Generally update for every new build
   orientation: "portrait",
   icon: "./assets/images/adaptive-icon2.png",
   // jsEngine: "hermes",
@@ -25,21 +26,21 @@ export default {
   ],
   platforms: [
     "android",
-    "ios"
+    // "ios"
   ],
   android: {
     package: getAppIdentifier(),
-    versionCode: 35,
+    versionCode: getAndriodVersionCode(),
     googleServicesFile: "./google-services.json",
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon2.png",
       backgroundColor: "#FFFFFF"
     }
   },
-  ios: {
-    bundleIdentifier: getAppIdentifier(),
-    googleServicesFile: "./GoogleService-Info.plist",
-  },
+  // ios: {
+  //   bundleIdentifier: getAppIdentifier(),
+  //   googleServicesFile: "./GoogleService-Info.plist",
+  // },
   plugins: [
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
@@ -58,6 +59,10 @@ export default {
   },
 }
 
+function getAndriodVersionCode() {
+  var _v = version.split(".");
+  return Number(_v[_v.length - 1]);
+}
 function getAppName() {
   if (env === "development") {
     return "Cashingames Dev";
@@ -130,8 +135,4 @@ function getAssetsBaseUrl() {
   }
 
   return 'https://api.cashingames.com';
-}
-
-function isTrue(value) {
-  return value != "" && value !== undefined && value !== null
 }

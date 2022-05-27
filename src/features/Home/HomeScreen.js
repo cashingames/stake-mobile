@@ -421,6 +421,7 @@ const styles = EStyleSheet.create({
     },
     pointDetail: {
         color: '#e3e3e3',
+        // color: 'red',
         fontSize: '0.8rem',
         fontFamily: 'graphik-medium',
     },
