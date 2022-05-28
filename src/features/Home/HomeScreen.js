@@ -33,7 +33,6 @@ const HomeScreen = () => {
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const [loading, setLoading] = useState(true);
 
-
     useEffect(() => {
         dispatch(resetGameStats());
 
@@ -179,7 +178,6 @@ const UserWallet = ({ balance }) => {
     return (
         <Animated.View entering={BounceInRight.duration(2000)} style={styles.wallet}>
             <Image
-                style={styles.icon}
                 source={require('../../../assets/images/wallet.png')}
             />
             <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
@@ -357,20 +355,20 @@ const styles = EStyleSheet.create({
         lineHeight: '0.8rem'
     },
     wallet: {
-        display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
     },
     walletText: {
         fontSize: '1.2rem',
         color: '#FFFF',
+        lineHeight: '1.4rem',
         fontFamily: 'graphik-medium',
         marginLeft: normalize(8),
     },
     points: {
         backgroundColor: '#01A7DB',
         borderRadius: normalize(10),
-        marginTop: responsiveScreenHeight(5),
+        marginTop: responsiveScreenHeight(4),
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
