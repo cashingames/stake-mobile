@@ -26,7 +26,7 @@ export default {
   ],
   platforms: [
     "android",
-    // "ios"
+    "ios"
   ],
   android: {
     package: getAppIdentifier(),
@@ -37,10 +37,10 @@ export default {
       backgroundColor: "#FFFFFF"
     }
   },
-  // ios: {
-  //   bundleIdentifier: getAppIdentifier(),
-  //   googleServicesFile: "./GoogleService-Info.plist",
-  // },
+  ios: {
+    bundleIdentifier: getAppIdentifier(),
+    googleServicesFile: "./GoogleService-Info.plist",
+  },
   plugins: [
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
