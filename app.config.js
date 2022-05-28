@@ -1,11 +1,11 @@
 const env = process.env.APP_VARIANT;
-const version = "1.0.36"; //Update for every build and publish
+const version = "1.0.37"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
   version: version, //For every publish and build update the version. Update for every publish and new build
-  runtimeVersion: "1.35", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "1.37", //All apps using the same runtime will get the published updates. Generally update for every new build
   orientation: "portrait",
   icon: "./assets/images/adaptive-icon2.png",
   // jsEngine: "hermes",

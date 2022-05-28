@@ -1688,6 +1688,11 @@
   dependencies:
     invariant "^2.2.4"
 
+"@react-native-community/netinfo@^8.3.0":
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-8.3.0.tgz#e3d19381c7d9f885b44ea1785ed892bc39c4b0f1"
+  integrity sha512-VlmjD7Vg1BacbNhwuJCel1eeD8N2Ps6BEcZe9qoSoeIptpCbC86o4ZqD0meSjJzioKSvgalrkmPgMaVYsVipKw==
+
 "@react-native-firebase/analytics@^14.3.0":
   version "14.9.1"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-14.9.1.tgz#0f756da8a90f4c1a296b9e73803cf8dc9aa00be8"
@@ -5571,7 +5576,7 @@ moment-range@2.2.0:
   resolved "https://registry.yarnpkg.com/moment-range/-/moment-range-2.2.0.tgz#b02575778a4ac50a65777939f5c5d757f83fcd85"
   integrity sha1-sCV1d4pKxQpld3k59cXXV/g/zYU=
 
-moment@^2.22.1, moment@^2.27.0:
+moment@^2.22.1, moment@^2.27.0, moment@^2.29.3:
   version "2.29.3"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.3.tgz#edd47411c322413999f7a5940d526de183c031f3"
   integrity sha512-c6YRvhEo//6T2Jz/vVtYzqBzwvPT95JBQ+smCytzf7c50oMZRsR/a4w88aD34I+/QVSfnoAnSBFPJHItlOMJVw==
