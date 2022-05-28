@@ -30,6 +30,7 @@ const HomeScreen = () => {
     const user = useSelector(state => state.auth.user);
     const gameTypes = useSelector(state => state.common.gameTypes);
     const upcomingTrivia = useSelector(state => state.common.upcomingTrivia);
+    console.log(upcomingTrivia);
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const [loading, setLoading] = useState(true);
@@ -125,6 +126,26 @@ const UserDetails = ({ user, upcomingTrivia }) => {
 
 const LiveTriviaBoard = ({ upcomingTrivia }) => {
     const navigation = useNavigation();
+    const [triviaTimer, setTriviaTimer] = useState('');
+    const [triviaStartTime] = useState((upcomingTrivia.start_timespan) + new Date().getTime())
+
+    var x = setInterval(function () {
+        var now = new Date().getTime();
+        var triviaDifference = triviaStartTime - now;
+
+        var days = Math.floor(triviaDifference / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((triviaDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((triviaDifference % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((triviaDifference % (1000 * 60)) / 1000);
+
+        setTriviaTimer(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+
+        if (triviaDifference < 0) {
+            clearInterval(x);
+            setTriviaTimer("EXPIRED");
+        }
+    }, 1000);
+
     return (
         <>
             {upcomingTrivia &&
@@ -141,10 +162,11 @@ const LiveTriviaBoard = ({ upcomingTrivia }) => {
                             <Text style={styles.triviaTitle}>{upcomingTrivia.name}</Text>
                             <Text style={styles.triviaTimeText}>Grand price: &#8358;{formatCurrency(upcomingTrivia.grand_price)}</Text>
                             <Text style={styles.triviaDate}>{upcomingTrivia.start_time}</Text>
+                            <Text style={styles.triviaDate}>Points eligibility: {upcomingTrivia.point_eligibility}</Text>
                             <View style={styles.triviaBoardBottom}>
                                 <View style={styles.triviaTimeCountdown}>
                                     <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.timeIcon} />
-                                    <Text style={styles.triviaDate}>Points eligibility: {upcomingTrivia.point_eligibility}</Text>
+                                    <Text style={styles.triviaDate}>Start in {triviaTimer}</Text>
                                 </View>
                                 <Image
                                     style={styles.icon}
@@ -158,6 +180,7 @@ const LiveTriviaBoard = ({ upcomingTrivia }) => {
         </>
     )
 }
+
 
 
 const UserWallet = ({ balance }) => {
@@ -322,8 +345,8 @@ const styles = EStyleSheet.create({
         justifyContent: "center",
         paddingBottom: '.8rem',
         paddingTop: '.3rem',
-        paddingHorizontal: '.8rem',
-        marginTop: responsiveScreenWidth(5),
+        paddingHorizontal: '0.7rem',
+        marginTop: responsiveScreenWidth(5)
     },
     triviaTime: {
         flexDirection: 'row',
