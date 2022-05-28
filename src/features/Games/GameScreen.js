@@ -66,7 +66,7 @@ const GameTabs = () => {
 
     const gameTypes = useSelector(state => state.common.gameTypes)
     if (gameTypes.length === 0) {
-        networkIssueNotify()
+        // networkIssueNotify()
         return null;
     }
 

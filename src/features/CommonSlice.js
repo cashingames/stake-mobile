@@ -6,6 +6,7 @@ import axios from 'axios';
 export const getCommonData = createAsyncThunk(
     'common/get',
     async (thunkAPI) => {
+        console.log("fetching common data");
         const response = await getData('v3/game/common')
         return response.data
     }
@@ -24,6 +25,7 @@ export const getBankData = createAsyncThunk(
 export const getGlobalLeaders = createAsyncThunk(
     'common/globalLeaders/get',
     async (thunkAPI) => {
+        console.log("getting global leaders")
         const response = await axios.post('v2/leaders/global');
         return response.data
     }

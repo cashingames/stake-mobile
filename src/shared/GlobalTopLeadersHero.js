@@ -13,10 +13,6 @@ export default function GlobalTopLeadersHero() {
     const navigation = useNavigation();
     const leaders = useSelector(state => state.common.globalLeaders)
 
-    // console.log("pixel ratio", PixelRatio.get());
-    // console.log("font scale", PixelRatio.getFontScale());
-    // console.log("pixel size for 12", PixelRatio.getPixelSizeForLayoutSize(12));
-    // console.log("nearest pixel for 12", PixelRatio.roundToNearestPixel(22));
     return (
         <Animated.View style={styles.leaderboard} entering={randomEnteringAnimation().duration(1000)}>
             <View style={styles.leaderboardHeader}>

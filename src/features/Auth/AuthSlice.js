@@ -117,6 +117,7 @@ export const editProfileAvatar = createAsyncThunk(
 export const getUser = createAsyncThunk(
     'auth/user/get',
     async (thunkAPI) => {
+        console.log("getting user")
         const response = await getData('v3/user/profile');
         return response.data
     }
@@ -152,9 +153,9 @@ export const AuthSlice = createSlice({
         saveCreatedUserCredentials: (state, action) => {
             state.createAccount = action.payload
         },
-        reduceBoostCount : (state, action) => {
-            state.user.boosts.map(boost =>{
-                if( boost.id === action.payload ){
+        reduceBoostCount: (state, action) => {
+            state.user.boosts.map(boost => {
+                if (boost.id === action.payload) {
                     return boost.count -= 1
                 }
             })
