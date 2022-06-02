@@ -2,12 +2,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {
-    getIsLoggedInOnce,
     login as loginApi,
     verifyOtp as verifyOtpApi,
     verifyAccount as verifyAccountApi,
     resetPassword as resetPasswordApi,
-    signInWithGoogle as googleSignIn,
     getData,
 } from '../../utils/ApiHelper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -109,7 +107,6 @@ export const editProfileAvatar = createAsyncThunk(
         const response = await axios.post('v2/profile/me/picture', data, config).catch(e => {
             console.log(e);
         });
-        console.log("update result ", response.data)
         return response.data
     }
 )

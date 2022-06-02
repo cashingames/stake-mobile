@@ -84,7 +84,6 @@ function CustomDrawerContent(props) {
 
     const user = useSelector(state => state.auth.user)
 
-
     const onLogout = () => {
         dispatch(logoutUser());
     }

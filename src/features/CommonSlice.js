@@ -86,7 +86,6 @@ const initialState = {
     categoryLeaders: [],
     globalLeaders: [],
     faqAndAnswers: [],
-    hasLiveTrivia: false,
     trivia: [],
     minVersionCode: '',
     minVersionForce: false,
@@ -111,7 +110,6 @@ export const CommonSlice = createSlice({
                 state.gameTypes = action.payload.gameTypes;
                 state.gameModes = action.payload.gameModes;
                 state.gameCategories = action.payload.gameCategories;
-                state.hasLiveTrivia = action.payload.hasLiveTrivia;
                 state.minVersionCode = action.payload.minVersionCode;
                 state.minVersionForce = action.payload.minVersionForce;
                 state.upcomingTrivia = action.payload.upcomingTrivia;

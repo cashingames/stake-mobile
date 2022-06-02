@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
-import normalize, { responsiveScreenWidth } from '../../utils/normalize';
+import { responsiveScreenWidth } from '../../utils/normalize';
 import {
     getCategoryLeadersByDate,
     getGlobalLeadersByDate
@@ -22,11 +22,11 @@ const LeaderBoardFilter = () => {
         dispatch(getGlobalLeadersByDate({
             startDate,
             endDate
-         } ));
+        }));
         dispatch(getCategoryLeadersByDate({
             startDate,
             endDate
-    }));
+        }));
     }
 
     const customButton = (onConfirm) => (

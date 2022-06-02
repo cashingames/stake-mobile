@@ -31,7 +31,8 @@ export default function ExtendedLeaderboard({ navigation }) {
 
     useFocusEffect(
         React.useCallback(() => {
-            dispatch(getGlobalLeaders())
+            dispatch(getGlobalLeaders());
+            dispatch(getCategoryLeaders());
         }, [])
     );
 
@@ -40,7 +41,6 @@ export default function ExtendedLeaderboard({ navigation }) {
     }
 
     const categories = Object.keys(categoryLeaders);
-    console.log(categories)
     return (
         <View style={styles.container}>
             <ScrollView>
