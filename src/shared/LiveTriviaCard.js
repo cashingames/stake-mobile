@@ -56,47 +56,42 @@ const LiveTriviaCard = ({ liveTrivia }) => {
                     {/* <Text style={styles.triviaDate}>{upcomingTrivia.start_time}</Text> */}
                     {/* <Text style={styles.triviaDate}>Points eligibility: {upcomingTrivia.point_eligibility}</Text> */}
                     <View style={styles.triviaBoardBottom}>
-                        {
+
+                        <View>
+                            <View style={styles.triviaStatus}>
+                                <Text style={styles.triviaStatusText}>Status: </Text>
+                                {
+                                    liveTrivia.status === "ONGOING" ?
+                                        <Text style={styles.triviaStatusResp}>Ongoing</Text> : <Text style={styles.triviaStatusResp}>Closed</Text>
+                                }
+                            </View>
+                            <Image
+                                source={require('../../assets/images/yellow-line-bottom.png')}
+                            />
+                        </View>
+                        {!liveTrivia.has_played ?
                             <>
-                                <View style={styles.triviaTimeCountdown}>
-                                    <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.timeIcon} />
-                                    <Text style={styles.triviaTimeCountdownText}>Starts in {triviaTimer}</Text>
-                                </View>
-                                <View>
-                                    <View style={styles.triviaStatus}>
-                                        <Text style={styles.triviaStatusText}>Status: </Text>
-                                        {
-                                            liveTrivia.status === "ONGOING" ?
-                                                <Text style={styles.triviaStatusResp}>Ongoing</Text> : <Text style={styles.triviaStatusResp}>Closed</Text>
-                                        }
-                                    </View>
-                                    <Image
-                                        source={require('../../assets/images/yellow-line-bottom.png')}
-                                    />
-                                </View>
-                                {!liveTrivia.has_played ?
-                                    <>
-                                        {
-                                            liveTrivia.status === "ONGOING" ?
-                                                <Pressable style={styles.triviaButton} onPress={() => setInstructionModalVisible(true)}>
-                                                    <Text style={styles.triviaButtonText}>Join Now</Text>
-                                                    <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
-                                                </Pressable>
-                                                :
-                                                <Pressable style={styles.triviaButton}>
-                                                    <Text style={styles.triviaButtonText}>Leaderboard</Text>
-                                                    <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
-                                                </Pressable>
-                                        }
-                                    </>
-                                    :
-                                    <Pressable style={styles.triviaButton}>
-                                        <Text style={styles.triviaButtonText}>Leaderboard</Text>
-                                        <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
-                                    </Pressable>
+                                {
+                                    liveTrivia.status === "ONGOING" ?
+                                        <Pressable style={styles.triviaButton} onPress={() => setInstructionModalVisible(true)}>
+                                            <Text style={styles.triviaButtonText}>Join Now</Text>
+                                            <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
+                                        </Pressable>
+                                        :
+                                        <Pressable style={styles.triviaButton}>
+                                            <Text style={styles.triviaButtonText}>Leaderboard</Text>
+                                            <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
+                                        </Pressable>
                                 }
                             </>
+                            :
+                            <Pressable style={styles.triviaButton}>
+                                <Text style={styles.triviaButtonText}>Leaderboard</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
+                            </Pressable>
                         }
+
+
                     </View>
                 </ImageBackground>
             </Animated.View>
