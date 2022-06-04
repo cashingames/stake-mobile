@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, Pressable, ImageBackground } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -18,13 +18,12 @@ import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import LiveTriviaCard from '../../shared/LiveTriviaCard';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
-import { getCommonData, getGlobalLeaders } from '../CommonSlice';
+import { getCommonData, getGlobalLeaders, initialLoadingComplete } from '../CommonSlice';
 import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
-import { Ionicons } from '@expo/vector-icons';
-import { calculateTimeRemaining, networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates, randomEnteringAnimation } from '../../utils/utils';
-import UpComingTriviaCard from '../../shared/UpComingTriviaCard';
+import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const HomeScreen = () => {
 
@@ -33,15 +32,16 @@ const HomeScreen = () => {
     const gameTypes = useSelector(state => state.common.gameTypes);
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
-    const [loading, setLoading] = useState(true);
+    const loading = useSelector(state => state.common.initialLoading);
 
     useEffect(() => {
         dispatch(resetGameStats());
 
         var _1 = dispatch(getUser());
+        var _2 = dispatch(getCommonData());
 
-        Promise.all([_1]).then(() => {
-            setLoading(false);
+        Promise.all([_1, _2]).then(() => {
+            dispatch(initialLoadingComplete());
         });
 
     }, []);
@@ -50,7 +50,7 @@ const HomeScreen = () => {
         if (Constants.manifest.extra.isDevelopment) {
             return;
         }
-        //whethe we are forcing or not, show the first time
+        //whether we are forcing or not, show the first time
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }, [minVersionCode]);
 
@@ -67,8 +67,7 @@ const HomeScreen = () => {
                 return;
             }
 
-            console.log(loading)
-            dispatch(getCommonData());
+            dispatch(getUser());
             dispatch(getGlobalLeaders())
             if (Constants.manifest.extra.isDevelopment) {
                 return;
@@ -80,6 +79,17 @@ const HomeScreen = () => {
             }
         }, [loading])
     );
+
+    useEffect(() => {
+        if (!user || !isTrue(user.walletBalance)) {
+            return;
+        }
+
+        Promise.all([
+            crashlytics().setAttribute('username', user.username),
+        ]);
+
+    }, [user]);
 
     if (loading) {
         return <PageLoading />
@@ -108,81 +118,16 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 const UserDetails = ({ user }) => {
-    const upcomingTrivia = useSelector(state => state.common.upcomingTrivia);
-    const liveTrivia = useSelector(state => state.common.liveTrivia);
-    const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia);
-
-    console.log(liveTrivia);
 
     return (
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance} />
-            {hasLiveTrivia ?
-                <LiveTriviaCard liveTrivia={liveTrivia} />
-                :
-                <UpComingTriviaCard upcomingTrivia={upcomingTrivia} />
-            }
+            <LiveTriviaCard />
             <UserPoints points={user.points} />
             <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} />
         </View>
     );
 }
-
-// const LiveTriviaBoard = ({ upcomingTrivia }) => {
-//     const navigation = useNavigation();
-//     const [triviaTimer, setTriviaTimer] = useState('');
-
-//     useEffect(() => {
-//         if (upcomingTrivia === null) {
-//             return;
-//         }
-
-//         const startTime = upcomingTrivia.start_timespan + new Date().getTime();
-//         const countDown = setInterval(() => {
-//             setTriviaTimer(calculateTimeRemaining(startTime));
-//         }, 1000);
-
-//         return () => clearInterval(countDown);
-
-//     }, [upcomingTrivia])
-
-//     if (!isTrue(triviaTimer) || upcomingTrivia === null) {
-//         return null;
-//     }
-
-//     return (
-//         <Animated.View entering={randomEnteringAnimation().duration(2000)} style={styles.triviaContainer}>
-//             <ImageBackground
-//                 source={require('../../../assets/images/live-trivia-card-background-blue.png')}
-//                 style={styles.triviaBackground}
-//                 imageStyle={{ borderRadius: 20 }}
-//                 resizeMode='cover'>
-
-//                 <Pressable onPress={() => navigation.navigate('Trivia')}>
-//                     <View style={styles.triviaTime}>
-//                         <Text style={styles.triviaTimeText}>Join this {upcomingTrivia.game_duration} seconds contest</Text>
-//                         <Image
-//                             source={require('../../../assets/images/yellow-line-top.png')}
-//                         />
-//                     </View>
-//                     <Text style={styles.triviaTitle}>{upcomingTrivia.name}</Text>
-//                     {/* <Text style={styles.triviaTimeText}>Grand price: &#8358;{formatCurrency(upcomingTrivia.grand_price)}</Text> */}
-//                     {/* <Text style={styles.triviaDate}>{upcomingTrivia.start_time}</Text> */}
-//                     {/* <Text style={styles.triviaDate}>Points eligibility: {upcomingTrivia.point_eligibility}</Text> */}
-//                     <View style={styles.triviaBoardBottom}>
-//                         <View style={styles.triviaTimeCountdown}>
-//                             <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.timeIcon} />
-//                             <Text style={styles.triviaTimeCountdownText}>Starts in {triviaTimer}</Text>
-//                         </View>
-//                         <Image
-//                             source={require('../../../assets/images/yellow-line-bottom.png')}
-//                         />
-//                     </View>
-//                 </Pressable>
-//             </ImageBackground>
-//         </Animated.View>
-//     )
-// }
 
 const UserWallet = ({ balance }) => {
     return (
@@ -274,7 +219,7 @@ function GameCard({ game }) {
 }
 
 function RecentlyPlayedCards({ games }) {
-    if (!isTrue(games) || games.length === 0)
+    if (!games || !isTrue(games) || games.length === 0)
         return <></>;
     return (
         <View style={styles.games}>
@@ -319,50 +264,6 @@ const styles = EStyleSheet.create({
         backgroundColor: '#072169',
         paddingVertical: normalize(30),
         paddingHorizontal: normalize(20),
-    },
-    triviaContainer: {
-        marginTop: responsiveScreenWidth(5),
-    },
-    triviaBackground: {
-        flex: 1,
-        justifyContent: "center",
-        padding: '1rem',
-        borderRadius: 20,
-    },
-    triviaTime: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    triviaTimeText: {
-        fontSize: '1rem',
-        color: '#FFFF',
-        opacity: 0.8,
-        fontFamily: 'graphik-regular',
-    },
-    triviaTitle: {
-        fontSize: '1.5rem',
-        color: '#FFFF',
-        lineHeight: '2rem',
-        fontFamily: 'graphik-medium',
-    },
-    triviaBoardBottom: {
-        marginTop: responsiveScreenWidth(10),
-    },
-    triviaTimeCountdown: {
-        flexDirection: 'row',
-        alignItems: "center",
-        marginVertical: "0.5rem",
-    },
-    timeIcon: {
-        marginRight: 7
-    },
-    triviaTimeCountdownText: {
-        fontSize: '0.8rem',
-        color: '#FFFF',
-        opacity: 0.8,
-        fontFamily: 'graphik-regular',
-        lineHeight: '0.8rem'
     },
     wallet: {
         flexDirection: 'row',

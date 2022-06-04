@@ -101,14 +101,14 @@ async function saveToken(data) {
     await AsyncStorage.setItem("used", "token");
 }
 
-async function signInWithGoogle(email, first_name, last_name) {
-    return postData("/auth/google/login", { email, first_name, last_name })
-        .then(response => {
-            saveToken(response.data);
-            console.log(response + ' in apiiiidjdjd')
-            return response;
-        });
-}
+// async function signInWithGoogle(email, first_name, last_name) {
+//     return postData("/auth/google/login", { email, first_name, last_name })
+//         .then(response => {
+//             saveToken(response.data);
+//             console.log(response + ' in apiiiidjdjd')
+//             return response;
+//         });
+// }
 
-export { login, register, verifyUsername, saveToken, verifyAccount, verifyFunding, resetPassword, verifyOtp, signInWithGoogle };
+export { login, register, verifyUsername, saveToken, verifyAccount, verifyFunding, resetPassword, verifyOtp };
 export { getData, postData };

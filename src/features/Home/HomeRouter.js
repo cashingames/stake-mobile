@@ -21,11 +21,11 @@ import AppButton from '../../shared/AppButton';
 const HomeStack = createDrawerNavigator();
 
 const HomeRouter = () => {
-    const user = useSelector(state => state.auth.user)
+    const loading = useSelector(state => state.common.initialLoading);
 
     const AppMainHeaderOptions = () => {
         return {
-            headerShown: isTrue(user) && isTrue(user.username),
+            headerShown: !loading,
             drawerType: "slide",
             drawerStyle: {
                 width: '85%',

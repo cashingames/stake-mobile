@@ -63,6 +63,7 @@ function getAndriodVersionCode() {
   var _v = version.split(".");
   return Number(_v[_v.length - 1]);
 }
+
 function getAppName() {
   if (env === "development") {
     return "Cashingames Dev";
@@ -78,23 +79,25 @@ function getSlug() {
 }
 
 function getAppIdentifier() {
+  var identifier = "cashingames";
   if (env === "development") {
-    return "com.cashingames.dev";
+    identifier = "dev";
   } else if (env === "preview") {
-    return "com.cashingames.test";
-  } else {
-    return "com.cashingames.cashingames";
+    identifier = "test";
   }
+
+  return `com.cashingames.${identifier}`;
 }
 
 function getSocialLoginClientID() {
+  var result = "125752028373-mmdihc58hbubpt4obl59875tun5633or.apps.googleusercontent.com";
   if (env === "development") {
-    return '125752028373-ik9v848h4d8n8c95bq5lrva1k5anffdo.apps.googleusercontent.com';
+    result = '125752028373-ik9v848h4d8n8c95bq5lrva1k5anffdo.apps.googleusercontent.com';
   } else if (env === "preview") {
-    return "125752028373-f3pls3bjaq22s82p9elsg57bd7bc0kbh.apps.googleusercontent.com";
-  } else {
-    return "125752028373-mmdihc58hbubpt4obl59875tun5633or.apps.googleusercontent.com";
+    result = "125752028373-f3pls3bjaq22s82p9elsg57bd7bc0kbh.apps.googleusercontent.com";
   }
+
+  return result;
 }
 
 function getGATrackingID() {
@@ -115,6 +118,7 @@ function getPaystackKey() {
 
 function getApiUrl() {
   if (env === "development" || env === "preview") {
+    // return 'http://192.168.1.147:8000/api';
     return 'https://stg-api.cashingames.com/api';
   }
 

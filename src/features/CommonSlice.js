@@ -1,13 +1,12 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { getData } from '../utils/ApiHelper'
 import axios from 'axios';
 
 export const getCommonData = createAsyncThunk(
     'common/get',
     async (thunkAPI) => {
         console.log("fetching common data");
-        const response = await getData('v3/game/common')
+        const response = await axios.get('v3/game/common');
         return response.data
     }
 )
@@ -15,7 +14,7 @@ export const getCommonData = createAsyncThunk(
 export const getBankData = createAsyncThunk(
     'common/bank/get',
     async (thunkAPI) => {
-        const response = await getData('v2/wallet/banks')
+        const response = await axios.get('v2/wallet/banks')
         return response.data
     }
 )
@@ -35,7 +34,6 @@ export const getGlobalLeadersByDate = createAsyncThunk(
     'common/globalLeadersByDate/get',
     async (data, thunkAPI) => {
         const response = await axios.post('v2/leaders/global', data);
-        console.log(response.data);
         return response.data
     }
 )
@@ -51,7 +49,6 @@ export const getCategoryLeadersByDate = createAsyncThunk(
     'common/categoryLeadersByDate/get',
     async (data, thunkAPI) => {
         const response = await axios.post('v2/leaders/categories', data);
-        console.log(response.data);
         return response.data
     }
 )
@@ -76,6 +73,7 @@ export const fetchTrivia = createAsyncThunk(
 
 
 const initialState = {
+    initialLoading: true,
     boosts: [],
     achievements: [],
     gameTypes: [],
@@ -90,34 +88,35 @@ const initialState = {
     minVersionCode: '',
     minVersionForce: false,
     upcomingTrivia: null,
-    liveTrivia: {},
+    liveTrivia: null,
 }
 
 export const CommonSlice = createSlice({
     name: 'common',
     initialState,
     reducers: {
-        setGlobalLeadersByDate: (state, action) => {
-            state.globalLeaders = action.payload.data;
-        },
+        initialLoadingComplete: (state) => {
+            state.initialLoading = false;
+        }
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
         builder
             .addCase(getCommonData.fulfilled, (state, action) => {
-                state.boosts = action.payload.boosts;
-                state.achievements = action.payload.achievements;
-                state.plans = action.payload.plans;
-                state.gameTypes = action.payload.gameTypes;
-                state.gameModes = action.payload.gameModes;
-                state.gameCategories = action.payload.gameCategories;
-                state.minVersionCode = action.payload.minVersionCode;
-                state.minVersionForce = action.payload.minVersionForce;
-                state.upcomingTrivia = action.payload.upcomingTrivia;
-                state.liveTrivia = action.payload.liveTrivia;
+                var data = action.payload.data;
+                state.boosts = data.boosts;
+                state.achievements = data.achievements;
+                state.plans = data.plans;
+                state.gameTypes = data.gameTypes;
+                state.gameModes = data.gameModes;
+                state.gameCategories = data.gameCategories;
+                state.minVersionCode = data.minVersionCode;
+                state.minVersionForce = data.minVersionForce;
+                state.upcomingTrivia = data.upcomingTrivia;
+                state.liveTrivia = data.liveTrivia;
             })
             .addCase(getBankData.fulfilled, (state, action) => {
-                state.banks = action.payload;
+                state.banks = action.payload.data;
             })
             .addCase(getGlobalLeaders.fulfilled, (state, action) => {
                 state.globalLeaders = action.payload.data
@@ -139,5 +138,7 @@ export const CommonSlice = createSlice({
             })
     },
 });
+
+export const { initialLoadingComplete } = CommonSlice.actions
 
 export default CommonSlice.reducer

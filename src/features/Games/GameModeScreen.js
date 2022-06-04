@@ -13,12 +13,9 @@ export default function GameModeScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const gameModes = useSelector(state => state.common.gameModes);
-    console.log(gameModes);
-
 
     const onSelectGameMode = (mode) => {
         dispatch(setGameMode(mode));
-        console.log("here")
         if (mode.name === "EXHIBITION") {
             navigation.navigate('GameInstructions')
         }

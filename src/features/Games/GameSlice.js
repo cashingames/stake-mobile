@@ -106,11 +106,11 @@ export const GameSlice = createSlice({
             console.log("main")
             state.selectedFriend = action.payload;
         },
-        setGameDuration:(state,action)=>{
-            state.gameDuration=action.payload;
+        setGameDuration: (state, action) => {
+            state.gameDuration = action.payload;
         },
-        setQuestionsCount:(state,action)=>{
-            state.totalQuestionCount=action.payload;
+        setQuestionsCount: (state, action) => {
+            state.totalQuestionCount = action.payload;
         },
         setPointsGained: (state, action) => {
             state.pointsGained = action.payload;
@@ -177,6 +177,7 @@ export const GameSlice = createSlice({
         // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
         builder
             .addCase(startGame.fulfilled, (state, action) => {
+                console.log(action);
                 state.questions = action.payload.data.questions;
                 state.displayedQuestion = state.questions[state.currentQuestionPosition]
                 state.displayedOptions = state.displayedQuestion.options
@@ -198,7 +199,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    resetGameStats, setSelectedFriend, setIsPlayingTrivia,setHasPlayedTrivia, setGameDuration,setQuestionsCount
+    resetGameStats, setSelectedFriend, setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount
 } = GameSlice.actions
 
 

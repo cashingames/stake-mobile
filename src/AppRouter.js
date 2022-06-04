@@ -158,6 +158,7 @@ export default AppRouter;
 
 const booststrapAxios = async function (token) {
     axios.defaults.baseURL = Constants.manifest.extra.apiBaseUrl;
+
     if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {

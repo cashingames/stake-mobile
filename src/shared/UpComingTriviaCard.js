@@ -33,6 +33,9 @@ const UpComingTriviaCard = ({ upcomingTrivia }) => {
         return null;
     }
 
+    const status = upcomingTrivia.status;
+    console.log("status", status)
+
     return (
         <Animated.View entering={randomEnteringAnimation().duration(2000)} style={styles.triviaContainer}>
             <ImageBackground

@@ -6,6 +6,7 @@ import {
     FlipInXUp, FlipInXDown, FlipInEasyX, FlipInEasyY, FlipInYLeft, FlipInYRight
 } from "react-native-reanimated";
 import * as Updates from 'expo-updates';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 
 export const randomElement = (arr) => {
@@ -77,7 +78,7 @@ export const notifyOfPublishedUpdates = async () => {
                         {
                             text: 'Restart',
                             onPress: async () => {
-                                await Updates.reloadAsync();
+                                await Updates.reloadAsync().catch((error) => crashlytics().recordError(error));
                             },
                         }
                     ]
@@ -86,6 +87,7 @@ export const notifyOfPublishedUpdates = async () => {
         });
     } catch (e) {
         // handle or log error
+        crashlytics().recordError(error);
         console.log(e);
     }
 }
@@ -98,7 +100,7 @@ export const networkIssueNotify = async () => {
             {
                 text: 'Restart',
                 onPress: async () => {
-                    await Updates.reloadAsync();
+                    await Updates.reloadAsync().catch((error) => crashlytics().recordError(error));
                 },
             }
         ]

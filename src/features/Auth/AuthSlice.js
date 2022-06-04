@@ -1,14 +1,14 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from 'expo-constants';
 import {
     login as loginApi,
     verifyOtp as verifyOtpApi,
     verifyAccount as verifyAccountApi,
     resetPassword as resetPasswordApi,
-    getData,
 } from '../../utils/ApiHelper';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isTrue } from '../../utils/stringUtl';
 
 export const registerUser = async (data) => {
@@ -114,8 +114,26 @@ export const editProfileAvatar = createAsyncThunk(
 export const getUser = createAsyncThunk(
     'auth/user/get',
     async (thunkAPI) => {
-        console.log("getting user")
-        const response = await getData('v3/user/profile');
+        console.log("getting users");
+        const response = await axios.get('v3/user/profile')
+        // .catch(error => {
+        //     if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        // console.log(error.response.data);
+        // console.log(error.response.status);
+        // console.log(error.response.headers);
+        // } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        // console.log(error);
+        // } else {
+        // Something happened in setting up the request that triggered an Error
+        // console.log('Error', error.message);
+        // }
+        //     console.log(error.config);
+        // });
         return response.data
     }
 )
@@ -153,10 +171,10 @@ export const AuthSlice = createSlice({
         reduceBoostCount: (state, action) => {
             state.user.boosts.map(boost => {
                 if (boost.id === action.payload) {
-                    return boost.count -= 1
+                    boost.count -= 1;
                 }
             })
-        },
+        }
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
@@ -176,7 +194,7 @@ export const AuthSlice = createSlice({
             })
             .addCase(getUser.fulfilled, (state, action) => {
                 // Add user to the state array
-                state.user = action.payload;
+                state.user = action.payload.data;
             })
             .addCase(isLoggedIn.fulfilled, (state, action) => {
                 state.token = action.payload;
