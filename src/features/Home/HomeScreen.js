@@ -15,6 +15,7 @@ import normalize, {
     responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth
 } from '../../utils/normalize';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
+import LiveTriviaCard from '../../shared/LiveTriviaCard';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, getGlobalLeaders } from '../CommonSlice';
@@ -23,6 +24,7 @@ import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
 import { Ionicons } from '@expo/vector-icons';
 import { calculateTimeRemaining, networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates, randomEnteringAnimation } from '../../utils/utils';
+import UpComingTriviaCard from '../../shared/UpComingTriviaCard';
 
 const HomeScreen = () => {
 
@@ -107,72 +109,80 @@ export default HomeScreen;
 
 const UserDetails = ({ user }) => {
     const upcomingTrivia = useSelector(state => state.common.upcomingTrivia);
+    const liveTrivia = useSelector(state => state.common.liveTrivia);
+    const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia);
+
+    console.log(liveTrivia);
 
     return (
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance} />
-            <LiveTriviaBoard upcomingTrivia={upcomingTrivia} />
+            {hasLiveTrivia ?
+                <LiveTriviaCard liveTrivia={liveTrivia} />
+                :
+                <UpComingTriviaCard upcomingTrivia={upcomingTrivia} />
+            }
             <UserPoints points={user.points} />
             <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} />
         </View>
     );
 }
 
-const LiveTriviaBoard = ({ upcomingTrivia }) => {
-    const navigation = useNavigation();
-    const [triviaTimer, setTriviaTimer] = useState('');
+// const LiveTriviaBoard = ({ upcomingTrivia }) => {
+//     const navigation = useNavigation();
+//     const [triviaTimer, setTriviaTimer] = useState('');
 
-    useEffect(() => {
-        if (upcomingTrivia === null) {
-            return;
-        }
+//     useEffect(() => {
+//         if (upcomingTrivia === null) {
+//             return;
+//         }
 
-        const startTime = upcomingTrivia.start_timespan + new Date().getTime();
-        const countDown = setInterval(() => {
-            setTriviaTimer(calculateTimeRemaining(startTime));
-        }, 1000);
+//         const startTime = upcomingTrivia.start_timespan + new Date().getTime();
+//         const countDown = setInterval(() => {
+//             setTriviaTimer(calculateTimeRemaining(startTime));
+//         }, 1000);
 
-        return () => clearInterval(countDown);
+//         return () => clearInterval(countDown);
 
-    }, [upcomingTrivia])
+//     }, [upcomingTrivia])
 
-    if (!isTrue(triviaTimer) || upcomingTrivia === null) {
-        return null;
-    }
+//     if (!isTrue(triviaTimer) || upcomingTrivia === null) {
+//         return null;
+//     }
 
-    return (
-        <Animated.View entering={randomEnteringAnimation().duration(2000)} style={styles.triviaContainer}>
-            <ImageBackground
-                source={require('../../../assets/images/live-trivia-card-background-blue.png')}
-                style={styles.triviaBackground}
-                imageStyle={{ borderRadius: 20 }}
-                resizeMode='cover'>
+//     return (
+//         <Animated.View entering={randomEnteringAnimation().duration(2000)} style={styles.triviaContainer}>
+//             <ImageBackground
+//                 source={require('../../../assets/images/live-trivia-card-background-blue.png')}
+//                 style={styles.triviaBackground}
+//                 imageStyle={{ borderRadius: 20 }}
+//                 resizeMode='cover'>
 
-                <Pressable onPress={() => navigation.navigate('Trivia')}>
-                    <View style={styles.triviaTime}>
-                        <Text style={styles.triviaTimeText}>Join this {upcomingTrivia.game_duration} seconds contest</Text>
-                        <Image
-                            source={require('../../../assets/images/yellow-line-top.png')}
-                        />
-                    </View>
-                    <Text style={styles.triviaTitle}>{upcomingTrivia.name}</Text>
-                    {/* <Text style={styles.triviaTimeText}>Grand price: &#8358;{formatCurrency(upcomingTrivia.grand_price)}</Text> */}
-                    {/* <Text style={styles.triviaDate}>{upcomingTrivia.start_time}</Text> */}
-                    {/* <Text style={styles.triviaDate}>Points eligibility: {upcomingTrivia.point_eligibility}</Text> */}
-                    <View style={styles.triviaBoardBottom}>
-                        <View style={styles.triviaTimeCountdown}>
-                            <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.timeIcon} />
-                            <Text style={styles.triviaTimeCountdownText}>Starts in {triviaTimer}</Text>
-                        </View>
-                        <Image
-                            source={require('../../../assets/images/yellow-line-bottom.png')}
-                        />
-                    </View>
-                </Pressable>
-            </ImageBackground>
-        </Animated.View>
-    )
-}
+//                 <Pressable onPress={() => navigation.navigate('Trivia')}>
+//                     <View style={styles.triviaTime}>
+//                         <Text style={styles.triviaTimeText}>Join this {upcomingTrivia.game_duration} seconds contest</Text>
+//                         <Image
+//                             source={require('../../../assets/images/yellow-line-top.png')}
+//                         />
+//                     </View>
+//                     <Text style={styles.triviaTitle}>{upcomingTrivia.name}</Text>
+//                     {/* <Text style={styles.triviaTimeText}>Grand price: &#8358;{formatCurrency(upcomingTrivia.grand_price)}</Text> */}
+//                     {/* <Text style={styles.triviaDate}>{upcomingTrivia.start_time}</Text> */}
+//                     {/* <Text style={styles.triviaDate}>Points eligibility: {upcomingTrivia.point_eligibility}</Text> */}
+//                     <View style={styles.triviaBoardBottom}>
+//                         <View style={styles.triviaTimeCountdown}>
+//                             <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.timeIcon} />
+//                             <Text style={styles.triviaTimeCountdownText}>Starts in {triviaTimer}</Text>
+//                         </View>
+//                         <Image
+//                             source={require('../../../assets/images/yellow-line-bottom.png')}
+//                         />
+//                     </View>
+//                 </Pressable>
+//             </ImageBackground>
+//         </Animated.View>
+//     )
+// }
 
 const UserWallet = ({ balance }) => {
     return (
@@ -306,7 +316,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: '1.2rem',
     },
     userDetails: {
-        backgroundColor: '#151C2F',
+        backgroundColor: '#072169',
         paddingVertical: normalize(30),
         paddingHorizontal: normalize(20),
     },
@@ -366,7 +376,7 @@ const styles = EStyleSheet.create({
         marginLeft: normalize(8),
     },
     points: {
-        backgroundColor: '#01A7DB',
+        backgroundColor: '#518EF8',
         borderRadius: normalize(10),
         marginTop: responsiveScreenHeight(4),
         display: 'flex',
