@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Text, View, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
-import AppButton from "../../shared/AppButton";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +9,7 @@ import { getUser } from '../Auth/AuthSlice';
 import WalletBalance from './WalletBalance';
 import { formatNumber } from '../../utils/stringUtl';
 
-export default function WalletScreen({ navigation }) {
+export default function WalletScreen() {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     useEffect(() => {
@@ -140,7 +139,7 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems:'center'
+        alignItems: 'center'
     },
     linkTitle: {
         color: '#EF2F55',

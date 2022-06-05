@@ -2,17 +2,16 @@ import React, { useState, useRef } from 'react';
 import { Text, View, Image, Alert } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/native';
-import PaystackWebView from 'react-native-paystack-popup';
 import { useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { getUser } from '../Auth/AuthSlice';
 import AppButton from "../../shared/AppButton";
-import { verifyFunding } from '../../utils/ApiHelper';
 import Input from '../../shared/Input';
 import { formatCurrency } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import { Paystack } from 'react-native-paystack-webview';
 
 
 export default function FundWalletScreen() {
@@ -27,24 +26,22 @@ export default function FundWalletScreen() {
     const ref = useRef(null);
 
     const transactionCompleted = (res) => {
-        verifyFunding(res.reference);
-        dispatch(getUser())
-            .then(result => {
-                setShowPayment(false);
-                dispatch(getUser())
-                navigation.navigate('Wallet')
-            })
+        // verifyFunding(res.reference); for local testing
+        dispatch(getUser());
+        setShowPayment(false);
+        navigation.navigate('Wallet')
     }
 
     const startPayment = () => {
         var cleanedAmount = amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
         console.log(Number.parseFloat(amount));
         if (cleanedAmount < 500) {
-            Alert.alert("Amount cannot be less than 500");
+            Alert.alert("Amount cannot be less than 500 naira");
             return false;
         }
         setShowPayment(true);
     }
+
     return (
         <>
             {!showPayment && <View style={styles.container}>
@@ -72,22 +69,20 @@ export default function FundWalletScreen() {
             }
 
 
-            {showPayment && <PaystackWebView
-                ref={ref}
-                onError={() => {
+            {showPayment && <Paystack
+                channels={["card", "bank", "ussd", "qr", "mobile_money", 'bank_transfer']}
+                paystackKey={Constants.manifest.extra.paystackKey}
+                amount={Number.parseFloat(amount)}
+                billingEmail={user.email}
+                activityIndicatorColor="green"
+                onCancel={(e) => {
                     setShowPayment(false);
                     alert("Failed...")
                 }}
-                onDismissed={() => {
-                    setShowPayment(false)
-                }}
-                onSuccess={(response) => {
-                    transactionCompleted(response)
-                }}
-
-                paystackKey={Constants.manifest.extra.paystackKey} customerEmail={user.email} amount={Number.parseFloat(amount) * 100} />}
-
-
+                onSuccess={transactionCompleted}
+                autoStart={true}
+            />
+            }
         </>
     );
 }

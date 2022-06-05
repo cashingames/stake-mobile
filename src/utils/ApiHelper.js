@@ -74,14 +74,6 @@ async function verifyAccount(email) {
         });
 }
 
-async function verifyFunding(data) {
-    return getData('v2/wallet/me/transaction/verify/' + data)
-        .then(response => {
-            console.log(response.data);
-            return response.data;
-        });
-}
-
 async function verifyOtp(token) {
     return postData(`auth/token/verify`, token)
         .then(response => {
@@ -110,5 +102,5 @@ async function saveToken(data) {
 //         });
 // }
 
-export { login, register, verifyUsername, saveToken, verifyAccount, verifyFunding, resetPassword, verifyOtp };
+export { login, register, verifyUsername, saveToken, verifyAccount, resetPassword, verifyOtp };
 export { getData, postData };
