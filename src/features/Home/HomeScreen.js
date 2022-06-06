@@ -12,10 +12,10 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import normalize, {
-    responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth
+    responsiveHeight, responsiveScreenWidth, responsiveWidth
 } from '../../utils/normalize';
 import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
-import LiveTriviaCard from '../../shared/LiveTriviaCard';
+import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, getGlobalLeaders, initialLoadingComplete } from '../CommonSlice';
@@ -262,12 +262,13 @@ const styles = EStyleSheet.create({
     },
     userDetails: {
         backgroundColor: '#072169',
-        paddingVertical: normalize(30),
+        paddingVertical: normalize(15),
         paddingHorizontal: normalize(20),
     },
     wallet: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: normalize(15),
     },
     walletText: {
         fontSize: '1.2rem',
@@ -279,7 +280,7 @@ const styles = EStyleSheet.create({
     points: {
         backgroundColor: '#518EF8',
         borderRadius: normalize(10),
-        marginTop: responsiveScreenHeight(4),
+        marginTop: normalize(10),
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',

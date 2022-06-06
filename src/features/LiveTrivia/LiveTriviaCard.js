@@ -1,35 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, Image, Pressable, ImageBackground } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/core';
+import { useFocusEffect } from '@react-navigation/native';
 import Animated from 'react-native-reanimated';
-import { formatCurrency } from '../utils/stringUtl';
-import normalize, { responsiveScreenWidth } from '../utils/normalize';
+import { formatCurrency } from '../../utils/stringUtl';
+import normalize from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
-import { calculateTimeRemaining, randomEnteringAnimation } from '../utils/utils';
+import { calculateTimeRemaining, randomEnteringAnimation } from '../../utils/utils';
+import { liveTriviaStatus } from './LiveTriviaSlice';
 
 
 const LiveTriviaCard = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
-    const trivia = useSelector(state => state.common.liveTrivia);
+    const initialLoading = useSelector(state => state.common.initialLoading);
+    const trivia = useSelector(state => state.liveTrivia.data);
+
+    // console.log("live trivia", trivia);
+    useFocusEffect(
+        React.useCallback(() => {
+            if (initialLoading)
+                return;
+            dispatch(liveTriviaStatus())
+        }, [initialLoading])
+    );
 
     if (!trivia) {
         return null;
     }
 
     return (
-        <Animated.View entering={randomEnteringAnimation().duration(2000)} style={styles.triviaContainer}>
+        <Animated.View entering={randomEnteringAnimation().duration(2000)}>
             <ImageBackground
-                source={require('../../assets/images/live-trivia-card-background-blue.png')}
+                source={require('../../../assets/images/live-trivia-card-background-blue.png')}
                 style={styles.triviaBackground}
                 imageStyle={{ borderRadius: 20 }}
                 resizeMode='cover'>
-
-                <Pressable onPress={() => navigation.navigate('Trivia')}>
-                    <View style={styles.triviaTime}>
-                        <Text style={styles.triviaTimeText}>Play live tournament</Text>
+                {/* onPress={() => navigation.navigate('Trivia')} */}
+                <View style={styles.triviaContainer}>
+                    <View style={styles.triviaTop}>
+                        <Text style={styles.triviaTopText}>Play live tournament</Text>
                         <Ionicons name="information-circle-outline" size={24} color="#FFFF" />
                     </View>
                     <Text style={styles.triviaTitle}>&#8358;{formatCurrency(trivia.grand_price)}</Text>
@@ -40,12 +53,12 @@ const LiveTriviaCard = () => {
                                 <TriviaStatus trivia={trivia} />
                             </View>
                             <Image
-                                source={require('../../assets/images/yellow-line-bottom.png')}
+                                source={require('../../../assets/images/yellow-line-bottom.png')}
                             />
                         </View>
                         <TriviaAction trivia={trivia} />
                     </View>
-                </Pressable>
+                </View>
             </ImageBackground>
         </Animated.View>
     )
@@ -64,8 +77,6 @@ function TriviaStatus({ trivia }) {
     return <Text style={styles.statusText}>{status}</Text>
 }
 
-
-
 function TriviaCountDown({ trivia }) {
     const [triviaTimer, setTriviaTimer] = useState('');
 
@@ -75,9 +86,8 @@ function TriviaCountDown({ trivia }) {
             return;
         }
 
-        const startTime = trivia.start_timespan + new Date().getTime();
         const countDown = setInterval(() => {
-            setTriviaTimer(calculateTimeRemaining(startTime));
+            setTriviaTimer(calculateTimeRemaining(trivia.start_time_utc));
         }, 1000);
 
         return () => clearInterval(countDown);
@@ -92,24 +102,23 @@ function TriviaCountDown({ trivia }) {
     )
 }
 
-
 function TriviaAction({ trivia }) {
 
     let { status, played } = trivia;
 
     const text = () => {
         if (played) {
-            return "Leaderboard";
+            return "LEADERBOARD";
         }
 
         let t = "";
 
         switch (status) {
-            case "RUNNING":
-                t = "Join now"
+            case "ONGOING":
+                t = "JOIN NOW"
                 break;
             case "CLOSED":
-                t = "Leaderboard"
+                t = "LEADERBOARD"
                 break;
             default:
                 break;
@@ -135,19 +144,18 @@ function TriviaAction({ trivia }) {
 }
 
 const styles = EStyleSheet.create({
-    triviaContainer: {},
     triviaBackground: {
-        // justifyContent: "center",
-        padding: '1rem',
         borderRadius: 20,
     },
-    triviaTime: {
+    triviaContainer: {
+        margin: '1rem',
+    },
+    triviaTop: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: '1rem',
     },
-    triviaTimeText: {
+    triviaTopText: {
         fontSize: '1rem',
         lineHeight: '1rem',
         color: '#FFFF',
@@ -158,7 +166,7 @@ const styles = EStyleSheet.create({
     triviaTitle: {
         fontSize: '2rem',
         color: '#FFFF',
-        lineHeight: '2.5rem',
+        lineHeight: '2.4rem',
         fontFamily: 'graphik-bold',
     },
     triviaAdText: {
@@ -167,11 +175,9 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
     },
     triviaBoardBottom: {
-        marginTop: responsiveScreenWidth(10),
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: "flex-end",
-        // backgroundColor: "red"
     },
     triviaTimeCountdown: {
         flexDirection: 'row',

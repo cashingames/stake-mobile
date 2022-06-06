@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const getCommonData = createAsyncThunk(
     'common/get',
-    async (thunkAPI) => {
+    async () => {
         console.log("fetching common data");
         const response = await axios.get('v3/game/common');
         return response.data
@@ -13,7 +13,7 @@ export const getCommonData = createAsyncThunk(
 
 export const getBankData = createAsyncThunk(
     'common/bank/get',
-    async (thunkAPI) => {
+    async () => {
         const response = await axios.get('v2/wallet/banks')
         return response.data
     }
@@ -23,7 +23,7 @@ export const getBankData = createAsyncThunk(
 
 export const getGlobalLeaders = createAsyncThunk(
     'common/globalLeaders/get',
-    async (thunkAPI) => {
+    async () => {
         console.log("getting global leaders")
         const response = await axios.post('v2/leaders/global');
         return response.data
@@ -32,14 +32,14 @@ export const getGlobalLeaders = createAsyncThunk(
 
 export const getGlobalLeadersByDate = createAsyncThunk(
     'common/globalLeadersByDate/get',
-    async (data, thunkAPI) => {
+    async (data) => {
         const response = await axios.post('v2/leaders/global', data);
         return response.data
     }
 )
 export const getCategoryLeaders = createAsyncThunk(
     'common/categoryLeaders/get',
-    async (thunkAPI) => {
+    async () => {
         const response = await axios.post('v2/leaders/categories');
         return response.data
     }
@@ -47,7 +47,7 @@ export const getCategoryLeaders = createAsyncThunk(
 
 export const getCategoryLeadersByDate = createAsyncThunk(
     'common/categoryLeadersByDate/get',
-    async (data, thunkAPI) => {
+    async (data) => {
         const response = await axios.post('v2/leaders/categories', data);
         return response.data
     }
@@ -55,21 +55,21 @@ export const getCategoryLeadersByDate = createAsyncThunk(
 
 export const fetchFaqAndAnswers = createAsyncThunk(
     'common/faq/get',
-    async (thunkAPI) => {
+    async () => {
         const response = await axios.get('v2/faq/fetch');
         return response.data.data
     }
 )
 
-export const fetchTrivia = createAsyncThunk(
-    'common/fetchTrivia',
-    async (data, thunkAPI) => {
-        //make a network request to the server
-        const response = await axios.get('v3/fetch/trivia', data)
-        console.log('trivia started');
-        return response.data;
-    }
-)
+// export const fetchTrivia = createAsyncThunk(
+//     'common/fetchTrivia',
+//     async (data, thunkAPI) => {
+//         //make a network request to the server
+//         const response = await axios.get('v3/fetch/trivia', data)
+//         console.log('trivia started');
+//         return response.data;
+//     }
+// )
 
 
 const initialState = {
@@ -86,9 +86,7 @@ const initialState = {
     faqAndAnswers: [],
     trivia: [],
     minVersionCode: '',
-    minVersionForce: false,
-    upcomingTrivia: null,
-    liveTrivia: null,
+    minVersionForce: false
 }
 
 export const CommonSlice = createSlice({
@@ -112,8 +110,6 @@ export const CommonSlice = createSlice({
                 state.gameCategories = data.gameCategories;
                 state.minVersionCode = data.minVersionCode;
                 state.minVersionForce = data.minVersionForce;
-                state.upcomingTrivia = data.upcomingTrivia;
-                state.liveTrivia = data.liveTrivia;
             })
             .addCase(getBankData.fulfilled, (state, action) => {
                 state.banks = action.payload.data;
@@ -132,9 +128,6 @@ export const CommonSlice = createSlice({
             })
             .addCase(fetchFaqAndAnswers.fulfilled, (state, action) => {
                 state.faqAndAnswers = action.payload
-            })
-            .addCase(fetchTrivia.fulfilled, (state, action) => {
-                state.trivia = action.payload.data;
             })
     },
 });

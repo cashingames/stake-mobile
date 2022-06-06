@@ -13,7 +13,7 @@ import { formatNumber, isTrue } from '../../utils/stringUtl';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import { setGameCategory, setGameType } from './GameSlice';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { networkIssueNotify, randomEnteringAnimation } from '../../utils/utils';
+import { randomEnteringAnimation } from '../../utils/utils';
 
 export default function GameScreen() {
 
@@ -79,7 +79,6 @@ const CategoriesScreen = ({ currentGame }) => {
     const navigation = useNavigation();
     const refRBSheet = useRef();
 
-    // const currentGame = route.params.currentGame;
     const [activeCategory, setActiveCategory] = useState();
     const activeSubcategory = useSelector(state => state.game.gameCategory);
     const activeGame = useSelector(state => state.game.gameType);

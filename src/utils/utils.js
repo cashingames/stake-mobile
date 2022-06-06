@@ -109,7 +109,6 @@ export const networkIssueNotify = async () => {
 
 export const calculateTimeRemaining = (futureTime) => {
     var diff = futureTime - new Date().getTime();
-
     if (diff < 0) {
         return "";
     }
