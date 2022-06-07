@@ -50,6 +50,7 @@ import TriviaEndResultScreen from './features/Games/TriviaEndResultScreen';
 import TriviaScreen from './features/Games/TriviaScreen';
 import TournamentScreen from './features/Games/TournamentScreen';
 import TriviaLeaderBoard from './features/Leaderboard/TriviaLeaderboard';
+import LiveTriviaLeaderBoard from './features/LiveTrivia/LiveTriviaLeaderboard';
 
 const AppStack = createNativeStackNavigator();
 
@@ -89,7 +90,7 @@ function AppRouter() {
                         <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
                         <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Leaderboards', headerRight: () => <LeaderBoardFilter /> }} />
-                        <AppStack.Screen name="TriviaLeaderboard" component={TriviaLeaderBoard} options={{ title: 'Leaderboard' }} />
+                        <AppStack.Screen name="LiveTriviaLeaderboard" component={LiveTriviaLeaderBoard} options={{ title: 'Leaderboard' }} />
 
 
                         {/** game **/}
