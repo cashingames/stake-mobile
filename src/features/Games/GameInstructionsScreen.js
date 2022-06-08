@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
@@ -150,7 +150,7 @@ const AvailableBoosts = ({ onClose }) => {
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError);
-                networkIssueNotify()
+                Alert.alert(rejectedValueOrSerializedError.message)
                 setLoading(false);
             });
     }

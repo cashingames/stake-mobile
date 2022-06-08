@@ -61,15 +61,15 @@ export const fetchFaqAndAnswers = createAsyncThunk(
     }
 )
 
-// export const fetchTrivia = createAsyncThunk(
-//     'common/fetchTrivia',
-//     async (data, thunkAPI) => {
-//         //make a network request to the server
-//         const response = await axios.get('v3/fetch/trivia', data)
-//         console.log('trivia started');
-//         return response.data;
-//     }
-// )
+export const fetchTrivia = createAsyncThunk(
+    'common/fetchTrivia',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.get('v3/fetch/trivia', data)
+        console.log('trivia started');
+        return response.data;
+    }
+)
 
 
 const initialState = {
@@ -128,6 +128,9 @@ export const CommonSlice = createSlice({
             })
             .addCase(fetchFaqAndAnswers.fulfilled, (state, action) => {
                 state.faqAndAnswers = action.payload
+            })
+            .addCase(fetchTrivia.fulfilled, (state, action) => {
+                state.fetchTrivia = action.payload
             })
     },
 });
