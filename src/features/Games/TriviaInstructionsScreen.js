@@ -124,7 +124,7 @@ const AvailableBoosts = ({ onClose, params }) => {
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError);
-                Alert.alert('failed to start game')
+                Alert.alert(rejectedValueOrSerializedError.message)
                 setLoading(false);
                 // after login eager get commond data for the whole app
                 // console.log("failed");
