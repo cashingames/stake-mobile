@@ -22,8 +22,9 @@ import { getCommonData, getGlobalLeaders, initialLoadingComplete } from '../Comm
 import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserPurchasedItems';
-import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
+import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import crashlytics from '@react-native-firebase/crashlytics';
+
 
 const HomeScreen = () => {
 
@@ -33,6 +34,7 @@ const HomeScreen = () => {
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
+
 
     useEffect(() => {
         dispatch(resetGameStats());
@@ -105,8 +107,7 @@ const HomeScreen = () => {
                         Buy Games to enjoy playing without interruptons.
                     </Text>
                 </Animated.View>
-
-                <UserItems showBuy={true} />
+                <UserItems showBuy={true}/>
                 <GameCards games={gameTypes} />
                 <RecentlyPlayedCards games={user.recentGames} />
                 <GlobalTopLeadersHero />
@@ -117,12 +118,13 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-const UserDetails = ({ user }) => {
+
+const UserDetails = ({ user}) => {
 
     return (
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance} />
-            <LiveTriviaCard />
+            <LiveTriviaCard  />
             <UserPoints points={user.points} />
             <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} />
         </View>

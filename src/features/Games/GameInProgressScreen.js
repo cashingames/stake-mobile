@@ -163,7 +163,7 @@ const GameProgressAndBoosts = ({ onComplete }) => {
     const gameCategory = useSelector(state => state.game.gameCategory)
     return (
         <View style={styles.gameProgressAndBoost}>
-            <GameTopicProgress gameTopic="" gameCategory={gameCategory.name} onComplete={onComplete} />
+            <GameTopicProgress onComplete={onComplete} />
             <AvailableBoosts />
         </View>
     )
@@ -176,7 +176,7 @@ const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
 
     return (
         <View style={styles.topicProgress}>
-            <Text style={styles.title}>{gameCategory} {gameTopic}</Text>
+            {/* <Text style={styles.title}>{gameCategory} {gameTopic}</Text> */}
 
             <AnsweredGameProgress />
 
