@@ -36,6 +36,7 @@ const HomeRouter = () => {
             },
             headerTitleStyle: {
                 fontSize: normalize(20),
+                lineHeight: normalize(20),
                 color: "#000000",
                 fontFamily: 'graphik-medium',
             },

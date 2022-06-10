@@ -192,13 +192,13 @@ const styles = EStyleSheet.create({
         lineHeight: '.85rem',
         color: '#FFFF',
         opacity: 0.8,
-        fontFamily: 'graphik-regular',
+        fontFamily: 'graphik-medium',
     },
     triviaTitle: {
         fontSize: '1.8rem',
         color: '#FFFF',
         lineHeight: '2.1rem',
-        fontFamily: 'graphik-bold',
+        fontFamily: 'graphik-medium',
     },
     triviaAdText: {
         fontSize: '.85rem',

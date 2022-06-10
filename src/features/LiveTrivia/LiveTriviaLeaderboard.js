@@ -14,9 +14,9 @@ import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
 const LiveTriviaLeaderBoard = ({ navigation, route }) => {
+    useApplyHeaderWorkaround(navigation.setOptions);
     const params = route.params;
     const dispatch = useDispatch();
-    useApplyHeaderWorkaround(navigation.setOptions);
 
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
     const triviaPosition = useSelector(state => state.game.triviaPosition)
