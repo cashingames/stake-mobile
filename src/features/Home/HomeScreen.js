@@ -265,18 +265,17 @@ const styles = EStyleSheet.create({
     },
     userDetails: {
         backgroundColor: '#072169',
-        paddingVertical: normalize(15),
+        paddingVertical: normalize(10),
         paddingHorizontal: normalize(20),
     },
     wallet: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: normalize(15),
     },
     walletText: {
         fontSize: '1.2rem',
         color: '#FFFF',
-        lineHeight: '1.4rem',
+        lineHeight: '1.2rem',
         fontFamily: 'graphik-medium',
         marginLeft: normalize(8),
     },
@@ -314,7 +313,7 @@ const styles = EStyleSheet.create({
     userRanking: {
         backgroundColor: '#FFFF',
         borderRadius: normalize(10),
-        marginTop: normalize(15),
+        marginTop: normalize(10),
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
