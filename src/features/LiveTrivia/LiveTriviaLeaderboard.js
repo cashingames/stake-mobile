@@ -55,7 +55,7 @@ const TriviaParticipant = ({ player, position }) => {
         <View style={styles.participant}>
             <View style={styles.positionName}>
                 <Text style={styles.position}>{position}</Text>
-                <Text style={styles.username}>{player.first_name} {player.last_name}</Text>
+                <Text style={styles.username}>{player.username}</Text>
             </View>
             <Text style={styles.username}>{player.points}pts</Text>
         </View>
