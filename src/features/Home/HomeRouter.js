@@ -64,15 +64,15 @@ const RightButtons = () => {
 
     return (
         <View style={styles.headerIcons}>
-            <Pressable style={styles.headerIconContainer} onPress={() => navigation.navigate('Home')}>
-                <Ionicons name='home-outline' size={24} style={[styles.headerIcon, routeName === 'Home' ? styles.activeHeaderIcon : {}]} />
+            <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Home')}>
+                <Ionicons name='home-outline' size={24} />
                 <Text style={styles.headerIconText}>Home</Text>
             </Pressable>
-            <Pressable style={styles.headerIconContainer} onPress={() => navigation.navigate('Game')}>
+            <Pressable style={[styles.headerIconContainer, routeName === 'Game' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Game')}>
                 <Ionicons name='game-controller-outline' size={24} style={[styles.headerIcon, routeName === 'Game' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Play</Text>
             </Pressable>
-            <Pressable style={styles.headerIconContainer} onPress={() => navigation.navigate('Wallet')}>
+            <Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
                 <Ionicons name='wallet-outline' size={24} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
             </Pressable>
@@ -179,17 +179,16 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
     },
     headerIconContainer: {
-        // borderColor: "red",
-        // borderWidth: 1,
+        opacity: 0.4,
         alignItems: 'center',
         marginLeft: '1rem',
     },
     headerIcon: {
-        // marginLeft: '1.6rem',
         opacity: 0.4,
     },
     headerIconText: {
         fontSize: '0.5rem',
+        fontFamily: 'graphik-medium',
     },
     activeHeaderIcon: {
         opacity: 1
