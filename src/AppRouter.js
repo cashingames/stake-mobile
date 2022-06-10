@@ -49,7 +49,6 @@ import TriviaInstructionsScreen from './features/Games/TriviaInstructionsScreen'
 import TriviaEndResultScreen from './features/Games/TriviaEndResultScreen';
 import TriviaScreen from './features/Games/TriviaScreen';
 import TournamentScreen from './features/Games/TournamentScreen';
-import TriviaLeaderBoard from './features/Leaderboard/TriviaLeaderboard';
 import LiveTriviaLeaderBoard from './features/LiveTrivia/LiveTriviaLeaderboard';
 
 const AppStack = createNativeStackNavigator();

@@ -84,7 +84,7 @@ const initialState = {
     categoryLeaders: [],
     globalLeaders: [],
     faqAndAnswers: [],
-    trivia: [],
+    trivias: [],
     minVersionCode: '',
     minVersionForce: false
 }
@@ -128,6 +128,9 @@ export const CommonSlice = createSlice({
             })
             .addCase(fetchFaqAndAnswers.fulfilled, (state, action) => {
                 state.faqAndAnswers = action.payload
+            })
+            .addCase(fetchTrivia.fulfilled, (state, action) => {
+                state.trivias = action.payload.data
             })
     },
 });

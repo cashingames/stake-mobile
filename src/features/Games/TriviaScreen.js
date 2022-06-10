@@ -14,7 +14,7 @@ const TriviaScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     useApplyHeaderWorkaround(navigation.setOptions);
 
-    const trivia = useSelector(state => state.common.trivia)
+    const trivia = useSelector(state => state.common.trivias)
     console.log(trivia)
     useEffect(() => {
         dispatch(fetchTrivia());
@@ -104,7 +104,7 @@ const TriviaLeaderBoard = ({ trivia }) => {
     const navigation = useNavigation();
     return (
         <>
-            <Pressable style={styles.leaderboardContainer} onPress={() => navigation.navigate('TriviaLeaderboard', { triviaId: trivia.id })}>
+            <Pressable style={styles.leaderboardContainer} onPress={() => navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id })}>
                 <Text style={styles.leaderboardLink}>Leaderboard</Text>
             </Pressable>
         </>
