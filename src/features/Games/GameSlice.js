@@ -37,7 +37,6 @@ export const getTriviaData = createAsyncThunk(
         //make a network request to the server
         const response = await axios.get(`v3/trivia/leaders/${data}`);
         // console.log(response.data);
-        // console.log(data, 'marttttttttttt');
         return response.data;
     }
 )

@@ -47,9 +47,9 @@ import FirstTimeUserBonus from './features/Auth/FirstTimeUserBonus';
 import LeaderBoardFilter from './features/Leaderboard/LeaderBoardFilter';
 import TriviaInstructionsScreen from './features/Games/TriviaInstructionsScreen';
 import TriviaEndResultScreen from './features/Games/TriviaEndResultScreen';
-import TriviaScreen from './features/Games/TriviaScreen';
 import TournamentScreen from './features/Games/TournamentScreen';
 import LiveTriviaLeaderBoard from './features/LiveTrivia/LiveTriviaLeaderboard';
+import LiveTriviasScreen from './features/Games/LiveTriviasScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -101,7 +101,7 @@ function AppRouter() {
                         <AppStack.Screen name="DuelScreen" component={DuelScreen} options={{ title: 'Challenge' }} />
                         <AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{ title: 'Game Instructions' }} />
                         <AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen} options={{ headerShown: false }} />
-                        <AppStack.Screen name="Trivia" component={TriviaScreen} options={{ title: 'Live Trivia' }} />
+                        <AppStack.Screen name="LiveTrivias" component={LiveTriviasScreen} options={{ title: 'Live Trivia' }} />
 
 
 

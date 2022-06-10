@@ -8,12 +8,15 @@ import Constants from 'expo-constants';
 import normalize from '../../utils/normalize';
 import { isTrue } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import PageLoading from '../../shared/PageLoading';
+
 
 export default function UserStatsScreen({ navigation }) {
 
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const user = useSelector(state => state.auth.user)
+
 
     return (
         <ScrollView style={styles.container}>
