@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, ScrollView, Image, Pressable } from 'react-native';
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
@@ -7,18 +7,26 @@ import { formatCurrency } from '../../utils/stringUtl';
 import { useNavigation } from '@react-navigation/core';
 import { fetchTrivia } from '../CommonSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import PageLoading from '../../shared/PageLoading';
 
 
 
-const TriviaScreen = ({ navigation }) => {
+const LiveTriviasScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     useApplyHeaderWorkaround(navigation.setOptions);
+
+    const [loading, setLoading] = useState(true)
 
     const trivia = useSelector(state => state.common.trivias)
     console.log(trivia)
     useEffect(() => {
-        dispatch(fetchTrivia());
+        dispatch(fetchTrivia()).then(() => setLoading(false));
     }, []);
+
+    if (loading) {
+        return <PageLoading />
+    }
+
     return (
         <ScrollView style={styles.container}>
             <TriviaBoards trivia={trivia} />
@@ -111,7 +119,7 @@ const TriviaLeaderBoard = ({ trivia }) => {
     )
 }
 
-export default TriviaScreen;
+export default LiveTriviasScreen;
 
 const styles = EStyleSheet.create({
     container: {

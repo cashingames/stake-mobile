@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react'
-import { Text, View, Image, ScrollView, Pressable, Alert, BackHandler } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { Text, View, Image, ScrollView } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
+import PageLoading from '../../shared/PageLoading';
 import { formatNumber } from '../../utils/stringUtl';
 import { getTriviaData } from '../Games/GameSlice';
 import { getCommonData } from '../CommonSlice';
@@ -19,45 +17,35 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
     const dispatch = useDispatch();
 
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
-    const triviaPosition = useSelector(state => state.game.triviaPosition)
+    const [loading, setLoading] = useState(true)
 
 
     useEffect(() => {
         dispatch(getCommonData())
         dispatch(getTriviaData(
             params.triviaId
-        ))
-            .then(unwrapResult)
-            .then((originalPromiseResult) => {
-                console.log('fetched')
-            })
-            .catch((rejectedValueOrSerializedError) => {
-                console.log(rejectedValueOrSerializedError)
-            })
-    }, []);
+        )).then(() => setLoading(false));
+    }, [])
 
-
-
-
+    if (loading) {
+        return <PageLoading />
+    }
 
     return (
         <ScrollView style={styles.container}>
-            <ResultContainer triviaPosition={triviaPosition} />
+            <ResultContainer />
             <TriviaParticipants triviaLeaders={triviaLeaders} />
         </ScrollView>
     )
 }
 
-const ResultContainer = ({ triviaPosition }) => {
-    // const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia)
-    // console.log(hasLiveTrivia);
+const ResultContainer = () => {
     return (
         <View style={styles.resultContainer}>
             <Image
                 style={styles.icon}
                 source={require('../../../assets/images/trivia-cup.png')}
             />
-            {/* <Text style={styles.positionText}>Your current position is {triviaPosition}</Text> */}
         </View>
     )
 }
