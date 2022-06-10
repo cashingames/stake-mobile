@@ -4,8 +4,8 @@ import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from '@expo/vector-icons';
-import AppButton from './AppButton';
-import normalize from '../utils/normalize';
+import AppButton from '../../shared/AppButton';
+import normalize from '../../utils/normalize';
 
 
 const FailedBottomSheet = ({ refBottomSheet, pointsRequired, onClose }) => {

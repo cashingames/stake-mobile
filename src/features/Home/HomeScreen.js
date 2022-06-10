@@ -49,7 +49,8 @@ const HomeScreen = () => {
     }, []);
 
     useEffect(() => {
-        if (Constants.manifest.extra.isDevelopment) {
+        //we intentionally allow in preview to enable testing of this functionality
+        if (!Constants.manifest.extra.isDevelopment) {
             return;
         }
         //whether we are forcing or not, show the first time
@@ -107,7 +108,7 @@ const HomeScreen = () => {
                         Buy Games to enjoy playing without interruptons.
                     </Text>
                 </Animated.View>
-                <UserItems showBuy={true}/>
+                <UserItems showBuy={true} />
                 <GameCards games={gameTypes} />
                 <RecentlyPlayedCards games={user.recentGames} />
                 <GlobalTopLeadersHero />
@@ -119,12 +120,12 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 
-const UserDetails = ({ user}) => {
+const UserDetails = ({ user }) => {
 
     return (
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance} />
-            <LiveTriviaCard  />
+            <LiveTriviaCard />
             <UserPoints points={user.points} />
             <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} />
         </View>

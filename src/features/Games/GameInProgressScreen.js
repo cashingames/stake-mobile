@@ -139,7 +139,7 @@ const PlayGameHeader = ({ onPress }) => {
 
     return (
         <View style={styles.header}>
-            <Text style={styles.headerTitle}>Game Mode</Text>
+            <Text style={styles.headerTitle}></Text>
             <Pressable onPress={onPress}>
                 <Text style={styles.headerTitle}>Exit</Text>
             </Pressable>

@@ -93,6 +93,8 @@ export const notifyOfPublishedUpdates = async () => {
 }
 
 export const networkIssueNotify = async () => {
+
+    //let's actually check network
     Alert.alert(
         "Problem detected",
         "Please check your network connection and restart the app to continue playing game. If the issue still persists please contact support",

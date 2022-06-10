@@ -6,7 +6,7 @@ const initialState = {
     data: null
 }
 
-export const liveTriviaStatus = createAsyncThunk(
+export const getLiveTriviaStatus = createAsyncThunk(
     'liveTrivia/status',
     async () => {
         const response = await axios.get(`v3/live-trivia/status`)
@@ -21,7 +21,7 @@ export const LiveTriviaSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(liveTriviaStatus.fulfilled, (state, action) => {
+            .addCase(getLiveTriviaStatus.fulfilled, (state, action) => {
                 state.data = action.payload;
             })
     },

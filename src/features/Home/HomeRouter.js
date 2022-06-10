@@ -46,7 +46,6 @@ const HomeRouter = () => {
     return (
         <HomeStack.Navigator
             initialRouteName="Home"
-
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={AppMainHeaderOptions}>
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
@@ -64,14 +63,17 @@ const RightButtons = () => {
 
     return (
         <View style={styles.headerIcons}>
-            <Pressable onPress={() => navigation.navigate('Home')}>
-                <Image resizeMode='contain' style={[styles.pageIcon, routeName === 'Home' ? styles.activePageIcon : {}]} source={require('../../../assets/images/Home.png')} />
+            <Pressable style={styles.headerIconContainer} onPress={() => navigation.navigate('Home')}>
+                <Ionicons name='home-outline' size={24} style={[styles.headerIcon, routeName === 'Home' ? styles.activeHeaderIcon : {}]} />
+                <Text style={styles.headerIconText}>Home</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Game')}>
-                <Image resizeMode='contain' style={[styles.pageIcon, routeName === 'Game' ? styles.activePageIcon : {}]} source={require('../../../assets/images/gamepad.png')} />
+            <Pressable style={styles.headerIconContainer} onPress={() => navigation.navigate('Game')}>
+                <Ionicons name='game-controller-outline' size={24} style={[styles.headerIcon, routeName === 'Game' ? styles.activeHeaderIcon : {}]} />
+                <Text style={styles.headerIconText}>Play</Text>
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Wallet')}>
-                <Image resizeMode='contain' style={[styles.pageIcon, routeName === 'Wallet' ? styles.activePageIcon : {}]} source={require('../../../assets/images/smallpurse.png')} />
+            <Pressable style={styles.headerIconContainer} onPress={() => navigation.navigate('Wallet')}>
+                <Ionicons name='wallet-outline' size={24} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
+                <Text style={styles.headerIconText}>Wallet</Text>
             </Pressable>
         </View>
     )
@@ -174,15 +176,21 @@ function CustomDrawerContent(props) {
 const styles = EStyleSheet.create({
     headerIcons: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
-    pageIcon: {
-        marginLeft: '1.6rem',
-        width: '1.6rem',
+    headerIconContainer: {
+        // borderColor: "red",
+        // borderWidth: 1,
+        alignItems: 'center',
+        marginLeft: '1rem',
+    },
+    headerIcon: {
+        // marginLeft: '1.6rem',
         opacity: 0.4,
     },
-    activePageIcon: {
+    headerIconText: {
+        fontSize: '0.5rem',
+    },
+    activeHeaderIcon: {
         opacity: 1
     },
 });

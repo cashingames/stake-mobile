@@ -9,33 +9,25 @@ import { formatCurrency } from '../../utils/stringUtl';
 import normalize from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import { calculateTimeRemaining, randomEnteringAnimation } from '../../utils/utils';
-import { liveTriviaStatus } from './LiveTriviaSlice';
-import FailedBottomSheet from '../../shared/FailedBottomSheet';
+import { getLiveTriviaStatus } from './LiveTriviaSlice';
+import FailedBottomSheet from './FailedBottomSheet';
 
 
 
 const LiveTriviaCard = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const refRBSheet = useRef();
+    const notEnoughPointNotice = useRef();
 
     const initialLoading = useSelector(state => state.common.initialLoading);
     const trivia = useSelector(state => state.liveTrivia.data);
 
-    const user = useSelector(state => state.auth.user)
-
-
-    const notEnoughPoints = () => {
-        refRBSheet.current.open()
-    }
-
-    const onClose = () => {
-        refRBSheet.current.close()
-    }
-
-
-    const canPlayAction = () => {
-        if (trivia.player_status === "CANPLAY" || trivia.player_status !== "INSUFFICIENTPOINTS") {
+    const triviaActionButtonClicked = () => {
+        if (trivia.player_status === "INSUFFICIENTPOINTS") {
+            notEnoughPointNotice.current.open();
+        } else if (trivia.player_status === "PLAYED") {
+            navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id });
+        } else if (trivia.player_status === "CANPLAY") {
             navigation.navigate('TriviaInstructions', {
                 type: trivia.game_type_id,
                 mode: trivia.game_mode_id,
@@ -44,21 +36,14 @@ const LiveTriviaCard = () => {
                 questionCount: trivia.question_count,
                 gameDuration: trivia.game_duration
             })
-        } else {
-            notEnoughPoints();
         }
     }
 
-    const playedAction = () => {
-        navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id });
-    }
-
-    // console.log("live trivia", trivia);
     useFocusEffect(
         React.useCallback(() => {
             if (initialLoading)
                 return;
-            dispatch(liveTriviaStatus())
+            dispatch(getLiveTriviaStatus())
         }, [initialLoading])
     );
 
@@ -73,17 +58,20 @@ const LiveTriviaCard = () => {
                 style={styles.triviaBackground}
                 imageStyle={{ borderRadius: 20 }}
                 resizeMode='cover'>
-                {/* onPress={() => navigation.navigate('Trivia')} */}
-                <FailedBottomSheet refBottomSheet={refRBSheet} pointsRequired={trivia.point_eligibility}
-                    onClose={onClose}
+                <FailedBottomSheet
+                    pointsRequired={trivia.point_eligibility}
+                    refBottomSheet={notEnoughPointNotice}
+                    onClose={() => notEnoughPointNotice.current.close()}
                 />
                 <View style={styles.triviaContainer}>
                     <View style={styles.triviaTop}>
-                        <Text style={styles.triviaTopText}>Play live tournament</Text>
-                        <Ionicons name="information-circle-outline" size={20} color="#FFFF" />
+                        <Text style={styles.triviaTopText}>{trivia.name}</Text>
+                        <Ionicons name="help-circle-outline" size={24} color="#FFFF" />
                     </View>
-                    <Text style={styles.triviaTitle}>&#8358;{formatCurrency(trivia.grand_price)}</Text>
-                    <Text style={styles.triviaAdText}>up for grabs !</Text>
+                    <Text style={styles.triviaTitle}>win &#8358;{formatCurrency(trivia.grand_price)}</Text>
+                    {/* <Text style={styles.triviaAdText}>up for grabs !</Text> */}
+                    <Text style={styles.triviaAdText}>Join at {trivia.start_time}</Text>
+
                     <View style={styles.triviaBoardBottom}>
                         <View>
                             <View style={styles.triviaTimeCountdown}>
@@ -93,7 +81,7 @@ const LiveTriviaCard = () => {
                                 source={require('../../../assets/images/yellow-line-bottom.png')}
                             />
                         </View>
-                        <TriviaAction trivia={trivia} canPlayAction={canPlayAction} playedAction={playedAction} />
+                        <TriviaAction trivia={trivia} action={triviaActionButtonClicked} />
                     </View>
                 </View>
             </ImageBackground>
@@ -104,12 +92,14 @@ const LiveTriviaCard = () => {
 
 function TriviaStatus({ trivia }) {
 
-    console.log(trivia);
-
     const { status } = trivia;
 
     if (status === "WAITING") {
         return <TriviaCountDown trivia={trivia} />
+    }
+
+    if (status === "ONGOING") {
+        return <Text style={styles.statusText}>STATUS: LIVE</Text>
     }
 
     return <Text style={styles.statusText}>STATUS: {status}</Text>
@@ -127,7 +117,7 @@ function TriviaCountDown({ trivia }) {
 
         const onComplete = () => {
             clearInterval(countDown);
-            dispatch(liveTriviaStatus());
+            dispatch(getLiveTriviaStatus());
         }
 
         const countDown = setInterval(() => {
@@ -139,12 +129,6 @@ function TriviaCountDown({ trivia }) {
 
     }, [trivia])
 
-    // useEffect(() => {
-    //     console.log(triviaTimer)
-    //     if(triviaTimer === "RUNNING"){
-    //     }
-    // }, [triviaTimer])
-
     return (
         <>
             <Ionicons name="timer-outline" size={15} color="#FFFF" style={styles.timeIcon} />
@@ -153,7 +137,7 @@ function TriviaCountDown({ trivia }) {
     )
 }
 
-function TriviaAction({ trivia, canPlayAction, playedAction }) {
+function TriviaAction({ trivia, action }) {
 
     let { status, player_status } = trivia;
 
@@ -178,14 +162,12 @@ function TriviaAction({ trivia, canPlayAction, playedAction }) {
         return t;
     }
 
-
-
     if (status === "WAITING") {
         return null;
     }
 
     return (
-        <Pressable style={styles.triviaButton} onPress={player_status === "PLAYED" ? playedAction : canPlayAction}>
+        <Pressable style={styles.triviaButton} onPress={action}>
             <Text style={styles.triviaButtonText}>{text()}</Text>
             <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
         </Pressable>
@@ -198,20 +180,19 @@ const styles = EStyleSheet.create({
     },
     triviaContainer: {
         margin: '1rem',
-        // paddingVertical: '1rem'
     },
     triviaTop: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        // backgroundColor: "red",
     },
     triviaTopText: {
         fontSize: '.85rem',
-        // lineHeight: '.7rem',
+        lineHeight: '.85rem',
         color: '#FFFF',
         opacity: 0.8,
         fontFamily: 'graphik-regular',
-        // textTransform: 'uppercase',
     },
     triviaTitle: {
         fontSize: '1.8rem',
@@ -222,6 +203,7 @@ const styles = EStyleSheet.create({
     triviaAdText: {
         fontSize: '.85rem',
         color: '#FFFF',
+        opacity: 0.8,
         fontFamily: 'graphik-medium',
     },
     triviaBoardBottom: {
@@ -233,7 +215,7 @@ const styles = EStyleSheet.create({
     triviaTimeCountdown: {
         flexDirection: 'row',
         alignItems: "center",
-        marginVertical: "0.2rem",
+        marginVertical: "0.5rem",
     },
     timeIcon: {
         marginRight: 7
@@ -257,6 +239,7 @@ const styles = EStyleSheet.create({
     },
     triviaButtonText: {
         fontSize: '.65rem',
+        lineHeight: '.65rem',
         color: '#4F4949',
         fontFamily: 'graphik-medium',
     },
