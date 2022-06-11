@@ -56,8 +56,7 @@ const LiveTriviaCard = () => {
             <ImageBackground
                 source={require('../../../assets/images/live-trivia-card-background-blue.png')}
                 style={styles.triviaBackground}
-                imageStyle={{ borderRadius: 20 }}
-                resizeMode='cover'>
+                resizeMode='stretch'>
                 <FailedBottomSheet
                     pointsRequired={trivia.point_eligibility}
                     refBottomSheet={notEnoughPointNotice}
@@ -179,13 +178,12 @@ const styles = EStyleSheet.create({
         borderRadius: 20,
     },
     triviaContainer: {
-        padding:'1rem'
+        padding: '1rem'
     },
     triviaTop: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        // backgroundColor: "red",
     },
     triviaTopText: {
         fontSize: '.85rem',

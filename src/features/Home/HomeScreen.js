@@ -267,12 +267,13 @@ const styles = EStyleSheet.create({
     },
     userDetails: {
         backgroundColor: '#072169',
-        paddingVertical: normalize(10),
+        paddingVertical: normalize(20),
         paddingHorizontal: normalize(20),
     },
     wallet: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: normalize(10),
     },
     walletText: {
         fontSize: '1.2rem',
