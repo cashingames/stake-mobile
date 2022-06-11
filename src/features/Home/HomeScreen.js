@@ -10,7 +10,6 @@ import Animated, {
     BounceIn, BounceInLeft, BounceInRight, BounceInUp, FadeInUp,
     useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming
 } from 'react-native-reanimated';
-
 import normalize, {
     responsiveHeight, responsiveScreenWidth, responsiveWidth
 } from '../../utils/normalize';
@@ -25,12 +24,10 @@ import UserItems from '../../shared/UserPurchasedItems';
 import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import crashlytics from '@react-native-firebase/crashlytics';
 
-
 const HomeScreen = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
-    const gameTypes = useSelector(state => state.common.gameTypes);
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
@@ -109,8 +106,8 @@ const HomeScreen = () => {
                     </Text>
                 </Animated.View>
                 <UserItems showBuy={true} />
-                <GameCards games={gameTypes} />
-                <RecentlyPlayedCards games={user.recentGames} />
+                <GameCards />
+                <RecentlyPlayedCards />
                 <GlobalTopLeadersHero />
             </View>
         </ScrollView>
@@ -185,7 +182,8 @@ const UserRanking = ({ gamesCount, ranking }) => {
     );
 }
 
-function GameCards({ games }) {
+function GameCards() {
+    const games = useSelector(state => state.common.gameTypes);
 
     if (!isTrue(games) || games.length === 0)
         return <></>;
@@ -221,9 +219,13 @@ function GameCard({ game }) {
     );
 }
 
-function RecentlyPlayedCards({ games }) {
+function RecentlyPlayedCards() {
+
+    const games = useSelector(state => state.auth.user.recentGames);
+
     if (!games || !isTrue(games) || games.length === 0)
         return <></>;
+
     return (
         <View style={styles.games}>
             <Text style={styles.lightTitle}>Recently Played</Text>
@@ -284,7 +286,7 @@ const styles = EStyleSheet.create({
         borderRadius: normalize(10),
         marginTop: normalize(10),
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'row-reverse',
         justifyContent: 'space-between',
         paddingVertical: normalize(15),
         paddingRight: normalize(30),
@@ -296,17 +298,16 @@ const styles = EStyleSheet.create({
         marginTop: normalize(-25)
     },
     pointsNumber: {
-        alignItems: 'flex-end',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     userPoint: {
         fontSize: '1.6rem',
+        lineHeight: '1.6rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
     },
     pointDetail: {
         color: '#e3e3e3',
-        // color: 'red',
         fontSize: '0.8rem',
         fontFamily: 'graphik-medium',
     },
