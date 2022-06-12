@@ -28,12 +28,14 @@ export default function GameInProgressScreen({ navigation, route }) {
     const dispatch = useDispatch();
     const refRBSheet = useRef();
     const params = route.params;
+
     const gameSessionToken = useSelector(state => state.game.gameSessionToken);
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
-    const [ending, setEnding] = useState(false);
     const gameEnded = useSelector(state => state.game.isEnded);
     const isPlayingTrivia = useSelector(state => state.game.isPlayingTrivia);
+
+    const [ending, setEnding] = useState(false);
 
     const onEndGame = () => {
         setEnding(true);

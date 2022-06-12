@@ -1,14 +1,13 @@
 import React, { useRef } from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from '@expo/vector-icons';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 
 
-const FailedBottomSheet = ({ refBottomSheet, pointsRequired, onClose }) => {
+const FailedBottomSheet = ({ refBottomSheet, trivia, onClose }) => {
     return (
         <RBSheet
             ref={refBottomSheet}
@@ -28,18 +27,20 @@ const FailedBottomSheet = ({ refBottomSheet, pointsRequired, onClose }) => {
                 }
             }}
         >
-            <BottomSheet onClose={onClose} pointsRequired={pointsRequired} />
+            <BottomSheet onClose={onClose} trivia={trivia} />
         </RBSheet>
     )
 }
-const BottomSheet = ({ pointsRequired, onClose }) => {
-    const navigation = useNavigation();
+const BottomSheet = ({ trivia, onClose }) => {
     return (
         <View style={styles.triviaBottomSheet}>
             <Ionicons name="warning-outline" size={100} color="#FFEE03" style={styles.bottomSheetIcon} />
-            <Text style={styles.bottomSheetPoints}>Required Points : {pointsRequired}pts</Text>
-            <Text style={styles.bottomSheetText}>Sorry you do not have enough points today
-                to join this trivia, earn more points by playing more games to join this live trivia</Text>
+            <Text style={styles.bottomSheetPoints}>Required Points : {trivia.pointsRequired}pts</Text>
+            <Text style={styles.bottomSheetPoints}>Your points gained today : {trivia.pointsAcquiredBeforeStart}pts</Text>
+
+            <Text style={styles.bottomSheetText}>
+                Play more fun games to qualify to play this live trivia.
+            </Text>
             <AppButton onPress={onClose} text='Close' />
         </View>
     )

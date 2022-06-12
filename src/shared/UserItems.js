@@ -37,11 +37,11 @@ const UserItems = ({ showBuy }) => {
             <Image
                 style={styles.image}
                 resizeMode='contain'
-                source={require('../../assets/images/shooting-star.png')}
+                source={require('../../assets/images/treasure_chest.png')}
             />
             <View style={styles.leftContainer}>
                 <View style={styles.firstRow}>
-                    <Text style={[styles.commonRow]}>You have {formatNumber(sumOfPlans)} games remanining</Text>
+                    <Text style={[styles.commonRow]}>You have {formatNumber(sumOfPlans)} games lives</Text>
                 </View>
                 <Text style={[styles.commonRow, boosts?.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
                 {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy more</Text>}
@@ -58,7 +58,11 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(12),
     },
     image: {
-        flex: 1
+        flex: 1,
+        shadowColor: '#000',
+        shadowRadius: 100,
+        marginLeft: normalize(10)
+        // elevation: 2,
     },
     leftContainer: {
         alignItems: 'center',

@@ -23,19 +23,12 @@ const LiveTriviaCard = () => {
     const trivia = useSelector(state => state.liveTrivia.data);
 
     const triviaActionButtonClicked = () => {
-        if (trivia.player_status === "INSUFFICIENTPOINTS") {
+        if (trivia.playerStatus === "INSUFFICIENTPOINTS") {
             notEnoughPointNotice.current.open();
-        } else if (trivia.player_status === "PLAYED") {
+        } else if (trivia.playerStatus === "PLAYED") {
             navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id });
-        } else if (trivia.player_status === "CANPLAY") {
-            navigation.navigate('TriviaInstructions', {
-                type: trivia.game_type_id,
-                mode: trivia.game_mode_id,
-                category: trivia.category_id,
-                trivia: trivia.id,
-                questionCount: trivia.question_count,
-                gameDuration: trivia.game_duration
-            })
+        } else if (trivia.playerStatus === "CANPLAY") {
+            navigation.navigate('TriviaInstructions', { ...trivia })
         }
     }
 
@@ -56,20 +49,20 @@ const LiveTriviaCard = () => {
             <ImageBackground
                 source={require('../../../assets/images/live-trivia-card-background-blue.png')}
                 style={styles.triviaBackground}
-                resizeMode='stretch'>
+                resizeMode='contain'>
                 <FailedBottomSheet
-                    pointsRequired={trivia.point_eligibility}
+                    trivia={trivia}
                     refBottomSheet={notEnoughPointNotice}
                     onClose={() => notEnoughPointNotice.current.close()}
                 />
                 <View style={styles.triviaContainer}>
                     <View style={styles.triviaTop}>
-                        <Text style={styles.triviaTopText}>{trivia.name}</Text>
+                        <Text style={styles.triviaTopText}>{trivia.title}</Text>
                         <Ionicons name="help-circle-outline" size={24} color="#FFFF" />
                     </View>
-                    <Text style={styles.triviaTitle}>win &#8358;{formatCurrency(trivia.grand_price)}</Text>
+                    <Text style={styles.triviaTitle}>{trivia.prizeDisplayText}</Text>
                     {/* <Text style={styles.triviaAdText}>up for grabs !</Text> */}
-                    <Text style={styles.triviaAdText}>Join at {trivia.start_time}</Text>
+                    <Text style={styles.triviaAdText}>{trivia.startDateDisplayText}</Text>
 
                     <View style={styles.triviaBoardBottom}>
                         <View>
@@ -91,17 +84,13 @@ const LiveTriviaCard = () => {
 
 function TriviaStatus({ trivia }) {
 
-    const { status } = trivia;
+    const { status, statusDisplayText } = trivia;
 
     if (status === "WAITING") {
         return <TriviaCountDown trivia={trivia} />
     }
 
-    if (status === "ONGOING") {
-        return <Text style={styles.statusText}>STATUS: LIVE</Text>
-    }
-
-    return <Text style={styles.statusText}>STATUS: {status}</Text>
+    return <Text style={styles.statusText}>STATUS: {statusDisplayText}</Text>
 }
 
 function TriviaCountDown({ trivia }) {
@@ -120,7 +109,7 @@ function TriviaCountDown({ trivia }) {
         }
 
         const countDown = setInterval(() => {
-            const timeString = calculateTimeRemaining(trivia.start_time_utc, onComplete);
+            const timeString = calculateTimeRemaining(trivia.startAtUtc, onComplete);
             setTriviaTimer(timeString);
         }, 1000);
 
@@ -138,36 +127,15 @@ function TriviaCountDown({ trivia }) {
 
 function TriviaAction({ trivia, action }) {
 
-    let { status, player_status } = trivia;
+    let { actionDisplayText } = trivia;
 
-    const text = () => {
-        if (player_status === "PLAYED") {
-            return "LEADERBOARD";
-        }
-
-        let t = "";
-
-        switch (status) {
-            case "ONGOING":
-                t = "JOIN NOW"
-                break;
-            case "CLOSED":
-                t = "LEADERBOARD"
-                break;
-            default:
-                break;
-        }
-
-        return t;
-    }
-
-    if (status === "WAITING") {
+    if (actionDisplayText === "") {
         return null;
     }
 
     return (
         <Pressable style={styles.triviaButton} onPress={action}>
-            <Text style={styles.triviaButtonText}>{text()}</Text>
+            <Text style={styles.triviaButtonText}>{actionDisplayText}</Text>
             <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
         </Pressable>
     )

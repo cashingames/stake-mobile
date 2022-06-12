@@ -155,7 +155,7 @@ function CustomDrawerContent(props) {
                 <DrawerItem
                     label={() =>
                         <View style={drawStyles.item}>
-                            <Text style={drawStyles.itemLabel}>Support</Text>
+                            <Text style={drawStyles.itemLabel}>Help</Text>
                             <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                         </View>}
                     onPress={() => navigation.navigate('Support')}

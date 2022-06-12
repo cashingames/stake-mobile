@@ -47,54 +47,13 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
                     }
                 }}
             >
-                <AvailableBoosts onClose={() => refRBSheet.current.close()} params={params} />
+                <AvailableBoosts onClose={() => refRBSheet.current.close()} trivia={params} />
             </RBSheet>
         </ScrollView>
     );
 };
-const TriviaInstructions = () => {
-    return (
-        <>
-            <View style={styles.instruction}>
-                <Text style={styles.unicode}>{'\u0031'}.</Text>
-                <Text style={styles.instructionText}>This trivia consists of  questions</Text>
-            </View>
-            <View style={styles.instruction}>
-                <Text style={styles.unicode}>{'\u0032'}.</Text>
-                <Text style={styles.instructionText}>You have limited time to answer these questions. Answer questions as correctly
-                    and as rapidly as you can to stay at the top of the leaderboard.</Text>
-            </View>
-            <View style={styles.instruction}>
-                <Text style={styles.unicode}>{'\u0033'}.</Text>
-                <Text style={styles.instructionText}>Use boosts to increase your chances of winning the grand prize.</Text>
-            </View>
-        </>
-    )
-};
 
-
-
-
-const AvailableBoost = ({ boost }) => {
-    return (
-        <View style={styles.boostContent}>
-            <View style={styles.boostAmount}>
-                <Image
-                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
-                    style={styles.boostIcon}
-                />
-                <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
-            </View>
-            <View style={styles.boostDetails}>
-                <Text style={styles.boostName}>{boost.name}</Text>
-                <Text style={styles.boostDescription}>{boost.description}</Text>
-            </View>
-        </View>
-    )
-}
-
-
-const AvailableBoosts = ({ onClose, params }) => {
+const AvailableBoosts = ({ onClose, trivia }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const boosts = useSelector(state => state.auth.user.boosts);
@@ -103,32 +62,24 @@ const AvailableBoosts = ({ onClose, params }) => {
     const onStartGame = () => {
         setLoading(true);
         dispatch(setIsPlayingTrivia(true))
-        dispatch(setQuestionsCount(params.questionCount));
-        dispatch(setGameDuration(params.gameDuration));
+        dispatch(setQuestionsCount(trivia.questionsCount));
+        dispatch(setGameDuration(trivia.duration));
         dispatch(startGame({
-            category: params.category,
-            type: params.type,
-            mode: params.mode,
-            trivia: params.trivia
+            category: trivia.categoryId,
+            type: trivia.typeId,
+            mode: trivia.modeId,
+            trivia: trivia.id
         }))
             .then(unwrapResult)
             .then(result => {
-                console.log(result);
                 setLoading(false);
                 onClose();
-                navigation.navigate("GameInProgress",
-                    {
-                        triviaId: params.trivia,
-                    }
-                )
+                navigation.navigate("GameInProgress", { triviaId: trivia.id })
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError);
                 Alert.alert(rejectedValueOrSerializedError.message)
                 setLoading(false);
-                // after login eager get commond data for the whole app
-                // console.log("failed");
-                // console.log(rejectedValueOrSerializedError)
             });
     }
 
@@ -156,6 +107,45 @@ const AvailableBoosts = ({ onClose, params }) => {
         </View>
     )
 }
+
+const AvailableBoost = ({ boost }) => {
+    return (
+        <View style={styles.boostContent}>
+            <View style={styles.boostAmount}>
+                <Image
+                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
+                    style={styles.boostIcon}
+                />
+                <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
+            </View>
+            <View style={styles.boostDetails}>
+                <Text style={styles.boostName}>{boost.name}</Text>
+                <Text style={styles.boostDescription}>{boost.description}</Text>
+            </View>
+        </View>
+    )
+}
+
+const TriviaInstructions = () => {
+    return (
+        <>
+            <View style={styles.instruction}>
+                <Text style={styles.unicode}>{'\u0031'}.</Text>
+                <Text style={styles.instructionText}>This trivia consists of  questions</Text>
+            </View>
+            <View style={styles.instruction}>
+                <Text style={styles.unicode}>{'\u0032'}.</Text>
+                <Text style={styles.instructionText}>You have limited time to answer these questions. Answer questions as correctly
+                    and as rapidly as you can to stay at the top of the leaderboard.</Text>
+            </View>
+            <View style={styles.instruction}>
+                <Text style={styles.unicode}>{'\u0033'}.</Text>
+                <Text style={styles.instructionText}>Use boosts to increase your chances of winning the grand prize.</Text>
+            </View>
+        </>
+    )
+};
+
 
 const GoToStore = ({ onPress }) => {
     return (

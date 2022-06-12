@@ -1,0 +1,297 @@
+
+import React, { useEffect, useState, useRef } from 'react';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import Animated, { FadeOut } from 'react-native-reanimated';
+import { Text, View, Pressable } from 'react-native';
+import RBSheet from "react-native-raw-bottom-sheet";
+import { useDispatch, useSelector } from 'react-redux';
+
+import AppButton from '../../shared/AppButton';
+import { isTrue } from '../../utils/stringUtl';
+import { setGameCategory, setGameType } from './GameSlice';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
+import { randomEnteringAnimation } from '../../utils/utils';
+import GameCategoryCard from './GameCategoryCard';
+import NoGameNotification from './NoGameNotification';
+
+export default ({ title, initialShowPlayButton = true }) => {
+
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
+    const refRBSheet = useRef();
+    const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
+    const [activeCategory, setActiveCategory] = useState();
+    const activeSubcategory = useSelector(state => state.game.gameCategory);
+    const activeGame = useSelector(state => state.game.gameType);
+    const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
+
+    const onCategorySelected = (category) => {
+        setActiveCategory(category);
+        dispatch(setGameCategory(undefined));
+    }
+
+    const onSubCategorySelected = (subcategory) => {
+        dispatch(setGameCategory(subcategory));
+    }
+
+    const openBottomSheet = () => {
+        refRBSheet.current.open()
+    }
+
+    const closeBottomSheet = () => {
+        refRBSheet.current.close()
+    }
+
+    const onPlayButtonClick = () => {
+        hasActivePlan ? navigation.navigate('GameMode') : openBottomSheet();
+    }
+
+    useFocusEffect(
+        React.useCallback(() => {
+            setActiveCategory(undefined);
+            dispatch(setGameType(currentGame));
+        }, [])
+    );
+
+    useEffect(() => {
+        setActiveCategory(undefined); //category
+    }, [activeGame]);
+
+    if (!currentGame) {
+        return <></>;
+    }
+
+    return (
+        <>
+            <Text style={styles.title}>{title ?? "Pick a game"}</Text>
+            <View style={styles.cards}>
+                {currentGame.categories.map((category, i) => <GameCategoryCard key={i}
+                    category={category}
+                    isSelected={activeCategory?.id === category.id}
+                    onSelect={onCategorySelected}
+                />
+                )}
+            </View>
+            <View>
+                {isTrue(activeCategory) && <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />}
+            </View>
+
+            {(initialShowPlayButton || isTrue(activeSubcategory)) &&
+                < Animated.View entering={randomEnteringAnimation()}>
+                    <AppButton text='Proceed to Play' onPress={onPlayButtonClick} disabled={!isTrue(activeSubcategory)} />
+                </Animated.View>
+            }
+
+            <RBSheet
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                height={400}
+                customStyles={{
+                    wrapper: {
+                        backgroundColor: "rgba(0, 0, 0, 0.5)"
+                    },
+                    draggableIcon: {
+                        backgroundColor: "#000",
+                    },
+                    container: {
+                        borderTopStartRadius: 25,
+                        borderTopEndRadius: 25,
+                    }
+                }}
+            >
+                <NoGameNotification closeSheet={closeBottomSheet} />
+            </RBSheet>
+
+        </>
+
+    )
+};
+
+const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory }) => {
+
+    return (
+        <Animated.View entering={randomEnteringAnimation()}>
+            <Text style={styles.title}>Choose category</Text>
+            <View style={styles.subcategories}>
+                {category.subcategories.map((subcategory, i) => <SubCategory
+                    key={i}
+                    subcategory={subcategory}
+                    onSubCategorySelected={onSubCategorySelected}
+                    isSelected={subcategory === selectedSubcategory} />)}
+            </View>
+        </Animated.View>
+    )
+};
+
+
+const SubCategory = ({ subcategory, onSubCategorySelected, isSelected }) => {
+
+    return (
+        <Pressable
+            style={[styles.subcategory, isSelected ? styles.activeSubcategory : {}]}
+            onPress={() => onSubCategorySelected(subcategory)}
+        >
+            <Text style={[styles.gameButton, isSelected ? { color: "#FFF" } : {}]}>{subcategory.name}</Text>
+        </Pressable>
+    )
+};
+
+
+const styles = EStyleSheet.create({
+
+    container: {
+        flex: 1,
+    },
+    contentContainer: {
+        backgroundColor: '#F8F9FD',
+        paddingHorizontal: normalize(18),
+        paddingBottom: normalize(40),
+    },
+    winBig: {
+        display: 'flex',
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: normalize(14),
+        paddingHorizontal: normalize(15),
+        borderRadius: 8,
+        borderWidth: normalize(1),
+        borderColor: 'rgba(0, 0, 0, 0.15)',
+    },
+    progress: {
+        display: 'flex',
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: normalize(10),
+        paddingHorizontal: normalize(15),
+        marginVertical: normalize(22),
+        borderRadius: 8,
+        borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
+        borderColor: '#E5E5E5',
+    },
+    progressText: {
+        width: responsiveScreenWidth(45),
+    },
+    progressTitle: {
+        fontFamily: 'graphik-medium',
+        fontSize: '1.3rem',
+        color: '#151C2F',
+    },
+    text: {
+        fontFamily: 'graphik-regular',
+        fontSize: '0.68rem',
+        color: '#7C7D7F',
+        lineHeight: '1rem',
+        marginTop: normalize(8)
+    },
+    noGamesText: {
+        fontFamily: 'graphik-medium',
+        fontSize: normalize(16),
+        width: normalize(130),
+        textAlign: 'center',
+        color: '#000',
+        lineHeight: normalize(24)
+    },
+    createQuiz: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        paddingVertical: normalize(10),
+        paddingHorizontal: normalize(10),
+        borderRadius: 8,
+        marginBottom: normalize(20),
+        borderWidth: normalize(1),
+        borderColor: 'rgba(0, 0, 0, 0.15)',
+    },
+    quiz: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    create: {
+        fontFamily: 'graphik-bold',
+        fontSize: normalize(12),
+        color: '#EF2F55',
+    },
+    games: {
+        paddingVertical: normalize(10),
+        // marginRight: normalize(5),
+        // backgroundColor: "red",
+        width: "88%",
+    },
+    title: {
+        fontSize: '0.89rem',
+        color: '#151C2F',
+        fontFamily: 'graphik-medium',
+        marginVertical: normalize(10),
+    },
+    cards: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    card: {
+        width: normalize(130),
+        padding: normalize(15),
+        borderRadius: normalize(7),
+        marginBottom: normalize(15),
+        marginRight: normalize(10)
+    },
+    gameButton: {
+        fontFamily: 'graphik-medium',
+        fontSize: '0.73rem',
+        color: '#151C2F',
+        textAlign: 'center'
+    },
+    subcategories: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    activeSubcategory: {
+        color: '#FFF',
+        backgroundColor: '#EF2F55',
+    },
+    subcategory: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: normalize(10),
+        paddingHorizontal: normalize(18),
+        borderRadius: 20,
+        marginRight: normalize(10),
+        marginBottom: normalize(10),
+        backgroundColor: '#E0E0E0',
+    },
+    noGames: {
+        backgroundColor: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: normalize(14),
+        paddingHorizontal: normalize(15),
+    },
+    sadEmoji: {
+        width: normalize(50),
+        height: normalize(50),
+        marginBottom: normalize(20)
+    },
+    needGames: {
+        fontSize: normalize(12),
+        fontFamily: 'graphik-regular',
+        color: '#000',
+        marginTop: normalize(15)
+    },
+    storeLink: {
+        fontSize: normalize(12),
+        fontFamily: 'graphik-medium',
+        color: '#EF2F55',
+    },
+
+});

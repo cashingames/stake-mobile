@@ -7,7 +7,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/core';
 import Animated, {
-    BounceIn, BounceInLeft, BounceInRight, BounceInUp, FadeInUp,
+    BounceIn, BounceInLeft, BounceInRight, BounceInUp,
     useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming
 } from 'react-native-reanimated';
 import normalize, {
@@ -18,11 +18,13 @@ import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, getGlobalLeaders, initialLoadingComplete } from '../CommonSlice';
-import { resetGameStats } from '../Games/GameSlice';
+import { resetGameStats, setGameCategory, setGameType } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
-import UserItems from '../../shared/UserPurchasedItems';
+import UserItems from '../../shared/UserItems';
 import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import crashlytics from '@react-native-firebase/crashlytics';
+import GameCategoryCard from '../Games/GameCategoryCard';
+import GamePicker from '../Games/GamePicker';
 
 const HomeScreen = () => {
 
@@ -31,7 +33,6 @@ const HomeScreen = () => {
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
-
 
     useEffect(() => {
         dispatch(resetGameStats());
@@ -99,14 +100,8 @@ const HomeScreen = () => {
         <ScrollView contentContainerStyle={styles.scrollView}>
             <UserDetails user={user} />
             <View style={styles.container}>
-                <Animated.View entering={FadeInUp.delay(1000).duration(1000)}>
-                    <Text style={styles.title}>Games</Text>
-                    <Text style={styles.planInstruction}>You can only play 5 free games daily,
-                        Buy Games to enjoy playing without interruptons.
-                    </Text>
-                </Animated.View>
-                <UserItems showBuy={true} />
-                <GameCards />
+                {/* <ChooseGameTeaser /> */}
+                <GamePicker initialShowPlayButton={false} title={"Pick a game"} />
                 <RecentlyPlayedCards />
                 <GlobalTopLeadersHero />
             </View>
@@ -124,7 +119,8 @@ const UserDetails = ({ user }) => {
             <UserWallet balance={user.walletBalance} />
             <LiveTriviaCard />
             <UserPoints points={user.points} />
-            <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} />
+            <UserItems showBuy={true} />
+            {/* <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} /> */}
         </View>
     );
 }
@@ -161,62 +157,43 @@ const UserPoints = ({ points }) => {
             />
             <View style={styles.pointsNumber}>
                 <Text style={styles.userPoint}>{formatNumber(points)}</Text>
-                <Text style={styles.pointDetail} >POINTS EARNED</Text>
+                <Text style={styles.pointDetail} >Today</Text>
+            </View>
+            <View style={styles.pointsNumber}>
+                <Text style={styles.userPoint}>{formatNumber(points)}</Text>
+                <Text style={styles.pointDetail} >Total</Text>
             </View>
         </Animated.View>
     );
 }
 
-const UserRanking = ({ gamesCount, ranking }) => {
-    return (
-        <Animated.View entering={BounceInLeft.delay(400)} style={styles.userRanking} >
-            <View style={styles.gamesPlayed}>
-                <Text style={styles.rankNumber}>{formatNumber(gamesCount)}</Text>
-                <Text style={styles.rankDetail}>GAMES PLAYED</Text>
-            </View>
-            <View style={styles.globalRanking}>
-                <Text style={styles.rankNumber}>{formatNumber(ranking)}</Text>
-                <Text style={styles.rankDetail}>GLOBAL RANKING</Text>
-            </View>
-        </Animated.View>
-    );
-}
+const ChooseGameTeaser = ({ title, showPlayButton }) => {
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
 
-function GameCards() {
     const games = useSelector(state => state.common.gameTypes);
+
+    const onCategorySelected = (category) => {
+        dispatch(setGameType(games[0]));
+        navigation.navigate("Game");
+    }
 
     if (!isTrue(games) || games.length === 0)
         return <></>;
 
     return (
-        <Animated.View entering={BounceIn.delay(1000)} style={styles.games}>
-            <Text style={styles.lightTitle}>Play New Game</Text>
+        <>
+            <Text style={styles.title}>Pick a game</Text>
             <View style={styles.cards}>
-                <SwiperFlatList >
-                    {games.map((game, i) => <GameCard key={i} game={game} />)}
-                </SwiperFlatList>
+                {games[0].categories.map((category, i) => <GameCategoryCard key={i}
+                    category={category}
+                    isSelected={false}
+                    onSelect={onCategorySelected}
+                />
+                )}
             </View>
-        </Animated.View>
-
+        </>
     )
-}
-
-function GameCard({ game }) {
-    const navigation = useNavigation();
-    return (
-        <Pressable style={[styles.card]} onPress={() => navigation.navigate('Game')}>
-            <Image
-                style={styles.cardIcon}
-                source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${game.icon}` }}
-                resizeMode='contain'
-            />
-            <View style={styles.cardContent}>
-                <Text style={styles.cardTitle}>{game.displayName}</Text>
-                <Text style={styles.cardInstruction}>{game.description}</Text>
-            </View>
-
-        </Pressable>
-    );
 }
 
 function RecentlyPlayedCards() {
@@ -285,12 +262,12 @@ const styles = EStyleSheet.create({
     points: {
         backgroundColor: '#518EF8',
         borderRadius: normalize(10),
-        marginTop: normalize(10),
+        marginVertical: normalize(10),
         display: 'flex',
         flexDirection: 'row-reverse',
         justifyContent: 'space-between',
         paddingVertical: normalize(15),
-        paddingRight: normalize(30),
+        paddingRight: normalize(10),
         paddingLeft: normalize(20),
     },
     trophy: {
@@ -300,17 +277,22 @@ const styles = EStyleSheet.create({
     },
     pointsNumber: {
         justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: "#072169",
+        borderRadius: 100,
+        padding: 20,
     },
     userPoint: {
-        fontSize: '1.6rem',
-        lineHeight: '1.6rem',
+        fontSize: '0.8rem',
+        lineHeight: '0.8rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
     },
     pointDetail: {
         color: '#e3e3e3',
-        fontSize: '0.8rem',
+        fontSize: '0.6rem',
         fontFamily: 'graphik-medium',
+        textTransform: 'uppercase',
     },
     userRanking: {
         backgroundColor: '#FFFF',
@@ -349,9 +331,8 @@ const styles = EStyleSheet.create({
         color: '#151C2F',
         fontSize: Platform.OS === 'ios' ? '0.9rem' : '0.8rem',
         fontFamily: 'graphik-regular',
-        lineHeight: responsiveHeight(3),
-        opacity: 0.7,
-        marginVertical: responsiveHeight(2),
+        marginTop: responsiveHeight(1),
+        marginBottom: responsiveHeight(2),
     },
     lightTitle: {
         fontSize: '1rem',
@@ -360,7 +341,7 @@ const styles = EStyleSheet.create({
         marginTop: normalize(10),
     },
     cards: {
-        display: 'flex',
+        flexDirection: 'row',
         marginTop: normalize(18),
     },
     card: {

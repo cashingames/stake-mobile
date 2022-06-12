@@ -13,7 +13,7 @@ import { buyBoostFromWallet, buyPlanFromWallet } from "./StoreSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 import AppButton from "../../shared/AppButton";
-import UserItems from "../../shared/UserPurchasedItems";
+import UserItems from "../../shared/UserItems";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { randomEnteringAnimation } from "../../utils/utils";
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
