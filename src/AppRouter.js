@@ -82,15 +82,22 @@ function AppRouter() {
     }
 
     return (
-        <AppStack.Navigator>
+        <AppStack.Navigator >
             {isTrue(token) ?
                 (
                     <>
                         <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
                         <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Leaderboards', headerRight: () => <LeaderBoardFilter /> }} />
-                        <AppStack.Screen name="LiveTriviaLeaderboard" component={LiveTriviaLeaderBoard} options={{ title: 'Leaderboard' }} />
-
+                            <AppStack.Screen name="LiveTriviaLeaderboard" component={LiveTriviaLeaderBoard}
+                                options={{
+                                    title: 'Leaderboard',
+                                    headerStyle: {
+                                        backgroundColor: '#072169',
+                                    },
+                                    headerTintColor: '#FFFF',
+                                }}
+                            />
 
                         {/** game **/}
                         <AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
