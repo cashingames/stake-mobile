@@ -9,6 +9,7 @@ import { getTriviaData } from '../Games/GameSlice';
 import LiveTriviaWinner from './LiveTriviaWinner';
 import { isTrue } from '../../utils/stringUtl';
 import Constants from 'expo-constants';
+import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
 
@@ -92,16 +93,27 @@ const TriviaParticipant = ({ player, position }) => {
                 />
                 <View style={styles.positionName}>
                     <Text style={styles.username}>{player.username}</Text>
+                    <View style={styles.playerDuration}>
+                        <Text style={styles.username}>2:13</Text>
+                        <Ionicons name="alarm" size={18} color="#000000" style={styles.bottomSheetIcon} />
+                    </View>
                     <View style={styles.pointsContainer}>
                         <Text style={styles.username}>{player.points}pts</Text>
                         <Image
-                        style={styles.pointsIcon}
+                            style={styles.pointsIcon}
                             source={require('../../../assets/images/points-coin.png')}
                         />
                     </View>
                 </View>
             </View>
-            <Text style={styles.position}>{position}</Text>
+            <View style={styles.topRank}>
+                {/* <Ionicons name="thumbs-up-outline" size={20} color="#FFEE03" style={styles.bottomSheetIcon} /> */}
+                <Image
+                    style={styles.participantRibbon}
+                    source={require('../../../assets/images/gold-ribbon.png')}
+                />
+                <Text style={styles.participantPosition}>{position}</Text>
+            </View>
         </View>
     )
 }
@@ -137,15 +149,20 @@ const TriviaTopLeader = ({ player, position }) => {
                 />
                 <View style={styles.positionName}>
                     <Text style={[styles.topParticipantusername, { color: fontColor }]}>{player.username}</Text>
+                    <View style={styles.playerDuration}>
+                        <Text style={[styles.topParticipantusername, { color: fontColor }]}>2:13</Text>
+                        <Ionicons name="alarm" size={18} color={fontColor} />
+                    </View>
                     <View style={styles.pointsContainer}>
                         <Text style={[styles.topParticipantusername, { color: fontColor }]}>{player.points}pts</Text>
                         <Image
-                        style={styles.pointsIcon}
+                            style={styles.pointsIcon}
                             source={require('../../../assets/images/points-coin.png')}
                         />
                     </View>
                 </View>
             </View>
+
             <View style={styles.topRank}>
                 {/* {position === 1 &&
                     <LiveTriviaWinner 
@@ -190,6 +207,10 @@ const styles = EStyleSheet.create({
     championsTrophy: {
         width: normalize(40),
         height: normalize(40),
+    },
+    participantRibbon: {
+        width: normalize(25),
+        height: normalize(35),
     },
     positionText: {
         fontSize: '1.1rem',
@@ -246,7 +267,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#FFFF',
-        paddingVertical: normalize(13),
+        paddingVertical: normalize(10),
         borderRadius: 10,
         paddingHorizontal: normalize(10),
         marginBottom: normalize(15)
@@ -257,7 +278,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#FFFF',
-        paddingVertical: normalize(13),
+        paddingVertical: normalize(10),
         borderRadius: 10,
         paddingHorizontal: normalize(10),
         marginBottom: normalize(15)
@@ -272,11 +293,10 @@ const styles = EStyleSheet.create({
         marginLeft: normalize(10)
         // alignItems: 'center',
     },
-    timeSpent: {
+    playerDuration: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft: normalize(15)
     },
     questionAnswered: {
         display: 'flex',
@@ -300,8 +320,19 @@ const styles = EStyleSheet.create({
         borderRadius: 5,
         textAlign: 'center',
         marginLeft: '0.2rem',
-        marginTop: '.3rem'
-
+        // marginTop: '.3rem'
+    },
+    participantPosition: {
+        fontSize: '0.75rem',
+        color: '#7C7D7F',
+        fontFamily: 'graphik-medium',
+        backgroundColor: '#072169',
+        paddingVertical: '0.1rem',
+        paddingHorizontal: '0.3rem',
+        borderRadius: 5,
+        textAlign: 'center',
+        marginLeft: '0.6rem',
+        // marginTop: '.3rem'
     },
     topRank: {
         flexDirection: 'row',
@@ -311,6 +342,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.75rem',
         color: '#000000',
         fontFamily: 'graphik-medium',
+        marginRight: '.2rem'
     },
     points: {
         fontSize: '0.75rem',
@@ -325,12 +357,12 @@ const styles = EStyleSheet.create({
         width: '.5rem',
         height: '.5rem',
         marginTop: '.25rem',
-        marginLeft:'.2rem'
     },
     topParticipantusername: {
         fontSize: '0.75rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
+        marginRight: '.2rem'
     },
     topParticipantpoints: {
         fontSize: '0.75rem',
