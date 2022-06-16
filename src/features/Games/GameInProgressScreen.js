@@ -53,7 +53,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                         triviaId: params.triviaId,
                     })
                 } else {
-                    navigation.navigate('GameEndResult');
+                    navigation.navigate('GameInProgress');
                 }
 
             })
@@ -107,8 +107,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     return (
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">
             <ScrollView>
-                <PlayGameHeader onPress={() => onEndGame()} />
-                <BoostsInfo onPress={() => refRBSheet.current.open()} />
+                <PlayGameHeader onPress={() => onEndGame()} onPressBoost= {() => refRBSheet.current.open()} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} />
                 <GameQuestions />
                 <NextButton onPress={() => onEndGame()} ending={ending} />
@@ -137,11 +136,11 @@ export default function GameInProgressScreen({ navigation, route }) {
     );
 }
 
-const PlayGameHeader = ({ onPress }) => {
+const PlayGameHeader = ({ onPress, onPressBoost }) => {
 
     return (
         <View style={styles.header}>
-            <Text style={styles.headerTitle}></Text>
+            <BoostsInfo onPress={onPressBoost} />
             <Pressable onPress={onPress}>
                 <Text style={styles.headerTitle}>Exit</Text>
             </Pressable>
@@ -151,12 +150,12 @@ const PlayGameHeader = ({ onPress }) => {
 
 const BoostsInfo = ({ onPress }) => {
     return (
-        <View style={styles.boostDialog}>
-            <Text onPress={onPress} style={styles.infoText}>
+        <Pressable style={styles.boostDialog}onPress={onPress}>
+            <Text style={styles.infoText}>
                 See available boosts description
             </Text>
             <Ionicons name="md-arrow-forward-sharp" size={20} color="#FF9900" />
-        </View>
+        </Pressable>
     )
 }
 
@@ -372,7 +371,7 @@ const styles = EStyleSheet.create({
         flex: 1,
         backgroundColor: '#9C3DB8',
         paddingHorizontal: normalize(18),
-        paddingTop: normalize(45),
+        paddingTop: normalize(15),
     },
     header: {
         display: 'flex',
@@ -395,7 +394,7 @@ const styles = EStyleSheet.create({
     topicProgress: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         borderBottomWidth: 1,
         borderColor: 'rgba(255, 255, 255, 0.2)',
