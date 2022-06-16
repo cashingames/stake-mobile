@@ -94,25 +94,28 @@ const TriviaParticipant = ({ player, position }) => {
                 <View style={styles.positionName}>
                     <Text style={styles.username}>{player.username}</Text>
                     <View style={styles.playerDuration}>
+                        <Ionicons name="alarm" size={18} color="#000000"  />
                         <Text style={styles.username}>2:13</Text>
-                        <Ionicons name="alarm" size={18} color="#000000" style={styles.bottomSheetIcon} />
-                    </View>
-                    <View style={styles.pointsContainer}>
-                        <Text style={styles.username}>{player.points}pts</Text>
-                        <Image
-                            style={styles.pointsIcon}
-                            source={require('../../../assets/images/points-coin.png')}
-                        />
                     </View>
                 </View>
             </View>
+            <View style={styles.pointsContainer}>
+                <Text style={styles.points}>{player.points}pts</Text>
+                <Image
+                    style={styles.pointsIcon}
+                    source={require('../../../assets/images/points-coin.png')}
+                />
+            </View>
             <View style={styles.topRank}>
                 {/* <Ionicons name="thumbs-up-outline" size={20} color="#FFEE03" style={styles.bottomSheetIcon} /> */}
-                <Image
-                    style={styles.participantRibbon}
-                    source={require('../../../assets/images/gold-ribbon.png')}
-                />
-                <Text style={styles.participantPosition}>{position}</Text>
+
+                <View style={styles.topRankBottom}>
+                    <Image
+                        style={styles.participantRibbon}
+                        source={require('../../../assets/images/gold-ribbon.png')}
+                    />
+                    <Text style={styles.participantPosition}>{position}</Text>
+                </View>
             </View>
         </View>
     )
@@ -150,17 +153,17 @@ const TriviaTopLeader = ({ player, position }) => {
                 <View style={styles.positionName}>
                     <Text style={[styles.topParticipantusername, { color: fontColor }]}>{player.username}</Text>
                     <View style={styles.playerDuration}>
-                        <Text style={[styles.topParticipantusername, { color: fontColor }]}>2:13</Text>
                         <Ionicons name="alarm" size={18} color={fontColor} />
-                    </View>
-                    <View style={styles.pointsContainer}>
-                        <Text style={[styles.topParticipantusername, { color: fontColor }]}>{player.points}pts</Text>
-                        <Image
-                            style={styles.pointsIcon}
-                            source={require('../../../assets/images/points-coin.png')}
-                        />
+                        <Text style={[styles.topParticipantusername, { color: fontColor }]}>2:13</Text>
                     </View>
                 </View>
+            </View>
+            <View style={styles.pointsContainer}>
+                <Text style={[styles.topParticipantpoints, { color: fontColor }]}>{player.points}pts</Text>
+                <Image
+                    style={styles.pointsIcon}
+                    source={require('../../../assets/images/points-coin.png')}
+                />
             </View>
 
             <View style={styles.topRank}>
@@ -171,11 +174,14 @@ const TriviaTopLeader = ({ player, position }) => {
                     height= {normalize(60)}
                      />
                 } */}
-                <Image
-                    style={styles.championsTrophy}
-                    source={trophyImageUrl}
-                />
-                <Text style={styles.position}>{position}</Text>
+
+                <View style={styles.topRankBottom}>
+                    <Image
+                        style={styles.championsTrophy}
+                        source={trophyImageUrl}
+                    />
+                    <Text style={styles.position}>{position}</Text>
+                </View>
             </View>
 
         </View>
@@ -335,6 +341,10 @@ const styles = EStyleSheet.create({
         // marginTop: '.3rem'
     },
     topRank: {
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+    },
+    topRankBottom: {
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -345,17 +355,19 @@ const styles = EStyleSheet.create({
         marginRight: '.2rem'
     },
     points: {
-        fontSize: '0.75rem',
         color: '#2D9CDB',
-        fontFamily: 'graphik-regular',
+        fontSize: '0.9rem',
+        color: '#000000',
+        fontFamily: 'graphik-medium',
+        marginRight: '.2rem'
     },
     pointsContainer: {
         flexDirection: 'row',
         alignItems: 'center'
     },
     pointsIcon: {
-        width: '.5rem',
-        height: '.5rem',
+        width: '.7rem',
+        height: '.7rem',
         marginTop: '.25rem',
     },
     topParticipantusername: {
@@ -365,9 +377,10 @@ const styles = EStyleSheet.create({
         marginRight: '.2rem'
     },
     topParticipantpoints: {
-        fontSize: '0.75rem',
+        fontSize: '0.9rem',
         color: '#FFFF',
-        fontFamily: 'graphik-regular',
+        fontFamily: 'graphik-medium',
+        marginRight: '.2rem'
     },
     buttonsContainer: {
         display: 'flex',
