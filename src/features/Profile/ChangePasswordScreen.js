@@ -66,43 +66,41 @@ export default function ChangePasswordScreen({ navigation }) {
             });
     }
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <View style={styles.content}>
-                    <View style={styles.submitButton}>
-                        <>
-                            <Input
-                                type="password"
-                                label='Old Password'
-                                value={password}
-                                placeholder="Enter password"
-                                error={passErr && '*password must not be less than 8 digits'}
-                                onChangeText={text => { onChangePassword(text) }}
-                            />
-                            <Input
-                                type="password"
-                                label='New Password'
-                                value={new_password}
-                                placeholder="Enter new password"
-                                error={passErr && '*password must not be less than 8 digits'}
-                                onChangeText={text => { onChangeNewPassword(text) }}
-                            />
-                            <Input
-                                type="password"
-                                label='Password'
-                                value={new_password_confirmation}
-                                placeholder="Confirm new password"
-                                error={new_password_confirmation !== new_password && '*password confirmation must match password'}
-                                onChangeText={text => { onChangeConfirmPassword(text) }}
-                            />
-                        </>
-                        <PasswordRequirement />
-                    </View>
-                    <AppButton text={saving ? 'Saving' : 'Change Password'} onPress={onSavePassword} disabled={!canSave} />
-
+        <ScrollView style={styles.container}>
+            <View style={styles.content}>
+                <View style={styles.submitButton}>
+                    <>
+                        <Input
+                            type="password"
+                            label='Old Password'
+                            value={password}
+                            placeholder="Enter password"
+                            error={passErr && '*password must not be less than 8 digits'}
+                            onChangeText={text => { onChangePassword(text) }}
+                        />
+                        <Input
+                            type="password"
+                            label='New Password'
+                            value={new_password}
+                            placeholder="Enter new password"
+                            error={passErr && '*password must not be less than 8 digits'}
+                            onChangeText={text => { onChangeNewPassword(text) }}
+                        />
+                        <Input
+                            type="password"
+                            label='Password'
+                            value={new_password_confirmation}
+                            placeholder="Confirm new password"
+                            error={new_password_confirmation !== new_password && '*password confirmation must match password'}
+                            onChangeText={text => { onChangeConfirmPassword(text) }}
+                        />
+                    </>
+                    <PasswordRequirement />
                 </View>
-            </ScrollView>
-        </SafeAreaView >
+                <AppButton text={saving ? 'Saving' : 'Change Password'} onPress={onSavePassword} disabled={!canSave} />
+
+            </View>
+        </ScrollView>
     );
 }
 

@@ -19,6 +19,7 @@ import {
 import AppButton from "../../shared/AppButton";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { Base64 } from 'js-base64';
+import LottieAnimations from "../../shared/LottieAnimations";
 
 var base64 = require('base-64');
 
@@ -53,7 +54,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                         triviaId: params.triviaId,
                     })
                 } else {
-                    navigation.navigate('GameInProgress');
+                    navigation.navigate('GameEndResult');
                 }
 
             })
@@ -107,7 +108,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     return (
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">
             <ScrollView>
-                <PlayGameHeader onPress={() => onEndGame()} onPressBoost= {() => refRBSheet.current.open()} />
+                <PlayGameHeader onPress={() => onEndGame()} onPressBoost={() => refRBSheet.current.open()} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} />
                 <GameQuestions />
                 <NextButton onPress={() => onEndGame()} ending={ending} />
@@ -150,11 +151,16 @@ const PlayGameHeader = ({ onPress, onPressBoost }) => {
 
 const BoostsInfo = ({ onPress }) => {
     return (
-        <Pressable style={styles.boostDialog}onPress={onPress}>
+        <Pressable style={styles.boostDialog} onPress={onPress}>
             <Text style={styles.infoText}>
-                See available boosts description
+                Power Ups
             </Text>
-            <Ionicons name="md-arrow-forward-sharp" size={20} color="#FF9900" />
+            <LottieAnimations
+                animationView={require('../../../assets/boost.json')}
+                width={normalize(40)}
+                height={normalize(40)}
+            />
+            {/* <Ionicons name="speedometer" size={20} color="#FFFF" /> */}
         </Pressable>
     )
 }
@@ -178,24 +184,32 @@ const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
     return (
         <View style={styles.topicProgress}>
             {/* <Text style={styles.title}>{gameCategory} {gameTopic}</Text> */}
+            <LottieAnimations
+                animationView={require('../../../assets/game-board.json')}
+                width={normalize(110)}
+                height={normalize(110)}
+            />
+            <View style={styles.topicProgressRight}>
+                <AnsweredGameProgress />
+                <View style={styles.questionsAnsweredContainer}>
+                    <CountdownCircleTimer
+                        isPlaying={!isGamePaused}
+                        duration={gameDuration}
+                        colors={[["#fff", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
+                        trailColor="#2D9CDB"
 
-            <AnsweredGameProgress />
-
-            <CountdownCircleTimer
-                isPlaying={!isGamePaused}
-                duration={gameDuration}
-                colors={[["#fff", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
-                trailColor="#2D9CDB"
-                size={60}
-                strokeWidth={5}
-                key={countdownKey}
-                onComplete={onComplete} >
-                {({ remainingTime, animatedColor }) => (
-                    <Animated.Text style={styles.timeText}>
-                        {remainingTime}
-                    </Animated.Text>
-                )}
-            </CountdownCircleTimer>
+                        size={60}
+                        strokeWidth={5}
+                        key={countdownKey}
+                        onComplete={onComplete} >
+                        {({ remainingTime, animatedColor }) => (
+                            <Animated.Text style={styles.timeText}>
+                                {remainingTime}
+                            </Animated.Text>
+                        )}
+                    </CountdownCircleTimer>
+                </View>
+            </View>
         </View>
     )
 }
@@ -206,21 +220,23 @@ const AnsweredGameProgress = () => {
     const total = useSelector(state => state.game.totalQuestionCount);
 
     return (
-        <AnimatedCircularProgress
-            size={60}
-            width={5}
-            fill={((index + 1) / total * 100)}
-            tintColor="#2D9CDB"
-            onAnimationComplete={() => console.log('onAnimationComplete')}
-            backgroundColor="#fff">
-            {
-                (fill) => (
-                    <Text style={styles.questionsAnswered}>
-                        {`${index + 1}/${total}`}
-                    </Text>
-                )
-            }
-        </AnimatedCircularProgress>
+        <View style={styles.questionsAnsweredContainer}>
+            <AnimatedCircularProgress
+                size={60}
+                width={5}
+                fill={((index + 1) / total * 100)}
+                tintColor="#2D9CDB"
+                onAnimationComplete={() => console.log('onAnimationComplete')}
+                backgroundColor="#fff">
+                {
+                    (fill) => (
+                        <Text style={styles.questionsAnswered}>
+                            {`${index + 1}/${total}`}
+                        </Text>
+                    )
+                }
+            </AnimatedCircularProgress>
+        </View>
     );
 }
 
@@ -261,7 +277,7 @@ const AvailableBoosts = () => {
     return (
         <View style={styles.availableBoosts}>
             <View style={styles.boostinfo}>
-                <Text style={styles.title}>Boost</Text>
+                <Text style={styles.title}>BOOST</Text>
             </View>
             {boostsToDisplay().map((boost, index) =>
                 boost.count >= 1 &&
@@ -357,11 +373,14 @@ const NextButton = ({ onPress, ending }) => {
     const isLastQuestion = useSelector(state => state.game.isLastQuestion);
 
     return (
-        <AppButton
-            disabled={ending}
-            text={isLastQuestion ? 'Finish' : 'Next'}
-            onPress={() => dispatch(isLastQuestion ? onPress : nextQuestion())}
-        />
+        // <View >
+            <AppButton
+                disabled={ending}
+                text={isLastQuestion ? 'Finish' : 'Next'}
+                onPress={() => dispatch(isLastQuestion ? onPress : nextQuestion())}
+                style={styles.nextButton}
+            />
+        // {/* </View> */}
     )
 }
 
@@ -372,6 +391,7 @@ const styles = EStyleSheet.create({
         backgroundColor: '#9C3DB8',
         paddingHorizontal: normalize(18),
         paddingTop: normalize(15),
+        justifyContent:'flex-end'
     },
     header: {
         display: 'flex',
@@ -394,23 +414,27 @@ const styles = EStyleSheet.create({
     topicProgress: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         alignItems: 'center',
         borderBottomWidth: 1,
         borderColor: 'rgba(255, 255, 255, 0.2)',
-        paddingHorizontal: normalize(20),
-        paddingVertical: normalize(10),
+    },
+    topicProgressRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     availableBoost: {
         display: 'flex',
         flexDirection: 'row',
+        marginRight: normalize(20)
     },
     availableBoosts: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: normalize(20),
+        paddingLeft: normalize(30),
+        paddingVertical: normalize(18),
     },
     boostActive: {
         borderWidth: 1,
@@ -426,7 +450,7 @@ const styles = EStyleSheet.create({
     title: {
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        fontSize: '0.8rem'
+        fontSize: '.9rem'
     },
     boostinfo: {
         display: 'flex',
@@ -483,6 +507,9 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    questionsAnsweredContainer: {
+        marginRight: normalize(20)
+    },
     questionsAnswered: {
         color: '#FFFF',
         fontFamily: 'graphik-medium',
@@ -534,8 +561,10 @@ const styles = EStyleSheet.create({
     boostDialog: {
         display: 'flex',
         flexDirection: 'row',
-        marginTop: normalize(10),
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#EF2F55',
+        paddingHorizontal: '.4rem',
+        borderRadius: 5
     },
     title1: {
         fontSize: '0.82rem',
@@ -546,11 +575,17 @@ const styles = EStyleSheet.create({
     },
     infoText: {
         fontSize: '0.63rem',
-        fontFamily: 'graphik-medium',
+        fontFamily: 'graphik-regular',
         color: '#FFFF',
     },
     boostIcon: {
         width: normalize(35),
         height: normalize(35)
+    },
+    nextButton: {
+           justifyContent: 'flex-end'
+        // position: 'absolute',
+        // bottom: 0,
+        // left: 0
     }
 });

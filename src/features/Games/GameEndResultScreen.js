@@ -9,6 +9,7 @@ import { getUser } from '../Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { incrementCountdownResetIndex, startGame, resetGameStats } from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import LottieAnimations from "../../shared/LottieAnimations";
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -39,9 +40,14 @@ export default function GameEndResultScreen({ navigation }) {
 const UserResultEmoji = ({ userEmoji }) => {
     return (
         <View style={styles.emojiContainer}>
-            <Image
+            {/* <Image
                 style={styles.emoji}
                 source={userEmoji}
+            /> */}
+            <LottieAnimations
+                animationView={require('../../../assets/game-over.json')}
+                width={normalize(120)}
+                height={normalize(120)}
             />
         </View>
     )
@@ -215,7 +221,6 @@ const styles = EStyleSheet.create({
     },
     emojiContainer: {
         alignItems: 'center',
-        marginBottom: normalize(18)
     },
     emoji: {
         width: normalize(66),
@@ -223,7 +228,7 @@ const styles = EStyleSheet.create({
     },
     nameContainer: {
         alignItems: 'center',
-        marginBottom: normalize(15)
+        marginBottom: normalize(10)
     },
     name: {
         textAlign: 'center',
@@ -235,7 +240,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         marginHorizontal: normalize(25),
-        marginBottom: responsiveScreenWidth(15)
+        marginBottom: responsiveScreenWidth(10)
     },
     info: {
         textAlign: 'center',
@@ -268,7 +273,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#F9E821',
         borderRadius: 16,
-        marginBottom: responsiveScreenWidth(27),
+        marginBottom: responsiveScreenWidth(23),
         padding: Platform.OS === 'ios' ? normalize(15) : normalize(10),
     },
     finalScoreText: {

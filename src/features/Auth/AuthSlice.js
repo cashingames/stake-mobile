@@ -116,6 +116,8 @@ export const getUser = createAsyncThunk(
     async (thunkAPI) => {
         console.log("getting users");
         const response = await axios.get('v3/user/profile')
+        console.log(response);
+
         // .catch(error => {
         //     if (error.response) {
         // The request was made and the server responded with a status code
