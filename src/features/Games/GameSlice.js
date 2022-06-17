@@ -31,7 +31,7 @@ export const endGame = createAsyncThunk(
         return response.data;
     }
 )
-export const getTriviaLeaders = createAsyncThunk(
+export const getLiveTriviaLeaders = createAsyncThunk(
     'game/getTriviaData',
     async (data, thunkAPI) => {
         //make a network request to the server
@@ -187,7 +187,7 @@ export const GameSlice = createSlice({
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
             })
-            .addCase(getTriviaLeaders.fulfilled, (state, action) => {
+            .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
                 state.triviaLeaders = action.payload;
             })
 

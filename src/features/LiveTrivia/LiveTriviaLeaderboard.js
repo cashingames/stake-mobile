@@ -5,7 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector, useDispatch } from 'react-redux';
 import PageLoading from '../../shared/PageLoading';
 // import { formatNumber } from '../../utils/stringUtl';
-import { getTriviaLeaders } from '../Games/GameSlice';
+import { getLiveTriviaLeaders} from '../Games/GameSlice';
 import { isTrue } from '../../utils/stringUtl';
 import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,7 +25,7 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
 
 
     useEffect(() => {
-        dispatch(getTriviaLeaders(
+        dispatch(getLiveTriviaLeaders(
             params.triviaId
         )).then(() => setLoading(false));
     }, [])
