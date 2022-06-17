@@ -31,11 +31,11 @@ export const endGame = createAsyncThunk(
         return response.data;
     }
 )
-export const getTriviaData = createAsyncThunk(
+export const getLiveTriviaLeaders = createAsyncThunk(
     'game/getTriviaData',
     async (data, thunkAPI) => {
         //make a network request to the server
-        const response = await axios.get(`v3/trivia/leaders/${data}`);
+        const response = await axios.get(`v3/live-trivia/${data}/leaderboard`);
         // console.log(response.data);
         return response.data;
     }
@@ -187,9 +187,8 @@ export const GameSlice = createSlice({
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
             })
-            .addCase(getTriviaData.fulfilled, (state, action) => {
-                state.triviaLeaders = action.payload.data.leaders;
-                state.triviaPosition = action.payload.data.position;
+            .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
+                state.triviaLeaders = action.payload;
             })
 
     },
