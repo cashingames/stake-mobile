@@ -9,7 +9,7 @@ export default function useApplyHeaderWorkaround(setOptions) {
     const androidHeaderFix = useMemo(
         () => ({
             headerTransparent: true,
-            headerStyle: { backgroundColor: 'white' },
+            // headerStyle: { backgroundColor: 'white' },
             contentStyle: { paddingTop: headerHeight },
         }),
         [headerHeight],
