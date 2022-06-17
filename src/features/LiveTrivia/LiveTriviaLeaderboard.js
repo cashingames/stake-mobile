@@ -5,7 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector, useDispatch } from 'react-redux';
 import PageLoading from '../../shared/PageLoading';
 // import { formatNumber } from '../../utils/stringUtl';
-import { getTriviaData } from '../Games/GameSlice';
+import { getTriviaLeaders } from '../Games/GameSlice';
 import { isTrue } from '../../utils/stringUtl';
 import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,12 +20,12 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
     const dispatch = useDispatch();
 
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
-    console.log(triviaLeaders[0])
+    console.log(triviaLeaders);
     const [loading, setLoading] = useState(true)
 
 
     useEffect(() => {
-        dispatch(getTriviaData(
+        dispatch(getTriviaLeaders(
             params.triviaId
         )).then(() => setLoading(false));
     }, [])
@@ -85,16 +85,15 @@ const TriviaParticipant = ({ player, position }) => {
     return (
         <View style={styles.participant}>
             <View style={styles.participantLeft}>
-                <Image
-                    style={styles.playerIcon}
-                    source={isTrue(player.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${player.avatar}` } : require("../../../assets/images/user-icon.png")}
-
-                />
+            <Image
+                style={styles.avatar}
+                source={isTrue(player.avatar) ? { uri: player.avatar} : require("../../../assets/images/user-icon.png")}
+            />
                 <View style={styles.positionName}>
                     <Text style={styles.username}>{player.username}</Text>
                     <View style={styles.playerDuration}>
                         <Ionicons name="alarm" size={18} color="#000000" />
-                        <Text style={styles.username}>2:13</Text>
+                        <Text style={styles.username}>{player.duration}secs</Text>
                     </View>
                 </View>
             </View>
@@ -145,13 +144,15 @@ const TriviaTopLeader = ({ player, position }) => {
             <View style={styles.participantLeft}>
                 <Image
                     style={styles.playerIcon}
-                    source={isTrue(player.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${player.avatar}` } : require("../../../assets/images/user-icon.png")}
+                    // source={isTrue(player.avatar) ? player.avatar : require("../../../assets/images/user-icon.png")}
+                    source={isTrue(player.avatar) ? { uri: player.avatar} : require("../../../assets/images/user-icon.png")}
+
                 />
                 <View style={styles.positionName}>
                     <Text style={[styles.topParticipantusername, { color: fontColor }]}>{player.username}</Text>
                     <View style={styles.playerDuration}>
                         <Ionicons name="alarm" size={18} color={fontColor} />
-                        <Text style={[styles.topParticipantusername, { color: fontColor }]}>2:13</Text>
+                        <Text style={[styles.topParticipantusername, { color: fontColor }]}>{player.duration}secs</Text>
                     </View>
                 </View>
             </View>
