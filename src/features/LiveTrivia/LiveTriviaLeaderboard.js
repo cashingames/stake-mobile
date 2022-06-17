@@ -6,11 +6,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import PageLoading from '../../shared/PageLoading';
 // import { formatNumber } from '../../utils/stringUtl';
 import { getTriviaData } from '../Games/GameSlice';
-import LiveTriviaWinner from './LiveTriviaWinner';
 import { isTrue } from '../../utils/stringUtl';
 import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import LottieAnimations from '../../shared/LottieAnimations';
 
 
 
@@ -49,7 +49,7 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
 const ResultContainer = () => {
     return (
         <View style={styles.resultContainer}>
-            <LiveTriviaWinner
+            <LottieAnimations
                 animationView={require('../../../assets/leaderboard.json')}
                 width={normalize(170)}
                 height={normalize(170)}
@@ -85,7 +85,6 @@ const TriviaParticipant = ({ player, position }) => {
     return (
         <View style={styles.participant}>
             <View style={styles.participantLeft}>
-                {/* <Text style={styles.position}>{position}</Text> */}
                 <Image
                     style={styles.playerIcon}
                     source={isTrue(player.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${player.avatar}` } : require("../../../assets/images/user-icon.png")}
@@ -94,7 +93,7 @@ const TriviaParticipant = ({ player, position }) => {
                 <View style={styles.positionName}>
                     <Text style={styles.username}>{player.username}</Text>
                     <View style={styles.playerDuration}>
-                        <Ionicons name="alarm" size={18} color="#000000"  />
+                        <Ionicons name="alarm" size={18} color="#000000" />
                         <Text style={styles.username}>2:13</Text>
                     </View>
                 </View>
@@ -107,8 +106,6 @@ const TriviaParticipant = ({ player, position }) => {
                 />
             </View>
             <View style={styles.topRank}>
-                {/* <Ionicons name="thumbs-up-outline" size={20} color="#FFEE03" style={styles.bottomSheetIcon} /> */}
-
                 <View style={styles.topRankBottom}>
                     <Image
                         style={styles.participantRibbon}
@@ -168,7 +165,7 @@ const TriviaTopLeader = ({ player, position }) => {
 
             <View style={styles.topRank}>
                 {/* {position === 1 &&
-                    <LiveTriviaWinner 
+                    <LottieAnimations
                     animationView={require('../../../assets/winner.json')}
                     width= {normalize(60)}
                     height= {normalize(60)}
@@ -194,7 +191,6 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#072169',
-        // paddingTop: responsiveScreenWidth(20),
     },
     resultContainer: {
         alignItems: 'center',
@@ -338,7 +334,6 @@ const styles = EStyleSheet.create({
         borderRadius: 5,
         textAlign: 'center',
         marginLeft: '0.6rem',
-        // marginTop: '.3rem'
     },
     topRank: {
         flexDirection: 'column',
