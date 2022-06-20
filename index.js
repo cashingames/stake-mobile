@@ -1,5 +1,4 @@
 import 'expo-dev-client';
-// import 'expo-splash-screen' //need to resolve No native splash screen registered for given view controller.Call 'SplashScreen.show' for given view controller first
 
 import { registerRootComponent } from 'expo';
 

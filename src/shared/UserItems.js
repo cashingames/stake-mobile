@@ -41,7 +41,7 @@ const UserItems = ({ showBuy }) => {
             />
             <View style={styles.leftContainer}>
                 <View style={styles.firstRow}>
-                    <Text style={[styles.commonRow]}>You have {formatNumber(sumOfPlans)} games lives</Text>
+                    <Text style={[styles.commonRow]}>You have {formatNumber(sumOfPlans)} games left</Text>
                 </View>
                 <Text style={[styles.commonRow, boosts?.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
                 {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy more</Text>}

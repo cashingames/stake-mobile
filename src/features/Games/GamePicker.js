@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Animated, { FadeOut } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { Text, View, Pressable } from 'react-native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { randomEnteringAnimation } from '../../utils/utils';
 import GameCategoryCard from './GameCategoryCard';
 import NoGameNotification from './NoGameNotification';
+import GameSubcategoryCard from './GameSubcategoryCard';
 
 export default ({ title, initialShowPlayButton = true }) => {
 
@@ -73,9 +74,9 @@ export default ({ title, initialShowPlayButton = true }) => {
                 />
                 )}
             </View>
-            <View>
-                {isTrue(activeCategory) && <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />}
-            </View>
+            {/* <View> */}
+            {isTrue(activeCategory) && <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />}
+            {/* </View> */}
 
             {(initialShowPlayButton || isTrue(activeSubcategory)) &&
                 < Animated.View entering={randomEnteringAnimation()}>
@@ -115,11 +116,13 @@ const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory })
         <Animated.View entering={randomEnteringAnimation()}>
             <Text style={styles.title}>Choose category</Text>
             <View style={styles.subcategories}>
-                {category.subcategories.map((subcategory, i) => <SubCategory
-                    key={i}
-                    subcategory={subcategory}
-                    onSubCategorySelected={onSubCategorySelected}
-                    isSelected={subcategory === selectedSubcategory} />)}
+                {category.subcategories.map((subcategory, i) =>
+                    <GameSubcategoryCard
+                        key={i}
+                        game={subcategory}
+                        isSelected={subcategory === selectedSubcategory}
+                        onSelect={onSubCategorySelected} />
+                )}
             </View>
         </Animated.View>
     )

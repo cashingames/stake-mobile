@@ -2,7 +2,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Constants from 'expo-constants';
+
 import {
     login as loginApi,
     verifyOtp as verifyOtpApi,
@@ -115,9 +115,7 @@ export const getUser = createAsyncThunk(
     'auth/user/get',
     async (thunkAPI) => {
         console.log("getting users");
-        const response = await axios.get('v3/user/profile')
-        console.log(response);
-
+        const response = await axios.get('v3/user/profile');
         // .catch(error => {
         //     if (error.response) {
         // The request was made and the server responded with a status code
@@ -145,7 +143,7 @@ const initialState = {
     showIntro: false,
     user: {},
     passwordReset: {
-        email: 'oyekunmi@gmail.com'
+        // email: 'oyekunmi@gmail.com'
     },
     createAccount: {}
 }

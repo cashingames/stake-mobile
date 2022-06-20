@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, Pressable } from 'react-native';
-import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import { Text, View, Image, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
-import { useNavigation } from '@react-navigation/core';
 import Animated, {
-    BounceIn, BounceInLeft, BounceInRight, BounceInUp,
+    BounceInRight, BounceInUp,
     useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming
 } from 'react-native-reanimated';
 import normalize, {
@@ -18,13 +16,13 @@ import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, getGlobalLeaders, initialLoadingComplete } from '../CommonSlice';
-import { resetGameStats, setGameCategory, setGameType } from '../Games/GameSlice';
+import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserItems';
 import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import crashlytics from '@react-native-firebase/crashlytics';
-import GameCategoryCard from '../Games/GameCategoryCard';
 import GamePicker from '../Games/GamePicker';
+import RecentlyPlayedGames from '../Games/RecentlyPlayedGames';
 
 const HomeScreen = () => {
 
@@ -100,9 +98,8 @@ const HomeScreen = () => {
         <ScrollView contentContainerStyle={styles.scrollView}>
             <UserDetails user={user} />
             <View style={styles.container}>
-                {/* <ChooseGameTeaser /> */}
                 <GamePicker initialShowPlayButton={false} title={"Pick a game"} />
-                <RecentlyPlayedCards />
+                <RecentlyPlayedGames />
                 <GlobalTopLeadersHero />
             </View>
         </ScrollView>
@@ -110,7 +107,6 @@ const HomeScreen = () => {
 }
 
 export default HomeScreen;
-
 
 const UserDetails = ({ user }) => {
 
@@ -167,71 +163,7 @@ const UserPoints = ({ points }) => {
     );
 }
 
-const ChooseGameTeaser = ({ title, showPlayButton }) => {
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
 
-    const games = useSelector(state => state.common.gameTypes);
-
-    const onCategorySelected = (category) => {
-        dispatch(setGameType(games[0]));
-        navigation.navigate("Game");
-    }
-
-    if (!isTrue(games) || games.length === 0)
-        return <></>;
-
-    return (
-        <>
-            <Text style={styles.title}>Pick a game</Text>
-            <View style={styles.cards}>
-                {games[0].categories.map((category, i) => <GameCategoryCard key={i}
-                    category={category}
-                    isSelected={false}
-                    onSelect={onCategorySelected}
-                />
-                )}
-            </View>
-        </>
-    )
-}
-
-function RecentlyPlayedCards() {
-
-    const games = useSelector(state => state.auth.user.recentGames);
-
-    if (!games || !isTrue(games) || games.length === 0)
-        return <></>;
-
-    return (
-        <View style={styles.games}>
-            <Text style={styles.lightTitle}>Recently Played</Text>
-            <View style={styles.cards}>
-                <SwiperFlatList >
-                    {games.map((game, i) => <RecentlyPlayedCard key={i} game={game} />)}
-                </SwiperFlatList>
-            </View>
-        </View>
-
-    )
-}
-
-function RecentlyPlayedCard({ game }) {
-    const navigation = useNavigation();
-    return (
-        <View style={[styles.card, { backgroundColor: game.bgColor }]} >
-            <Image
-                style={[styles.cardIconBigger]}
-                source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${game.icon}` }}
-                resizeMode='contain'
-            />
-            <View style={styles.cardContent}>
-                <Text style={styles.cardTitle}>{game.name}</Text>
-                <Pressable onPress={() => navigation.navigate('Game')}><Text style={styles.replay}>Replay</Text></Pressable>
-            </View>
-        </View>
-    );
-}
 
 const styles = EStyleSheet.create({
     scrollView: {

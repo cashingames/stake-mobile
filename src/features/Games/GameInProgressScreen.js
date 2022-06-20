@@ -3,7 +3,6 @@ import { Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Al
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { Ionicons } from '@expo/vector-icons';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
@@ -20,8 +19,6 @@ import AppButton from "../../shared/AppButton";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { Base64 } from 'js-base64';
 import LottieAnimations from "../../shared/LottieAnimations";
-
-var base64 = require('base-64');
 
 
 export default function GameInProgressScreen({ navigation, route }) {
@@ -374,12 +371,12 @@ const NextButton = ({ onPress, ending }) => {
 
     return (
         // <View >
-            <AppButton
-                disabled={ending}
-                text={isLastQuestion ? 'Finish' : 'Next'}
-                onPress={() => dispatch(isLastQuestion ? onPress : nextQuestion())}
-                style={styles.nextButton}
-            />
+        <AppButton
+            disabled={ending}
+            text={isLastQuestion ? 'Finish' : 'Next'}
+            onPress={() => dispatch(isLastQuestion ? onPress : nextQuestion())}
+            style={styles.nextButton}
+        />
         // {/* </View> */}
     )
 }
@@ -391,7 +388,7 @@ const styles = EStyleSheet.create({
         backgroundColor: '#9C3DB8',
         paddingHorizontal: normalize(18),
         paddingTop: normalize(15),
-        justifyContent:'flex-end'
+        justifyContent: 'flex-end'
     },
     header: {
         display: 'flex',
@@ -583,7 +580,7 @@ const styles = EStyleSheet.create({
         height: normalize(35)
     },
     nextButton: {
-           justifyContent: 'flex-end'
+        justifyContent: 'flex-end'
         // position: 'absolute',
         // bottom: 0,
         // left: 0

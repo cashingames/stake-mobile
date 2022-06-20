@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-
-var base64 = require('base-64');
+import { Base64 } from 'js-base64';
 
 const shuffleArray = array => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -153,8 +152,8 @@ export const GameSlice = createSlice({
             state.displayedOptions = state.displayedQuestion.options
         },
         bombOptions: (state) => {
-            const correctOption = state.displayedOptions.find(option => base64.decode(option.is_correct) === '1')
-            const falseOptions = state.displayedOptions.filter(option => base64.decode(option.is_correct) === '0')
+            const correctOption = state.displayedOptions.find(option => Base64.decode(option.is_correct) === '1')
+            const falseOptions = state.displayedOptions.filter(option => Base64.decode(option.is_correct) === '0')
             const randomWrongOption = falseOptions[Math.floor(Math.random() * falseOptions.length)];
             state.displayedOptions = shuffleArray([correctOption, randomWrongOption]);
         },

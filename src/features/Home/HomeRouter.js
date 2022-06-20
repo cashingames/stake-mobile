@@ -65,15 +65,15 @@ const RightButtons = () => {
     return (
         <View style={styles.headerIcons}>
             <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Home')}>
-                <Ionicons name='home-outline' size={24} />
+                <Ionicons name='home-outline' size={26} />
                 <Text style={styles.headerIconText}>Home</Text>
             </Pressable>
-            <Pressable style={[styles.headerIconContainer, routeName === 'Game' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Game')}>
+            {/* <Pressable style={[styles.headerIconContainer, routeName === 'Game' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Game')}>
                 <Ionicons name='game-controller-outline' size={24} style={[styles.headerIcon, routeName === 'Game' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Play</Text>
-            </Pressable>
+            </Pressable> */}
             <Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
-                <Ionicons name='wallet-outline' size={24} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
+                <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
             </Pressable>
         </View>
@@ -179,12 +179,9 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
     },
     headerIconContainer: {
-        opacity: 0.4,
+        opacity: 0.5,
         alignItems: 'center',
-        marginLeft: '1rem',
-    },
-    headerIcon: {
-        opacity: 0.4,
+        marginLeft: '1.5rem',
     },
     headerIconText: {
         fontSize: '0.5rem',
