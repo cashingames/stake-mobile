@@ -28,6 +28,7 @@ const HomeScreen = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
+    console.log(user);
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
@@ -114,7 +115,7 @@ const UserDetails = ({ user }) => {
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance} />
             <LiveTriviaCard />
-            <UserPoints points={user.points} />
+            <UserPoints points={user.points} todaysPoints= {user.todaysPoints} />
             <UserItems showBuy={true} />
             {/* <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} /> */}
         </View>
@@ -132,7 +133,7 @@ const UserWallet = ({ balance }) => {
     );
 }
 
-const UserPoints = ({ points }) => {
+const UserPoints = ({ points, todaysPoints }) => {
     const rotation = useSharedValue(0);
     rotation.value = withSequence(
         withTiming(-10, { duration: 50 }),
@@ -152,11 +153,11 @@ const UserPoints = ({ points }) => {
                 source={require('../../../assets/images/point-trophy.png')}
             />
             <View style={styles.pointsNumber}>
-                <Text style={styles.userPoint}>{formatNumber(points)}</Text>
+                <Text style={styles.userPoint}>{formatNumber(todaysPoints)}pts</Text>
                 <Text style={styles.pointDetail} >Today</Text>
             </View>
             <View style={styles.pointsNumber}>
-                <Text style={styles.userPoint}>{formatNumber(points)}</Text>
+                <Text style={styles.userPoint}>{formatNumber(points)}pts</Text>
                 <Text style={styles.pointDetail} >Total</Text>
             </View>
         </Animated.View>
@@ -213,12 +214,15 @@ const styles = EStyleSheet.create({
         backgroundColor: "#072169",
         borderRadius: 100,
         padding: 20,
+        textAlign: 'center'
     },
     userPoint: {
         fontSize: '0.8rem',
         lineHeight: '0.8rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
+        width: '2.3rem',
+        textAlign: 'center'
     },
     pointDetail: {
         color: '#e3e3e3',
