@@ -7,20 +7,21 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize, { responsiveHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize';
 
 
-export default ({ game, onSelect }) => {
+export default ({ game, onSelect, isSelected}) => {
     const navigation = useNavigation();
     return (
-        <View style={[styles.card, { backgroundColor: game.bgColor }]} >
+        <Pressable style={[styles.card, isSelected ?{ backgroundColor:"#FED843"}  : {}]} onPress={() => onSelect(game)} >
+
             <Image
                 style={[styles.cardIconBigger]}
                 source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${game.icon}` }}
                 resizeMode='contain'
             />
             <View style={styles.cardContent}>
-                <Text style={styles.cardTitle}>{game.name}</Text>
-                <Pressable onPress={() => onSelect(game)}><Text style={styles.replay}>Replay</Text></Pressable>
+                <Text style={[styles.cardTitle,  isSelected ?{ color:  "#FFFF" }  : {}]}>{game.name}</Text>
+                {/* <Pressable onPress={() => onSelect(game)}><Text style={styles.replay}>Replay</Text></Pressable> */}
             </View>
-        </View>
+        </Pressable >
     );
 }
 
@@ -39,13 +40,18 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         marginRight: responsiveWidth(3),
         flexDirection: "row",
-        borderColor: '#0F000000',
+        borderWidth: Platform.OS === 'ios' ? normalize(0.5) : normalize(1),
+        borderColor: '#E0E0E0',
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.1,
         width: responsiveScreenWidth(70),
         '@media (min-height: 781) and (max-height: 1200)': {
-            height: responsiveHeight(10),
+            height: responsiveHeight(8),
         },
         '@media (min-height: 300) and (max-height: 780)': {
-            height: responsiveHeight(11),
+            height: responsiveHeight(9),
         },
     },
     cardIconBigger: {

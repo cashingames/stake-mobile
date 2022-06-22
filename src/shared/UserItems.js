@@ -3,6 +3,7 @@ import { Text, View, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import LottieAnimations from '../shared/LottieAnimations';
 
 import { formatNumber } from '../utils/stringUtl';
 import normalize, { responsiveHeight, responsiveScreenWidth } from "../utils/normalize";
@@ -34,18 +35,20 @@ const UserItems = ({ showBuy }) => {
 
     return (
         <Animated.View entering={randomEnteringAnimation().duration(1000)} style={styles.container}>
-            <Image
-                style={styles.image}
-                resizeMode='contain'
-                source={require('../../assets/images/treasure_chest.png')}
-            />
-            <View style={styles.leftContainer}>
-                <View style={styles.firstRow}>
-                    <Text style={[styles.commonRow]}>You have {formatNumber(sumOfPlans)} games left</Text>
+            <View style={styles.topRow}>
+                <LottieAnimations
+                    animationView={require('../../assets/treasure-chest.json')}
+                    width={normalize(110)}
+                    height={normalize(110)}
+                />
+                <View>
+                    <View style={styles.firstRow}>
+                        <Text style={[styles.commonRow]}>You have {formatNumber(sumOfPlans)} games left</Text>
+                    </View>
+                    <Text style={[styles.commonRow, boosts?.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
                 </View>
-                <Text style={[styles.commonRow, boosts?.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
-                {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy more</Text>}
             </View>
+            {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy more</Text>}
         </Animated.View>
     )
 }
@@ -53,9 +56,11 @@ const UserItems = ({ showBuy }) => {
 const styles = EStyleSheet.create({
     container: {
         borderRadius: 15,
-        flexDirection: 'row',
+        flexDirection: 'column',
         backgroundColor: '#518EF8',
-        paddingVertical: normalize(12),
+        paddingVertical: normalize(8),
+        paddingRight: normalize(12),
+        alignItems: 'center'
     },
     image: {
         flex: 1,
@@ -64,11 +69,15 @@ const styles = EStyleSheet.create({
         marginLeft: normalize(10)
         // elevation: 2,
     },
+    topRow: {
+        flexDirection:'row',
+        alignItems:'center'
+    },
     leftContainer: {
         alignItems: 'center',
-        paddingTop: normalize(10),
+        marginTop: normalize(10),
         marginRight: responsiveScreenWidth(3),
-        flex: 3,
+        // flex: 3,
     },
     commonRow: {
         color: '#FFFF',
@@ -78,8 +87,8 @@ const styles = EStyleSheet.create({
         width: '100%',
     },
     firstRow: {
-        marginBottom: normalize(12),
-        paddingBottom: normalize(12),
+        marginBottom: normalize(8),
+        paddingBottom: normalize(8),
         borderBottomColor: '#B1CEFF',
         borderBottomWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
 
@@ -91,10 +100,10 @@ const styles = EStyleSheet.create({
     },
     buyMore: {
         alignSelf: 'flex-end',
-        color: '#151C2F',
-        fontFamily: 'graphik-bold',
+        color: '#EF2F55',
+        fontFamily: 'graphik-medium',
         fontSize: '0.8rem',
-        marginTop: responsiveHeight(2),
+        marginTop: normalize(.2)
     }
 });
 

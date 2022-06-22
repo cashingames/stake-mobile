@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, ScrollView, Image, Pressable } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { formatCurrency } from '../../utils/stringUtl';
-import { useNavigation } from '@react-navigation/core';
 import { fetchTrivia } from '../CommonSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import PageLoading from '../../shared/PageLoading';
+import LiveTriviaCardComponent from '../../shared/LiveTriviaCardComponent';
 
 
 
@@ -29,102 +28,21 @@ const LiveTriviasScreen = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <TriviaBoards trivia={trivia} />
+            <View style={styles.boards}>
+                {trivia.map((trivia, i) => <LiveTriviaCardComponent key={i} trivia={trivia} />)}
+            </View>
         </ScrollView>
     )
 }
 
 
-const TriviaBoards = ({ trivia }) => {
-    return (
-        <View style={styles.boards}>
-            {trivia.map((trivia, i) => <TriviaBoard key={i} trivia={trivia} />)}
-        </View>
-    )
-}
-
-const TriviaBoard = ({ trivia }) => {
-    const navigation = useNavigation();
-    const user = useSelector(state => state.auth.user)
-    const canPlay = (user.points) >= (trivia.point_eligibility);
-
-
-    return (
-        <View style={styles.mainContainer}>
-            <View style={styles.boardContainer}>
-                <View style={styles.boardheader}>
-                    <Text style={styles.competitionName}>{trivia.name}</Text>
-                    <TriviaLeaderBoard trivia={trivia} />
-                </View>
-                <View style={styles.prizeContainer}>
-                    <Text style={styles.prizeHeader}>Grand Prize</Text>
-                    <Text style={styles.prize}>&#8358;{formatCurrency(trivia.grand_price)}</Text>
-                </View>
-                <View style={styles.dateContainer}>
-                    <View style={styles.pointContainer}>
-                        <Image
-                            style={styles.icon}
-                            source={require('../../../assets/images/points-coin.png')}
-                        />
-                        <Text style={styles.dates}>{trivia.point_eligibility}pts required</Text>
-                    </View>
-                    <View style={styles.dateSubContainer}>
-                        <Image
-                            style={styles.icon}
-                            source={require('../../../assets/images/calendar.png')}
-                        />
-                        <Text style={styles.dates}>{trivia.start_time}</Text>
-                    </View>
-                </View>
-            </View>
-            {canPlay ?
-                <Pressable style={[trivia.is_active ? styles.triviaStageContainer : styles.disabled,
-                !canPlay ? styles.disabled : {}, trivia.has_played ? styles.disabled : {}]}
-                    onPress={() => navigation.navigate('TriviaInstructions', {
-                        type: trivia.game_type_id,
-                        mode: trivia.game_mode_id,
-                        category: trivia.category_id,
-                        trivia: trivia.id,
-                        questionCount: trivia.question_count,
-                        gameDuration: trivia.game_duration
-                    })} disabled={!canPlay || trivia.has_played || !trivia.is_active}>
-                    {trivia.is_active && !trivia.has_played ?
-                        <Text style={styles.triviaStage}>Join Now</Text>
-                        :
-                        <Text style={styles.triviaClosed}>Closed</Text>
-                    }
-                </Pressable>
-                :
-                <View style={styles.disabled}>
-                    {trivia.is_active ?
-                        <Text style={styles.triviaClosed}>Earn {trivia.point_eligibility - user.points} more points to join this live trivia</Text>
-                        :
-                        <Text style={styles.triviaClosed}>Closed</Text>
-                    }
-                </View>
-            }
-
-        </View>
-    )
-}
-
-const TriviaLeaderBoard = ({ trivia }) => {
-    const navigation = useNavigation();
-    return (
-        <>
-            <Pressable style={styles.leaderboardContainer} onPress={() => navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id })}>
-                <Text style={styles.leaderboardLink}>Leaderboard</Text>
-            </Pressable>
-        </>
-    )
-}
 
 export default LiveTriviasScreen;
 
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F2F5FF',
+        backgroundColor: '#FFFF',
         paddingHorizontal: normalize(18),
     },
     titleContainer: {

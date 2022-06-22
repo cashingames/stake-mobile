@@ -5,11 +5,12 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTriviaData, resetGameStats, setIsPlayingTrivia } from './GameSlice';
+import { getLiveTriviaLeaders, resetGameStats, setIsPlayingTrivia } from './GameSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { formatNumber } from '../../utils/stringUtl';
 import { getCommonData } from '../CommonSlice';
 import AppButton from '../../shared/AppButton';
+import LottieAnimations from '../../shared/LottieAnimations';
 
 
 
@@ -17,13 +18,12 @@ const TriviaEndResultScreen = ({ route }) => {
     const params = route.params;
     const dispatch = useDispatch();
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
-    const triviaPosition = useSelector(state => state.game.triviaPosition)
     const isGameEnded = useSelector(state => state.game.isEnded);
 
 
     useEffect(() => {
         dispatch(getCommonData())
-        dispatch(getTriviaData(
+        dispatch(getLiveTriviaLeaders(
             params.triviaId
         ))
             .then(unwrapResult)
@@ -55,7 +55,7 @@ const TriviaEndResultScreen = ({ route }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <ResultContainer triviaPosition={triviaPosition} />
+            <ResultContainer />
             {/* <UserResultAnalytics /> */}
             <TriviaParticipants triviaLeaders={triviaLeaders} />
             <TriviaButton />
@@ -63,16 +63,17 @@ const TriviaEndResultScreen = ({ route }) => {
     )
 }
 
-const ResultContainer = ({ triviaPosition }) => {
+const ResultContainer = () => {
     // const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia)
     // console.log(hasLiveTrivia);
     return (
         <View style={styles.resultContainer}>
-            <Image
-                style={styles.icon}
-                source={require('../../../assets/images/trivia-cup.png')}
+            <LottieAnimations
+                animationView={require('../../../assets/game-over.json')}
+                width={normalize(170)}
+                height={normalize(170)}
             />
-            <Text style={styles.positionText}>Your current position is {triviaPosition}</Text>
+            {/* <Text style={styles.positionText}>Your current position is {triviaPosition}</Text> */}
             {/* {hasLiveTrivia ? */}
             {/* <Text style={styles.resultMessage}>Thanks for playing, play again to climb up the trivia leaderboard and,
                     win exciting prizes</Text>
@@ -112,7 +113,7 @@ const TriviaParticipant = ({ player, position }) => {
         <View style={styles.participant}>
             <View style={styles.positionName}>
                 <Text style={styles.position}>{position}</Text>
-                <Text style={styles.username}>{player.first_name} {player.last_name}</Text>
+                <Text style={styles.username}>{player.username}</Text>
             </View>
             <Text style={styles.username}>{player.points}pts</Text>
         </View>
