@@ -16,6 +16,8 @@ import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
 import AppButton from '../../shared/AppButton';
+import LottieAnimations from '../../shared/LottieAnimations';
+import HowToWin from '../HowToWin/HowToWin';
 
 
 const HomeStack = createDrawerNavigator();
@@ -52,6 +54,8 @@ const HomeRouter = () => {
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
             <HomeStack.Screen name="Game" component={GameScreen} options={{ title: 'Game' }} />
             <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
+            <HomeStack.Screen name="HowToWin" component={HowToWin} options={{ title: 'How to win' }} />
+
         </HomeStack.Navigator>
     );
 }
@@ -64,6 +68,7 @@ const RightButtons = () => {
 
     return (
         <View style={styles.headerIcons}>
+          
             <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Home')}>
                 <Ionicons name='home-outline' size={26} />
                 <Text style={styles.headerIconText}>Home</Text>
@@ -75,6 +80,15 @@ const RightButtons = () => {
             <Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
                 <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
+            </Pressable>
+            <Pressable style={[styles.headerIconContainer, routeName === 'HowToWin' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('HowToWin')}>
+                {/* <Ionicons name='home-outline' size={26} /> */}
+                <LottieAnimations
+                    animationView={require('../../../assets/info.json')}
+                    width={normalize(28)}
+                    height={normalize(28)}
+                />
+                <Text style={styles.headerIconText}>How to win</Text>
             </Pressable>
         </View>
     )

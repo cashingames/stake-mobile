@@ -7,7 +7,7 @@ import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 
 
-const FailedBottomSheet = ({ refBottomSheet, trivia, onClose }) => {
+const FailedBottomSheet = ({ refBottomSheet, onClose, userPoints,pointsRequired }) => {
     return (
         <RBSheet
             ref={refBottomSheet}
@@ -27,16 +27,16 @@ const FailedBottomSheet = ({ refBottomSheet, trivia, onClose }) => {
                 }
             }}
         >
-            <BottomSheet onClose={onClose} trivia={trivia} />
+            <BottomSheet onClose={onClose} userPoints={userPoints} pointsRequired={pointsRequired} />
         </RBSheet>
     )
 }
-const BottomSheet = ({ trivia, onClose }) => {
+const BottomSheet = ({ onClose, userPoints, pointsRequired }) => {
     return (
         <View style={styles.triviaBottomSheet}>
             <Ionicons name="warning-outline" size={100} color="#FFEE03" style={styles.bottomSheetIcon} />
-            <Text style={styles.bottomSheetPoints}>Required Points : {trivia.pointsRequired}pts</Text>
-            <Text style={styles.bottomSheetPoints}>Your points gained today : {trivia.pointsAcquiredBeforeStart}pts</Text>
+            <Text style={styles.bottomSheetPoints}>Required Points : {pointsRequired}pts</Text>
+            <Text style={styles.bottomSheetPoints}>Your points gained today : {userPoints}pts</Text>
 
             <Text style={styles.bottomSheetText}>
                 Play more fun games to qualify to play this live trivia.

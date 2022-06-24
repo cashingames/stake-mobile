@@ -24,6 +24,7 @@ export default ({ title, initialShowPlayButton = true }) => {
     const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
     const [activeCategory, setActiveCategory] = useState();
     const activeSubcategory = useSelector(state => state.game.gameCategory);
+    console.log(activeSubcategory)
     const activeGame = useSelector(state => state.game.gameType);
     const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
 
@@ -115,7 +116,7 @@ const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory })
     return (
         <Animated.View entering={randomEnteringAnimation()}>
             <Text style={styles.title}>Choose category</Text>
-            <View style={styles.subcategories}>
+            {/* <View style={styles.subcategories}> */}
                 {category.subcategories.map((subcategory, i) =>
                     <GameSubcategoryCard
                         key={i}
@@ -123,7 +124,7 @@ const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory })
                         isSelected={subcategory === selectedSubcategory}
                         onSelect={onSubCategorySelected} />
                 )}
-            </View>
+            {/* </View> */}
         </Animated.View>
     )
 };

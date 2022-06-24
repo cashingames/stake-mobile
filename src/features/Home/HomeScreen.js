@@ -23,6 +23,7 @@ import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } fr
 import crashlytics from '@react-native-firebase/crashlytics';
 import GamePicker from '../Games/GamePicker';
 import RecentlyPlayedGames from '../Games/RecentlyPlayedGames';
+import LottieAnimations from '../../shared/LottieAnimations';
 
 const HomeScreen = () => {
 
@@ -99,7 +100,7 @@ const HomeScreen = () => {
             <UserDetails user={user} />
             <View style={styles.container}>
                 <GamePicker initialShowPlayButton={false} title={"Pick a game"} />
-                <RecentlyPlayedGames />
+                {/* <RecentlyPlayedGames /> */}
                 <GlobalTopLeadersHero />
             </View>
         </ScrollView>
@@ -114,7 +115,7 @@ const UserDetails = ({ user }) => {
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance} />
             <LiveTriviaCard />
-            <UserPoints points={user.points} />
+            <UserPoints points={user.points} todaysPoints= {user.todaysPoints} />
             <UserItems showBuy={true} />
             {/* <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} /> */}
         </View>
@@ -124,15 +125,20 @@ const UserDetails = ({ user }) => {
 const UserWallet = ({ balance }) => {
     return (
         <Animated.View entering={BounceInRight.duration(2000)} style={styles.wallet}>
-            <Image
+            {/* <Image
                 source={require('../../../assets/images/wallet.png')}
-            />
+            /> */}
+             <LottieAnimations
+                    animationView={require('../../../assets/wallet.json')}
+                    width={normalize(50)}
+                    height={normalize(50)}
+                />
             <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
         </Animated.View>
     );
 }
 
-const UserPoints = ({ points }) => {
+const UserPoints = ({ points, todaysPoints }) => {
     const rotation = useSharedValue(0);
     rotation.value = withSequence(
         withTiming(-10, { duration: 50 }),
@@ -152,11 +158,11 @@ const UserPoints = ({ points }) => {
                 source={require('../../../assets/images/point-trophy.png')}
             />
             <View style={styles.pointsNumber}>
-                <Text style={styles.userPoint}>{formatNumber(points)}</Text>
+                <Text style={styles.userPoint}>{formatNumber(todaysPoints)}pts</Text>
                 <Text style={styles.pointDetail} >Today</Text>
             </View>
             <View style={styles.pointsNumber}>
-                <Text style={styles.userPoint}>{formatNumber(points)}</Text>
+                <Text style={styles.userPoint}>{formatNumber(points)}pts</Text>
                 <Text style={styles.pointDetail} >Total</Text>
             </View>
         </Animated.View>
@@ -176,20 +182,21 @@ const styles = EStyleSheet.create({
     },
     userDetails: {
         backgroundColor: '#072169',
-        paddingVertical: normalize(20),
+        paddingBottom: normalize(15),
         paddingHorizontal: normalize(20),
     },
     wallet: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: normalize(10),
+        // marginBottom: normalize(10),
     },
     walletText: {
         fontSize: '1.2rem',
         color: '#FFFF',
-        lineHeight: '1.2rem',
+        // lineHeight: '1.2rem',
         fontFamily: 'graphik-medium',
-        marginLeft: normalize(8),
+        marginLeft: normalize(2),
+        marginTop: normalize(5)
     },
     points: {
         backgroundColor: '#518EF8',
@@ -213,12 +220,15 @@ const styles = EStyleSheet.create({
         backgroundColor: "#072169",
         borderRadius: 100,
         padding: 20,
+        textAlign: 'center'
     },
     userPoint: {
         fontSize: '0.8rem',
         lineHeight: '0.8rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
+        width: '2.3rem',
+        textAlign: 'center'
     },
     pointDetail: {
         color: '#e3e3e3',

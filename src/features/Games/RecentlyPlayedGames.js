@@ -12,6 +12,7 @@ import GameSubcategoryCard from './GameSubcategoryCard';
 export default () => {
 
     const games = useSelector(state => state.auth.user.recentGames);
+    console.log(games)
 
     if (!games || !isTrue(games) || games.length === 0)
         return <></>;

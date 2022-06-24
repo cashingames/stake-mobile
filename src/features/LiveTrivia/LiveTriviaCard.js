@@ -18,6 +18,8 @@ const LiveTriviaCard = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const notEnoughPointNotice = useRef();
+    const user = useSelector(state => state.auth.user)
+
 
     const initialLoading = useSelector(state => state.common.initialLoading);
     const trivia = useSelector(state => state.liveTrivia.data);
@@ -51,9 +53,10 @@ const LiveTriviaCard = () => {
                 style={styles.triviaBackground}
                 resizeMode='contain'>
                 <FailedBottomSheet
-                    trivia={trivia}
                     refBottomSheet={notEnoughPointNotice}
                     onClose={() => notEnoughPointNotice.current.close()}
+                    pointsRequired={trivia.pointsRequired}
+                    userPoints={user.todaysPoints}
                 />
                 <View style={styles.triviaContainer}>
                     <View style={styles.triviaTop}>
