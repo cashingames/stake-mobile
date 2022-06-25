@@ -81,15 +81,15 @@ const RightButtons = () => {
                 <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
             </Pressable>
-            <Pressable style={[styles.headerIconContainer, routeName === 'HowToWin' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('HowToWin')}>
-                {/* <Ionicons name='home-outline' size={26} /> */}
+            {/* <Pressable style={[styles.headerIconContainer, routeName === 'HowToWin' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('HowToWin')}>
+                <Ionicons name='home-outline' size={26} />
                 <LottieAnimations
                     animationView={require('../../../assets/info.json')}
                     width={normalize(28)}
                     height={normalize(28)}
                 />
                 <Text style={styles.headerIconText}>How to win</Text>
-            </Pressable>
+            </Pressable> */}
         </View>
     )
 }
