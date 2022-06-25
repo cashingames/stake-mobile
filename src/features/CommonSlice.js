@@ -61,10 +61,10 @@ export const fetchFaqAndAnswers = createAsyncThunk(
     }
 )
 
-export const fetchTrivia = createAsyncThunk(
-    'common/fetchTrivia',
+export const fetchRecentLiveTrivia = createAsyncThunk(
+    'common/fetchRecentLiveTrivia',
     async (data, thunkAPI) => {
-        const response = await axios.get('v3/fetch/trivia', data)
+        const response = await axios.get('v3/live-trivia/recent', data)
         return response.data;
     }
 )
@@ -127,8 +127,8 @@ export const CommonSlice = createSlice({
             .addCase(fetchFaqAndAnswers.fulfilled, (state, action) => {
                 state.faqAndAnswers = action.payload
             })
-            .addCase(fetchTrivia.fulfilled, (state, action) => {
-                state.trivias = action.payload.data
+            .addCase(fetchRecentLiveTrivia.fulfilled, (state, action) => {
+                state.trivias = action.payload
             })
     },
 });

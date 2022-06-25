@@ -21,9 +21,9 @@ const LiveTriviaCardComponent = ({ trivia }) => {
     const notEnoughPointNotice = useRef();
 
     const actionButtonClicked = () => {
-        if (!canPlay) {
+        if ( trivia.playerStatus === "INSUFFICIENTPOINTS") {
             notEnoughPointNotice.current.open();
-        } else if (trivia.is_active && canPlay) {
+        } else if (trivia.status === "ONGOING" && trivia.playerStatus === "CANPLAY") {
             navigation.navigate('TriviaInstructions', { ...trivia })
         }
     }
@@ -37,20 +37,20 @@ const LiveTriviaCardComponent = ({ trivia }) => {
                 refBottomSheet={notEnoughPointNotice}
                 onClose={() => notEnoughPointNotice.current.close()}
                 userPoints={user.todaysPoints}
-                pointsRequired={trivia.point_eligibility}
+                pointsRequired={trivia.pointsRequired}
             />
             <View style={styles.triviaContainer}>
                 <View style={styles.triviaTop}>
-                    <Text style={styles.triviaTopText}>{trivia.name}</Text>
+                    <Text style={styles.triviaTopText}>{trivia.title}</Text>
                     <Ionicons name="help-circle-outline" size={24} color="#FFFF" />
                 </View>
-                <Text style={styles.triviaTitle}>&#8358;{formatCurrency(trivia.grand_price)}</Text>
+                <Text style={styles.triviaTitle}>{trivia.prizeDisplayText}</Text>
                 {/* <Text style={styles.triviaAdText}>up for grabs !</Text> */}
-                <Text style={styles.triviaAdText}>{trivia.start_time}</Text>
+                <Text style={styles.triviaAdText}>{trivia.startAt}</Text>
                 <View style={styles.triviaBoardBottom}>
                     <View>
                         <View style={styles.triviaTimeCountdown}>
-                            <TriviaStatus trivia={trivia} action={actionButtonClicked} canPlay={canPlay} />
+                            <TriviaStatus trivia={trivia} action={actionButtonClicked} />
                         </View>
                         <Image
                             source={require('../../assets/images/yellow-line-bottom.png')}
@@ -64,20 +64,23 @@ const LiveTriviaCardComponent = ({ trivia }) => {
     )
 }
 
-const TriviaStatus = ({ trivia, action, canPlay }) => {
+const TriviaStatus = ({ trivia, action}) => {
     // const navigation = useNavigation();
     // const user = useSelector(state => state.auth.user)
     // const canPlay = (user.todaysPoints) >= (trivia.point_eligibility);
 
     return (
         <>
-            {canPlay ?
-                <Pressable style={[trivia.is_active ? styles.triviaStageContainer : styles.disabled,
-                !canPlay ? styles.disabled : {}, trivia.has_played ? styles.disabled : {}]}
+            {trivia.playerStatus === "CANPLAY" ?
+                <Pressable style={[trivia.status === "ONGOING" ? styles.triviaStageContainer : styles.disabled,
+                trivia.playerStatus === "INSUFFICIENTPOINTS" ? styles.disabled : {},
+                trivia.playerStatus === "PLAYED" ? styles.disabled : {}]}
                     onPress={action}
-                    disabled={!canPlay || trivia.has_played || !trivia.is_active}
+                    disabled={trivia.playerStatus === "INSUFFICIENTPOINTS" ||
+                        trivia.playerStatus === "PLAYED" ||
+                        trivia.playerStatus === "WAITING"}
                 >
-                    {trivia.is_active && !trivia.has_played ?
+                    {trivia.status === "ONGOING" && trivia.playerStatus !== "PLAYED" ?
                         <Text style={styles.statusText}>Click to join Now</Text>
                         :
                         <Text style={styles.triviaClosed}>Closed</Text>
@@ -85,7 +88,7 @@ const TriviaStatus = ({ trivia, action, canPlay }) => {
                 </Pressable>
                 :
                 <>
-                    {trivia.is_active ?
+                    {trivia.status === "ONGOING" && trivia.playerStatus !== "PLAYED"  ?
                         <Pressable style={styles.triviaStageContainer} onPress={action}>
                             <Text style={styles.statusText}>Click to join Now</Text>
                         </Pressable>

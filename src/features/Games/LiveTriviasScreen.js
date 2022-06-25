@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { View, ScrollView } from 'react-native';
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { fetchTrivia } from '../CommonSlice';
+import { fetchRecentLiveTrivia} from '../CommonSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import PageLoading from '../../shared/PageLoading';
 import LiveTriviaCardComponent from '../../shared/LiveTriviaCardComponent';
@@ -19,7 +19,7 @@ const LiveTriviasScreen = ({ navigation }) => {
     const trivia = useSelector(state => state.common.trivias)
     console.log(trivia)
     useEffect(() => {
-        dispatch(fetchTrivia()).then(() => setLoading(false));
+        dispatch(fetchRecentLiveTrivia()).then(() => setLoading(false));
     }, []);
 
     if (loading) {
