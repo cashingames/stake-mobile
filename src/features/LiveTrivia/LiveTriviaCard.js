@@ -61,7 +61,7 @@ const LiveTriviaCard = () => {
                 <View style={styles.triviaContainer}>
                     <View style={styles.triviaTop}>
                         <Text style={styles.triviaTopText}>{trivia.title}</Text>
-                        <Ionicons name="help-circle-outline" size={24} color="#FFFF" />
+                        {/* <Ionicons name="help-circle-outline" size={24} color="#FFFF" /> */}
                     </View>
                     <Text style={styles.triviaTitle}>{trivia.prizeDisplayText}</Text>
                     {/* <Text style={styles.triviaAdText}>up for grabs !</Text> */}

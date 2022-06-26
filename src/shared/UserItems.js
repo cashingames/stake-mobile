@@ -38,8 +38,8 @@ const UserItems = ({ showBuy }) => {
             <View style={styles.topRow}>
                 <LottieAnimations
                     animationView={require('../../assets/treasure-chest.json')}
-                    width={normalize(110)}
-                    height={normalize(110)}
+                    width={normalize(120)}
+                    height={normalize(120)}
                 />
                 <View>
                     <View style={styles.firstRow}>
@@ -58,9 +58,9 @@ const styles = EStyleSheet.create({
         borderRadius: 15,
         flexDirection: 'column',
         backgroundColor: '#518EF8',
-        paddingVertical: normalize(8),
-        paddingRight: normalize(12),
-        alignItems: 'center'
+        paddingBottom: normalize(8),
+        paddingRight: normalize(14),
+        // alignItems: 'center'
     },
     image: {
         flex: 1,
@@ -71,7 +71,8 @@ const styles = EStyleSheet.create({
     },
     topRow: {
         flexDirection:'row',
-        alignItems:'center'
+        alignItems:'center',
+        justifyContent: 'space-between'
     },
     leftContainer: {
         alignItems: 'center',

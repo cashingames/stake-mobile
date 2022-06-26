@@ -165,10 +165,14 @@ const AvailableBoosts = ({ onClose }) => {
     return (
         <View style={styles.availableBoosts}>
             <Text style={styles.title}>Available Boosts</Text>
-            <View style={styles.boosts}>
-                {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i} />
-                )}
-            </View>
+            {boosts ?
+                <View style={styles.boosts}>
+                    {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i} />
+                    )}
+                </View>
+                :
+                <Text style={styles.noBoosts}>No boost available, go to store to purchase boost</Text>
+            }
             <GoToStore onPress={visitStore} />
             <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />
         </View>
@@ -252,6 +256,12 @@ const styles = EStyleSheet.create({
     boosts: {
         // alignItems: ''
 
+    },
+    noBoosts:{
+        textAlign: 'center',
+        fontSize: '0.85rem',
+        fontFamily: 'graphik-regular',
+        marginVertical: '1rem'
     },
     boostContent: {
         display: 'flex',

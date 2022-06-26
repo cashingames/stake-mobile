@@ -32,6 +32,7 @@ const HomeScreen = () => {
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
+   
 
     useEffect(() => {
         dispatch(resetGameStats());
@@ -158,11 +159,13 @@ const UserPoints = ({ points, todaysPoints }) => {
                 source={require('../../../assets/images/point-trophy.png')}
             />
             <View style={styles.pointsNumber}>
-                <Text style={styles.userPoint}>{formatNumber(todaysPoints)}pts</Text>
+                <Text style={styles.userPoint}>{formatNumber(todaysPoints)}</Text>
+                <Text style={styles.userPoint} >pts</Text>
                 <Text style={styles.pointDetail} >Today</Text>
             </View>
             <View style={styles.pointsNumber}>
-                <Text style={styles.userPoint}>{formatNumber(points)}pts</Text>
+                <Text style={styles.userPoint}>{formatNumber(points)}</Text>
+                <Text style={styles.userPoint} >pts</Text>
                 <Text style={styles.pointDetail} >Total</Text>
             </View>
         </Animated.View>
@@ -219,7 +222,8 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#072169",
         borderRadius: 100,
-        padding: 20,
+        paddingVertical: 20,
+        paddingHorizontal: 25,
         textAlign: 'center'
     },
     userPoint: {
@@ -227,7 +231,7 @@ const styles = EStyleSheet.create({
         lineHeight: '0.8rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        width: '2.3rem',
+        // width: '2.3rem',
         textAlign: 'center'
     },
     pointDetail: {

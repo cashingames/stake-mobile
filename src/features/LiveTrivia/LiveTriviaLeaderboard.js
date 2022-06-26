@@ -86,7 +86,7 @@ const TriviaParticipant = ({ player, position }) => {
         <View style={styles.participant}>
             <View style={styles.participantLeft}>
             <Image
-                style={styles.avatar}
+                style={styles.otherPlayerIcon}
                 source={isTrue(player.avatar) ? { uri: player.avatar} : require("../../../assets/images/user-icon.png")}
             />
                 <View style={styles.positionName}>
@@ -205,6 +205,12 @@ const styles = EStyleSheet.create({
         width: normalize(50),
         height: normalize(50),
         backgroundColor: '#FFFF',
+        borderRadius: 15,
+    },
+    otherPlayerIcon: {
+        width: normalize(50),
+        height: normalize(50),
+        backgroundColor: '#072169',
         borderRadius: 15,
     },
     championsTrophy: {

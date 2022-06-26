@@ -10,7 +10,7 @@ import normalize, { responsiveHeight, responsiveScreenWidth, responsiveWidth } f
 export default ({ game, onSelect, isSelected}) => {
     const navigation = useNavigation();
     return (
-        <Pressable style={[styles.card, isSelected ?{ backgroundColor:"#FED843"}  : {}]} onPress={() => onSelect(game)} >
+        <Pressable style={[styles.card, isSelected ?{ backgroundColor:"#EF8318"}  : {}]} onPress={() => onSelect(game)} >
 
             <Image
                 style={[styles.cardIconBigger]}

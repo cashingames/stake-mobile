@@ -147,18 +147,25 @@ const PlayGameHeader = ({ onPress, onPressBoost }) => {
 };
 
 const BoostsInfo = ({ onPress }) => {
+    const boosts = useSelector(state => state.auth.user.boosts);
     return (
-        <Pressable style={styles.boostDialog} onPress={onPress}>
-            <Text style={styles.infoText}>
-                Power Ups
-            </Text>
-            <LottieAnimations
-                animationView={require('../../../assets/boost.json')}
-                width={normalize(40)}
-                height={normalize(40)}
-            />
-            {/* <Ionicons name="speedometer" size={20} color="#FFFF" /> */}
-        </Pressable>
+        <>
+            {boosts ?
+                <Pressable style={styles.boostDialog} onPress={onPress}>
+                    <Text style={styles.infoText}>
+                        Power Ups
+                    </Text>
+                    <LottieAnimations
+                        animationView={require('../../../assets/boost.json')}
+                        width={normalize(40)}
+                        height={normalize(40)}
+                    />
+                    {/* <Ionicons name="speedometer" size={20} color="#FFFF" /> */}
+                </Pressable>
+                :
+                <View></View>
+            }
+        </>
     )
 }
 
@@ -272,15 +279,24 @@ const AvailableBoosts = () => {
     }
 
     return (
-        <View style={styles.availableBoosts}>
-            <View style={styles.boostinfo}>
-                <Text style={styles.title}>BOOST</Text>
-            </View>
-            {boostsToDisplay().map((boost, index) =>
-                boost.count >= 1 &&
-                <AvailableBoost boost={boost} key={index} onConsume={boostApplied} />
-            )}
-        </View>
+        <>
+            {boosts ?
+                <View style={styles.availableBoosts}>
+                    <View style={styles.boostinfo}>
+                        <Text style={styles.title}>BOOST</Text>
+                    </View>
+                    {
+                        boostsToDisplay().map((boost, index) =>
+                            boost.count >= 1 &&
+                            <AvailableBoost boost={boost} key={index} onConsume={boostApplied} />
+                        )
+                    }
+
+                </View>
+                :
+                <></>
+            }
+        </>
     )
 }
 

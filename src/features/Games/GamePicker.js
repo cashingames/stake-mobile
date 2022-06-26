@@ -6,6 +6,8 @@ import Animated from 'react-native-reanimated';
 import { Text, View, Pressable } from 'react-native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useDispatch, useSelector } from 'react-redux';
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
+
 
 import AppButton from '../../shared/AppButton';
 import { isTrue } from '../../utils/stringUtl';
@@ -116,15 +118,17 @@ const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory })
     return (
         <Animated.View entering={randomEnteringAnimation()}>
             <Text style={styles.title}>Choose category</Text>
-            {/* <View style={styles.subcategories}> */}
-                {category.subcategories.map((subcategory, i) =>
-                    <GameSubcategoryCard
-                        key={i}
-                        game={subcategory}
-                        isSelected={subcategory === selectedSubcategory}
-                        onSelect={onSubCategorySelected} />
-                )}
-            {/* </View> */}
+            <View style={styles.subcategories}>
+                <SwiperFlatList >
+                    {category.subcategories.map((subcategory, i) =>
+                        <GameSubcategoryCard
+                            key={i}
+                            game={subcategory}
+                            isSelected={subcategory === selectedSubcategory}
+                            onSelect={onSubCategorySelected} />
+                    )}
+                </SwiperFlatList>
+            </View>
         </Animated.View>
     )
 };
@@ -254,9 +258,8 @@ const styles = EStyleSheet.create({
         textAlign: 'center'
     },
     subcategories: {
-        display: 'flex',
         flexDirection: 'row',
-        flexWrap: 'wrap',
+        // flexWrap: 'wrap',
     },
     activeSubcategory: {
         color: '#FFF',

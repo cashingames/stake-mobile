@@ -82,7 +82,7 @@ function AppRouter() {
     }
 
     return (
-        <AppStack.Navigator >
+        <AppStack.Navigator  screenOptions={{ headerStyle: { backgroundColor: 'white' } }} >
             {isTrue(token) ?
                 (
                     <>
