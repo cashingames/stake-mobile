@@ -117,26 +117,26 @@ function getPaystackKey() {
 }
 
 function getApiUrl() {
-  // if (env === "development" || env === "preview") {
-  //   // return 'http://192.168.1.147:8000/api';
-  //   return 'https://stg-api.cashingames.com/api';
-  // }
+  if (env === "development" || env === "preview") {
+    // return 'http://192.168.1.147:8000/api';
+    return 'https://stg-api.cashingames.com/api';
+  }
 
   return 'https://api.cashingames.com/api'
 }
 
 function getDomain() {
-  // if (env === "development" || env === "preview") {
-  //   return 'https://stg.cashingames.com';
-  // }
+  if (env === "development" || env === "preview") {
+    return 'https://stg.cashingames.com';
+  }
 
   return 'https://www.cashingames.com'
 }
 
 function getAssetsBaseUrl() {
-  // if (env === "development" || env === "preview") {
-  //   return 'https://stg-api.cashingames.com';
-  // }
+  if (env === "development" || env === "preview") {
+    return 'https://stg-api.cashingames.com';
+  }
 
   return 'https://api.cashingames.com';
 }
