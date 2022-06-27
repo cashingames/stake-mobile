@@ -2,10 +2,12 @@
 import React from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 
-export default function () {
+export default function ({ backgroundColor, spinnerColor }) {
     return (
-        <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#0000ff" />
+        <View style={[styles.loadingContainer,
+        backgroundColor ? { backgroundColor: backgroundColor } : { backgroundColor: '#fff' }
+        ]}>
+            <ActivityIndicator size="large" color={spinnerColor } />
         </View>
     )
 }
@@ -15,7 +17,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         flexDirection: "row",
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
+        // "#0000ff"
         padding: 10
     },
 })

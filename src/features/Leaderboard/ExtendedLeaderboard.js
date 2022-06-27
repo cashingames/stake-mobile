@@ -37,7 +37,7 @@ export default function ExtendedLeaderboard({ navigation }) {
     );
 
     if (loading) {
-        return <PageLoading />
+        return <PageLoading spinnerColor="#0000ff" />
     }
 
     const categories = Object.keys(categoryLeaders);

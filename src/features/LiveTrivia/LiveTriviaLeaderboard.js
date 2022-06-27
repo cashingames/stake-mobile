@@ -31,7 +31,7 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
     }, [])
 
     if (loading) {
-        return <PageLoading />
+        return <PageLoading backgroundColor= '#072169' spinnerColor="#FFFF" />
     }
 
     return (

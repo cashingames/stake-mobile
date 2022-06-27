@@ -93,7 +93,7 @@ const HomeScreen = () => {
     }, [user]);
 
     if (loading) {
-        return <PageLoading />
+        return <PageLoading spinnerColor="#0000ff" />
     }
 
     return (

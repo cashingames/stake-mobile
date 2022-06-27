@@ -23,7 +23,7 @@ export default function SupportQuestionsScreen({ navigation }) {
     }, [])
 
     if (loading) {
-        return <PageLoading />
+        return <PageLoading spinnerColor="#0000ff" />
     }
 
 
