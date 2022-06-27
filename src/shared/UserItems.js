@@ -59,8 +59,8 @@ const styles = EStyleSheet.create({
         flexDirection: 'column',
         backgroundColor: '#518EF8',
         paddingBottom: normalize(8),
-        paddingRight: normalize(14),
-        // alignItems: 'center'
+        paddingRight: normalize(24),
+        alignItems: 'center'
     },
     image: {
         flex: 1,
@@ -72,7 +72,7 @@ const styles = EStyleSheet.create({
     topRow: {
         flexDirection:'row',
         alignItems:'center',
-        justifyContent: 'space-between'
+        // justifyContent: 'space-between'
     },
     leftContainer: {
         alignItems: 'center',
@@ -100,11 +100,12 @@ const styles = EStyleSheet.create({
         fontStyle: "italic"
     },
     buyMore: {
-        alignSelf: 'flex-end',
         color: '#EF2F55',
         fontFamily: 'graphik-medium',
         fontSize: '0.8rem',
-        marginTop: normalize(.2)
+        marginTop: normalize(.1),
+        marginLeft:'auto',
+        // marginRight:'1rem',
     }
 });
 

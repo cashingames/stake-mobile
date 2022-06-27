@@ -165,7 +165,7 @@ const AvailableBoosts = ({ onClose }) => {
     return (
         <View style={styles.availableBoosts}>
             <Text style={styles.title}>Available Boosts</Text>
-            {boosts ?
+            {boosts?.length > 0 ?
                 <View style={styles.boosts}>
                     {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i} />
                     )}

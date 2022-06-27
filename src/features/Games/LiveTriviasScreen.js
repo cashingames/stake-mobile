@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, StatusBar } from 'react-native';
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { fetchRecentLiveTrivia } from '../CommonSlice';
@@ -27,15 +27,18 @@ const LiveTriviasScreen = ({ navigation }) => {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            {trivia ?
-                <View style={styles.boards}>
-                    {trivia.map((trivia, i) => <LiveTriviaCardComponent key={i} trivia={trivia} />)}
-                </View>
-                :
-                <Text style={styles.noLiveTrivia}>No recent live trivia</Text>
-            }
-        </ScrollView>
+        <>
+            <StatusBar barStyle="light-content" backgroundColor="#072169" />
+            <ScrollView style={styles.container}>
+                {trivia ?
+                    <View style={styles.boards}>
+                        {trivia.map((trivia, i) => <LiveTriviaCardComponent key={i} trivia={trivia} />)}
+                    </View>
+                    :
+                    <Text style={styles.noLiveTrivia}>No recent live trivia</Text>
+                }
+            </ScrollView>
+        </>
     )
 }
 

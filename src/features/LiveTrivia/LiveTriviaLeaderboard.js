@@ -415,7 +415,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         marginTop: responsiveScreenWidth(30),
         fontSize: '1rem',
-        color: '#000000',
+        color: '#FFFF',
         fontFamily: 'graphik-medium',
     }
 });

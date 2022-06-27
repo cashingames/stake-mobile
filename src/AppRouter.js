@@ -82,22 +82,22 @@ function AppRouter() {
     }
 
     return (
-        <AppStack.Navigator  screenOptions={{ headerStyle: { backgroundColor: 'white' } }} >
+        <AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' } }} >
             {isTrue(token) ?
                 (
                     <>
                         <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
                         <AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Leaderboards', headerRight: () => <LeaderBoardFilter /> }} />
-                            <AppStack.Screen name="LiveTriviaLeaderboard" component={LiveTriviaLeaderBoard}
-                                options={{
-                                    title: 'Leaderboard',
-                                    headerStyle: {
-                                        backgroundColor: '#072169',
-                                    },
-                                    headerTintColor: '#FFFF',
-                                }}
-                            />
+                        <AppStack.Screen name="LiveTriviaLeaderboard" component={LiveTriviaLeaderBoard}
+                            options={{
+                                title: 'Leaderboard',
+                                headerStyle: {
+                                    backgroundColor: '#072169',
+                                },
+                                headerTintColor: '#FFFF',
+                            }}
+                        />
 
                         {/** game **/}
                         <AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
@@ -108,7 +108,13 @@ function AppRouter() {
                         <AppStack.Screen name="DuelScreen" component={DuelScreen} options={{ title: 'Challenge' }} />
                         <AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{ title: 'Game Instructions' }} />
                         <AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen} options={{ headerShown: false }} />
-                        <AppStack.Screen name="LiveTrivias" component={LiveTriviasScreen} options={{ title: 'Live Trivia' }} />
+                        <AppStack.Screen name="LiveTrivias" component={LiveTriviasScreen} options={{
+                            title: 'Live Trivia',
+                            headerStyle: {
+                                backgroundColor: '#072169',
+                            },
+                            headerTintColor: '#FFFF',
+                        }} />
 
 
 

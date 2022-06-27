@@ -150,7 +150,7 @@ const BoostsInfo = ({ onPress }) => {
     const boosts = useSelector(state => state.auth.user.boosts);
     return (
         <>
-            {boosts ?
+            {boosts?.length > 0 ?
                 <Pressable style={styles.boostDialog} onPress={onPress}>
                     <Text style={styles.infoText}>
                         Power Ups
@@ -280,7 +280,7 @@ const AvailableBoosts = () => {
 
     return (
         <>
-            {boosts ?
+            {boosts?.length > 0 ?
                 <View style={styles.availableBoosts}>
                     <View style={styles.boostinfo}>
                         <Text style={styles.title}>BOOST</Text>
