@@ -16,8 +16,8 @@ import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
 import AppButton from '../../shared/AppButton';
-import LottieAnimations from '../../shared/LottieAnimations';
-import HowToWin from '../HowToWin/HowToWin';
+// import LottieAnimations from '../../shared/LottieAnimations';
+// import HowToWin from '../HowToWin/HowToWin';
 
 
 const HomeStack = createDrawerNavigator();
@@ -54,7 +54,7 @@ const HomeRouter = () => {
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
             <HomeStack.Screen name="Game" component={GameScreen} options={{ title: 'Game' }} />
             <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
-            <HomeStack.Screen name="HowToWin" component={HowToWin} options={{ title: 'How to win' }} />
+            {/* <HomeStack.Screen name="HowToWin" component={HowToWin} options={{ title: 'How to win' }} /> */}
 
         </HomeStack.Navigator>
     );
