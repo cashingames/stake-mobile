@@ -135,6 +135,7 @@ const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory })
 };
 
 const NoGameNotification = ({onClose}) => {
+    const navigation = useNavigation();
     const visitStore = () => {
         onClose();
         navigation.navigate('GameStore')
