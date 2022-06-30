@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -17,7 +17,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
 
     const dispatch = useDispatch();
 
-    const user = useSelector(state => state.auth.user)
+    const user = useSelector(state => state.auth.user);
 
     const [saving, setSaving] = useState(false);
     const [email, setEmail] = useState(user.email);
@@ -25,6 +25,10 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const [firstName, setFirstName] = useState(user.firstName);
     const [lastName, setLastName] = useState(user.lastName);
     const [username, setUsername] = useState(user.username);
+    const [firstNameErr, setFirstNameError] = useState(false);
+    const [lastNameErr, setLastNameError] = useState(false);
+    const [phoneNumberErr, setPhoneNumberError] = useState(false);
+    const [canSave, setCanSave] = useState(false);
     const [dateOfBirth, setDateOfBirth] = useState(isTrue(user.dateOfBirth) ? new Date(Date.parse(user.dateOfBirth)) : new Date(2003, 0, 1));
     const [gender, setGender] = useState(user.gender);
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -34,6 +38,27 @@ export default function EditProfileDetailsScreen({ navigation }) {
         setDateOfBirth(currentDate);
         setShowDatePicker(false);
     };
+
+    const onChangeFirstName = (text) => {
+        text.length > 0 && text.length < 3 ? setFirstNameError(true) : setFirstNameError(false);
+        setFirstName(text)
+    }
+
+    const onChangeLastName = (text) => {
+        text.length > 0 && text.length < 3 ? setLastNameError(true) : setLastNameError(false);
+        setLastName(text)
+    }
+
+    const onChangePhoneNumber = (text) => {
+        text.length > 0 && text.length < 11 ? setPhoneNumberError(true) : setPhoneNumberError(false);
+        setPhoneNumber(text)
+    }
+
+    useEffect(() => {
+        const invalid = firstNameErr || firstName === '' || lastNameErr || lastName === '' ||
+            phoneNumber === '' || phoneNumberErr;
+        setCanSave(!invalid);
+    }, [firstNameErr, firstName, lastNameErr, lastName, phoneNumber, phoneNumberErr])
 
     const onSavePersonalDetails = () => {
         setSaving(true);
@@ -51,12 +76,17 @@ export default function EditProfileDetailsScreen({ navigation }) {
                 navigation.navigate("UserProfile")
             })
             .catch((rejectedValueOrSerializedError) => {
-                console.log(rejectedValueOrSerializedError);
+                if (rejectedValueOrSerializedError.message === "Request failed with status code 422") {
+                    Alert.alert('The phone number has already been taken')
+                }
+                else {
+                    Alert.alert("Could not update profile, Please try again later.");
+                }
+                console.log(rejectedValueOrSerializedError.message);
                 setSaving(false);
-                Alert.alert('Invalid data provided')
                 // after login eager get commond data for the whole app
                 // console.log("failed");
-                // console.log(rejectedValueOrSerializedError)
+                console.log(rejectedValueOrSerializedError.message);
             });
     }
 
@@ -78,17 +108,20 @@ export default function EditProfileDetailsScreen({ navigation }) {
                 <Input
                     label='First name'
                     value={firstName}
-                    onChangeText={setFirstName}
+                    onChangeText={text => { onChangeFirstName(text) }}
+                    error={firstNameErr && '*first name must not be empty'}
                 />
                 <Input
                     label='Last name'
                     value={lastName}
-                    onChangeText={setLastName}
+                    onChangeText={text => { onChangeLastName(text) }}
+                    error={lastNameErr && '*last name must not be empty'}
                 />
                 <Input
                     label='Phone number'
                     value={phoneNumber}
-                    onChangeText={setPhoneNumber}
+                    onChangeText={text => { onChangePhoneNumber(text) }}
+                    error={phoneNumberErr && '*input a valid phone number'}
                     type="phone"
                     maxLength={11}
                     keyboardType='numeric'
@@ -131,7 +164,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         </Picker>
                     </View>
                 </View>
-                <AppButton text={saving ? 'Saving' : 'Save Changes'} onPress={onSavePersonalDetails} />
+                <AppButton text={saving ? 'Saving' : 'Save Changes'} onPress={onSavePersonalDetails} disabled={!canSave} />
             </View>
         </ScrollView>
     );
