@@ -1,128 +1,84 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Image, ScrollView, TextInput, Pressable, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { useNavigation } from '@react-navigation/native';
-import { SearchBar } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector, useDispatch } from 'react-redux';
-import AppButton from '../../shared/AppButton';
 import { isTrue } from '../../utils/stringUtl';
-import { sendFriendInvite, setSelectedFriend } from './GameSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
-import Constants from 'expo-constants';
+import { fetchUserFriends, searchUserFriends } from '../CommonSlice';
+import PageLoading from '../../shared/PageLoading';
 
 export default function DuelSelectPlayerScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true)
+    const userFriends = useSelector(state => state.common.userFriends);
+    const [search, setSearch] = useState("");
 
-    const friends = useSelector(state => state.auth.user.friends)
-    const [searchText, setSearchText] = useState('');
-    const [filteredFriends, setFilteredFriends] = useState(friends);
+
     useEffect(() => {
+        dispatch(fetchUserFriends()).then(() => setLoading(false));
+    }, []);
 
-        if (searchText == '') {
-            setFilteredFriends(friends);
-            return;
-        }
+    const onSearchFriends = () => {
+        console.log('clicking')
+        dispatch(searchUserFriends(
+            search
+        ))
+    }
 
-        var result = friends.filter(friend => {
-            return friend.username.toLowerCase().includes(searchText.toLowerCase()) ||
-                friend.fullName.toLowerCase().includes(searchText.toLowerCase());
-        });
-
-        setFilteredFriends(result);
-
-    }, [searchText])
+    if (loading) {
+        return <PageLoading spinnerColor="#0000ff" />
+    }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView style={styles.content}>
-                <View style={styles.search}>
-                    <Ionicons name="search" size={18} color="#524D4D" style={styles.icon} />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Search your friend’s name"
-                        onChangeText={setSearchText}
-                        keyboardType="default"
-                    />
+        <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
+            <View style={styles.search}>
+                <Ionicons name="search" size={18} color="#524D4D" style={styles.icon} />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Search friend’s name"
+                    onChangeText={setSearch}
+                    keyboardType="default"
+                />
+                <Pressable style={styles.searchButton} onPress={onSearchFriends}>
+                    <Text style={styles.searchText}>Search</Text>
+                </Pressable>
+            </View>
+            {userFriends &&
+                <View style={styles.boards}>
+                    {userFriends.map((userFriends, i) => <FriendDetails key={i} userFriends={userFriends} />)}
                 </View>
-                <View>
-                    <View style={styles.players}>
-                        {filteredFriends.map((friend, i) => <FriendDetails friend={friend} key={i} />)}
-                    </View>
-                </View>
-                <SendInvites />
-            </ScrollView>
-        </SafeAreaView>
+
+            }
+
+        </ScrollView>
     );
 }
 
 
-const FriendDetails = ({ friend }) => {
-    const dispatch = useDispatch();
-    const opponentId = useSelector(state => state.game.selectedFriend.id)
-    const selectedFriend = (friend) => {
-        dispatch(setSelectedFriend(friend));
-        console.log("mountain")
-        console.log(friend)
-    }
+const FriendDetails = ({ userFriends }) => {
     return (
-        <Pressable style={[styles.friendDetails, opponentId === friend.id ? styles.selected : {}]} onPress={() => { selectedFriend(friend) }}>
+        <Pressable style={styles.friendDetails}>
             <Image
-                source={isTrue(friend.avatar) ? { uri: `${Constants.manifest.extra.apiBaseUrl}/${friend.avatar}` } : require("../../../assets/images/user-icon.png")}
+                source={isTrue(userFriends.avatar) ? { uri: userFriends.avatar } : require("../../../assets/images/user-icon.png")}
                 style={styles.avatar}
             />
-            <Text style={[styles.friendName, opponentId === friend.id ? styles.selectedText : {}]}>{friend.username}</Text>
+            <Text style={styles.friendName}>{userFriends.username}</Text>
         </Pressable>
     )
 }
 
-const SendInvites = () => {
-    const dispatch = useDispatch();
-    const navigation = useNavigation();
-    const opponentId = useSelector(state => state.game.selectedFriend.id)
-    const categoryId = useSelector(state => state.game.gameCategory.id)
-    const gameTypeId = useSelector(state => state.game.gameType.id)
-    console.log(JSON.stringify(categoryId) + 'this is category');
-    console.log(JSON.stringify(gameTypeId) + 'this is type');
-    console.log(JSON.stringify(opponentId) + 'this is opponent');
-    const sendInvite = () => {
-        dispatch(sendFriendInvite({
-            opponentId,
-            categoryId,
-            gameTypeId
-        }))
-            .then(unwrapResult)
-            .then(() => {
-                console.log('sent')
-                navigation.navigate('DuelScreen');
-            })
-            .catch((rejectedValueOrSerializedError) => {
-                console.log(rejectedValueOrSerializedError);
-                Alert.alert('failed to send invite')
-                navigation.navigate('Home');
-            });
-
-    }
-
-    return (
-        <AppButton onPress={sendInvite} text='Send Invite' />
-    )
-}
 
 
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F8F9FD',
+        paddingHorizontal: normalize(18),
     },
 
-    content: {
-        paddingHorizontal: normalize(18),
-        paddingBottom: normalize(50),
-    },
     search: {
         display: 'flex',
         flexDirection: 'row',
@@ -130,10 +86,22 @@ const styles = EStyleSheet.create({
         backgroundColor: '#FFFF',
         paddingVertical: responsiveScreenWidth(1.5),
         paddingHorizontal: responsiveScreenWidth(3),
-        borderRadius: 8,
-        borderColor: 'rgba(0, 0, 0, 0.15)',
+        borderRadius: 4,
+        borderColor:  '#E9E8E8',
         borderWidth: 1,
         marginVertical: responsiveScreenWidth(5)
+    },
+    searchButton: {
+        backgroundColor: '#EF2F55',
+        marginLeft: 'auto',
+        paddingHorizontal: '0.7rem',
+        paddingVertical: '0.3rem',
+        borderRadius: 10,
+    },
+    searchText: {
+        fontSize: '0.6rem',
+        fontFamily: 'graphik-regular',
+        color: '#FFFF'
     },
     icon: {
         opacity: 0.4,

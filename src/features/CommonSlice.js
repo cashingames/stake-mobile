@@ -69,6 +69,22 @@ export const fetchRecentLiveTrivia = createAsyncThunk(
     }
 )
 
+export const fetchUserFriends = createAsyncThunk(
+    'common/fetchUserFriends',
+    async (thunkAPI) => {
+        const response = await axios.get('v3/user/search/friends')
+        return response.data;
+    }
+)
+
+export const searchUserFriends = createAsyncThunk(
+    'common/searchUserFriends',
+    async (data, thunkAPI) => {
+        const response = await axios.get(`v3/user/search/friends?search=${data}`)
+        return response.data;
+    }
+)
+
 
 const initialState = {
     initialLoading: true,
@@ -84,7 +100,8 @@ const initialState = {
     faqAndAnswers: [],
     trivias: [],
     minVersionCode: '',
-    minVersionForce: false
+    minVersionForce: false,
+    userFriends: [],
 }
 
 export const CommonSlice = createSlice({
@@ -129,6 +146,12 @@ export const CommonSlice = createSlice({
             })
             .addCase(fetchRecentLiveTrivia.fulfilled, (state, action) => {
                 state.trivias = action.payload
+            })
+            .addCase(fetchUserFriends.fulfilled, (state, action) => {
+                state.userFriends = action.payload
+            })
+            .addCase(searchUserFriends.fulfilled, (state, action) => {
+                state.userFriends = action.payload
             })
     },
 });
