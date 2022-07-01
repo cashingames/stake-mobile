@@ -33,7 +33,7 @@ export default function DuelSelectPlayerScreen({ navigation }) {
     }
 
     return (
-        <ScrollView style={styles.content} keyboardShouldPersistTaps='always'>
+        <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
             <View style={styles.search}>
                 <Ionicons name="search" size={18} color="#524D4D" style={styles.icon} />
                 <TextInput
@@ -50,8 +50,9 @@ export default function DuelSelectPlayerScreen({ navigation }) {
                 <View style={styles.boards}>
                     {userFriends.map((userFriends, i) => <FriendDetails key={i} userFriends={userFriends} />)}
                 </View>
+
             }
-    
+
         </ScrollView>
     );
 }
@@ -75,12 +76,9 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F8F9FD',
+        paddingHorizontal: normalize(18),
     },
 
-    content: {
-        paddingHorizontal: normalize(18),
-        paddingBottom: normalize(50),
-    },
     search: {
         display: 'flex',
         flexDirection: 'row',
@@ -88,8 +86,8 @@ const styles = EStyleSheet.create({
         backgroundColor: '#FFFF',
         paddingVertical: responsiveScreenWidth(1.5),
         paddingHorizontal: responsiveScreenWidth(3),
-        borderRadius: 8,
-        borderColor: 'rgba(0, 0, 0, 0.15)',
+        borderRadius: 4,
+        borderColor:  '#E9E8E8',
         borderWidth: 1,
         marginVertical: responsiveScreenWidth(5)
     },
