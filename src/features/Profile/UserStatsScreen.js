@@ -1,14 +1,12 @@
 import React from 'react';
-import { Text, View, ScrollView, Image } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from 'react-redux';
-import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import Constants from 'expo-constants';
-
 import normalize from '../../utils/normalize';
-import { isTrue } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
-import PageLoading from '../../shared/PageLoading';
+import UserItems from '../../shared/UserItems';
+import LottieAnimations from '../../shared/LottieAnimations';
+
 
 
 export default function UserStatsScreen({ navigation }) {
@@ -20,6 +18,7 @@ export default function UserStatsScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
+
             <UserRank userPoint={user.points} />
             <Detail
                 username={user.username}
@@ -28,10 +27,9 @@ export default function UserStatsScreen({ navigation }) {
                 gamesPlayed={user.gamesCount}
                 globalRanking={user.globalRank}
                 winRate={user.winRate}
-                position={user.badge}
                 challengesPlayed={user.totalChallenges}
             />
-            <RecentlyPlayedCards games={user.recentGames} />
+            <UserItems showBuy={true} />
         </ScrollView>
     );
 }
@@ -40,13 +38,18 @@ const UserRank = ({ userPoint }) => {
     return (
         <View style={styles.rank}>
             <View style={styles.rankPoints}>
-                <Text style={styles.rankText}>Rank by Points</Text>
+                <Text style={styles.rankText}>All Time Best</Text>
                 <Text style={styles.pointText}>{userPoint}points</Text>
+
             </View>
-            <Image
-                // style={styles.avatar}
-                source={require('../../../assets/images/trophy-cup.png')}
+            <LottieAnimations
+                animationView={require('../../../assets/userStats.json')}
+                width={normalize(150)}
+                height={normalize(150)}
             />
+            {/* <Image
+                source={require('../../../assets/images/trophy-cup.png')}
+            /> */}
         </View>
     )
 }
@@ -58,7 +61,6 @@ const Detail = ({
     gamesPlayed,
     globalRanking,
     winRate,
-    position,
     challengesPlayed
 }) => {
     return (
@@ -89,10 +91,6 @@ const Detail = ({
                     <Text style={styles.responseText}>{winRate}</Text>
                 </View>
                 <View style={styles.detail}>
-                    <Text style={styles.detailText}>Position</Text>
-                    <Text style={styles.responseText}>{position}</Text>
-                </View>
-                <View style={styles.detail}>
                     <Text style={styles.detailText}>Challenges Played</Text>
                     <Text style={styles.responseText}>{challengesPlayed}</Text>
                 </View>
@@ -101,33 +99,9 @@ const Detail = ({
     )
 }
 
-function RecentlyPlayedCards({ games }) {
-    if (!isTrue(games) || games.length === 0)
-        return <></>;
-    return (
-        <View style={styles.games}>
-            <Text style={styles.title}>Recently Played Games</Text>
-            <View style={styles.cards}>
-                <SwiperFlatList autoplay autoplayDelay={2} autoplayLoop>
-                    {games.map((game, i) => <RecentlyPlayedCard key={i} game={game} />)}
-                </SwiperFlatList>
-            </View>
-        </View>
-    )
-}
 
-function RecentlyPlayedCard({ game }) {
-    return (
-        <View style={[styles.card, { backgroundColor: game.bgColor }]} >
-            <Image
-                style={styles.cardIcon}
-                source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${game.icon}` }}
-            />
-            <Text style={styles.playedTitle}>{game.name}</Text>
-            <Text style={styles.replay}>Replay</Text>
-        </View>
-    );
-}
+
+
 
 const styles = EStyleSheet.create({
 
@@ -136,14 +110,14 @@ const styles = EStyleSheet.create({
         backgroundColor: '#F2F5FF',
         paddingHorizontal: normalize(18),
         paddingVertical: normalize(25),
-        marginBottom: normalize(20)
+        // marginBottom: normalize(20)
     },
     rank: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#151C2F',
-        paddingVertical: normalize(25),
+        paddingVertical: normalize(10),
         paddingHorizontal: normalize(15),
         borderRadius: 16
     },
