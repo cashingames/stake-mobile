@@ -47,7 +47,7 @@ import FirstTimeUserBonus from './features/Auth/FirstTimeUserBonus';
 import LeaderBoardFilter from './features/Leaderboard/LeaderBoardFilter';
 import TriviaInstructionsScreen from './features/Games/TriviaInstructionsScreen';
 import TriviaEndResultScreen from './features/Games/TriviaEndResultScreen';
-import TournamentScreen from './features/Games/TournamentScreen';
+// import TournamentScreen from './features/Games/TournamentScreen';
 import LiveTriviaLeaderBoard from './features/LiveTrivia/LiveTriviaLeaderboard';
 import LiveTriviasScreen from './features/Games/LiveTriviasScreen';
 
@@ -162,7 +162,7 @@ function AppRouter() {
             <AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Support' }} />
             <AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
             <AppStack.Screen name="FirstTimeBonus" component={FirstTimeUserBonus} options={{ headerShown: false }} />
-            <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} />
+            {/* <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} /> */}
         </AppStack.Navigator >
     )
 }

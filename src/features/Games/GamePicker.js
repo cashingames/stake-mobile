@@ -15,9 +15,10 @@ import { setGameCategory, setGameType } from './GameSlice';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { randomEnteringAnimation } from '../../utils/utils';
 import GameCategoryCard from './GameCategoryCard';
-// import NoGameNotification from './NoGameNotification';
 import GameSubcategoryCard from './GameSubcategoryCard';
 import { Image } from 'react-native';
+import NoGameNotification from '../../shared/NoGameNotification';
+// import NoGameNotification from '../../shared/NoGameNotification';
 
 export default ({ title, initialShowPlayButton = true }) => {
 
@@ -134,38 +135,38 @@ const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory })
     )
 };
 
-const NoGameNotification = ({onClose}) => {
-    const navigation = useNavigation();
-    const visitStore = () => {
-        onClose();
-        navigation.navigate('GameStore')
-    }
-    return (
-        <View style={styles.noGames}>
-        <Image style={styles.sadEmoji}
-            source={require('../../../assets/images/sad-face-emoji.png')}
+// const NoGameNotification = ({onClose}) => {
+//     const navigation = useNavigation();
+//     const visitStore = () => {
+//         onClose();
+//         navigation.navigate('GameStore')
+//     }
+//     return (
+//         <View style={styles.noGames}>
+//         <Image style={styles.sadEmoji}
+//             source={require('../../../assets/images/sad-face-emoji.png')}
 
-        />
-        <Text style={styles.noGamesText}>Sorry,</Text>
-        <Text style={styles.noGamesText}>You have exhausted your games</Text>
-        <GoToStore onPress={visitStore} />
-    </View>
-    )
-};
+//         />
+//         <Text style={styles.noGamesText}>Sorry,</Text>
+//         <Text style={styles.noGamesText}>You have exhausted your games</Text>
+//         <GoToStore onPress={visitStore} />
+//     </View>
+//     )
+// };
 
-const GoToStore = ({ onPress }) => {
-    return (
-        <View style={styles.moreBoost}>
+// const GoToStore = ({ onPress }) => {
+//     return (
+//         <View style={styles.moreBoost}>
 
-            <Pressable onPress={onPress}>
-                <Text style={styles.needBoost}>Need more games?
-                    <Text style={styles.storeLink}> Go to Store</Text>
-                </Text>
-            </Pressable>
+//             <Pressable onPress={onPress}>
+//                 <Text style={styles.needBoost}>Need more games?
+//                     <Text style={styles.storeLink}> Go to Store</Text>
+//                 </Text>
+//             </Pressable>
 
-        </View>
-    )
-}
+//         </View>
+//     )
+// }
 
 
 const SubCategory = ({ subcategory, onSubCategorySelected, isSelected }) => {
