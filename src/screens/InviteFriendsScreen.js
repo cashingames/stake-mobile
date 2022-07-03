@@ -6,6 +6,7 @@ import * as Clipboard from 'expo-clipboard';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from 'react-redux';
 import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
+import LottieAnimations from '../shared/LottieAnimations';
 
 
 export default function InviteFriendsScreen({ navigation }) {
@@ -13,10 +14,16 @@ export default function InviteFriendsScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
+            <LottieAnimations
+                animationView={require('../../assets/friends.json')}
+                width={normalize(160)}
+                height={normalize(160)}
+            />
             <Heading />
             <Instructions />
             <InviteLink />
         </ScrollView>
+
     );
 }
 
@@ -93,6 +100,11 @@ const styles = EStyleSheet.create({
 
     heading: {
         marginVertical: normalize(30),
+    },
+    headingContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     value: {
         fontSize: '1.5rem',

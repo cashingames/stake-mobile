@@ -39,7 +39,7 @@ const UserRank = ({ userPoint }) => {
         <View style={styles.rank}>
             <View style={styles.rankPoints}>
                 <Text style={styles.rankText}>All Time Best</Text>
-                <Text style={styles.pointText}>{userPoint}points</Text>
+                <Text style={styles.pointText}>{userPoint}pts</Text>
 
             </View>
             <LottieAnimations
@@ -117,7 +117,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#151C2F',
-        paddingVertical: normalize(10),
+        paddingVertical: normalize(5),
         paddingHorizontal: normalize(15),
         borderRadius: 16
     },
@@ -130,10 +130,10 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
     },
     pointText: {
-        fontSize: '0.66rem',
+        fontSize: '0.8rem',
         fontFamily: 'graphik-medium',
         color: '#828282',
-        marginVertical: normalize(10)
+        marginVertical: normalize(5)
     },
     detail: {
         flexDirection: 'row',
