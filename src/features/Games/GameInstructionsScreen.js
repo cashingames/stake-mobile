@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Constants from 'expo-constants';
 import EStyleSheet from "react-native-extended-stylesheet";
-
+import GoToStore from '../../shared/GoToStore';
 import { startGame, setIsPlayingTrivia } from "./GameSlice";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
@@ -173,26 +173,13 @@ const AvailableBoosts = ({ onClose }) => {
                 :
                 <Text style={styles.noBoosts}>No boost available, go to store to purchase boost</Text>
             }
-            <GoToStore onPress={visitStore} />
+            <View style={styles.storeLinks}>
+                <GoToStore onPress={visitStore} />
+            </View>
             <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />
         </View>
     )
 }
-
-const GoToStore = ({ onPress }) => {
-    return (
-        <View style={styles.moreBoost}>
-
-            <Pressable onPress={onPress}>
-                <Text style={styles.needBoost}>Need more boosts?
-                    <Text style={styles.storeLink}> Go to Store</Text>
-                </Text>
-            </Pressable>
-
-        </View>
-    )
-}
-
 
 
 const styles = EStyleSheet.create({
@@ -240,7 +227,9 @@ const styles = EStyleSheet.create({
         borderRadius: 12,
         backgroundColor: '#EF2F55'
     },
-
+    storeLinks: {
+        alignItems: 'center',
+    },
     amount: {
         fontFamily: 'graphik-bold',
         fontSize: '0.8rem',
@@ -257,7 +246,7 @@ const styles = EStyleSheet.create({
         // alignItems: ''
 
     },
-    noBoosts:{
+    noBoosts: {
         textAlign: 'center',
         fontSize: '0.85rem',
         fontFamily: 'graphik-regular',

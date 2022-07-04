@@ -3,15 +3,12 @@ import {Text, View, Image, ScrollView, Pressable, Alert, BackHandler } from 'rea
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import RBSheet from "react-native-raw-bottom-sheet";
-// import { NoGameNotification } from '../Games/GamePicker';
 import { getUser } from '../Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { incrementCountdownResetIndex, startGame, resetGameStats } from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LottieAnimations from "../../shared/LottieAnimations";
 import NoGameNotification from '../../shared/NoGameNotification';
-
 
 export default function GameEndResultScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -106,26 +103,10 @@ export default function GameEndResultScreen({ navigation }) {
                 />
 
             </View>
-            <RBSheet
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={true}
-                height={400}
-                customStyles={{
-                    wrapper: {
-                        backgroundColor: "rgba(0, 0, 0, 0.5)"
-                    },
-                    draggableIcon: {
-                        backgroundColor: "#000",
-                    },
-                    container: {
-                        borderTopStartRadius: 25,
-                        borderTopEndRadius: 25,
-                    }
-                }}
-            >
-                <NoGameNotification onClose={closeBottomSheet} />
-            </RBSheet>
+            <NoGameNotification
+                refBottomSheet={refRBSheet}
+                onClose={closeBottomSheet}
+            />
         </ScrollView>
 
     );
