@@ -10,7 +10,7 @@ export default function DuelGameEndResult({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <ImageBackground source={require('../../assets/images/game_end.png')} style={styles.image} resizeMode="cover">
+            <ImageBackground source={require('../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">
                 <ScrollView>
                     <View style={styles.content}>
                         <UserResultEmoji userEmoji={require('../../assets/images/fire-cracker.png')} />

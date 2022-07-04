@@ -126,9 +126,7 @@ const UserDetails = ({ user }) => {
 const UserWallet = ({ balance }) => {
     return (
         <Animated.View entering={BounceInRight.duration(2000)} style={styles.wallet}>
-            {/* <Image
-                source={require('../../../assets/images/wallet.png')}
-            /> */}
+       
              <LottieAnimations
                     animationView={require('../../../assets/wallet.json')}
                     width={normalize(50)}

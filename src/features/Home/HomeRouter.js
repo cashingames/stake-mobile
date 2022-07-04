@@ -11,7 +11,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import HomeScreen from './HomeScreen';
 import WalletScreen from '../Transactions/WalletScreen';
-import GameScreen from '../Games/GameScreen';
 import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
@@ -52,7 +51,6 @@ const HomeRouter = () => {
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={AppMainHeaderOptions}>
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
-            <HomeStack.Screen name="Game" component={GameScreen} options={{ title: 'Game' }} />
             <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
             {/* <HomeStack.Screen name="HowToWin" component={HowToWin} options={{ title: 'How to win' }} /> */}
 
@@ -73,10 +71,6 @@ const RightButtons = () => {
                 <Ionicons name='home-outline' size={26} />
                 <Text style={styles.headerIconText}>Home</Text>
             </Pressable>
-            {/* <Pressable style={[styles.headerIconContainer, routeName === 'Game' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Game')}>
-                <Ionicons name='game-controller-outline' size={24} style={[styles.headerIcon, routeName === 'Game' ? styles.activeHeaderIcon : {}]} />
-                <Text style={styles.headerIconText}>Play</Text>
-            </Pressable> */}
             <Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
                 <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
