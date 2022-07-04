@@ -3,12 +3,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Animated from 'react-native-reanimated';
-import { Text, View, Pressable } from 'react-native';
-import RBSheet from "react-native-raw-bottom-sheet";
+import { Text, View} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-
-
 import AppButton from '../../shared/AppButton';
 import { isTrue } from '../../utils/stringUtl';
 import { setGameCategory, setGameType } from './GameSlice';
@@ -16,9 +13,7 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { randomEnteringAnimation } from '../../utils/utils';
 import GameCategoryCard from './GameCategoryCard';
 import GameSubcategoryCard from './GameSubcategoryCard';
-import { Image } from 'react-native';
 import NoGameNotification from '../../shared/NoGameNotification';
-// import NoGameNotification from '../../shared/NoGameNotification';
 
 export default ({ title, initialShowPlayButton = true }) => {
 
@@ -79,36 +74,17 @@ export default ({ title, initialShowPlayButton = true }) => {
                 />
                 )}
             </View>
-            {/* <View> */}
             {isTrue(activeCategory) && <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />}
-            {/* </View> */}
-
             {(initialShowPlayButton || isTrue(activeSubcategory)) &&
                 < Animated.View entering={randomEnteringAnimation()}>
                     <AppButton text='Proceed to Play' onPress={onPlayButtonClick} disabled={!isTrue(activeSubcategory)} />
                 </Animated.View>
             }
 
-            <RBSheet
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={true}
-                height={400}
-                customStyles={{
-                    wrapper: {
-                        backgroundColor: "rgba(0, 0, 0, 0.5)"
-                    },
-                    draggableIcon: {
-                        backgroundColor: "#000",
-                    },
-                    container: {
-                        borderTopStartRadius: 25,
-                        borderTopEndRadius: 25,
-                    }
-                }}
-            >
-                <NoGameNotification onClose={closeBottomSheet} />
-            </RBSheet>
+            <NoGameNotification
+                refBottomSheet={refRBSheet}
+                onClose={closeBottomSheet}
+            />
 
         </>
 
@@ -132,52 +108,6 @@ const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory })
                 </SwiperFlatList>
             </View>
         </Animated.View>
-    )
-};
-
-// const NoGameNotification = ({onClose}) => {
-//     const navigation = useNavigation();
-//     const visitStore = () => {
-//         onClose();
-//         navigation.navigate('GameStore')
-//     }
-//     return (
-//         <View style={styles.noGames}>
-//         <Image style={styles.sadEmoji}
-//             source={require('../../../assets/images/sad-face-emoji.png')}
-
-//         />
-//         <Text style={styles.noGamesText}>Sorry,</Text>
-//         <Text style={styles.noGamesText}>You have exhausted your games</Text>
-//         <GoToStore onPress={visitStore} />
-//     </View>
-//     )
-// };
-
-// const GoToStore = ({ onPress }) => {
-//     return (
-//         <View style={styles.moreBoost}>
-
-//             <Pressable onPress={onPress}>
-//                 <Text style={styles.needBoost}>Need more games?
-//                     <Text style={styles.storeLink}> Go to Store</Text>
-//                 </Text>
-//             </Pressable>
-
-//         </View>
-//     )
-// }
-
-
-const SubCategory = ({ subcategory, onSubCategorySelected, isSelected }) => {
-
-    return (
-        <Pressable
-            style={[styles.subcategory, isSelected ? styles.activeSubcategory : {}]}
-            onPress={() => onSubCategorySelected(subcategory)}
-        >
-            <Text style={[styles.gameButton, isSelected ? { color: "#FFF" } : {}]}>{subcategory.name}</Text>
-        </Pressable>
     )
 };
 
@@ -265,8 +195,6 @@ const styles = EStyleSheet.create({
     },
     games: {
         paddingVertical: normalize(10),
-        // marginRight: normalize(5),
-        // backgroundColor: "red",
         width: "88%",
     },
     title: {
@@ -318,22 +246,6 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         paddingVertical: normalize(14),
         paddingHorizontal: normalize(15),
-    },
-    sadEmoji: {
-        width: normalize(50),
-        height: normalize(50),
-        marginBottom: normalize(20)
-    },
-    needGames: {
-        fontSize: normalize(12),
-        fontFamily: 'graphik-regular',
-        color: '#000',
-        marginTop: normalize(15)
-    },
-    storeLink: {
-        fontSize: normalize(12),
-        fontFamily: 'graphik-medium',
-        color: '#EF2F55',
     },
 
 });
