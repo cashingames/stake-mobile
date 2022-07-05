@@ -32,7 +32,8 @@ const HomeScreen = () => {
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
-   
+    const trivia = useSelector(state => state.liveTrivia.data);
+
 
     useEffect(() => {
         dispatch(resetGameStats());
@@ -98,7 +99,7 @@ const HomeScreen = () => {
 
     return (
         <ScrollView contentContainerStyle={styles.scrollView}>
-            <UserDetails user={user} />
+            <UserDetails user={user} trivia={trivia} />
             <View style={styles.container}>
                 <GamePicker initialShowPlayButton={false} title={"Pick a game"} />
                 {/* <RecentlyPlayedGames /> */}
@@ -110,12 +111,12 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-const UserDetails = ({ user }) => {
+const UserDetails = ({ user, trivia }) => {
 
     return (
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance} />
-            <LiveTriviaCard />
+            <LiveTriviaCard trivia ={trivia} />
             <UserPoints points={user.points} todaysPoints= {user.todaysPoints} />
             <UserItems showBuy={true} />
             {/* <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} /> */}
@@ -151,7 +152,7 @@ const UserPoints = ({ points, todaysPoints }) => {
     });
 
     return (
-        <Animated.View entering={BounceInUp.delay(800)} style={styles.points}>
+        <Animated.View entering={BounceInUp.duration(2000)} style={styles.points}>
             <Animated.Image
                 style={[styles.trophy, animatedStyle]}
                 source={require('../../../assets/images/point-trophy.png')}

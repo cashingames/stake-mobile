@@ -14,7 +14,7 @@ export default function GlobalTopLeadersHero() {
     const leaders = useSelector(state => state.common.globalLeaders)
 
     return (
-        <Animated.View style={styles.leaderboard} entering={randomEnteringAnimation().duration(1000)}>
+        <Animated.View style={styles.leaderboard} entering={randomEnteringAnimation().duration(2000)}>
             <View style={styles.leaderboardHeader}>
                 <Text style={styles.title}>Leaderboard</Text>
                 <View style={styles.extended}>

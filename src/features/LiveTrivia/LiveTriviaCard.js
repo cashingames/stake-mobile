@@ -14,7 +14,7 @@ import FailedBottomSheet from './FailedBottomSheet';
 
 
 
-const LiveTriviaCard = () => {
+const LiveTriviaCard = ({trivia}) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const notEnoughPointNotice = useRef();
@@ -22,7 +22,7 @@ const LiveTriviaCard = () => {
 
 
     const initialLoading = useSelector(state => state.common.initialLoading);
-    const trivia = useSelector(state => state.liveTrivia.data);
+    // const trivia = useSelector(state => state.liveTrivia.data);
 
     const triviaActionButtonClicked = () => {
         if (trivia.playerStatus === "INSUFFICIENTPOINTS") {

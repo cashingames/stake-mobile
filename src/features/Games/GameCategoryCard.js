@@ -10,7 +10,7 @@ import Constants from 'expo-constants';
 
 export default ({ category, onSelect, isSelected }) => {
     return (
-        <Animated.View style={[styles.card, { backgroundColor: category.bgColor }]} entering={randomEnteringAnimation().duration(1000)}>
+        <Animated.View style={[styles.card, { backgroundColor: category.bgColor }]} entering={randomEnteringAnimation().duration(2000)}>
             <Pressable onPress={() => onSelect(category)} >
                 <View style={styles.categoryCardTopRow}>
                     <Image
