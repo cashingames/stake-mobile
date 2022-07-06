@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import GlobalTopLeaders from "./GlobalTopLeaders";
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Animated from 'react-native-reanimated';
+import Animated, { SlideInRight } from 'react-native-reanimated';
 import { randomEnteringAnimation } from '../utils/utils';
 
 export default function GlobalTopLeadersHero() {
@@ -14,7 +14,7 @@ export default function GlobalTopLeadersHero() {
     const leaders = useSelector(state => state.common.globalLeaders)
 
     return (
-        <Animated.View style={styles.leaderboard} entering={randomEnteringAnimation().duration(2000)}>
+        <Animated.View style={styles.leaderboard} entering={SlideInRight.duration(2000)}>
             <View style={styles.leaderboardHeader}>
                 <Text style={styles.title}>Leaderboard</Text>
                 <View style={styles.extended}>
