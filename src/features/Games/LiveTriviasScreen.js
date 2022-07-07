@@ -24,7 +24,12 @@ const LiveTriviasScreen = ({ navigation }) => {
     }, []);
 
     if (loading) {
-        return <PageLoading backgroundColor= '#072169' spinnerColor="#FFFF" />
+        return <PageLoading
+            backgroundColor='#072169'
+            spinnerColor="#FFFF"
+            statusBackgroundr="#072169"
+            barStyle="light"
+        />
     }
 
     return (
