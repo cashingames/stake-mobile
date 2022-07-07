@@ -47,7 +47,7 @@ const LiveTriviaCard = ({trivia}) => {
     }
 
     return (
-        <Animated.View entering={randomEnteringAnimation().duration(2000)}>
+        <Animated.View entering={BounceInRight.duration(2000)}>
             <ImageBackground
                 source={require('../../../assets/images/live-trivia-card-background-blue.png')}
                 style={styles.triviaBackground}

@@ -7,8 +7,7 @@ import LottieAnimations from '../shared/LottieAnimations';
 
 import { formatNumber } from '../utils/stringUtl';
 import normalize, { responsiveHeight, responsiveScreenWidth } from "../utils/normalize";
-import Animated from "react-native-reanimated";
-import { randomEnteringAnimation } from "../utils/utils";
+import Animated, { BounceInLeft } from "react-native-reanimated";
 
 const UserItems = ({ showBuy }) => {
 
@@ -34,7 +33,7 @@ const UserItems = ({ showBuy }) => {
     }, [boosts, plans]);
 
     return (
-        <Animated.View entering={randomEnteringAnimation().duration(1000)} style={styles.container}>
+        <Animated.View entering={BounceInLeft.duration(2000)} style={styles.container}>
             <View style={styles.topRow}>
                 <LottieAnimations
                     animationView={require('../../assets/treasure-chest.json')}
