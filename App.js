@@ -50,9 +50,15 @@ const config = {
     AppRouter: {
       screens: {
         Home: 'home',
+        Game: 'game',
+        Wallet: 'wallet',
       },
     },
-    GameStore: 'store'
+    GameStore: 'store',
+    Trivia: 'trivia',
+    FundWallet: 'fund',
+    UserProfile: 'profile',
+    Invite: 'invite'
   },
 };
 
