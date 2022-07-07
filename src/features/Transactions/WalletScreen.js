@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
 import WalletBalance from './WalletBalance';
 import { formatNumber } from '../../utils/stringUtl';
+import AppButton from '../../shared/AppButton';
 
 export default function WalletScreen() {
     const dispatch = useDispatch();
@@ -30,18 +31,7 @@ const FundButton = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.buttonContainer}>
-            <Pressable
-                onPress={() => navigation.navigate('FundWallet')}
-                style={() => [
-                    {
-                        backgroundColor:
-                            '#EF2F55'
-                    },
-                    styles.button
-                ]}
-            >
-                <Text style={styles.fundButton}>Fund Wallet</Text>
-            </Pressable>
+            <AppButton text="Fund Wallet" textStyle={styles.fundButton} onPress={() => navigation.navigate('FundWallet')} style={styles.button} />
         </View>
     )
 };

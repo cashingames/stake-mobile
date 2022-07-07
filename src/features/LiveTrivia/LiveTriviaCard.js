@@ -4,7 +4,7 @@ import { Text, View, Image, Pressable, ImageBackground } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/core';
 import { useFocusEffect } from '@react-navigation/native';
-import Animated from 'react-native-reanimated';
+import Animated, { BounceInRight } from 'react-native-reanimated';
 import { formatCurrency } from '../../utils/stringUtl';
 import normalize from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
