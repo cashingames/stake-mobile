@@ -53,6 +53,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         ))
     }
 
+
     const onSelectedFriend = (userFriend) => {
         dispatch(setSelectedFriend(userFriend));
     }
