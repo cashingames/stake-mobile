@@ -9,18 +9,18 @@ import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { fetchUserFriends, searchUserFriends } from '../CommonSlice';
 import PageLoading from '../../shared/PageLoading';
 import AppButton from '../../shared/AppButton';
-import { setSelectedFriend } from './GameSlice';
+import { setSelectedFriend, unselectFriend } from './GameSlice';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import ChallengeInviteSent from '../../shared/ChallengeInviteSent';
 
 
-export default function DuelSelectPlayerScreen({ navigation }) {
+export default function ChallengeSelectPlayerScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
     const refRBSheet = useRef();
     const [loading, setLoading] = useState(true)
     const userFriends = useSelector(state => state.common.userFriends);
-    const selectedOpponent = useSelector(state => state.game.selectedFriend)
+    const selectedOpponent = useSelector(state => state.game.selectedFriend);
     console.log(selectedOpponent)
     const [search, setSearch] = useState("");
 
@@ -37,10 +37,12 @@ export default function DuelSelectPlayerScreen({ navigation }) {
         openBottomSheet()
     }
 
-
-
     useEffect(() => {
         dispatch(fetchUserFriends()).then(() => setLoading(false));
+
+        return () => (
+            dispatch(unselectFriend())
+        )
     }, []);
 
 
@@ -72,24 +74,18 @@ export default function DuelSelectPlayerScreen({ navigation }) {
                     <Text style={styles.searchText}>Search</Text>
                 </Pressable>
             </View>
-            {userFriends &&
-                <View style={styles.boards}>
-                    {userFriends.map((userFriend, i) => <FriendDetails key={i} userFriend={userFriend}
-                        isSelected={userFriend.id === selectedOpponent.id}
-                        onSelect={onSelectedFriend}
-                    />)}
-                </View>
+            <View style={styles.boards}>
+                {userFriends.map((userFriend, i) => <FriendDetails key={i} userFriend={userFriend}
+                    isSelected={userFriend.id === selectedOpponent?.id}
+                    onSelect={onSelectedFriend}
+                />)}
+            </View>
+            <AppButton text="Send Invite" disabled={!selectedOpponent} onPress={sendInvite} />
 
-            }
-            <SendInviteButton disabled={!isTrue(selectedOpponent)} onPress={sendInvite} />
             <ChallengeInviteSent
                 refBottomSheet={refRBSheet}
                 onClose={closeBottomSheet}
             />
-            {/* <NoGameNotification
-                refBottomSheet={refRBSheet}
-                onClose={closeBottomSheet}
-            /> */}
 
         </ScrollView>
     );
@@ -112,11 +108,7 @@ const FriendDetails = ({ userFriend, onSelect, isSelected }) => {
     )
 }
 
-const SendInviteButton = ({ disabled, onPress }) => {
-    return (
-        <AppButton text="Send Invite" disabled={disabled} onPress={onPress} />
-    )
-}
+
 
 
 

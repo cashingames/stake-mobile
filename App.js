@@ -58,7 +58,8 @@ const config = {
     FundWallet: 'fund',
     UserProfile: 'profile',
     Invite: 'invite',
-    AcceptDeclineDuel:'challenge'
+    AcceptDeclineChallenge:'challenge/:challengeId',
+    GameInstructions: 'instructions/:challengeId'
   },
 };
 
