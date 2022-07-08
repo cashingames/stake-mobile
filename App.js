@@ -9,7 +9,6 @@ import { Provider } from 'react-redux';
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as Linking from 'expo-linking';
-import * as WebBrowser from 'expo-web-browser';
 import * as SplashScreen from 'expo-splash-screen';
 
 import store from './src/store';
@@ -17,7 +16,7 @@ import AppRouter from './src/AppRouter';
 
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();
-const prefix = Linking.createURL('/');
+const prefix = Linking.createURL("/");
 
 EStyleSheet.build({
   $rem: getRem()
@@ -58,7 +57,8 @@ const config = {
     Trivia: 'trivia',
     FundWallet: 'fund',
     UserProfile: 'profile',
-    Invite: 'invite'
+    Invite: 'invite',
+    AcceptDeclineDuel:'challenge'
   },
 };
 

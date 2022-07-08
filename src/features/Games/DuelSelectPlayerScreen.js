@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Text, View, Image, ScrollView, TextInput, Pressable, Alert } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,18 +8,39 @@ import { isTrue } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { fetchUserFriends, searchUserFriends } from '../CommonSlice';
 import PageLoading from '../../shared/PageLoading';
+import AppButton from '../../shared/AppButton';
+import { setSelectedFriend } from './GameSlice';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import ChallengeInviteSent from '../../shared/ChallengeInviteSent';
+
 
 export default function DuelSelectPlayerScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
+    const refRBSheet = useRef();
     const [loading, setLoading] = useState(true)
     const userFriends = useSelector(state => state.common.userFriends);
+    const selectedOpponent = useSelector(state => state.game.selectedFriend)
+    console.log(selectedOpponent)
     const [search, setSearch] = useState("");
 
+    const openBottomSheet = () => {
+        refRBSheet.current.open()
+    }
+
+    const closeBottomSheet = () => {
+        refRBSheet.current.close()
+        navigation.navigate('Home')
+    }
+
+    const sendInvite = () => {
+        openBottomSheet()
+    }
 
     useEffect(() => {
         dispatch(fetchUserFriends()).then(() => setLoading(false));
     }, []);
+
 
     const onSearchFriends = () => {
         console.log('clicking')
@@ -28,6 +49,9 @@ export default function DuelSelectPlayerScreen({ navigation }) {
         ))
     }
 
+    const onSelectedFriend = (userFriend) => {
+        dispatch(setSelectedFriend(userFriend));
+    }
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
     }
@@ -48,25 +72,47 @@ export default function DuelSelectPlayerScreen({ navigation }) {
             </View>
             {userFriends &&
                 <View style={styles.boards}>
-                    {userFriends.map((userFriends, i) => <FriendDetails key={i} userFriends={userFriends} />)}
+                    {userFriends.map((userFriend, i) => <FriendDetails key={i} userFriend={userFriend}
+                        isSelected={userFriend.id === selectedOpponent.id}
+                        onSelect={onSelectedFriend}
+                    />)}
                 </View>
 
             }
+            <SendInviteButton disabled={!isTrue(selectedOpponent)} onPress={sendInvite} />
+            <ChallengeInviteSent
+                refBottomSheet={refRBSheet}
+                onClose={closeBottomSheet}
+            />
+            {/* <NoGameNotification
+                refBottomSheet={refRBSheet}
+                onClose={closeBottomSheet}
+            /> */}
 
         </ScrollView>
     );
 }
 
 
-const FriendDetails = ({ userFriends }) => {
+const FriendDetails = ({ userFriend, onSelect, isSelected }) => {
+
     return (
-        <Pressable style={styles.friendDetails}>
-            <Image
-                source={isTrue(userFriends.avatar) ? { uri: userFriends.avatar } : require("../../../assets/images/user-icon.png")}
-                style={styles.avatar}
-            />
-            <Text style={styles.friendName}>{userFriends.username}</Text>
+        <Pressable style={[styles.friendDetails, isSelected ? [styles.selected] : {}]} onPress={() => onSelect(userFriend)} >
+            <View style={styles.friendLeft}>
+                <Image
+                    source={isTrue(userFriend.avatar) ? { uri: userFriend.avatar } : require("../../../assets/images/user-icon.png")}
+                    style={styles.avatar}
+                />
+                <Text style={[styles.friendName, isSelected ? { color: "#FFFF" } : {}]}>{userFriend.username}</Text>
+            </View>
+            <Ionicons name={isSelected && "checkmark-circle"} size={24} color={isSelected && "#EF2F55"} />
         </Pressable>
+    )
+}
+
+const SendInviteButton = ({ disabled, onPress }) => {
+    return (
+        <AppButton text="Send Invite" disabled={disabled} onPress={onPress} />
     )
 }
 
@@ -87,7 +133,7 @@ const styles = EStyleSheet.create({
         paddingVertical: responsiveScreenWidth(1.5),
         paddingHorizontal: responsiveScreenWidth(3),
         borderRadius: 4,
-        borderColor:  '#E9E8E8',
+        borderColor: '#E9E8E8',
         borderWidth: 1,
         marginVertical: responsiveScreenWidth(5)
     },
@@ -125,13 +171,17 @@ const styles = EStyleSheet.create({
     friendDetails: {
         display: 'flex',
         flexDirection: 'row',
-        // justifyContent: 'space-between',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: normalize(16),
         backgroundColor: '#E9E8E8',
         borderRadius: 45,
         paddingVertical: responsiveScreenWidth(2),
         paddingHorizontal: normalize(15),
+    },
+    friendLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     selected: {
         backgroundColor: '#151C2F',
@@ -170,7 +220,6 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         color: '#828282'
     },
-
     send: {
         backgroundColor: '#EF2F55',
         alignItems: 'center',
