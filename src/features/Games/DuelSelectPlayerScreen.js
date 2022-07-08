@@ -37,6 +37,8 @@ export default function DuelSelectPlayerScreen({ navigation }) {
         openBottomSheet()
     }
 
+
+
     useEffect(() => {
         dispatch(fetchUserFriends()).then(() => setLoading(false));
     }, []);
