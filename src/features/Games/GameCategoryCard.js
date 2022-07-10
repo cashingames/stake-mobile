@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image, Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
-import Animated, { SlideInRight } from "react-native-reanimated";
+import Animated, { BounceInRight, SlideInRight } from "react-native-reanimated";
 import normalize from "../../utils/normalize";
 import { formatNumber } from "../../utils/stringUtl";
 import { randomEnteringAnimation } from "../../utils/utils";
@@ -10,7 +10,7 @@ import Constants from 'expo-constants';
 
 export default ({ category, onSelect, isSelected }) => {
     return (
-        <Animated.View style={[styles.card, { backgroundColor: category.bgColor }]} entering={SlideInRight.duration(2000)}>
+        <Animated.View style={[styles.card, { backgroundColor: category.bgColor }]} entering={BounceInRight.duration(2000)}>
             <Pressable onPress={() => onSelect(category)} >
                 <View style={styles.categoryCardTopRow}>
                     <Image
