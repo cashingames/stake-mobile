@@ -41,8 +41,6 @@ import GameBoostPurchaseSuccessfulScreen from './features/Store/GameBoostPurchas
 import GamePlanPurchaseSuccessfulScreen from './features/Store/GamePlanPurchaseSuccessfulScreen';
 import GameStoreScreen from './features/Store/GameStoreScreen';
 import GameStoreItemsPurchaseFailed from './features/Store/GameStoreItemsPurchaseFailedScreen';
-import DuelSelectPlayerScreen from './features/Games/DuelSelectPlayerScreen';
-import DuelScreen from './features/Games/DuelScreen';
 import FirstTimeUserBonus from './features/Auth/FirstTimeUserBonus';
 import LeaderBoardFilter from './features/Leaderboard/LeaderBoardFilter';
 import TriviaInstructionsScreen from './features/Games/TriviaInstructionsScreen';
@@ -50,6 +48,9 @@ import TriviaEndResultScreen from './features/Games/TriviaEndResultScreen';
 // import TournamentScreen from './features/Games/TournamentScreen';
 import LiveTriviaLeaderBoard from './features/LiveTrivia/LiveTriviaLeaderboard';
 import LiveTriviasScreen from './features/Games/LiveTriviasScreen';
+import ChallengeScreen from './features/Games/ChallengeScreen';
+import ChallengeSelectPlayerScreen from './features/Games/ChallengeSelectPlayerScreen';
+import AcceptDeclineChallengeScreen from './features/Games/AcceptDeclineChallengeScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -104,8 +105,16 @@ function AppRouter() {
                         <AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
                         <AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
                         <AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
-                        <AppStack.Screen name="DuelSelectPlayer" component={DuelSelectPlayerScreen} options={{ title: 'Challenge - Select a player' }} />
-                        <AppStack.Screen name="DuelScreen" component={DuelScreen} options={{ title: 'Challenge' }} />
+                        <AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Challenge - Select a player' }} />
+                        <AppStack.Screen name="Challenge" component={ChallengeScreen} options={{ title: 'Challenge' }} />
+                        <AppStack.Screen name="AcceptDeclineChallenge" component={AcceptDeclineChallengeScreen} options={{
+                            title: 'Challenge',
+                            headerStyle: {
+                                backgroundColor: '#072169',
+                            },
+                            headerTintColor: '#FFFF',
+                        }} />
+
                         <AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{ title: 'Game Instructions' }} />
                         <AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen} options={{ headerShown: false }} />
                         <AppStack.Screen name="LiveTrivias" component={LiveTriviasScreen} options={{

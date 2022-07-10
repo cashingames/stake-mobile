@@ -16,7 +16,7 @@ import AppRouter from './src/AppRouter';
 
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();
-const prefix = Linking.createURL('/');
+const prefix = Linking.createURL("/");
 
 EStyleSheet.build({
   $rem: getRem()
@@ -49,9 +49,17 @@ const config = {
     AppRouter: {
       screens: {
         Home: 'home',
+        Game: 'game',
+        Wallet: 'wallet',
       },
     },
-    GameStore: 'store'
+    GameStore: 'store',
+    Trivia: 'trivia',
+    FundWallet: 'fund',
+    UserProfile: 'profile',
+    Invite: 'invite',
+    AcceptDeclineChallenge:'challenge/:challengeId',
+    GameInstructions: 'instructions/:challengeId'
   },
 };
 

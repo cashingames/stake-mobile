@@ -6,7 +6,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import AppButton from '../../shared/AppButton';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
-export default function DuelScreen({ navigation }) {
+export default function ChallengeScreen({ navigation }) {
 
     useApplyHeaderWorkaround(navigation.setOptions);
 

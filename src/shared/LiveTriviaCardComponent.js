@@ -46,7 +46,7 @@ const LiveTriviaCardComponent = ({ trivia }) => {
                 </View>
                 <Text style={styles.triviaTitle}>{trivia.prizeDisplayText}</Text>
                 {/* <Text style={styles.triviaAdText}>up for grabs !</Text> */}
-                <Text style={styles.triviaAdText}>{trivia.startAt}</Text>
+                <Text style={styles.triviaAdText}>{trivia.startDateDisplayText}</Text>
                 <View style={styles.triviaBoardBottom}>
                     <View>
                         <View style={styles.triviaTimeCountdown}>
