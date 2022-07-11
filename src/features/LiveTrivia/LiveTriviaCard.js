@@ -14,7 +14,7 @@ import FailedBottomSheet from './FailedBottomSheet';
 
 
 
-const LiveTriviaCard = ({trivia}) => {
+const LiveTriviaCard = ({ trivia }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const notEnoughPointNotice = useRef();
@@ -27,9 +27,9 @@ const LiveTriviaCard = ({trivia}) => {
     const triviaActionButtonClicked = () => {
         if (trivia.playerStatus === "INSUFFICIENTPOINTS") {
             notEnoughPointNotice.current.open();
-        } else if (trivia.playerStatus === "PLAYED") {
+        } else if (trivia.playerStatus === "PLAYED" || trivia.status === "EXPIRED" || trivia.status === "CLOSED") {
             navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id });
-        } else if (trivia.playerStatus === "CANPLAY") {
+        } else if (trivia.playerStatus === "CANPLAY" && trivia.status !== "EXPIRED") {
             navigation.navigate('TriviaInstructions', { ...trivia })
         }
     }

@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useRef } from 'react';
-import { Dimensions, PixelRatio, Text,  StatusBar } from 'react-native';
+import { Dimensions, PixelRatio, Text } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import { useFonts } from 'expo-font';
@@ -13,6 +13,7 @@ import * as SplashScreen from 'expo-splash-screen';
 
 import store from './src/store';
 import AppRouter from './src/AppRouter';
+import { StatusBar } from 'expo-status-bar';
 
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();

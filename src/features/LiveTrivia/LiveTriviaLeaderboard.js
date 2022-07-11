@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, ScrollView, StatusBar } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector, useDispatch } from 'react-redux';
 import PageLoading from '../../shared/PageLoading';
 // import { formatNumber } from '../../utils/stringUtl';
-import { getLiveTriviaLeaders} from '../Games/GameSlice';
+import { getLiveTriviaLeaders } from '../Games/GameSlice';
 import { isTrue } from '../../utils/stringUtl';
 import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
+import { StatusBar } from 'expo-status-bar';
 
 
 
@@ -31,12 +32,12 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
     }, [])
 
     if (loading) {
-        return <PageLoading backgroundColor= '#072169' spinnerColor="#FFFF" />
+        return <PageLoading backgroundColor='#072169' spinnerColor="#FFFF" />
     }
 
     return (
         <>
-            <StatusBar barStyle="light-content" backgroundColor="#072169" />
+            <StatusBar style="light" backgroundColor="#072169" />
             <ScrollView style={styles.container}>
                 <ResultContainer />
                 {/* <TriviaTopLeaders /> */}
@@ -85,10 +86,10 @@ const TriviaParticipant = ({ player, position }) => {
     return (
         <View style={styles.participant}>
             <View style={styles.participantLeft}>
-            <Image
-                style={styles.otherPlayerIcon}
-                source={isTrue(player.avatar) ? { uri: player.avatar} : require("../../../assets/images/user-icon.png")}
-            />
+                <Image
+                    style={styles.otherPlayerIcon}
+                    source={isTrue(player.avatar) ? { uri: player.avatar } : require("../../../assets/images/user-icon.png")}
+                />
                 <View style={styles.positionName}>
                     <Text style={styles.username}>{player.username}</Text>
                     <View style={styles.playerDuration}>
@@ -145,7 +146,7 @@ const TriviaTopLeader = ({ player, position }) => {
                 <Image
                     style={styles.playerIcon}
                     // source={isTrue(player.avatar) ? player.avatar : require("../../../assets/images/user-icon.png")}
-                    source={isTrue(player.avatar) ? { uri: player.avatar} : require("../../../assets/images/user-icon.png")}
+                    source={isTrue(player.avatar) ? { uri: player.avatar } : require("../../../assets/images/user-icon.png")}
 
                 />
                 <View style={styles.positionName}>
