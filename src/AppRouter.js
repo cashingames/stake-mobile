@@ -107,13 +107,7 @@ function AppRouter() {
                         <AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
                         <AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Challenge - Select a player' }} />
                         <AppStack.Screen name="Challenge" component={ChallengeScreen} options={{ title: 'Challenge' }} />
-                        <AppStack.Screen name="AcceptDeclineChallenge" component={AcceptDeclineChallengeScreen} options={{
-                            title: 'Challenge',
-                            headerStyle: {
-                                backgroundColor: '#072169',
-                            },
-                            headerTintColor: '#FFFF',
-                        }} />
+                        <AppStack.Screen name="AcceptDeclineChallenge" component={AcceptDeclineChallengeScreen} options={{ headerShown: false }} />
 
                         <AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{ title: 'Game Instructions' }} />
                         <AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen} options={{ headerShown: false }} />

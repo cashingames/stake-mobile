@@ -20,6 +20,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const dispatch = useDispatch();
     const refRBSheet = useRef();
     const [loading, setLoading] = useState(true)
+    const activeCategory = useSelector(state => state.game.gameCategory);
     const userFriends = useSelector(state => state.common.userFriends);
     const selectedOpponent = useSelector(state => state.game.selectedFriend);
     console.log(selectedOpponent)
@@ -36,7 +37,11 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
 
     const sendInvite = () => {
-        dispatch(sendFriendInvite())
+        dispatch(sendFriendInvite({
+            opponentId: selectedOpponent.id,
+            categoryId: activeCategory.id
+        }
+        ))
             .then(unwrapResult)
             .then(result => {
                 console.log(result);

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView,Pressable } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
@@ -23,6 +23,7 @@ import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } fr
 import crashlytics from '@react-native-firebase/crashlytics';
 import GamePicker from '../Games/GamePicker';
 import RecentlyPlayedGames from '../Games/RecentlyPlayedGames';
+import * as Linking from 'expo-linking';
 import LottieAnimations from '../../shared/LottieAnimations';
 
 const HomeScreen = () => {
@@ -103,6 +104,9 @@ const HomeScreen = () => {
             <View style={styles.container}>
                 <GamePicker initialShowPlayButton={false} title={"Pick a game"} />
                 {/* <RecentlyPlayedGames /> */}
+                <Pressable onPress = {() => Linking.openURL ('cashingames://challenge/:challengeId')}>
+                    <Text>Press me</Text>
+                </Pressable>
                 <GlobalTopLeadersHero />
             </View>
         </ScrollView>
