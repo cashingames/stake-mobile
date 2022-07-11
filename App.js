@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import React, { useRef } from 'react';
-import { Dimensions, PixelRatio, Text,  StatusBar } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { Dimensions, PixelRatio, Text} from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import { useFonts } from 'expo-font';
@@ -58,7 +59,7 @@ const config = {
     FundWallet: 'fund',
     UserProfile: 'profile',
     Invite: 'invite',
-    AcceptDeclineChallenge:'challenge/:challengeId',
+    AcceptDeclineChallenge: 'challenge/:challengeId',
     GameInstructions: 'instructions/:challengeId'
   },
 };
@@ -113,7 +114,8 @@ function App() {
         linking={linking} fallback={<Text>Loading...</Text>}
       >
         <SafeAreaProvider>
-        <StatusBar barStyle="dark-content" backgroundColor="#FFFF" />
+          <StatusBar style="dark"
+            backgroundColor="#FFFF"  />
           <AppRouter />
         </SafeAreaProvider>
       </NavigationContainer>

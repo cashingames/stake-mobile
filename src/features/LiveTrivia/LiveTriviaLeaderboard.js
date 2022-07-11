@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, ScrollView, StatusBar } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
+import { StatusBar } from 'expo-status-bar';
 
 
 
@@ -36,7 +37,7 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
 
     return (
         <>
-            <StatusBar barStyle="light-content" backgroundColor="#072169" />
+            <StatusBar style="light" backgroundColor="#072169" />
             <ScrollView style={styles.container}>
                 <ResultContainer />
                 {/* <TriviaTopLeaders /> */}

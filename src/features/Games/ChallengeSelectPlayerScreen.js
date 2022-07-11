@@ -9,9 +9,10 @@ import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { fetchUserFriends, searchUserFriends } from '../CommonSlice';
 import PageLoading from '../../shared/PageLoading';
 import AppButton from '../../shared/AppButton';
-import { setSelectedFriend, unselectFriend } from './GameSlice';
+import { sendFriendInvite, setSelectedFriend, unselectFriend } from './GameSlice';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import ChallengeInviteSent from '../../shared/ChallengeInviteSent';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 
 export default function ChallengeSelectPlayerScreen({ navigation }) {
@@ -33,8 +34,18 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         navigation.navigate('Home')
     }
 
+
     const sendInvite = () => {
-        openBottomSheet()
+        dispatch(sendFriendInvite())
+            .then(unwrapResult)
+            .then(result => {
+                console.log(result);
+                openBottomSheet()
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                console.log(rejectedValueOrSerializedError);
+                Alert.alert(rejectedValueOrSerializedError.message)
+            });
     }
 
     useEffect(() => {

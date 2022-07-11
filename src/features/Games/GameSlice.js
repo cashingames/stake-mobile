@@ -45,9 +45,9 @@ export const sendFriendInvite = createAsyncThunk(
     async (data, thunkAPI) => {
         console.log('before invite');
         //make a network request to the server
-        const response = await axios.post('v2/game/challenge/invite', data)
+        const response = await axios.post('v3/challenge/send-invite', data)
         console.log('invite sent');
-        return response;
+        return response.data;
     }
 )
 
@@ -192,6 +192,7 @@ export const GameSlice = createSlice({
             .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
                 state.triviaLeaders = action.payload;
             })
+
 
     },
 })
