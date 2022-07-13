@@ -51,6 +51,28 @@ export const sendFriendInvite = createAsyncThunk(
     }
 )
 
+export const getChallengeDetails = createAsyncThunk(
+    'game/getChallengeDetails',
+    async (data, thunkAPI) => {
+        console.log('before details');
+        //make a network request to the server
+        const response = await axios.get(`v3/challenge/${data}/details`)
+        console.log(response.data);
+        return response.data;
+    }
+)
+
+export const acceptDeclineChallengeInivite = createAsyncThunk(
+    'game/acceptChallengeInivite ',
+    async (data, thunkAPI) => {
+        console.log('accept');
+        //make a network request to the server
+        const response = await axios.post('v3/challenge/invite/respond', data)
+        console.log(response.data);
+        return response.data;
+    }
+)
+
 
 //This is to store the currently ongoing active game
 const initialState = {
@@ -80,7 +102,8 @@ const initialState = {
     triviaMode: '',
     triviaId: '',
     hasPlayedTrivia: false,
-    gameDuration: 60
+    gameDuration: 60,
+    challengeDetails: {}
 }
 
 
@@ -191,6 +214,9 @@ export const GameSlice = createSlice({
             })
             .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
                 state.triviaLeaders = action.payload;
+            })
+            .addCase(getChallengeDetails.fulfilled, (state, action) => {
+                state.challengeDetails = action.payload;
             })
 
 

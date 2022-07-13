@@ -104,9 +104,9 @@ const HomeScreen = () => {
             <View style={styles.container}>
                 <GamePicker initialShowPlayButton={false} title={"Pick a game"} />
                 {/* <RecentlyPlayedGames /> */}
-                <Pressable onPress = {() => Linking.openURL ('cashingames://challenge/:challengeId')}>
+                {/* <Pressable onPress = {() => Linking.openURL ('cashingames://challenge/:challengeId')}>
                     <Text>Press me</Text>
-                </Pressable>
+                </Pressable> */}
                 <GlobalTopLeadersHero />
             </View>
         </ScrollView>
