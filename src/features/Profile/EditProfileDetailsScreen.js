@@ -167,7 +167,11 @@ export default function EditProfileDetailsScreen({ navigation }) {
                     </View>
                 </View>
             </ScrollView>
-            <AppButton text={saving ? 'Saving' : 'Save Changes'} onPress={onSavePersonalDetails} disabled={!canSave} style = {styles.saveButton} />
+            <AppButton
+                text={saving ? 'Saving' : 'Save Changes'}
+                onPress={onSavePersonalDetails}
+                disabled={!canSave}
+                style={styles.saveButton} />
         </View>
     );
 }
@@ -213,7 +217,7 @@ const styles = EStyleSheet.create({
     pickerItem: {
         fontSize: '0.75rem',
     },
-    saveButton : {
+    saveButton: {
         marginVertical: 10,
     }
 

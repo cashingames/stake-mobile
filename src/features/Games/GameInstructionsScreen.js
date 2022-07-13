@@ -22,31 +22,37 @@ export default function GameInstructionsScreen({ navigation, route }) {
     const refRBSheet = useRef();
 
     return (
-        <ScrollView style={styles.container}>
-            {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
-            {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
-            <AppButton onPress={() => refRBSheet.current.open()} text='Proceed' />
-            <RBSheet
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={true}
-                height={480}
-                customStyles={{
-                    wrapper: {
-                        backgroundColor: "rgba(0, 0, 0, 0.5)"
-                    },
-                    draggableIcon: {
-                        backgroundColor: "#000",
-                    },
-                    container: {
-                        borderTopStartRadius: 25,
-                        borderTopEndRadius: 25,
-                    }
-                }}
-            >
-                <AvailableBoosts onClose={() => refRBSheet.current.close()} />
-            </RBSheet>
-        </ScrollView>
+        <View style={styles.container}>
+            <ScrollView>
+                {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
+                {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
+                <RBSheet
+                    ref={refRBSheet}
+                    closeOnDragDown={true}
+                    closeOnPressMask={true}
+                    height={480}
+                    customStyles={{
+                        wrapper: {
+                            backgroundColor: "rgba(0, 0, 0, 0.5)"
+                        },
+                        draggableIcon: {
+                            backgroundColor: "#000",
+                        },
+                        container: {
+                            borderTopStartRadius: 25,
+                            borderTopEndRadius: 25,
+                        }
+                    }}
+                >
+                    <AvailableBoosts onClose={() => refRBSheet.current.close()} />
+                </RBSheet>
+            </ScrollView>
+            <AppButton
+                onPress={() => refRBSheet.current.open()}
+                text='Proceed'
+                style={styles.proceedButton}
+            />
+        </View>
     );
 };
 const ExhibitionInstructions = () => {
@@ -176,7 +182,11 @@ const AvailableBoosts = ({ onClose }) => {
             <View style={styles.storeLinks}>
                 <GoToStore onPress={visitStore} />
             </View>
-            <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />
+            <AppButton
+                text={loading ? 'Starting...' : 'Start Game'}
+                onPress={onStartGame}
+                disabled={loading}
+            />
         </View>
     )
 }
@@ -307,5 +317,8 @@ const styles = EStyleSheet.create({
     boostIcon: {
         width: normalize(35),
         height: normalize(35)
+    },
+    proceedButton: {
+        marginVertical: 10,
     }
 });
