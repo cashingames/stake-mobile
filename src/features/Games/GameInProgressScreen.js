@@ -108,7 +108,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     return (
     <>
         <StatusBar style="light" backgroundColor="#9C3DB8" />
-        <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">
+        <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
             <ScrollView style = {styles.container}>
                 <PlayGameHeader onPress={() => onEndGame()} onPressBoost={() => refRBSheet.current.open()} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} />
@@ -406,12 +406,13 @@ const NextButton = ({ onPress, ending }) => {
 const styles = EStyleSheet.create({
 
     container: { 
+        flex: 1,
         backgroundColor: '#9C3DB8',
         paddingTop: normalize(40),
     },
     image: {
-        justifyContent: 'flex-end',
         paddingHorizontal: normalize(18),
+        backgroundColor: '#9C3DB8',
         flex: 1,
     },
     header: {
@@ -604,9 +605,6 @@ const styles = EStyleSheet.create({
         height: normalize(35)
     },
     nextButton: {
-        justifyContent: 'flex-end'
-        // position: 'absolute',
-        // bottom: 0,
-        // left: 0
+        marginVertical: 10,
     }
 });
