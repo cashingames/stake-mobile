@@ -153,7 +153,8 @@ const styles = EStyleSheet.create({
         borderRadius: 20,
     },
     triviaContainer: {
-        padding: '1rem'
+        paddingVertical: '1rem',
+        paddingHorizontal: '1.1rem'
     },
     triviaTop: {
         flexDirection: 'row',

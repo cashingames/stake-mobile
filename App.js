@@ -114,7 +114,7 @@ function App() {
         linking={linking} fallback={<Text>Loading...</Text>}
       >
         <SafeAreaProvider>
-        <StatusBar barStyle="dark-content" backgroundColor="#FFFF" />
+        <StatusBar style="dark" backgroundColor="#FFFF" />
           <AppRouter />
         </SafeAreaProvider>
       </NavigationContainer>

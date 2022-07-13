@@ -40,13 +40,21 @@ const LiveTriviasScreen = ({ navigation }) => {
             <ScrollView style={styles.container}>
                 {trivia ?
                     <View style={styles.boards}>
-                        {trivia.map((trivia, i) => <LiveTriviaCard key={i} trivia={trivia} />)}
+                        {trivia.map((trivia, i) => <TriviaCardContainer  key={i} trivia={trivia} />)}
                     </View>
                     :
                     <Text style={styles.noLiveTrivia}>No recent live trivia</Text>
                 }
             </ScrollView>
         </>
+    )
+}
+
+const TriviaCardContainer = ({trivia}) => {
+    return (
+        <View style={styles.cardContainer}>
+            <LiveTriviaCard trivia={trivia} />
+        </View>
     )
 }
 
@@ -59,6 +67,9 @@ const styles = EStyleSheet.create({
         flex: 1,
         backgroundColor: '#072169',
         paddingHorizontal: normalize(18),
+    },
+    cardContainer: {
+        margin : normalize(8),
     },
     noLiveTrivia: {
         textAlign: 'center',
