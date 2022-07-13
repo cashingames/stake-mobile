@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, StatusBar } from 'react-native';
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { fetchRecentLiveTrivia } from '../CommonSlice';
@@ -8,7 +8,7 @@ import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import PageLoading from '../../shared/PageLoading';
 import LiveTriviaCardComponent from '../../shared/LiveTriviaCardComponent';
 import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
-import { StatusBar } from 'expo-status-bar';
+import { useFocusEffect } from '@react-navigation/native';
 // import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 
 
@@ -25,32 +25,39 @@ const LiveTriviasScreen = ({ navigation }) => {
         dispatch(fetchRecentLiveTrivia()).then(() => setLoading(false));
     }, []);
 
+    useEffect(() => {
+        StatusBar.setBackgroundColor('#072169');
+        StatusBar.setBarStyle('light-content');
+        return () => {
+            StatusBar.setBackgroundColor('#FFFF');
+            StatusBar.setBarStyle('dark-content');
+        }
+    },[]);
+
     if (loading) {
         return <PageLoading
             backgroundColor='#072169'
             spinnerColor="#FFFF"
-            statusBackgroundr="#072169"
-            barStyle="light"
+            barStyle = "light-content"
+            statusBackground= "#072169"
+
         />
     }
 
     return (
-        <>
-            <StatusBar style="light" backgroundColor="#072169" />
-            <ScrollView style={styles.container}>
-                {trivia ?
-                    <View style={styles.boards}>
-                        {trivia.map((trivia, i) => <TriviaCardContainer  key={i} trivia={trivia} />)}
-                    </View>
-                    :
-                    <Text style={styles.noLiveTrivia}>No recent live trivia</Text>
-                }
-            </ScrollView>
-        </>
+        <ScrollView style={styles.container}>
+            {trivia ?
+                <View style={styles.boards}>
+                    {trivia.map((trivia, i) => <TriviaCardContainer key={i} trivia={trivia} />)}
+                </View>
+                :
+                <Text style={styles.noLiveTrivia}>No recent live trivia</Text>
+            }
+        </ScrollView>
     )
 }
 
-const TriviaCardContainer = ({trivia}) => {
+const TriviaCardContainer = ({ trivia }) => {
     return (
         <View style={styles.cardContainer}>
             <LiveTriviaCard trivia={trivia} />
@@ -69,7 +76,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(18),
     },
     cardContainer: {
-        margin : normalize(8),
+        margin: normalize(8),
     },
     noLiveTrivia: {
         textAlign: 'center',

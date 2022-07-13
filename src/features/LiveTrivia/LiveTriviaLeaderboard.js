@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView, StatusBar } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,8 +11,7 @@ import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
-import { StatusBar } from 'expo-status-bar';
-
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const LiveTriviaLeaderBoard = ({ navigation, route }) => {
@@ -31,19 +30,23 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
         )).then(() => setLoading(false));
     }, [])
 
+
+
     if (loading) {
-        return <PageLoading backgroundColor='#072169' spinnerColor="#FFFF" />
+        return <PageLoading 
+        backgroundColor='#072169'
+        spinnerColor="#FFFF"
+        barStyle = "light-content"
+        statusBackground= "#072169"
+        />
     }
 
     return (
-        <>
-            <StatusBar style="light" backgroundColor="#072169" />
             <ScrollView style={styles.container}>
                 <ResultContainer />
                 {/* <TriviaTopLeaders /> */}
                 <TriviaParticipants triviaLeaders={triviaLeaders} />
             </ScrollView>
-        </>
     )
 }
 

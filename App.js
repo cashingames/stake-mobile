@@ -13,7 +13,6 @@ import * as SplashScreen from 'expo-splash-screen';
 
 import store from './src/store';
 import AppRouter from './src/AppRouter';
-import { StatusBar } from 'expo-status-bar';
 
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();
@@ -114,7 +113,6 @@ function App() {
         linking={linking} fallback={<Text>Loading...</Text>}
       >
         <SafeAreaProvider>
-        <StatusBar style="dark" backgroundColor="#FFFF" />
           <AppRouter />
         </SafeAreaProvider>
       </NavigationContainer>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert } from 'react-native';
+import { Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert, StatusBar } from 'react-native';
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -20,7 +20,6 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import { Base64 } from 'js-base64';
 import LottieAnimations from "../../shared/LottieAnimations";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
-import { StatusBar } from "expo-status-bar";
 
 
 export default function GameInProgressScreen({ navigation, route }) {
@@ -105,9 +104,17 @@ export default function GameInProgressScreen({ navigation, route }) {
             }),
         [navigation, gameEnded]
     );
+
+    useEffect(() => {
+        StatusBar.setBackgroundColor('#9C3DB8');
+        StatusBar.setBarStyle('light-content');
+        return () => {
+            StatusBar.setBackgroundColor('#FFFF');
+            StatusBar.setBarStyle('dark-content');
+        }
+    }, []);
+
     return (
-    <>
-        <StatusBar style="light" backgroundColor="#9C3DB8" />
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
             <ScrollView style = {styles.container}>
                 <PlayGameHeader onPress={() => onEndGame()} onPressBoost={() => refRBSheet.current.open()} />
@@ -136,7 +143,6 @@ export default function GameInProgressScreen({ navigation, route }) {
             </ScrollView>
             <NextButton onPress={() => onEndGame()} ending={ending} />
         </ImageBackground>
-        </>
     );
 }
 
