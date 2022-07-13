@@ -19,9 +19,12 @@ import AppButton from "../../shared/AppButton";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { Base64 } from 'js-base64';
 import LottieAnimations from "../../shared/LottieAnimations";
+import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
+import { StatusBar } from "expo-status-bar";
 
 
 export default function GameInProgressScreen({ navigation, route }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
 
     const dispatch = useDispatch();
     const refRBSheet = useRef();
@@ -103,12 +106,13 @@ export default function GameInProgressScreen({ navigation, route }) {
         [navigation, gameEnded]
     );
     return (
+    <>
+        <StatusBar style="light" backgroundColor="#9C3DB8" />
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">
-            <ScrollView>
+            <ScrollView style = {styles.container}>
                 <PlayGameHeader onPress={() => onEndGame()} onPressBoost={() => refRBSheet.current.open()} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} />
                 <GameQuestions />
-                <NextButton onPress={() => onEndGame()} ending={ending} />
                 <RBSheet
                     ref={refRBSheet}
                     closeOnDragDown={true}
@@ -130,7 +134,9 @@ export default function GameInProgressScreen({ navigation, route }) {
                     <GameBoosts />
                 </RBSheet>
             </ScrollView>
+            <NextButton onPress={() => onEndGame()} ending={ending} />
         </ImageBackground>
+        </>
     );
 }
 
@@ -399,12 +405,14 @@ const NextButton = ({ onPress, ending }) => {
 
 const styles = EStyleSheet.create({
 
-    image: {
-        flex: 1,
+    container: { 
         backgroundColor: '#9C3DB8',
+        paddingTop: normalize(40),
+    },
+    image: {
+        justifyContent: 'flex-end',
         paddingHorizontal: normalize(18),
-        paddingTop: normalize(15),
-        justifyContent: 'flex-end'
+        flex: 1,
     },
     header: {
         display: 'flex',
