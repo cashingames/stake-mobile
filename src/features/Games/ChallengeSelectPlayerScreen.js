@@ -8,10 +8,8 @@ import { isTrue } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { fetchUserFriends, searchUserFriends } from '../CommonSlice';
 import PageLoading from '../../shared/PageLoading';
-import AppButton from '../../shared/AppButton';
 import { setSelectedFriend, unselectFriend } from './GameSlice';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { FAB } from 'react-native-elements';
 import ChallengeInviteSent from '../../shared/ChallengeInviteSent';
 
 
