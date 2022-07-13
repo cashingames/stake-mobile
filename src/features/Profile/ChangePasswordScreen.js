@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Alert } from 'react-native';
 import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
 import normalize from '../../utils/normalize';
@@ -66,41 +65,43 @@ export default function ChangePasswordScreen({ navigation }) {
             });
     }
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.content}>
-                <View style={styles.submitButton}>
-                    <>
-                        <Input
-                            type="password"
-                            label='Old Password'
-                            value={password}
-                            placeholder="Enter password"
-                            error={passErr && '*password must not be less than 8 digits'}
-                            onChangeText={text => { onChangePassword(text) }}
-                        />
-                        <Input
-                            type="password"
-                            label='New Password'
-                            value={new_password}
-                            placeholder="Enter new password"
-                            error={passErr && '*password must not be less than 8 digits'}
-                            onChangeText={text => { onChangeNewPassword(text) }}
-                        />
-                        <Input
-                            type="password"
-                            label='Password'
-                            value={new_password_confirmation}
-                            placeholder="Confirm new password"
-                            error={new_password_confirmation !== new_password && '*password confirmation must match password'}
-                            onChangeText={text => { onChangeConfirmPassword(text) }}
-                        />
-                    </>
-                    <PasswordRequirement />
-                </View>
-                <AppButton text={saving ? 'Saving' : 'Change Password'} onPress={onSavePassword} disabled={!canSave} />
-
-            </View>
-        </ScrollView>
+        <View style={styles.container}>
+            <ScrollView>
+                <>
+                    <Input
+                        type="password"
+                        label='Old Password'
+                        value={password}
+                        placeholder="Enter password"
+                        error={passErr && '*password must not be less than 8 digits'}
+                        onChangeText={text => { onChangePassword(text) }}
+                    />
+                    <Input
+                        type="password"
+                        label='New Password'
+                        value={new_password}
+                        placeholder="Enter new password"
+                        error={passErr && '*password must not be less than 8 digits'}
+                        onChangeText={text => { onChangeNewPassword(text) }}
+                    />
+                    <Input
+                        type="password"
+                        label='Password'
+                        value={new_password_confirmation}
+                        placeholder="Confirm new password"
+                        error={new_password_confirmation !== new_password && '*password confirmation must match password'}
+                        onChangeText={text => { onChangeConfirmPassword(text) }}
+                    />
+                </>
+                <PasswordRequirement />
+            </ScrollView>
+            <AppButton
+                text={saving ? 'Saving' : 'Change Password'}
+                onPress={onSavePassword}
+                disabled={!canSave}
+                style={styles.saveButton}
+            />
+        </View>
     );
 }
 
@@ -119,16 +120,9 @@ const PasswordRequirement = () => {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
-    },
-    contentContainer: {
         backgroundColor: '#F8F9FD',
-    },
-    content: {
-        marginHorizontal: normalize(18),
+        paddingHorizontal: normalize(18),
         paddingVertical: normalize(25),
-        marginBottom: normalize(20)
-
     },
     header: {
         display: 'flex',
@@ -188,9 +182,6 @@ const styles = EStyleSheet.create({
         opacity: 0.4,
         lineHeight: 22
     },
-    submitButton: {
-        marginBottom: normalize(140)
-    },
     passwordIcon: {
         left: '100%',
         top: '50%',
@@ -211,5 +202,8 @@ const styles = EStyleSheet.create({
         color: '#000000',
         opacity: 0.4,
     },
+    saveButton: {
+        marginVertical: 10,
+    }
 
 });

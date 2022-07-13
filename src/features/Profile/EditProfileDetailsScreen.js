@@ -91,82 +91,84 @@ export default function EditProfileDetailsScreen({ navigation }) {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.content}>
-                <Input
-                    label='Username'
-                    value={username}
-                    onChangeText={setUsername}
-                    editable={false}
-                />
-                <Input
-                    label='Email'
-                    value={email}
-                    onChangeText={setEmail}
-                    editable={false}
-                />
-                <Input
-                    label='First name'
-                    value={firstName}
-                    onChangeText={text => { onChangeFirstName(text) }}
-                    error={firstNameErr && '*first name must not be empty'}
-                />
-                <Input
-                    label='Last name'
-                    value={lastName}
-                    onChangeText={text => { onChangeLastName(text) }}
-                    error={lastNameErr && '*last name must not be empty'}
-                />
-                <Input
-                    label='Phone number'
-                    value={phoneNumber}
-                    onChangeText={text => { onChangePhoneNumber(text) }}
-                    error={phoneNumberErr && '*input a valid phone number'}
-                    type="phone"
-                    maxLength={11}
-                    keyboardType='numeric'
-                />
-                <View style={styles.detail}>
-
-                    {!showDatePicker ?
-                        <Input
-                            label='Date of Birth'
-                            value={dateOfBirth.toDateString()}
-                            onPressIn={() => setShowDatePicker(true)}
-                        />
-
-                        :
-                        <>
-                            <Text style={styles.inputLabel}>Date of Birth</Text>
-                            <DateTimePicker
-                                value={dateOfBirth}
-                                mode={"date"}
-                                display="default"
-                                onChange={onChangeDateOfBirth}
-                                maximumDate={new Date(2003, 0, 1)}
-                                style={styles.dateOfBirth}
-                                textColor='#00000080'
-                            />
-                        </>
-                    }
+        <View style={styles.container}>
+            <ScrollView style={styles.contentContainer}>
+                <View style={styles.content}>
+                    <Input
+                        label='Username'
+                        value={username}
+                        onChangeText={setUsername}
+                        editable={false}
+                    />
+                    <Input
+                        label='Email'
+                        value={email}
+                        onChangeText={setEmail}
+                        editable={false}
+                    />
+                    <Input
+                        label='First name'
+                        value={firstName}
+                        onChangeText={text => { onChangeFirstName(text) }}
+                        error={firstNameErr && '*first name must not be empty'}
+                    />
+                    <Input
+                        label='Last name'
+                        value={lastName}
+                        onChangeText={text => { onChangeLastName(text) }}
+                        error={lastNameErr && '*last name must not be empty'}
+                    />
+                    <Input
+                        label='Phone number'
+                        value={phoneNumber}
+                        onChangeText={text => { onChangePhoneNumber(text) }}
+                        error={phoneNumberErr && '*input a valid phone number'}
+                        type="phone"
+                        maxLength={11}
+                        keyboardType='numeric'
+                    />
                     <View style={styles.detail}>
-                        <Text style={styles.inputLabel}>Select Gender</Text>
-                        <Picker
-                            selectedValue={gender}
-                            onValueChange={(itemValue, itemIndex) =>
-                                setGender(itemValue)
-                            }
-                            mode='dropdown'
-                            style={styles.select}
-                        >
-                            <Picker.Item label="Male" value="male" style={styles.pickerItem} />
-                            <Picker.Item label="Female" value="female" style={styles.pickerItem} />
-                        </Picker>
+
+                        {!showDatePicker ?
+                            <Input
+                                label='Date of Birth'
+                                value={dateOfBirth.toDateString()}
+                                onPressIn={() => setShowDatePicker(true)}
+                            />
+
+                            :
+                            <>
+                                <Text style={styles.inputLabel}>Date of Birth</Text>
+                                <DateTimePicker
+                                    value={dateOfBirth}
+                                    mode={"date"}
+                                    display="default"
+                                    onChange={onChangeDateOfBirth}
+                                    maximumDate={new Date(2003, 0, 1)}
+                                    style={styles.dateOfBirth}
+                                    textColor='#00000080'
+                                />
+                            </>
+                        }
+                        <View style={styles.detail}>
+                            <Text style={styles.inputLabel}>Select Gender</Text>
+                            <Picker
+                                selectedValue={gender}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    setGender(itemValue)
+                                }
+                                mode='dropdown'
+                                style={styles.select}
+                            >
+                                <Picker.Item label="Male" value="male" style={styles.pickerItem} />
+                                <Picker.Item label="Female" value="female" style={styles.pickerItem} />
+                            </Picker>
+                        </View>
                     </View>
                 </View>
-                <AppButton text={saving ? 'Saving' : 'Save Changes'} onPress={onSavePersonalDetails} disabled={!canSave} />
-            </View>
-        </ScrollView>
+            </ScrollView>
+            <AppButton text={saving ? 'Saving' : 'Save Changes'} onPress={onSavePersonalDetails} disabled={!canSave} style = {styles.saveButton} />
+        </View>
     );
 }
 
@@ -176,7 +178,10 @@ const styles = EStyleSheet.create({
         flex: 1,
         backgroundColor: '#FFFF',
         paddingHorizontal: normalize(18),
-        paddingVertical: normalize(20),
+        paddingBottom: normalize(20),
+    },
+    contentContainer: {
+        paddingTop: normalize(20),
     },
     inputLabel: {
         fontFamily: 'graphik-medium',
@@ -207,6 +212,9 @@ const styles = EStyleSheet.create({
     },
     pickerItem: {
         fontSize: '0.75rem',
+    },
+    saveButton : {
+        marginVertical: 10,
     }
 
 });
