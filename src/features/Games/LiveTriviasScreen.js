@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { View, ScrollView, Text, StatusBar } from 'react-native';
+import { View, ScrollView, Text} from 'react-native';
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { fetchRecentLiveTrivia } from '../CommonSlice';
@@ -27,14 +27,11 @@ const LiveTriviasScreen = ({ navigation }) => {
         return <PageLoading
             backgroundColor='#072169'
             spinnerColor="#FFFF"
-            statusBackgroundr="#072169"
-            barStyle="light"
         />
     }
 
     return (
         <>
-            <StatusBar barStyle="light-content" backgroundColor="#072169" />
             <ScrollView style={styles.container}>
                 {trivia ?
                     <View style={styles.boards}>

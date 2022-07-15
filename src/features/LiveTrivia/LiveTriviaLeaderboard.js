@@ -11,7 +11,6 @@ import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
-import { StatusBar } from 'expo-status-bar';
 
 
 
@@ -36,9 +35,7 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
     }
 
     return (
-        <>
-            <StatusBar style="light" backgroundColor="#072169" />
-            <ScrollView style={styles.container}>
+        <>            <ScrollView style={styles.container}>
                 <ResultContainer />
                 {/* <TriviaTopLeaders /> */}
                 <TriviaParticipants triviaLeaders={triviaLeaders} />

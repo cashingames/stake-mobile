@@ -21,6 +21,26 @@ export const startGame = createAsyncThunk(
     }
 )
 
+export const startChallengeGame = createAsyncThunk(
+    'game/startChallengeGame',
+    async (data, thunkAPI) => {
+        // console.log(data)
+        const response = await axios.post('v3/challenge/start/game', data)
+        console.log('challenge started');
+        return response.data
+    }
+)
+
+export const challengeEndGame = createAsyncThunk(
+    'game/challengeEndGame',
+    async (data, thunkAPI) => {
+        // console.log(data)
+        const response = await axios.post('v3/challenge/end/game', data)
+        console.log('challenge ended');
+        return response.data
+    }
+)
+
 export const endGame = createAsyncThunk(
     'game/endGame',
     async (data, thunkAPI) => {
@@ -217,6 +237,18 @@ export const GameSlice = createSlice({
             })
             .addCase(getChallengeDetails.fulfilled, (state, action) => {
                 state.challengeDetails = action.payload;
+            })
+            .addCase(startChallengeGame.fulfilled, (state, action) => {
+                console.log(action);
+                state.questions = action.payload.data.questions;
+                state.displayedQuestion = state.questions[state.currentQuestionPosition]
+                state.displayedOptions = state.displayedQuestion.options
+                state.gameSessionToken = action.payload.data.game.token
+                state.isEnded = false
+            })
+            .addCase(challengeEndGame.fulfilled, (state, action) => {
+                state.isEnded = true;
+                state.pointsGained = action.payload.data.points_gained;
             })
 
 

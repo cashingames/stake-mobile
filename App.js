@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import React, { useRef } from 'react';
-import { StatusBar } from "expo-status-bar";
 import { Dimensions, PixelRatio, Text} from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
@@ -114,8 +113,6 @@ function App() {
         linking={linking} fallback={<Text>Loading...</Text>}
       >
         <SafeAreaProvider>
-          <StatusBar style="dark"
-            backgroundColor="#FFFF"  />
           <AppRouter />
         </SafeAreaProvider>
       </NavigationContainer>

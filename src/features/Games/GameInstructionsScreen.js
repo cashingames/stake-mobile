@@ -7,7 +7,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import Constants from 'expo-constants';
 import EStyleSheet from "react-native-extended-stylesheet";
 import GoToStore from '../../shared/GoToStore';
-import { startGame, setIsPlayingTrivia } from "./GameSlice";
+import { startGame, setIsPlayingTrivia, startChallengeGame } from "./GameSlice";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { formatNumber } from '../../utils/stringUtl';
@@ -131,6 +131,7 @@ const AvailableBoosts = ({ onClose }) => {
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
     const gameTypeId = useSelector(state => state.game.gameType.id);
     const gameModeId = useSelector(state => state.game.gameMode.id);
+    const gameModeName = useSelector(state => state.game.gameMode.name);
     const [loading, setLoading] = useState(false);
 
     const onStartGame = () => {
@@ -147,6 +148,27 @@ const AvailableBoosts = ({ onClose }) => {
                 setLoading(false);
                 onClose();
                 navigation.navigate("GameInProgress")
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                console.log(rejectedValueOrSerializedError);
+                Alert.alert(rejectedValueOrSerializedError.message)
+                setLoading(false);
+            });
+    }
+
+    const startChallenge = () => {
+        setLoading(true);
+        dispatch(startChallengeGame({
+            category: gameCategoryId,
+            type: gameTypeId,
+            challenge_id : 12
+        }))
+            .then(unwrapResult)
+            .then(result => {
+                console.log(result);
+                setLoading(false);
+                onClose();
+                navigation.navigate("ChallengeGameInProgress")
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError);
@@ -176,7 +198,12 @@ const AvailableBoosts = ({ onClose }) => {
             <View style={styles.storeLinks}>
                 <GoToStore onPress={visitStore} />
             </View>
-            <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />
+            {gameModeName === "EXHIBITION" &&
+                <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />
+            }
+             {gameModeName === "CHALLENGE" &&
+                <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={startChallenge} disabled={loading} />
+            }
         </View>
     )
 }

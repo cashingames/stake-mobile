@@ -1,12 +1,10 @@
 
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 export default function ({ backgroundColor, spinnerColor, barStyle, statusBackground }) {
     return (
         <>
-            <StatusBar style={barStyle} backgroundColor={statusBackground} />
             <View style={[styles.loadingContainer,
             backgroundColor ? { backgroundColor: backgroundColor } : { backgroundColor: '#fff' }
             ]}>

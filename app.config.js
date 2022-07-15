@@ -43,6 +43,7 @@ export default {
           {
             "scheme": "https",
             "host": "cashingames.com",
+            "path": "/cashingames"
           }
         ],
         "category": [
