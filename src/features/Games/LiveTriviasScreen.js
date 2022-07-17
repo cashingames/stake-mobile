@@ -38,8 +38,8 @@ const LiveTriviasScreen = ({ navigation }) => {
         return <PageLoading
             backgroundColor='#072169'
             spinnerColor="#FFFF"
-            barStyle = "light-content"
-            statusBackground= "#072169"
+            // barStyle = "light-content"
+            // statusBackground= "#072169"
 
         />
     }
