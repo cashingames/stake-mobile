@@ -9,11 +9,11 @@ import { acceptDeclineChallengeInivite, getChallengeDetails } from "./GameSlice"
 import { useSelector, useDispatch } from 'react-redux';
 import PageLoading from "../../shared/PageLoading";
 import { isTrue } from "../../utils/stringUtl";
-import { unwrapResult } from "@reduxjs/toolkit";
 
-const AcceptDeclineChallengeScreen = ({ navigation }) => {
+const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
 	useApplyHeaderWorkaround(navigation.setOptions);
 
+    const {challengeId} = route.params
 	const dispatch = useDispatch();
 	const [loading, setLoading] = useState(true)
 	const challengeDetails = useSelector(state => state.game.challengeDetails);
@@ -37,8 +37,7 @@ const AcceptDeclineChallengeScreen = ({ navigation }) => {
 	}
 
 	useEffect(() => {
-		dispatch(getChallengeDetails(12)).then(() => setLoading(false));
-		console.log('fetched')
+		dispatch(getChallengeDetails(challengeId)).then(() => setLoading(false));
 	}, []);
 
 	if (loading) {

@@ -59,7 +59,7 @@ const InviteSuccessText = ({ onClose }) => {
 
 const ReturnToDashboard = ({ onPress }) => {
     return (
-        <AppButton text="Go to Dashboard" onPress={onPress} />
+        <AppButton text="Return to Home" onPress={onPress} />
     )
 }
 

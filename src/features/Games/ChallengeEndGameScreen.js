@@ -1,14 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
-import {Text, View, Image, ScrollView, Pressable, Alert, BackHandler } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, Alert, BackHandler } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { incrementCountdownResetIndex, startGame, resetGameStats } from './GameSlice';
+import { resetGameStats } from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LottieAnimations from "../../shared/LottieAnimations";
-import NoGameNotification from '../../shared/NoGameNotification';
+import AppButton from '../../shared/AppButton';
 
 export default function ChallengeEndGameScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -21,7 +21,7 @@ export default function ChallengeEndGameScreen({ navigation }) {
 
     const onHomeButtonClick = () => {
         dispatch(resetGameStats());
-        navigation.navigate('Home')
+        navigation.navigate('AppRouter')
     }
 
     useFocusEffect(
@@ -54,16 +54,10 @@ export default function ChallengeEndGameScreen({ navigation }) {
             <UserResultInfo pointsGained={pointsGained} />
             <SeeRank />
             <FinalScore pointsGained={pointsGained} />
-            <View style={styles.gameButtons}>
-                <GameButton buttonText='Return to Home'
-                    onPress={onHomeButtonClick}
-                />
-                {/* <GameButton buttonText={loading ? 'loading...' : 'Play Again'}
-                    onPress={onPlayButtonClick}
-                    disabled={loading}
-                /> */}
+            <AppButton text='Return to Home'
+            style={styles.gameButton}
+                onPress={onHomeButtonClick} />
 
-            </View>
         </ScrollView>
 
     );
@@ -93,7 +87,9 @@ const Username = ({ userName }) => {
 const UserResultInfo = ({ pointsGained }) => {
     return (
         <View style={styles.infoContainer}>
-            <Text style={styles.info}>you scored {pointsGained} points, Play again to climb up the leaderboard</Text>
+            <Text style={styles.info}>you scored {pointsGained}, go to the challenge leaderboard
+                to view the status and result of this challenge
+            </Text>
         </View>
     )
 }
@@ -110,7 +106,7 @@ const SeeRank = () => {
                 <Image
                     source={require('../../../assets/images/leaderboard.png')}
                 />
-                <Text style={styles.seeRankText}>Check the leaderboard to see your rank</Text>
+                <Text style={styles.seeRankText}>Click to see status and result of this challenge</Text>
             </View>
         </Pressable>
 
@@ -123,14 +119,6 @@ const FinalScore = ({ pointsGained }) => {
             <Text style={styles.finalScoreText}>Your final score point is</Text>
             <Text style={styles.point}>{pointsGained}</Text>
         </View>
-    )
-}
-
-const GameButton = ({ buttonText, onPress, disabled }) => {
-    return (
-        <Pressable onPress={onPress} style={[styles.gameButton, disabled ? styles.gameButtonDisabled : {}]} >
-            <Text style={styles.buttonText}>{buttonText}</Text>
-        </Pressable>
     )
 }
 
@@ -214,30 +202,8 @@ const styles = EStyleSheet.create({
         fontSize: '4rem',
     },
     gameButton: {
-        borderColor: '#FFFF',
-        borderWidth: 1,
-        width: responsiveScreenWidth(35),
-        height: responsiveScreenHeight(6.5),
-        borderRadius: 8,
-        justifyContent: 'center',
-        alignItems: 'center',
-        display: 'flex',
+      marginVertical:normalize(1)
     },
-    gameButtonDisabled: {
-        backgroundColor: '#DFCBCF'
-    },
-    gameButtons: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: normalize(50)
-    },
-    buttonText: {
-        textAlign: 'center',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        fontSize: '0.72rem',
-    },
+
 
 });

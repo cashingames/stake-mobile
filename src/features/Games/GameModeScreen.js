@@ -20,7 +20,7 @@ export default function GameModeScreen({ navigation }) {
             navigation.navigate('GameInstructions')
         }
         else if (mode.name === "CHALLENGE") {
-            navigation.navigate('AcceptDeclineChallenge')
+            navigation.navigate('ChallengeSelectPlayer')
         }
 
     };
