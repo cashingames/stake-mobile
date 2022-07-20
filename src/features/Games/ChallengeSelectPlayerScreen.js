@@ -8,9 +8,11 @@ import { isTrue } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { fetchUserFriends, searchUserFriends } from '../CommonSlice';
 import PageLoading from '../../shared/PageLoading';
-import { setSelectedFriend, unselectFriend } from './GameSlice';
+import AppButton from '../../shared/AppButton';
+import { sendFriendInvite, setSelectedFriend, unselectFriend } from './GameSlice';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import ChallengeInviteSent from '../../shared/ChallengeInviteSent';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 
 export default function ChallengeSelectPlayerScreen({ navigation }) {
@@ -18,9 +20,9 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const dispatch = useDispatch();
     const refRBSheet = useRef();
     const [loading, setLoading] = useState(true)
+    const activeCategory = useSelector(state => state.game.gameCategory);
     const userFriends = useSelector(state => state.common.userFriends);
     const selectedOpponent = useSelector(state => state.game.selectedFriend);
-    console.log(selectedOpponent)
     const [search, setSearch] = useState("");
 
     const openBottomSheet = () => {
@@ -32,8 +34,22 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         navigation.navigate('Home')
     }
 
+
     const sendInvite = () => {
-        openBottomSheet()
+        dispatch(sendFriendInvite({
+            opponentId: selectedOpponent.id,
+            categoryId: activeCategory.id
+        }
+        ))
+            .then(unwrapResult)
+            .then(result => {
+                console.log(result);
+                openBottomSheet()
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                console.log(rejectedValueOrSerializedError);
+                Alert.alert(rejectedValueOrSerializedError.message)
+            });
     }
 
     useEffect(() => {

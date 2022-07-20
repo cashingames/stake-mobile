@@ -66,7 +66,7 @@ const RightButtons = () => {
 
     return (
         <View style={styles.headerIcons}>
-          
+
             <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Home')}>
                 <Ionicons name='home-outline' size={26} />
                 <Text style={styles.headerIconText}>Home</Text>
@@ -125,6 +125,17 @@ function CustomDrawerContent(props) {
                     style={drawStyles.label}
                     labelContainerStyle
                 />
+                <DrawerItem
+                    label={() =>
+                        <View style={drawStyles.item}>
+                            <Text style={drawStyles.itemLabel}>My Challenges</Text>
+                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                        </View>}
+                    onPress={() => navigation.navigate('MyChallenges')}
+                    activeTintColor='#EF2F55'
+                    style={drawStyles.label}
+                    labelContainerStyle
+                />
 
                 <DrawerItem
                     label={() =>
@@ -149,17 +160,6 @@ function CustomDrawerContent(props) {
                     labelContainerStyle
                 />
 
-                {/* <DrawerItem
-                    label={() =>
-                        <View style={drawStyles.item}>
-                            <Text style={drawStyles.itemLabel}>Tournament</Text>
-                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                        </View>}
-                    onPress={() => navigation.navigate('Tournament')}
-                    activeTintColor='#EF2F55'
-                    style={drawStyles.label}
-                    labelContainerStyle
-                /> */}
                 <DrawerItem
                     label={() =>
                         <View style={drawStyles.item}>

@@ -7,26 +7,36 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import Constants from 'expo-constants';
 import EStyleSheet from "react-native-extended-stylesheet";
 import GoToStore from '../../shared/GoToStore';
-import { startGame, setIsPlayingTrivia, startChallengeGame } from "./GameSlice";
+import { startChallengeGame, getChallengeDetails } from "./GameSlice";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { formatNumber } from '../../utils/stringUtl';
-import AppButton from './../../shared/AppButton';
+import AppButton from '../../shared/AppButton';
+import PageLoading from "../../shared/PageLoading";
 
 
-export default function GameInstructionsScreen({ navigation }) {
+export default function ChallengeGameInstructionsScreen({ navigation, route }) {
   useApplyHeaderWorkaround(navigation.setOptions);
+  const { challengeId } = route.params
 
-  const gameMode = useSelector(state => state.game.gameMode);
   const challengeDetails = useSelector(state => state.game.challengeDetails);
   const refRBSheet = useRef();
+  const [onLoading, setOnLoading] = useState(true)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getChallengeDetails(challengeId)).then(() => setOnLoading(false));
+    console.log('fetched')
+  }, []);
+
+  if (onLoading) {
+    return <PageLoading spinnerColor="#0000ff" />
+  }
 
   return (
-  
-   <View style={styles.container}>
-    <ScrollView>
-      {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
-      {challengeDetails.gameModeName === "CHALLENGE" && <ChallengeInstructions />}
+    <ScrollView style={styles.container}>
+      <ChallengeInstructions />
+      <AppButton onPress={() => refRBSheet.current.open()} text='Proceed' />
       <RBSheet
         ref={refRBSheet}
         closeOnDragDown={true}
@@ -45,46 +55,11 @@ export default function GameInstructionsScreen({ navigation }) {
           }
         }}
       >
-        {gameMode.name === "EXHIBITION" &&
-          <AvailableBoosts onClose={() => refRBSheet.current.close()} />
-        }
-        {challengeDetails.gameModeName === "CHALLENGE"
-          && <AvailableChallengeBoosts onClose={() => refRBSheet.current.close()} />
-        }
+        <AvailableChallengeBoosts onClose={() => refRBSheet.current.close()} />
+
       </RBSheet>
     </ScrollView>
-         <AppButton
-                onPress={() => refRBSheet.current.open()}
-                text='Proceed'
-                style={styles.proceedButton}
-            />
-        </View>
-  );                  
-};
-const ExhibitionInstructions = () => {
-  return (
-    <>
-      <View style={styles.instruction}>
-        <Text style={styles.unicode}>{'\u0031'}.</Text>
-        <Text style={styles.instructionText}>There are 10 questions per session.
-          You are required to answer these 10 questions in 60 seconds</Text>
-      </View>
-      <View style={styles.instruction}>
-        <Text style={styles.unicode}>{'\u0032'}.</Text>
-        <Text style={styles.instructionText}>Click on the “Next” button after answering each question to
-          progress to the next question.</Text>
-      </View>
-      <View style={styles.instruction}>
-        <Text style={styles.unicode}>{'\u0033'}.</Text>
-        <Text style={styles.instructionText}>At the end of the session, you would see your total score</Text>
-      </View>
-      <View style={styles.instruction}>
-        <Text style={styles.unicode}>{'\u0034'}.</Text>
-        <Text style={styles.instructionText}>Click “Play again” to start another session in winning
-          more points to climb the leader board.</Text>
-      </View>
-    </>
-  )
+  );
 };
 
 const ChallengeInstructions = () => {
@@ -131,63 +106,6 @@ const AvailableBoost = ({ boost }) => {
         <Text style={styles.boostName}>{boost.name}</Text>
         <Text style={styles.boostDescription}>{boost.description}</Text>
       </View>
-    </View>
-  )
-}
-
-
-const AvailableBoosts = ({ onClose }) => {
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const boosts = useSelector(state => state.auth.user.boosts);
-  const gameCategoryId = useSelector(state => state.game.gameCategory.id);
-  const gameTypeId = useSelector(state => state.game.gameType.id);
-  const gameModeId = useSelector(state => state.game.gameMode.id);
-  const [loading, setLoading] = useState(false);
-
-  const onStartGame = () => {
-    setLoading(true);
-    dispatch(setIsPlayingTrivia(false))
-    dispatch(startGame({
-      category: gameCategoryId,
-      type: gameTypeId,
-      mode: gameModeId
-    }))
-      .then(unwrapResult)
-      .then(result => {
-        console.log(result);
-        setLoading(false);
-        onClose();
-        navigation.navigate("GameInProgress")
-      })
-      .catch((rejectedValueOrSerializedError) => {
-        console.log(rejectedValueOrSerializedError);
-        Alert.alert(rejectedValueOrSerializedError.message)
-        setLoading(false);
-      });
-  }
-
-
-  const visitStore = () => {
-    onClose();
-    navigation.navigate('GameStore')
-  }
-
-  return (
-    <View style={styles.availableBoosts}>
-      <Text style={styles.title}>Available Boosts</Text>
-      {boosts?.length > 0 ?
-        <View style={styles.boosts}>
-          {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i} />
-          )}
-        </View>
-        :
-        <Text style={styles.noBoosts}>No boost available, go to store to purchase boost</Text>
-      }
-      <View style={styles.storeLinks}>
-        <GoToStore onPress={visitStore} />
-      </View>
-      <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />
     </View>
   )
 }
@@ -311,6 +229,7 @@ const styles = EStyleSheet.create({
   },
   boosts: {
     // alignItems: ''
+
   },
   noBoosts: {
     textAlign: 'center',
@@ -370,6 +289,8 @@ const styles = EStyleSheet.create({
   startContainer: {
     marginTop: normalize(50),
   },
-    proceedButton: {
-        marginVertical: 10,
+  boostIcon: {
+    width: normalize(35),
+    height: normalize(35)
+  }
 });

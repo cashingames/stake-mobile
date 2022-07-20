@@ -21,6 +21,26 @@ export const startGame = createAsyncThunk(
     }
 )
 
+export const startChallengeGame = createAsyncThunk(
+    'game/startChallengeGame',
+    async (data, thunkAPI) => {
+        // console.log(data)
+        const response = await axios.post('v3/challenge/start/game', data)
+        console.log('challenge started');
+        return response.data
+    }
+)
+
+export const challengeEndGame = createAsyncThunk(
+    'game/challengeEndGame',
+    async (data, thunkAPI) => {
+        // console.log(data)
+        const response = await axios.post('v3/challenge/end/game', data)
+        console.log('challenge ended');
+        return response.data
+    }
+)
+
 export const endGame = createAsyncThunk(
     'game/endGame',
     async (data, thunkAPI) => {
@@ -45,9 +65,51 @@ export const sendFriendInvite = createAsyncThunk(
     async (data, thunkAPI) => {
         console.log('before invite');
         //make a network request to the server
-        const response = await axios.post('v2/game/challenge/invite', data)
+        const response = await axios.post('v3/challenge/send-invite', data)
         console.log('invite sent');
-        return response;
+        return response.data;
+    }
+)
+
+export const getChallengeDetails = createAsyncThunk(
+    'game/getChallengeDetails',
+    async (data, thunkAPI) => {
+        console.log('before details');
+        //make a network request to the server
+        const response = await axios.get(`v3/challenge/${data}/details`)
+        console.log(response.data);
+        return response.data;
+    }
+)
+
+export const acceptDeclineChallengeInivite = createAsyncThunk(
+    'game/acceptChallengeInivite ',
+    async (data, thunkAPI) => {
+        console.log('accept');
+        //make a network request to the server
+        const response = await axios.post('v3/challenge/invite/respond', data)
+        console.log(response.data);
+        return response.data;
+    }
+)
+
+export const getUserChallenges = createAsyncThunk(
+    'game/getUserChallenges  ',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.get('v3/user/challenges', data)
+        return response.data;
+    }
+)
+
+export const getChallengeScores = createAsyncThunk(
+    'game/getChallengeScores',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        console.log('getting challenge score');
+        const response = await axios.get(`v3/challenge/${data}/leaderboard`);
+        console.log(response.data);
+        return response.data;
     }
 )
 
@@ -80,7 +142,10 @@ const initialState = {
     triviaMode: '',
     triviaId: '',
     hasPlayedTrivia: false,
-    gameDuration: 60
+    gameDuration: 60,
+    challengeDetails: {},
+    userChallenges: [],
+    challengeScores: {}
 }
 
 
@@ -192,6 +257,29 @@ export const GameSlice = createSlice({
             .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
                 state.triviaLeaders = action.payload;
             })
+            .addCase(getChallengeDetails.fulfilled, (state, action) => {
+                state.challengeDetails = action.payload;
+            })
+            .addCase(startChallengeGame.fulfilled, (state, action) => {
+                console.log(action);
+                state.questions = action.payload.data.questions;
+                state.displayedQuestion = state.questions[state.currentQuestionPosition]
+                state.displayedOptions = state.displayedQuestion.options
+                state.gameSessionToken = action.payload.data.game.token
+                state.isEnded = false
+            })
+            .addCase(challengeEndGame.fulfilled, (state, action) => {
+                state.isEnded = true;
+                state.pointsGained = action.payload.data.points_gained;
+            })
+            .addCase(getUserChallenges.fulfilled, (state, action) => {
+                state.userChallenges = action.payload;
+            })
+
+            .addCase(getChallengeScores.fulfilled, (state, action) => {
+                state.challengeScores = action.payload;
+            })
+
 
     },
 })
@@ -199,7 +287,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    resetGameStats,setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend
+    resetGameStats, setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend
 } = GameSlice.actions
 
 

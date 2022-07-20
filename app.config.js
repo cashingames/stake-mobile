@@ -35,7 +35,23 @@ export default {
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon2.png",
       backgroundColor: "#FFFFFF"
-    }
+    },
+    "intentFilters": [
+      {
+        "action": "VIEW",
+        "data": [
+          {
+            "scheme": "https",
+            "host": "cashingames.com",
+            "path": "/cashingames"
+          }
+        ],
+        "category": [
+          "BROWSABLE",
+          "DEFAULT"
+        ]
+      }
+    ]
   },
   ios: {
     bundleIdentifier: getAppIdentifier(),

@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useRef } from 'react';
-import { Dimensions, PixelRatio, Text } from 'react-native';
+import { Dimensions, PixelRatio, Text} from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import { useFonts } from 'expo-font';
@@ -58,8 +58,8 @@ const config = {
     FundWallet: 'fund',
     UserProfile: 'profile',
     Invite: 'invite',
-    AcceptDeclineChallenge:'challenge/:challengeId',
-    GameInstructions: 'instructions/:challengeId'
+    AcceptDeclineChallenge: 'challenge/:challengeId',
+    ChallengeGameInstruction: 'instructions/:challengeId'
   },
 };
 

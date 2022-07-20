@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, ScrollView, StatusBar } from 'react-native';
+import { Text, View, Image, ScrollView } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector, useDispatch } from 'react-redux';
@@ -33,12 +33,7 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
 
 
     if (loading) {
-        return <PageLoading 
-        backgroundColor='#072169'
-        spinnerColor="#FFFF"
-        // barStyle = "light-content"
-        // statusBackground= "#072169"
-        />
+        return <PageLoading backgroundColor='#072169' spinnerColor="#FFFF" />
     }
 
     return (
