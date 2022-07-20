@@ -19,7 +19,6 @@ export default function ChallengeGameInstructionsScreen({ navigation, route }) {
   useApplyHeaderWorkaround(navigation.setOptions);
   const { challengeId } = route.params
 
-  const challengeDetails = useSelector(state => state.game.challengeDetails);
   const refRBSheet = useRef();
   const [onLoading, setOnLoading] = useState(true)
   const dispatch = useDispatch();
@@ -165,7 +164,6 @@ const AvailableChallengeBoosts = ({ onClose }) => {
     </View>
   )
 }
-
 
 const styles = EStyleSheet.create({
   container: {
