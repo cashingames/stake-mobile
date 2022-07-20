@@ -107,8 +107,9 @@ const styles = EStyleSheet.create({
     },
     status: {
         fontSize: '.75rem',
-        color: '#000000',
+        color: '#701F88',
         fontFamily: 'graphik-medium',
+        opacity: 0.4
     },
     versus: {
         fontSize: '.9rem',
