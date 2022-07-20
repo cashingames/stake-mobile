@@ -155,7 +155,7 @@ export default MyChallengesScoreScreen;
 const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#9C3DB8',
+    backgroundColor: '#701F88',
     paddingHorizontal: normalize(20),
     paddingBottom: responsiveScreenWidth(30)
 

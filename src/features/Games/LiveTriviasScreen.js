@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { View, ScrollView, Text} from 'react-native';
+import { View, ScrollView, Text, StatusBar} from 'react-native';
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { fetchRecentLiveTrivia } from '../CommonSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import PageLoading from '../../shared/PageLoading';
-import LiveTriviaCardComponent from '../../shared/LiveTriviaCardComponent';
 import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 import { useFocusEffect } from '@react-navigation/native';
-// import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 
 
 
@@ -20,7 +18,6 @@ const LiveTriviasScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(true)
 
     const trivia = useSelector(state => state.common.trivias)
-    console.log(trivia)
     useEffect(() => {
         dispatch(fetchRecentLiveTrivia()).then(() => setLoading(false));
     }, []);

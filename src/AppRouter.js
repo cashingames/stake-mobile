@@ -117,7 +117,7 @@ function AppRouter() {
 						<AppStack.Screen name="MyChallengesScore" component={MyChallengesScoreScreen} options={{
 							title: 'Scores',
 							headerStyle: {
-								backgroundColor: '#9C3DB8',
+								backgroundColor: '#701F88',
 							},
 							headerTintColor: '#FFFF',
 						}} />

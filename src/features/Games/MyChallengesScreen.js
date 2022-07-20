@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, StatusBar } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import PageLoading from '../../shared/PageLoading';
 import { getUserChallenges } from './GameSlice';
+import AppButton from '../../shared/AppButton';
 
 
 
@@ -19,7 +20,7 @@ const MyChallengesScreen = ({ navigation, route }) => {
 
 
     const userChallenges = useSelector(state => state.game.userChallenges);
-    console.log(userChallenges )
+    console.log(userChallenges)
 
 
 
@@ -28,12 +29,22 @@ const MyChallengesScreen = ({ navigation, route }) => {
         dispatch(getUserChallenges()).then(() => setLoading(false));
     }, []);
 
+    useEffect(() => {
+        StatusBar.setBackgroundColor('#701F88');
+        StatusBar.setBarStyle('light-content');
+        return () => {
+            StatusBar.setBackgroundColor('#FFFF');
+            StatusBar.setBarStyle('dark-content');
+        }
+    }, []);
+
     if (loading) {
         return <PageLoading
             backgroundColor='#701F88'
             spinnerColor="#FFFF"
         />
     }
+
 
 
 
@@ -51,7 +62,7 @@ const MyChallengesScreen = ({ navigation, route }) => {
     )
 }
 
-const ChallengeCard = ({userChallenge }) => {
+const ChallengeCard = ({ userChallenge }) => {
     const navigation = useNavigation();
 
     const checkScores = () => {
@@ -60,6 +71,7 @@ const ChallengeCard = ({userChallenge }) => {
         })
 
     }
+    const challengeDeclined = userChallenge.status === "DECLINED";
     return (
         <View style={styles.challengeContainer}>
             <View style={styles.categoryContainer}>
@@ -76,9 +88,15 @@ const ChallengeCard = ({userChallenge }) => {
                 <Text style={styles.versus}>vs</Text>
                 <Text style={styles.opponent}>{userChallenge.opponentUsername}</Text>
             </View>
-            <Pressable style={styles.scoresButton} onPress={checkScores}>
-                <Text style={styles.scoresText}>Scores</Text>
-            </Pressable>
+            {userChallenge.status === "DECLINED" ?
+                <AppButton text={'Challenge Declined'} disabled={challengeDeclined} style={styles.disabled} />
+                :
+                <Pressable style={styles.scoresButton} onPress={checkScores}>
+                    <Text style={styles.scoresText}>Scores</Text>
+                </Pressable>
+            }
+
+
         </View>
     )
 }
@@ -97,8 +115,8 @@ const styles = EStyleSheet.create({
         marginVertical: responsiveScreenWidth(3),
         backgroundColor: '#FFFF',
         borderRadius: 16,
-        paddingHorizontal: normalize(18),
-        paddingVertical: normalize(15)
+        paddingHorizontal: normalize(20),
+        paddingVertical: normalize(12)
     },
     challengeCategory: {
         fontSize: '.9rem',
@@ -117,12 +135,12 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
     },
     opponent: {
-        fontSize: '1.2rem',
+        fontSize: '1rem',
         color: '#FF716C',
         fontFamily: 'graphik-medium',
     },
     challenger: {
-        fontSize: '1.2rem',
+        fontSize: '1rem',
         color: '#2D9CDB',
         fontFamily: 'graphik-medium',
     },
@@ -150,6 +168,9 @@ const styles = EStyleSheet.create({
         fontSize: '.9rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
+    },
+    disabled: {
+        backgroundColor: '#DFCBCF'
     }
 
 });
