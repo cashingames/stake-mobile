@@ -37,9 +37,11 @@ export default function SignupProfileScreen({ navigation }) {
             username: username,
             ...userCredentials
         }).then(response => {
-            saveToken(response.data.data)
-            dispatch(setToken(response.data.data))
-            navigation.navigate('FirstTimeBonus')
+            // saveToken(response.data.data)
+            // dispatch(setToken(response.data.data))
+            navigation.navigate('SignupVerifyEmail')
+            // navigation.navigate('EmailVerified')
+
         }, err => {
             if (!err || !err.response || err.response === undefined) {
                 setError("Your Network is Offline.");

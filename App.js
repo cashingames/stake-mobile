@@ -60,7 +60,7 @@ const config = {
     Invite: 'invite',
     AcceptDeclineChallenge: 'challenge/:challengeId',
     ChallengeGameInstruction: 'instructions/:challengeId',
-    SignupVerifyEmail: 'verifyemail/:email'
+    EmailVerified: 'verifyemail/:email'
   },
 };
 
