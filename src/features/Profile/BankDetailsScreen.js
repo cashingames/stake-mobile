@@ -73,48 +73,53 @@ export default function BankDetailsScreen({ navigation }) {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <Input
-                label='Account Number'
-                value={accountNumber}
-                onChangeText={text => { onChangeAccountNumber(text) }}
-                maxLength={10}
-                keyboardType='numeric'
-                error={accountNumberErr && '*account number must not be less than 10 digits'}
-            />
-            <Input
-                label='Name on Account'
-                value={accountName}
-                onChangeText={text => { onChangeAccountName(text) }}
-                error={accountNameErr && '*account name must not be empty'}
-            />
-            <View style={styles.banksContainer}>
-                <Text style={styles.bankLabel}>Select Bank</Text>
+        <View style={styles.container}>
+            <ScrollView >
+                <>
+                    <Input
+                        label='Account Number'
+                        value={accountNumber}
+                        onChangeText={text => { onChangeAccountNumber(text) }}
+                        maxLength={10}
+                        keyboardType='numeric'
+                        error={accountNumberErr && '*account number must not be less than 10 digits'}
+                    />
+                    <Input
+                        label='Name on Account'
+                        value={accountName}
+                        onChangeText={text => { onChangeAccountName(text) }}
+                        error={accountNameErr && '*account name must not be empty'}
+                    />
+                    <View style={styles.banksContainer}>
+                        <Text style={styles.bankLabel}>Select Bank</Text>
 
-                <Picker
-                    style={styles.bankPicker}
-                    selectedValue={bankName}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setBankName(itemValue)
-                    }
-                    mode='dropdown'
+                        <Picker
+                            style={styles.bankPicker}
+                            selectedValue={bankName}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setBankName(itemValue)
+                            }
+                            mode='dropdown'
 
-                >
-                    {banks && banks.map((bank, i) =>
-                        <Picker.Item label={bank.name} key={i} value={bank.name} style={styles.pickerItem} />
-                    )}
-                </Picker>
-            </View>
+                        >
+                            {banks && banks.map((bank, i) =>
+                                <Picker.Item label={bank.name} key={i} value={bank.name} style={styles.pickerItem} />
+                            )}
+                        </Picker>
+                    </View>
+                </>
+            </ScrollView>
             <AppButton text={saving ? 'Saving' : 'Save Changes'} onPress={onSaveBankDetails} disabled={!canSave} />
-        </ScrollView>
+        </View>
     );
 }
 
 const styles = EStyleSheet.create({
     container: {
+        flex: 1,
+        backgroundColor: '#F8F9FD',
         paddingHorizontal: normalize(18),
-        paddingVertical: normalize(10),
-        backgroundColor: "#F2F5FF",
+        paddingVertical: normalize(25),
     },
     banksContainer: {
         marginVertical: normalize(10)

@@ -6,6 +6,7 @@ import {
     Text,
 } from 'react-native';
 import AppButton from '../../shared/AppButton';
+import LottieAnimations from '../../shared/LottieAnimations';
 import normalize from '../../utils/normalize';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
@@ -14,9 +15,10 @@ export default ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Image
-                style={styles.successImageStyle}
-                source={require('../../../assets/images/success.png')}
+            <LottieAnimations
+                animationView={require('../../../assets/transaction-successful.json')}
+                width={normalize(100)}
+                height={normalize(100)}
             />
             <SuccessText />
             <View style={styles.button}>

@@ -14,7 +14,7 @@ import FailedBottomSheet from './FailedBottomSheet';
 
 
 
-const LiveTriviaCard = ({trivia}) => {
+const LiveTriviaCard = ({ trivia }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const notEnoughPointNotice = useRef();
@@ -25,11 +25,11 @@ const LiveTriviaCard = ({trivia}) => {
     // const trivia = useSelector(state => state.liveTrivia.data);
 
     const triviaActionButtonClicked = () => {
-        if (trivia.playerStatus === "INSUFFICIENTPOINTS") {
+        if (trivia.playerStatus === "INSUFFICIENTPOINTS" && trivia.status === "ONGOING") {
             notEnoughPointNotice.current.open();
-        } else if (trivia.playerStatus === "PLAYED") {
+        } else if (trivia.playerStatus === "PLAYED" || trivia.status === "EXPIRED" || trivia.status === "CLOSED") {
             navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id });
-        } else if (trivia.playerStatus === "CANPLAY") {
+        } else if (trivia.playerStatus === "CANPLAY" && trivia.status !== "EXPIRED") {
             navigation.navigate('TriviaInstructions', { ...trivia })
         }
     }
@@ -65,7 +65,11 @@ const LiveTriviaCard = ({trivia}) => {
                     </View>
                     <Text style={styles.triviaTitle}>{trivia.prizeDisplayText}</Text>
                     {/* <Text style={styles.triviaAdText}>up for grabs !</Text> */}
-                    <Text style={styles.triviaAdText}>{trivia.startDateDisplayText}</Text>
+                    {trivia.status === "EXPIRED" ?
+                        <Text style={styles.triviaAdText}>{trivia.startAt}</Text>
+                        :
+                        <Text style={styles.triviaAdText}>{trivia.startDateDisplayText}</Text>
+                    }
 
                     <View style={styles.triviaBoardBottom}>
                         <View>
@@ -149,7 +153,8 @@ const styles = EStyleSheet.create({
         borderRadius: 20,
     },
     triviaContainer: {
-        padding: '1rem'
+        paddingVertical: '1rem',
+        paddingHorizontal: '1.1rem'
     },
     triviaTop: {
         flexDirection: 'row',

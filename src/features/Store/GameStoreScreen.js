@@ -41,7 +41,7 @@ const GamePlans = () => {
 
     return (
         <View style={styles.storeItems}>
-            <Text style={styles.title}>Buy Games</Text>
+                <Text style={styles.title}>Buy Games</Text>
             <Text style={styles.storeItemsDescription}>
                 You can only play 5 free games daily, Buy Games to enjoy
                 playing without interruptons
@@ -325,6 +325,10 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(15),
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    planCountContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     planCount: {
         fontFamily: 'graphik-bold',

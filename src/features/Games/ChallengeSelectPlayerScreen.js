@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, View, Image, ScrollView, TextInput, Pressable, Alert } from 'react-native';
+import { Text, View, Image, ScrollView, TextInput, Pressable, Alert, } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -10,6 +10,7 @@ import { fetchUserFriends, searchUserFriends } from '../CommonSlice';
 import PageLoading from '../../shared/PageLoading';
 import AppButton from '../../shared/AppButton';
 import { sendFriendInvite, setSelectedFriend, unselectFriend } from './GameSlice';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import ChallengeInviteSent from '../../shared/ChallengeInviteSent';
 import { unwrapResult } from '@reduxjs/toolkit';
 
@@ -76,36 +77,44 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     }
 
     return (
-        <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
-            <View style={styles.search}>
-                <Ionicons name="search" size={18} color="#524D4D" style={styles.icon} />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Search friend’s name"
-                    onChangeText={setSearch}
-                    keyboardType="default"
+        <View style={styles.container}>
+            <ScrollView keyboardShouldPersistTaps='always'>
+                <View style={styles.search}>
+                    <Ionicons name="search" size={18} color="#524D4D" style={styles.icon} />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Search friend’s name"
+                        onChangeText={setSearch}
+                        keyboardType="default"
+                    />
+                    <Pressable style={styles.searchButton} onPress={onSearchFriends}>
+                        <Text style={styles.searchText}>Search</Text>
+                    </Pressable>
+                </View>
+                <View style={styles.boards}>
+                    {userFriends.map((userFriend, i) => <FriendDetails key={i} userFriend={userFriend}
+                        isSelected={userFriend.id === selectedOpponent?.id}
+                        onSelect={onSelectedFriend}
+                    />)}
+                </View>
+                <ChallengeInviteSent
+                    refBottomSheet={refRBSheet}
+                    onClose={closeBottomSheet}
                 />
-                <Pressable style={styles.searchButton} onPress={onSearchFriends}>
-                    <Text style={styles.searchText}>Search</Text>
-                </Pressable>
-            </View>
-            <View style={styles.boards}>
-                {userFriends.map((userFriend, i) => <FriendDetails key={i} userFriend={userFriend}
-                    isSelected={userFriend.id === selectedOpponent?.id}
-                    onSelect={onSelectedFriend}
-                />)}
-            </View>
-            <AppButton text="Send Invite" disabled={!selectedOpponent} onPress={sendInvite} />
 
-            <ChallengeInviteSent
-                refBottomSheet={refRBSheet}
-                onClose={closeBottomSheet}
-            />
-
-        </ScrollView>
+            </ScrollView>
+            <SendInviteButton onPress={sendInvite} disabled={!selectedOpponent} />
+        </View>
     );
 }
 
+const SendInviteButton = ({ onPress, disabled }) => {
+    return (
+        <Pressable onPress={onPress} style={[styles.selectButton, disabled ? styles.disabled : {}]} >
+            <Ionicons name='checkmark-sharp' size={26} color='#FFFF' />
+        </Pressable>
+    )
+}
 
 const FriendDetails = ({ userFriend, onSelect, isSelected }) => {
 
@@ -241,5 +250,21 @@ const styles = EStyleSheet.create({
         fontSize: normalize(12),
         fontFamily: 'graphik-medium',
     },
+    selectButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 100,
+        width: 50,
+        height: 50,
+        elevation: 5,
+        backgroundColor: '#EF2F55',
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+        margin: normalize(18)
+    },
+    disabled: {
+        backgroundColor: '#DFCBCF'
+    }
 
 });

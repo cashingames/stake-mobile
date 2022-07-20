@@ -160,8 +160,11 @@ const styles = EStyleSheet.create({
     opacity: 0.5,
   },
   actionButton: {
-    paddingVertical: responsiveScreenHeight(2.3),
-    marginTop: responsiveScreenHeight(5),
     marginHorizontal: normalize(18),
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    width: responsiveScreenWidth(90),
+    height: responsiveScreenWidth(12),
   },
 });

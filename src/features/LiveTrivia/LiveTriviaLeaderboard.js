@@ -11,7 +11,7 @@ import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
-
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const LiveTriviaLeaderBoard = ({ navigation, route }) => {
@@ -30,18 +30,18 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
         )).then(() => setLoading(false));
     }, [])
 
+
+
     if (loading) {
         return <PageLoading backgroundColor='#072169' spinnerColor="#FFFF" />
     }
 
     return (
-        <>
             <ScrollView style={styles.container}>
                 <ResultContainer />
                 {/* <TriviaTopLeaders /> */}
                 <TriviaParticipants triviaLeaders={triviaLeaders} />
             </ScrollView>
-        </>
     )
 }
 

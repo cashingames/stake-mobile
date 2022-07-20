@@ -1,17 +1,18 @@
-import React, {useEffect} from 'react';
-import {Text, View, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { Text, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import AppButton from '../../shared/AppButton';
 import { getUser } from '../Auth/AuthSlice';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import LottieAnimations from '../../shared/LottieAnimations';
 
 const GameBoostPurchaseSuccessfulScreen = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
-  
+
 
     useEffect(() => {
         dispatch(getUser());
@@ -20,9 +21,10 @@ const GameBoostPurchaseSuccessfulScreen = () => {
     return (
         <View style={styles.container}>
             <View style={styles.image}>
-                <Image
-                    style={styles.success}
-                    source={require('../../../assets/images/success.png')}
+                <LottieAnimations
+                    animationView={require('../../../assets/transaction-successful.json')}
+                    width={normalize(100)}
+                    height={normalize(100)}
                 />
             </View>
             <Text style={styles.paymentHeader}>Payment Successful</Text>
@@ -48,7 +50,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         marginVertical: normalize(15)
     },
-   success: {
+    success: {
         width: normalize(65),
         height: normalize(65),
         marginVertical: normalize(10),

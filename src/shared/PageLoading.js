@@ -4,13 +4,13 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 export default function ({ backgroundColor, spinnerColor, barStyle, statusBackground }) {
     return (
-        <>
+     
             <View style={[styles.loadingContainer,
             backgroundColor ? { backgroundColor: backgroundColor } : { backgroundColor: '#fff' }
             ]}>
                 <ActivityIndicator size="large" color={spinnerColor} />
             </View>
-        </>
+  
     )
 }
 

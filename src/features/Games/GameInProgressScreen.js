@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert } from 'react-native';
+import { Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert, StatusBar } from 'react-native';
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -19,9 +19,11 @@ import AppButton from "../../shared/AppButton";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { Base64 } from 'js-base64';
 import LottieAnimations from "../../shared/LottieAnimations";
+import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 
 
 export default function GameInProgressScreen({ navigation, route }) {
+    useApplyHeaderWorkaround(navigation.setOptions);
 
     const dispatch = useDispatch();
     const refRBSheet = useRef();
@@ -102,13 +104,22 @@ export default function GameInProgressScreen({ navigation, route }) {
             }),
         [navigation, gameEnded]
     );
+
+    useEffect(() => {
+        StatusBar.setBackgroundColor('#9C3DB8');
+        StatusBar.setBarStyle('light-content');
+        return () => {
+            StatusBar.setBackgroundColor('#FFFF');
+            StatusBar.setBarStyle('dark-content');
+        }
+    }, []);
+
     return (
-        <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">
-            <ScrollView>
+        <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
+            <ScrollView style = {styles.container}>
                 <PlayGameHeader onPress={() => onEndGame()} onPressBoost={() => refRBSheet.current.open()} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} />
                 <GameQuestions />
-                <NextButton onPress={() => onEndGame()} ending={ending} />
                 <RBSheet
                     ref={refRBSheet}
                     closeOnDragDown={true}
@@ -130,6 +141,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                     <GameBoosts />
                 </RBSheet>
             </ScrollView>
+            <NextButton onPress={() => onEndGame()} ending={ending} />
         </ImageBackground>
     );
 }
@@ -399,12 +411,15 @@ const NextButton = ({ onPress, ending }) => {
 
 const styles = EStyleSheet.create({
 
-    image: {
+    container: { 
         flex: 1,
         backgroundColor: '#9C3DB8',
+        paddingTop: normalize(40),
+    },
+    image: {
         paddingHorizontal: normalize(18),
-        paddingTop: normalize(15),
-        justifyContent: 'flex-end'
+        backgroundColor: '#9C3DB8',
+        flex: 1,
     },
     header: {
         display: 'flex',
@@ -596,9 +611,6 @@ const styles = EStyleSheet.create({
         height: normalize(35)
     },
     nextButton: {
-        justifyContent: 'flex-end'
-        // position: 'absolute',
-        // bottom: 0,
-        // left: 0
+        marginVertical: 10,
     }
 });

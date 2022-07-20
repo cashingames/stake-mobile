@@ -6,16 +6,17 @@ import { useSelector } from 'react-redux';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import LottieAnimations from '../../shared/LottieAnimations';
 
 const GamePlanPurchaseSuccessfulScreen = () => {
-    const user = useSelector(state => state.auth.user)
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <View style={styles.image}>
-                <Image
-                    style={styles.success}
-                    source={require('../../../assets/images/success.png')}
+                <LottieAnimations
+                    animationView={require('../../../assets/transaction-successful.json')}
+                    width={normalize(100)}
+                    height={normalize(100)}
                 />
             </View>
             <Text style={styles.paymentHeader}>Payment Successful</Text>

@@ -9,6 +9,7 @@ import { getUser } from '../Auth/AuthSlice';
 import WalletBalance from './WalletBalance';
 import { formatNumber } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
+import LottieAnimations from '../../shared/LottieAnimations';
 
 export default function WalletScreen() {
     const dispatch = useDispatch();

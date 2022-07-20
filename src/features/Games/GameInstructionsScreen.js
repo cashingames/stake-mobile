@@ -21,12 +21,12 @@ export default function GameInstructionsScreen({ navigation }) {
   const challengeDetails = useSelector(state => state.game.challengeDetails);
   const refRBSheet = useRef();
 
-
   return (
-    <ScrollView style={styles.container}>
+  
+   <View style={styles.container}>
+    <ScrollView>
       {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
       {challengeDetails.gameModeName === "CHALLENGE" && <ChallengeInstructions />}
-      <AppButton onPress={() => refRBSheet.current.open()} text='Proceed' />
       <RBSheet
         ref={refRBSheet}
         closeOnDragDown={true}
@@ -53,7 +53,13 @@ export default function GameInstructionsScreen({ navigation }) {
         }
       </RBSheet>
     </ScrollView>
-  );
+         <AppButton
+                onPress={() => refRBSheet.current.open()}
+                text='Proceed'
+                style={styles.proceedButton}
+            />
+        </View>
+  );                  
 };
 const ExhibitionInstructions = () => {
   return (
@@ -305,7 +311,6 @@ const styles = EStyleSheet.create({
   },
   boosts: {
     // alignItems: ''
-
   },
   noBoosts: {
     textAlign: 'center',
@@ -365,8 +370,6 @@ const styles = EStyleSheet.create({
   startContainer: {
     marginTop: normalize(50),
   },
-  boostIcon: {
-    width: normalize(35),
-    height: normalize(35)
-  }
+    proceedButton: {
+        marginVertical: 10,
 });
