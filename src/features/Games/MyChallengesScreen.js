@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import PageLoading from '../../shared/PageLoading';
 import { getUserChallenges } from './GameSlice';
 import AppButton from '../../shared/AppButton';
+import { getUser } from '../Auth/AuthSlice';
 
 
 
@@ -21,8 +22,6 @@ const MyChallengesScreen = ({ navigation, route }) => {
 
     const userChallenges = useSelector(state => state.game.userChallenges);
     console.log(userChallenges)
-
-
 
 
     useEffect(() => {
