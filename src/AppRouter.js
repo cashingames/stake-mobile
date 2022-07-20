@@ -55,6 +55,7 @@ import ChallengeGameInProgressScreen from './features/Games/ChallengeGameInProgr
 import ChallengeGameInstructionsScreen from './features/Games/ChallengeGameInstructionScreen';
 import MyChallengesScreen from './features/Games/MyChallengesScreen';
 import MyChallengesScoreScreen from './features/Games/MyChallengesScoreScreen.js';
+import SignupVerifyEmailScreen from './features/Auth/SignupVerifyEmailScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -175,6 +176,7 @@ function AppRouter() {
 						<AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
 						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} />
 						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} />
+						<AppStack.Screen name="SignupVerifyEmail" component={SignupVerifyEmailScreen} />
 					</AppStack.Group >
 				)
 			}
