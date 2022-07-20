@@ -52,6 +52,9 @@ import ChallengeSelectPlayerScreen from './features/Games/ChallengeSelectPlayerS
 import AcceptDeclineChallengeScreen from './features/Games/AcceptDeclineChallengeScreen';
 import ChallengeEndGameScreen from './features/Games/ChallengeEndGameScreen';
 import ChallengeGameInProgressScreen from './features/Games/ChallengeGameInProgressScreen';
+import ChallengeGameInstructionsScreen from './features/Games/ChallengeGameInstructionScreen';
+import MyChallengesScreen from './features/Games/MyChallengesScreen';
+import MyChallengesScoreScreen from './features/Games/MyChallengesScoreScreen.js';
 
 const AppStack = createNativeStackNavigator();
 
@@ -107,9 +110,24 @@ function AppRouter() {
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Challenge - Select a player' }} />
+						<AppStack.Screen name="ChallengeGameInstruction" component={ChallengeGameInstructionsScreen} options={{ title: 'Game Instructions' }} />
 						<AppStack.Screen name="ChallengeGameInProgress" component={ChallengeGameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeEndGameScreen" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="AcceptDeclineChallenge" component={AcceptDeclineChallengeScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="MyChallengesScore" component={MyChallengesScoreScreen} options={{
+							title: 'Scores',
+							headerStyle: {
+								backgroundColor: '#9C3DB8',
+							},
+							headerTintColor: '#FFFF',
+						}} />
+						<AppStack.Screen name="MyChallenges" component={MyChallengesScreen} options={{
+							title: 'My Challenges',
+							headerStyle: {
+								backgroundColor: '#701F88',
+							},
+							headerTintColor: '#FFFF',
+						}} />
 
 						<AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{ title: 'Game Instructions' }} />
 						<AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen} options={{ headerShown: false }} />

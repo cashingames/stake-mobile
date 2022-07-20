@@ -93,6 +93,26 @@ export const acceptDeclineChallengeInivite = createAsyncThunk(
     }
 )
 
+export const getUserChallenges = createAsyncThunk(
+    'game/getUserChallenges  ',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.get('v3/user/challenges', data)
+        return response.data;
+    }
+)
+
+export const getChallengeScores = createAsyncThunk(
+    'game/getChallengeScores',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        console.log('getting challenge score');
+        const response = await axios.get(`v3/challenge/${data}/leaderboard`);
+        console.log(response.data);
+        return response.data;
+    }
+)
+
 
 //This is to store the currently ongoing active game
 const initialState = {
@@ -123,7 +143,9 @@ const initialState = {
     triviaId: '',
     hasPlayedTrivia: false,
     gameDuration: 60,
-    challengeDetails: {}
+    challengeDetails: {},
+    userChallenges: [],
+    challengeScores: {}
 }
 
 
@@ -250,6 +272,13 @@ export const GameSlice = createSlice({
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
             })
+            .addCase(getUserChallenges.fulfilled, (state, action) => {
+                state.userChallenges = action.payload;
+            })
+
+            .addCase(getChallengeScores.fulfilled, (state, action) => {
+                state.challengeScores = action.payload;
+            })
 
 
     },
@@ -258,7 +287,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    resetGameStats,setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend
+    resetGameStats, setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend
 } = GameSlice.actions
 
 

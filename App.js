@@ -59,7 +59,7 @@ const config = {
     UserProfile: 'profile',
     Invite: 'invite',
     AcceptDeclineChallenge: 'challenge/:challengeId',
-    GameInstructions: 'instructions/:challengeId'
+    ChallengeGameInstruction: 'instructions/:challengeId'
   },
 };
 
