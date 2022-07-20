@@ -41,7 +41,6 @@ import GameBoostPurchaseSuccessfulScreen from './features/Store/GameBoostPurchas
 import GamePlanPurchaseSuccessfulScreen from './features/Store/GamePlanPurchaseSuccessfulScreen';
 import GameStoreScreen from './features/Store/GameStoreScreen';
 import GameStoreItemsPurchaseFailed from './features/Store/GameStoreItemsPurchaseFailedScreen';
-import FirstTimeUserBonus from './features/Auth/FirstTimeUserBonus';
 import LeaderBoardFilter from './features/Leaderboard/LeaderBoardFilter';
 import TriviaInstructionsScreen from './features/Games/TriviaInstructionsScreen';
 import TriviaEndResultScreen from './features/Games/TriviaEndResultScreen';
@@ -56,6 +55,7 @@ import ChallengeGameInstructionsScreen from './features/Games/ChallengeGameInstr
 import MyChallengesScreen from './features/Games/MyChallengesScreen';
 import MyChallengesScoreScreen from './features/Games/MyChallengesScoreScreen.js';
 import SignupVerifyEmailScreen from './features/Auth/SignupVerifyEmailScreen';
+import EmailVerifiedScreen from './features/Auth/EmailVerifiedScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -176,7 +176,7 @@ function AppRouter() {
 						<AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
 						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} />
 						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} />
-						<AppStack.Screen name="SignupVerifyEmail" component={SignupVerifyEmailScreen} />
+						<AppStack.Screen name="SignupVerifyEmail" component={SignupVerifyEmailScreen} options={{ headerShown: false }} />
 					</AppStack.Group >
 				)
 			}
@@ -186,7 +186,7 @@ function AppRouter() {
 			<AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
 			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Support' }} />
 			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
-			<AppStack.Screen name="FirstTimeBonus" component={FirstTimeUserBonus} options={{ headerShown: false }} />
+			<AppStack.Screen name="EmailVerified" component={EmailVerifiedScreen} options={{ headerShown: false }} />
 			{/* <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} /> */}
 		</AppStack.Navigator >
 	)
