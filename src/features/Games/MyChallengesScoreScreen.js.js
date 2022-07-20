@@ -29,7 +29,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
 
   if (loading) {
     return <PageLoading
-      backgroundColor='#9C3DB8'
+      backgroundColor='#701F88'
       spinnerColor="#FFFF"
     />
   }
