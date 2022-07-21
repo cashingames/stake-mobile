@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     View,
@@ -10,11 +10,51 @@ import AppButton from '../../shared/AppButton';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LottieAnimations from '../../shared/LottieAnimations';
+import { setToken, verifyUser } from './AuthSlice';
+import { Base64 } from 'js-base64';
+import { saveToken } from '../../utils/ApiHelper';
 
 
-const EmailVerifiedScreen = ({ navigation }) => {
+
+const EmailVerifiedScreen = ({ navigation, route }) => {
+    const params = route.params
+    console.log(route.params)
+
+
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
+
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
+
+    const goToDashboard = () => {
+        setLoading(true);
+
+        verifyUser({
+          email: Base64.decode(params.email)
+        }).then(response => {
+            console.log(response)
+            saveToken(response.data.data)
+            dispatch(setToken(response.data.data))
+            navigation.navigate('AppRouter')
+        }, err => {
+            if (!err || !err.response || err.response === undefined) {
+                setError("Your Network is Offline.");
+            }
+            else if (err.response.status === 500) {
+                setError("Service not currently available. Please contact support");
+            }
+            else {
+                const errors =
+                    err.response && err.response.data && err.response.data.errors;
+                const firstError = Object.values(errors, {})[0];
+                setError(firstError[0])
+            }
+            setLoading(false);
+        });
+    }
+
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -34,7 +74,8 @@ const EmailVerifiedScreen = ({ navigation }) => {
                 </View>
                 <FirstTimeUserRewards />
             </ScrollView>
-            <AppButton text={'Proceed to Dashboard'} onPress={() => navigation.navigate('Home')} />
+            <AppButton text={loading ? 'Verifying...' : 'Proceed to Dashboard'} onPress={goToDashboard} disabled={loading} />
+
         </View>
 
     )

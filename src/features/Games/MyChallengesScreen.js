@@ -37,6 +37,7 @@ const MyChallengesScreen = ({ navigation, route }) => {
         }
     }, []);
 
+
     if (loading) {
         return <PageLoading
             backgroundColor='#701F88'
@@ -72,31 +73,36 @@ const ChallengeCard = ({ userChallenge }) => {
     }
     const challengeDeclined = userChallenge.status === "DECLINED";
     return (
-        <View style={styles.challengeContainer}>
-            <View style={styles.categoryContainer}>
-                <Text style={styles.challengeCategory}>{userChallenge.subcategory}</Text>
-                <LottieAnimations
-                    animationView={require('../../../assets/challenge.json')}
-                    height={normalize(50)}
-                />
-            </View>
-            <Text style={styles.status}>{userChallenge.date}</Text>
-            <Text style={styles.status}>STATUS : {userChallenge.status}</Text>
-            <View style={styles.competitorsContainer}>
-                <Text style={styles.challenger}>{userChallenge.playerUsername}</Text>
-                <Text style={styles.versus}>vs</Text>
-                <Text style={styles.opponent}>{userChallenge.opponentUsername}</Text>
-            </View>
-            {userChallenge.status === "DECLINED" ?
-                <AppButton text={'Challenge Declined'} disabled={challengeDeclined} style={styles.disabled} />
+        <>
+            {!challengeDeclined ?
+                < View style={styles.challengeContainer}>
+                    <View style={styles.categoryContainer}>
+                        <Text style={styles.challengeCategory}>{userChallenge.subcategory}</Text>
+                        <LottieAnimations
+                            animationView={require('../../../assets/challenge.json')}
+                            height={normalize(50)}
+                        />
+                    </View>
+                    <Text style={styles.status}>{userChallenge.date}</Text>
+                    <Text style={styles.status}>STATUS : {userChallenge.status}</Text>
+                    <View style={styles.competitorsContainer}>
+                        <Text style={styles.challenger}>{userChallenge.playerUsername}</Text>
+                        <Text style={styles.versus}>vs</Text>
+                        <Text style={styles.opponent}>{userChallenge.opponentUsername}</Text>
+                    </View>
+                    {/* <AppButton text={'Challenge Declined'} disabled={challengeDeclined} style={styles.disabled} /> */}
+
+                    <Pressable style={styles.scoresButton} onPress={checkScores}>
+                        <Text style={styles.scoresText}>Scores</Text>
+                    </Pressable>
+
+
+
+                </View>
                 :
-                <Pressable style={styles.scoresButton} onPress={checkScores}>
-                    <Text style={styles.scoresText}>Scores</Text>
-                </Pressable>
+                <></>
             }
-
-
-        </View>
+        </>
     )
 }
 

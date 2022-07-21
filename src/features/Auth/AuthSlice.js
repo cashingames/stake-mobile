@@ -15,6 +15,10 @@ export const registerUser = async (data) => {
     return axios.post('auth/register', data);
 }
 
+export const verifyUser = async (data) => {
+    return axios.post('auth/user/authenticate', data);
+}
+
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
     async (data, thunkAPI) => {

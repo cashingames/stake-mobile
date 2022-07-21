@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, BackHandler } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../shared/Input';
 import AppButton from '../../shared/AppButton';
@@ -7,13 +7,23 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { useFocusEffect } from '@react-navigation/native';
 
 const SignupVerifyEmailScreen = ({ navigation }) => {
   useApplyHeaderWorkaround(navigation.setOptions);
 
-  const goToSignup = () => {
-    navigation.navigate('Login')
-  }
+ 
+  useFocusEffect(
+    React.useCallback(() => {
+        const onBackPress = () => {
+            return true;
+        };
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+        return () =>
+            BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+);
 
   return (
     <View style={styles.container}>
@@ -27,7 +37,6 @@ const SignupVerifyEmailScreen = ({ navigation }) => {
         </View>
         <VerifyEmailText />
       </ScrollView>
-      <AppButton text='Back to Sign Up' onPress={goToSignup} />
     </View>
 
   )

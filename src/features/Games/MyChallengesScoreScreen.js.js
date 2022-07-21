@@ -53,7 +53,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
 const ResultContainer = ({ playerScore }) => {
   return (
     <View style={styles.resultContainer}>
-      <Text style={styles.finalScoreText}>The result is</Text>
+      <Text style={styles.finalScoreText}>The final result is</Text>
       <View style={styles.playersResult}>
         <Text style={styles.playersScore}>{playerScore.challengerPoint} </Text>
         <Text style={styles.colon}>: </Text>

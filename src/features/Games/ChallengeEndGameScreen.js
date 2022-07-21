@@ -99,7 +99,7 @@ const SeeRank = () => {
 
     return (
         <Pressable
-            onPress={() => navigation.navigate('Leaderboard')}
+            onPress={() => navigation.navigate('MyChallenges')}
             style={styles.goToLeaderboard}
         >
             <View style={styles.seeRank}>

@@ -24,6 +24,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const userFriends = useSelector(state => state.common.userFriends);
     const selectedOpponent = useSelector(state => state.game.selectedFriend);
     const [search, setSearch] = useState("");
+    const [sending, setSending] = useState(false)
 
     const openBottomSheet = () => {
         refRBSheet.current.open()
@@ -36,6 +37,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
 
     const sendInvite = () => {
+        setSending(true)
         dispatch(sendFriendInvite({
             opponentId: selectedOpponent.id,
             categoryId: activeCategory.id
@@ -44,12 +46,15 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
             .then(unwrapResult)
             .then(result => {
                 console.log(result);
+                setSending(false)
                 openBottomSheet()
             })
             .catch((rejectedValueOrSerializedError) => {
+                setSending(false)
                 console.log(rejectedValueOrSerializedError);
                 Alert.alert(rejectedValueOrSerializedError.message)
             });
+        setSending(false)
     }
 
     useEffect(() => {
@@ -103,7 +108,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                 />
 
             </ScrollView>
-            <SendInviteButton onPress={sendInvite} disabled={!selectedOpponent} />
+            <SendInviteButton onPress={sendInvite} disabled={!selectedOpponent || sending} />
         </View>
     );
 }

@@ -217,7 +217,8 @@ const AvailableChallengeBoosts = ({ onClose }) => {
       })
       .catch((rejectedValueOrSerializedError) => {
         console.log(rejectedValueOrSerializedError);
-        Alert.alert(rejectedValueOrSerializedError.message)
+        Alert.alert('Failed to start game')
+        // Alert.alert(rejectedValueOrSerializedError.message)
         setLoading(false);
       });
   }

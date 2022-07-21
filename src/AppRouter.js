@@ -56,6 +56,7 @@ import MyChallengesScreen from './features/Games/MyChallengesScreen';
 import MyChallengesScoreScreen from './features/Games/MyChallengesScoreScreen.js';
 import SignupVerifyEmailScreen from './features/Auth/SignupVerifyEmailScreen';
 import EmailVerifiedScreen from './features/Auth/EmailVerifiedScreen';
+import ChallengeNotPendingScreen from './features/Games/ChallengeNotPendingScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -187,6 +188,8 @@ function AppRouter() {
 			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Support' }} />
 			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
 			<AppStack.Screen name="EmailVerified" component={EmailVerifiedScreen} options={{ headerShown: false }} />
+			<AppStack.Screen name="ChallengeNotPending" component={ChallengeNotPendingScreen} options={{ headerShown: false }} />
+
 			{/* <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} /> */}
 		</AppStack.Navigator >
 	)

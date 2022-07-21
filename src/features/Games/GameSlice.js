@@ -27,8 +27,10 @@ export const startChallengeGame = createAsyncThunk(
         // console.log(data)
         const response = await axios.post('v3/challenge/start/game', data)
         console.log('challenge started');
+        console.log(response.data +'this is data');
         return response.data
     }
+
 )
 
 export const challengeEndGame = createAsyncThunk(
@@ -263,8 +265,10 @@ export const GameSlice = createSlice({
             .addCase(startChallengeGame.fulfilled, (state, action) => {
                 console.log(action);
                 state.questions = action.payload.data.questions;
+                console.log(JSON.stringify(state.questions) + 'this is questions');
                 state.displayedQuestion = state.questions[state.currentQuestionPosition]
                 state.displayedOptions = state.displayedQuestion.options
+                console.log(JSON.stringify(state.displayedOptions) + 'this is questions');
                 state.gameSessionToken = action.payload.data.game.token
                 state.isEnded = false
             })
