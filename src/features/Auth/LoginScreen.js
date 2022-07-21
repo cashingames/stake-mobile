@@ -51,9 +51,10 @@ export default function LoginScreen({ navigation }) {
                 setLoading(false);
                 setCanLogin(true);
                 console.log(rejectedValueOrSerializedError)
-                setError("Invalid username or password provided");
+                setError("Invalid username or password provided or unverified account");
             })
     }
+
 
     useEffect(() => {
         var valid = email.length > 5 && password.length > 7;
