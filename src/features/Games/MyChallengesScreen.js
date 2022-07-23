@@ -50,13 +50,18 @@ const MyChallengesScreen = ({ navigation, route }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <View>
-                {userChallenges.map((userChallenge, i) => <ChallengeCard
-                    key={i}
-                    userChallenge={userChallenge}
-                />
-                )}
-            </View>
+            {userChallenges ?
+                <View>
+                    {userChallenges.map((userChallenge, i) => <ChallengeCard
+                        key={i}
+                        userChallenge={userChallenge}
+                    />
+                    )}
+                </View>
+                :
+                <NoChallenges />
+
+            }
 
         </ScrollView>
     )
@@ -103,6 +108,21 @@ const ChallengeCard = ({ userChallenge }) => {
                 <></>
             }
         </>
+
+    )
+}
+
+const NoChallenges = () => {
+    return (
+        < View style={styles.noTransactionContainer}>
+            <LottieAnimations
+                animationView={require('../../../assets/challenge.json')}
+                height={normalize(100)}
+            />
+            <Text style={styles.noTransaction}>
+                You dont have any challenge yet. Challenge a friend to play exciting and fun games
+            </Text>
+        </View>
     )
 }
 
@@ -176,6 +196,20 @@ const styles = EStyleSheet.create({
     },
     disabled: {
         backgroundColor: '#DFCBCF'
-    }
+    },
+    noTransaction: {
+        fontFamily: 'graphik-regular',
+        fontSize: '1rem',
+        color: '#FFFF',
+        lineHeight: '1.5rem',
+        textAlign: 'center',
+        marginTop: responsiveScreenWidth(8)
+    },
+    noTransactionContainer: {
+        display: 'flex',
+        marginVertical: responsiveScreenWidth(40),
+        paddingHorizontal: normalize(18),
+        alignItems: 'center'
+    },
 
 });

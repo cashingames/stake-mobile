@@ -15,9 +15,11 @@ export const registerUser = async (data) => {
     return axios.post('auth/register', data);
 }
 
+
 export const verifyUser = async (data) => {
     return axios.post('auth/user/authenticate', data);
 }
+
 
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
@@ -26,6 +28,7 @@ export const loginUser = createAsyncThunk(
         return response.data
     }
 )
+
 
 export const loginWithGoogle = async (data) => {
     return axios.post("/auth/google/login", data);

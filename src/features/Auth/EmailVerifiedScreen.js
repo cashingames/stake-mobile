@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import {
-    StyleSheet,
     View,
     Text,
+    ScrollView 
 } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { ScrollView } from 'react-native-gesture-handler';
 import AppButton from '../../shared/AppButton';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -54,6 +53,7 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
             setLoading(false);
         });
     }
+    
 
     return (
         <View style={styles.container}>

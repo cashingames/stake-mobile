@@ -67,10 +67,12 @@ const ChallengeMessage = ({ playerPoint }) => {
   const challengerwins = playerPoint.challengerPoint > playerPoint.opponentPoint;
   const opponentwins = playerPoint.opponentPoint > playerPoint.challengerPoint
   const draw = playerPoint.opponentPoint === playerPoint.challengerPoint
+  const challengeStatus = useSelector(state => state.game.userChallenges.status);
+
 
   return (
     <View style={styles.challengeMessageContainer}>
-      {playerPoint.challengeStatus === 'CLOSED' ?
+      {playerPoint.challengeStatus === 'CLOSED' && challengeStatus === 'CLOSED' ?
         <>
           {challengerwins &&
             <>
