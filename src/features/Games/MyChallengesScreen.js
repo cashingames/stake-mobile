@@ -50,7 +50,7 @@ const MyChallengesScreen = ({ navigation, route }) => {
 
     return (
         <ScrollView style={styles.container}>
-            {userChallenges ?
+            {userChallenges.length > 0 ?
                 <View>
                     {userChallenges.map((userChallenge, i) => <ChallengeCard
                         key={i}

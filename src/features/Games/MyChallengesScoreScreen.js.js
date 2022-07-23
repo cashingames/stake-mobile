@@ -67,12 +67,11 @@ const ChallengeMessage = ({ playerPoint }) => {
   const challengerwins = playerPoint.challengerPoint > playerPoint.opponentPoint;
   const opponentwins = playerPoint.opponentPoint > playerPoint.challengerPoint
   const draw = playerPoint.opponentPoint === playerPoint.challengerPoint
-  const challengeStatus = useSelector(state => state.game.userChallenges.status);
 
 
   return (
     <View style={styles.challengeMessageContainer}>
-      {playerPoint.challengeStatus === 'CLOSED' && challengeStatus === 'CLOSED' ?
+      {playerPoint.challengeStatus === 'CLOSED' ?
         <>
           {challengerwins &&
             <>
@@ -95,15 +94,6 @@ const ChallengeMessage = ({ playerPoint }) => {
         </>
         :
         <Text style={styles.challengeInProgress}>This Challenge is still in progress</Text>
-
-        // <>
-        //   {playerPoint.opponentStatus === 'ACCEPTED' || playerPoint.opponentStatus === 'PENDING' &&
-        //     <Text style={styles.challengeMessageTop}>This Challenge is still in progress</Text>
-        //   }
-        //   {playerPoint.opponentStatus === 'DECLINED' &&
-        //     <Text style={styles.challengeMessageTop}>The Opponent declined this challenge</Text>
-        //   }
-        // </>
       }
     </View>
   )
