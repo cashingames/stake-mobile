@@ -87,7 +87,7 @@ const FirstTimeUserRewards = () => {
         [
             {
                 bonus: 100,
-                bonusName: 'Points',
+                bonusName: 'Naira',
                 bonusText: 'Get a boost on the leaderboard with free points'
             },
             {

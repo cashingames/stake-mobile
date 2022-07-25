@@ -116,7 +116,7 @@ export default function GameInProgressScreen({ navigation, route }) {
 
     return (
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
-            <ScrollView style = {styles.container}>
+            <ScrollView style = {styles.container} keyboardShouldPersistTaps='always'>
                 <PlayGameHeader onPress={() => onEndGame()} onPressBoost={() => refRBSheet.current.open()} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} />
                 <GameQuestions />
@@ -371,6 +371,7 @@ const GameQuestions = () => {
 
     const optionSelected = (option) => {
         dispatch(questionAnswered(option));
+        console.log('i have selected my option')
     }
 
     return (
@@ -396,13 +397,17 @@ const Option = ({ option: { title, isSelected }, onSelected }) => {
 const NextButton = ({ onPress, ending }) => {
     const dispatch = useDispatch()
     const isLastQuestion = useSelector(state => state.game.isLastQuestion);
+    const pressNext = () => {
+        console.log('pressed next')
+       dispatch(isLastQuestion ? onPress : nextQuestion())
+    }
 
     return (
         // <View >
         <AppButton
             disabled={ending}
             text={isLastQuestion ? 'Finish' : 'Next'}
-            onPress={() => dispatch(isLastQuestion ? onPress : nextQuestion())}
+            onPress={pressNext}
             style={styles.nextButton}
         />
         // {/* </View> */}
