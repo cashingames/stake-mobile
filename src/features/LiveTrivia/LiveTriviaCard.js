@@ -50,8 +50,9 @@ const LiveTriviaCard = ({ trivia }) => {
         <Animated.View entering={BounceInRight.duration(2000)}>
             <ImageBackground
                 source={require('../../../assets/images/live-trivia-card-background-blue.png')}
+                imageStyle={{ borderRadius: 20}}
                 style={styles.triviaBackground}
-                resizeMode='contain'>
+                resizeMode='cover'>
                 <FailedBottomSheet
                     refBottomSheet={notEnoughPointNotice}
                     onClose={() => notEnoughPointNotice.current.close()}
@@ -61,6 +62,11 @@ const LiveTriviaCard = ({ trivia }) => {
                 <View style={styles.triviaContainer}>
                     <View style={styles.triviaTop}>
                         <Text style={styles.triviaTopText}>{trivia.title}</Text>
+                        <View style={styles.triviaRequiredContainer}>
+                            <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
+                            <Text style={styles.triviaRequiredText}>Required</Text>
+
+                        </View>
                         {/* <Ionicons name="help-circle-outline" size={24} color="#FFFF" /> */}
                     </View>
                     <Text style={styles.triviaTitle}>{trivia.prizeDisplayText}</Text>
@@ -150,20 +156,28 @@ function TriviaAction({ trivia, action }) {
 
 const styles = EStyleSheet.create({
     triviaBackground: {
-        borderRadius: 20,
     },
     triviaContainer: {
-        paddingVertical: '1rem',
+        paddingVertical: '1.1rem',
         paddingHorizontal: '1.1rem'
     },
     triviaTop: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+    },
+    triviaRequiredContainer: {
+        alignItems: 'flex-end'
     },
     triviaTopText: {
         fontSize: '.85rem',
         lineHeight: '.85rem',
+        color: '#FFFF',
+        opacity: 0.8,
+        fontFamily: 'graphik-medium',
+    },
+    triviaRequiredText: {
+        fontSize: '.85rem',
+        lineHeight: '1rem',
         color: '#FFFF',
         opacity: 0.8,
         fontFamily: 'graphik-medium',
