@@ -13,6 +13,7 @@ import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { formatNumber } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
 import PageLoading from "../../shared/PageLoading";
+import UserAvailableBoost from "../../shared/UserAvailableBoost";
 
 
 export default function ChallengeGameInstructionsScreen({ navigation, route }) {
@@ -90,25 +91,6 @@ const ChallengeInstructions = () => {
 };
 
 
-
-const AvailableBoost = ({ boost }) => {
-  return (
-    <View style={styles.boostContent}>
-      <View style={styles.boostAmount}>
-        <Image
-          source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
-          style={styles.boostIcon}
-        />
-        <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
-      </View>
-      <View style={styles.boostDetails}>
-        <Text style={styles.boostName}>{boost.name}</Text>
-        <Text style={styles.boostDescription}>{boost.description}</Text>
-      </View>
-    </View>
-  )
-}
-
 const AvailableChallengeBoosts = ({ onClose }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -151,7 +133,7 @@ const AvailableChallengeBoosts = ({ onClose }) => {
       <Text style={styles.title}>Available Boosts</Text>
       {boosts?.length > 0 ?
         <View style={styles.boosts}>
-          {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i} />
+          {boosts.map((boost, i) => <UserAvailableBoost boost={boost} key={i} />
           )}
         </View>
         :

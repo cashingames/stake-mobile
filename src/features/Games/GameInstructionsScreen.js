@@ -1,17 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
+import React, { useRef, useState} from "react";
+import { Text, View, ScrollView, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
-import Constants from 'expo-constants';
 import EStyleSheet from "react-native-extended-stylesheet";
 import GoToStore from '../../shared/GoToStore';
 import { startGame, setIsPlayingTrivia, startChallengeGame } from "./GameSlice";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
-import { formatNumber } from '../../utils/stringUtl';
 import AppButton from './../../shared/AppButton';
+import UserAvailableBoost from "../../shared/UserAvailableBoost";
 
 
 export default function GameInstructionsScreen({ navigation }) {
@@ -116,26 +115,6 @@ const ChallengeInstructions = () => {
 };
 
 
-
-const AvailableBoost = ({ boost }) => {
-  return (
-    <View style={styles.boostContent}>
-      <View style={styles.boostAmount}>
-        <Image
-          source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
-          style={styles.boostIcon}
-        />
-        <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
-      </View>
-      <View style={styles.boostDetails}>
-        <Text style={styles.boostName}>{boost.name}</Text>
-        <Text style={styles.boostDescription}>{boost.description}</Text>
-      </View>
-    </View>
-  )
-}
-
-
 const AvailableBoosts = ({ onClose }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -178,7 +157,7 @@ const AvailableBoosts = ({ onClose }) => {
       <Text style={styles.title}>Available Boosts</Text>
       {boosts?.length > 0 ?
         <View style={styles.boosts}>
-          {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i} />
+          {boosts.map((boost, i) => <UserAvailableBoost boost={boost} key={i} />
           )}
         </View>
         :
@@ -235,7 +214,7 @@ const AvailableChallengeBoosts = ({ onClose }) => {
       <Text style={styles.title}>Available Boosts</Text>
       {boosts?.length > 0 ?
         <View style={styles.boosts}>
-          {boosts.map((boost, i) => <AvailableBoost boost={boost} key={i} />
+          {boosts.map((boost, i) => <UserAvailableBoost boost={boost} key={i} />
           )}
         </View>
         :
