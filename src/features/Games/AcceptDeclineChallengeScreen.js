@@ -21,12 +21,15 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
 
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true)
+  const user = useSelector(state => state.auth.user);
+
   const challengeDetails = useSelector(state => state.game.challengeDetails);
   console.log(JSON.stringify(challengeDetails))
 
   const acceptChallengeInivite = () => {
     dispatch(acceptDeclineChallengeInivite({
       challenge_id: challengeDetails.challenegeId,
+      opponentId: user.id,
       status: 1
     }
     ))
@@ -36,6 +39,7 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
   const declineChallengeInivite = () => {
     dispatch(acceptDeclineChallengeInivite({
       challenge_id: challengeDetails.challenegeId,
+      opponentId: user.id,
       status: 0
     }
     ))
