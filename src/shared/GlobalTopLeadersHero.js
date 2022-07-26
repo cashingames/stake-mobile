@@ -7,7 +7,6 @@ import normalize from "../utils/normalize";
 import GlobalTopLeaders from "./GlobalTopLeaders";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Animated, { BounceInDown } from 'react-native-reanimated';
-import { randomEnteringAnimation } from '../utils/utils';
 
 export default function GlobalTopLeadersHero() {
     const navigation = useNavigation();

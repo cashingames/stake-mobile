@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert, StatusBar } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert, StatusBar, BackHandler } from 'react-native';
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -20,6 +20,7 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import { Base64 } from 'js-base64';
 import LottieAnimations from "../../shared/LottieAnimations";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 export default function GameInProgressScreen({ navigation, route }) {
@@ -32,13 +33,18 @@ export default function GameInProgressScreen({ navigation, route }) {
     const gameSessionToken = useSelector(state => state.game.gameSessionToken);
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
-    const gameEnded = useSelector(state => state.game.isEnded);
     const isPlayingTrivia = useSelector(state => state.game.isPlayingTrivia);
 
     const [ending, setEnding] = useState(false);
 
-    const onEndGame = () => {
+    const onEndGame = (confirm = false) => {
+        
         setEnding(true);
+        if (confirm) {
+            showExitConfirmation()
+            return;
+        }
+
         dispatch(endGame({
             token: gameSessionToken,
             chosenOptions,
@@ -64,45 +70,36 @@ export default function GameInProgressScreen({ navigation, route }) {
             });
     }
 
-    const onGoBackTrigger = () => {
-        dispatch(endGame({
-            token: gameSessionToken,
-            chosenOptions,
-            consumedBoosts
-        }))
-            .then(unwrapResult)
-            .then(() => {
-                console.log('game terminated on go back');
-            })
-            .catch((rejectedValueOrSerializedError) => {
-                console.log(rejectedValueOrSerializedError);
-            });
+    const showExitConfirmation = () => {
+        Alert.alert(
+            'Exit Game?',
+            'You have an ongoing game. Do you want to submit this game ?',
+            [
+                {
+                    text: "Continue playing",
+                    style: 'cancel',
+                    onPress: () => setEnding(false)
+                },
+                {
+                    text: 'Exit',
+                    onPress: () => {
+                        console.log("show exit from exit button")
+                        onEndGame();
+                    },
+                },
+            ]
+        );
     }
 
-    useEffect(
-        () =>
-            navigation.addListener('beforeRemove', (e) => {
-                if (gameEnded) {
-                    return;
-                }
-                e.preventDefault();
-                Alert.alert(
-                    'Discard Game?',
-                    'You have an ongoing game. Do you want to discard game and leave the screen?',
-                    [
-                        { text: "Continue playing", style: 'cancel', onPress: () => { } },
-                        {
-                            text: 'Exit',
-                            style: 'destructive',
-                            onPress: () => {
-                                onGoBackTrigger();
-                                navigation.navigate('Game')
-                            },
-                        },
-                    ]
-                );
-            }),
-        [navigation, gameEnded]
+    //disable back button
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => true;
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+            return () =>
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
     );
 
     useEffect(() => {
@@ -116,9 +113,9 @@ export default function GameInProgressScreen({ navigation, route }) {
 
     return (
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
-            <ScrollView style = {styles.container} keyboardShouldPersistTaps='always'>
-                <PlayGameHeader onPress={() => onEndGame()} onPressBoost={() => refRBSheet.current.open()} />
-                <GameProgressAndBoosts onComplete={() => onEndGame()} />
+            <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
+                <PlayGameHeader onPress={() => onEndGame(true)} onPressBoost={() => refRBSheet.current.open()} />
+                <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
                 <GameQuestions />
                 <RBSheet
                     ref={refRBSheet}
@@ -182,20 +179,20 @@ const BoostsInfo = ({ onPress }) => {
 }
 
 
-const GameProgressAndBoosts = ({ onComplete }) => {
-    const gameCategory = useSelector(state => state.game.gameCategory)
+const GameProgressAndBoosts = ({ onComplete, ending }) => {
     return (
         <View style={styles.gameProgressAndBoost}>
-            <GameTopicProgress onComplete={onComplete} />
+            <GameTopicProgress onComplete={onComplete} ending={ending} />
             <AvailableBoosts />
         </View>
     )
 }
 
-const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
+const GameTopicProgress = ({onComplete, ending }) => {
     const countdownKey = useSelector(state => state.game.countdownKey);
     const isGamePaused = useSelector(state => state.game.countdownFrozen);
     const gameDuration = useSelector(state => state.game.gameDuration);
+    const isEnded = useSelector(state => state.game.isEnded);
 
     return (
         <View style={styles.topicProgress}>
@@ -208,22 +205,24 @@ const GameTopicProgress = ({ gameTopic, gameCategory, onComplete }) => {
             <View style={styles.topicProgressRight}>
                 <AnsweredGameProgress />
                 <View style={styles.questionsAnsweredContainer}>
-                    <CountdownCircleTimer
-                        isPlaying={!isGamePaused}
-                        duration={gameDuration}
-                        colors={[["#fff", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
-                        trailColor="#2D9CDB"
+                    {!isEnded &&
+                        <CountdownCircleTimer
+                            isPlaying={!isGamePaused && !ending}
+                            duration={gameDuration}
+                            colors={[["#fff", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
+                            trailColor="#2D9CDB"
 
-                        size={60}
-                        strokeWidth={5}
-                        key={countdownKey}
-                        onComplete={onComplete} >
-                        {({ remainingTime, animatedColor }) => (
-                            <Animated.Text style={styles.timeText}>
-                                {remainingTime}
-                            </Animated.Text>
-                        )}
-                    </CountdownCircleTimer>
+                            size={60}
+                            strokeWidth={5}
+                            key={countdownKey}
+                            onComplete={onComplete} >
+                            {({ remainingTime, animatedColor }) => (
+                                <Animated.Text style={styles.timeText}>
+                                    {remainingTime}
+                                </Animated.Text>
+                            )}
+                        </CountdownCircleTimer>
+                    }
                 </View>
             </View>
         </View>
@@ -399,24 +398,22 @@ const NextButton = ({ onPress, ending }) => {
     const isLastQuestion = useSelector(state => state.game.isLastQuestion);
     const pressNext = () => {
         console.log('pressed next')
-       dispatch(isLastQuestion ? onPress : nextQuestion())
+        dispatch(isLastQuestion ? onPress : nextQuestion())
     }
 
     return (
-        // <View >
         <AppButton
             disabled={ending}
             text={isLastQuestion ? 'Finish' : 'Next'}
             onPress={pressNext}
             style={styles.nextButton}
         />
-        // {/* </View> */}
     )
 }
 
 const styles = EStyleSheet.create({
 
-    container: { 
+    container: {
         flex: 1,
         backgroundColor: '#9C3DB8',
         paddingTop: normalize(40),

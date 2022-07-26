@@ -193,8 +193,16 @@ export const GameSlice = createSlice({
             state.displayedOptions.map(x => {
                 x.isSelected = x.id === action.payload.id
                 return x;
-            })
-            state.chosenOptions.push(action.payload)
+            });
+            
+            //find if this question id exist in the chosenOption
+            const existingIndex = state.chosenOptions.findIndex(x => x.question_id === action.payload.question_id);
+
+            //if it exists, replace it
+            if (existingIndex !== -1)
+                state.chosenOptions[existingIndex] = action.payload;
+            else
+                state.chosenOptions.push(action.payload)
         },
         nextQuestion: (state) => {
             state.currentQuestionPosition += 1;
