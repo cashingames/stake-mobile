@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react'
-import { Text, View, Image, ScrollView, Pressable, Alert, BackHandler } from 'react-native';
+import { Text, View, ScrollView, BackHandler } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { getLiveTriviaLeaders, resetGameStats, setIsPlayingTrivia } from './GameSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { formatNumber } from '../../utils/stringUtl';
 import { getCommonData } from '../CommonSlice';
@@ -73,40 +71,13 @@ const ResultContainer = () => {
                 width={normalize(170)}
                 height={normalize(170)}
             />
-            {/* <Text style={styles.positionText}>Your current position is {triviaPosition}</Text> */}
-            {/* {hasLiveTrivia ? */}
-            {/* <Text style={styles.resultMessage}>Thanks for playing, play again to climb up the trivia leaderboard and,
-                    win exciting prizes</Text>
-
-                : */}
             <Text style={styles.resultMessage}>Thanks for completing the live trivia session today.
                 View the final leaderboard at the end of the trivia to know your final position and
-                stay tuned for upcoming live trivia sessions</Text>
-            {/* } */}
+                stay tuned for upcoming live trivia sessions
+            </Text>
         </View>
     )
 }
-
-// const UserResultAnalytics = () => {
-//     var userResult =
-//     {
-//         correctAnswer: 5,
-//         totalQuestions: 10,
-//         votingTime: '2:48'
-//     }
-//     return (
-//         <View style={styles.userResult}>
-//             <View style={styles.answerContainer}>
-//                 <Text style={styles.resultText}>Correct answers</Text>
-//                 <Text style={styles.resultResponse}>{userResult.correctAnswer}/{userResult.totalQuestions}</Text>
-//             </View>
-//             <View style={styles.timeContainer}>
-//                 <Text style={styles.resultText}>Voting time</Text>
-//                 <Text style={styles.resultResponse}>{userResult.votingTime}</Text>
-//             </View>
-//         </View>
-//     )
-// }
 
 const TriviaParticipant = ({ player, position }) => {
     return (
@@ -130,7 +101,6 @@ const TriviaButton = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const returnToHomeButton = () => {
-        dispatch(resetGameStats());
         navigation.navigate('Home')
     }
     return (

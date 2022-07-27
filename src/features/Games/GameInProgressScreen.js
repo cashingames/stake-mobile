@@ -32,10 +32,17 @@ export default function GameInProgressScreen({ navigation, route }) {
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
     const isPlayingTrivia = useSelector(state => state.game.isPlayingTrivia);
+    const isEnded = useSelector(state => state.game.isEnded);
 
     const [ending, setEnding] = useState(false);
 
     const onEndGame = (confirm = false) => {
+
+        if (ending) {
+            //doe not delete
+            console.log("Trying to end second time. If this happens, please notify Oye")
+            return;
+        }
 
         setEnding(true);
         if (confirm) {
@@ -109,6 +116,10 @@ export default function GameInProgressScreen({ navigation, route }) {
         }
     }, []);
 
+    if (isEnded) {
+        return null;
+    }
+
     return (
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
@@ -154,7 +165,6 @@ const NextButton = ({ onPress, ending }) => {
     const dispatch = useDispatch()
     const isLastQuestion = useSelector(state => state.game.isLastQuestion);
     const pressNext = () => {
-        console.log('pressed next')
         dispatch(isLastQuestion ? onPress : nextQuestion())
     }
 

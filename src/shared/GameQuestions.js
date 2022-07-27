@@ -14,7 +14,6 @@ const GameQuestions = () => {
 
     const optionSelected = (option) => {
         dispatch(questionAnswered(option));
-        console.log('i have selected my option')
     }
 
     return (

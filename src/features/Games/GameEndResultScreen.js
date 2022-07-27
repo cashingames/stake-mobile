@@ -5,7 +5,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { incrementCountdownResetIndex, startGame, resetGameStats } from './GameSlice';
+import { incrementCountdownResetIndex, startGame } from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LottieAnimations from "../../shared/LottieAnimations";
 import NoGameNotification from '../../shared/NoGameNotification';
@@ -31,59 +31,44 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	const onPlayButtonClick = () => {
+
+		if (!hasActivePlan) {
+			openBottomSheet();
+			return;
+		}
+
 		setLoading(true);
 
-		if (hasActivePlan) {
-			dispatch(startGame({
-				category: gameCategoryId,
-				type: gameTypeId,
-				mode: gameModeId
-			}))
-				.then(unwrapResult)
-				.then(result => {
-					setLoading(false);
-					dispatch(resetGameStats());
-					dispatch(incrementCountdownResetIndex());
-					navigation.navigate("GameInProgress")
-				})
-				.catch(() => {
-					Alert.alert('failed to restart game')
-					dispatch(resetGameStats());
-					setLoading(false);
-				});
-		} else {
-			setLoading(false);
-			dispatch(resetGameStats());
-			openBottomSheet();
-		}
+		dispatch(startGame({
+			category: gameCategoryId,
+			type: gameTypeId,
+			mode: gameModeId
+		}))
+			.then(unwrapResult)
+			.then(result => {
+				setLoading(false);
+				dispatch(incrementCountdownResetIndex());
+				navigation.navigate("GameInProgress")
+			})
+			.catch((err) => {
+				Alert.alert(err.data.message)
+				setLoading(false);
+			});
 	}
 
 	const onHomeButtonClick = () => {
-		dispatch(resetGameStats());
 		navigation.navigate('Home')
 	}
 
 	useFocusEffect(
 		React.useCallback(() => {
-			const onBackPress = () => {
-				if (isGameEnded) {
-					return true;
-				} else {
-					return false;
-				}
-			};
+			const onBackPress = () => isGameEnded
 			BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
 			return () =>
 				BackHandler.removeEventListener('hardwareBackPress', onBackPress);
 		}, [isGameEnded])
 	);
-
-	useEffect(() => {
-		dispatch(getUser());
-	}, []);
-
-
 
 	return (
 

@@ -134,7 +134,6 @@ const AvailableBoosts = ({ onClose }) => {
     }))
       .then(unwrapResult)
       .then(result => {
-        console.log(result);
         setLoading(false);
         onClose();
         navigation.navigate("GameInProgress")

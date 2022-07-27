@@ -12,10 +12,17 @@ const shuffleArray = array => {
     return array;
 }
 
+function getAllIndexes(arr, val) {
+    var indexes = [], i;
+    for (i = 0; i < arr.length; i++)
+        if (arr[i] === val)
+            indexes.push(i);
+    return indexes;
+}
+
 export const startGame = createAsyncThunk(
     'game/startGame',
     async (data, thunkAPI) => {
-        // console.log(data)
         const response = await axios.post('v2/game/start/single-player', data)
         return response.data
     }
@@ -24,10 +31,7 @@ export const startGame = createAsyncThunk(
 export const startChallengeGame = createAsyncThunk(
     'game/startChallengeGame',
     async (data, thunkAPI) => {
-        // console.log(data)
         const response = await axios.post('v3/challenge/start/game', data)
-        console.log('challenge started');
-        console.log(response.data +'this is data');
         return response.data
     }
 
@@ -36,9 +40,7 @@ export const startChallengeGame = createAsyncThunk(
 export const challengeEndGame = createAsyncThunk(
     'game/challengeEndGame',
     async (data, thunkAPI) => {
-        // console.log(data)
         const response = await axios.post('v3/challenge/end/game', data)
-        console.log('challenge ended');
         return response.data
     }
 )
@@ -46,9 +48,13 @@ export const challengeEndGame = createAsyncThunk(
 export const endGame = createAsyncThunk(
     'game/endGame',
     async (data, thunkAPI) => {
+        //log if question_count exist more than once in the array
+        data.chosenOptions.forEach(x => {
+            console.log("loggind submitted question id", x.question_id);
+        });
+
         //make a network request to the server
         const response = await axios.post('v2/game/end/single-player', data)
-        console.log('game ended');
         return response.data;
     }
 )
@@ -57,7 +63,6 @@ export const getLiveTriviaLeaders = createAsyncThunk(
     async (data, thunkAPI) => {
         //make a network request to the server
         const response = await axios.get(`v3/live-trivia/${data}/leaderboard`);
-        // console.log(response.data);
         return response.data;
     }
 )
@@ -65,10 +70,8 @@ export const getLiveTriviaLeaders = createAsyncThunk(
 export const sendFriendInvite = createAsyncThunk(
     'game/sendFriendInvite',
     async (data, thunkAPI) => {
-        console.log('before invite');
         //make a network request to the server
         const response = await axios.post('v3/challenge/send-invite', data)
-        console.log('invite sent');
         return response.data;
     }
 )
@@ -76,10 +79,8 @@ export const sendFriendInvite = createAsyncThunk(
 export const getChallengeDetails = createAsyncThunk(
     'game/getChallengeDetails',
     async (data, thunkAPI) => {
-        console.log('before details');
         //make a network request to the server
         const response = await axios.get(`v3/challenge/${data}/details`)
-        console.log(response.data);
         return response.data;
     }
 )
@@ -87,10 +88,8 @@ export const getChallengeDetails = createAsyncThunk(
 export const acceptDeclineChallengeInivite = createAsyncThunk(
     'game/acceptChallengeInivite ',
     async (data, thunkAPI) => {
-        console.log('accept');
         //make a network request to the server
         const response = await axios.post('v3/challenge/invite/respond', data)
-        console.log(response.data);
         return response.data;
     }
 )
@@ -108,16 +107,14 @@ export const getChallengeScores = createAsyncThunk(
     'game/getChallengeScores',
     async (data, thunkAPI) => {
         //make a network request to the server
-        console.log('getting challenge score');
         const response = await axios.get(`v3/challenge/${data}/leaderboard`);
-        console.log(response.data);
         return response.data;
     }
 )
 
 
 //This is to store the currently ongoing active game
-const initialState = {
+let initialState = {
     gameMode: {},
     gameCategory: {},
     gameType: {},
@@ -194,7 +191,7 @@ export const GameSlice = createSlice({
                 x.isSelected = x.id === action.payload.id
                 return x;
             });
-            
+
             //find if this question id exist in the chosenOption
             const existingIndex = state.chosenOptions.findIndex(x => x.question_id === action.payload.question_id);
 
@@ -238,31 +235,32 @@ export const GameSlice = createSlice({
         boostReleased: (state) => {
             state.activeBoost = {}
         },
-        resetGameStats: (state) => {
-            state.chosenOptions = [];
-            state.pointsGained = 0;
-            state.consumedBoosts = [];
-            state.currentQuestionPosition = 0;
-            state.isLastQuestion = false;
-            state.totalQuestionCount = 10;
-            state.gameDuration = 60;
-        }
+        // resetGameStats: (state) => {
+        //     state.chosenOptions = [];
+        //     state.pointsGained = 0;
+        //     state.consumedBoosts = [];
+        //     state.currentQuestionPosition = 0;
+        //     state.isLastQuestion = false;
+        //     state.totalQuestionCount = 10;
+        //     state.gameDuration = 60;
+        // }
     },
 
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
         builder
             .addCase(startGame.fulfilled, (state, action) => {
-                console.log(action);
                 state.questions = action.payload.data.questions;
                 state.displayedQuestion = state.questions[state.currentQuestionPosition]
                 state.displayedOptions = state.displayedQuestion.options
                 state.gameSessionToken = action.payload.data.game.token
                 state.isEnded = false
+                state.pointsGained = 0;
             })
             .addCase(endGame.fulfilled, (state, action) => {
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
+                resetState(state)
             })
             .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
                 state.triviaLeaders = action.payload;
@@ -271,18 +269,16 @@ export const GameSlice = createSlice({
                 state.challengeDetails = action.payload;
             })
             .addCase(startChallengeGame.fulfilled, (state, action) => {
-                console.log(action);
                 state.questions = action.payload.data.questions;
-                console.log(JSON.stringify(state.questions) + 'this is questions');
                 state.displayedQuestion = state.questions[state.currentQuestionPosition]
                 state.displayedOptions = state.displayedQuestion.options
-                console.log(JSON.stringify(state.displayedOptions) + 'this is questions');
                 state.gameSessionToken = action.payload.data.game.token
                 state.isEnded = false
             })
             .addCase(challengeEndGame.fulfilled, (state, action) => {
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
+                resetState(state)
             })
             .addCase(getUserChallenges.fulfilled, (state, action) => {
                 state.userChallenges = action.payload;
@@ -299,8 +295,46 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    resetGameStats, setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend
+    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend
 } = GameSlice.actions
 
 
 export default GameSlice.reducer
+
+
+function resetState(state) {
+
+
+    //Because we need it for replay
+    // state.gameMode = {};
+    // state.gameCategory = {};
+    // state.gameType = {};
+
+    state.gameSessionToken = '';
+    state.questions = [];
+    state.currentQuestionPosition = 0;
+    state.totalQuestionCount = 10;
+    state.isLastQuestion = false;
+    state.countdownKey = 0;
+    state.countdownFrozen = false;
+    state.chosenOptions = [];
+    state.consumedBoosts = [];
+    state.activeBoost = [];
+    state.displayedOptions = [];
+    state.displayedQuestion = {};
+    state.selectedFriend = null;
+    state.isPlayingTrivia = false;
+    state.triviaLeaders = [];
+    state.triviaPosition = '';
+    state.triviaCategory = '';
+    state.triviaType = '';
+    state.triviaMode = '';
+    state.triviaId = '',
+        state.hasPlayedTrivia = false;
+    state.gameDuration = 60;
+    state.challengeDetails = {};
+    state.userChallenges = [];
+    state.challengeScores = {};
+
+    return state;
+}

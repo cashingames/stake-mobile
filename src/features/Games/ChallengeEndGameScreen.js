@@ -1,11 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, Pressable, Alert, BackHandler } from 'react-native';
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
+import React, { useEffect } from 'react';
+import { Text, View, Image, ScrollView, Pressable, BackHandler } from 'react-native';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { resetGameStats } from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LottieAnimations from "../../shared/LottieAnimations";
 import AppButton from '../../shared/AppButton';
@@ -15,24 +13,14 @@ export default function ChallengeEndGameScreen({ navigation }) {
     const user = useSelector(state => state.auth.user);
     const pointsGained = useSelector(state => state.game.pointsGained);
     const isGameEnded = useSelector(state => state.game.isEnded);
-    const [loading, setLoading] = useState(false);
-
-
 
     const onHomeButtonClick = () => {
-        dispatch(resetGameStats());
         navigation.navigate('AppRouter')
     }
 
     useFocusEffect(
         React.useCallback(() => {
-            const onBackPress = () => {
-                if (isGameEnded) {
-                    return true;
-                } else {
-                    return false;
-                }
-            };
+            const onBackPress = () => isGameEnded;
             BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
             return () =>

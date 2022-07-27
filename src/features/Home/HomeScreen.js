@@ -16,14 +16,11 @@ import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, getGlobalLeaders, initialLoadingComplete } from '../CommonSlice';
-import { resetGameStats } from '../Games/GameSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserItems';
 import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import crashlytics from '@react-native-firebase/crashlytics';
 import GamePicker from '../Games/GamePicker';
-import RecentlyPlayedGames from '../Games/RecentlyPlayedGames';
-import * as Linking from 'expo-linking';
 import LottieAnimations from '../../shared/LottieAnimations';
 
 const HomeScreen = () => {
@@ -37,10 +34,8 @@ const HomeScreen = () => {
 
 
     useEffect(() => {
-        dispatch(resetGameStats());
-
-        var _1 = dispatch(getUser());
-        var _2 = dispatch(getCommonData());
+        const _1 = dispatch(getUser());
+        const _2 = dispatch(getCommonData());
 
         Promise.all([_1, _2]).then(() => {
             dispatch(initialLoadingComplete());
