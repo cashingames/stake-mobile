@@ -9,6 +9,7 @@ import { formatNumber } from '../../utils/stringUtl';
 import { getCommonData } from '../CommonSlice';
 import AppButton from '../../shared/AppButton';
 import GameEndClockAnimation from '../../shared/GameEndClockAnimation';
+import { getLiveTriviaLeaders } from './GameSlice';
 
 
 
@@ -43,6 +44,10 @@ const TriviaEndResultScreen = ({ route }) => {
                 BackHandler.removeEventListener('hardwareBackPress', onBackPress);
         }, [isGameEnded])
     );
+    useEffect(() => {
+        StatusBar.setBackgroundColor('#FFFF');
+        StatusBar.setBarStyle('dark-content');
+    }, []);
 
 
     return (
