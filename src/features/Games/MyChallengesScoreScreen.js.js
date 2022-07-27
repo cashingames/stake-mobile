@@ -5,9 +5,9 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
 import { useDispatch, useSelector } from 'react-redux';
-import { getChallengeScores } from './GameSlice';
 import PageLoading from '../../shared/PageLoading';
 import { isTrue } from '../../utils/stringUtl';
+import { getChallengeScores } from '../Auth/AuthSlice';
 
 
 
@@ -16,9 +16,8 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true)
   const params = route.params;
-  console.log(params)
 
-  const challengeScores = useSelector(state => state.game.challengeScores)
+  const challengeScores = useSelector(state => state.auth.challengeScores)
   console.log(challengeScores)
 
   useEffect(() => {

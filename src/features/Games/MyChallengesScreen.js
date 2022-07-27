@@ -8,9 +8,8 @@ import LottieAnimations from '../../shared/LottieAnimations';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import PageLoading from '../../shared/PageLoading';
-import { getUserChallenges } from './GameSlice';
 import AppButton from '../../shared/AppButton';
-import { getUser } from '../Auth/AuthSlice';
+import { getUser, getUserChallenges } from '../Auth/AuthSlice';
 
 
 
@@ -20,7 +19,7 @@ const MyChallengesScreen = ({ navigation, route }) => {
     const [loading, setLoading] = useState(true)
 
 
-    const userChallenges = useSelector(state => state.game.userChallenges);
+    const userChallenges = useSelector(state => state.auth.userChallenges);
     console.log(userChallenges)
 
 

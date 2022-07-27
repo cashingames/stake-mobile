@@ -118,6 +118,24 @@ export const editProfileAvatar = createAsyncThunk(
     }
 )
 
+export const getUserChallenges = createAsyncThunk(
+    'auth/getUserChallenges  ',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.get('v3/user/challenges', data)
+        return response.data;
+    }
+)
+
+export const getChallengeScores = createAsyncThunk(
+    'auth/getChallengeScores',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.get(`v3/challenge/${data}/leaderboard`);
+        return response.data;
+    }
+)
+
 export const getUser = createAsyncThunk(
     'auth/user/get',
     async (thunkAPI) => {
@@ -152,7 +170,9 @@ const initialState = {
     passwordReset: {
         // email: 'oyekunmi@gmail.com'
     },
-    createAccount: {}
+    createAccount: {},
+    userChallenges: [],
+    challengeScores: {}
 }
 
 export const AuthSlice = createSlice({
@@ -212,6 +232,14 @@ export const AuthSlice = createSlice({
             .addCase(verifyAccount.fulfilled, (state, action) => {
                 state.passwordReset.email = action.meta.arg.email;
             })
+            .addCase(getUserChallenges.fulfilled, (state, action) => {
+                state.userChallenges = action.payload;
+            })
+            
+            .addCase(getChallengeScores.fulfilled, (state, action) => {
+                state.challengeScores = action.payload;
+            })
+
     },
 });
 

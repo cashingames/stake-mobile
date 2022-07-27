@@ -3,12 +3,12 @@ import { Text, View, Image, ScrollView, Pressable, Alert, BackHandler } from 're
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser } from '../Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { incrementCountdownResetIndex, startGame } from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import LottieAnimations from "../../shared/LottieAnimations";
 import NoGameNotification from '../../shared/NoGameNotification';
+import GameEndClockAnimation from '../../shared/GameEndClockAnimation';
+import UserName from '../../shared/UserName';
 
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
@@ -73,8 +73,8 @@ export default function GameEndResultScreen({ navigation }) {
 	return (
 
 		<ScrollView style={styles.container}>
-			<UserResultEmoji />
-			<Username userName={user.firstName} />
+			<GameEndClockAnimation />
+			<UserName userName={user.firstName} />
 			<UserResultInfo pointsGained={pointsGained} />
 			<SeeRank />
 			<FinalScore pointsGained={pointsGained} />
@@ -97,26 +97,6 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 }
 
-
-const UserResultEmoji = () => {
-	return (
-		<View style={styles.emojiContainer}>
-			<LottieAnimations
-				animationView={require('../../../assets/game-over.json')}
-				width={normalize(120)}
-				height={normalize(120)}
-			/>
-		</View>
-	)
-}
-
-const Username = ({ userName }) => {
-	return (
-		<View style={styles.nameContainer}>
-			<Text style={styles.name}>{userName}</Text>
-		</View>
-	)
-}
 
 const UserResultInfo = ({ pointsGained }) => {
 	return (
@@ -180,16 +160,6 @@ const styles = EStyleSheet.create({
 	emoji: {
 		width: normalize(66),
 		height: normalize(70)
-	},
-	nameContainer: {
-		alignItems: 'center',
-		marginBottom: normalize(10)
-	},
-	name: {
-		textAlign: 'center',
-		color: '#FFFF',
-		fontFamily: 'graphik-medium',
-		fontSize: '2.3rem',
 	},
 	infoContainer: {
 		alignItems: 'center',

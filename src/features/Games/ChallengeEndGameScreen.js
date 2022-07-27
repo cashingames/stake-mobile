@@ -1,15 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Text, View, Image, ScrollView, Pressable, BackHandler } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUser } from '../Auth/AuthSlice';
+import { useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import LottieAnimations from "../../shared/LottieAnimations";
 import AppButton from '../../shared/AppButton';
+import GameEndClockAnimation from '../../shared/GameEndClockAnimation';
+import UserName from '../../shared/UserName';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 export default function ChallengeEndGameScreen({ navigation }) {
-    const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
     const pointsGained = useSelector(state => state.game.pointsGained);
     const isGameEnded = useSelector(state => state.game.isEnded);
@@ -28,17 +27,14 @@ export default function ChallengeEndGameScreen({ navigation }) {
         }, [isGameEnded])
     );
 
-    useEffect(() => {
-        dispatch(getUser());
-    }, []);
 
 
 
     return (
 
         <ScrollView style={styles.container}>
-            <UserResultEmoji />
-            <Username userName={user.firstName} />
+            <GameEndClockAnimation />
+            <UserName userName={user.firstName} />
             <UserResultInfo pointsGained={pointsGained} />
             <SeeRank />
             <FinalScore pointsGained={pointsGained} />
@@ -49,27 +45,6 @@ export default function ChallengeEndGameScreen({ navigation }) {
         </ScrollView>
 
     );
-}
-
-
-const UserResultEmoji = () => {
-    return (
-        <View style={styles.emojiContainer}>
-            <LottieAnimations
-                animationView={require('../../../assets/game-over.json')}
-                width={normalize(120)}
-                height={normalize(120)}
-            />
-        </View>
-    )
-}
-
-const Username = ({ userName }) => {
-    return (
-        <View style={styles.nameContainer}>
-            <Text style={styles.name}>{userName}</Text>
-        </View>
-    )
 }
 
 const UserResultInfo = ({ pointsGained }) => {
@@ -128,16 +103,6 @@ const styles = EStyleSheet.create({
     emoji: {
         width: normalize(66),
         height: normalize(70)
-    },
-    nameContainer: {
-        alignItems: 'center',
-        marginBottom: normalize(10)
-    },
-    name: {
-        textAlign: 'center',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        fontSize: '2.3rem',
     },
     infoContainer: {
         alignItems: 'center',

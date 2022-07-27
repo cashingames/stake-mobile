@@ -30,11 +30,17 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
   const gameSessionToken = useSelector(state => state.game.gameSessionToken);
   const chosenOptions = useSelector(state => state.game.chosenOptions);
   const consumedBoosts = useSelector(state => state.game.consumedBoosts);
-  // const gameEnded = useSelector(state => state.game.isEnded);
+  const isEnded = useSelector(state => state.game.isEnded);
 
   const [ending, setEnding] = useState(false);
 
   const onEndGame = (confirm = false) => {
+
+    if (ending) {
+      //doe not delete
+      console.log("Trying to end second time. If this happens, please notify Oye")
+      return;
+  }
 
     setEnding(true);
     if (confirm) {
@@ -92,6 +98,9 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
     }, [])
   );
 
+  if (isEnded) {
+    return null;
+}
 
   return (
     <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">

@@ -8,7 +8,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { formatNumber } from '../../utils/stringUtl';
 import { getCommonData } from '../CommonSlice';
 import AppButton from '../../shared/AppButton';
-import LottieAnimations from '../../shared/LottieAnimations';
+import GameEndClockAnimation from '../../shared/GameEndClockAnimation';
 
 
 
@@ -36,13 +36,7 @@ const TriviaEndResultScreen = ({ route }) => {
 
     useFocusEffect(
         React.useCallback(() => {
-            const onBackPress = () => {
-                if (isGameEnded) {
-                    return true;
-                } else {
-                    return false;
-                }
-            };
+            const onBackPress = () => isGameEnded
             BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
             return () =>
@@ -54,7 +48,6 @@ const TriviaEndResultScreen = ({ route }) => {
     return (
         <ScrollView style={styles.container}>
             <ResultContainer />
-            {/* <UserResultAnalytics /> */}
             <TriviaParticipants triviaLeaders={triviaLeaders} />
             <TriviaButton />
         </ScrollView>
@@ -62,15 +55,9 @@ const TriviaEndResultScreen = ({ route }) => {
 }
 
 const ResultContainer = () => {
-    // const hasLiveTrivia = useSelector(state => state.common.hasLiveTrivia)
-    // console.log(hasLiveTrivia);
     return (
         <View style={styles.resultContainer}>
-            <LottieAnimations
-                animationView={require('../../../assets/game-over.json')}
-                width={normalize(170)}
-                height={normalize(170)}
-            />
+            <GameEndClockAnimation />
             <Text style={styles.resultMessage}>Thanks for completing the live trivia session today.
                 View the final leaderboard at the end of the trivia to know your final position and
                 stay tuned for upcoming live trivia sessions
@@ -98,7 +85,6 @@ const TriviaParticipants = ({ triviaLeaders }) => {
 }
 
 const TriviaButton = () => {
-    const dispatch = useDispatch();
     const navigation = useNavigation();
     const returnToHomeButton = () => {
         navigation.navigate('Home')
