@@ -20,8 +20,6 @@ export default function GameEndResultScreen({ navigation }) {
 	const gameModeId = useSelector(state => state.game.gameMode.id);
 	const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
 	const isGameEnded = useSelector(state => state.game.isEnded);
-	const chosenOptions = useSelector(state => state.game.chosenOptions);
-	const gameSessionToken = useSelector(state => state.game.gameSessionToken);
 	const [loading, setLoading] = useState(false);
 	const refRBSheet = useRef();
 
@@ -50,8 +48,8 @@ export default function GameEndResultScreen({ navigation }) {
 			.then(unwrapResult)
 			.then(result => {
 				dispatch(logActionToServer({
-					message: "Game session " + gameSessionToken + " chosen options for " + user.username,
-					data: chosenOptions
+					message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
+					data: result.data.questions
 				}))
 					.then(unwrapResult)
 					.then(result => {

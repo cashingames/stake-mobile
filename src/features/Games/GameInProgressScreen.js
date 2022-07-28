@@ -19,6 +19,7 @@ import GameTopicProgress from "../../shared/GameTopicProgress";
 import AvailableGameSessionBoosts from "../../shared/AvailableGameSessionBoosts";
 import GameQuestions from "../../shared/GameQuestions";
 import UserAvailableBoosts from "../../shared/UserAvailableBoosts";
+import { logActionToServer } from "../CommonSlice";
 
 
 export default function GameInProgressScreen({ navigation, route }) {
@@ -32,6 +33,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
     const isPlayingTrivia = useSelector(state => state.game.isPlayingTrivia);
+    const user = useSelector(state => state.auth.user);
     const isEnded = useSelector(state => state.game.isEnded);
 
     const [ending, setEnding] = useState(false);
@@ -57,6 +59,17 @@ export default function GameInProgressScreen({ navigation, route }) {
         }))
             .then(unwrapResult)
             .then(() => {
+                dispatch(logActionToServer({
+                    message: "Game session " + gameSessionToken + " chosen options for " + user.username,
+                    data: chosenOptions
+                }))
+                    .then(unwrapResult)
+                    .then(result => {
+                        console.log('Action logged to server');
+                    })
+                    .catch(() => {
+                        console.log('failed to log to server');
+                    });
                 setEnding(false);
                 if (isPlayingTrivia) {
                     dispatch(setHasPlayedTrivia(true));

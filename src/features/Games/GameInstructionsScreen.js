@@ -124,8 +124,6 @@ const AvailableBoosts = ({ onClose }) => {
   const gameTypeId = useSelector(state => state.game.gameType.id);
   const gameModeId = useSelector(state => state.game.gameMode.id);
   const user = useSelector(state => state.auth.user);
-  const questions = useSelector(state => state.game.questions);
-  const gameSessionToken = useSelector(state => state.game.gameSessionToken);
   const [loading, setLoading] = useState(false);
 
   const onStartGame = () => {
@@ -139,15 +137,15 @@ const AvailableBoosts = ({ onClose }) => {
       .then(unwrapResult)
       .then(result => {
         dispatch(logActionToServer({
-          message: "Game session " + gameSessionToken + " questions recieved for " + user.username,
-          data: questions
+          message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
+          data: result.data.questions
         }))
           .then(unwrapResult)
           .then(result => {
             console.log('Action logged to server');
           })
-          .catch(() => {
-            console.log('failed to log to server');
+          .catch((e) => {
+            console.log('Failed to log to server');
           });
         setLoading(false);
         onClose();
@@ -193,8 +191,6 @@ const AvailableChallengeBoosts = ({ onClose }) => {
   const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
   const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
   const user = useSelector(state => state.auth.user);
-  const questions = useSelector(state => state.game.questions);
-  const gameSessionToken = useSelector(state => state.game.gameSessionToken);
   const [loading, setLoading] = useState(false);
 
   const startChallenge = () => {
@@ -208,8 +204,8 @@ const AvailableChallengeBoosts = ({ onClose }) => {
       .then(result => {
         console.log(result);
         dispatch(logActionToServer({
-          message: "Challenge Game session " + gameSessionToken + " questions recieved for " + user.username,
-          data: questions
+          message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
+          data: result.data.questions
         }))
           .then(unwrapResult)
           .then(result => {
