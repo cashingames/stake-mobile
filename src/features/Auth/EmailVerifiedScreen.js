@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -10,8 +10,7 @@ import AppButton from '../../shared/AppButton';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LottieAnimations from '../../shared/LottieAnimations';
-import { setToken, verifyUser} from './AuthSlice';
-import { Base64 } from 'js-base64';
+import { getFirstTimeUserReward, verifyUser } from './AuthSlice';
 import { saveToken } from '../../utils/ApiHelper';
 import { unwrapResult } from '@reduxjs/toolkit';
 
@@ -24,6 +23,7 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
 
+
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -35,8 +35,8 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
             .then(response => {
                 console.log(response)
                 saveToken(response.data.data)
-                setLoading(false);
                 navigation.navigate('AppRouter')
+                setLoading(false);
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError)
@@ -44,6 +44,16 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
                 setLoading(false);
             })
     }
+
+    useEffect(() => {
+        console.log('about fetching')
+        dispatch(getFirstTimeUserReward())
+            .then(() => {setLoading(false);console.log('fetched')
+        });
+    }, [])
+
+
+
 
     if (user.username) {
         navigation.navigate("AppRouter");
@@ -69,7 +79,8 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
                 </View>
                 <FirstTimeUserRewards />
             </ScrollView>
-            <AppButton text={loading ? 'Verifying...' : 'Login'} onPress={goToDashboard} disabled={loading} />
+            <AppButton text={loading ? 'Verifying...' : 'Login'} onPress={goToDashboard}
+                disabled={loading} />
 
         </View>
 
@@ -78,24 +89,8 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
 
 
 const FirstTimeUserRewards = () => {
-    var rewards =
-        [
-            {
-                bonus: 100,
-                bonusName: 'Naira',
-                bonusText: 'Get a boost on the leaderboard with free points'
-            },
-            {
-                bonus: 3,
-                bonusName: 'Skips',
-                bonusText: 'Skip a question in a game session'
-            },
-            {
-                bonus: 3,
-                bonusName: 'Freezes',
-                bonusText: 'Freeze time for 15 seconds during a game session'
-            }
-        ]
+    const rewards = useSelector(state => state.auth.firstTimeUserReward)
+    console.log(JSON.stringify(rewards))
 
     return (
         <View style={styles.rewardsContainer}>
@@ -148,15 +143,15 @@ const styles = EStyleSheet.create({
         lineHeight: '1.7rem'
     },
     rewardsContainer: {
-        // borderWidth: 0.6,
-        // borderRadius: 10,
-        // borderColor: '#E0E0E0',
-        // paddingHorizontal: normalize(15),
-        // marginVertical: normalize(10),
-        // elevation: 2,
-        // shadowColor: '#000',
-        // shadowOffset: { width: 0.5, height: 2 },
-        // shadowOpacity: 0.6,
+        borderWidth: 0.6,
+        borderRadius: 10,
+        borderColor: '#E0E0E0',
+        paddingHorizontal: normalize(15),
+        marginVertical: normalize(10),
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0.5, height: 2 },
+        shadowOpacity: 0.6,
     },
     reward: {
         paddingVertical: normalize(15)
