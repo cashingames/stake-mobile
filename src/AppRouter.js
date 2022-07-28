@@ -106,7 +106,7 @@ function AppRouter() {
 							}}
 						/>
 
-						{/** game **/}
+						{/* game */}
 						<AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
 						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
@@ -148,7 +148,7 @@ function AppRouter() {
 						<AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
 						<AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
 
-						{/** user profile **/}
+						{/* user profile */}
 						<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
 						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Edit Details' }} />
 						<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Change Password' }} />
@@ -169,7 +169,7 @@ function AppRouter() {
 				(
 
 					<AppStack.Group screenOptions={{ title: "", headerShadowVisible: false }}>
-						{/** unauthenticated **/}
+						{/* unauthenticated */}
 						<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
@@ -199,7 +199,7 @@ export default AppRouter;
 
 const booststrapAxios = async function (token) {
 	axios.defaults.baseURL = Constants.manifest.extra.apiBaseUrl;
-	// console.log(axios.defaults.baseURL);
+	console.log(axios.defaults.baseURL);
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {

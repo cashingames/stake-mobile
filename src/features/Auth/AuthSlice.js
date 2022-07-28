@@ -16,9 +16,18 @@ export const registerUser = async (data) => {
 }
 
 
-export const verifyUser = async (data) => {
-    return axios.post('auth/user/authenticate', data);
-}
+// export const verifyUser = async (data) => {
+//     return axios.post('auth/user/authenticate', data);
+// }
+
+export const verifyUser = createAsyncThunk(
+    'auth/verifyUser',
+    async (data, thunkAPI) => {
+        const response = await axios.post('auth/user/authenticate', data)
+        // console.log(response)
+        return response.data
+    }
+)
 
 
 export const loginUser = createAsyncThunk(
@@ -235,7 +244,9 @@ export const AuthSlice = createSlice({
             .addCase(getUserChallenges.fulfilled, (state, action) => {
                 state.userChallenges = action.payload;
             })
-            
+            .addCase(verifyUser.fulfilled, (state, action) => {
+                state.token = action.payload.data;
+            })
             .addCase(getChallengeScores.fulfilled, (state, action) => {
                 state.challengeScores = action.payload;
             })

@@ -2,23 +2,24 @@ import React, { useState } from 'react';
 import {
     View,
     Text,
-    ScrollView 
+    ScrollView,
+    Alert
 } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import AppButton from '../../shared/AppButton';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LottieAnimations from '../../shared/LottieAnimations';
-import { setToken, verifyUser } from './AuthSlice';
+import { setToken, verifyUser} from './AuthSlice';
 import { Base64 } from 'js-base64';
 import { saveToken } from '../../utils/ApiHelper';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 
 
 const EmailVerifiedScreen = ({ navigation, route }) => {
-    const params = route.params
-    console.log(route.params)
-
+    const email = route.params.email
+    console.log(email)
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
@@ -29,31 +30,25 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
 
     const goToDashboard = () => {
         setLoading(true);
-
-        verifyUser({
-          email: Base64.decode(params.email)
-        }).then(response => {
-            console.log(response)
-            saveToken(response.data.data)
-            dispatch(setToken(response.data.data))
-            navigation.navigate('AppRouter')
-        }, err => {
-            if (!err || !err.response || err.response === undefined) {
-                setError("Your Network is Offline.");
-            }
-            else if (err.response.status === 500) {
-                setError("Service not currently available. Please contact support");
-            }
-            else {
-                const errors =
-                    err.response && err.response.data && err.response.data.errors;
-                const firstError = Object.values(errors, {})[0];
-                setError(firstError[0])
-            }
-            setLoading(false);
-        });
+        dispatch(verifyUser({ email: email }))
+            .then(unwrapResult)
+            .then(response => {
+                console.log(response)
+                saveToken(response.data.data)
+                setLoading(false);
+                navigation.navigate('AppRouter')
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                console.log(rejectedValueOrSerializedError)
+                Alert.alert("Failed to log in");
+                setLoading(false);
+            })
     }
-    
+
+    if (user.username) {
+        navigation.navigate("AppRouter");
+        return null;
+    }
 
     return (
         <View style={styles.container}>
@@ -66,15 +61,15 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
                     />
                 </View>
                 <View style={styles.headerContainer}>
-                    <Text style={styles.userDetails}>Congratulations, {user.username}</Text>
+                    <Text style={styles.userDetails}>Congratulations</Text>
                     <Text style={styles.rewardHeaderText}>
-                        Your email has been verified and you have been rewarded with a starter bundle.
-                        You can now proceed to play exciting games and win great prices
+                        You have successfully been register, kindly click on the button below
+                        to verify your email to Login and play exciting games and win great prices
                     </Text>
                 </View>
                 <FirstTimeUserRewards />
             </ScrollView>
-            <AppButton text={loading ? 'Verifying...' : 'Proceed to Dashboard'} onPress={goToDashboard} disabled={loading} />
+            <AppButton text={loading ? 'Verifying...' : 'Login'} onPress={goToDashboard} disabled={loading} />
 
         </View>
 
@@ -153,15 +148,15 @@ const styles = EStyleSheet.create({
         lineHeight: '1.7rem'
     },
     rewardsContainer: {
-        borderWidth: 0.6,
-        borderRadius: 10,
-        borderColor: '#E0E0E0',
-        paddingHorizontal: normalize(15),
-        marginVertical: normalize(10),
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.5, height: 2 },
-        shadowOpacity: 0.6,
+        // borderWidth: 0.6,
+        // borderRadius: 10,
+        // borderColor: '#E0E0E0',
+        // paddingHorizontal: normalize(15),
+        // marginVertical: normalize(10),
+        // elevation: 2,
+        // shadowColor: '#000',
+        // shadowOffset: { width: 0.5, height: 2 },
+        // shadowOpacity: 0.6,
     },
     reward: {
         paddingVertical: normalize(15)

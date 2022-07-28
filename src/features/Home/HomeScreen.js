@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView,Pressable } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, BackHandler } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
@@ -78,6 +78,18 @@ const HomeScreen = () => {
         }, [loading])
     );
 
+    // useFocusEffect(
+    //     React.useCallback(() => {
+    //         const onBackPress = () => {
+    //             return true;
+    //         };
+    //         BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    //         return () =>
+    //             BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    //     }, [])
+    // )
+
     useEffect(() => {
         if (!user || !isTrue(user.walletBalance)) {
             return;
@@ -115,8 +127,8 @@ const UserDetails = ({ user, trivia }) => {
     return (
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance} />
-            <LiveTriviaCard trivia ={trivia} />
-            <UserPoints points={user.points} todaysPoints= {user.todaysPoints} />
+            <LiveTriviaCard trivia={trivia} />
+            <UserPoints points={user.points} todaysPoints={user.todaysPoints} />
             <UserItems showBuy={true} />
             {/* <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} /> */}
         </View>
@@ -126,12 +138,12 @@ const UserDetails = ({ user, trivia }) => {
 const UserWallet = ({ balance }) => {
     return (
         <Animated.View entering={BounceInRight.duration(2000)} style={styles.wallet}>
-       
-             <LottieAnimations
-                    animationView={require('../../../assets/wallet.json')}
-                    width={normalize(50)}
-                    height={normalize(50)}
-                />
+
+            <LottieAnimations
+                animationView={require('../../../assets/wallet.json')}
+                width={normalize(50)}
+                height={normalize(50)}
+            />
             <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
         </Animated.View>
     );
