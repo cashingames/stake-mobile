@@ -61,6 +61,14 @@ export const fetchFaqAndAnswers = createAsyncThunk(
     }
 )
 
+export const logActionToServer = createAsyncThunk(
+    'common/logActionToServer',
+    async (data, thunkAPI) => {
+        const response = await axios.post('v3/log/frontend-info', data)
+        return response.data
+    }
+)
+
 export const fetchRecentLiveTrivia = createAsyncThunk(
     'common/fetchRecentLiveTrivia',
     async (data, thunkAPI) => {
@@ -84,7 +92,6 @@ export const searchUserFriends = createAsyncThunk(
         return response.data;
     }
 )
-
 
 const initialState = {
     initialLoading: true,

@@ -9,6 +9,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import NoGameNotification from '../../shared/NoGameNotification';
 import GameEndClockAnimation from '../../shared/GameEndClockAnimation';
 import UserName from '../../shared/UserName';
+import { logActionToServer } from '../CommonSlice';
 
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
@@ -19,6 +20,8 @@ export default function GameEndResultScreen({ navigation }) {
 	const gameModeId = useSelector(state => state.game.gameMode.id);
 	const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
 	const isGameEnded = useSelector(state => state.game.isEnded);
+	const chosenOptions = useSelector(state => state.game.chosenOptions);
+	const gameSessionToken = useSelector(state => state.game.gameSessionToken);
 	const [loading, setLoading] = useState(false);
 	const refRBSheet = useRef();
 
@@ -46,6 +49,17 @@ export default function GameEndResultScreen({ navigation }) {
 		}))
 			.then(unwrapResult)
 			.then(result => {
+				dispatch(logActionToServer({
+					message: "Game session " + gameSessionToken + " chosen options for " + user.username,
+					data: chosenOptions
+				}))
+					.then(unwrapResult)
+					.then(result => {
+						console.log('Action logged to server');
+					})
+					.catch(() => {
+						console.log('failed to log to server');
+					});
 				setLoading(false);
 				dispatch(incrementCountdownResetIndex());
 				navigation.navigate("GameInProgress")
