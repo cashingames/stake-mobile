@@ -1,4 +1,4 @@
-import React, { useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import { Text, View, ScrollView, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -11,6 +11,7 @@ import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import AppButton from './../../shared/AppButton';
 import UserAvailableBoost from "../../shared/UserAvailableBoost";
+import { logActionToServer } from "../CommonSlice";
 
 
 export default function GameInstructionsScreen({ navigation }) {
@@ -122,6 +123,7 @@ const AvailableBoosts = ({ onClose }) => {
   const gameCategoryId = useSelector(state => state.game.gameCategory.id);
   const gameTypeId = useSelector(state => state.game.gameType.id);
   const gameModeId = useSelector(state => state.game.gameMode.id);
+  const user = useSelector(state => state.auth.user);
   const [loading, setLoading] = useState(false);
 
   const onStartGame = () => {
@@ -134,6 +136,17 @@ const AvailableBoosts = ({ onClose }) => {
     }))
       .then(unwrapResult)
       .then(result => {
+        dispatch(logActionToServer({
+          message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
+          data: result.data.questions
+        }))
+          .then(unwrapResult)
+          .then(result => {
+            console.log('Action logged to server');
+          })
+          .catch((e) => {
+            console.log('Failed to log to server');
+          });
         setLoading(false);
         onClose();
         navigation.navigate("GameInProgress")
@@ -177,6 +190,7 @@ const AvailableChallengeBoosts = ({ onClose }) => {
   const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
   const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
   const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
+  const user = useSelector(state => state.auth.user);
   const [loading, setLoading] = useState(false);
 
   const startChallenge = () => {
@@ -189,6 +203,17 @@ const AvailableChallengeBoosts = ({ onClose }) => {
       .then(unwrapResult)
       .then(result => {
         console.log(result);
+        dispatch(logActionToServer({
+          message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
+          data: result.data.questions
+        }))
+          .then(unwrapResult)
+          .then(result => {
+            console.log('Action logged to server');
+          })
+          .catch(() => {
+            console.log('failed to log to server');
+          });
         setLoading(false);
         onClose();
         navigation.navigate("ChallengeGameInProgress")

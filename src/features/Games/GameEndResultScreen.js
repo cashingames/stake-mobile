@@ -9,6 +9,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import NoGameNotification from '../../shared/NoGameNotification';
 import GameEndClockAnimation from '../../shared/GameEndClockAnimation';
 import UserName from '../../shared/UserName';
+import { logActionToServer } from '../CommonSlice';
 
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
@@ -46,6 +47,17 @@ export default function GameEndResultScreen({ navigation }) {
 		}))
 			.then(unwrapResult)
 			.then(result => {
+				dispatch(logActionToServer({
+					message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
+					data: result.data.questions
+				}))
+					.then(unwrapResult)
+					.then(result => {
+						console.log('Action logged to server');
+					})
+					.catch(() => {
+						console.log('failed to log to server');
+					});
 				setLoading(false);
 				dispatch(incrementCountdownResetIndex());
 				navigation.navigate("GameInProgress")
