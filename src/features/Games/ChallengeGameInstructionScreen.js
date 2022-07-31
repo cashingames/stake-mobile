@@ -14,6 +14,8 @@ import { formatNumber } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
 import PageLoading from "../../shared/PageLoading";
 import UserAvailableBoost from "../../shared/UserAvailableBoost";
+import { getChallengeScores } from "../Auth/AuthSlice";
+import LottieAnimations from "../../shared/LottieAnimations";
 
 
 export default function ChallengeGameInstructionsScreen({ navigation, route }) {
@@ -23,42 +25,60 @@ export default function ChallengeGameInstructionsScreen({ navigation, route }) {
   const refRBSheet = useRef();
   const [onLoading, setOnLoading] = useState(true)
   const dispatch = useDispatch();
+  const challengeDetails = useSelector(state => state.game.challengeDetails);
+  const challengeScores = useSelector(state => state.auth.challengeScores)
+
 
   useEffect(() => {
     dispatch(getChallengeDetails(challengeId)).then(() => setOnLoading(false));
     console.log('fetched')
   }, []);
 
+  useEffect(() => {
+    dispatch(getChallengeScores(
+      challengeId
+    )).then(() => setOnLoading(false));
+  }, [])
+
+
   if (onLoading) {
     return <PageLoading spinnerColor="#0000ff" />
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <ChallengeInstructions />
-      <AppButton onPress={() => refRBSheet.current.open()} text='Proceed' />
-      <RBSheet
-        ref={refRBSheet}
-        closeOnDragDown={true}
-        closeOnPressMask={true}
-        height={480}
-        customStyles={{
-          wrapper: {
-            backgroundColor: "rgba(0, 0, 0, 0.5)"
-          },
-          draggableIcon: {
-            backgroundColor: "#000",
-          },
-          container: {
-            borderTopStartRadius: 25,
-            borderTopEndRadius: 25,
-          }
-        }}
-      >
-        <AvailableChallengeBoosts onClose={() => refRBSheet.current.close()} />
+    <>
+      {challengeDetails.status === "ACCEPTED" &&
+        challengeScores.challengerStatus === "PENDING" ?
+        <ScrollView style={styles.container}>
+          <ChallengeInstructions />
+          <AppButton onPress={() => refRBSheet.current.open()} text='Proceed' />
+          <RBSheet
+            ref={refRBSheet}
+            closeOnDragDown={true}
+            closeOnPressMask={true}
+            height={480}
+            customStyles={{
+              wrapper: {
+                backgroundColor: "rgba(0, 0, 0, 0.5)"
+              },
+              draggableIcon: {
+                backgroundColor: "#000",
+              },
+              container: {
+                borderTopStartRadius: 25,
+                borderTopEndRadius: 25,
+              }
+            }}
+          >
+            <AvailableChallengeBoosts onClose={() => refRBSheet.current.close()} />
 
-      </RBSheet>
-    </ScrollView>
+          </RBSheet>
+        </ScrollView>
+        :
+        <ChallengeNotPending challenge={challengeScores} />
+      }
+
+    </>
   );
 };
 
@@ -143,6 +163,43 @@ const AvailableChallengeBoosts = ({ onClose }) => {
         <GoToStore onPress={visitStore} />
       </View>
       <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={startChallenge} disabled={loading} />
+    </View>
+  )
+}
+
+const ChallengeNotPending = ({ challenge }) => {
+  const navigation = useNavigation();
+
+  const goHome = () => {
+    navigation.navigate('AppRouter')
+
+  }
+  const goToMyChallenges = () => {
+    navigation.navigate('MyChallenges')
+
+  }
+  return (
+    <View style={styles.noContainer}>
+      {challenge.challengeStatus === 'CLOSED' &&
+        <>
+          <View style={styles.animation}>
+            <LottieAnimations
+              animationView={require('../../../assets/leaderboard.json')}
+              width={normalize(170)}
+              height={normalize(170)}
+            />
+          </View>
+          <Text style={styles.message}>This challenge has already been played,
+            check your recent challenges to see the result
+            or go to dashboard to play more exciting games
+          </Text>
+          <View style={styles.buttonContainer}>
+            <AppButton text='Dashboard' onPress={goHome} style={styles.button} />
+            <AppButton text='My Challenges' onPress={goToMyChallenges} style={styles.button} />
+          </View>
+
+        </>
+      }
     </View>
   )
 }
@@ -272,5 +329,35 @@ const styles = EStyleSheet.create({
   boostIcon: {
     width: normalize(35),
     height: normalize(35)
+  },
+  noContainer: {
+    flex: 1,
+    backgroundColor: '#072169',
+    paddingHorizontal: normalize(22),
+    paddingTop: normalize(25),
+    justifyContent: 'center'
+  },
+  message: {
+    fontSize: '1rem',
+    color: '#FFFF',
+    fontFamily: 'graphik-medium',
+    textAlign: 'center',
+    lineHeight: '1.5rem'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginTop: normalize(50),
+    justifyContent: 'space-between'
+  },
+  button: {
+    width: responsiveScreenWidth(43),
+  },
+  animation: {
+    alignItems: 'center',
+    marginBottom: normalize(25)
+  },
+  emoji: {
+    width: normalize(150),
+    height: normalize(150),
   }
 });

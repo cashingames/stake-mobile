@@ -49,10 +49,21 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
     console.log('fetched')
   }, []);
 
+  useEffect(() => {
+    StatusBar.setBackgroundColor('#072169');
+    StatusBar.setBarStyle('light-content');
+    return () => {
+      StatusBar.setBackgroundColor('#FFFF');
+      StatusBar.setBarStyle('dark-content');
+    }
+  }, []);
+
 
 
   if (loading) {
-    return <PageLoading spinnerColor="#0000ff" />
+    return <PageLoading spinnerColor="#0000ff"
+      backgroundColor='#072169'
+    />
   }
 
   return (
