@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import PageLoading from '../../shared/PageLoading';
 import { isTrue } from '../../utils/stringUtl';
 import { getChallengeScores } from '../Auth/AuthSlice';
+import { acceptDeclineChallengeInivite, getChallengeDetails } from './GameSlice';
+import AppButton from '../../shared/AppButton';
 
 
 
@@ -18,13 +20,46 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const params = route.params;
 
   const challengeScores = useSelector(state => state.auth.challengeScores)
-  console.log(challengeScores)
+  // console.log(challengeScores)
+  const challengeDetails = useSelector(state => state.game.challengeDetails);
+  console.log(JSON.stringify(challengeDetails))
+  const user = useSelector(state => state.auth.user.username);
+  // console.log(JSON.stringify(user))
+
 
   useEffect(() => {
     dispatch(getChallengeScores(
       params.challengeid
     )).then(() => setLoading(false));
   }, [])
+
+  useEffect(() => {
+    dispatch(getChallengeDetails(params.challengeid)).then(() => setLoading(false)
+    );
+    console.log('fetched')
+  }, []);
+
+  const acceptChallengeInivite = () => {
+    dispatch(acceptDeclineChallengeInivite({
+      challenge_id: challengeDetails.challenegeId,
+      status: 1
+    }
+    ))
+    navigation.navigate('GameInstructions')
+  }
+
+  const challengerPlays = () => {
+    navigation.navigate('GameInstructions')
+  }
+
+  const declineChallengeInivite = () => {
+    dispatch(acceptDeclineChallengeInivite({
+      challenge_id: challengeDetails.challenegeId,
+      status: 0
+    }
+    ))
+    navigation.navigate('Home')
+  }
 
   if (loading) {
     return <PageLoading
@@ -41,7 +76,30 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           height={normalize(150)}
         />
       </View>
-      <ChallengeMessage playerPoint={challengeScores} />
+      {user === challengeDetails.opponentUsername &&
+        <>
+          {challengeDetails.status === "PENDING" &&
+            challengeScores.opponentStatus === "PENDING" &&
+            <View style={styles.buttonContainer}>
+              <AppButton text="Accept" style={styles.acceptButton} onPress={acceptChallengeInivite} />
+              <AppButton text="Decline" style={styles.declineButton} onPress={declineChallengeInivite} />
+            </View>
+          }
+        </>
+      }
+      {user === challengeDetails.playerUsername &&
+        <>
+          {challengeDetails.status === "ACCEPTED" &&
+            challengeScores.challengerStatus === "PENDING" &&
+            <AppButton text="Play" onPress={challengerPlays} />
+          }
+        </>
+
+      }
+      <ChallengeMessage playerPoint={challengeScores}
+        user={user}
+        challengeDetails={challengeDetails}
+      />
       <ChallengeParticipants player={challengeScores} />
       <ResultContainer playerScore={challengeScores} />
 
@@ -62,7 +120,7 @@ const ResultContainer = ({ playerScore }) => {
   )
 }
 
-const ChallengeMessage = ({ playerPoint }) => {
+const ChallengeMessage = ({ playerPoint, user, challengeDetails }) => {
   const challengerwins = playerPoint.challengerPoint > playerPoint.opponentPoint;
   const opponentwins = playerPoint.opponentPoint > playerPoint.challengerPoint
   const draw = playerPoint.opponentPoint === playerPoint.challengerPoint
@@ -92,7 +150,19 @@ const ChallengeMessage = ({ playerPoint }) => {
           }
         </>
         :
-        <Text style={styles.challengeInProgress}>This Challenge is still in progress</Text>
+        <>
+          {user === challengeDetails.opponentUsername &&
+            challengeDetails.status === "PENDING" &&
+            <Text style={styles.challengeInProgress}>You have not responded to this challenge</Text>
+          }
+          {user === challengeDetails.playerUsername &&
+            challengeDetails.status === "PENDING" &&
+            <Text style={styles.challengeInProgress}>Your opponent has not responded to this challenge</Text>
+          }
+          {challengeDetails.status === "ACCEPTED" &&
+            <Text style={styles.challengeInProgress}>This challenge is still in progress</Text>
+          }
+        </>
       }
     </View>
   )
@@ -290,6 +360,19 @@ const styles = EStyleSheet.create({
     alignItems: 'flex-end'
   },
 
-
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  acceptButton: {
+    paddingHorizontal: responsiveScreenWidth(13),
+    backgroundColor: '#EF2F55'
+  },
+  declineButton: {
+    paddingHorizontal: responsiveScreenWidth(13),
+    backgroundColor: '#701F88',
+    borderColor: '#FFFF',
+    borderWidth: 1
+  },
 
 });

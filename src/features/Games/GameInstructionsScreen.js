@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Text, View, ScrollView, Pressable, Alert } from 'react-native';
+import { Text, View, ScrollView, Pressable, Alert, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
@@ -163,6 +163,11 @@ const AvailableBoosts = ({ onClose }) => {
     onClose();
     navigation.navigate('GameStore')
   }
+
+  useEffect(() => {
+    StatusBar.setBackgroundColor('#FFFF');
+    StatusBar.setBarStyle('dark-content');
+  }, []);
 
   return (
     <View style={styles.availableBoosts}>

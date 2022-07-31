@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { calculateTimeRemaining, randomEnteringAnimation } from '../../utils/utils';
 import { getLiveTriviaStatus } from './LiveTriviaSlice';
 import FailedBottomSheet from './FailedBottomSheet';
+import LottieAnimations from '../../shared/LottieAnimations';
 
 
 
@@ -19,6 +20,7 @@ const LiveTriviaCard = ({ trivia }) => {
     const dispatch = useDispatch();
     const notEnoughPointNotice = useRef();
     const user = useSelector(state => state.auth.user)
+    const [showText, setShowText] = useState(true);
 
 
     const initialLoading = useSelector(state => state.common.initialLoading);
@@ -33,6 +35,14 @@ const LiveTriviaCard = ({ trivia }) => {
             navigation.navigate('TriviaInstructions', { ...trivia })
         }
     }
+
+    useEffect(() => {
+        // Change the state every second or the time given by User.
+        const interval = setInterval(() => {
+            setShowText((showText) => !showText);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -50,7 +60,7 @@ const LiveTriviaCard = ({ trivia }) => {
         <Animated.View entering={BounceInRight.duration(2000)}>
             <ImageBackground
                 source={require('../../../assets/images/live-trivia-card-background-blue.png')}
-                imageStyle={{ borderRadius: 20}}
+                imageStyle={{ borderRadius: 20 }}
                 style={styles.triviaBackground}
                 resizeMode='cover'>
                 <FailedBottomSheet
@@ -62,9 +72,18 @@ const LiveTriviaCard = ({ trivia }) => {
                 <View style={styles.triviaContainer}>
                     <View style={styles.triviaTop}>
                         <Text style={styles.triviaTopText}>{trivia.title}</Text>
-                        <View style={styles.triviaRequiredContainer}>
+                        <View style={[styles.triviaRequiredContainer,
+                        { display: showText ? 'none' : 'flex' }
+                        ]}>
+
+                            
                             <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
                             <Text style={styles.triviaRequiredText}>Required</Text>
+                            {/* <LottieAnimations
+                                animationView={require('../../../assets/leaderboard.json')}
+                                width={normalize(50)}
+                                height={normalize(50)}
+                            /> */}
 
                         </View>
                         {/* <Ionicons name="help-circle-outline" size={24} color="#FFFF" /> */}
@@ -166,7 +185,14 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
     },
     triviaRequiredContainer: {
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        backgroundColor:'#FFD064',
+        paddingHorizontal:normalize(15),
+        borderRadius: normalize(12),
+        paddingVertical:normalize(5),
+        borderLeftWidth: 8,
+        borderRightWidth: 8,
+        borderColor: '#C39938',
     },
     triviaTopText: {
         fontSize: '.85rem',
@@ -176,9 +202,9 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
     },
     triviaRequiredText: {
-        fontSize: '.85rem',
-        lineHeight: '1rem',
-        color: '#FFFF',
+        fontSize: '.65rem',
+        lineHeight: '.65rem',
+        color: '#4F4949',
         opacity: 0.8,
         fontFamily: 'graphik-medium',
     },

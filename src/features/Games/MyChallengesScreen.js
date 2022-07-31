@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, ScrollView, Pressable, StatusBar } from 'react-native';
+import { Text, View, ScrollView, Pressable, StatusBar } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { useDispatch, useSelector } from 'react-redux';
 import LottieAnimations from '../../shared/LottieAnimations';
 import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
 import PageLoading from '../../shared/PageLoading';
-import AppButton from '../../shared/AppButton';
-import { getUser, getUserChallenges } from '../Auth/AuthSlice';
+import { getUserChallenges } from '../Auth/AuthSlice';
 
 
 
@@ -18,9 +16,8 @@ const MyChallengesScreen = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
 
-
     const userChallenges = useSelector(state => state.auth.userChallenges);
-    console.log(userChallenges)
+    // console.log(userChallenges)
 
 
     useEffect(() => {
@@ -97,11 +94,12 @@ const ChallengeCard = ({ userChallenge }) => {
                     {/* <AppButton text={'Challenge Declined'} disabled={challengeDeclined} style={styles.disabled} /> */}
 
                     <Pressable style={styles.scoresButton} onPress={checkScores}>
-                        <Text style={styles.scoresText}>Scores</Text>
+                        {userChallenge.status === "CLOSED" ?
+                            <Text style={styles.scoresText}>Scores</Text>
+                            :
+                            <Text style={styles.scoresText}>View challenge details</Text>
+                        }
                     </Pressable>
-
-
-
                 </View>
                 :
                 <></>

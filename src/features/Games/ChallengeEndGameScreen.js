@@ -41,7 +41,6 @@ export default function ChallengeEndGameScreen({ navigation }) {
             <AppButton text='Return to Home'
             style={styles.gameButton}
                 onPress={onHomeButtonClick} />
-
         </ScrollView>
 
     );
@@ -90,7 +89,7 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#9C3DB8',
-        paddingVertical: normalize(40),
+        paddingBottom: normalize(40),
         paddingHorizontal: normalize(18),
         display: 'flex',
     },
@@ -108,7 +107,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         marginHorizontal: normalize(25),
-        marginBottom: responsiveScreenWidth(10)
+        marginBottom: responsiveScreenWidth(8)
     },
     info: {
         textAlign: 'center',
@@ -132,7 +131,7 @@ const styles = EStyleSheet.create({
         backgroundColor: '#701F88',
         borderRadius: 8,
         padding: normalize(15),
-        marginBottom: normalize(15)
+        marginBottom: normalize(12)
     },
     finalScore: {
         display: 'flex',
@@ -141,7 +140,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#F9E821',
         borderRadius: 16,
-        marginBottom: responsiveScreenWidth(23),
+        marginBottom: responsiveScreenWidth(20),
         padding: Platform.OS === 'ios' ? normalize(15) : normalize(10),
     },
     finalScoreText: {
@@ -155,7 +154,6 @@ const styles = EStyleSheet.create({
         fontSize: '4rem',
     },
     gameButton: {
-      marginVertical:normalize(1)
     },
 
 
