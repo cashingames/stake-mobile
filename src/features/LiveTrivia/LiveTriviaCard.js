@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/core';
 import { useFocusEffect } from '@react-navigation/native';
 import Animated, { BounceInRight } from 'react-native-reanimated';
 import { formatCurrency } from '../../utils/stringUtl';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import { calculateTimeRemaining, randomEnteringAnimation } from '../../utils/utils';
 import { getLiveTriviaStatus } from './LiveTriviaSlice';
@@ -72,21 +72,19 @@ const LiveTriviaCard = ({ trivia }) => {
                 <View style={styles.triviaContainer}>
                     <View style={styles.triviaTop}>
                         <Text style={styles.triviaTopText}>{trivia.title}</Text>
-                        <View style={[styles.triviaRequiredContainer,
-                        { display: showText ? 'none' : 'flex' }
-                        ]}>
-
-                            
-                            <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
-                            <Text style={styles.triviaRequiredText}>Required</Text>
-                            {/* <LottieAnimations
-                                animationView={require('../../../assets/leaderboard.json')}
-                                width={normalize(50)}
-                                height={normalize(50)}
-                            /> */}
-
-                        </View>
-                        {/* <Ionicons name="help-circle-outline" size={24} color="#FFFF" /> */}
+                        {trivia.status === "WAITING" || trivia.status === "ONGOING" ?
+                            <View style={[styles.triviaRequiredContainer,
+                            { display: showText ? 'none' : 'flex' }
+                            ]}>
+                                <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
+                                <Text style={styles.triviaRequiredText}>Required</Text>
+                            </View>
+                            :
+                            <View style={styles.triviaRequiredContainer}>
+                                <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
+                                <Text style={styles.triviaRequiredText}>Required</Text>
+                            </View>
+                        }
                     </View>
                     <Text style={styles.triviaTitle}>{trivia.prizeDisplayText}</Text>
                     {/* <Text style={styles.triviaAdText}>up for grabs !</Text> */}
@@ -183,23 +181,25 @@ const styles = EStyleSheet.create({
     triviaTop: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+
     },
     triviaRequiredContainer: {
         alignItems: 'flex-end',
-        backgroundColor:'#FFD064',
-        paddingHorizontal:normalize(15),
+        backgroundColor: '#FFD064',
+        paddingHorizontal: normalize(15),
         borderRadius: normalize(12),
-        paddingVertical:normalize(5),
+        paddingVertical: normalize(5),
         borderLeftWidth: 8,
         borderRightWidth: 8,
         borderColor: '#C39938',
     },
     triviaTopText: {
         fontSize: '.85rem',
-        lineHeight: '.85rem',
+        lineHeight: '1rem',
         color: '#FFFF',
         opacity: 0.8,
         fontFamily: 'graphik-medium',
+        width: responsiveScreenWidth(45)
     },
     triviaRequiredText: {
         fontSize: '.65rem',
