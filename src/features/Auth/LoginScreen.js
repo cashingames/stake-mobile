@@ -97,8 +97,6 @@ export default function LoginScreen({ navigation }) {
             </View>
 
             <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
-            {/* <SocialSigninDivider signInText='sign in' /> */}
-            {/* <SocialSignUp /> */}
             <RenderCreateAccount />
         </ScrollView >
     );
@@ -119,10 +117,17 @@ const RenderForgotPassword = () => {
 const RenderCreateAccount = () => {
     const navigation = useNavigation();
     return (
-        <View style={styles.signIn}><Text style={styles.signInText}>Don't have an account ?</Text>
-            <Pressable onPress={() => navigation.navigate('Signup')}>
-                <Text style={styles.linkText}>Create one</Text>
-            </Pressable>
+        <View style={styles.signIn}>
+            <View style={styles.create}>
+                <Text style={styles.signInText}>Don't have an account ?</Text>
+                <Pressable onPress={() => navigation.navigate('Signup')}>
+                    <Text style={styles.linkText}> Create one</Text>
+                </Pressable>
+            </View>
+            <Text style={styles.signInText}>or</Text>
+            <View style={styles.google}>
+                <SocialSignUp />
+            </View>
         </View>
     )
 }
@@ -158,7 +163,7 @@ const styles = EStyleSheet.create({
     linkText: {
         color: '#EF2F55',
         fontFamily: 'graphik-medium',
-        marginLeft: normalize(15),
+        // marginLeft: normalize(15),
         fontSize: '0.87rem'
     },
     divider: {
@@ -167,14 +172,22 @@ const styles = EStyleSheet.create({
         justifyContent: 'center'
     },
     signIn: {
+        flexDirection: 'column',
+        // justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: responsiveScreenWidth(2)
+    },
+    create: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: responsiveScreenWidth(5)
+        marginBottom: normalize(5)
     },
     signInText: {
         color: '#00000080',
         fontFamily: 'graphik-medium',
-        marginBottom: responsiveScreenWidth(15),
         fontSize: '0.87rem'
     },
+    google: {
+        marginVertical: normalize(10)
+    }
 });
