@@ -29,12 +29,6 @@ const SelectGameMode = () => {
         setActiveMode(mode)
         console.log(mode)
         dispatch(setGameMode(mode));
-        // if (mode.name === "EXHIBITION") {
-        //     navigation.navigate('GameInstructions')
-        // }
-        // else if (mode.name === "CHALLENGE") {
-        //     navigation.navigate('ChallengeSelectPlayer')
-        // }
     };
 
     const selectCategory = () => {
@@ -48,6 +42,7 @@ const SelectGameMode = () => {
         }, [])
     );
 
+    };
     return (
         <View>
             <Text style={styles.title}>Select game mode</Text>
