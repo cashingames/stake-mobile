@@ -23,6 +23,11 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
     console.log(triviaLeaders);
     const [loading, setLoading] = useState(true)
 
+    useEffect(() => {
+        StatusBar.setTranslucent(true)
+        StatusBar.setBackgroundColor("transparent")
+    }, []);
+
 
     useEffect(() => {
         dispatch(getLiveTriviaLeaders(

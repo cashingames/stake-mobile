@@ -22,14 +22,11 @@ const LiveTriviasScreen = ({ navigation }) => {
         dispatch(fetchRecentLiveTrivia()).then(() => setLoading(false));
     }, []);
 
+
     useEffect(() => {
-        StatusBar.setBackgroundColor('#072169');
-        StatusBar.setBarStyle('light-content');
-        return () => {
-            StatusBar.setBackgroundColor('#FFFF');
-            StatusBar.setBarStyle('dark-content');
-        }
-    },[]);
+        StatusBar.setTranslucent(true)
+        StatusBar.setBackgroundColor("transparent")
+    }, []);
 
     if (loading) {
         return <PageLoading

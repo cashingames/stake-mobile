@@ -45,11 +45,11 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       status: 1
     }
     ))
-    navigation.navigate('GameInstructions')
+    navigation.navigate('ChallengeInstructions')
   }
 
   const challengerPlays = () => {
-    navigation.navigate('GameInstructions')
+    navigation.navigate('ChallengeInstructions')
   }
 
   const declineChallengeInivite = () => {
@@ -80,6 +80,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
         <>
           {challengeDetails.status === "PENDING" &&
             challengeScores.opponentStatus === "PENDING" &&
+            challengeScores.opponentStatus !== "COMPLETED" &&
             <View style={styles.buttonContainer}>
               <AppButton text="Accept" style={styles.acceptButton} onPress={acceptChallengeInivite} />
               <AppButton text="Decline" style={styles.declineButton} onPress={declineChallengeInivite} />
