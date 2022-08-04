@@ -187,8 +187,7 @@ const styles = EStyleSheet.create({
     flex: 1,
     backgroundColor: '#9C3DB8',
     paddingHorizontal: normalize(18),
-    paddingTop: normalize(15),
-    justifyContent: 'flex-end'
+    paddingTop: normalize(25),
   },
   gameProgressAndBoost: {
     display: 'flex',
