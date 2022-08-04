@@ -18,14 +18,9 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true)
   const params = route.params;
-
+  const user = useSelector(state => state.auth.user);
   const challengeScores = useSelector(state => state.auth.challengeScores)
-  // console.log(challengeScores)
   const challengeDetails = useSelector(state => state.game.challengeDetails);
-  console.log(JSON.stringify(challengeDetails))
-  const user = useSelector(state => state.auth.user.username);
-  // console.log(JSON.stringify(user))
-
 
   useEffect(() => {
     dispatch(getChallengeScores(
@@ -36,7 +31,6 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   useEffect(() => {
     dispatch(getChallengeDetails(params.challengeid)).then(() => setLoading(false)
     );
-    console.log('fetched')
   }, []);
 
   const acceptChallengeInivite = () => {
@@ -76,10 +70,11 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           height={normalize(150)}
         />
       </View>
-      {user === challengeDetails.opponentUsername &&
+      {user.username === challengeDetails.opponentUsername &&
         <>
           {challengeDetails.status === "PENDING" &&
             challengeScores.opponentStatus === "PENDING" &&
+            challengeScores.opponentStatus !== "COMPLETED" &&
             <View style={styles.buttonContainer}>
               <AppButton text="Accept" style={styles.acceptButton} onPress={acceptChallengeInivite} />
               <AppButton text="Decline" style={styles.declineButton} onPress={declineChallengeInivite} />
@@ -87,7 +82,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           }
         </>
       }
-      {user === challengeDetails.playerUsername &&
+      {user.username === challengeDetails.playerUsername &&
         <>
           {challengeDetails.status === "ACCEPTED" &&
             challengeScores.challengerStatus === "PENDING" &&
@@ -122,7 +117,9 @@ const ResultContainer = ({ playerScore }) => {
 
 const ChallengeMessage = ({ playerPoint, user, challengeDetails }) => {
   const challengerwins = playerPoint.challengerPoint > playerPoint.opponentPoint;
+  const challengerlose = playerPoint.opponentPoint > playerPoint.challengerPoint;
   const opponentwins = playerPoint.opponentPoint > playerPoint.challengerPoint
+  const opponentlose = playerPoint.challengerPoint > playerPoint.opponentPoint
   const draw = playerPoint.opponentPoint === playerPoint.challengerPoint
 
 
@@ -130,16 +127,28 @@ const ChallengeMessage = ({ playerPoint, user, challengeDetails }) => {
     <View style={styles.challengeMessageContainer}>
       {playerPoint.challengeStatus === 'CLOSED' ?
         <>
-          {challengerwins &&
+          {challengerwins && user.username === challengeDetails.playerUsername &&
             <>
               <Text style={styles.challengeMessageTop}>Congrats {playerPoint.challengerUsername}</Text>
               <Text style={styles.challengeMessageBottom}>You won this challenge</Text>
             </>
           }
-          {opponentwins &&
+          {opponentwins && user.username === challengeDetails.opponentUsername &&
             <>
               <Text style={styles.challengeMessageTop}>Congrats {playerPoint.opponentUsername}</Text>
               <Text style={styles.challengeMessageBottom}>You won this challenge</Text>
+            </>
+          }
+          {opponentlose && user.username === challengeDetails.opponentUsername &&
+            <>
+              <Text style={styles.challengeMessageTop}>Sorry {playerPoint.opponentUsername}</Text>
+              <Text style={styles.challengeMessageBottom}>You lost this challenge</Text>
+            </>
+          }
+          {challengerlose && user.username === challengeDetails.playerUsername &&
+            <>
+              <Text style={styles.challengeMessageTop}>Sorry {playerPoint.challengerUsername}</Text>
+              <Text style={styles.challengeMessageBottom}>You lost this challenge</Text>
             </>
           }
           {draw &&
@@ -151,11 +160,11 @@ const ChallengeMessage = ({ playerPoint, user, challengeDetails }) => {
         </>
         :
         <>
-          {user === challengeDetails.opponentUsername &&
+          {user.username === challengeDetails.opponentUsername &&
             challengeDetails.status === "PENDING" &&
             <Text style={styles.challengeInProgress}>You have not responded to this challenge</Text>
           }
-          {user === challengeDetails.playerUsername &&
+          {user.username === challengeDetails.playerUsername &&
             challengeDetails.status === "PENDING" &&
             <Text style={styles.challengeInProgress}>Your opponent has not responded to this challenge</Text>
           }
@@ -171,13 +180,13 @@ const ChallengeMessage = ({ playerPoint, user, challengeDetails }) => {
 const ChallengeParticipants = ({ player }) => {
   return (
     <View style={styles.playersDetails}>
-      <TopChallengerDetails challenger={player} />
+      <ChallengerDetails challenger={player} />
       <OpponentDetails opponent={player} />
     </View>
   )
 }
 
-const TopChallengerDetails = ({ challenger }) => {
+const ChallengerDetails = ({ challenger }) => {
 
   return (
     <View style={styles.playerDetails}>
@@ -196,7 +205,6 @@ const TopChallengerDetails = ({ challenger }) => {
 
 const OpponentDetails = ({ opponent }) => {
 
-
   return (
     <View style={styles.playerDetails}>
       <Text style={styles.PlayerName}>{opponent.opponentUsername}</Text>
@@ -210,6 +218,7 @@ const OpponentDetails = ({ opponent }) => {
     </View>
   )
 }
+
 
 export default MyChallengesScoreScreen;
 

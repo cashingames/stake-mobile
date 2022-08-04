@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert, StatusBar, BackHandler } from 'react-native';
-import normalize, { responsiveScreenWidth } from "../../utils/normalize";
+import React, { useCallback, useRef, useState } from "react";
+import { View, ScrollView, ImageBackground, Alert, StatusBar, BackHandler } from 'react-native';
+import normalize from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
@@ -111,6 +111,14 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
     }, [])
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+        StatusBar.setTranslucent(true)
+        StatusBar.setBackgroundColor("transparent")
+        StatusBar.setBarStyle('light-content');
+    }, [])
+);
+
   if (isEnded) {
     return null;
   }
@@ -179,8 +187,7 @@ const styles = EStyleSheet.create({
     flex: 1,
     backgroundColor: '#9C3DB8',
     paddingHorizontal: normalize(18),
-    paddingTop: normalize(15),
-    justifyContent: 'flex-end'
+    paddingTop: normalize(25),
   },
   gameProgressAndBoost: {
     display: 'flex',

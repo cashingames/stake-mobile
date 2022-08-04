@@ -1,85 +1,57 @@
-import React, { useRef, useState } from "react";
-import { Text, View, ScrollView, Alert } from 'react-native';
+import React, { useRef, useState, useEffect } from "react";
+import { Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
+import Constants from 'expo-constants';
 import EStyleSheet from "react-native-extended-stylesheet";
 import GoToStore from '../../shared/GoToStore';
-import { startGame, setIsPlayingTrivia, startChallengeGame} from "./GameSlice";
+import { startChallengeGame, getChallengeDetails } from "./GameSlice";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
-import AppButton from './../../shared/AppButton';
+import { formatNumber } from '../../utils/stringUtl';
+import AppButton from '../../shared/AppButton';
+import PageLoading from "../../shared/PageLoading";
 import UserAvailableBoost from "../../shared/UserAvailableBoost";
-import { logActionToServer } from "../CommonSlice";
+import { getChallengeScores } from "../Auth/AuthSlice";
+import LottieAnimations from "../../shared/LottieAnimations";
 
 
-export default function GameInstructionsScreen({ navigation }) {
+export default function ChallengeInstructionsScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
 
-  const gameMode = useSelector(state => state.game.gameMode);
   const refRBSheet = useRef();
-
+  const dispatch = useDispatch();
+  const challengeDetails = useSelector(state => state.game.challengeDetails);
 
   return (
+        <ScrollView style={styles.container}>
+          {challengeDetails.gameModeName === "CHALLENGE" && <ChallengeInstructions />}
+          <AppButton onPress={() => refRBSheet.current.open()} text='Proceed' />
+          <RBSheet
+            ref={refRBSheet}
+            closeOnDragDown={true}
+            closeOnPressMask={true}
+            height={480}
+            customStyles={{
+              wrapper: {
+                backgroundColor: "rgba(0, 0, 0, 0.5)"
+              },
+              draggableIcon: {
+                backgroundColor: "#000",
+              },
+              container: {
+                borderTopStartRadius: 25,
+                borderTopEndRadius: 25,
+              }
+            }}
+          >
+            <AvailableChallengeBoosts onClose={() => refRBSheet.current.close()} />
 
-    <View style={styles.container}>
-      <ScrollView>
-        {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
-        {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
-        <RBSheet
-          ref={refRBSheet}
-          closeOnDragDown={true}
-          closeOnPressMask={true}
-          height={480}
-          customStyles={{
-            wrapper: {
-              backgroundColor: "rgba(0, 0, 0, 0.5)"
-            },
-            draggableIcon: {
-              backgroundColor: "#000",
-            },
-            container: {
-              borderTopStartRadius: 25,
-              borderTopEndRadius: 25,
-            }
-          }}
-        >
-            <AvailableBoosts onClose={() => refRBSheet.current.close()} />
-        </RBSheet>
-      </ScrollView>
-      <AppButton
-        onPress={() => refRBSheet.current.open()}
-        text='Proceed'
-        style={styles.proceedButton}
-      />
-    </View>
+          </RBSheet>
+        </ScrollView>
   );
-};
-const ExhibitionInstructions = () => {
-  return (
-    <>
-      <View style={styles.instruction}>
-        <Text style={styles.unicode}>{'\u0031'}.</Text>
-        <Text style={styles.instructionText}>There are 10 questions per session.
-          You are required to answer these 10 questions in 60 seconds</Text>
-      </View>
-      <View style={styles.instruction}>
-        <Text style={styles.unicode}>{'\u0032'}.</Text>
-        <Text style={styles.instructionText}>Click on the “Next” button after answering each question to
-          progress to the next question.</Text>
-      </View>
-      <View style={styles.instruction}>
-        <Text style={styles.unicode}>{'\u0033'}.</Text>
-        <Text style={styles.instructionText}>At the end of the session, you would see your total score</Text>
-      </View>
-      <View style={styles.instruction}>
-        <Text style={styles.unicode}>{'\u0034'}.</Text>
-        <Text style={styles.instructionText}>Click “Play again” to start another session in winning
-          more points to climb the leader board.</Text>
-      </View>
-    </>
-  )
 };
 
 const ChallengeInstructions = () => {
@@ -111,53 +83,14 @@ const ChallengeInstructions = () => {
 };
 
 
-const AvailableBoosts = ({ onClose }) => {
+const AvailableChallengeBoosts = ({ onClose }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const boosts = useSelector(state => state.auth.user.boosts);
-  const gameCategoryId = useSelector(state => state.game.gameCategory.id);
-  const gameTypeId = useSelector(state => state.game.gameType.id);
-  const gameModeId = useSelector(state => state.game.gameMode.id);
-  const gameMode = useSelector(state => state.game.gameMode);
   const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
   const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
   const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
-  const user = useSelector(state => state.auth.user);
   const [loading, setLoading] = useState(false);
-
-  console.log(gameCategoryId, gameModeId, gameTypeId);
-
-  const onStartGame = () => {
-    setLoading(true);
-    dispatch(setIsPlayingTrivia(false))
-    dispatch(startGame({
-      category: gameCategoryId,
-      type: gameTypeId,
-      mode: gameModeId
-    }))
-      .then(unwrapResult)
-      .then(result => {
-        dispatch(logActionToServer({
-          message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
-          data: result.data.questions
-        }))
-          .then(unwrapResult)
-          .then(result => {
-            console.log('Action logged to server');
-          })
-          .catch((e) => {
-            console.log('Failed to log to server');
-          });
-        setLoading(false);
-        onClose();
-        navigation.navigate("GameInProgress")
-      })
-      .catch((rejectedValueOrSerializedError) => {
-        console.log(rejectedValueOrSerializedError);
-        Alert.alert(rejectedValueOrSerializedError.message)
-        setLoading(false);
-      });
-  }
 
   const startChallenge = () => {
     setLoading(true);
@@ -169,28 +102,17 @@ const AvailableBoosts = ({ onClose }) => {
       .then(unwrapResult)
       .then(result => {
         console.log(result);
-        dispatch(logActionToServer({
-          message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
-          data: result.data.questions
-        }))
-          .then(unwrapResult)
-          .then(result => {
-            console.log('Action logged to server');
-          })
-          .catch(() => {
-            console.log('failed to log to server');
-          });
         setLoading(false);
         onClose();
         navigation.navigate("ChallengeGameInProgress")
       })
       .catch((rejectedValueOrSerializedError) => {
         console.log(rejectedValueOrSerializedError);
-        Alert.alert('Failed to start game')
-        // Alert.alert(rejectedValueOrSerializedError.message)
+        Alert.alert(rejectedValueOrSerializedError.message)
         setLoading(false);
       });
   }
+
 
 
   const visitStore = () => {
@@ -212,14 +134,47 @@ const AvailableBoosts = ({ onClose }) => {
       <View style={styles.storeLinks}>
         <GoToStore onPress={visitStore} />
       </View>
-      {gameMode.name === "EXHIBITION" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />}
-      {gameMode.name === "CHALLENGE" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={startChallenge} disabled={loading} />}
-
+      <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={startChallenge} disabled={loading} />
     </View>
   )
 }
 
+const ChallengeNotPending = ({ challenge }) => {
+  const navigation = useNavigation();
 
+  const goHome = () => {
+    navigation.navigate('AppRouter')
+
+  }
+  const goToMyChallenges = () => {
+    navigation.navigate('MyChallenges')
+
+  }
+  return (
+    <View style={styles.noContainer}>
+      {challenge.challengeStatus === 'CLOSED' &&
+        <>
+          <View style={styles.animation}>
+            <LottieAnimations
+              animationView={require('../../../assets/leaderboard.json')}
+              width={normalize(170)}
+              height={normalize(170)}
+            />
+          </View>
+          <Text style={styles.message}>This challenge has already been played,
+            check your recent challenges to see the result
+            or go to dashboard to play more exciting games
+          </Text>
+          <View style={styles.buttonContainer}>
+            <AppButton text='Dashboard' onPress={goHome} style={styles.button} />
+            <AppButton text='My Challenges' onPress={goToMyChallenges} style={styles.button} />
+          </View>
+
+        </>
+      }
+    </View>
+  )
+}
 
 const styles = EStyleSheet.create({
   container: {
@@ -283,6 +238,7 @@ const styles = EStyleSheet.create({
   },
   boosts: {
     // alignItems: ''
+
   },
   noBoosts: {
     textAlign: 'center',
@@ -342,7 +298,38 @@ const styles = EStyleSheet.create({
   startContainer: {
     marginTop: normalize(50),
   },
-  proceedButton: {
-    marginVertical: 10,
+  boostIcon: {
+    width: normalize(35),
+    height: normalize(35)
+  },
+  noContainer: {
+    flex: 1,
+    backgroundColor: '#072169',
+    paddingHorizontal: normalize(22),
+    paddingTop: normalize(25),
+    justifyContent: 'center'
+  },
+  message: {
+    fontSize: '1rem',
+    color: '#FFFF',
+    fontFamily: 'graphik-medium',
+    textAlign: 'center',
+    lineHeight: '1.5rem'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginTop: normalize(50),
+    justifyContent: 'space-between'
+  },
+  button: {
+    width: responsiveScreenWidth(43),
+  },
+  animation: {
+    alignItems: 'center',
+    marginBottom: normalize(25)
+  },
+  emoji: {
+    width: normalize(150),
+    height: normalize(150),
   }
 });

@@ -30,7 +30,7 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
       status: 1
     }
     ))
-    navigation.navigate('GameInstructions')
+    navigation.navigate('ChallengeInstructions')
   }
 
   const declineChallengeInivite = () => {

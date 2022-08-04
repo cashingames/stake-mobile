@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, View, Image, ScrollView, TextInput, Pressable, Alert, } from 'react-native';
+import { Text, View, Image, ScrollView, TextInput, Pressable, Alert, StatusBar, } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -64,6 +64,11 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
             dispatch(unselectFriend())
         )
     }, []);
+
+    useEffect(() => {
+        StatusBar.setBackgroundColor('#FFFF');
+        StatusBar.setBarStyle('dark-content');
+      }, []);
 
 
     const onSearchFriends = () => {

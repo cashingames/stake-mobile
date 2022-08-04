@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Animated from 'react-native-reanimated';
-import { Text, View } from 'react-native';
+import { Text, View} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import AppButton from '../../shared/AppButton';
@@ -46,20 +46,8 @@ export default ({ title, initialShowPlayButton = true }) => {
     }
 
     const onPlayButtonClick = () => {
-        hasActivePlan ? onSelectGameMode() : openBottomSheet();
+        hasActivePlan ? navigation.navigate('GameMode') : openBottomSheet();
     }
-    const gameMode = useSelector(state => state.game.gameMode);
-    console.log("oya log it", gameMode, "this is it right here")
-
-    const onSelectGameMode = () => {
-        if (gameMode.name === "EXHIBITION") {
-            navigation.navigate('GameInstructions')
-        }
-        else if (gameMode.name === "CHALLENGE") {
-            navigation.navigate('ChallengeSelectPlayer')
-        }
-
-    };
 
     useFocusEffect(
         React.useCallback(() => {
@@ -78,6 +66,7 @@ export default ({ title, initialShowPlayButton = true }) => {
 
     return (
         <>
+            <Text style={styles.title}>{title ?? "Pick a game"}</Text>
             <View style={styles.cards}>
                 {currentGame.categories.map((category, i) => <GameCategoryCard key={i}
                     category={category}
@@ -210,21 +199,21 @@ const styles = EStyleSheet.create({
         width: "88%",
     },
     title: {
-        fontSize: '1rem',
-        color: '#FFFF',
+        fontSize: '0.89rem',
+        color: '#151C2F',
         fontFamily: 'graphik-medium',
         marginVertical: normalize(10),
     },
     cards: {
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
     },
     card: {
-        // width: normalize(130),
+        width: normalize(130),
         padding: normalize(15),
         borderRadius: normalize(7),
         marginBottom: normalize(15),
-        // marginRight: normalize(10)
+        marginRight: normalize(10)
     },
     gameButton: {
         fontFamily: 'graphik-medium',

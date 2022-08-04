@@ -22,6 +22,7 @@ import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } fr
 import crashlytics from '@react-native-firebase/crashlytics';
 import GamePicker from '../Games/GamePicker';
 import LottieAnimations from '../../shared/LottieAnimations';
+import SelectGameMode from '../Games/SelectGameMode';
 
 const HomeScreen = () => {
 
@@ -109,7 +110,8 @@ const HomeScreen = () => {
         <ScrollView contentContainerStyle={styles.scrollView}>
             <UserDetails user={user} trivia={trivia} />
             <View style={styles.container}>
-                <GamePicker initialShowPlayButton={false} title={"Pick a game"} />
+                <SelectGameMode />
+                {/* <GamePicker initialShowPlayButton={false} title={"Pick a game"} /> */}
                 {/* <RecentlyPlayedGames /> */}
                 {/* <Pressable onPress = {() => Linking.openURL ('cashingames://challenge/:challengeId')}>
                     <Text>Press me</Text>

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, Pressable, Alert, BackHandler } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, Alert, BackHandler, StatusBar } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -81,6 +81,18 @@ export default function GameEndResultScreen({ navigation }) {
 				BackHandler.removeEventListener('hardwareBackPress', onBackPress);
 		}, [isGameEnded])
 	);
+
+	useFocusEffect(
+        React.useCallback(() => {
+            StatusBar.setTranslucent(true)
+            StatusBar.setBackgroundColor("transparent")
+            StatusBar.setBarStyle('light-content');
+            return () => {
+                StatusBar.setTranslucent(true)
+                StatusBar.setBarStyle('dark-content');
+            }
+        }, [])
+    );
 
 	return (
 

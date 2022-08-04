@@ -5,7 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { useDispatch, useSelector } from 'react-redux';
 import LottieAnimations from '../../shared/LottieAnimations';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import PageLoading from '../../shared/PageLoading';
 import { getUserChallenges } from '../Auth/AuthSlice';
 
@@ -24,14 +24,17 @@ const MyChallengesScreen = ({ navigation, route }) => {
         dispatch(getUserChallenges()).then(() => setLoading(false));
     }, []);
 
-    useEffect(() => {
-        StatusBar.setBackgroundColor('#701F88');
-        StatusBar.setBarStyle('light-content');
-        return () => {
-            StatusBar.setBackgroundColor('#FFFF');
-            StatusBar.setBarStyle('dark-content');
-        }
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            StatusBar.setTranslucent(true)
+            StatusBar.setBackgroundColor("transparent")
+            StatusBar.setBarStyle('light-content');
+            return () => {
+                StatusBar.setTranslucent(true)
+                StatusBar.setBarStyle('dark-content');
+            }
+        }, [])
+    );
 
 
     if (loading) {

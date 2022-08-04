@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Image, ScrollView, Pressable, BackHandler } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -25,6 +25,18 @@ export default function ChallengeEndGameScreen({ navigation }) {
             return () =>
                 BackHandler.removeEventListener('hardwareBackPress', onBackPress);
         }, [isGameEnded])
+    );
+
+    useFocusEffect(
+        React.useCallback(() => {
+            StatusBar.setTranslucent(true)
+            StatusBar.setBackgroundColor("transparent")
+            StatusBar.setBarStyle('light-content');
+            return () => {
+                StatusBar.setTranslucent(true)
+                StatusBar.setBarStyle('dark-content');
+            }
+        }, [])
     );
 
 

@@ -247,6 +247,16 @@ export const GameSlice = createSlice({
             })
             .addCase(getChallengeDetails.fulfilled, (state, action) => {
                 state.challengeDetails = action.payload;
+                state.gameMode = {
+                    name:action.payload.gameModeName,
+                    id:action.payload.gameModeId,
+                };
+                state.gameCategory = {
+                    id: action.payload.categoryId
+                };
+                state.gameType = {
+                    id: 1
+                }
             })
             .addCase(startChallengeGame.fulfilled, (state, action) => {
                 state.questions = action.payload.data.questions;
