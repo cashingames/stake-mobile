@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Text, View, ScrollView, Pressable, Alert, StatusBar } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import React, { useRef, useState } from "react";
+import { Text, View, ScrollView, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from "react-native-extended-stylesheet";
 import GoToStore from '../../shared/GoToStore';
-import { startGame, setIsPlayingTrivia, startChallengeGame, setGameMode } from "./GameSlice";
+import { startGame, setIsPlayingTrivia, startChallengeGame} from "./GameSlice";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import AppButton from './../../shared/AppButton';
@@ -16,20 +16,9 @@ import { logActionToServer } from "../CommonSlice";
 
 export default function GameInstructionsScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
-  const dispatch = useDispatch();
 
   const gameMode = useSelector(state => state.game.gameMode);
-  const challengeDetails = useSelector(state => state.game.challengeDetails);
-  // const challengeMode = useSelector(state => state.game.challengeDetails.gameModeName);
-
-  // console.log('this is game mode', challengeDetails, 'end',)
   const refRBSheet = useRef();
-
-  // useEffect(() => {
-  //   if (challengeMode) {
-  //     dispatch(setGameMode(challengeMode));
-  //   }
-  // }, []);
 
 
   return (
@@ -37,7 +26,7 @@ export default function GameInstructionsScreen({ navigation }) {
     <View style={styles.container}>
       <ScrollView>
         {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
-        {challengeDetails.gameModeName === "CHALLENGE" && <ChallengeInstructions />}
+        {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
         <RBSheet
           ref={refRBSheet}
           closeOnDragDown={true}
@@ -56,12 +45,7 @@ export default function GameInstructionsScreen({ navigation }) {
             }
           }}
         >
-          {gameMode.name === "EXHIBITION" &&
             <AvailableBoosts onClose={() => refRBSheet.current.close()} />
-          }
-          {challengeDetails.gameModeName === "CHALLENGE"
-            && <AvailableChallengeBoosts onClose={() => refRBSheet.current.close()} />
-          }
         </RBSheet>
       </ScrollView>
       <AppButton
@@ -134,8 +118,14 @@ const AvailableBoosts = ({ onClose }) => {
   const gameCategoryId = useSelector(state => state.game.gameCategory.id);
   const gameTypeId = useSelector(state => state.game.gameType.id);
   const gameModeId = useSelector(state => state.game.gameMode.id);
+  const gameMode = useSelector(state => state.game.gameMode);
+  const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
+  const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
+  const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
   const user = useSelector(state => state.auth.user);
   const [loading, setLoading] = useState(false);
+
+  console.log(gameCategoryId, gameModeId, gameTypeId);
 
   const onStartGame = () => {
     setLoading(true);
@@ -168,41 +158,6 @@ const AvailableBoosts = ({ onClose }) => {
         setLoading(false);
       });
   }
-
-
-  const visitStore = () => {
-    onClose();
-    navigation.navigate('GameStore')
-  }
-
-  return (
-    <View style={styles.availableBoosts}>
-      <Text style={styles.title}>Available Boosts</Text>
-      {boosts?.length > 0 ?
-        <View style={styles.boosts}>
-          {boosts.map((boost, i) => <UserAvailableBoost boost={boost} key={i} />
-          )}
-        </View>
-        :
-        <Text style={styles.noBoosts}>No boost available, go to store to purchase boost</Text>
-      }
-      <View style={styles.storeLinks}>
-        <GoToStore onPress={visitStore} />
-      </View>
-      <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />
-    </View>
-  )
-}
-
-const AvailableChallengeBoosts = ({ onClose }) => {
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const boosts = useSelector(state => state.auth.user.boosts);
-  const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
-  const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
-  const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
-  const user = useSelector(state => state.auth.user);
-  const [loading, setLoading] = useState(false);
 
   const startChallenge = () => {
     setLoading(true);
@@ -238,7 +193,6 @@ const AvailableChallengeBoosts = ({ onClose }) => {
   }
 
 
-
   const visitStore = () => {
     onClose();
     navigation.navigate('GameStore')
@@ -258,10 +212,13 @@ const AvailableChallengeBoosts = ({ onClose }) => {
       <View style={styles.storeLinks}>
         <GoToStore onPress={visitStore} />
       </View>
-      <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={startChallenge} disabled={loading} />
+      {gameMode.name === "EXHIBITION" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />}
+      {gameMode.name === "CHALLENGE" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={startChallenge} disabled={loading} />}
+
     </View>
   )
 }
+
 
 
 const styles = EStyleSheet.create({

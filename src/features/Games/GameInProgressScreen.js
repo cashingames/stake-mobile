@@ -120,14 +120,13 @@ export default function GameInProgressScreen({ navigation, route }) {
         }, [])
     );
 
-    useEffect(() => {
-        StatusBar.setBackgroundColor('#9C3DB8');
-        StatusBar.setBarStyle('light-content');
-        return () => {
-            StatusBar.setBackgroundColor('#FFFF');
-            StatusBar.setBarStyle('dark-content');
-        }
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            StatusBar.setTranslucent(true)
+            StatusBar.setBackgroundColor("transparent")
+            StatusBar.setBarStyle('light-content');
+        }, [])
+    );
 
     if (isEnded) {
         return null;

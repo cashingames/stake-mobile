@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Text, View, Image, ScrollView, ImageBackground, Animated, Pressable, Alert, StatusBar, BackHandler } from 'react-native';
-import normalize, { responsiveScreenWidth } from "../../utils/normalize";
+import React, { useCallback, useRef, useState } from "react";
+import { View, ScrollView, ImageBackground, Alert, StatusBar, BackHandler } from 'react-native';
+import normalize from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
@@ -110,6 +110,14 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, [])
   );
+
+  useFocusEffect(
+    React.useCallback(() => {
+        StatusBar.setTranslucent(true)
+        StatusBar.setBackgroundColor("transparent")
+        StatusBar.setBarStyle('light-content');
+    }, [])
+);
 
   if (isEnded) {
     return null;

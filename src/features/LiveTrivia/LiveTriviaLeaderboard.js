@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView, StatusBar } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector, useDispatch } from 'react-redux';
@@ -42,11 +42,11 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
     }
 
     return (
-            <ScrollView style={styles.container}>
-                <ResultContainer />
-                {/* <TriviaTopLeaders /> */}
-                <TriviaParticipants triviaLeaders={triviaLeaders} />
-            </ScrollView>
+        <ScrollView style={styles.container}>
+            <ResultContainer />
+            {/* <TriviaTopLeaders /> */}
+            <TriviaParticipants triviaLeaders={triviaLeaders} />
+        </ScrollView>
     )
 }
 

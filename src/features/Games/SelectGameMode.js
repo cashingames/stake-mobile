@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import { Image, Pressable, Text, View } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +10,6 @@ import Constants from 'expo-constants';
 import normalize from '../../utils/normalize';
 import { isTrue } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
-import { useFocusEffect } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/core';
 
 
@@ -18,16 +17,12 @@ import { useNavigation } from '@react-navigation/core';
 const SelectGameMode = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [activeMode, setActiveMode] = useState();
     const gameModes = useSelector(state => state.common.gameModes);
-    // const selectedGameMode = useSelector(state => state.game.gameMode);
-    const currentMode = useSelector(state => state.common.gameModes ? state.common.gameModes[0] : null);
+    const selectedGameMode = useSelector(state => state.game.gameMode);
     // console.log(currentMode)
 
 
     const onSelectGameMode = (mode) => {
-        setActiveMode(mode)
-        console.log(mode)
         dispatch(setGameMode(mode));
     };
 
@@ -35,31 +30,25 @@ const SelectGameMode = () => {
         navigation.navigate('SelectGameCategory')
     };
 
-    useFocusEffect(
-        React.useCallback(() => {
-            setActiveMode(undefined);
-            dispatch(setGameMode(currentMode));
-        }, [])
-    );
-
-    };
     return (
         <View>
             <Text style={styles.title}>Select game mode</Text>
             <View style={styles.subcategories}>
                 <SwiperFlatList>
                     {gameModes.map((gameMode, i) =>
-                        <AvailableMode key={i} gameMode={gameMode}
+                        <AvailableMode 
+                            key={i} 
+                            gameMode={gameMode}
                             onPress={() => onSelectGameMode(gameMode)}
-                            isSelected={gameMode.id === activeMode?.id}
+                            isSelected={gameMode.id === selectedGameMode?.id}
                         />
                     )}
                 </SwiperFlatList>
             </View>
-            {isTrue(activeMode) && <AppButton text="Proceed" onPress={selectCategory} />}
+            {isTrue(selectedGameMode?.id) && <AppButton text="Proceed" onPress={selectCategory} />}
 
         </View>
-    )
+    ) 
 }
 
 const AvailableMode = ({ gameMode, onPress, isSelected }) => {

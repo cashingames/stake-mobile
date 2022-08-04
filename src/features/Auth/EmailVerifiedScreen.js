@@ -17,26 +17,28 @@ import { unwrapResult } from '@reduxjs/toolkit';
 
 
 const EmailVerifiedScreen = ({ navigation, route }) => {
-    const email = route.params.email
-    console.log(email)
+    const params = route.params
+    console.log(params)
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
 
-
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const rewards = useSelector(state => state.auth.firstTimeUserReward)
+    console.log(JSON.stringify(rewards))
 
 
     const goToDashboard = () => {
         setLoading(true);
-        dispatch(verifyUser({ email: email }))
+        dispatch(verifyUser({ email: params.email }))
             .then(unwrapResult)
             .then(response => {
                 console.log(response)
                 saveToken(response.data.data)
-                navigation.navigate('AppRouter')
                 setLoading(false);
+                navigation.navigate('AppRouter')
+                // {() => navigation.navigate('AppRouter') }
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError)
@@ -48,8 +50,9 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
     useEffect(() => {
         console.log('about fetching')
         dispatch(getFirstTimeUserReward())
-            .then(() => {setLoading(false);console.log('fetched')
-        });
+            .then(() => {
+                setLoading(false); console.log('fetched')
+            });
     }, [])
 
 
@@ -77,7 +80,7 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
                         to verify your email to Login and play exciting games and win great prices
                     </Text>
                 </View>
-                <FirstTimeUserRewards />
+                <FirstTimeUserRewards rewards={rewards} />
             </ScrollView>
             <AppButton text={loading ? 'Verifying...' : 'Login'} onPress={goToDashboard}
                 disabled={loading} />
@@ -88,9 +91,7 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
 }
 
 
-const FirstTimeUserRewards = () => {
-    const rewards = useSelector(state => state.auth.firstTimeUserReward)
-    console.log(JSON.stringify(rewards))
+const FirstTimeUserRewards = ({ rewards }) => {
 
     return (
         <View style={styles.rewardsContainer}>

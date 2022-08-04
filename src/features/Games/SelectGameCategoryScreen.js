@@ -1,18 +1,26 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Image, Pressable, ScrollView, StatusBar, Text, View } from 'react-native';
+import React from 'react';
+import { ScrollView, StatusBar, View } from 'react-native';
 import GamePicker from './GamePicker';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from '../../utils/normalize';
 import LottieAnimations from '../../shared/LottieAnimations';
+import { useFocusEffect } from '@react-navigation/native';
 
 const SelectGameCategoryScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
 
-    useEffect(() => {
-        StatusBar.setTranslucent(true)
-        StatusBar.setBackgroundColor("transparent")
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            StatusBar.setTranslucent(true)
+            StatusBar.setBackgroundColor("transparent")
+            StatusBar.setBarStyle('light-content');
+            return () => {
+                StatusBar.setTranslucent(true)
+                StatusBar.setBarStyle('dark-content');
+            }
+        }, [])
+    );
 
     return (
         <ScrollView contentContainerStyle={styles.container}>

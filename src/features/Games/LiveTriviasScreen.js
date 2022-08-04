@@ -23,10 +23,17 @@ const LiveTriviasScreen = ({ navigation }) => {
     }, []);
 
 
-    useEffect(() => {
-        StatusBar.setTranslucent(true)
-        StatusBar.setBackgroundColor("transparent")
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            StatusBar.setTranslucent(true)
+            StatusBar.setBackgroundColor("transparent")
+            StatusBar.setBarStyle('light-content');
+            return () => {
+                StatusBar.setTranslucent(true)
+                StatusBar.setBarStyle('dark-content');
+            }
+        }, [])
+    );
 
     if (loading) {
         return <PageLoading
