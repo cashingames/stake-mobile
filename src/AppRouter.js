@@ -189,7 +189,6 @@ function AppRouter() {
 			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
 			<AppStack.Screen name="EmailVerified" component={EmailVerifiedScreen} options={{ headerShown: false }} />
 			<AppStack.Screen name="ChallengeNotPending" component={ChallengeNotPendingScreen} options={{ headerShown: false }} />
-
 			{/* <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} /> */}
 		</AppStack.Navigator >
 	)

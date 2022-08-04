@@ -1,5 +1,5 @@
 const env = process.env.APP_VARIANT;
-const version = "1.0.43"; //Update for every build and publish
+const version = "1.0.45"; //Update for every build and publish
 
 export default {
   name: getAppName(),
@@ -60,13 +60,14 @@ export default {
   plugins: [
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
+    "@react-native-google-signin/google-signin"
   ],
   extra: {
     isDevelopment: env === 'development' || false,
     isProduction: env === 'production' || false,
     isPreview: env === 'preview' || false,
     isStaging: env === "development" || env === "preview",
-    socialLoginClientID: getSocialLoginClientID(),
+    googleClientId: getGoogleAndroidClientId(),
     gaTrackingID: getGATrackingID(),
     paystackKey: getPaystackKey(),
     apiBaseUrl: getApiUrl(),
@@ -105,16 +106,16 @@ function getAppIdentifier() {
   return `com.cashingames.${identifier}`;
 }
 
-function getSocialLoginClientID() {
-  var result = "125752028373-mmdihc58hbubpt4obl59875tun5633or.apps.googleusercontent.com";
-  if (env === "development") {
-    result = '125752028373-ik9v848h4d8n8c95bq5lrva1k5anffdo.apps.googleusercontent.com';
-  } else if (env === "preview") {
-    result = "125752028373-f3pls3bjaq22s82p9elsg57bd7bc0kbh.apps.googleusercontent.com";
-  }
+// function getSocialLoginClientID() {
+//   var result = "125752028373-mmdihc58hbubpt4obl59875tun5633or.apps.googleusercontent.com";
+//   if (env === "development") {
+//     result = '125752028373-ik9v848h4d8n8c95bq5lrva1k5anffdo.apps.googleusercontent.com';
+//   } else if (env === "preview") {
+//     result = "125752028373-f3pls3bjaq22s82p9elsg57bd7bc0kbh.apps.googleusercontent.com";
+//   }
 
-  return result;
-}
+//   return result;
+// }
 
 function getGATrackingID() {
   if (env === "development" || env === "preview") {
@@ -155,4 +156,16 @@ function getAssetsBaseUrl() {
   }
 
   return 'https://api.cashingames.com';
+}
+
+function getGoogleAndroidClientId() {
+  if (env === "development") {
+    return '520726557605-n6htks6ao6ge2thkbevhosc0ipk35odr.apps.googleusercontent.com';
+  }
+
+  if (env === "preview") {
+    return '520726557605-ur6av2djj8oqkhvre58c2fp747p0k41g.apps.googleusercontent.com';
+  }
+
+  return '520726557605-pmk80q42pnoteo5gp6j2gan93smdv8o7.apps.googleusercontent.com';
 }
