@@ -76,8 +76,9 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
                 <View style={styles.headerContainer}>
                     <Text style={styles.userDetails}>Congratulations</Text>
                     <Text style={styles.rewardHeaderText}>
-                        You have successfully been register, kindly click on the button below
-                        to verify your email to Login and play exciting games and win great prices
+                        You have been successfully registered.
+                        Click on the button below to verify your email and log in to your account.
+                        Once verified, you will be rewarded with a starter bundle to play exciting games and win great prizes.
                     </Text>
                 </View>
                 <FirstTimeUserRewards rewards={rewards} />

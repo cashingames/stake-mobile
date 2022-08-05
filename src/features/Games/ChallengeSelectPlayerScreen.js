@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, View, Image, ScrollView, TextInput, Pressable, Alert, StatusBar, } from 'react-native';
+import { Text, View, Image, ScrollView, TextInput, Pressable, Alert, } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -37,7 +37,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
 
     const sendInvite = () => {
-        setSending(true)
+        setSending(false)
         dispatch(sendFriendInvite({
             opponentId: selectedOpponent.id,
             categoryId: activeCategory.id
@@ -46,11 +46,11 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
             .then(unwrapResult)
             .then(result => {
                 console.log(result);
-                setSending(false)
+                // setSending(true)
                 openBottomSheet()
             })
             .catch((rejectedValueOrSerializedError) => {
-                setSending(false)
+                setSending(true)
                 console.log(rejectedValueOrSerializedError);
                 Alert.alert(rejectedValueOrSerializedError.message)
             });
@@ -65,11 +65,6 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         )
     }, []);
 
-    useEffect(() => {
-        StatusBar.setBackgroundColor('#FFFF');
-        StatusBar.setBarStyle('dark-content');
-      }, []);
-
 
     const onSearchFriends = () => {
         console.log('clicking')
@@ -81,6 +76,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
     const onSelectedFriend = (userFriend) => {
         dispatch(setSelectedFriend(userFriend));
+        setSending(true)
     }
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
@@ -113,7 +109,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                 />
 
             </ScrollView>
-            <SendInviteButton onPress={sendInvite} disabled={!selectedOpponent || sending} />
+            <SendInviteButton onPress={sendInvite} disabled={!selectedOpponent || !sending} />
         </View>
     );
 }
