@@ -255,7 +255,7 @@ export const GameSlice = createSlice({
                     id: action.payload.categoryId
                 };
                 state.gameType = {
-                    id: 1
+                    id: 2
                 }
             })
             .addCase(startChallengeGame.fulfilled, (state, action) => {

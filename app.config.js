@@ -134,38 +134,38 @@ function getPaystackKey() {
 }
 
 function getApiUrl() {
-  if (env === "development" || env === "preview") {
-    // return 'http://192.168.1.147:8000/api';
-    return 'https://stg-api.cashingames.com/api';
-  }
+  // if (env === "development" || env === "preview") {
+  //   // return 'http://192.168.1.147:8000/api';
+  //   return 'https://stg-api.cashingames.com/api';
+  // }
 
   return 'https://api.cashingames.com/api'
 }
 
 function getDomain() {
-  if (env === "development" || env === "preview") {
-    return 'https://stg.cashingames.com';
-  }
+  // if (env === "development" || env === "preview") {
+  //   return 'https://stg.cashingames.com';
+  // }
 
   return 'https://www.cashingames.com'
 }
 
 function getAssetsBaseUrl() {
-  if (env === "development" || env === "preview") {
-    return 'https://stg-api.cashingames.com';
-  }
+  // if (env === "development" || env === "preview") {
+  //   return 'https://stg-api.cashingames.com';
+  // }
 
   return 'https://api.cashingames.com';
 }
 
 function getGoogleAndroidClientId() {
-  if (env === "development") {
-    return '520726557605-n6htks6ao6ge2thkbevhosc0ipk35odr.apps.googleusercontent.com';
-  }
+  // if (env === "development") {
+  //   return '520726557605-n6htks6ao6ge2thkbevhosc0ipk35odr.apps.googleusercontent.com';
+  // }
 
-  if (env === "preview") {
-    return '520726557605-ur6av2djj8oqkhvre58c2fp747p0k41g.apps.googleusercontent.com';
-  }
+  // if (env === "preview") {
+  //   return '520726557605-ur6av2djj8oqkhvre58c2fp747p0k41g.apps.googleusercontent.com';
+  // }
 
   return '520726557605-pmk80q42pnoteo5gp6j2gan93smdv8o7.apps.googleusercontent.com';
 }

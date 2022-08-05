@@ -163,7 +163,7 @@ const AvailableBoosts = ({ onClose }) => {
     setLoading(true);
     dispatch(startChallengeGame({
       category: challengeCategory,
-      type: challengeType,
+      type: gameTypeId,
       challenge_id: challengeId
     }))
       .then(unwrapResult)

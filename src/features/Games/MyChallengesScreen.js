@@ -17,7 +17,7 @@ const MyChallengesScreen = ({ navigation, route }) => {
     const [loading, setLoading] = useState(true)
 
     const userChallenges = useSelector(state => state.auth.userChallenges);
-    // console.log(userChallenges)
+    console.log(userChallenges)
 
 
     useEffect(() => {
