@@ -200,11 +200,11 @@ const styles = EStyleSheet.create({
         width: responsiveScreenWidth(45)
     },
     triviaRequiredText: {
-        fontSize: '.75rem',
-        lineHeight: '.65rem',
-        color: '#FFFF',
+        fontSize: '.8rem',
+        lineHeight: '.85rem',
+        color: '#FFD064',
         opacity: 0.8,
-        fontFamily: 'graphik-medium',
+        fontFamily: 'graphik-bold',
     },
     triviaTitle: {
         fontSize: '1.8rem',
