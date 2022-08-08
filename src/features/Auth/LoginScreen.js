@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Constants from 'expo-constants';
 
-import SocialSigninDivider from '../../shared/SocialSigninDivider';
 import SocialSignUp from '../../shared/SocialSignUp';
 import AuthBanner from '../../shared/AuthBanner';
 import AuthTitle from '../../shared/AuthTitle';

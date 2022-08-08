@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, Pressable, ImageBackground } from 'react-native';
+import { Text, View, Image, Pressable, ImageBackground, Animated } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/core';
 import { useFocusEffect } from '@react-navigation/native';
-import Animated, { BounceInRight } from 'react-native-reanimated';
+// import Animated, { BounceInRight } from 'react-native-reanimated';
 import { formatCurrency } from '../../utils/stringUtl';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
@@ -35,14 +35,19 @@ const LiveTriviaCard = ({ trivia }) => {
             navigation.navigate('TriviaInstructions', { ...trivia })
         }
     }
+    const fadeAnim = useState(new Animated.Value(0));
+
+    // useEffect(() => {
+    //     // Change the state every second or the time given by User.
+    //     const interval = setInterval(() => {
+    //         setShowText((showText) => !showText);
+    //     }, 1000);
+    //     return () => clearInterval(interval);
+    // }, []);
 
     useEffect(() => {
-        // Change the state every second or the time given by User.
-        const interval = setInterval(() => {
-            setShowText((showText) => !showText);
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
+        Animated.loop
+    }, [])
 
     useFocusEffect(
         React.useCallback(() => {
@@ -57,7 +62,7 @@ const LiveTriviaCard = ({ trivia }) => {
     }
 
     return (
-        <Animated.View entering={BounceInRight.duration(2000)}>
+        <Animated.View>
             <ImageBackground
                 source={require('../../../assets/images/live-trivia-card-background-blue.png')}
                 imageStyle={{ borderRadius: 20 }}
@@ -73,12 +78,10 @@ const LiveTriviaCard = ({ trivia }) => {
                     <View style={styles.triviaTop}>
                         <Text style={styles.triviaTopText}>{trivia.title}</Text>
                         {trivia.status === "WAITING" || trivia.status === "ONGOING" ?
-                            <View style={[styles.triviaRequiredContainer,
-                            { display: showText ? 'none' : 'flex' }
-                            ]}>
+                            <Animated.View style={[styles.triviaRequiredContainer, { opacity: fadeAnim }]}>
                                 <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
                                 <Text style={styles.triviaRequiredText}>Required</Text>
-                            </View>
+                            </Animated.View>
                             :
                             <View style={styles.triviaRequiredContainer}>
                                 <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
@@ -185,13 +188,13 @@ const styles = EStyleSheet.create({
     },
     triviaRequiredContainer: {
         alignItems: 'flex-end',
-        backgroundColor: '#FFD064',
-        paddingHorizontal: normalize(15),
-        borderRadius: normalize(12),
-        paddingVertical: normalize(5),
-        borderLeftWidth: 8,
-        borderRightWidth: 8,
-        borderColor: '#C39938',
+        // backgroundColor: '#FFD064',
+        // paddingHorizontal: normalize(15),
+        // borderRadius: normalize(12),
+        // paddingVertical: normalize(5),
+        // borderLeftWidth: 8,
+        // borderRightWidth: 8,
+        // borderColor: '#C39938',
     },
     triviaTopText: {
         fontSize: '.85rem',
@@ -202,9 +205,9 @@ const styles = EStyleSheet.create({
         width: responsiveScreenWidth(45)
     },
     triviaRequiredText: {
-        fontSize: '.65rem',
+        fontSize: '.75rem',
         lineHeight: '.65rem',
-        color: '#4F4949',
+        color: '#FFFF',
         opacity: 0.8,
         fontFamily: 'graphik-medium',
     },
