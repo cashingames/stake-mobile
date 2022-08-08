@@ -35,19 +35,14 @@ const LiveTriviaCard = ({ trivia }) => {
             navigation.navigate('TriviaInstructions', { ...trivia })
         }
     }
-    const fadeAnim = useState(new Animated.Value(0));
-
-    // useEffect(() => {
-    //     // Change the state every second or the time given by User.
-    //     const interval = setInterval(() => {
-    //         setShowText((showText) => !showText);
-    //     }, 1000);
-    //     return () => clearInterval(interval);
-    // }, []);
-
     useEffect(() => {
-        Animated.loop
-    }, [])
+        // Change the state every second or the time given by User.
+        const interval = setInterval(() => {
+            setShowText((showText) => !showText);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
 
     useFocusEffect(
         React.useCallback(() => {
@@ -78,7 +73,7 @@ const LiveTriviaCard = ({ trivia }) => {
                     <View style={styles.triviaTop}>
                         <Text style={styles.triviaTopText}>{trivia.title}</Text>
                         {trivia.status === "WAITING" || trivia.status === "ONGOING" ?
-                            <Animated.View style={[styles.triviaRequiredContainer, { opacity: fadeAnim }]}>
+                            <Animated.View style={[styles.triviaRequiredContainer, {opacity: showText ? 0 : 1  }]}>
                                 <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
                                 <Text style={styles.triviaRequiredText}>Required</Text>
                             </Animated.View>
