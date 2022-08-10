@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Constants from 'expo-constants';
-// import * as Device from 'expo-device';
-// import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 
 import axios from "axios";
 
@@ -25,7 +25,7 @@ import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScree
 import SupportQuestionsScreen from './features/Support/SupportQuestionsScreen';
 import SupportAnswerScreen from './features/Support/SupportAnswerScreen';
 
-import { isLoggedIn, shouldShowIntro } from './features/Auth/AuthSlice';
+import { isLoggedIn, shouldShowIntro, verifyDeviceToken } from './features/Auth/AuthSlice';
 import { isTrue } from './utils/stringUtl';
 import GameModeScreen from './features/Games/GameModeScreen';
 import GameInstructionsScreen from './features/Games/GameInstructionsScreen';
@@ -72,6 +72,19 @@ function AppRouter() {
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
 
+	const notificationListener = useRef();
+	const responseListener = useRef();
+	const [notification, setNotification] = useState(false);
+	const [pushToken, setPushToken] = useState('');
+
+	Notifications.setNotificationHandler({
+		handleNotification: async () => ({
+			shouldShowAlert: true,
+			shouldPlaySound: false,
+			shouldSetBadge: false,
+		}),
+	});
+
 	booststrapAxios(token); //sets basic api call params
 
 	//during app restart, check localstorage for these info
@@ -83,6 +96,31 @@ function AppRouter() {
 			setLoading(false);
 		});
 	}, []);
+
+	useEffect(() => {
+		if (isTrue(token)) {
+			registerForPushNotificationsAsync().then(device_token => {
+				setPushToken(device_token);
+				// console.log("preparing to dispatch token to server", device_token);
+				dispatch(verifyDeviceToken(device_token))
+
+			});
+
+			// This listener is fired whenever a notification is received while the app is foregrounded
+			Notifications.addNotificationReceivedListener(notification => {
+				console.log("foreground received", notification);
+			});
+
+			Notifications.addNotificationResponseReceivedListener(response => {
+				console.log("from background", response)
+			});
+
+			// return () => {
+			// 	Notifications.removeNotificationSubscription(notificationListener.current);
+			// 	Notifications.removeNotificationSubscription(responseListener.current);
+			// };
+		}
+	}, [token]);
 
 	if (loading) {
 		return <PageLoading spinnerColor="#0000ff" />
@@ -219,3 +257,34 @@ const booststrapAxios = async function (token) {
 		delete axios.defaults.headers.common['Authorization'];
 	}
 };
+
+async function registerForPushNotificationsAsync() {
+	let deviceToken;
+	if (Device.isDevice) {
+		const { status: existingStatus } = await Notifications.getPermissionsAsync();
+		let finalStatus = existingStatus;
+		if (existingStatus !== 'granted') {
+			const { status } = await Notifications.requestPermissionsAsync();
+			finalStatus = status;
+		}
+		if (finalStatus !== 'granted') {
+			alert('Failed to get push token for push notification!');
+			return;
+		}
+		deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
+		console.log('this is device token', deviceToken);
+	} else {
+		alert('Must use physical device for Push Notifications');
+	}
+
+	if (Platform.OS === 'android') {
+		Notifications.setNotificationChannelAsync('default', {
+			name: 'default',
+			importance: Notifications.AndroidImportance.MAX,
+			vibrationPattern: [0, 250, 250, 250],
+			lightColor: '#FF231F7C',
+		});
+	}
+
+	return deviceToken;
+}

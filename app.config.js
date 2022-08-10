@@ -60,7 +60,8 @@ export default {
   plugins: [
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
-    "@react-native-google-signin/google-signin"
+    "@react-native-google-signin/google-signin",
+    "expo-notifications"
   ],
   extra: {
     isDevelopment: env === 'development' || false,
