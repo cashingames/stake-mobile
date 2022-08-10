@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Constants from 'expo-constants';
-// import * as Device from 'expo-device';
-// import * as Notifications from 'expo-notifications';
 
 import axios from "axios";
 

@@ -56,7 +56,7 @@ export default function LoginScreen({ navigation }) {
 
 
     useEffect(() => {
-        var valid = email.length > 5 && password.length > 7;
+        var valid = email.length > 1 && password.length > 7;
         setCanLogin(valid);
         setError('');
     }, [email, password]);
