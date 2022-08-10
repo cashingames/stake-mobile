@@ -116,6 +116,7 @@ const AvailableChallengeBoosts = ({ onClose }) => {
   const navigation = useNavigation();
   const boosts = useSelector(state => state.auth.user.boosts);
   const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
+  const gameTypeId = useSelector(state => state.game.gameType.id);
   const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
   const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
   const [loading, setLoading] = useState(false);
@@ -124,7 +125,7 @@ const AvailableChallengeBoosts = ({ onClose }) => {
     setLoading(true);
     dispatch(startChallengeGame({
       category: challengeCategory,
-      type: challengeType,
+      type: gameTypeId,
       challenge_id: challengeId
     }))
       .then(unwrapResult)

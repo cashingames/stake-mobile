@@ -68,6 +68,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
 
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.subContainer}>
       <View style={styles.confetti}>
         <LottieAnimations
           animationView={require('../../../assets/challenge.json')}
@@ -101,6 +102,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       />
       <ChallengeParticipants player={challengeScores} />
       <ResultContainer playerScore={challengeScores} />
+      </View>
 
     </ScrollView>
   )
@@ -237,8 +239,11 @@ const styles = EStyleSheet.create({
     flex: 1,
     backgroundColor: '#701F88',
     paddingHorizontal: normalize(20),
-    paddingBottom: responsiveScreenWidth(30)
+    paddingBottom: responsiveScreenWidth(30),
 
+  },
+  subContainer: {
+    justifyContent:'center'
   },
   confetti: {
     alignItems: 'center'
