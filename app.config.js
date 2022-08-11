@@ -32,6 +32,7 @@ export default {
     package: getAppIdentifier(),
     versionCode: getAndriodVersionCode(),
     googleServicesFile: "./google-services.json",
+    useNextNotificationsApi: true,
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon2.png",
       backgroundColor: "#FFFFFF"

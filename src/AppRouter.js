@@ -61,6 +61,7 @@ import EmailVerifiedScreen from './features/Auth/EmailVerifiedScreen';
 import ChallengeNotPendingScreen from './features/Games/ChallengeNotPendingScreen';
 import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen';
 import ChallengeInstructionsScreen from './features/Games/ChallengeInstructionScreen';
+import { Alert } from 'react-native';
 
 const AppStack = createNativeStackNavigator();
 
@@ -80,8 +81,8 @@ function AppRouter() {
 	Notifications.setNotificationHandler({
 		handleNotification: async () => ({
 			shouldShowAlert: true,
-			shouldPlaySound: false,
-			shouldSetBadge: false,
+			shouldPlaySound: true,
+			shouldSetBadge: true,
 		}),
 	});
 
@@ -109,10 +110,12 @@ function AppRouter() {
 			// This listener is fired whenever a notification is received while the app is foregrounded
 			Notifications.addNotificationReceivedListener(notification => {
 				console.log("foreground received", notification);
+				Alert.alert("the notification was sent from foreground")
 			});
 
 			Notifications.addNotificationResponseReceivedListener(response => {
 				console.log("from background", response)
+				Alert.alert("the notification was sent from background")
 			});
 
 			// return () => {
