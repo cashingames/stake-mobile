@@ -62,8 +62,9 @@ import EmailVerifiedScreen from './features/Auth/EmailVerifiedScreen';
 import ChallengeNotPendingScreen from './features/Games/ChallengeNotPendingScreen';
 import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen';
 import ChallengeInstructionsScreen from './features/Games/ChallengeInstructionScreen';
-import { Alert } from 'react-native';
+import { Alert, View } from 'react-native';
 import NotificationPopup from './shared/NotificationPopup';
+import RBSheet from "react-native-raw-bottom-sheet";
 
 const AppStack = createNativeStackNavigator();
 
@@ -85,9 +86,9 @@ const AppStack = createNativeStackNavigator();
 // 	console.log("from background", response)
 // 	Alert.alert("the notification was sent from background")
 // });
-messaging().setBackgroundMessageHandler(async remoteMessage => {
-	console.log('Message handled in the background!', remoteMessage);
-});
+// messaging().setBackgroundMessageHandler(async remoteMessage => {
+// 	console.log('Message handled in the background!', remoteMessage);
+// });
 function AppRouter() {
 	const dispatch = useDispatch();
 
@@ -100,15 +101,17 @@ function AppRouter() {
 	const responseListener = useRef();
 	const [notification, setNotification] = useState(false);
 	const [pushToken, setPushToken] = useState('');
+	const refRBSheet = useRef();
 
 	const closeBottomSheet = () => {
 		refRBSheet.current.close()
 	}
 
 	const openBottomSheet = () => {
+		console.log('trying to open bottom sheet');
 		refRBSheet.current.open()
 	}
-	const refRBSheet = useRef();
+
 
 	booststrapAxios(token); //sets basic api call params
 
@@ -134,15 +137,44 @@ function AppRouter() {
 		}
 		const unsubscribe = messaging().onMessage(async remoteMessage => {
 			console.log(remoteMessage)
-			setNotification(true)
-			if (notification) {
-				<NotificationPopup
-					ref={refRBSheet}
-					remoteMessage={remoteMessage.data}
-					onClose={closeBottomSheet}
-				/>
-			}
-			openBottomSheet()
+			// setNotification(true)
+			// openBottomSheet()
+			// if (true) {
+			console.log('right here.....');
+			// <NotificationPopup
+			// 	ref={refRBSheet}
+			// 	remoteMessage={remoteMessage.data}
+			// 	onClose={closeBottomSheet}
+			// />
+
+			Alert.alert('Notification', remoteMessage.data.title);
+
+			// <View>
+			// 	<RBSheet
+			// 		ref={refRBSheet}
+			// 		closeOnDragDown={true}
+			// 		closeOnPressMask={true}
+			// 		height={480}
+			// 		customStyles={{
+			// 			wrapper: {
+			// 				backgroundColor: "rgba(0, 0, 0, 0.5)"
+			// 			},
+			// 			draggableIcon: {
+			// 				backgroundColor: "#000",
+			// 			},
+			// 			container: {
+			// 				borderTopStartRadius: 25,
+			// 				borderTopEndRadius: 25,
+			// 			}
+			// 		}}
+			// 	>
+			// 		<View><Text>{remoteMessage.data.title}</Text></View>
+
+			// 	</RBSheet>
+			// </View>
+
+			// }
+
 			// state.notification_object = remoteMessage;
 			// if (remoteMessage.data.action_type == "CHALLENGE"){
 			// 	const challenge_id = remoteMessage.data.action_id;

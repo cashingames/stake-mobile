@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useRef } from 'react';
-import { Dimensions, PixelRatio, Text} from 'react-native';
+import { Dimensions, PixelRatio, Text } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import { useFonts } from 'expo-font';
@@ -13,10 +13,20 @@ import * as SplashScreen from 'expo-splash-screen';
 
 import store from './src/store';
 import AppRouter from './src/AppRouter';
+import messaging from '@react-native-firebase/messaging';
+
 
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();
 const prefix = Linking.createURL("/");
+
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+  if (remoteMessage.data.action_type === 'CHALLENGE') {
+    console.log('about to navigate...')
+    //navigation.navigate('AcceptDeclineChallenge', { challengeId: remoteMessage.data.action_id })
+  }
+});
 
 EStyleSheet.build({
   $rem: getRem()
