@@ -18,13 +18,13 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true)
   const params = route.params;
-  console.log("params",params)
+  // console.log("params",params)
   const user = useSelector(state => state.auth.user);
-  console.log(user.username)
+  // console.log(user.username)
   const challengeScores = useSelector(state => state.auth.challengeScores)
   console.log(challengeScores)
   const challengeDetails = useSelector(state => state.game.challengeDetails);
-  console.log("challenge details", challengeDetails)
+  // console.log("challenge details", challengeDetails)
 
   useEffect(() => {
     dispatch(getChallengeScores(
@@ -68,6 +68,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
 
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.subContainer}>
       <View style={styles.confetti}>
         <LottieAnimations
           animationView={require('../../../assets/challenge.json')}
@@ -101,6 +102,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       />
       <ChallengeParticipants player={challengeScores} />
       <ResultContainer playerScore={challengeScores} />
+      </View>
 
     </ScrollView>
   )
@@ -108,14 +110,19 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
 
 const ResultContainer = ({ playerScore }) => {
   return (
-    <View style={styles.resultContainer}>
-      <Text style={styles.finalScoreText}>The final result is</Text>
-      <View style={styles.playersResult}>
-        <Text style={styles.playersScore}>{playerScore.challengerPoint} </Text>
-        <Text style={styles.colon}>: </Text>
-        <Text style={styles.opponentScore}>{playerScore.opponentPoint}</Text>
-      </View>
-    </View>
+    <>
+      {playerScore.challengerStatus === "COMPLETED" &&
+        playerScore.opponentStatus === "COMPLETED" &&
+        <View style={styles.resultContainer}>
+          <Text style={styles.finalScoreText}>The final result is</Text>
+          <View style={styles.playersResult}>
+            <Text style={styles.playersScore}>{playerScore.challengerPoint} </Text>
+            <Text style={styles.colon}>: </Text>
+            <Text style={styles.opponentScore}>{playerScore.opponentPoint}</Text>
+          </View>
+        </View>
+      }
+    </>
   )
 }
 
@@ -129,7 +136,8 @@ const ChallengeMessage = ({ playerPoint, user, challengeDetails }) => {
 
   return (
     <View style={styles.challengeMessageContainer}>
-      {playerPoint.challengeStatus === 'CLOSED' ?
+      {playerPoint.challengerStatus === "COMPLETED" &&
+        playerPoint.opponentStatus === "COMPLETED" ?
         <>
           {challengerwins && user.username === challengeDetails.playerUsername &&
             <>
@@ -231,8 +239,11 @@ const styles = EStyleSheet.create({
     flex: 1,
     backgroundColor: '#701F88',
     paddingHorizontal: normalize(20),
-    paddingBottom: responsiveScreenWidth(30)
+    paddingBottom: responsiveScreenWidth(30),
 
+  },
+  subContainer: {
+    justifyContent:'center'
   },
   confetti: {
     alignItems: 'center'
