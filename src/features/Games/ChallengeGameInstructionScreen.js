@@ -14,7 +14,7 @@ import { formatNumber } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
 import PageLoading from "../../shared/PageLoading";
 import UserAvailableBoost from "../../shared/UserAvailableBoost";
-import { getChallengeScores } from "../Auth/AuthSlice";
+import { getChallengeScores, logoutUser } from "../Auth/AuthSlice";
 import LottieAnimations from "../../shared/LottieAnimations";
 
 
@@ -27,11 +27,12 @@ export default function ChallengeGameInstructionsScreen({ navigation, route }) {
   const dispatch = useDispatch();
   const challengeDetails = useSelector(state => state.game.challengeDetails);
   const challengeScores = useSelector(state => state.auth.challengeScores)
+  const username = useSelector(state => state.auth.user.username);
 
 
   useEffect(() => {
     dispatch(getChallengeDetails(challengeId)).then(() => setOnLoading(false));
-    console.log('fetched')
+    challengeDetails.playerUsername !== username && dispatch(logoutUser()); 
   }, []);
 
   useEffect(() => {
