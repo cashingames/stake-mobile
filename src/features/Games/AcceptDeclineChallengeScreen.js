@@ -12,6 +12,7 @@ import { isTrue } from "../../utils/stringUtl";
 import { useNavigation } from '@react-navigation/native';
 import { unwrapResult } from "@reduxjs/toolkit";
 import LottieAnimations from "../../shared/LottieAnimations";
+import { logoutUser } from "../Auth/AuthSlice";
 
 const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
   useApplyHeaderWorkaround(navigation.setOptions);
@@ -22,7 +23,8 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true)
   const challengeDetails = useSelector(state => state.game.challengeDetails);
-  console.log(JSON.stringify(challengeDetails))
+  const username = useSelector(state => state.auth.user.username);
+  console.log(JSON.stringify(challengeDetails.opponentId))
 
   const acceptChallengeInivite = () => {
     dispatch(acceptDeclineChallengeInivite({
@@ -43,10 +45,11 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
   }
 
 
+
   useEffect(() => {
     dispatch(getChallengeDetails(challengeId)).then(() => setLoading(false)
     );
-    console.log('fetched')
+    challengeDetails.opponentUsername !== username && dispatch(logoutUser());
   }, []);
 
   useEffect(() => {
