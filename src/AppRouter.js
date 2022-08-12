@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import messaging from '@react-native-firebase/messaging';
 
 import axios from "axios";
 
@@ -62,9 +63,31 @@ import ChallengeNotPendingScreen from './features/Games/ChallengeNotPendingScree
 import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen';
 import ChallengeInstructionsScreen from './features/Games/ChallengeInstructionScreen';
 import { Alert } from 'react-native';
+import NotificationPopup from './shared/NotificationPopup';
 
 const AppStack = createNativeStackNavigator();
 
+// Notifications.setNotificationHandler({
+// 	handleNotification: async () => ({
+// 		shouldShowAlert: true,
+// 		shouldPlaySound: true,
+// 		shouldSetBadge: true,
+// 	}),
+// });
+
+// // This listener is fired whenever a notification is received while the app is foregrounded
+// Notifications.addNotificationReceivedListener(notification => {
+// 	console.log("foreground received", notification);
+// 	Alert.alert("the notification was sent from foreground")
+// });
+
+// Notifications.addNotificationResponseReceivedListener(response => {
+// 	console.log("from background", response)
+// 	Alert.alert("the notification was sent from background")
+// });
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+	console.log('Message handled in the background!', remoteMessage);
+});
 function AppRouter() {
 	const dispatch = useDispatch();
 
@@ -78,13 +101,14 @@ function AppRouter() {
 	const [notification, setNotification] = useState(false);
 	const [pushToken, setPushToken] = useState('');
 
-	Notifications.setNotificationHandler({
-		handleNotification: async () => ({
-			shouldShowAlert: true,
-			shouldPlaySound: true,
-			shouldSetBadge: true,
-		}),
-	});
+	const closeBottomSheet = () => {
+		refRBSheet.current.close()
+	}
+
+	const openBottomSheet = () => {
+		refRBSheet.current.open()
+	}
+	const refRBSheet = useRef();
 
 	booststrapAxios(token); //sets basic api call params
 
@@ -107,23 +131,28 @@ function AppRouter() {
 
 			});
 
-			// This listener is fired whenever a notification is received while the app is foregrounded
-			Notifications.addNotificationReceivedListener(notification => {
-				console.log("foreground received", notification);
-				Alert.alert("the notification was sent from foreground")
-			});
-
-			Notifications.addNotificationResponseReceivedListener(response => {
-				console.log("from background", response)
-				Alert.alert("the notification was sent from background")
-			});
-
-			// return () => {
-			// 	Notifications.removeNotificationSubscription(notificationListener.current);
-			// 	Notifications.removeNotificationSubscription(responseListener.current);
-			// };
 		}
+		const unsubscribe = messaging().onMessage(async remoteMessage => {
+			console.log(remoteMessage)
+			setNotification(true)
+			if (notification) {
+				<NotificationPopup
+					ref={refRBSheet}
+					remoteMessage={remoteMessage.data}
+					onClose={closeBottomSheet}
+				/>
+			}
+			openBottomSheet()
+			// state.notification_object = remoteMessage;
+			// if (remoteMessage.data.action_type == "CHALLENGE"){
+			// 	const challenge_id = remoteMessage.data.action_id;
+			// 	//display bottom sheet
+			// }
+			// Alert.alert(remoteMessage.data.title);
+		});
+		return unsubscribe;
 	}, [token]);
+
 
 	if (loading) {
 		return <PageLoading spinnerColor="#0000ff" />
@@ -290,4 +319,12 @@ async function registerForPushNotificationsAsync() {
 	}
 
 	return deviceToken;
+}
+
+const NotificationMessage = ({ remoteMessage }) => {
+	return (
+		<View>
+			<Text>{remoteMessage.title}</Text>
+		</View>
+	)
 }
