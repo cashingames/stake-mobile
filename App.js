@@ -22,9 +22,8 @@ const prefix = Linking.createURL("/");
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
-  if (remoteMessage.data.action_type === 'CHALLENGE') {
-    console.log('about to navigate...')
-    //navigation.navigate('AcceptDeclineChallenge', { challengeId: remoteMessage.data.action_id })
+  if (remoteMessage.data.action_type == "CHALLENGE") {
+    // navigate to challenge screen using remoteMessage.data.action_id as the challenge id prop
   }
 });
 

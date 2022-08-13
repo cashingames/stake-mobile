@@ -68,27 +68,6 @@ import RBSheet from "react-native-raw-bottom-sheet";
 
 const AppStack = createNativeStackNavigator();
 
-// Notifications.setNotificationHandler({
-// 	handleNotification: async () => ({
-// 		shouldShowAlert: true,
-// 		shouldPlaySound: true,
-// 		shouldSetBadge: true,
-// 	}),
-// });
-
-// // This listener is fired whenever a notification is received while the app is foregrounded
-// Notifications.addNotificationReceivedListener(notification => {
-// 	console.log("foreground received", notification);
-// 	Alert.alert("the notification was sent from foreground")
-// });
-
-// Notifications.addNotificationResponseReceivedListener(response => {
-// 	console.log("from background", response)
-// 	Alert.alert("the notification was sent from background")
-// });
-// messaging().setBackgroundMessageHandler(async remoteMessage => {
-// 	console.log('Message handled in the background!', remoteMessage);
-// });
 function AppRouter() {
 	const dispatch = useDispatch();
 
@@ -140,47 +119,25 @@ function AppRouter() {
 			// setNotification(true)
 			// openBottomSheet()
 			// if (true) {
-			console.log('right here.....');
+			
 			// <NotificationPopup
 			// 	ref={refRBSheet}
 			// 	remoteMessage={remoteMessage.data}
 			// 	onClose={closeBottomSheet}
 			// />
 
-			Alert.alert('Notification', remoteMessage.data.title);
-
-			// <View>
-			// 	<RBSheet
-			// 		ref={refRBSheet}
-			// 		closeOnDragDown={true}
-			// 		closeOnPressMask={true}
-			// 		height={480}
-			// 		customStyles={{
-			// 			wrapper: {
-			// 				backgroundColor: "rgba(0, 0, 0, 0.5)"
-			// 			},
-			// 			draggableIcon: {
-			// 				backgroundColor: "#000",
-			// 			},
-			// 			container: {
-			// 				borderTopStartRadius: 25,
-			// 				borderTopEndRadius: 25,
-			// 			}
-			// 		}}
-			// 	>
-			// 		<View><Text>{remoteMessage.data.title}</Text></View>
-
-			// 	</RBSheet>
-			// </View>
-
-			// }
-
-			// state.notification_object = remoteMessage;
-			// if (remoteMessage.data.action_type == "CHALLENGE"){
-			// 	const challenge_id = remoteMessage.data.action_id;
-			// 	//display bottom sheet
-			// }
-			// Alert.alert(remoteMessage.data.title);
+			Alert.alert(remoteMessage.data.title, remoteMessage.data.body, [
+				{
+					text: "Dismiss",
+					// onPress: () => console.log("Cancel Pressed"),
+					style: "cancel"
+				},
+				{ text: "View", onPress: (notificationData) => {
+					if (notificationData.data.action_type == "CHALLENGE"){
+						// navigate to challenge screen using notificationData.data.action_id as the challenge id prop
+					}
+				}}
+			]);
 		});
 		return unsubscribe;
 	}, [token]);
