@@ -49,7 +49,7 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
   useEffect(() => {
     dispatch(getChallengeDetails(challengeId)).then(() => setLoading(false)
     );
-    challengeDetails.opponentUsername !== username && dispatch(logoutUser());
+    // challengeDetails.opponentUsername !== username && dispatch(logoutUser());
   }, []);
 
   useEffect(() => {

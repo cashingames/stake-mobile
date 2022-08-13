@@ -63,12 +63,14 @@ import ChallengeNotPendingScreen from './features/Games/ChallengeNotPendingScree
 import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen';
 import ChallengeInstructionsScreen from './features/Games/ChallengeInstructionScreen';
 import { Alert, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import NotificationPopup from './shared/NotificationPopup';
 import RBSheet from "react-native-raw-bottom-sheet";
 
 const AppStack = createNativeStackNavigator();
 
 function AppRouter() {
+	const navigation = useNavigation();
 	const dispatch = useDispatch();
 
 	const [loading, setLoading] = useState(true);
@@ -116,10 +118,11 @@ function AppRouter() {
 		}
 		const unsubscribe = messaging().onMessage(async remoteMessage => {
 			console.log(remoteMessage)
+			// const navigation = useNavigation();
 			// setNotification(true)
 			// openBottomSheet()
 			// if (true) {
-			
+
 			// <NotificationPopup
 			// 	ref={refRBSheet}
 			// 	remoteMessage={remoteMessage.data}
@@ -132,11 +135,14 @@ function AppRouter() {
 					// onPress: () => console.log("Cancel Pressed"),
 					style: "cancel"
 				},
-				{ text: "View", onPress: (notificationData) => {
-					if (notificationData.data.action_type == "CHALLENGE"){
-						// navigate to challenge screen using notificationData.data.action_id as the challenge id prop
+				{
+					text: "View", onPress: () => {
+						if (remoteMessage.data.action_type == "CHALLENGE") {
+							// navigate to challenge screen using notificationData.data.action_id as the challenge id prop
+							navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+						}
 					}
-				}}
+				}
 			]);
 		});
 		return unsubscribe;
