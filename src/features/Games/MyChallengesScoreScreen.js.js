@@ -24,16 +24,16 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const challengeScores = useSelector(state => state.auth.challengeScores)
   console.log(challengeScores)
   const challengeDetails = useSelector(state => state.game.challengeDetails);
-  // console.log("challenge details", challengeDetails)
+  console.log("challenge details", challengeDetails)
 
   useEffect(() => {
     dispatch(getChallengeScores(
-      params.challengeid
+      params.challengeId
     )).then(() => setLoading(false));
   }, [])
 
   useEffect(() => {
-    dispatch(getChallengeDetails(params.challengeid)).then(() => setLoading(false)
+    dispatch(getChallengeDetails(params.challengeId)).then(() => setLoading(false)
     );
   }, []);
 

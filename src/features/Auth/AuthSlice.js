@@ -159,6 +159,22 @@ export const getChallengeScores = createAsyncThunk(
     }
 )
 
+export const verifyDeviceToken = createAsyncThunk(
+    'auth/verifyDeviceToken',
+    async (device_token, thunkAPI) => {
+        //make a network request to the server
+        // console.log('dataaaaaaaa')
+        try {
+            const response = await axios.post('v3/fcm/subscriptions', {device_token});
+            // console.log('gotten device token',response)
+            return response.data;
+        } catch (error) {
+            // console.log("error:, ", error);
+            throw error;
+        }
+    }
+)
+
 export const getFirstTimeUserReward = createAsyncThunk(
     'auth/getFirstTimeUserReward',
     async (data, thunkAPI) => {

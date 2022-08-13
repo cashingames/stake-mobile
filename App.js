@@ -1,22 +1,27 @@
 import 'react-native-gesture-handler';
 import React, { useRef } from 'react';
-import { Dimensions, PixelRatio, Text} from 'react-native';
-import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
+import { Dimensions, PixelRatio, Text } from 'react-native';
+import { CommonActions, NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import Constants from 'expo-constants';
+import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 
 import store from './src/store';
 import AppRouter from './src/AppRouter';
+import messaging from '@react-native-firebase/messaging';
+
 
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();
 const prefix = Linking.createURL("/");
+
+
 
 EStyleSheet.build({
   $rem: getRem()
@@ -74,6 +79,15 @@ function App() {
 
   const routeNameRef = useRef();
   const navigationRef = useNavigationContainerRef();
+
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
+    console.log('Message handled in the background!', remoteMessage);
+    if (remoteMessage.data.action_type == "CHALLENGE") {
+      // navigate to challenge screen using remoteMessage.data.action_id as the challenge id prop							navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+      // navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+      navigationRef.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id });
+    }
+  });
 
   let [fontsLoaded] = useFonts({
     'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),

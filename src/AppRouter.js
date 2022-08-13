@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Constants from 'expo-constants';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import messaging from '@react-native-firebase/messaging';
 
 import axios from "axios";
 
@@ -23,7 +26,7 @@ import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScree
 import SupportQuestionsScreen from './features/Support/SupportQuestionsScreen';
 import SupportAnswerScreen from './features/Support/SupportAnswerScreen';
 
-import { isLoggedIn, shouldShowIntro } from './features/Auth/AuthSlice';
+import { isLoggedIn, shouldShowIntro, verifyDeviceToken } from './features/Auth/AuthSlice';
 import { isTrue } from './utils/stringUtl';
 import GameModeScreen from './features/Games/GameModeScreen';
 import GameInstructionsScreen from './features/Games/GameInstructionsScreen';
@@ -59,16 +62,37 @@ import EmailVerifiedScreen from './features/Auth/EmailVerifiedScreen';
 import ChallengeNotPendingScreen from './features/Games/ChallengeNotPendingScreen';
 import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen';
 import ChallengeInstructionsScreen from './features/Games/ChallengeInstructionScreen';
+import { Alert, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import NotificationPopup from './shared/NotificationPopup';
+import RBSheet from "react-native-raw-bottom-sheet";
 
 const AppStack = createNativeStackNavigator();
 
 function AppRouter() {
+	const navigation = useNavigation();
 	const dispatch = useDispatch();
 
 	const [loading, setLoading] = useState(true);
 
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
+
+	const notificationListener = useRef();
+	const responseListener = useRef();
+	const [notification, setNotification] = useState(false);
+	const [pushToken, setPushToken] = useState('');
+	const refRBSheet = useRef();
+
+	const closeBottomSheet = () => {
+		refRBSheet.current.close()
+	}
+
+	const openBottomSheet = () => {
+		console.log('trying to open bottom sheet');
+		refRBSheet.current.open()
+	}
+
 
 	booststrapAxios(token); //sets basic api call params
 
@@ -81,6 +105,49 @@ function AppRouter() {
 			setLoading(false);
 		});
 	}, []);
+
+	useEffect(() => {
+		if (isTrue(token)) {
+			registerForPushNotificationsAsync().then(device_token => {
+				setPushToken(device_token);
+				// console.log("preparing to dispatch token to server", device_token);
+				dispatch(verifyDeviceToken(device_token))
+
+			});
+
+		}
+		const unsubscribe = messaging().onMessage(async remoteMessage => {
+			console.log(remoteMessage)
+			// const navigation = useNavigation();
+			// setNotification(true)
+			// openBottomSheet()
+			// if (true) {
+
+			// <NotificationPopup
+			// 	ref={refRBSheet}
+			// 	remoteMessage={remoteMessage.data}
+			// 	onClose={closeBottomSheet}
+			// />
+
+			Alert.alert(remoteMessage.data.title, remoteMessage.data.body, [
+				{
+					text: "Dismiss",
+					// onPress: () => console.log("Cancel Pressed"),
+					style: "cancel"
+				},
+				{
+					text: "View", onPress: () => {
+						if (remoteMessage.data.action_type == "CHALLENGE") {
+							// navigate to challenge screen using notificationData.data.action_id as the challenge id prop
+							navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+						}
+					}
+				}
+			]);
+		});
+		return unsubscribe;
+	}, [token]);
+
 
 	if (loading) {
 		return <PageLoading spinnerColor="#0000ff" />
@@ -217,3 +284,42 @@ const booststrapAxios = async function (token) {
 		delete axios.defaults.headers.common['Authorization'];
 	}
 };
+
+async function registerForPushNotificationsAsync() {
+	let deviceToken;
+	if (Device.isDevice) {
+		const { status: existingStatus } = await Notifications.getPermissionsAsync();
+		let finalStatus = existingStatus;
+		if (existingStatus !== 'granted') {
+			const { status } = await Notifications.requestPermissionsAsync();
+			finalStatus = status;
+		}
+		if (finalStatus !== 'granted') {
+			alert('Failed to get push token for push notification!');
+			return;
+		}
+		deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
+		console.log('this is device token', deviceToken);
+	} else {
+		alert('Must use physical device for Push Notifications');
+	}
+
+	if (Platform.OS === 'android') {
+		Notifications.setNotificationChannelAsync('default', {
+			name: 'default',
+			importance: Notifications.AndroidImportance.MAX,
+			vibrationPattern: [0, 250, 250, 250],
+			lightColor: '#FF231F7C',
+		});
+	}
+
+	return deviceToken;
+}
+
+const NotificationMessage = ({ remoteMessage }) => {
+	return (
+		<View>
+			<Text>{remoteMessage.title}</Text>
+		</View>
+	)
+}
