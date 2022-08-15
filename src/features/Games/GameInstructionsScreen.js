@@ -71,7 +71,7 @@ const ExhibitionInstructions = () => {
       </View>
       <View style={styles.instruction}>
         <Text style={styles.unicode}>{'\u0033'}.</Text>
-        <Text style={styles.instructionText}>At the end of the session, you would see your total score</Text>
+        <Text style={styles.instructionText}>At the end of the session, you will see your total score</Text>
       </View>
       <View style={styles.instruction}>
         <Text style={styles.unicode}>{'\u0034'}.</Text>
@@ -102,7 +102,7 @@ const ChallengeInstructions = () => {
       </View>
       <View style={styles.instruction}>
         <Text style={styles.unicode}>{'\u0033'}.</Text>
-        <Text style={styles.instructionText}>At the end of the session, you would see
+        <Text style={styles.instructionText}>At the end of the session, you will see
           your total score against that of your competitor.
         </Text>
       </View>

@@ -78,7 +78,7 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
                     <Text style={styles.rewardHeaderText}>
                         You have been successfully registered.
                         Click on the button below to verify your email and log in to your account.
-                        Once verified, you would be rewarded with a starter bundle to play exciting games and win great prizes.
+                        Once verified, you will be rewarded with a starter bundle to play exciting games and win great prizes.
                     </Text>
                 </View>
                 <FirstTimeUserRewards rewards={rewards} />

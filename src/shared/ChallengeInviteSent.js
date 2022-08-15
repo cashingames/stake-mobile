@@ -50,7 +50,7 @@ const InviteSuccessText = ({ onClose }) => {
             />
             <Text style={styles.congratsText}>Congratulations</Text>
             <Text style={styles.innerText}>Your invite was sent successfully</Text>
-                <Text style={styles.innerText}>You would receive an email stating that your opponent has accepted your invite</Text>
+                <Text style={styles.innerText}>You will receive an email stating that your opponent has accepted your invite</Text>
             <Text style={styles.innerText}>Click on the link in the email to start the challenge</Text>
             <ReturnToDashboard onPress={goHome} />
         </View>
