@@ -21,9 +21,10 @@ export default function SignupProfileScreen({ navigation }) {
     const [referrer, setReferrer] = useState('');
     console.log(referrer)
     const [loading, setLoading] = useState(false);
-    const [canSend, setCanSend] = useState(true);
+    const [canSend, setCanSend] = useState(false);
     const [fNameErr, setFnameErr] = useState(false);
     const [lNameErr, setLnameErr] = useState(false);
+    const [uNameErr, setUnameErr] = useState(false)
     const [error, setError] = useState('');
 
 
@@ -61,13 +62,17 @@ export default function SignupProfileScreen({ navigation }) {
 
     useEffect(() => {
         const nameRule = /\d/;
+        const usernameRule = /\s/;
         const validFirstName = !nameRule.test(firstName)
         const validLastName = !nameRule.test(lastName)
-
+        const validUsername = !usernameRule.test(username)
         setFnameErr(!validFirstName);
         setLnameErr(!validLastName);
+        setUnameErr(!validUsername);
 
-        setCanSend(validLastName && validFirstName);
+        const invalid = fNameErr || firstName === "" || lNameErr || lastName === ""
+            || uNameErr || username === ""
+        setCanSend(!invalid);
 
     }, [firstName, lastName, username])
 
@@ -105,6 +110,7 @@ export default function SignupProfileScreen({ navigation }) {
                     label='Username'
                     placeholder="johnDoe"
                     value={username}
+                    error={uNameErr && "Username can't have space or can't be empty"}
                     onChangeText={setUsername}
                 />
 

@@ -35,12 +35,12 @@ const HomeScreen = () => {
 
 
     useEffect(() => {
-        const _1 = dispatch(getUser());
-        const _2 = dispatch(getCommonData());
+        dispatch(getUser())
+        dispatch(getCommonData())
 
-        Promise.all([_1, _2]).then(() => {
-            dispatch(initialLoadingComplete());
-        });
+            .then(() => {
+                dispatch(initialLoadingComplete());
+            });
 
     }, []);
 
@@ -55,6 +55,8 @@ const HomeScreen = () => {
 
     useEffect(() => {
         if (!loading && !isTrue(user.walletBalance)) {
+            console.log("initial loading",loading)
+            console.log("user balance", user.walletBalance)
             networkIssueNotify()
         }
     }, [user, loading])

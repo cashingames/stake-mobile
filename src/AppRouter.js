@@ -62,10 +62,9 @@ import EmailVerifiedScreen from './features/Auth/EmailVerifiedScreen';
 import ChallengeNotPendingScreen from './features/Games/ChallengeNotPendingScreen';
 import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen';
 import ChallengeInstructionsScreen from './features/Games/ChallengeInstructionScreen';
-import { Alert, View } from 'react-native';
+import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import NotificationPopup from './shared/NotificationPopup';
-import RBSheet from "react-native-raw-bottom-sheet";
+
 
 const AppStack = createNativeStackNavigator();
 
@@ -82,15 +81,6 @@ function AppRouter() {
 	const responseListener = useRef();
 	const [notification, setNotification] = useState(false);
 	const [pushToken, setPushToken] = useState('');
-	const refRBSheet = useRef();
-
-	const closeBottomSheet = () => {
-		refRBSheet.current.close()
-	}
-
-	const openBottomSheet = () => {
-		refRBSheet.current.open()
-	}
 
 
 	booststrapAxios(token); //sets basic api call params
@@ -115,17 +105,6 @@ function AppRouter() {
 
 		}
 		const unsubscribe = messaging().onMessage(async remoteMessage => {
-			
-			// const navigation = useNavigation();
-			// setNotification(true)
-			// openBottomSheet()
-			// if (true) {
-
-			// <NotificationPopup
-			// 	ref={refRBSheet}
-			// 	remoteMessage={remoteMessage.data}
-			// 	onClose={closeBottomSheet}
-			// />
 
 			Alert.alert(remoteMessage.data.title, remoteMessage.data.body, [
 				{
@@ -284,21 +263,23 @@ const booststrapAxios = async function (token) {
 
 async function registerForPushNotificationsAsync() {
 	let deviceToken;
-	if (Device.isDevice) {
-		const { status: existingStatus } = await Notifications.getPermissionsAsync();
-		let finalStatus = existingStatus;
-		if (existingStatus !== 'granted') {
-			const { status } = await Notifications.requestPermissionsAsync();
-			finalStatus = status;
-		}
-		if (finalStatus !== 'granted') {
-			alert('Failed to get push token for push notification!');
-			return;
-		}
-		deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
-	} else {
-		alert('Must use physical device for Push Notifications');
+	if (!Device.isDevice) {
+		alert('Must use physical device for Push Notifications')
+		return;
 	}
+	const { status: existingStatus } = await Notifications.getPermissionsAsync();
+	let finalStatus = existingStatus;
+	if (existingStatus !== 'granted') {
+		const { status } = await Notifications.requestPermissionsAsync();
+		finalStatus = status;
+	}
+	if (finalStatus !== 'granted') {
+		Alert.alert('Failed to get push token for push notification!');
+		return;
+	}
+	deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
+	console.log('this is device token', deviceToken);
+
 
 	if (Platform.OS === 'android') {
 		Notifications.setNotificationChannelAsync('default', {
@@ -312,10 +293,3 @@ async function registerForPushNotificationsAsync() {
 	return deviceToken;
 }
 
-const NotificationMessage = ({ remoteMessage }) => {
-	return (
-		<View>
-			<Text>{remoteMessage.title}</Text>
-		</View>
-	)
-}
