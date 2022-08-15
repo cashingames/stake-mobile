@@ -71,7 +71,7 @@ const ChallengeCard = ({ userChallenge }) => {
 
     const checkScores = () => {
         navigation.navigate('MyChallengesScore', {
-            challengeid: userChallenge.challengeId
+            challengeId: userChallenge.challengeId
         })
 
     }
