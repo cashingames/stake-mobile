@@ -73,7 +73,7 @@ export const notifyOfPublishedUpdates = async () => {
             Updates.fetchUpdateAsync().then(() => {
                 Alert.alert(
                     "Updates available",
-                    "Please reload to the app to enjoy the new experience we just added to cashingames",
+                    "Please reload the app to enjoy the new experience we just added to cashingames",
                     [
                         {
                             text: 'Restart',
