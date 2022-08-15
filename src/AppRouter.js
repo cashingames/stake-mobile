@@ -278,7 +278,7 @@ async function registerForPushNotificationsAsync() {
 		return;
 	}
 	deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
-	console.log('this is device token', deviceToken);
+	
 
 
 	if (Platform.OS === 'android') {

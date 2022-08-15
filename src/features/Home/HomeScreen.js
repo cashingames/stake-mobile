@@ -35,12 +35,18 @@ const HomeScreen = () => {
 
 
     useEffect(() => {
-        dispatch(getUser())
-        dispatch(getCommonData())
+        const _1 = dispatch(getUser());
+        const _2 = dispatch(getCommonData());
 
-            .then(() => {
-                dispatch(initialLoadingComplete());
-            });
+        Promise.all([_1, _2]).then(() => {
+            dispatch(initialLoadingComplete());
+        });
+        // dispatch(getUser())
+        // dispatch(getCommonData())
+
+        //     .then(() => {
+        //         dispatch(initialLoadingComplete());
+        //     });
 
     }, []);
 
@@ -55,8 +61,6 @@ const HomeScreen = () => {
 
     useEffect(() => {
         if (!loading && !isTrue(user.walletBalance)) {
-            console.log("initial loading",loading)
-            console.log("user balance", user.walletBalance)
             networkIssueNotify()
         }
     }, [user, loading])
