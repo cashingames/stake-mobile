@@ -31,7 +31,8 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
         dispatch(verifyUser({ email: params.email }))
             .then(unwrapResult)
             .then(response => {
-                saveToken(response.data.data)
+                // console.log("email verification response", response);
+                saveToken(response.data)
                 setLoading(false);
                 navigation.navigate('AppRouter')
             })
