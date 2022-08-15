@@ -38,7 +38,6 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
                 saveToken(response.data.data)
                 setLoading(false);
                 navigation.navigate('AppRouter')
-                // {() => navigation.navigate('AppRouter') }
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError)

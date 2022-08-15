@@ -90,6 +90,7 @@ async function resetPassword(data) {
 
 async function saveToken(data) {
     await AsyncStorage.setItem("token", data);
+    await AsyncStorage.setItem("used", token);
     // console.log(data)
 }
 
