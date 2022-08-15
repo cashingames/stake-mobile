@@ -89,7 +89,6 @@ function AppRouter() {
 	}
 
 	const openBottomSheet = () => {
-		console.log('trying to open bottom sheet');
 		refRBSheet.current.open()
 	}
 
@@ -110,14 +109,13 @@ function AppRouter() {
 		if (isTrue(token)) {
 			registerForPushNotificationsAsync().then(device_token => {
 				setPushToken(device_token);
-				// console.log("preparing to dispatch token to server", device_token);
 				dispatch(verifyDeviceToken(device_token))
 
 			});
 
 		}
 		const unsubscribe = messaging().onMessage(async remoteMessage => {
-			console.log(remoteMessage)
+			
 			// const navigation = useNavigation();
 			// setNotification(true)
 			// openBottomSheet()
@@ -132,7 +130,6 @@ function AppRouter() {
 			Alert.alert(remoteMessage.data.title, remoteMessage.data.body, [
 				{
 					text: "Dismiss",
-					// onPress: () => console.log("Cancel Pressed"),
 					style: "cancel"
 				},
 				{
@@ -275,7 +272,7 @@ export default AppRouter;
 
 const booststrapAxios = async function (token) {
 	axios.defaults.baseURL = Constants.manifest.extra.apiBaseUrl;
-	console.log(axios.defaults.baseURL);
+	// console.log(axios.defaults.baseURL);
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {
@@ -299,7 +296,6 @@ async function registerForPushNotificationsAsync() {
 			return;
 		}
 		deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
-		console.log('this is device token', deviceToken);
 	} else {
 		alert('Must use physical device for Push Notifications');
 	}

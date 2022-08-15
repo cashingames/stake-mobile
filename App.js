@@ -81,7 +81,7 @@ function App() {
   const navigationRef = useNavigationContainerRef();
 
   messaging().setBackgroundMessageHandler(async remoteMessage => {
-    console.log('Message handled in the background!', remoteMessage);
+    
     if (remoteMessage.data.action_type == "CHALLENGE") {
       // navigate to challenge screen using remoteMessage.data.action_id as the challenge id prop							navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
       // navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })

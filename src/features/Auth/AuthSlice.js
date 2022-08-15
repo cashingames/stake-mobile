@@ -24,7 +24,7 @@ export const verifyUser = createAsyncThunk(
     'auth/verifyUser',
     async (data, thunkAPI) => {
         const response = await axios.post('auth/user/authenticate', data)
-        // console.log(response)
+        
         return response.data
     }
 )
@@ -33,8 +33,13 @@ export const verifyUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
     async (data, thunkAPI) => {
-        const response = await loginApi(data);
-        return response.data
+        try {
+            const response = await loginApi(data);
+            return response.data
+        } catch (error) {
+            console.log("axios error", JSON.stringify(error));
+            
+        }
     }
 )
 
@@ -75,7 +80,7 @@ export const isLoggedIn = createAsyncThunk(
 export const shouldShowIntro = createAsyncThunk(
     'auth/shouldShowIntro',
     async (thunkAPI) => {
-        return AsyncStorage.getItem("used");
+        return await AsyncStorage.getItem("used");
     }
 )
 

@@ -24,7 +24,7 @@ export const getBankData = createAsyncThunk(
 export const getGlobalLeaders = createAsyncThunk(
     'common/globalLeaders/get',
     async () => {
-        console.log("getting global leaders")
+        // console.log("getting global leaders")
         const response = await axios.post('v2/leaders/global');
         return response.data
     }

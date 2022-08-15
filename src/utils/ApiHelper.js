@@ -90,7 +90,7 @@ async function resetPassword(data) {
 
 async function saveToken(data) {
     await AsyncStorage.setItem("token", data);
-    // console.log(data)
+    await AsyncStorage.setItem("used", "token")
 }
 
 // async function signInWithGoogle(email, first_name, last_name) {

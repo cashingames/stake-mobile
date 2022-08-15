@@ -18,40 +18,36 @@ import { unwrapResult } from '@reduxjs/toolkit';
 
 const EmailVerifiedScreen = ({ navigation, route }) => {
     const params = route.params
-    console.log(params)
-
+    
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
 
     const [loading, setLoading] = useState(false);
 
     const rewards = useSelector(state => state.auth.firstTimeUserReward)
-    console.log(JSON.stringify(rewards))
-
-
+    
     const goToDashboard = () => {
         setLoading(true);
         dispatch(verifyUser({ email: params.email }))
             .then(unwrapResult)
             .then(response => {
-                console.log(response)
                 saveToken(response.data.data)
                 setLoading(false);
                 navigation.navigate('AppRouter')
                 // {() => navigation.navigate('AppRouter') }
             })
             .catch((rejectedValueOrSerializedError) => {
-                console.log(rejectedValueOrSerializedError)
+                
                 Alert.alert("Failed to log in");
                 setLoading(false);
             })
     }
 
     useEffect(() => {
-        console.log('about fetching')
+        
         dispatch(getFirstTimeUserReward())
             .then(() => {
-                setLoading(false); console.log('fetched')
+                setLoading(false);
             });
     }, [])
 
