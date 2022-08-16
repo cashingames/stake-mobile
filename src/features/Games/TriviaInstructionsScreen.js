@@ -13,6 +13,7 @@ import AppButton from "../../shared/AppButton";
 import { startGame, setIsPlayingTrivia, setQuestionsCount, setGameDuration } from "./GameSlice";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
+import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 
 
 
@@ -21,34 +22,30 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
 
     const params = route.params;
     const refRBSheet = useRef();
-    const onProceed = () => {
+
+
+    const openBottomSheet = () => {
         refRBSheet.current.open()
+    }
+
+    const closeBottomSheet = () => {
+        refRBSheet.current.close()
+    }
+    const onProceed = () => {
+        openBottomSheet()
     }
 
     return (
         <ScrollView style={styles.container}>
             <TriviaInstructions />
             <AppButton onPress={onProceed} text='Proceed' />
-            <RBSheet
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={true}
-                height={480}
-                customStyles={{
-                    wrapper: {
-                        backgroundColor: "rgba(0, 0, 0, 0.5)"
-                    },
-                    draggableIcon: {
-                        backgroundColor: "#000",
-                    },
-                    container: {
-                        borderTopStartRadius: 25,
-                        borderTopEndRadius: 25,
-                    }
-                }}
-            >
-                <AvailableBoosts onClose={() => refRBSheet.current.close()} trivia={params} />
-            </RBSheet>
+            <UniversalBottomSheet
+                refBottomSheet={refRBSheet}
+                height={430}
+                subComponent={<AvailableBoosts onClose={closeBottomSheet}
+                    trivia={params}
+                />}
+            />
         </ScrollView>
     );
 };
@@ -88,11 +85,6 @@ const AvailableBoosts = ({ onClose, trivia }) => {
     const visitStore = () => {
         onClose();
         navigation.navigate('GameStore')
-    }
-
-    const endResult = () => {
-        onClose();
-        navigation.navigate('TriviaEndResult')
     }
 
     return (

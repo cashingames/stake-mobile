@@ -20,6 +20,8 @@ import AvailableGameSessionBoosts from "../../shared/AvailableGameSessionBoosts"
 import GameQuestions from "../../shared/GameQuestions";
 import UserAvailableBoosts from "../../shared/UserAvailableBoosts";
 import { logActionToServer } from "../CommonSlice";
+import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
+
 
 
 export default function GameInProgressScreen({ navigation, route }) {
@@ -35,6 +37,14 @@ export default function GameInProgressScreen({ navigation, route }) {
     const isPlayingTrivia = useSelector(state => state.game.isPlayingTrivia);
     const user = useSelector(state => state.auth.user);
     const isEnded = useSelector(state => state.game.isEnded);
+
+    const openBottomSheet = () => {
+        refRBSheet.current.open()
+    }
+
+    const closeBottomSheet = () => {
+        refRBSheet.current.close()
+    }
 
     const [ending, setEnding] = useState(false);
 
@@ -135,29 +145,14 @@ export default function GameInProgressScreen({ navigation, route }) {
     return (
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
-                <PlayGameHeader onPress={() => onEndGame(true)} onPressBoost={() => refRBSheet.current.open()} />
+                <PlayGameHeader onPress={() => onEndGame(true)} onPressBoost={openBottomSheet} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
                 <GameQuestions />
-                <RBSheet
-                    ref={refRBSheet}
-                    closeOnDragDown={true}
-                    closeOnPressMask={true}
-                    height={400}
-                    customStyles={{
-                        wrapper: {
-                            backgroundColor: "rgba(0, 0, 0, 0.5)"
-                        },
-                        draggableIcon: {
-                            backgroundColor: "#000",
-                        },
-                        container: {
-                            borderTopStartRadius: 25,
-                            borderTopEndRadius: 25,
-                        }
-                    }}
-                >
-                    <UserAvailableBoosts />
-                </RBSheet>
+                <UniversalBottomSheet
+                    refBottomSheet={refRBSheet}
+                    height={350}
+                    subComponent={<UserAvailableBoosts onClose={closeBottomSheet} />}
+                />
             </ScrollView>
             <NextButton onPress={() => onEndGame()} ending={ending} />
         </ImageBackground>
@@ -195,7 +190,7 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#9C3DB8',
-        paddingTop: normalize(40),
+        paddingTop: normalize(45),
     },
     image: {
         paddingHorizontal: normalize(18),

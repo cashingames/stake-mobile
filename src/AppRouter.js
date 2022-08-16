@@ -61,7 +61,6 @@ import SignupVerifyEmailScreen from './features/Auth/SignupVerifyEmailScreen';
 import EmailVerifiedScreen from './features/Auth/EmailVerifiedScreen';
 import ChallengeNotPendingScreen from './features/Games/ChallengeNotPendingScreen';
 import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen';
-import ChallengeInstructionsScreen from './features/Games/ChallengeInstructionScreen';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
@@ -171,7 +170,6 @@ function AppRouter() {
 							headerTintColor: '#FFFF',
 						}} />
 						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
-						<AppStack.Screen name="ChallengeInstructions" component={ChallengeInstructionsScreen} options={{ title: 'Game Instructions' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Challenge - Select a player' }} />

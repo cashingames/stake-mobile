@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Animated from 'react-native-reanimated';
-import { Text, View} from 'react-native';
+import { Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import AppButton from '../../shared/AppButton';
@@ -13,7 +13,8 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { randomEnteringAnimation } from '../../utils/utils';
 import GameCategoryCard from './GameCategoryCard';
 import GameSubcategoryCard from './GameSubcategoryCard';
-import NoGameNotification from '../../shared/NoGameNotification';
+import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
+import NoGame from '../../shared/NoGame';
 
 export default ({ title, initialShowPlayButton = true }) => {
 
@@ -82,9 +83,10 @@ export default ({ title, initialShowPlayButton = true }) => {
                 </Animated.View>
             }
 
-            <NoGameNotification
+            <UniversalBottomSheet
                 refBottomSheet={refRBSheet}
-                onClose={closeBottomSheet}
+                height={300}
+                subComponent={<NoGame onClose={closeBottomSheet} />}
             />
 
         </>

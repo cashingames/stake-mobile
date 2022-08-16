@@ -8,11 +8,10 @@ import { isTrue } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { fetchUserFriends, searchUserFriends } from '../CommonSlice';
 import PageLoading from '../../shared/PageLoading';
-import AppButton from '../../shared/AppButton';
 import { sendFriendInvite, setSelectedFriend, unselectFriend } from './GameSlice';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import ChallengeInviteSent from '../../shared/ChallengeInviteSent';
 import { unwrapResult } from '@reduxjs/toolkit';
+import ChallengeInviteSuccessText from '../../shared/ChallengeInviteSuccessText';
+import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 
 
 export default function ChallengeSelectPlayerScreen({ navigation }) {
@@ -103,9 +102,10 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                         onSelect={onSelectedFriend}
                     />)}
                 </View>
-                <ChallengeInviteSent
+                <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
-                    onClose={closeBottomSheet}
+                    height={435}
+                    subComponent={<ChallengeInviteSuccessText onClose={closeBottomSheet} />}
                 />
 
             </ScrollView>

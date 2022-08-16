@@ -6,10 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { incrementCountdownResetIndex, startGame } from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import NoGameNotification from '../../shared/NoGameNotification';
 import GameEndClockAnimation from '../../shared/GameEndClockAnimation';
 import UserName from '../../shared/UserName';
 import { logActionToServer } from '../CommonSlice';
+import NoGame from '../../shared/NoGame';
+import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
@@ -112,10 +113,11 @@ export default function GameEndResultScreen({ navigation }) {
 				/>
 
 			</View>
-			<NoGameNotification
-				refBottomSheet={refRBSheet}
-				onClose={closeBottomSheet}
-			/>
+			<UniversalBottomSheet
+                refBottomSheet={refRBSheet}
+				height={300}
+                subComponent = {<NoGame onClose={closeBottomSheet} />}
+            />
 		</ScrollView>
 
 	);

@@ -1,41 +1,13 @@
-import React from 'react';
-import RBSheet from "react-native-raw-bottom-sheet";
-import { View, Text, Pressable, Image } from 'react-native';
-import normalize from '../utils/normalize';
+import React from "react";
+import { Text, View } from "react-native";
+import LottieAnimations from "./LottieAnimations";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/native';
-import AppButton from './AppButton';
-import LottieAnimations from './LottieAnimations';
+import normalize from "../utils/normalize";
+import AppButton from "./AppButton";
 
 
-const ChallengeInviteSent = ({ onClose, refBottomSheet }) => {
-
-    return (
-        <RBSheet
-            ref={refBottomSheet}
-            closeOnDragDown={true}
-            closeOnPressMask={true}
-            height={420}
-            customStyles={{
-                wrapper: {
-                    backgroundColor: "rgba(0, 0, 0, 0.5)"
-                },
-                draggableIcon: {
-                    backgroundColor: "#000",
-                },
-                container: {
-                    borderTopStartRadius: 25,
-                    borderTopEndRadius: 25,
-                }
-            }}
-        >
-            <InviteSuccessText onClose={onClose} />
-        </RBSheet>
-
-    )
-}
-
-const InviteSuccessText = ({ onClose }) => {
+const ChallengeInviteSuccessText = ({ onClose }) => {
     const navigation = useNavigation();
     const goHome = () => {
         onClose();
@@ -50,7 +22,7 @@ const InviteSuccessText = ({ onClose }) => {
             />
             <Text style={styles.congratsText}>Congratulations</Text>
             <Text style={styles.innerText}>Your invite was sent successfully</Text>
-                <Text style={styles.innerText}>You will receive a notification on the app and your email when your opponent accepts your invite.</Text>
+            <Text style={styles.innerText}>You will receive a notification on the app and your email when your opponent accepts your invite.</Text>
             <Text style={styles.innerText}>You will be able to start the challenge when your opponent accepts the challenge.</Text>
             <ReturnToDashboard onPress={goHome} />
         </View>
@@ -62,13 +34,12 @@ const ReturnToDashboard = ({ onPress }) => {
         <AppButton text="Return to Home" onPress={onPress} />
     )
 }
-
-export default ChallengeInviteSent;
+export default ChallengeInviteSuccessText;
 
 const styles = EStyleSheet.create({
     successText: {
         paddingHorizontal: normalize(18),
-        alignItems: 'center'
+        alignItems: 'center',
     },
     innerText: {
         fontFamily: 'graphik-regular',
