@@ -124,6 +124,7 @@ function AppRouter() {
 				type: 'info',
 				text1: remoteMessage.data.title,
 				text2: remoteMessage.data.body,
+				visibilityTime: 10000,
 				onPress: () => {
 					navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
 				}
