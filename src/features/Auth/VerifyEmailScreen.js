@@ -24,28 +24,28 @@ export default function VerifyEmailScreen({ navigation, route }) {
     const [error, setError] = useState('');
 
     const onChangeInput1 = (text) => {
-        console.log(text);
+        
         let newArr = [...codes];
         newArr[0] = text;
         setCodes(newArr)
     }
 
     const onChangeInput2 = (text) => {
-        console.log(text);
+        
         let newArr = [...codes];
         newArr[1] = text;
         setCodes(newArr)
     }
 
     const onChangeInput3 = (text) => {
-        console.log(text);
+        
         let newArr = [...codes];
         newArr[2] = text;
         setCodes(newArr)
     }
 
     const onChangeInput4 = (text) => {
-        console.log(text);
+        
         let newArr = [...codes];
         newArr[3] = text;
         setCodes(newArr)

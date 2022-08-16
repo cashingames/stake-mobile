@@ -5,7 +5,7 @@ import axios from 'axios';
 export const getCommonData = createAsyncThunk(
     'common/get',
     async () => {
-        console.log("fetching common data");
+        // console.log("fetching common data");
         const response = await axios.get('v3/game/common');
         return response.data
     }

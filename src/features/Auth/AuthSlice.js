@@ -30,21 +30,22 @@ export const verifyUser = createAsyncThunk(
 )
 
 
-export const loginUser = createAsyncThunk(
-    'auth/loginUser',
-    async (data, thunkAPI) => {
-        // const response = await loginApi(data);
-        // return response.data
-        try {
-            const response = await loginApi(data);
-            // console.log('gotten device token',response)
-            return response.data;
-        } catch (error) {
-            console.log("error:, ", error);
-            throw error;
-        }
-    }
-)
+// export const loginUser = createAsyncThunk(
+//     'auth/loginUser',
+//     async (data, thunkAPI) => {
+//         try {
+//             const response = await loginApi(data);
+//             return response.data
+//         } catch (error) {
+//             return thunkAPI.rejectWithValue(error?.response?.data || error)
+//             console.log("error occured", error);
+//         }
+//     }
+// )
+
+export const loginUser = async (data) => {
+    return axios.post('auth/login', data);
+}
 
 export const loginWithGoogle = createAsyncThunk(
     'auth/loginWithGoogle',
@@ -223,7 +224,8 @@ const initialState = {
     createAccount: {},
     userChallenges: [],
     challengeScores: {},
-    firstTimeUserReward: []
+    firstTimeUserReward: [],
+    loginError: ""
 }
 
 export const AuthSlice = createSlice({
@@ -264,9 +266,12 @@ export const AuthSlice = createSlice({
                 state.passwordReset = {};
                 state.createAccount = {};
             })
-            .addCase(loginUser.fulfilled, (state, action) => {
-                state.token = action.payload;
-            })
+            // .addCase(loginUser.fulfilled, (state, action) => {
+            //     state.token = action.payload;
+            // })
+            // .addCase(loginUser.rejected, (state, action) => {
+            //     console.log("login rejected payload", action.payload);
+            // })
             .addCase(resetPassword.fulfilled, (state) => {
                 state.passwordReset = {};
             })

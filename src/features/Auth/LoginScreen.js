@@ -10,11 +10,12 @@ import AuthBanner from '../../shared/AuthBanner';
 import AuthTitle from '../../shared/AuthTitle';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { loginUser } from './AuthSlice';
+import { loginUser, setToken } from './AuthSlice';
 import Input from '../../shared/Input';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { saveToken } from '../../utils/ApiHelper';
 
 export default function LoginScreen({ navigation }) {
 
@@ -41,17 +42,42 @@ export default function LoginScreen({ navigation }) {
         setCanLogin(false);
         setError("");
 
-        dispatch(loginUser({ email, password })).then(unwrapResult)
-            .then((originalPromiseResult) => {
-                // after login eager get commond data for the whole app
-                console.log("loggedin");
-            })
-            .catch((rejectedValueOrSerializedError) => {
-                setLoading(false);
-                setCanLogin(true);
-                console.log(rejectedValueOrSerializedError)
-                setError("Invalid username or password provided or unverified account");
-            })
+        loginUser({
+            email, password
+        }).then(response => {
+            saveToken(response.data.data)
+            dispatch(setToken(response.data.data))
+            navigation.navigate('AppRouter')
+
+        }, err => {
+            if (!err || !err.response || err.response === undefined) {
+                setError("Your Network is Offline.");
+            }
+            else if (err.response.status === 500) {
+                setError("Service not currently available. Please contact support");
+            }
+            else {
+                
+                const errors =
+                    err.response && err.response.data && err.response.data.errors;
+                console.log(errors)
+
+                const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
+                setError(firstError)
+            }
+            setLoading(false);
+        });
+        // dispatch(loginUser({ email, password })).then(unwrapResult)
+        //     .then((originalPromiseResult) => {
+        //         // after login eager get commond data for the whole app
+        //         console.log("loggedin");
+        //     })
+        //     .catch((rejectedValueOrSerializedError) => {
+        //         setLoading(false);
+        //         setCanLogin(true);
+        //         console.log(rejectedValueOrSerializedError)
+        //         setError("Invalid username or password provided or unverified account");
+        //     })
     }
 
 
