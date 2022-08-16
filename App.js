@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
+import Toast from 'react-native-toast-message';
 
 import store from './src/store';
 import AppRouter from './src/AppRouter';
@@ -130,6 +131,7 @@ function App() {
         <SafeAreaProvider>
           <AppRouter />
         </SafeAreaProvider>
+        <Toast/>
       </NavigationContainer>
     </Provider>
   );

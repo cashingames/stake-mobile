@@ -64,7 +64,7 @@ import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen'
 import ChallengeInstructionsScreen from './features/Games/ChallengeInstructionScreen';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import Toast from 'react-native-toast-message';
 
 const AppStack = createNativeStackNavigator();
 
@@ -106,20 +106,29 @@ function AppRouter() {
 		}
 		const unsubscribe = messaging().onMessage(async remoteMessage => {
 
-			Alert.alert(remoteMessage.data.title, remoteMessage.data.body, [
-				{
-					text: "Dismiss",
-					style: "cancel"
-				},
-				{
-					text: "View", onPress: () => {
-						if (remoteMessage.data.action_type == "CHALLENGE") {
-							// navigate to challenge screen using notificationData.data.action_id as the challenge id prop
-							navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
-						}
-					}
+			// Alert.alert(remoteMessage.data.title, remoteMessage.data.body, [
+			// 	{
+			// 		text: "Dismiss",
+			// 		style: "cancel"
+			// 	},
+			// 	{
+			// 		text: "View", onPress: () => {
+			// 			if (remoteMessage.data.action_type == "CHALLENGE") {
+			// 				// navigate to challenge screen using notificationData.data.action_id as the challenge id prop
+			// 				navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+			// 			}
+			// 		}
+			// 	}
+			// ]);
+			Toast.show({
+				type: 'info',
+				text1: remoteMessage.data.title,
+				text2: remoteMessage.data.body,
+				onPress: () => {
+					navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
 				}
-			]);
+			})
+			
 		});
 		return unsubscribe;
 	}, [token]);
