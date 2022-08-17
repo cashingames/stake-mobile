@@ -5,13 +5,12 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/core';
 import { useFocusEffect } from '@react-navigation/native';
 // import Animated, { BounceInRight } from 'react-native-reanimated';
-import { formatCurrency } from '../../utils/stringUtl';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
-import { calculateTimeRemaining, randomEnteringAnimation } from '../../utils/utils';
+import { calculateTimeRemaining} from '../../utils/utils';
 import { getLiveTriviaStatus } from './LiveTriviaSlice';
-import FailedBottomSheet from './FailedBottomSheet';
-import LottieAnimations from '../../shared/LottieAnimations';
+import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
+import LiveTriviaEntryFailedText from './LiveTriviaEntryFailedText';
 
 
 
@@ -63,17 +62,20 @@ const LiveTriviaCard = ({ trivia }) => {
                 imageStyle={{ borderRadius: 20 }}
                 style={styles.triviaBackground}
                 resizeMode='cover'>
-                <FailedBottomSheet
-                    refBottomSheet={notEnoughPointNotice}
-                    onClose={() => notEnoughPointNotice.current.close()}
-                    pointsRequired={trivia.pointsRequired}
-                    userPoints={user.todaysPoints}
+                <UniversalBottomSheet
+                    refBottomSheet={refRBSheet}
+                    height={350}
+                    subComponent={<LiveTriviaEntryFailedText
+                        onClose={() => notEnoughPointNotice.current.close()}
+                        pointsRequired={trivia.pointsRequired}
+                        userPoints={user.todaysPoints}
+                    />}
                 />
                 <View style={styles.triviaContainer}>
                     <View style={styles.triviaTop}>
                         <Text style={styles.triviaTopText}>{trivia.title}</Text>
                         {trivia.status === "WAITING" || trivia.status === "ONGOING" ?
-                            <Animated.View style={[styles.triviaRequiredContainer, {opacity: showText ? 0 : 1  }]}>
+                            <Animated.View style={[styles.triviaRequiredContainer, { opacity: showText ? 0 : 1 }]}>
                                 <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
                                 <Text style={styles.triviaRequiredText}>Required</Text>
                             </Animated.View>

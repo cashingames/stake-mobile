@@ -1,17 +1,17 @@
 import React, { useRef, useState } from "react";
 import { Text, View, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from "react-native-extended-stylesheet";
 import GoToStore from '../../shared/GoToStore';
-import { startGame, setIsPlayingTrivia, startChallengeGame} from "./GameSlice";
+import { startGame, setIsPlayingTrivia, startChallengeGame } from "./GameSlice";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import AppButton from './../../shared/AppButton';
 import UserAvailableBoost from "../../shared/UserAvailableBoost";
 import { logActionToServer } from "../CommonSlice";
+import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 
 
 export default function GameInstructionsScreen({ navigation }) {
@@ -20,6 +20,14 @@ export default function GameInstructionsScreen({ navigation }) {
   const gameMode = useSelector(state => state.game.gameMode);
   const refRBSheet = useRef();
 
+  const openBottomSheet = () => {
+    refRBSheet.current.open()
+  }
+
+  const closeBottomSheet = () => {
+    refRBSheet.current.close()
+  }
+
 
   return (
 
@@ -27,29 +35,14 @@ export default function GameInstructionsScreen({ navigation }) {
       <ScrollView>
         {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
         {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
-        <RBSheet
-          ref={refRBSheet}
-          closeOnDragDown={true}
-          closeOnPressMask={true}
-          height={480}
-          customStyles={{
-            wrapper: {
-              backgroundColor: "rgba(0, 0, 0, 0.5)"
-            },
-            draggableIcon: {
-              backgroundColor: "#000",
-            },
-            container: {
-              borderTopStartRadius: 25,
-              borderTopEndRadius: 25,
-            }
-          }}
-        >
-            <AvailableBoosts onClose={() => refRBSheet.current.close()} />
-        </RBSheet>
+        <UniversalBottomSheet
+          refBottomSheet={refRBSheet}
+          height={430}
+          subComponent={<AvailableBoosts onClose={closeBottomSheet} />}
+        />
       </ScrollView>
       <AppButton
-        onPress={() => refRBSheet.current.open()}
+        onPress={openBottomSheet}
         text='Proceed'
         style={styles.proceedButton}
       />

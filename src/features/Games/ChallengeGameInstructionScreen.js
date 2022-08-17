@@ -1,21 +1,19 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Text, View, Image, ScrollView, Pressable, Alert } from 'react-native';
+import { Text, View, Image, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
-import Constants from 'expo-constants';
 import EStyleSheet from "react-native-extended-stylesheet";
 import GoToStore from '../../shared/GoToStore';
 import { startChallengeGame, getChallengeDetails } from "./GameSlice";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
-import { formatNumber } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
 import PageLoading from "../../shared/PageLoading";
 import UserAvailableBoost from "../../shared/UserAvailableBoost";
 import { getChallengeScores, logoutUser } from "../Auth/AuthSlice";
 import LottieAnimations from "../../shared/LottieAnimations";
+import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 
 
 export default function ChallengeGameInstructionsScreen({ navigation, route }) {
@@ -29,10 +27,18 @@ export default function ChallengeGameInstructionsScreen({ navigation, route }) {
   const challengeScores = useSelector(state => state.auth.challengeScores)
   const username = useSelector(state => state.auth.user.username);
 
+  const openBottomSheet = () => {
+    refRBSheet.current.open()
+  }
+
+  const closeBottomSheet = () => {
+    refRBSheet.current.close()
+  }
+
 
   useEffect(() => {
     dispatch(getChallengeDetails(challengeId)).then(() => setOnLoading(false));
-    challengeDetails.playerUsername !== username && dispatch(logoutUser()); 
+    challengeDetails.playerUsername !== username && dispatch(logoutUser());
   }, []);
 
   useEffect(() => {
@@ -52,28 +58,12 @@ export default function ChallengeGameInstructionsScreen({ navigation, route }) {
         challengeScores.challengerStatus === "PENDING" ?
         <ScrollView style={styles.container}>
           <ChallengeInstructions />
-          <AppButton onPress={() => refRBSheet.current.open()} text='Proceed' />
-          <RBSheet
-            ref={refRBSheet}
-            closeOnDragDown={true}
-            closeOnPressMask={true}
-            height={480}
-            customStyles={{
-              wrapper: {
-                backgroundColor: "rgba(0, 0, 0, 0.5)"
-              },
-              draggableIcon: {
-                backgroundColor: "#000",
-              },
-              container: {
-                borderTopStartRadius: 25,
-                borderTopEndRadius: 25,
-              }
-            }}
-          >
-            <AvailableChallengeBoosts onClose={() => refRBSheet.current.close()} />
-
-          </RBSheet>
+          <AppButton onPress={openBottomSheet} text='Proceed' />
+          <UniversalBottomSheet
+            refBottomSheet={refRBSheet}
+            height={430}
+            subComponent={<AvailableChallengeBoosts onClose={closeBottomSheet} />}
+          />
         </ScrollView>
         :
         <ChallengeNotPending challenge={challengeScores} />

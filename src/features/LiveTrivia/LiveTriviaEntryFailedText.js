@@ -1,37 +1,12 @@
-import React, { useRef } from 'react';
-import RBSheet from "react-native-raw-bottom-sheet";
-import { Text, View } from 'react-native';
+import React from "react";
+import { Text, View } from "react-native";
+import AppButton from "../../shared/AppButton";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from '@expo/vector-icons';
-import AppButton from '../../shared/AppButton';
-import normalize from '../../utils/normalize';
+import normalize from "../../utils/normalize";
 
 
-const FailedBottomSheet = ({ refBottomSheet, onClose, userPoints,pointsRequired }) => {
-    return (
-        <RBSheet
-            ref={refBottomSheet}
-            closeOnDragDown={true}
-            closeOnPressMask={true}
-            height={350}
-            customStyles={{
-                wrapper: {
-                    backgroundColor: "rgba(0, 0, 0, 0.5)"
-                },
-                draggableIcon: {
-                    backgroundColor: "#000",
-                },
-                container: {
-                    borderTopStartRadius: 25,
-                    borderTopEndRadius: 25,
-                }
-            }}
-        >
-            <BottomSheet onClose={onClose} userPoints={userPoints} pointsRequired={pointsRequired} />
-        </RBSheet>
-    )
-}
-const BottomSheet = ({ onClose, userPoints, pointsRequired }) => {
+const LiveTriviaEntryFailedText = ({ onClose, userPoints, pointsRequired }) => {
     return (
         <View style={styles.triviaBottomSheet}>
             <Ionicons name="warning-outline" size={100} color="#FFEE03" style={styles.bottomSheetIcon} />
@@ -45,6 +20,7 @@ const BottomSheet = ({ onClose, userPoints, pointsRequired }) => {
         </View>
     )
 }
+export default LiveTriviaEntryFailedText;
 
 const styles = EStyleSheet.create({
     triviaBottomSheet: {
@@ -76,5 +52,3 @@ const styles = EStyleSheet.create({
         textAlign: 'center'
     }
 })
-
-export default FailedBottomSheet

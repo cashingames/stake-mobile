@@ -1,14 +1,14 @@
-import React, { useRef, useState } from "react";
-import { Text } from "react-native";
+import React from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
 
-const NotificationPopup = ({ remoteMessage, onClose, ref }) => {
+const UniversalBottomSheet = ({ refBottomSheet,subComponent,height }) => {
+
     return (
         <RBSheet
-            ref={ref}
+            ref={refBottomSheet}
             closeOnDragDown={true}
             closeOnPressMask={true}
-            height={480}
+            height={height}
             customStyles={{
                 wrapper: {
                     backgroundColor: "rgba(0, 0, 0, 0.5)"
@@ -22,14 +22,10 @@ const NotificationPopup = ({ remoteMessage, onClose, ref }) => {
                 }
             }}
         >
-            <NotificationMessage onClose={onClose} remoteMessage={remoteMessage} />
+            {subComponent}
         </RBSheet>
+
     )
 }
 
-const NotificationMessage = ({ remoteMessage }) => {
-    return (
-        <Text>{remoteMessage.title}</Text>
-    )
-}
-export default NotificationPopup;
+export default UniversalBottomSheet;

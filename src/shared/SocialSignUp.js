@@ -15,6 +15,7 @@ import { saveToken } from '../utils/ApiHelper';
 import { useNavigation } from '@react-navigation/native';
 import Constants from "expo-constants";
 import normalize from '../utils/normalize';
+import UniversalBottomSheet from './UniversalBottomSheet';
 
 
 
@@ -37,6 +38,14 @@ export default function SocialSignUp() {
     const [lastName, setLastName] = useState('')
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
+
+    const openBottomSheet = () => {
+        refRBSheet.current.open()
+    }
+
+    const closeBottomSheet = () => {
+        refRBSheet.current.close()
+    }
 
 
 
@@ -89,9 +98,7 @@ export default function SocialSignUp() {
         androidClientId: Constants.manifest.extra.googleClientId,
         webClientId: '520726557605-ckaa4jojbac8mgpir7ta7cnngqmuodm0.apps.googleusercontent.com',
     });
-    const openBottomSheet = () => {
-        refRBSheet.current.open()
-    }
+
 
     useEffect(() => {
         const invalid = usernameErr || username === '' || passErr || password === '' ||
@@ -101,14 +108,12 @@ export default function SocialSignUp() {
 
     useEffect(() => {
         if (response?.type === 'success') {
-            console.log('success')
             const accessToken = response.authentication.accessToken
             console.log(accessToken)
             axios.get('https://www.googleapis.com/oauth2/v3/userinfo?access_token=' + accessToken)
                 .then(function (response) {
                     const userDetails = response.data
                     console.log('user details', userDetails)
-                    console.log('mmmmmmmmmmmmm')
                     dispatch(loginWithGoogle({
                         firstName: userDetails.given_name,
                         lastName: userDetails.family_name,
@@ -147,25 +152,10 @@ export default function SocialSignUp() {
                     />
                 </View>
             </Pressable>
-            <RBSheet
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={true}
+            <UniversalBottomSheet
+                refBottomSheet={refRBSheet}
                 height={570}
-                customStyles={{
-                    wrapper: {
-                        backgroundColor: "rgba(0, 0, 0, 0.5)"
-                    },
-                    draggableIcon: {
-                        backgroundColor: "#000",
-                    },
-                    container: {
-                        borderTopStartRadius: 25,
-                        borderTopEndRadius: 25,
-                    }
-                }}
-            >
-                <FirstTimeUserDetails
+                subComponent={<FirstTimeUserDetails
                     onPress={registerUserWithGoogle}
                     password={password}
                     password_confirmation={password_confirmation}
@@ -180,8 +170,9 @@ export default function SocialSignUp() {
                     onChangeConfirmPassword={onChangeConfirmPassword}
                     canSave={canSave}
                     saving={saving}
-                />
-            </RBSheet>
+                    onClose={closeBottomSheet}
+                />}
+            />
         </>
     );
 }
@@ -277,7 +268,7 @@ const styles = EStyleSheet.create({
         color: '#000000',
         fontFamily: 'graphik-medium',
         fontSize: '0.8rem',
-        textAlign:'center',
-        paddingVertical:normalize(5)
+        textAlign: 'center',
+        paddingVertical: normalize(5)
     }
 })

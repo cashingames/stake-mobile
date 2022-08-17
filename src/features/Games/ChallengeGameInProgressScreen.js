@@ -2,7 +2,6 @@ import React, { useCallback, useRef, useState } from "react";
 import { View, ScrollView, ImageBackground, Alert, StatusBar, BackHandler } from 'react-native';
 import normalize from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
-import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
@@ -19,6 +18,7 @@ import AvailableGameSessionBoosts from "../../shared/AvailableGameSessionBoosts"
 import GameQuestions from "../../shared/GameQuestions";
 import UserAvailableBoosts from "../../shared/UserAvailableBoosts";
 import { logActionToServer } from "../CommonSlice";
+import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 
 
 export default function ChallengeGameInProgressScreen({ navigation }) {
@@ -35,6 +35,14 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
   const user = useSelector(state => state.auth.user);
 
   const [ending, setEnding] = useState(false);
+
+  const openBottomSheet = () => {
+    refRBSheet.current.open()
+  }
+
+  const closeBottomSheet = () => {
+    refRBSheet.current.close()
+  }
 
   const onEndGame = (confirm = false) => {
 
@@ -113,11 +121,11 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
 
   useFocusEffect(
     React.useCallback(() => {
-        StatusBar.setTranslucent(true)
-        StatusBar.setBackgroundColor("transparent")
-        StatusBar.setBarStyle('light-content');
+      StatusBar.setTranslucent(true)
+      StatusBar.setBackgroundColor("transparent")
+      StatusBar.setBarStyle('light-content');
     }, [])
-);
+  );
 
   if (isEnded) {
     return null;
@@ -125,30 +133,15 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
 
   return (
     <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">
-      <ScrollView>
-        <PlayGameHeader onPress={() => onEndGame(true)} onPressBoost={() => refRBSheet.current.open()} />
+      <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
+        <PlayGameHeader onPress={() => onEndGame(true)} onPressBoost={openBottomSheet} />
         <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
         <GameQuestions />
-        <RBSheet
-          ref={refRBSheet}
-          closeOnDragDown={true}
-          closeOnPressMask={true}
-          height={400}
-          customStyles={{
-            wrapper: {
-              backgroundColor: "rgba(0, 0, 0, 0.5)"
-            },
-            draggableIcon: {
-              backgroundColor: "#000",
-            },
-            container: {
-              borderTopStartRadius: 25,
-              borderTopEndRadius: 25,
-            }
-          }}
-        >
-          <UserAvailableBoosts />
-        </RBSheet>
+        <UniversalBottomSheet
+          refBottomSheet={refRBSheet}
+          height={350}
+          subComponent={<UserAvailableBoosts onClose={closeBottomSheet} />}
+        />
       </ScrollView>
       <NextButton onPress={() => onEndGame()} ending={ending} />
     </ImageBackground>
@@ -183,12 +176,16 @@ const NextButton = ({ onPress, ending }) => {
 
 const styles = EStyleSheet.create({
 
-  image: {
+  container: {
     flex: 1,
     backgroundColor: '#9C3DB8',
+    paddingTop: normalize(45),
+},
+image: {
     paddingHorizontal: normalize(18),
-    paddingTop: normalize(25),
-  },
+    backgroundColor: '#9C3DB8',
+    flex: 1,
+},
   gameProgressAndBoost: {
     display: 'flex',
     backgroundColor: 'rgba(57, 15, 15, 0.4)',

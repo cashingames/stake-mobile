@@ -13,7 +13,8 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { randomEnteringAnimation } from '../../utils/utils';
 import GameCategoryCard from './GameCategoryCard';
 import GameSubcategoryCard from './GameSubcategoryCard';
-import NoGameNotification from '../../shared/NoGameNotification';
+import NoGame from '../../shared/NoGame';
+import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 
 export default ({ title, initialShowPlayButton = true }) => {
 
@@ -93,9 +94,12 @@ export default ({ title, initialShowPlayButton = true }) => {
                 </Animated.View>
             }
 
-            <NoGameNotification
+            <UniversalBottomSheet
                 refBottomSheet={refRBSheet}
-                onClose={closeBottomSheet}
+                height={300}
+                subComponent={<NoGame
+                    onClose={closeBottomSheet}
+                />}
             />
 
         </>
