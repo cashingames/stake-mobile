@@ -116,6 +116,27 @@ function AppRouter() {
 			})
 			
 		});
+		messaging().onNotificationOpenedApp(remoteMessage => {
+			console.log(
+				'Notification caused app to open from background state:',
+				remoteMessage.notification,
+			);
+			navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+		});
+
+		// Check whether an initial notification is available
+		messaging()
+			.getInitialNotification()
+			.then(remoteMessage => {
+				if (remoteMessage) {
+					console.log(
+						'Notification caused app to open from quit state:',
+						remoteMessage.notification,
+					);
+					navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+					// setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
+				}
+			});
 		return unsubscribe;
 	}, [token]);
 
