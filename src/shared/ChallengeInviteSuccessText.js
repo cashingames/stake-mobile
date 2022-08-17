@@ -20,10 +20,9 @@ const ChallengeInviteSuccessText = ({ onClose }) => {
                 width={normalize(120)}
                 height={normalize(120)}
             />
-            <Text style={styles.congratsText}>Congratulations</Text>
-            <Text style={styles.innerText}>Your invite was sent successfully</Text>
-            <Text style={styles.innerText}>You will receive a notification on the app and your email when your opponent accepts your invite.</Text>
-            <Text style={styles.innerText}>You will be able to start the challenge when your opponent accepts the challenge.</Text>
+            <Text style={styles.congratsText}>Congrats! Challenge sent</Text>
+            <Text style={styles.innerText}>Wait for an In-App notification and email when opponent accepts challenge</Text>
+            <Text style={styles.innerText}>Then you can start playing.</Text>
             <ReturnToDashboard onPress={goHome} />
         </View>
     )
