@@ -88,6 +88,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
               <>
                 {
                   challengeDetails.status === "ACCEPTED" &&
+                  challengeScores.opponentStatus !== "COMPLETED"&&
                   <AppButton text="Play" onPress={challengerPlays} />
                 }
               </>
