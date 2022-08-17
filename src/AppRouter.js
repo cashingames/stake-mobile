@@ -104,26 +104,11 @@ function AppRouter() {
 
 		}
 		const unsubscribe = messaging().onMessage(async remoteMessage => {
-
-			// Alert.alert(remoteMessage.data.title, remoteMessage.data.body, [
-			// 	{
-			// 		text: "Dismiss",
-			// 		style: "cancel"
-			// 	},
-			// 	{
-			// 		text: "View", onPress: () => {
-			// 			if (remoteMessage.data.action_type == "CHALLENGE") {
-			// 				// navigate to challenge screen using notificationData.data.action_id as the challenge id prop
-			// 				navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
-			// 			}
-			// 		}
-			// 	}
-			// ]);
 			Toast.show({
 				type: 'info',
 				text1: remoteMessage.data.title,
 				text2: remoteMessage.data.body,
-				visibilityTime: 10000,
+				autoHide: false,
 				onPress: () => {
 					navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
 				}
