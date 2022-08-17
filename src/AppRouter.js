@@ -110,30 +110,33 @@ function AppRouter() {
 				text2: remoteMessage.data.body,
 				autoHide: false,
 				onPress: () => {
+					Toast.hide();
 					navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
 				}
 			})
 			
 		});
 		messaging().onNotificationOpenedApp(remoteMessage => {
-			console.log(
-				'Notification caused app to open from background state:',
-				remoteMessage.notification,
-			);
-			navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+			if (!remoteMessage){}
+			else{
+				if (remoteMessage.data && remoteMessage.data.action_type == "CHALLENGE"){
+					navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+				}
+			}
+			
 		});
 
 		// Check whether an initial notification is available
 		messaging()
 			.getInitialNotification()
 			.then(remoteMessage => {
+				console.log("initial notification exists", remoteMessage);
 				if (remoteMessage) {
-					console.log(
-						'Notification caused app to open from quit state:',
-						remoteMessage.notification,
-					);
+					// console.log(
+					// 	'Notification caused app to open from quit state:',
+					// 	remoteMessage.data,
+					// );
 					navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
-					// setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
 				}
 			});
 		return unsubscribe;
