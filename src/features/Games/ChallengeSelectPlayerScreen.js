@@ -104,7 +104,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                 </View>
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
-                    height={435}
+                    height={450}
                     subComponent={<ChallengeInviteSuccessText onClose={closeBottomSheet} />}
                 />
 

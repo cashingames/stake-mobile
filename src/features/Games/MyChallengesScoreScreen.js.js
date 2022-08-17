@@ -69,39 +69,46 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subContainer}>
-      <View style={styles.confetti}>
-        <LottieAnimations
-          animationView={require('../../../assets/challenge.json')}
-          height={normalize(150)}
-        />
-      </View>
-      {user.username === challengeDetails.opponentUsername &&
-        <>
-          {challengeDetails.status === "PENDING" &&
-            challengeScores.opponentStatus === "PENDING" &&
-            challengeScores.opponentStatus !== "COMPLETED" &&
-            <View style={styles.buttonContainer}>
-              <AppButton text="Accept" style={styles.acceptButton} onPress={acceptChallengeInivite} />
-              <AppButton text="Decline" style={styles.declineButton} onPress={declineChallengeInivite} />
-            </View>
-          }
-        </>
-      }
-      {user.username === challengeDetails.playerUsername &&
-        <>
-          {challengeDetails.status === "ACCEPTED" &&
-            challengeScores.challengerStatus === "PENDING" &&
-            <AppButton text="Play" onPress={challengerPlays} />
-          }
-        </>
+        <View style={styles.confetti}>
+          <LottieAnimations
+            animationView={require('../../../assets/challenge.json')}
+            height={normalize(150)}
+          />
+        </View>
+        {user.username === challengeDetails.opponentUsername &&
+          <>
+            {challengeDetails.status === "PENDING" &&
+              challengeScores.opponentStatus === "PENDING" &&
+              challengeScores.opponentStatus !== "COMPLETED" ?
+              <View style={styles.buttonContainer}>
+                <AppButton text="Accept" style={styles.acceptButton} onPress={acceptChallengeInivite} />
+                <AppButton text="Decline" style={styles.declineButton} onPress={declineChallengeInivite} />
+              </View>
+              :
+              <>
+                {
+                  challengeDetails.status === "ACCEPTED" &&
+                  <AppButton text="Play" onPress={challengerPlays} />
+                }
+              </>
+            }
+          </>
+        }
+        {user.username === challengeDetails.playerUsername &&
+          <>
+            {challengeDetails.status === "ACCEPTED" &&
+              challengeScores.challengerStatus === "PENDING" &&
+              <AppButton text="Play" onPress={challengerPlays} />
+            }
+          </>
 
-      }
-      <ChallengeMessage playerPoint={challengeScores}
-        user={user}
-        challengeDetails={challengeDetails}
-      />
-      <ChallengeParticipants player={challengeScores} />
-      <ResultContainer playerScore={challengeScores} />
+        }
+        <ChallengeMessage playerPoint={challengeScores}
+          user={user}
+          challengeDetails={challengeDetails}
+        />
+        <ChallengeParticipants player={challengeScores} />
+        <ResultContainer playerScore={challengeScores} />
       </View>
 
     </ScrollView>
@@ -243,7 +250,7 @@ const styles = EStyleSheet.create({
 
   },
   subContainer: {
-    justifyContent:'center'
+    justifyContent: 'center'
   },
   confetti: {
     alignItems: 'center'
