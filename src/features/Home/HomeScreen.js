@@ -59,11 +59,11 @@ const HomeScreen = () => {
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }, [minVersionCode]);
 
-    useEffect(() => {
-        if (!loading && !isTrue(user.walletBalance)) {
-            networkIssueNotify()
-        }
-    }, [user, loading])
+    // useEffect(() => {
+    //     if (!loading && !isTrue(user.walletBalance)) {
+    //         networkIssueNotify()
+    //     }
+    // }, [user, loading])
 
     useFocusEffect(
         React.useCallback(() => {
