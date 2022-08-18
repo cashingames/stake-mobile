@@ -23,7 +23,7 @@ const SelectGameCategoryScreen = ({ navigation }) => {
     );
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.animation}>
                 <LottieAnimations
                     animationView={require('../../../assets/select-game.json')}
@@ -45,7 +45,7 @@ const styles = EStyleSheet.create({
         flex: 1,
         backgroundColor: '#5d5fef',
         paddingHorizontal: normalize(18),
-        justifyContent: 'center'
+        // justifyContent: 'center'
     },
     animation: {
         alignItems: 'center',
