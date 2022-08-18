@@ -94,7 +94,6 @@ const styles = EStyleSheet.create({
         backgroundColor: '#072169',
         paddingHorizontal: normalize(22),
         paddingTop: normalize(25),
-        justifyContent: 'center'
     },
     message: {
         fontSize: '1rem',

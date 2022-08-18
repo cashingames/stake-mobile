@@ -8,11 +8,10 @@ import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { acceptDeclineChallengeInivite, getChallengeDetails } from "./GameSlice";
 import { useSelector, useDispatch } from 'react-redux';
 import PageLoading from "../../shared/PageLoading";
+import { useFocusEffect } from '@react-navigation/native';
 import { isTrue } from "../../utils/stringUtl";
 import { useNavigation } from '@react-navigation/native';
-import { unwrapResult } from "@reduxjs/toolkit";
 import LottieAnimations from "../../shared/LottieAnimations";
-import { logoutUser } from "../Auth/AuthSlice";
 
 const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
   useApplyHeaderWorkaround(navigation.setOptions);
@@ -28,7 +27,7 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
       status: 1
     }
     ))
-    navigation.navigate('ChallengeInstructions')
+    navigation.navigate('GameInstructions')
   }
 
   const declineChallengeInivite = () => {
@@ -47,14 +46,17 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
     );
   }, []);
 
-  useEffect(() => {
-    StatusBar.setBackgroundColor('#072169');
-    StatusBar.setBarStyle('light-content');
-    return () => {
-      StatusBar.setBackgroundColor('#FFFF');
-      StatusBar.setBarStyle('dark-content');
-    }
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+        StatusBar.setTranslucent(true)
+        StatusBar.setBackgroundColor("transparent")
+        StatusBar.setBarStyle('light-content');
+        return () => {
+            StatusBar.setTranslucent(true)
+            StatusBar.setBarStyle('dark-content');
+        }
+    }, [])
+);
 
 
 
@@ -167,7 +169,7 @@ const styles = EStyleSheet.create({
     flex: 1,
     backgroundColor: '#072169',
     paddingHorizontal: normalize(22),
-    paddingTop: normalize(25)
+    paddingTop: normalize(45)
   },
   avatarBackground: {
     alignItems: 'center'

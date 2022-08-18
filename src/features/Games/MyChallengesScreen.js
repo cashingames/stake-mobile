@@ -17,7 +17,7 @@ const MyChallengesScreen = ({ navigation, route }) => {
     const [loading, setLoading] = useState(true)
 
     const userChallenges = useSelector(state => state.auth.userChallenges);
-    // console.log(userChallenges)
+    console.log(userChallenges)
 
 
     useEffect(() => {
@@ -82,10 +82,28 @@ const ChallengeCard = ({ userChallenge }) => {
                 < View style={styles.challengeContainer}>
                     <View style={styles.categoryContainer}>
                         <Text style={styles.challengeCategory}>{userChallenge.subcategory}</Text>
-                        <LottieAnimations
-                            animationView={require('../../../assets/challenge.json')}
-                            height={normalize(50)}
-                        />
+                        {/* {userChallenge.status === "CLOSED" ?
+                            <View style={styles.winnerContainer}>
+                                <LottieAnimations
+                                    animationView={require('../../../assets/trophy.json')}
+                                    height={normalize(30)}
+                                />
+                                {userChallenge.flag === "WON" &&
+                                    <Text style={styles.winner}>Won</Text>
+                                }
+                                {userChallenge.flag === "LOST" &&
+                                    <Text style={styles.winner}>LOST</Text>
+                                }
+                                {userChallenge.flag === "DRAW" &&
+                                    <Text style={styles.winner}>DRAW</Text>
+                                }
+                            </View>
+                            : */}
+                            <LottieAnimations
+                                animationView={require('../../../assets/challenge.json')}
+                                height={normalize(50)}
+                            />
+                        {/* } */}
                     </View>
                     <Text style={styles.status}>{userChallenge.date}</Text>
                     <Text style={styles.status}>STATUS : {userChallenge.status}</Text>
@@ -144,15 +162,25 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(12)
     },
     challengeCategory: {
-        fontSize: '.9rem',
+        fontSize: '1rem',
         color: '#6895FF',
-        fontFamily: 'graphik-medium',
+        fontFamily: 'graphik-bold',
     },
     status: {
         fontSize: '.75rem',
         color: '#701F88',
         fontFamily: 'graphik-medium',
         opacity: 0.4
+    },
+    winner: {
+        fontSize: '.75rem',
+        color: '#000000',
+        fontFamily: 'graphik-medium',
+        opacity: 0.4
+    },
+    winnerContainer: {
+        flexDirection:'row',
+        alignItems:'center'
     },
     versus: {
         fontSize: '.9rem',

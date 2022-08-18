@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, View, Image, ScrollView, TextInput, Pressable, Alert, } from 'react-native';
+import { Text, View, Image, ScrollView, TextInput, Pressable, Alert, ActivityIndicator, } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -21,9 +21,12 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const [loading, setLoading] = useState(true)
     const activeCategory = useSelector(state => state.game.gameCategory);
     const userFriends = useSelector(state => state.common.userFriends);
+    // console.log(userFriends)
     const selectedOpponent = useSelector(state => state.game.selectedFriend);
     const [search, setSearch] = useState("");
+    const [searching, setSearching] = useState(false);
     const [sending, setSending] = useState(false)
+    const [noDATA, setNoData] = useState(false)
 
     const openBottomSheet = () => {
         refRBSheet.current.open()
@@ -66,17 +69,34 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
 
     const onSearchFriends = () => {
-        // console.log('clicking')
+        console.log('clicking')
+        setSearching(true)
         dispatch(searchUserFriends(
             search
-        ))
+        )).then(() => setSearching(false))
+        if (userFriends.length === 0) {
+            setNoData(true)
+            console.log(noDATA)
+        }else {
+            setNoData(false)
+        }
     }
+
+    useEffect(() => {
+        if (search.length >= 2) {
+            dispatch(searchUserFriends(search)).then(() => setLoading(false));
+            setNoData(false)
+        }
+    }, [search]);
 
 
     const onSelectedFriend = (userFriend) => {
         dispatch(setSelectedFriend(userFriend));
         setSending(true)
+        setSearching(false)
     }
+
+
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
     }
@@ -93,14 +113,27 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                         keyboardType="default"
                     />
                     <Pressable style={styles.searchButton} onPress={onSearchFriends}>
-                        <Text style={styles.searchText}>Search</Text>
+                        {searching ?
+                            <ActivityIndicator size="small" color="#FFFF" />
+                            :
+                            <Text style={styles.searchText}>Search</Text>
+                        }
                     </Pressable>
                 </View>
+
                 <View style={styles.boards}>
-                    {userFriends.map((userFriend, i) => <FriendDetails key={i} userFriend={userFriend}
-                        isSelected={userFriend.id === selectedOpponent?.id}
-                        onSelect={onSelectedFriend}
-                    />)}
+                    {noDATA ?
+                        <Text>No Data</Text>
+                        :
+                        <>
+                            {
+                                userFriends.map((userFriend, i) => <FriendDetails key={i} userFriend={userFriend}
+                                    isSelected={userFriend.id === selectedOpponent?.id}
+                                    onSelect={onSelectedFriend}
+                                />)
+                            }
+                        </>
+                    }
                 </View>
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
