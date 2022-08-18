@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
@@ -17,6 +17,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   useApplyHeaderWorkaround(navigation.setOptions);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true)
+  const [clicking, setClicking] = useState(false)
   const params = route.params;
   // console.log("params",params)
   const user = useSelector(state => state.auth.user);
@@ -38,11 +39,12 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   }, []);
 
   const acceptChallengeInivite = () => {
+    setClicking(true)
     dispatch(acceptDeclineChallengeInivite({
       challenge_id: challengeDetails.challenegeId,
       status: 1
     }
-    ))
+    )).then(() => setClicking(false))
     navigation.navigate('GameInstructions')
   }
 
@@ -51,11 +53,12 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   }
 
   const declineChallengeInivite = () => {
+    setClicking(true)
     dispatch(acceptDeclineChallengeInivite({
       challenge_id: challengeDetails.challenegeId,
       status: 0
     }
-    ))
+    )).then(() => setClicking(false))
     navigation.navigate('Home')
   }
 
@@ -70,10 +73,18 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
     <ScrollView style={styles.container}>
       <View style={styles.subContainer}>
         <View style={styles.confetti}>
-          <LottieAnimations
-            animationView={require('../../../assets/challenge.json')}
-            height={normalize(150)}
-          />
+          {challengeScores.opponentStatus === "COMPLETED" &&
+            challengeScores.challengerStatus === "COMPLETED" ?
+            <LottieAnimations
+              animationView={require('../../../assets/champion.json')}
+              height={normalize(150)}
+            />
+            :
+            <LottieAnimations
+              animationView={require('../../../assets/challenge.json')}
+              height={normalize(150)}
+            />
+          }
         </View>
         {user.username === challengeDetails.opponentUsername &&
           <>
@@ -81,15 +92,15 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
               challengeScores.opponentStatus === "PENDING" &&
               challengeScores.opponentStatus !== "COMPLETED" ?
               <View style={styles.buttonContainer}>
-                <AppButton text="Accept" style={styles.acceptButton} onPress={acceptChallengeInivite} />
+                <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Accept"} style={styles.acceptButton} onPress={acceptChallengeInivite} />
                 <AppButton text="Decline" style={styles.declineButton} onPress={declineChallengeInivite} />
               </View>
               :
               <>
                 {
                   challengeDetails.status === "ACCEPTED" &&
-                  challengeScores.opponentStatus !== "COMPLETED"&&
-                  <AppButton text="Play" onPress={challengerPlays} />
+                  challengeScores.opponentStatus !== "COMPLETED" &&
+                  <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Play"} onPress={challengerPlays} />
                 }
               </>
             }

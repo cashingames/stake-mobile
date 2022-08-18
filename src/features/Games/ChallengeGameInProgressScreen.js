@@ -132,7 +132,7 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
   }
 
   return (
-    <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="cover">
+    <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
       <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
         <PlayGameHeader onPress={() => onEndGame(true)} onPressBoost={openBottomSheet} />
         <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
@@ -180,12 +180,12 @@ const styles = EStyleSheet.create({
     flex: 1,
     backgroundColor: '#9C3DB8',
     paddingTop: normalize(45),
-},
-image: {
+  },
+  image: {
     paddingHorizontal: normalize(18),
     backgroundColor: '#9C3DB8',
     flex: 1,
-},
+  },
   gameProgressAndBoost: {
     display: 'flex',
     backgroundColor: 'rgba(57, 15, 15, 0.4)',
@@ -197,9 +197,8 @@ image: {
     // paddingBottom: normalize(80),
   },
   nextButton: {
-    justifyContent: 'flex-end'
-    // position: 'absolute',
-    // bottom: 0,
-    // left: 0
+    marginBottom: 10,
+    marginTop: 5
   }
+
 });
