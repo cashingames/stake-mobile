@@ -17,8 +17,8 @@ const LeaderBoardFilter = () => {
     const onFilterLeaders = (dateRange) => {
         const startDate = dateRange.startDate
         const endDate = dateRange.endDate
-        console.log(dateRange.startDate);
-        console.log(dateRange.endDate);
+        // console.log(dateRange.startDate);
+        // console.log(dateRange.endDate);
         dispatch(getGlobalLeadersByDate({
             startDate,
             endDate

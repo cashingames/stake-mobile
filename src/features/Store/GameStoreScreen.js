@@ -114,7 +114,7 @@ const BuyGamePlan = ({ plan, onClose }) => {
         dispatch(buyPlanFromWallet(plan.id))
             .then(unwrapResult)
             .then(result => {
-                console.log(result);
+                // console.log(result);
                 dispatch(getUser())
                 onClose()
                 navigation.navigate("GamePlanPurchaseSuccessful")
@@ -124,7 +124,7 @@ const BuyGamePlan = ({ plan, onClose }) => {
                 // after login eager get commond data for the whole app
                 navigation.navigate("GameStoreItemsPurchaseFailed")
                 // Alert.alert("Notice", "Operation could not be completed, please try again");
-                console.log(rejectedValueOrSerializedError)
+                // console.log(rejectedValueOrSerializedError)
             });
     }
 

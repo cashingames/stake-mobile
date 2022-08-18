@@ -87,7 +87,6 @@ function App() {
       // navigate to challenge screen using remoteMessage.data.action_id as the challenge id prop							navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
       // navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
       // navigationRef.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id });
-      console.log("notification received in background", remoteMessage);
     }
   });
 
@@ -104,7 +103,6 @@ function App() {
     const currentRouteName = navigationRef.getCurrentRoute().name;
 
     if (previousRouteName !== currentRouteName) {
-      console.log("Logging to analytics", currentRouteName)
       await analytics().logScreenView({
         screen_name: currentRouteName,
         screen_class: currentRouteName,

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Text, View, ScrollView, BackHandler } from 'react-native';
+import { Text, View, ScrollView, BackHandler, StatusBar } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -27,10 +27,10 @@ const TriviaEndResultScreen = ({ route }) => {
         ))
             .then(unwrapResult)
             .then((originalPromiseResult) => {
-                console.log('fetched')
+                // console.log('fetched')
             })
             .catch((rejectedValueOrSerializedError) => {
-                console.log(rejectedValueOrSerializedError)
+                // console.log(rejectedValueOrSerializedError)
             })
     }, []);
 

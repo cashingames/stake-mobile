@@ -32,13 +32,13 @@ export default function ({ navigation }) {
             .then((originalPromiseResult) => {
                 setLoading(false);
                 setCanSend(true);
-                console.log(originalPromiseResult);
+                // console.log(originalPromiseResult);
                 navigation.navigate("VerifyEmail");
             })
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);
                 setCanSend(true);
-                console.log(rejectedValueOrSerializedError)
+                // console.log(rejectedValueOrSerializedError)
                 setError("Please Use Registered Email Address");
             })
 

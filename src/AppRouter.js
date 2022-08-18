@@ -130,7 +130,6 @@ function AppRouter() {
 		messaging()
 			.getInitialNotification()
 			.then(remoteMessage => {
-				console.log("initial notification exists", remoteMessage);
 				if (remoteMessage) {
 					// console.log(
 					// 	'Notification caused app to open from quit state:',

@@ -22,7 +22,7 @@ async function postData(url = '', data = {}) {
     });
     if (!response.ok) {
         debugger;
-        console.log(response);
+        // console.log(response);
         throw new Error(response.json());
     }
 
@@ -45,7 +45,7 @@ async function getData(url = '') {
 
 async function register(data) {
     return postData('auth/register', data).then(response => {
-        console.log("here")
+        // console.log("here")
         saveToken(response.data);
         return response;
     });
@@ -60,7 +60,7 @@ async function login(data) {
 }
 
 async function verifyUsername(username) {
-    console.log(username);
+    // console.log(username);
     return postData('auth/username/verify/' + username)
         .then(response => {
             return response.data

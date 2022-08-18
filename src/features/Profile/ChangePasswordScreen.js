@@ -44,18 +44,17 @@ export default function ChangePasswordScreen({ navigation }) {
 
         setSaving(true);
         setCanSave(false);
-        console.log(new_password + 'fish')
+        // console.log(new_password + 'fish')
         dispatch(changePassword({ password, new_password, new_password_confirmation }))
             .then(unwrapResult)
             .then(result => {
-                console.log(result);
-                console.log("success");
+                // console.log(result);
                 // dispatch(getUser())
                 Alert.alert('Password changed successfully')
                 navigation.navigate("Home")
             })
             .catch((rejectedValueOrSerializedError) => {
-                console.log(rejectedValueOrSerializedError);
+                // console.log(rejectedValueOrSerializedError);
                 setSaving(false);
                 setCanSave(true);
                 Alert.alert('Invalid data provided')

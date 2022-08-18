@@ -101,7 +101,7 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#9C3DB8',
-        paddingBottom: normalize(40),
+        paddingVertical: normalize(40),
         paddingHorizontal: normalize(18),
         display: 'flex',
     },

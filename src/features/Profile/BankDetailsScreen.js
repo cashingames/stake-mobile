@@ -66,7 +66,7 @@ export default function BankDetailsScreen({ navigation }) {
                 navigation.navigate("UserProfile")
             })
             .catch((rejectedValueOrSerializedError) => {
-                console.log(rejectedValueOrSerializedError);
+                // console.log(rejectedValueOrSerializedError);
                 setSaving(false);
                 Alert.alert('Invalid data provided')
             });

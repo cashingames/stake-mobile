@@ -42,7 +42,7 @@ export default function ({ navigation }) {
                 navigation.navigate('Login');
             })
             .catch((rejectedValueOrSerializedError) => {
-                console.log(rejectedValueOrSerializedError)
+                // console.log(rejectedValueOrSerializedError)
                 setError("Password reset failed, try again");
                 setLoading(false);
             })

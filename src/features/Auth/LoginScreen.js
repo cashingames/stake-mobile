@@ -60,7 +60,7 @@ export default function LoginScreen({ navigation }) {
                 
                 const errors =
                     err.response && err.response.data && err.response.data.errors;
-                console.log(errors)
+                // console.log(errors)
 
                 const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
                 setError(firstError)

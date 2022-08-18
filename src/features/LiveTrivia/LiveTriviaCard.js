@@ -63,7 +63,7 @@ const LiveTriviaCard = ({ trivia }) => {
                 style={styles.triviaBackground}
                 resizeMode='cover'>
                 <UniversalBottomSheet
-                    refBottomSheet={refRBSheet}
+                    refBottomSheet={notEnoughPointNotice}
                     height={350}
                     subComponent={<LiveTriviaEntryFailedText
                         onClose={() => notEnoughPointNotice.current.close()}

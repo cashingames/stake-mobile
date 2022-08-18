@@ -64,7 +64,7 @@ export default function VerifyEmailScreen({ navigation, route }) {
         dispatch(verifyOtp({ token })).then(unwrapResult)
             .then((originalPromiseResult) => {
                 setActive(true);
-                console.log(originalPromiseResult)
+                // console.log(originalPromiseResult)
                 navigation.navigate('ResetPassword');
             })
             .catch((rejectedValueOrSerializedError) => {
@@ -74,7 +74,7 @@ export default function VerifyEmailScreen({ navigation, route }) {
     }
 
     useEffect(() => {
-        console.log(codes.length);
+        // console.log(codes.length);
         if (codes.length < 5) {
             setActive(false)
             return;

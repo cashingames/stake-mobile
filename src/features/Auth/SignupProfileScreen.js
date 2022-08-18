@@ -19,7 +19,6 @@ export default function SignupProfileScreen({ navigation }) {
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
     const [referrer, setReferrer] = useState('');
-    console.log(referrer)
     const [loading, setLoading] = useState(false);
     const [canSend, setCanSend] = useState(false);
     const [fNameErr, setFnameErr] = useState(false);

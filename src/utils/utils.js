@@ -88,7 +88,7 @@ export const notifyOfPublishedUpdates = async () => {
     } catch (e) {
         // handle or log error
         crashlytics().recordError(error);
-        console.log(e);
+        // console.log(e);
     }
 }
 
