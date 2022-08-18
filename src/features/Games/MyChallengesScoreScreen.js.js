@@ -23,7 +23,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const user = useSelector(state => state.auth.user);
   // console.log(user.username)
   const challengeScores = useSelector(state => state.auth.challengeScores)
-  // console.log("challenge scores",challengeScores)
+  console.log("challenge scores", challengeScores)
   const challengeDetails = useSelector(state => state.game.challengeDetails);
   // console.log("challenge details", challengeDetails)
 
@@ -76,13 +76,13 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           {challengeScores.opponentStatus === "COMPLETED" &&
             challengeScores.challengerStatus === "COMPLETED" ?
             <LottieAnimations
-              animationView={require('../../../assets/champion.json')}
+              animationView={require('../../../assets/challenge-end.json')}
               height={normalize(150)}
             />
             :
             <LottieAnimations
-              animationView={require('../../../assets/challenge.json')}
-              height={normalize(150)}
+              animationView={require('../../../assets/battle.json')}
+              height={normalize(120)}
             />
           }
         </View>
@@ -119,7 +119,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           user={user}
           challengeDetails={challengeDetails}
         />
-        <ChallengeParticipants player={challengeScores} />
+        <ChallengeParticipants player={challengeScores} user={user} />
         <ResultContainer playerScore={challengeScores} />
       </View>
 
@@ -208,12 +208,50 @@ const ChallengeMessage = ({ playerPoint, user, challengeDetails }) => {
   )
 }
 
-const ChallengeParticipants = ({ player }) => {
+const ChallengeParticipants = ({ player, user }) => {
   return (
-    <View style={styles.playersDetails}>
-      <ChallengerDetails challenger={player} />
-      <OpponentDetails opponent={player} />
-    </View>
+    <>
+      {player.challengerStatus === "COMPLETED" &&
+        player.opponentStatus === "COMPLETED" ?
+        <View style={styles.winDetails}>
+          <View style={styles.winLoseContainer}>
+            {player.challengerPoint > player.opponentPoint &&
+              <>
+                <Image
+                  style={styles.winLose}
+                  source={require("../../../assets/images/first-crown.png")}
+                />
+              </>
+            }
+            <ChallengerDetails challenger={player} />
+          </View>
+          <Image
+           style={styles.versus}
+            source={require('../../../assets/images/versus.png')}
+          />
+          <View style={styles.winLoseContainer}>
+            {player.opponentPoint > player.challengerPoint &&
+              <>
+                <Image
+                  style={styles.winLose}
+                  source={require("../../../assets/images/first-crown.png")}
+                />
+              </>
+            }
+            <OpponentDetails opponent={player} />
+          </View>
+        </View>
+        :
+        <View style={styles.playersDetails}>
+          <ChallengerDetails challenger={player} />
+          <Image
+          style={styles.versus}
+            source={require('../../../assets/images/versus.png')}
+          />
+          <OpponentDetails opponent={player} />
+        </View>
+      }
+    </>
   )
 }
 
@@ -259,13 +297,13 @@ const styles = EStyleSheet.create({
     backgroundColor: '#701F88',
     paddingHorizontal: normalize(20),
     paddingBottom: responsiveScreenWidth(30),
-
+    paddingTop: responsiveScreenWidth(5),
   },
   subContainer: {
     justifyContent: 'center'
   },
   confetti: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   resultContainer: {
     alignItems: 'center',
@@ -310,19 +348,17 @@ const styles = EStyleSheet.create({
     color: '#FF716C',
     fontFamily: 'graphik-medium',
   },
-  challengerIcon: {
-    width: normalize(50),
-    height: normalize(50),
-    backgroundColor: '#FFFF',
-    borderRadius: 15,
-    marginRight: normalize(10)
+  winLose: {
+    width: normalize(35),
+    height: normalize(35),
   },
-  opponentIcon: {
-    width: normalize(50),
-    height: normalize(50),
-    backgroundColor: '#FFFF',
-    borderRadius: 15,
-    marginLeft: normalize(10)
+  versus: {
+    width: normalize(35),
+    height: normalize(102),
+  },
+  winLoseContainer: {
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   challengeMessageContainer: {
     alignItems: 'center',
@@ -353,39 +389,44 @@ const styles = EStyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  winDetails: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+  },
   topPlayerIcon: {
-    width: normalize(93),
-    height: normalize(93),
+    width: normalize(70),
+    height: normalize(70),
     backgroundColor: '#FFFF',
     borderRadius: 100,
     borderColor: '#2D9CDB',
-    borderWidth: 4
+    borderWidth: 3
   },
   topPlayerIconContainer: {
     borderColor: '#FFFF',
-    borderWidth: 5,
-    width: normalize(100),
-    height: normalize(100),
+    borderWidth: 4,
+    width: normalize(70),
+    height: normalize(70),
     borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center',
   },
   otherPlayerIconContainer: {
     borderColor: '#EF2F55',
-    borderWidth: 2,
-    width: normalize(65),
-    height: normalize(65),
+    borderWidth: 4,
+    width: normalize(70),
+    height: normalize(70),
     borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center'
   },
   otherPlayerIcon: {
-    width: normalize(62),
-    height: normalize(62),
+    width: normalize(70),
+    height: normalize(70),
     backgroundColor: '#FFFF',
     borderRadius: 100,
     borderColor: '#EF2F55',
-    borderWidth: 2
+    borderWidth: 3
   },
   playerDetails: {
     flexDirection: 'column',
@@ -396,7 +437,7 @@ const styles = EStyleSheet.create({
     color: '#FFFF',
     fontFamily: 'graphik-medium',
     marginBottom: normalize(10),
-    width: responsiveScreenWidth(28),
+    width: responsiveScreenWidth(27),
     textAlign: 'center'
   },
   playerTopDetails: {

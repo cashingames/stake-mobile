@@ -132,10 +132,7 @@ const ChallengeNotPending = ({ challenge }) => {
               height={normalize(170)}
             />
           </View>
-          <Text style={styles.message}>This challenge has already been played,
-            check your recent challenges to see the result
-            or go to dashboard to play more exciting games
-          </Text>
+          <Text style={styles.message}>STATUS : PLAYED</Text>
           <View style={styles.buttonContainer}>
             <AppButton text='Dashboard' onPress={goHome} style={styles.button} />
             <AppButton text='My Challenges' onPress={goToMyChallenges} style={styles.button} />
@@ -151,9 +148,7 @@ const ChallengeNotPending = ({ challenge }) => {
               style={styles.emoji}
             />
           </View>
-          <Text style={styles.message}>Sorry, this challenge has been declined,
-            go to dashboard to challenge other players
-          </Text>
+          <Text style={styles.message}>STATUS : DECLINED</Text>
           <AppButton text='Dashboard' onPress={goHome} />
 
         </>
