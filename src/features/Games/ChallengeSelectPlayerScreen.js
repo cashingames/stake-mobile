@@ -123,7 +123,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
                 <View style={styles.boards}>
                     {noDATA ?
-                        <Text>No Data</Text>
+                        <Text style={styles.noDataText}>No Data</Text>
                         :
                         <>
                             {
@@ -205,6 +205,13 @@ const styles = EStyleSheet.create({
         fontSize: '0.6rem',
         fontFamily: 'graphik-regular',
         color: '#FFFF'
+    },
+    noDataText: {
+        fontSize: '0.8rem',
+        fontFamily: 'graphik-medium',
+        color: '#000000',
+        textAlign:'center',
+        alignItems: 'center'
     },
     icon: {
         opacity: 0.4,

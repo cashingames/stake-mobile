@@ -82,28 +82,43 @@ const ChallengeCard = ({ userChallenge }) => {
                 < View style={styles.challengeContainer}>
                     <View style={styles.categoryContainer}>
                         <Text style={styles.challengeCategory}>{userChallenge.subcategory}</Text>
-                        {/* {userChallenge.status === "CLOSED" ?
-                            <View style={styles.winnerContainer}>
-                                <LottieAnimations
-                                    animationView={require('../../../assets/trophy.json')}
-                                    height={normalize(30)}
-                                />
+                        {userChallenge.status === "CLOSED" ?
+                            <>
                                 {userChallenge.flag === "WON" &&
-                                    <Text style={styles.winner}>Won</Text>
+                                    <View style={styles.winnerContainer}>
+                                        <Text style={styles.winner}>WON</Text>
+                                        <LottieAnimations
+                                            animationView={require('../../../assets/trophy.json')}
+                                            height={normalize(32)}
+                                        />
+                                    </View>
                                 }
                                 {userChallenge.flag === "LOST" &&
-                                    <Text style={styles.winner}>LOST</Text>
+                                    <View style={styles.winnerContainer}>
+                                        <Text style={styles.winner}>LOST</Text>
+                                        <LottieAnimations
+                                            animationView={require('../../../assets/loser.json')}
+                                            height={normalize(30)}
+                                        />
+                                    </View>
                                 }
                                 {userChallenge.flag === "DRAW" &&
-                                    <Text style={styles.winner}>DRAW</Text>
+
+                                    <View style={styles.winnerContainer}>
+                                        <Text style={styles.winner}>DRAW</Text>
+                                        <LottieAnimations
+                                            animationView={require('../../../assets/trophy.json')}
+                                            height={normalize(30)}
+                                        />
+                                    </View>
                                 }
-                            </View>
-                            : */}
+                            </>
+                            :
                             <LottieAnimations
                                 animationView={require('../../../assets/challenge.json')}
                                 height={normalize(50)}
                             />
-                        {/* } */}
+                        }
                     </View>
                     <Text style={styles.status}>{userChallenge.date}</Text>
                     <Text style={styles.status}>STATUS : {userChallenge.status}</Text>
@@ -176,11 +191,12 @@ const styles = EStyleSheet.create({
         fontSize: '.75rem',
         color: '#000000',
         fontFamily: 'graphik-medium',
-        opacity: 0.4
+        opacity: 0.4,
+        marginRight: '.8rem'
     },
     winnerContainer: {
-        flexDirection:'row',
-        alignItems:'center'
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     versus: {
         fontSize: '.9rem',
