@@ -37,7 +37,7 @@ export default function FundWalletScreen() {
   const startPayment = () => {
     var cleanedAmount =
       amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
-    console.log(Number.parseFloat(amount));
+    // console.log(Number.parseFloat(amount));
     if (cleanedAmount < 100) {
       Alert.alert("Amount cannot be less than 100 naira");
       return false;

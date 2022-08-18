@@ -52,7 +52,7 @@ export default function GameInProgressScreen({ navigation, route }) {
 
         if (ending) {
             //doe not delete
-            console.log("Trying to end second time. If this happens, please notify Oye")
+            // console.log("Trying to end second time. If this happens, please notify Oye")
             return;
         }
 
@@ -75,10 +75,10 @@ export default function GameInProgressScreen({ navigation, route }) {
                 }))
                     .then(unwrapResult)
                     .then(result => {
-                        console.log('Action logged to server');
+                        // console.log('Action logged to server');
                     })
                     .catch(() => {
-                        console.log('failed to log to server');
+                        // console.log('failed to log to server');
                     });
                 setEnding(false);
                 if (isPlayingTrivia) {
@@ -93,7 +93,7 @@ export default function GameInProgressScreen({ navigation, route }) {
             })
             .catch((rejectedValueOrSerializedError) => {
                 setEnding(false);
-                console.log(rejectedValueOrSerializedError);
+                // console.log(rejectedValueOrSerializedError);
                 Alert.alert('failed to end game')
             });
     }
@@ -111,7 +111,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                 {
                     text: 'Exit',
                     onPress: () => {
-                        console.log("show exit from exit button")
+                        // console.log("show exit from exit button")
                         onEndGame();
                     },
                 },

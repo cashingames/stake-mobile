@@ -44,13 +44,13 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         ))
             .then(unwrapResult)
             .then(result => {
-                console.log(result);
+                // console.log(result);
                 // setSending(true)
                 openBottomSheet()
             })
             .catch((rejectedValueOrSerializedError) => {
                 setSending(true)
-                console.log(rejectedValueOrSerializedError);
+                // console.log(rejectedValueOrSerializedError);
                 Alert.alert(rejectedValueOrSerializedError.message)
             });
         setSending(false)
@@ -66,7 +66,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
 
     const onSearchFriends = () => {
-        console.log('clicking')
+        // console.log('clicking')
         dispatch(searchUserFriends(
             search
         ))

@@ -86,7 +86,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                 setSaving(false);
                 // after login eager get commond data for the whole app
                 // console.log("failed");
-                console.log(rejectedValueOrSerializedError.message);
+                // console.log(rejectedValueOrSerializedError.message);
             });
     }
 

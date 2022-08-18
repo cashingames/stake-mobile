@@ -20,11 +20,11 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const params = route.params;
   // console.log("params",params)
   const user = useSelector(state => state.auth.user);
-  console.log(user.username)
+  // console.log(user.username)
   const challengeScores = useSelector(state => state.auth.challengeScores)
-  console.log("challenge scores",challengeScores)
+  // console.log("challenge scores",challengeScores)
   const challengeDetails = useSelector(state => state.game.challengeDetails);
-  console.log("challenge details", challengeDetails)
+  // console.log("challenge details", challengeDetails)
 
   useEffect(() => {
     dispatch(getChallengeScores(

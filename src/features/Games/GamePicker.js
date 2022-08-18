@@ -50,7 +50,7 @@ export default ({ title, initialShowPlayButton = true }) => {
         hasActivePlan ? onSelectGameMode() : openBottomSheet();
     }
     const gameMode = useSelector(state => state.game.gameMode);
-    console.log("oya log it", gameMode, "this is it right here")
+    // console.log(" log it", gameMode, "this is it right here")
 
     const onSelectGameMode = () => {
         if (gameMode.name === "EXHIBITION") {

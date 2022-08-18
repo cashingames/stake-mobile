@@ -54,10 +54,10 @@ export default function GameEndResultScreen({ navigation }) {
 				}))
 					.then(unwrapResult)
 					.then(result => {
-						console.log('Action logged to server');
+						// console.log('Action logged to server');
 					})
 					.catch(() => {
-						console.log('failed to log to server');
+						// console.log('failed to log to server');
 					});
 				setLoading(false);
 				dispatch(incrementCountdownResetIndex());

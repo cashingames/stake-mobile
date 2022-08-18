@@ -85,8 +85,7 @@ export default function SocialSignUp() {
             referrer
         })).then(unwrapResult)
             .then((originalPromiseResult) => {
-                console.log("sigggggggg");
-                console.log(originalPromiseResult);
+                // console.log(originalPromiseResult);
                 saveToken(originalPromiseResult.data.token)
                 navigation.navigate('AppRouter')
             })
@@ -109,18 +108,17 @@ export default function SocialSignUp() {
     useEffect(() => {
         if (response?.type === 'success') {
             const accessToken = response.authentication.accessToken
-            console.log(accessToken)
+            // console.log(accessToken)
             axios.get('https://www.googleapis.com/oauth2/v3/userinfo?access_token=' + accessToken)
                 .then(function (response) {
                     const userDetails = response.data
-                    console.log('user details', userDetails)
+                    // console.log('user details', userDetails)
                     dispatch(loginWithGoogle({
                         firstName: userDetails.given_name,
                         lastName: userDetails.family_name,
                         email: userDetails.email
                     })).then(unwrapResult)
                         .then((originalPromiseResult) => {
-                            console.log("google sign in");
                             if (originalPromiseResult.data.isFirstTime) {
                                 setEmail(originalPromiseResult.data.email)
                                 setFirstName(originalPromiseResult.data.firstName)
@@ -128,12 +126,12 @@ export default function SocialSignUp() {
                                 openBottomSheet()
                                 return
                             }
-                            console.log(originalPromiseResult);
+                            // console.log(originalPromiseResult);
                             saveToken(originalPromiseResult.data.token)
                             navigation.navigate('AppRouter')
                         })
                         .catch((rejectedValueOrSerializedError) => {
-                            console.log(rejectedValueOrSerializedError)
+                            // console.log(rejectedValueOrSerializedError)
                         })
                 })
         }

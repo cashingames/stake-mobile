@@ -4,14 +4,11 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector, useDispatch } from 'react-redux';
 import PageLoading from '../../shared/PageLoading';
-// import { formatNumber } from '../../utils/stringUtl';
 import { getLiveTriviaLeaders } from '../Games/GameSlice';
 import { isTrue } from '../../utils/stringUtl';
-import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
-import { useFocusEffect } from '@react-navigation/native';
 
 
 const LiveTriviaLeaderBoard = ({ navigation, route }) => {
@@ -20,7 +17,7 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
     const dispatch = useDispatch();
 
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
-    console.log(triviaLeaders);
+    // console.log(triviaLeaders);
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {

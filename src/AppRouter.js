@@ -103,10 +103,7 @@ function AppRouter() {
 			});
 
 		}
-		console.log("notification about to enter")
 		const unsubscribe = messaging().onMessage(async remoteMessage => {
-			console.log("notification entering")
-			console.log("notification entering2", remoteMessage)
 			Toast.show({
 				type: 'info',
 				text1: remoteMessage.data.title,
@@ -117,7 +114,6 @@ function AppRouter() {
 					navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
 				}
 			})
-			console.log("notification shown")
 			
 		});
 		messaging().onNotificationOpenedApp(remoteMessage => {
@@ -134,7 +130,6 @@ function AppRouter() {
 		messaging()
 			.getInitialNotification()
 			.then(remoteMessage => {
-				console.log("initial notification exists", remoteMessage);
 				if (remoteMessage) {
 					// console.log(
 					// 	'Notification caused app to open from quit state:',

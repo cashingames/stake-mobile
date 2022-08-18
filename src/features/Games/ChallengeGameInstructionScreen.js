@@ -121,13 +121,13 @@ const AvailableChallengeBoosts = ({ onClose }) => {
     }))
       .then(unwrapResult)
       .then(result => {
-        console.log(result);
+        // console.log(result);
         setLoading(false);
         onClose();
         navigation.navigate("ChallengeGameInProgress")
       })
       .catch((rejectedValueOrSerializedError) => {
-        console.log(rejectedValueOrSerializedError);
+        // console.log(rejectedValueOrSerializedError);
         Alert.alert(rejectedValueOrSerializedError.message)
         setLoading(false);
       });

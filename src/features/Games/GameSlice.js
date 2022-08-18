@@ -50,7 +50,7 @@ export const endGame = createAsyncThunk(
     async (data, thunkAPI) => {
         //log if question_count exist more than once in the array
         data.chosenOptions.forEach(x => {
-            console.log("loggind submitted question id", x.question_id);
+            // console.log("loggind submitted question id", x.question_id);
         });
 
         //make a network request to the server
@@ -137,15 +137,15 @@ export const GameSlice = createSlice({
             state.gameCategory = null;
         },
         setGameCategory: (state, action) => {
-            console.log("seeting")
+            // console.log("seeting")
             state.gameCategory = action.payload;
         },
         setGameMode: (state, action) => {
-            console.log("here")
+            // console.log("here")
             state.gameMode = action.payload;
         },
         setSelectedFriend: (state, action) => {
-            console.log("seeting")
+            // console.log("seeting")
             state.selectedFriend = action.payload;
         },
         unselectFriend: (state) => {

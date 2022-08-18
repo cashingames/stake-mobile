@@ -63,7 +63,7 @@ const UserAvatar = () => {
                 setLoading(false)
             });
         }).catch(ex => {
-            console.log("erroring", ex);
+            // console.log("erroring", ex);
             setLoading(false);
         });
     }

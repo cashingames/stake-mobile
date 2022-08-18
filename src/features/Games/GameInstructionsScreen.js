@@ -118,7 +118,7 @@ const AvailableBoosts = ({ onClose }) => {
   const user = useSelector(state => state.auth.user);
   const [loading, setLoading] = useState(false);
 
-  console.log(gameCategoryId, gameModeId, gameTypeId);
+  // console.log(gameCategoryId, gameModeId, gameTypeId);
 
   const onStartGame = () => {
     setLoading(true);
@@ -136,17 +136,17 @@ const AvailableBoosts = ({ onClose }) => {
         }))
           .then(unwrapResult)
           .then(result => {
-            console.log('Action logged to server');
+            // console.log('Action logged to server');
           })
           .catch((e) => {
-            console.log('Failed to log to server');
+            // console.log('Failed to log to server');
           });
         setLoading(false);
         onClose();
         navigation.navigate("GameInProgress")
       })
       .catch((rejectedValueOrSerializedError) => {
-        console.log(rejectedValueOrSerializedError);
+        // console.log(rejectedValueOrSerializedError);
         Alert.alert(rejectedValueOrSerializedError.message)
         setLoading(false);
       });
@@ -161,24 +161,24 @@ const AvailableBoosts = ({ onClose }) => {
     }))
       .then(unwrapResult)
       .then(result => {
-        console.log(result);
+        // console.log(result);
         dispatch(logActionToServer({
           message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
           data: result.data.questions
         }))
           .then(unwrapResult)
           .then(result => {
-            console.log('Action logged to server');
+            // console.log('Action logged to server');
           })
           .catch(() => {
-            console.log('failed to log to server');
+            // console.log('failed to log to server');
           });
         setLoading(false);
         onClose();
         navigation.navigate("ChallengeGameInProgress")
       })
       .catch((rejectedValueOrSerializedError) => {
-        console.log(rejectedValueOrSerializedError);
+        // console.log(rejectedValueOrSerializedError);
         Alert.alert('Failed to start game')
         // Alert.alert(rejectedValueOrSerializedError.message)
         setLoading(false);

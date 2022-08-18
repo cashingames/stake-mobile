@@ -17,14 +17,10 @@ import { logoutUser } from "../Auth/AuthSlice";
 const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
   useApplyHeaderWorkaround(navigation.setOptions);
   const { challengeId } = route.params
-  console.log(route.params)
-  console.log('log challegeid', challengeId)
 
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true)
   const challengeDetails = useSelector(state => state.game.challengeDetails);
-  const username = useSelector(state => state.auth.user.username);
-  console.log(JSON.stringify(challengeDetails.opponentId))
 
   const acceptChallengeInivite = () => {
     dispatch(acceptDeclineChallengeInivite({

@@ -144,7 +144,7 @@ export const editProfileAvatar = createAsyncThunk(
             }
         }
         const response = await axios.post('v2/profile/me/picture', data, config).catch(e => {
-            console.log(e);
+            // console.log(e);
         });
         return response.data
     }
@@ -190,7 +190,6 @@ export const getFirstTimeUserReward = createAsyncThunk(
 export const getUser = createAsyncThunk(
     'auth/user/get',
     async (thunkAPI) => {
-        console.log("getting users");
         const response = await axios.get('v3/user/profile');
         // .catch(error => {
         //     if (error.response) {
