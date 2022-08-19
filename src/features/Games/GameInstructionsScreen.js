@@ -118,8 +118,6 @@ const AvailableBoosts = ({ onClose }) => {
   const user = useSelector(state => state.auth.user);
   const [loading, setLoading] = useState(false);
 
-  // console.log(gameCategoryId, gameModeId, gameTypeId);
-
   const onStartGame = () => {
     setLoading(true);
     dispatch(setIsPlayingTrivia(false))
@@ -191,12 +189,19 @@ const AvailableBoosts = ({ onClose }) => {
     navigation.navigate('GameStore')
   }
 
+  const boostsToDisplay = () => {
+    if (gameMode.name === "CHALLENGE") {
+      return boosts.filter(x => x.name.toUpperCase() !== "SKIP");
+    }
+    return boosts;
+  }
+
   return (
     <View style={styles.availableBoosts}>
       <Text style={styles.title}>Available Boosts</Text>
       {boosts?.length > 0 ?
         <View style={styles.boosts}>
-          {boosts.map((boost, i) => <UserAvailableBoost boost={boost} key={i} />
+          {boostsToDisplay().map((boost, i) => <UserAvailableBoost boost={boost} key={i} />
           )}
         </View>
         :

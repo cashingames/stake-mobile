@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, View, Image, Text  } from "react-native";
+import { Pressable, View, Image, Text } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import Constants from 'expo-constants';
@@ -13,11 +13,15 @@ const AvailableGameSessionBoosts = () => {
     const dispatch = useDispatch();
     const boosts = useSelector(state => state.auth.user.boosts);
     const displayedOptions = useSelector(state => state.game.displayedOptions);
+    const gameMode = useSelector(state => state.game.gameMode);
 
     const boostsToDisplay = () => {
         //  bomb is only applicable to multiple choices
         if (displayedOptions.length === 2) {
             return boosts.filter(x => x.name.toUpperCase() !== "BOMB");
+        }
+        if (gameMode.name === "CHALLENGE") {
+            return boosts.filter(x => x.name.toUpperCase() !== "SKIP");
         }
         return boosts;
     }
@@ -98,7 +102,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
-     
+
     title: {
         color: '#FFFF',
         fontFamily: 'graphik-medium',
