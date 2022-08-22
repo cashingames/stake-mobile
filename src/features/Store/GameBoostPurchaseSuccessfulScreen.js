@@ -30,7 +30,7 @@ const GameBoostPurchaseSuccessfulScreen = () => {
             <Text style={styles.paymentHeader}>Payment Successful</Text>
             <Text style={styles.message}>You successfully purchased a boost to continue playing games, climb up the leaderboard and win great prizes</Text>
             <View style={styles.congratsButtons}>
-                <AppButton text={"Play a Game"} onPress={() => navigation.navigate('Game')} style={styles.actionButton} />
+                <AppButton text={"Play a Game"} onPress={() => navigation.navigate('Home')} style={styles.actionButton} />
                 <AppButton text={"Store"} onPress={() => navigation.navigate('GameStore')} style={styles.actionButton} />
             </View>
         </View>
