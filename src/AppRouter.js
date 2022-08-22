@@ -64,6 +64,8 @@ import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen'
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import routeDecider from './utils/notificationRouteDecider';
+import analytics from '@react-native-firebase/analytics';
 
 const AppStack = createNativeStackNavigator();
 
@@ -109,19 +111,27 @@ function AppRouter() {
 				text1: remoteMessage.data.title,
 				text2: remoteMessage.data.body,
 				autoHide: false,
-				onPress: () => {
+				onPress: async () => {
 					Toast.hide();
-					navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+					await analytics().logEvent("notification_challenge", {
+						state: "foreground"
+					})
+					routeDecider(remoteMessage, navigation)
+					
 				}
 			})
 			
 		});
-		messaging().onNotificationOpenedApp(remoteMessage => {
+		messaging().onNotificationOpenedApp(async remoteMessage => {
 			if (!remoteMessage){}
 			else{
-				if (remoteMessage.data && remoteMessage.data.action_type == "CHALLENGE"){
-					navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
-				}
+				await analytics().logEvent("notification_challenge", {
+					state: "background"
+				})
+				routeDecider(remoteMessage, navigation);
+				// if (remoteMessage.data && remoteMessage.data.action_type == "CHALLENGE"){
+				// 	navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+				// }
 			}
 			
 		});
@@ -129,14 +139,13 @@ function AppRouter() {
 		// Check whether an initial notification is available
 		messaging()
 			.getInitialNotification()
-			.then(remoteMessage => {
-				if (remoteMessage) {
-					// console.log(
-					// 	'Notification caused app to open from quit state:',
-					// 	remoteMessage.data,
-					// );
-					navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
+			.then(async remoteMessage => {
+				if ( remoteMessage){
+					await analytics().logEvent("notification_challenge", {
+						state: "quit"
+					})
 				}
+				routeDecider(remoteMessage, navigation);
 			});
 		return unsubscribe;
 	}, [token]);

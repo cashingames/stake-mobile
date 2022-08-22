@@ -21,7 +21,7 @@ export default function GameEndResultScreen({ navigation }) {
 	const gameTypeId = useSelector(state => state.game.gameType.id);
 	const gameModeId = useSelector(state => state.game.gameMode.id);
 	const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
-	console.log("NO GAME",hasActivePlan)
+	
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
 	const refRBSheet = useRef();
@@ -35,7 +35,7 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	const onPlayButtonClick = () => {
-		console.log("johojjoj",hasActivePlan)
+		
 		if (!hasActivePlan) {
 			openBottomSheet();
 			console.log("NO GAME",hasActivePlan)

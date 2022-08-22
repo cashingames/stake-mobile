@@ -12,6 +12,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { isTrue } from "../../utils/stringUtl";
 import { useNavigation } from '@react-navigation/native';
 import LottieAnimations from "../../shared/LottieAnimations";
+import analytics from '@react-native-firebase/analytics';
 
 const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
   useApplyHeaderWorkaround(navigation.setOptions);
@@ -21,21 +22,27 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true)
   const challengeDetails = useSelector(state => state.game.challengeDetails);
 
-  const acceptChallengeInivite = () => {
+  const acceptChallengeInivite = async () => {
     dispatch(acceptDeclineChallengeInivite({
       challenge_id: challengeDetails.challenegeId,
       status: 1
     }
     ))
+    await analytics().logEvent('challenge_action', {
+      'action': 'accept'
+    });
     navigation.navigate('GameInstructions')
   }
 
-  const declineChallengeInivite = () => {
+  const declineChallengeInivite = async () => {
     dispatch(acceptDeclineChallengeInivite({
       challenge_id: challengeDetails.challenegeId,
       status: 0
     }
     ))
+    await analytics().logEvent('challenge_action', {
+      'action': 'decline'
+    });
     navigation.navigate('AppRouter')
   }
 
