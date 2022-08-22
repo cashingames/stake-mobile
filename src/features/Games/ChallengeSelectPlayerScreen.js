@@ -12,6 +12,8 @@ import { sendFriendInvite, setSelectedFriend, unselectFriend } from './GameSlice
 import { unwrapResult } from '@reduxjs/toolkit';
 import ChallengeInviteSuccessText from '../../shared/ChallengeInviteSuccessText';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
+import { debounce } from 'lodash';
+import { useCallback } from 'react';
 
 
 export default function ChallengeSelectPlayerScreen({ navigation }) {
@@ -27,6 +29,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const [searching, setSearching] = useState(false);
     const [sending, setSending] = useState(false)
     const [noDATA, setNoData] = useState(false)
+    const [calltimes, setCallTimes] =useState(0);
 
     const openBottomSheet = () => {
         refRBSheet.current.open()
@@ -84,10 +87,20 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
     useEffect(() => {
         if (search.length >= 2) {
-            dispatch(searchUserFriends(search)).then(() => setLoading(false));
+            findFriends(search);
             setNoData(false)
+        }else{
+            setSearching(false);
         }
     }, [search]);
+
+    const findFriends = useCallback(
+        debounce(name => {
+                setSearching(true);
+                dispatch(searchUserFriends(name)).then(() => setSearching(false));
+        }, 500),
+        []
+    )
 
 
     const onSelectedFriend = (userFriend) => {
