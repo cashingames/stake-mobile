@@ -11,6 +11,7 @@ import UserName from '../../shared/UserName';
 import { logActionToServer } from '../CommonSlice';
 import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
+import { getUser } from '../Auth/AuthSlice';
 
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
@@ -20,6 +21,7 @@ export default function GameEndResultScreen({ navigation }) {
 	const gameTypeId = useSelector(state => state.game.gameType.id);
 	const gameModeId = useSelector(state => state.game.gameMode.id);
 	const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
+	console.log("NO GAME",hasActivePlan)
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
 	const refRBSheet = useRef();
@@ -33,9 +35,10 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	const onPlayButtonClick = () => {
-
+		console.log("johojjoj",hasActivePlan)
 		if (!hasActivePlan) {
 			openBottomSheet();
+			console.log("NO GAME",hasActivePlan)
 			return;
 		}
 
@@ -54,10 +57,10 @@ export default function GameEndResultScreen({ navigation }) {
 				}))
 					.then(unwrapResult)
 					.then(result => {
-						// console.log('Action logged to server');
+						console.log('Action logged to server');
 					})
 					.catch(() => {
-						// console.log('failed to log to server');
+						console.log('failed to log to server');
 					});
 				setLoading(false);
 				dispatch(incrementCountdownResetIndex());
@@ -72,6 +75,9 @@ export default function GameEndResultScreen({ navigation }) {
 	const onHomeButtonClick = () => {
 		navigation.navigate('Home')
 	}
+	useEffect(() => {
+        dispatch(getUser())
+    }, []);
 
 	useFocusEffect(
 		React.useCallback(() => {
