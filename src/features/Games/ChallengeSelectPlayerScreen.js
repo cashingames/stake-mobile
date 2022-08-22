@@ -89,12 +89,15 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         if (search.length >= 2) {
             findFriends(search);
             setNoData(false)
+        }else{
+            setSearching(false);
         }
     }, [search]);
 
     const findFriends = useCallback(
         debounce(name => {
-                dispatch(searchUserFriends(name)).then(() => setLoading(false));
+                setSearching(true);
+                dispatch(searchUserFriends(name)).then(() => setSearching(false));
         }, 500),
         []
     )
