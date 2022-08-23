@@ -1,11 +1,11 @@
 const env = process.env.APP_VARIANT;
-const version = "1.0.50"; //Update for every build and publish
+const version = "1.0.51"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
   version: version, //For every publish and build update the version. Update for every publish and new build
-  runtimeVersion: "1.44", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "1.51", //All apps using the same runtime will get the published updates. Generally update for every new build
   orientation: "portrait",
   icon: "./assets/images/adaptive-icon2.png",
   // jsEngine: "hermes",
@@ -75,6 +75,9 @@ export default {
     apiBaseUrl: getApiUrl(),
     appDomain: getDomain(),
     assetBaseUrl: getAssetsBaseUrl(),
+    "eas": {
+      "projectId": getEasProjectId()
+    }
   },
 }
 
@@ -170,4 +173,8 @@ function getGoogleAndroidClientId() {
   }
 
   return '520726557605-pmk80q42pnoteo5gp6j2gan93smdv8o7.apps.googleusercontent.com';
+}
+
+function getEasProjectId(){
+  return "0e946637-631c-4661-a1ca-5f28b92a1e12";
 }
