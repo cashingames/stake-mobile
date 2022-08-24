@@ -28,7 +28,7 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
       status: 1
     }
     ))
-    await analytics().logEvent('challenge_action', {
+    await analytics().logEvent('challenge_accepted', {
       'action': 'accept'
     });
     navigation.navigate('GameInstructions')
@@ -40,7 +40,7 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
       status: 0
     }
     ))
-    await analytics().logEvent('challenge_action', {
+    await analytics().logEvent('challenge_declined', {
       'action': 'decline'
     });
     navigation.navigate('AppRouter')

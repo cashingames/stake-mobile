@@ -14,6 +14,7 @@ import ChallengeInviteSuccessText from '../../shared/ChallengeInviteSuccessText'
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { debounce } from 'lodash';
 import { useCallback } from 'react';
+import analytics from '@react-native-firebase/analytics';
 
 
 export default function ChallengeSelectPlayerScreen({ navigation }) {
@@ -49,10 +50,13 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         }
         ))
             .then(unwrapResult)
-            .then(result => {
+            .then(async result => {
                 // console.log(result);
                 // setSending(true)
                 openBottomSheet()
+                await analytics().logEvent("challenge_initiated", {
+                    action: "initiate"
+                })
             })
             .catch((rejectedValueOrSerializedError) => {
                 setSending(true)

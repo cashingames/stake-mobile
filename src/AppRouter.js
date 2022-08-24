@@ -106,6 +106,9 @@ function AppRouter() {
 
 		}
 		const unsubscribe = messaging().onMessage(async remoteMessage => {
+			await analytics().logEvent('challenge_notification', {
+				'action': 'received'
+			});
 			Toast.show({
 				type: 'info',
 				text1: remoteMessage.data.title,
@@ -113,8 +116,8 @@ function AppRouter() {
 				autoHide: false,
 				onPress: async () => {
 					Toast.hide();
-					await analytics().logEvent("notification_challenge", {
-						state: "foreground"
+					await analytics().logEvent("challenge_notification", {
+						action: "clicked"
 					})
 					routeDecider(remoteMessage, navigation)
 					
@@ -125,7 +128,7 @@ function AppRouter() {
 		messaging().onNotificationOpenedApp(async remoteMessage => {
 			if (!remoteMessage){}
 			else{
-				await analytics().logEvent("notification_challenge", {
+				await analytics().logEvent("bg_notification", {
 					state: "background"
 				})
 				routeDecider(remoteMessage, navigation);
@@ -141,7 +144,7 @@ function AppRouter() {
 			.getInitialNotification()
 			.then(async remoteMessage => {
 				if ( remoteMessage){
-					await analytics().logEvent("notification_challenge", {
+					await analytics().logEvent("bg_notification", {
 						state: "quit"
 					})
 				}
