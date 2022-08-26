@@ -1,5 +1,5 @@
 const env = process.env.APP_VARIANT;
-const version = "1.0.52"; //Update for every build and publish
+const version = "1.0.53"; //Update for every build and publish
 
 export default {
   name: getAppName(),
