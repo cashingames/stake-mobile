@@ -47,14 +47,15 @@ export default ({ title, initialShowPlayButton = true }) => {
     }
 
     const onPlayButtonClick = () => {
-        hasActivePlan ? onSelectGameMode() : openBottomSheet();
+        // hasActivePlan ? onSelectGameMode() : openBottomSheet();
+        onSelectGameMode();
     }
     const gameMode = useSelector(state => state.game.gameMode);
     // console.log(" log it", gameMode, "this is it right here")
 
     const onSelectGameMode = () => {
         if (gameMode.name === "EXHIBITION") {
-            navigation.navigate('GameInstructions')
+            hasActivePlan ? navigation.navigate('GameInstructions') : openBottomSheet();
         }
         else if (gameMode.name === "CHALLENGE") {
             navigation.navigate('ChallengeSelectPlayer')
