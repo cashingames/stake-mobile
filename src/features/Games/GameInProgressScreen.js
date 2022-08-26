@@ -70,7 +70,7 @@ export default function GameInProgressScreen({ navigation, route }) {
         }))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('challenge_completed', {
+                await analytics().logEvent('exhibition_completed', {
                     'action': 'complete'
                 });
                 dispatch(logActionToServer({

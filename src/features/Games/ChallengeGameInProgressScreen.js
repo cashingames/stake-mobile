@@ -19,7 +19,7 @@ import GameQuestions from "../../shared/GameQuestions";
 import UserAvailableBoosts from "../../shared/UserAvailableBoosts";
 import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
-
+import analytics from '@react-native-firebase/analytics';
 
 export default function ChallengeGameInProgressScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
@@ -64,7 +64,10 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
       consumedBoosts
     }))
       .then(unwrapResult)
-      .then(() => {
+      .then(async () => {
+        await analytics().logEvent('challenge_completed', {
+          'action': 'complete'
+        });
         dispatch(logActionToServer({
           message: "Challenge Game session " + gameSessionToken + " chosen options for " + user.username,
           data: chosenOptions
