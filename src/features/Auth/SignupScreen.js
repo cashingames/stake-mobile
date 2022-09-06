@@ -4,7 +4,7 @@ import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
 // import SocialSignUp from '../../shared/SocialSignUp';
-import { Link} from '@react-navigation/native';
+import { Link } from '@react-navigation/native';
 import AuthBanner from '../../shared/AuthBanner';
 import Input from '../../shared/Input';
 // import SocialSigninDivider from '../../shared/SocialSigninDivider';
@@ -13,6 +13,7 @@ import AuthTitle from '../../shared/AuthTitle';
 import { useDispatch } from 'react-redux';
 import { saveCreatedUserCredentials } from './AuthSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import SocialSignUp from '../../shared/SocialSignUp';
 
 export default function SignupScreen({ navigation }) {
 
@@ -115,25 +116,27 @@ export default function SignupScreen({ navigation }) {
                     </Text>
                 }
             />
-
-            <View>
-                <AppButton text='Continue' onPress={onNext} disabled={!canSend} />
-            </View>
-            <SignIn />
-            {/* <SocialSigninDivider signInText='sign up' />
-            <SocialSignUp />
-            <SignIn /> */}
+            <AppButton text='Continue' onPress={onNext} disabled={!canSend} />
+            <RenderCreateAccount />
         </ScrollView >
     );
 }
 
-const SignIn = () => {
+
+const RenderCreateAccount = () => {
     const navigation = useNavigation();
     return (
-        <View style={styles.signIn}><Text style={styles.signInText}>Have an account already ?</Text>
-            <Pressable onPress={() => navigation.navigate('Login')} >
-                <Text style={{ ...styles.linkText, fontFamily: 'graphik-medium', marginLeft: normalize(7) }}>Sign in</Text>
-            </Pressable>
+        <View style={styles.signIn}>
+            <View style={styles.create}>
+                <Text style={styles.signInText}>Have an account already ?</Text>
+                <Pressable onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.linkText}> Sign in</Text>
+                </Pressable>
+            </View>
+            <Text style={styles.signInText}>or</Text>
+            <View style={styles.google}>
+                <SocialSignUp />
+            </View>
         </View>
     )
 }
@@ -145,13 +148,12 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingTop: responsiveScreenWidth(4),
         paddingHorizontal: responsiveScreenWidth(4),
 
     },
     headerBox: {
         marginTop: responsiveScreenWidth(13),
-        paddingTop: responsiveScreenWidth(10)
+        paddingTop: responsiveScreenWidth(4)
     },
     image: {
         flex: 1,
@@ -166,7 +168,7 @@ const styles = EStyleSheet.create({
     linkText: {
         color: '#EF2F55',
         fontFamily: 'graphik-regular',
-        fontSize:'0.85rem'
+        fontSize: '0.85rem'
     },
 
     agreement: {
@@ -178,7 +180,7 @@ const styles = EStyleSheet.create({
     permission: {
         color: '#000000',
         fontFamily: 'graphik-regular',
-        fontSize:'0.85rem'
+        fontSize: '0.85rem'
     },
     divider: {
         display: 'flex',
@@ -186,14 +188,22 @@ const styles = EStyleSheet.create({
         justifyContent: 'center'
     },
     signIn: {
-        display: 'flex',
+        flexDirection: 'column',
+        // justifyContent: 'center',
+        alignItems: 'center',
+        // marginTop: responsiveScreenWidth(2)
+    },
+    create: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: normalize(3),
+        // marginBottom: normalize(5)
     },
     signInText: {
         color: '#00000080',
         fontFamily: 'graphik-medium',
-        marginBottom: normalize(40)
+        fontSize: '0.87rem'
     },
+    google: {
+        marginVertical: normalize(10)
+    }
 });

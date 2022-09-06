@@ -66,6 +66,7 @@ import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import routeDecider from './utils/notificationRouteDecider';
 import analytics from '@react-native-firebase/analytics';
+import GameStakingScreen from './features/Games/GameStakingScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -190,6 +191,7 @@ function AppRouter() {
 							headerTintColor: '#FFFF',
 						}} />
 						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
+						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Challenge - Select a player' }} />

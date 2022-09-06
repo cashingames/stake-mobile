@@ -117,11 +117,6 @@ const HomeScreen = () => {
             <UserDetails user={user} trivia={trivia} />
             <View style={styles.container}>
                 <SelectGameMode />
-                {/* <GamePicker initialShowPlayButton={false} title={"Pick a game"} /> */}
-                {/* <RecentlyPlayedGames /> */}
-                {/* <Pressable onPress = {() => Linking.openURL ('cashingames://challenge/:challengeId')}>
-                    <Text>Press me</Text>
-                </Pressable> */}
                 <GlobalTopLeadersHero />
             </View>
         </ScrollView>

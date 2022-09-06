@@ -94,6 +94,16 @@ export const acceptDeclineChallengeInivite = createAsyncThunk(
     }
 )
 
+export const getGameStakes = createAsyncThunk(
+    'game/getGameStakes',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.get('v3/odds/standard', data)
+        // console.log(response.data)
+        return response.data;
+    }
+)
+
 
 //This is to store the currently ongoing active game
 let initialState = {
@@ -125,6 +135,7 @@ let initialState = {
     hasPlayedTrivia: false,
     gameDuration: 60,
     challengeDetails: {},
+    gameStakes: []
 }
 
 
@@ -269,6 +280,9 @@ export const GameSlice = createSlice({
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
                 resetState(state)
+            })
+            .addCase(getGameStakes.fulfilled, (state, action) => {
+                state.gameStakes = action.payload.data;
             })
 
     },

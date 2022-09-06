@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Text, View, ScrollView, Alert } from 'react-native';
+import { Text, View, ScrollView, Alert, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -12,6 +12,7 @@ import AppButton from './../../shared/AppButton';
 import UserAvailableBoost from "../../shared/UserAvailableBoost";
 import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
+import { formatCurrency } from "../../utils/stringUtl";
 
 
 export default function GameInstructionsScreen({ navigation }) {
@@ -35,6 +36,7 @@ export default function GameInstructionsScreen({ navigation }) {
       <ScrollView>
         {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
         {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
+        <StakeAmount />
         <UniversalBottomSheet
           refBottomSheet={refRBSheet}
           height={430}
@@ -217,6 +219,23 @@ const AvailableBoosts = ({ onClose }) => {
   )
 }
 
+const StakeAmount = () => {
+  const navigation = useNavigation();
+  const gotoStaking = () => {
+    navigation.navigate("GameStaking")
+  }
+  return (
+    <View style={styles.stakeContainer}>
+      <Text style={styles.stakeAmount}>Win up to &#8358;{formatCurrency(10000)} for playing
+        this game
+      </Text>
+      <Pressable style={styles.stakeButton} onPress={gotoStaking}>
+        <Text style={styles.showMe}>SHOW ME HOW</Text>
+      </Pressable>
+    </View>
+  )
+}
+
 
 
 const styles = EStyleSheet.create({
@@ -342,5 +361,36 @@ const styles = EStyleSheet.create({
   },
   proceedButton: {
     marginVertical: 10,
+  },
+  stakeContainer: {
+    backgroundColor: '#518EF8',
+    borderRadius: 15,
+    paddingHorizontal: "1.5rem",
+    paddingVertical: "1rem",
+    marginTop: "1rem",
+    marginBottom: "1rem",
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  stakeAmount: {
+    fontSize: '1.1rem',
+    fontFamily: 'graphik-medium',
+    color: '#ffff',
+    textAlign:'center',
+    lineHeight: '1.65rem'
+  },
+  stakeButton: {
+    marginVertical: '1rem',
+    borderWidth: 1,
+    borderColor: "#ffff",
+    paddingVertical: '.8rem',
+    paddingHorizontal: '1.3rem',
+    borderRadius: 8
+  },
+  showMe: {
+    fontSize: '.8rem',
+    fontFamily: 'graphik-regular',
+    color: '#ffff',
+    textAlign:'center',
   }
 });
