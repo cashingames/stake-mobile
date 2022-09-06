@@ -4,13 +4,19 @@ import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { formatCurrency } from "../../utils/stringUtl";
 import Input from "../../shared/Input";
 import AppButton from "../../shared/AppButton";
-import { getGameStakes } from "./GameSlice";
+import { getGameStakes, setIsPlayingTrivia, startGame } from "./GameSlice";
 import { Ionicons } from '@expo/vector-icons';
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
-import NoGame from "../../shared/NoGame";
+import FundWalletComponent from "../../shared/FundWalletComponent";
+import { getUser } from "../Auth/AuthSlice";
+import { logActionToServer } from "../CommonSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import UserAvailableBoost from "../../shared/UserAvailableBoost";
+import GoToStore from "../../shared/GoToStore";
 
 
 const GameStakingScreen = ({ navigation }) => {
@@ -27,18 +33,21 @@ const GameStakingScreen = ({ navigation }) => {
     }
 
     const closeBottomSheet = () => {
+        dispatch(getUser());
         refRBSheet.current.close()
     }
 
     useEffect(() => {
         dispatch(getGameStakes())
+        dispatch(getUser())
     }, [])
 
     const startGame = () => {
-        if (user.walletBalance < amount) {
+        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
             openBottomSheet();
             console.log("low balance")
         }
+        openBottomSheet() 
     }
 
 
@@ -66,21 +75,144 @@ const GameStakingScreen = ({ navigation }) => {
                     <Text style={styles.stakeHead}>WINNINGS</Text>
                     {/* </View> */}
                     {/* <View style={styles.stakeScoreContainer}> */}
-                        <Text style={styles.stakeScore}>SCORE</Text>
+                    <Text style={styles.stakeScore}>SCORE</Text>
                     {/* </View> */}
                     <Text style={styles.stakeHead}>ODDS</Text>
                 </View>
                 {gameStakes.map((gameStake, i) => <StakeAmount key={i} gameStake={gameStake} position={i + 1}
                     amount={amount} />)}
             </View>
-            <UniversalBottomSheet
-                refBottomSheet={refRBSheet}
-                height={300}
-                subComponent={<NotEnoughBalance onClose={closeBottomSheet} />}
-            />
+
+            {Number.parseFloat(user.walletBalance) < Number.parseFloat(amount) ?
+                <UniversalBottomSheet
+                    refBottomSheet={refRBSheet}
+                    height={620}
+                    subComponent={<NotEnoughBalance onClose={closeBottomSheet} />}
+                />
+                :
+                <UniversalBottomSheet
+                    refBottomSheet={refRBSheet}
+                    height={460}
+                    subComponent={<AvailableBoosts onClose={closeBottomSheet} />}
+                />
+            }
+
         </ScrollView>
     )
 
+}
+
+const AvailableBoosts = ({ onClose }) => {
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
+    const boosts = useSelector(state => state.auth.user.boosts);
+    const gameCategoryId = useSelector(state => state.game.gameCategory.id);
+    const gameTypeId = useSelector(state => state.game.gameType.id);
+    const gameModeId = useSelector(state => state.game.gameMode.id);
+    const gameMode = useSelector(state => state.game.gameMode);
+    // const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
+    // const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
+    // const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
+    const user = useSelector(state => state.auth.user);
+    const [loading, setLoading] = useState(false);
+
+    const onStartGame = () => {
+        setLoading(true);
+        dispatch(setIsPlayingTrivia(false))
+        dispatch(startGame({
+            category: gameCategoryId,
+            type: gameTypeId,
+            mode: gameModeId
+        }))
+            .then(unwrapResult)
+            .then(result => {
+                dispatch(logActionToServer({
+                    message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
+                    data: result.data.questions
+                }))
+                    .then(unwrapResult)
+                    .then(result => {
+                        // console.log('Action logged to server');
+                    })
+                    .catch((e) => {
+                        // console.log('Failed to log to server');
+                    });
+                setLoading(false);
+                onClose();
+                navigation.navigate("GameInProgress")
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                // console.log(rejectedValueOrSerializedError);
+                Alert.alert(rejectedValueOrSerializedError.message)
+                setLoading(false);
+            });
+    }
+
+    // const startChallenge = () => {
+    //   setLoading(true);
+    //   dispatch(startChallengeGame({
+    //     category: challengeCategory,
+    //     type: gameTypeId,
+    //     challenge_id: challengeId
+    //   }))
+    //     .then(unwrapResult)
+    //     .then(result => {
+    //       // console.log(result);
+    //       dispatch(logActionToServer({
+    //         message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
+    //         data: result.data.questions
+    //       }))
+    //         .then(unwrapResult)
+    //         .then(result => {
+    //           // console.log('Action logged to server');
+    //         })
+    //         .catch(() => {
+    //           // console.log('failed to log to server');
+    //         });
+    //       setLoading(false);
+    //       onClose();
+    //       navigation.navigate("ChallengeGameInProgress")
+    //     })
+    //     .catch((rejectedValueOrSerializedError) => {
+    //       // console.log(rejectedValueOrSerializedError);
+    //       Alert.alert('Failed to start game')
+    //       // Alert.alert(rejectedValueOrSerializedError.message)
+    //       setLoading(false);
+    //     });
+    // }
+
+
+    const visitStore = () => {
+        onClose();
+        navigation.navigate('GameStore')
+    }
+
+    const boostsToDisplay = () => {
+        if (gameMode.name === "CHALLENGE") {
+            return boosts.filter(x => x.name.toUpperCase() !== "SKIP");
+        }
+        return boosts;
+    }
+
+    return (
+        <View style={styles.availableBoosts}>
+            <Text style={styles.title}>Available Boosts</Text>
+            {boosts?.length > 0 ?
+                <View style={styles.boosts}>
+                    {boostsToDisplay().map((boost, i) => <UserAvailableBoost boost={boost} key={i} />
+                    )}
+                </View>
+                :
+                <Text style={styles.noBoosts}>No boost available, go to store to purchase boost</Text>
+            }
+            <View style={styles.storeLinks}>
+                <GoToStore onPress={visitStore} />
+            </View>
+            {gameMode.name === "EXHIBITION" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />}
+            {/* {gameMode.name === "CHALLENGE" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={startChallenge} disabled={loading} />} */}
+
+        </View>
+    )
 }
 const UserWalletBalance = ({ balance }) => {
     return (
@@ -109,7 +241,7 @@ const StakeAmount = ({ gameStake, position, amount }) => {
     )
 }
 
-const NotEnoughBalance = ()=>{
+const NotEnoughBalance = ({ onClose }) => {
     return (
         <View style={styles.noGames}>
             <Image style={styles.sadEmoji}
@@ -118,6 +250,7 @@ const NotEnoughBalance = ()=>{
             />
             <Text style={styles.noGamesText}>Sorry,</Text>
             <Text style={styles.noGamesText}>You do not have enough balance to stake this amount</Text>
+            <FundWalletComponent onClose={onClose} />
         </View>
     )
 }
@@ -250,4 +383,84 @@ const styles = EStyleSheet.create({
         color: '#000',
         lineHeight: normalize(24)
     },
+    storeLinks: {
+        alignItems: 'center',
+      },
+      amount: {
+        fontFamily: 'graphik-bold',
+        fontSize: '0.8rem',
+        color: '#FF932F'
+      },
+      title: {
+        fontSize: '0.85rem',
+        fontFamily: 'graphik-medium',
+        color: '#000',
+        lineHeight: 23,
+        marginBottom: normalize(15)
+      },
+      boosts: {
+        // alignItems: ''
+      },
+      noBoosts: {
+        textAlign: 'center',
+        fontSize: '0.85rem',
+        fontFamily: 'graphik-regular',
+        marginVertical: '1rem'
+      },
+      boostContent: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+        borderBottomWidth: 1,
+        marginBottom: normalize(17)
+      },
+      boostAmount: {
+        display: 'flex',
+        flexDirection: 'row',
+      },
+      availableBoosts: {
+        paddingVertical: normalize(14),
+        paddingHorizontal: normalize(20),
+      },
+      boostDetails: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        marginBottom: normalize(15),
+        justifyContent: 'center'
+      },
+      boostName: {
+        fontSize: '0.69rem',
+        fontFamily: 'graphik-bold',
+        color: '#151C2F',
+        lineHeight: '1.2rem',
+      },
+      boostDescription: {
+        fontSize: '0.69rem',
+        fontFamily: 'graphik-regular',
+        color: '#828282',
+        lineHeight: '1.2rem',
+        width: responsiveScreenWidth(60),
+      },
+      storeLink: {
+        fontSize: '0.69rem',
+        fontFamily: 'graphik-medium',
+        color: '#EF2F55',
+      },
+      needBoost: {
+        fontSize: '0.69rem',
+        fontFamily: 'graphik-regular',
+        color: '#000',
+      },
+      moreBoost: {
+        alignItems: 'center',
+      },
+      startContainer: {
+        marginTop: normalize(50),
+      },
+      proceedButton: {
+        marginVertical: 10,
+      },
+
 })
