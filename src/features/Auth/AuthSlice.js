@@ -201,7 +201,7 @@ export const markNotificationRead = createAsyncThunk(
     'auth/markNotificationRead',
     async (data, thunkAPI) => {
         //make a network request to the server
-        const response = await axios.put('v3/notifications/read/d5f07a86-8cf8-4e92-9653-01289e54d9fa', data)
+        const response = await axios.put(`v3/notifications/read/${data}`, data)
         console.log(response.data)
         return response.data;
     }

@@ -16,7 +16,7 @@ export default UserName;
 const styles = EStyleSheet.create({
     nameContainer: {
         alignItems: 'center',
-        marginBottom: normalize(10)
+        marginBottom: normalize(8)
     },
     name: {
         textAlign: 'center',

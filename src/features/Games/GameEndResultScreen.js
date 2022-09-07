@@ -12,6 +12,7 @@ import { logActionToServer } from '../CommonSlice';
 import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { getUser } from '../Auth/AuthSlice';
+import { formatCurrency } from '../../utils/stringUtl';
 
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
@@ -21,9 +22,11 @@ export default function GameEndResultScreen({ navigation }) {
 	const gameTypeId = useSelector(state => state.game.gameType.id);
 	const gameModeId = useSelector(state => state.game.gameMode.id);
 	const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
-	
+
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
+	const [showText, setShowText] = useState(true);
+
 	const refRBSheet = useRef();
 
 	const openBottomSheet = () => {
@@ -35,10 +38,10 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	const onPlayButtonClick = () => {
-		
+
 		if (!hasActivePlan) {
 			openBottomSheet();
-			console.log("NO GAME",hasActivePlan)
+			console.log("NO GAME", hasActivePlan)
 			return;
 		}
 
@@ -76,8 +79,8 @@ export default function GameEndResultScreen({ navigation }) {
 		navigation.navigate('Home')
 	}
 	useEffect(() => {
-        dispatch(getUser())
-    }, []);
+		dispatch(getUser())
+	}, []);
 
 	useFocusEffect(
 		React.useCallback(() => {
@@ -90,16 +93,24 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 
 	useFocusEffect(
-        React.useCallback(() => {
-            StatusBar.setTranslucent(true)
-            StatusBar.setBackgroundColor("transparent")
-            StatusBar.setBarStyle('light-content');
-            return () => {
-                StatusBar.setTranslucent(true)
-                StatusBar.setBarStyle('dark-content');
-            }
-        }, [])
-    );
+		React.useCallback(() => {
+			StatusBar.setTranslucent(true)
+			StatusBar.setBackgroundColor("transparent")
+			StatusBar.setBarStyle('light-content');
+			return () => {
+				StatusBar.setTranslucent(true)
+				StatusBar.setBarStyle('dark-content');
+			}
+		}, [])
+	);
+
+	useEffect(() => {
+        // Change the state every second or the time given by User.
+        const interval = setInterval(() => {
+            setShowText((showText) => !showText);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
 	return (
 
@@ -107,6 +118,7 @@ export default function GameEndResultScreen({ navigation }) {
 			<GameEndClockAnimation />
 			<UserName userName={user.firstName} />
 			<UserResultInfo pointsGained={pointsGained} />
+			<StakeWinnings showText={showText} />
 			<SeeRank />
 			<FinalScore pointsGained={pointsGained} />
 			<View style={styles.gameButtons}>
@@ -120,10 +132,10 @@ export default function GameEndResultScreen({ navigation }) {
 
 			</View>
 			<UniversalBottomSheet
-                refBottomSheet={refRBSheet}
+				refBottomSheet={refRBSheet}
 				height={300}
-                subComponent = {<NoGame onClose={closeBottomSheet} />}
-            />
+				subComponent={<NoGame onClose={closeBottomSheet} />}
+			/>
 		</ScrollView>
 
 	);
@@ -154,6 +166,20 @@ const SeeRank = () => {
 			</View>
 		</Pressable>
 
+	)
+}
+
+const StakeWinnings = ({showText}) => {
+	return (
+		<View style={styles.winningsContainer}>
+			<View style={styles.winningsAmount}>
+				<Text style={styles.winningsText}>You have won</Text>
+				<Text style={[styles.winningsCash, { opacity: showText ? 0 : 1 }]}> &#8358;{formatCurrency(10000)}!</Text>
+			</View>
+			<Pressable>
+				<Text style={styles.reviewStake}>Review Stake</Text>
+			</Pressable>
+		</View>
 	)
 }
 
@@ -197,7 +223,7 @@ const styles = EStyleSheet.create({
 		alignItems: 'center',
 		textAlign: 'center',
 		marginHorizontal: normalize(25),
-		marginBottom: responsiveScreenWidth(10)
+		marginBottom: responsiveScreenWidth(5)
 	},
 	info: {
 		textAlign: 'center',
@@ -230,7 +256,7 @@ const styles = EStyleSheet.create({
 		justifyContent: 'space-between',
 		backgroundColor: '#F9E821',
 		borderRadius: 16,
-		marginBottom: responsiveScreenWidth(23),
+		marginBottom: responsiveScreenWidth(12),
 		padding: Platform.OS === 'ios' ? normalize(15) : normalize(10),
 	},
 	finalScoreText: {
@@ -268,6 +294,40 @@ const styles = EStyleSheet.create({
 		color: '#FFFF',
 		fontFamily: 'graphik-medium',
 		fontSize: '0.72rem',
+	},
+	winningsContainer: {
+		alignItems: 'center',
+		backgroundColor:'#FFFF',
+		paddingVertical: normalize(10),
+		marginBottom: normalize(20),
+		borderRadius: 13,
+	},
+	winningsAmount: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: '.7rem'
+	},
+	winningsText: {
+		textAlign: 'center',
+		color: '#000000',
+		fontFamily: 'graphik-regular',
+		fontSize: '.9rem',
+		// lineHeight: '1.5rem'
+	},
+	winningsCash: {
+		textAlign: 'center',
+		color: '#EF2F55',
+		fontFamily: 'graphik-regular',
+		fontSize: '1.2rem',
+		// lineHeight: '1.5rem'
+	},
+	reviewStake: {
+		textAlign: 'center',
+		color: '#000000',
+		fontFamily: 'graphik-regular',
+		fontSize: '.8rem',
+		textDecorationLine: 'underline',
+		// lineHeight: '1.5rem'
 	},
 
 });

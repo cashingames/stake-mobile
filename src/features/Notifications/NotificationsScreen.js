@@ -11,10 +11,10 @@ import LottieAnimations from "../../shared/LottieAnimations";
 
 const NotificationsScreen = ({ navigation }) => {
     const user = useSelector(state => state.auth.user)
-    // console.log(user)
+    console.log(user)
 
     const notifications = useSelector(state => state.auth.userNotifications)
-    // console.log(notifications)
+    console.log(notifications)
     const dispatch = useDispatch();
 
 
@@ -24,7 +24,7 @@ const NotificationsScreen = ({ navigation }) => {
             console.log('here')
 
             dispatch(getUser());
-            dispatch(getUserNotifications())
+            dispatch(getUserNotifications());
         }, [])
     );
 
@@ -32,7 +32,7 @@ const NotificationsScreen = ({ navigation }) => {
         React.useCallback(() => {
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
-            StatusBar.setBarStyle('light-content');
+            StatusBar.setBarStyle('dark-content');
             return () => {
                 StatusBar.setTranslucent(true)
                 StatusBar.setBarStyle('dark-content');
@@ -65,15 +65,17 @@ const Notification = ({ notification, index }) => {
     const [clicked, setClicked] = useState(false)
     const notificationAction = () => {
         if (notification.data.action_type === "CHALLENGE") {
-            dispatch(markNotificationRead()).then(() => setClicked(true));
+            dispatch(markNotificationRead(notification.id)).then(() => setClicked(true));
+            dispatch(getUser());
             navigation.navigate('MyChallengesScore', { challengeId: notification.data.action_id })
         }
-        dispatch(markNotificationRead()).then(() => setClicked(true));
+        dispatch(markNotificationRead(notification.id)).then(() => setClicked(true));
+        dispatch(getUser());
     }
     return (
         <View style={styles.notificationContainer}>
             <Text style={styles.notificationIndex}>{index}</Text>
-            <Pressable style={[styles.notificationTitleContainer, clicked ? styles.clicked : {}]} onPress={notificationAction}>
+            <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked ? styles.clicked : {}]} onPress={notificationAction}>
                 <Text style={styles.notificationTitle}>{notification.data.title}</Text>
             </Pressable>
         </View>
