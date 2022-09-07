@@ -67,6 +67,7 @@ import Toast from 'react-native-toast-message';
 import routeDecider from './utils/notificationRouteDecider';
 import analytics from '@react-native-firebase/analytics';
 import GameStakingScreen from './features/Games/GameStakingScreen';
+import NotificationsScreen from './features/Notifications/NotificationsScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -247,6 +248,8 @@ function AppRouter() {
 						<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
 
 						<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
+						{/* <AppStack.Screen name="Notifications" component={NotificationsScreen} options={{ title: 'Notifications' }} /> */}
+
 					</>
 				) :
 				(

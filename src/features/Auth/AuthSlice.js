@@ -187,6 +187,26 @@ export const getFirstTimeUserReward = createAsyncThunk(
     }
 )
 
+export const getUserNotifications = createAsyncThunk(
+    'auth/getUserNotifications',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.get('v3/notifications/', data)
+        // console.log(response.data.data.data)
+        return response.data;
+    }
+)
+
+export const markNotificationRead = createAsyncThunk(
+    'auth/markNotificationRead',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.put('v3/notifications/read/d5f07a86-8cf8-4e92-9653-01289e54d9fa', data)
+        console.log(response.data)
+        return response.data;
+    }
+)
+
 export const getUser = createAsyncThunk(
     'auth/user/get',
     async (thunkAPI) => {
@@ -224,7 +244,8 @@ const initialState = {
     userChallenges: [],
     challengeScores: {},
     firstTimeUserReward: [],
-    loginError: ""
+    loginError: "",
+    userNotifications: []
 }
 
 export const AuthSlice = createSlice({
@@ -305,6 +326,9 @@ export const AuthSlice = createSlice({
             })
             .addCase(getFirstTimeUserReward.fulfilled, (state, action) => {
                 state.firstTimeUserReward = action.payload.data;
+            })
+            .addCase(getUserNotifications.fulfilled, (state, action) => {
+                state. userNotifications = action.payload.data.data;
             })
 
     },

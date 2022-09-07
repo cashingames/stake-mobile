@@ -15,6 +15,7 @@ import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
 import AppButton from '../../shared/AppButton';
+import NotificationsScreen from '../Notifications/NotificationsScreen';
 // import LottieAnimations from '../../shared/LottieAnimations';
 // import HowToWin from '../HowToWin/HowToWin';
 
@@ -52,7 +53,9 @@ const HomeRouter = () => {
             screenOptions={AppMainHeaderOptions}>
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
             <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
+            <HomeStack.Screen name="Notifications" component={NotificationsScreen} options={{ title: 'Notifications' }} />
             {/* <HomeStack.Screen name="HowToWin" component={HowToWin} options={{ title: 'How to win' }} /> */}
+
 
         </HomeStack.Navigator>
     );
@@ -60,6 +63,8 @@ const HomeRouter = () => {
 
 const RightButtons = () => {
     const navigation = useNavigation();
+    const user = useSelector(state => state.auth.user);
+    // console.log(user)
     const route = useRoute();
 
     const routeName = route.name
@@ -74,6 +79,15 @@ const RightButtons = () => {
             <Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
                 <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
+            </Pressable>
+            <Pressable style={[styles.headerIconContainer, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Notifications')}>
+                <View style={styles.notificationContainer}>
+                    <Ionicons name='notifications-outline' size={26} style={[styles.headerIcon, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} />
+                    <View style={styles.numberContainer}>
+                        <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
+                    </View>
+                </View>
+                <Text style={styles.headerIconText}>Notification</Text>
             </Pressable>
             {/* <Pressable style={[styles.headerIconContainer, routeName === 'HowToWin' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('HowToWin')}>
                 <Ionicons name='home-outline' size={26} />
@@ -197,6 +211,27 @@ const styles = EStyleSheet.create({
     },
     activeHeaderIcon: {
         opacity: 1
+    },
+    notificationContainer: {
+        flexDirection: 'row',
+    },
+    numberContainer: {
+        backgroundColor: '#518EF8',
+        position: 'absolute',
+        left: 22,
+        top: 0,
+        borderWidth: 2,
+        borderColor: 'white',
+        borderRadius: 100,
+        width: normalize(19),
+        height: normalize(19),
+    },
+    number: {
+        textAlign: 'center',
+        alignItems:'center',
+        color: '#FFFF',
+        fontFamily: 'graphik-bold',
+        fontSize: Platform.OS === 'ios' ? '0.6rem' : '0.6rem',
     },
 });
 
