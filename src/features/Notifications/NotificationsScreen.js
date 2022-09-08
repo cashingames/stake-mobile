@@ -74,7 +74,7 @@ const Notification = ({ notification, index }) => {
     }
     return (
         <View style={styles.notificationContainer}>
-            <Text style={styles.notificationIndex}>{index}</Text>
+            {/* <Text style={styles.notificationIndex}>{index}</Text> */}
             <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked ? styles.clicked : {}]} onPress={notificationAction}>
                 <Text style={styles.notificationTitle}>{notification.data.title}</Text>
             </Pressable>
@@ -102,16 +102,17 @@ const styles = EStyleSheet.create({
     notificationTitleContainer: {
         borderWidth: 1,
         borderColor: '#E0E0E0',
-        paddingVertical: Platform.OS === 'ios' ? normalize(15) : normalize(10),
+        paddingVertical: Platform.OS === 'ios' ? normalize(15) : normalize(12),
         borderRadius: 11,
-        paddingHorizontal: normalize(15),
+        paddingHorizontal: normalize(12),
+        width:'20rem',
         backgroundColor: '#FFFF',
         elevation: 1.5,
         shadowColor: '#000',
         shadowOffset: { width: 0.2, height: 2 },
         shadowOpacity: 0.2,
     },
-    notificationIndex: {
+    notificationIndex   : {
         fontFamily: 'graphik-medium',
         fontSize: '.7rem',
         color: '#000000',
@@ -123,7 +124,6 @@ const styles = EStyleSheet.create({
         color: '#000000',
         marginRight: '.6rem',
         textAlingn: 'center',
-        width: '17rem',
         lineHeight: '1.4rem'
     },
     clicked: {

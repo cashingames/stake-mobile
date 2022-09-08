@@ -36,7 +36,9 @@ export default function GameInstructionsScreen({ navigation }) {
       <ScrollView>
         {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
         {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
-        <StakeAmount />
+        {gameMode.name !== "CHALLENGE" &&
+          <StakeAmount />
+        }
         <UniversalBottomSheet
           refBottomSheet={refRBSheet}
           height={430}
@@ -369,14 +371,14 @@ const styles = EStyleSheet.create({
     paddingVertical: "1rem",
     marginTop: "1rem",
     marginBottom: "1rem",
-    alignItems:'center',
-    justifyContent:'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   stakeAmount: {
     fontSize: '1.1rem',
     fontFamily: 'graphik-medium',
     color: '#ffff',
-    textAlign:'center',
+    textAlign: 'center',
     lineHeight: '1.65rem'
   },
   stakeButton: {
@@ -391,6 +393,6 @@ const styles = EStyleSheet.create({
     fontSize: '.8rem',
     fontFamily: 'graphik-regular',
     color: '#ffff',
-    textAlign:'center',
+    textAlign: 'center',
   }
 });
