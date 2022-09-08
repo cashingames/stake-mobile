@@ -205,7 +205,7 @@ const VerifyOTP = ({ onClose }) => {
         <View style={styles.verifyPhoneOtp}>
             <Text style={styles.verifySubText}>
                 A One Time Password(OTP) has been sent to your registered phone number.
-                Please input the four(4) digit
+                Please input the five(5) digit
                 number below to verify your phone number so you
                 can play exicting games and stand a chance to win lots of prizes
             </Text>

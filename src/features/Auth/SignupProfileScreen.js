@@ -41,6 +41,7 @@ export default function SignupProfileScreen({ navigation }) {
             // dispatch(setToken(response.data.data))
             navigation.navigate('SignupVerifyPhone')
             // navigation.navigate('EmailVerified')
+            // console.log(response)
 
         }, err => {
             if (!err || !err.response || err.response === undefined) {

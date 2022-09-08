@@ -9,6 +9,7 @@ const InputOTP = () => {
     const [secondDigit, setSecondDigit] = useState('')
     const [thirdDigit, setThirdDigit] = useState('')
     const [fourthDigit, setFourthDigit] = useState('')
+    const [fifthDigit, setFifthDigit] = useState('')
 
 
     return (
@@ -43,6 +44,14 @@ const InputOTP = () => {
                     style={[styles.input]}
                     value={fourthDigit}
                     onChangeText={setFourthDigit}
+                    type="phone"
+                    keyboardType="numeric"
+                    maxLength={1}
+                />
+                <TextInput
+                    style={[styles.input]}
+                    value={fifthDigit}
+                    onChangeText={setFifthDigit}
                     type="phone"
                     keyboardType="numeric"
                     maxLength={1}
