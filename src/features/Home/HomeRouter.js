@@ -83,9 +83,12 @@ const RightButtons = () => {
             <Pressable style={[styles.headerIconContainer, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Notifications')}>
                 <View style={styles.notificationContainer}>
                     <Ionicons name='notifications-outline' size={26} style={[styles.headerIcon, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} />
-                    <View style={styles.numberContainer}>
-                        <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
-                    </View>
+                    {user.unreadNotificationsCount !== 0 &&
+                        <View style={styles.numberContainer}>
+                            <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
+                        </View>
+                    }
+
                 </View>
                 <Text style={styles.headerIconText}>Notification</Text>
             </Pressable>
@@ -228,7 +231,7 @@ const styles = EStyleSheet.create({
     },
     number: {
         textAlign: 'center',
-        alignItems:'center',
+        alignItems: 'center',
         color: '#FFFF',
         fontFamily: 'graphik-bold',
         fontSize: Platform.OS === 'ios' ? '0.6rem' : '0.6rem',

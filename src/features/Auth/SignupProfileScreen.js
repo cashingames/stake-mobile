@@ -39,7 +39,7 @@ export default function SignupProfileScreen({ navigation }) {
         }).then(response => {
             // saveToken(response.data.data)
             // dispatch(setToken(response.data.data))
-            navigation.navigate('SignupVerifyEmail')
+            navigation.navigate('SignupVerifyPhone')
             // navigation.navigate('EmailVerified')
 
         }, err => {
