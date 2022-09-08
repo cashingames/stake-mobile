@@ -93,7 +93,7 @@ const GameStakingScreen = ({ navigation }) => {
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={460}
-                    subComponent={<AvailableBoosts onClose={closeBottomSheet} />}
+                    subComponent={<AvailableBoosts onClose={closeBottomSheet} amount={amount} />}
                 />
             }
 
@@ -102,7 +102,7 @@ const GameStakingScreen = ({ navigation }) => {
 
 }
 
-const AvailableBoosts = ({ onClose }) => {
+const AvailableBoosts = ({ onClose, amount }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const boosts = useSelector(state => state.auth.user.boosts);
@@ -122,7 +122,8 @@ const AvailableBoosts = ({ onClose }) => {
         dispatch(startGame({
             category: gameCategoryId,
             type: gameTypeId,
-            mode: gameModeId
+            mode: gameModeId,
+            staking_amount: amount
         }))
             .then(unwrapResult)
             .then(result => {

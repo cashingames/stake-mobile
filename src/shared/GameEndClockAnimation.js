@@ -10,7 +10,7 @@ const GameEndClockAnimation = () => {
             <LottieAnimations
                 animationView={require('../../assets/game-over.json')}
                 width={normalize(140)}
-                height={normalize(140)}
+                height={normalize(125)}
             />
         </View>
     )
