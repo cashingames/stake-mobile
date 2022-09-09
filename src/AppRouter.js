@@ -68,6 +68,7 @@ import routeDecider from './utils/notificationRouteDecider';
 import analytics from '@react-native-firebase/analytics';
 import GameStakingScreen from './features/Games/GameStakingScreen';
 import NotificationsScreen from './features/Notifications/NotificationsScreen';
+import SignupVerifyPhoneScreen from './features/Auth/SignupVerifyPhoneScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -264,6 +265,7 @@ function AppRouter() {
 						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} />
 						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} />
 						<AppStack.Screen name="SignupVerifyEmail" component={SignupVerifyEmailScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="SignupVerifyPhone" component={SignupVerifyPhoneScreen} options={{ headerShown: false }} />
 					</AppStack.Group >
 				)
 			}
