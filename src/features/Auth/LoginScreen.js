@@ -15,6 +15,8 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { saveToken } from '../../utils/ApiHelper';
+import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
+import InputOTP from '../../shared/InputOTP';
 
 export default function LoginScreen({ navigation }) {
 
@@ -25,6 +27,17 @@ export default function LoginScreen({ navigation }) {
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+
+    const refRBSheet = useRef();
+
+
+    const openBottomSheet = () => {
+        refRBSheet.current.open()
+    }
+
+    const closeBottomSheet = () => {
+        refRBSheet.current.close()
+    }
 
     const onChangeEmail = (value) => {
         setEmail(value)
@@ -130,6 +143,11 @@ export default function LoginScreen({ navigation }) {
 
             <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
             <RenderCreateAccount />
+            <UniversalBottomSheet
+                refBottomSheet={refRBSheet}
+                height={540}
+                subComponent={<VerifyOTP onClose={closeBottomSheet} />}
+            />
         </ScrollView >
     );
 }
@@ -160,6 +178,42 @@ const RenderCreateAccount = () => {
             <View style={styles.google}>
                 <SocialSignUp />
             </View>
+        </View>
+    )
+}
+
+const VerifyOTP = ({ onClose }) => {
+    const [loading, setLoading] = useState(false);
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
+
+    const goToDashboard = () => {
+        setLoading(true);
+        dispatch(verifyUser({ email: params.email }))
+            .then(unwrapResult)
+            .then(response => {
+                // console.log("email verification response", response);
+                saveToken(response.data)
+                setLoading(false);
+                navigation.navigate('AppRouter')
+            })
+            .catch((rejectedValueOrSerializedError) => {
+
+                Alert.alert("Failed to log in");
+                setLoading(false);
+            })
+    }
+
+    return (
+        <View style={styles.verifyPhoneOtp}>
+            <Text style={styles.verifySubText}>
+                A One Time Password(OTP) has been sent to your registered phone number.
+                Please input the five(5) digit
+                number below to verify your phone number so you
+                can play exicting games and stand a chance to win lots of prizes
+            </Text>
+            <InputOTP />
+            <AppButton text={loading ? 'Verifying...' : 'Login'} disabled={loading} onPress={goToDashboard} />
         </View>
     )
 }

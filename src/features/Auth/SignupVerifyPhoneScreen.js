@@ -181,5 +181,4 @@ const styles = EStyleSheet.create({
         opacity: 0.6,
         marginTop: normalize(25)
     },
-
 });
