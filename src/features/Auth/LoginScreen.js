@@ -28,16 +28,8 @@ export default function LoginScreen({ navigation }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const refRBSheet = useRef();
 
-
-    const openBottomSheet = () => {
-        refRBSheet.current.open()
-    }
-
-    const closeBottomSheet = () => {
-        refRBSheet.current.close()
-    }
+    
 
     const onChangeEmail = (value) => {
         setEmail(value)
@@ -143,11 +135,6 @@ export default function LoginScreen({ navigation }) {
 
             <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
             <RenderCreateAccount />
-            <UniversalBottomSheet
-                refBottomSheet={refRBSheet}
-                height={540}
-                subComponent={<VerifyOTP onClose={closeBottomSheet} />}
-            />
         </ScrollView >
     );
 }
