@@ -69,7 +69,7 @@ export default function LoginScreen({ navigation }) {
                 if (err.response.status === 400) {
                     navigation.navigate('SignupVerifyPhone', {
                         phone_number: err.response.data.errors.phoneNumber,
-                        username: err.response.data.errors.username, next_resend_minutes: 0
+                        username: err.response.data.errors.username, next_resend_minutes: 1
                     })
                 }
 
