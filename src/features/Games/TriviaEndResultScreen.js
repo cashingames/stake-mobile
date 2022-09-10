@@ -17,7 +17,10 @@ const TriviaEndResultScreen = ({ route }) => {
     const params = route.params;
     const dispatch = useDispatch();
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
+    console.log(triviaLeaders)
     const isGameEnded = useSelector(state => state.game.isEnded);
+    const navigation = useNavigation();
+
 
 
     useEffect(() => {
@@ -49,12 +52,19 @@ const TriviaEndResultScreen = ({ route }) => {
         StatusBar.setBarStyle('dark-content');
     }, []);
 
+    const viewLiveTriviaLeaderboard = () => {
+        navigation.navigate('LiveTriviaLeaderboard', { triviaId: params.triviaId })
+    }
+    const returnToHomeButton = () => {
+        navigation.navigate('Home')
+    }
+
 
     return (
         <ScrollView style={styles.container}>
             <ResultContainer />
-            <TriviaParticipants triviaLeaders={triviaLeaders} />
-            <TriviaButton />
+            {/* <TriviaParticipants triviaLeaders={triviaLeaders} /> */}
+            <TriviaButton onPress={viewLiveTriviaLeaderboard} onPressHome ={returnToHomeButton} />
         </ScrollView>
     )
 }
@@ -89,14 +99,12 @@ const TriviaParticipants = ({ triviaLeaders }) => {
     )
 }
 
-const TriviaButton = () => {
-    const navigation = useNavigation();
-    const returnToHomeButton = () => {
-        navigation.navigate('Home')
-    }
+const TriviaButton = ({onPress, onPressHome}) => {
+
     return (
         <View style={styles.triviaButton}>
-            <AppButton text='Return to Dashboard' onPress={returnToHomeButton} />
+            <AppButton text='View Leaderboard' onPress={onPress} />
+            <AppButton text='Return to Home' onPress={onPressHome} />
         </View>
     )
 }

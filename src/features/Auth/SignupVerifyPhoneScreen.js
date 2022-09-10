@@ -108,7 +108,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                         height={normalize(140)}
                     />
                 </View>
-                <VerifyEmailText />
+                <VerifyEmailText params={params} />
                 <InputOTP
                     firstDigit={firstDigit}
                     setFirstDigit={setFirstDigit}
@@ -131,7 +131,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     )
 }
 
-const VerifyEmailText = () => {
+const VerifyEmailText = ({params}) => {
     return (
         <View style={styles.verifyText}>
             <Text style={styles.verifyHeadText}>
