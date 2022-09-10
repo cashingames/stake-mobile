@@ -1,13 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Text, View, ScrollView, Alert, Pressable, Image, StatusBar } from 'react-native';
-import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
+import React, { useState } from "react";
+import { Text, View, ScrollView, Pressable, StatusBar } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
-import WalletBalance from "../Transactions/WalletBalance";
 import { getUser, getUserNotifications, markNotificationRead } from "../Auth/AuthSlice";
 import normalize from "../../utils/normalize";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import LottieAnimations from "../../shared/LottieAnimations";
+import PageLoading from "../../shared/PageLoading";
 
 const NotificationsScreen = ({ navigation }) => {
     const user = useSelector(state => state.auth.user)
@@ -16,15 +15,14 @@ const NotificationsScreen = ({ navigation }) => {
     const notifications = useSelector(state => state.auth.userNotifications)
     console.log(notifications)
     const dispatch = useDispatch();
-
-
+    const [loading, setLoading] = useState(true)
 
     useFocusEffect(
         React.useCallback(() => {
             console.log('here')
 
             dispatch(getUser());
-            dispatch(getUserNotifications());
+            dispatch(getUserNotifications()).then(() => setLoading(false));
         }, [])
     );
 
@@ -40,6 +38,13 @@ const NotificationsScreen = ({ navigation }) => {
         }, [])
     );
 
+    if (loading) {
+        return <PageLoading
+            backgroundColor='#F2F5FF'
+            spinnerColor="000000"
+        />
+    }
+
 
     return (
         <ScrollView style={styles.container}>
@@ -49,11 +54,18 @@ const NotificationsScreen = ({ navigation }) => {
                     height={normalize(150)}
                 />
             </View>
-            <>
-                {notifications.map((notification, i) => <Notification key={i} notification={notification}
-                    index={i + 1}
-                />)}
-            </>
+            {notifications.length > 0 ?
+                <>
+                    {notifications.map((notification, i) => <Notification key={i} notification={notification}
+                        index={i + 1}
+                    />)}
+                </>
+                :
+                <View style={styles.noNotificationContainer}>
+                    <Text style={styles.noNotification}>No Notification available</Text>
+                </View>
+            }
+
 
         </ScrollView>
     )
@@ -105,14 +117,14 @@ const styles = EStyleSheet.create({
         paddingVertical: Platform.OS === 'ios' ? normalize(15) : normalize(12),
         borderRadius: 11,
         paddingHorizontal: normalize(12),
-        width:'20rem',
+        width: '20rem',
         backgroundColor: '#FFFF',
         elevation: 1.5,
         shadowColor: '#000',
         shadowOffset: { width: 0.2, height: 2 },
         shadowOpacity: 0.2,
     },
-    notificationIndex   : {
+    notificationIndex: {
         fontFamily: 'graphik-medium',
         fontSize: '.7rem',
         color: '#000000',
@@ -129,5 +141,17 @@ const styles = EStyleSheet.create({
     clicked: {
         opacity: 0.6,
         // backgroundColor:"red"
+    },
+    noNotificationContainer: {
+        justifyContent: 'center',
+        alignItems:'center'
+
+    },
+    noNotification: {
+        fontFamily: 'graphik-medium',
+        fontSize: '1rem',
+        color: '#000000',
+        textAlingn: 'center',
+
     }
 })

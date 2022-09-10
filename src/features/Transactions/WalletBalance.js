@@ -24,7 +24,7 @@ const styles = EStyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: responsiveScreenWidth(10),
+        paddingVertical: responsiveScreenWidth(5),
         borderColor: '#E5E5E5',
         backgroundColor: '#fff',
         borderBottomWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3)

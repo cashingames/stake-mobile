@@ -7,9 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
 import WalletBalance from './WalletBalance';
-import { formatNumber } from '../../utils/stringUtl';
+import { formatCurrency, formatNumber } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
-import LottieAnimations from '../../shared/LottieAnimations';
 
 export default function WalletScreen() {
     const dispatch = useDispatch();
@@ -22,6 +21,10 @@ export default function WalletScreen() {
         <ScrollView style={styles.container}>
             <WalletBalance balance={user.walletBalance} />
             <FundButton />
+            <WithdrawableWalletBalance
+                withdrawableBalance={user.withdrawableBalance}
+                bookBalance={user.bookBalance}
+            />
             <UserEarnings point={user.points} />
             <TransactionLink />
         </ScrollView>
@@ -56,11 +59,27 @@ const TransactionLink = () => {
     )
 };
 
+const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance }) => {
+    return (
+        <View style={styles.earningsContainer}>
+            <View style={styles.earnings}>
+                <Text style={styles.earningText}>Your Withdrawable wallet balance</Text>
+                <Text style={styles.earningAmount}>&#8358;{formatCurrency(withdrawableBalance)}</Text>
+            </View>
+            <View style={styles.earnings}>
+                <Text style={styles.earningText}>Your  pending Withdrawable wallet balance</Text>
+                <Text style={styles.earningAmount}>&#8358;{formatCurrency(bookBalance)}</Text>
+            </View>
+        </View>
+    )
+}
+
 
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F2F5FF'
+        backgroundColor: '#F2F5FF',
+        paddingBottom:'2rem'
     },
 
     walletTitle: {
@@ -87,7 +106,7 @@ const styles = EStyleSheet.create({
         marginHorizontal: normalize(18),
         borderRadius: 12,
         elevation: 3,
-        marginVertical: 30,
+        marginVertical: 10,
 
     },
     fundButton: {
@@ -103,6 +122,16 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(15),
         marginHorizontal: normalize(18),
         marginVertical: normalize(18),
+        borderRadius: 8,
+        borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
+        borderColor: 'rgba(0, 0, 0, 0.15)',
+    },
+    earningsContainer: {
+        backgroundColor: '#fff',
+        paddingVertical: Platform.OS === 'ios' ? normalize(15) : normalize(12),
+        paddingHorizontal: normalize(15),
+        marginHorizontal: normalize(18),
+        marginTop: normalize(18),
         borderRadius: 8,
         borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
         borderColor: 'rgba(0, 0, 0, 0.15)',
@@ -123,7 +152,6 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(12),
         paddingHorizontal: normalize(15),
         marginHorizontal: normalize(18),
-        marginVertical: normalize(5),
         borderRadius: 8,
         borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
         borderColor: 'rgba(0, 0, 0, 0.15)',
