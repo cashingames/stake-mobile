@@ -25,7 +25,7 @@ export default function WalletScreen() {
                 withdrawableBalance={user.withdrawableBalance}
                 bookBalance={user.bookBalance}
             />
-            <UserEarnings point={user.points} />
+            {/* <UserEarnings point={user.points} /> */}
             <TransactionLink />
         </ScrollView>
     );
@@ -63,11 +63,11 @@ const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance }) => {
     return (
         <View style={styles.earningsContainer}>
             <View style={styles.earnings}>
-                <Text style={styles.earningText}>Your Withdrawable wallet balance</Text>
+                <Text style={styles.earningText}>My Winnings</Text>
                 <Text style={styles.earningAmount}>&#8358;{formatCurrency(withdrawableBalance)}</Text>
             </View>
             <View style={styles.earnings}>
-                <Text style={styles.earningText}>Your  pending Withdrawable wallet balance</Text>
+                <Text style={styles.earningText}>Pending Winnings</Text>
                 <Text style={styles.earningAmount}>&#8358;{formatCurrency(bookBalance)}</Text>
             </View>
         </View>

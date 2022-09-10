@@ -8,7 +8,7 @@ import { formatCurrency } from '../../utils/stringUtl';
 const WalletBalance = ({ balance }) => {
     return (
         <View style={styles.balance}>
-            <Text style={styles.walletTitle}>Wallet Balance</Text>
+            <Text style={styles.walletTitle}>Deposit Balance</Text>
             <Text style={styles.availableAmount}>&#8358;{formatCurrency(balance)}</Text>
             <LottieAnimations
                 animationView={require('../../../assets/moneybag.json')}

@@ -138,7 +138,7 @@ const VerifyEmailText = () => {
                 Good job, you are almost there
             </Text>
             <Text style={styles.verifySubText}>
-                A One Time Password(OTP) has been sent to your registered phone number.
+                A One Time Password(OTP) has been sent to your phone number {params.phone_number}.
                 Please input the five(5) digit
                 number below to verify your phone number so you
                 can play exicting games and stand a chance to win lots of prizes

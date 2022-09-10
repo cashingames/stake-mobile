@@ -36,9 +36,9 @@ export default function GameInstructionsScreen({ navigation }) {
       <ScrollView>
         {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
         {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
-        {gameMode.name !== "CHALLENGE" &&
+        {/* {gameMode.name !== "CHALLENGE" &&
           <StakeAmount />
-        }
+        } */}
         <UniversalBottomSheet
           refBottomSheet={refRBSheet}
           height={430}

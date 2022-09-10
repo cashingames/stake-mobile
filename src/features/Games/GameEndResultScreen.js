@@ -120,9 +120,9 @@ export default function GameEndResultScreen({ navigation }) {
 			<GameEndClockAnimation />
 			<UserName userName={user.firstName} />
 			<UserResultInfo pointsGained={pointsGained} />
-			{withStaking &&
+			{/* {withStaking &&
 				<StakeWinnings showText={showText} amountWon={amountWon} />
-			}
+			} */}
 			<SeeRank />
 			<FinalScore pointsGained={pointsGained} />
 			<View style={styles.gameButtons}>
