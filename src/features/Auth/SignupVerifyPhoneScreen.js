@@ -10,25 +10,76 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { useFocusEffect } from '@react-navigation/native';
 import ResendOtp from '../../shared/ResendOtp';
 import InputOTP from '../../shared/InputOTP';
-import { verifyUser } from './AuthSlice';
+import { ResendPhoneOtp, setToken, verifyPhoneOtp, verifyUser } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { createIconSetFromFontello } from '@expo/vector-icons';
+import { saveToken } from '../../utils/ApiHelper';
+import { calculateTimeRemaining } from '../../utils/utils';
 
-const SignupVerifyPhoneScreen = ({ navigation }) => {
+const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+
+
+    const [firstDigit, setFirstDigit] = useState('')
+    const [secondDigit, setSecondDigit] = useState('')
+    const [thirdDigit, setThirdDigit] = useState('')
+    const [fourthDigit, setFourthDigit] = useState('')
+    const [fifthDigit, setFifthDigit] = useState('')
+    const [counter, setCounter] = useState('');
+    const [isCountdownInProgress, setIsCountdownInProgress] = useState(true);
+    const params = route.params;
+
+
+
+    useEffect(() => {
+
+        const onComplete = () => {
+            clearInterval(countDown);
+            setIsCountdownInProgress(false)
+        }
+        let nextResendMinutes = params.next_resend_minutes;
+
+        const futureDate = new Date()
+        futureDate.setMinutes(futureDate.getMinutes() + nextResendMinutes)
+
+        const countDown = setInterval(() => {
+
+            const timeString = calculateTimeRemaining(futureDate.getTime(), onComplete);
+            setCounter(timeString);
+        }, 1000);
+
+        return () => clearInterval(countDown);
+
+    }, [])
+
+    const resendButton = () => {
+        console.log('otp resent')
+        dispatch(ResendPhoneOtp({
+            username: params.username
+        }))
+        setIsCountdownInProgress(true)
+    }
 
     const goToDashboard = () => {
         setLoading(true);
-        dispatch(verifyUser({ email: params.email }))
+        dispatch(verifyPhoneOtp({
+            phone_number: params.phone_number,
+            token: `${firstDigit}${secondDigit}${thirdDigit}${fourthDigit}${fifthDigit}`
+        }))
+            // console.log("token phone", token)
+
             .then(unwrapResult)
             .then(response => {
-                // console.log("email verification response", response);
+                console.log("phone verification response", response.data);
                 saveToken(response.data)
+                dispatch(setToken(response.data))
                 setLoading(false);
-                navigation.navigate('AppRouter')
+                // navigation.navigate('Home')
             })
             .catch((rejectedValueOrSerializedError) => {
-
+                console.log(rejectedValueOrSerializedError)
                 Alert.alert("Failed to log in");
                 setLoading(false);
             })
@@ -58,7 +109,21 @@ const SignupVerifyPhoneScreen = ({ navigation }) => {
                     />
                 </View>
                 <VerifyEmailText />
-                <InputOTP />
+                <InputOTP
+                    firstDigit={firstDigit}
+                    setFirstDigit={setFirstDigit}
+                    secondDigit={secondDigit}
+                    setSecondDigit={setSecondDigit}
+                    thirdDigit={thirdDigit}
+                    setThirdDigit={setThirdDigit}
+                    fourthDigit={fourthDigit}
+                    setFourthDigit={setFourthDigit}
+                    fifthDigit={fifthDigit}
+                    setFifthDigit={setFifthDigit}
+                    onPress={resendButton}
+                    counter={counter}
+                    isCountdownInProgress={isCountdownInProgress}
+                />
                 <AppButton text={loading ? 'Verifying...' : 'Login'} disabled={loading} onPress={goToDashboard} />
             </ScrollView>
         </View>
@@ -73,7 +138,7 @@ const VerifyEmailText = () => {
                 Good job, you are almost there
             </Text>
             <Text style={styles.verifySubText}>
-                A One Time Password(OTP) has been sent to your registered phone number.
+                A One Time Password(OTP) has been sent to your phone number {params.phone_number}.
                 Please input the five(5) digit
                 number below to verify your phone number so you
                 can play exicting games and stand a chance to win lots of prizes
@@ -116,5 +181,4 @@ const styles = EStyleSheet.create({
         opacity: 0.6,
         marginTop: normalize(25)
     },
-   
 });

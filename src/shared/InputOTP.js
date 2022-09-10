@@ -4,12 +4,10 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import ResendOtp from "./ResendOtp"
 
 
-const InputOTP = () => {
-    const [firstDigit, setFirstDigit] = useState('')
-    const [secondDigit, setSecondDigit] = useState('')
-    const [thirdDigit, setThirdDigit] = useState('')
-    const [fourthDigit, setFourthDigit] = useState('')
-    const [fifthDigit, setFifthDigit] = useState('')
+const InputOTP = ({ firstDigit, setFirstDigit, secondDigit, setSecondDigit,
+    thirdDigit, setThirdDigit, fourthDigit, setFourthDigit, fifthDigit, setFifthDigit,
+    onPress, counter, isCountdownInProgress
+}) => {
 
 
     return (
@@ -57,7 +55,7 @@ const InputOTP = () => {
                     maxLength={1}
                 />
             </View>
-            <ResendOtp />
+            <ResendOtp onPress={onPress} counter={counter} isCountdownInProgress= {isCountdownInProgress} />
         </View>
     )
 }

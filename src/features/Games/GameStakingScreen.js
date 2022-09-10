@@ -23,7 +23,7 @@ const GameStakingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
-    console.log(gameStakes)
+    // console.log(gameStakes)
     const [amount, setAmount] = useState("");
     const dispatch = useDispatch();
     const refRBSheet = useRef();
@@ -45,7 +45,6 @@ const GameStakingScreen = ({ navigation }) => {
     const startGame = () => {
         if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
             openBottomSheet();
-            console.log("low balance")
         }
         openBottomSheet() 
     }

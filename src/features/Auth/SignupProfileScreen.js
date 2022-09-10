@@ -14,6 +14,7 @@ export default function SignupProfileScreen({ navigation }) {
     const dispatch = useDispatch();
 
     const userCredentials = useSelector(state => state.auth.createAccount);
+    // console.log(userCredentials, 'bbbbb')
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -37,9 +38,11 @@ export default function SignupProfileScreen({ navigation }) {
             username: username,
             ...userCredentials
         }).then(response => {
+            console.log(response.data.data, 'all good')
             // saveToken(response.data.data)
             // dispatch(setToken(response.data.data))
-            navigation.navigate('SignupVerifyPhone')
+            navigation.navigate('SignupVerifyPhone' , { phone_number: userCredentials.phone_number , 
+                username:username, next_resend_minutes: response.data.data.next_resend_minutes })
             // navigation.navigate('EmailVerified')
             // console.log(response)
 

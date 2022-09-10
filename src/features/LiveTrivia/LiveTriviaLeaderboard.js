@@ -99,7 +99,7 @@ const TriviaParticipant = ({ player, position }) => {
                 </View>
             </View>
             <View style={styles.pointsContainer}>
-                <Text style={styles.points}>{player.points}pts</Text>
+                {/* <Text style={styles.points}>{player.points}pts</Text> */}
                 <Image
                     style={styles.pointsIcon}
                     source={require('../../../assets/images/points-coin.png')}

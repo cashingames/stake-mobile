@@ -18,6 +18,8 @@ export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
 	const user = useSelector(state => state.auth.user);
 	const pointsGained = useSelector(state => state.game.pointsGained);
+	const amountWon = useSelector(state => state.game.amountWon);
+	const withStaking = useSelector(state => state.game.withStaking);
 	const gameCategoryId = useSelector(state => state.game.gameCategory.id);
 	const gameTypeId = useSelector(state => state.game.gameType.id);
 	const gameModeId = useSelector(state => state.game.gameMode.id);
@@ -105,12 +107,12 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 
 	useEffect(() => {
-        // Change the state every second or the time given by User.
-        const interval = setInterval(() => {
-            setShowText((showText) => !showText);
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
+		// Change the state every second or the time given by User.
+		const interval = setInterval(() => {
+			setShowText((showText) => !showText);
+		}, 1000);
+		return () => clearInterval(interval);
+	}, []);
 
 	return (
 
@@ -118,7 +120,9 @@ export default function GameEndResultScreen({ navigation }) {
 			<GameEndClockAnimation />
 			<UserName userName={user.firstName} />
 			<UserResultInfo pointsGained={pointsGained} />
-			<StakeWinnings showText={showText} />
+			{/* {withStaking &&
+				<StakeWinnings showText={showText} amountWon={amountWon} />
+			} */}
 			<SeeRank />
 			<FinalScore pointsGained={pointsGained} />
 			<View style={styles.gameButtons}>
@@ -169,12 +173,12 @@ const SeeRank = () => {
 	)
 }
 
-const StakeWinnings = ({showText}) => {
+const StakeWinnings = ({ showText, amountWon }) => {
 	return (
 		<View style={styles.winningsContainer}>
 			<View style={styles.winningsAmount}>
 				<Text style={styles.winningsText}>You have won</Text>
-				<Text style={[styles.winningsCash, { opacity: showText ? 0 : 1 }]}> &#8358;{formatCurrency(10000)}!</Text>
+				<Text style={[styles.winningsCash, { opacity: showText ? 0 : 1 }]}> &#8358;{formatCurrency(amountWon)}!</Text>
 			</View>
 			<Pressable>
 				<Text style={styles.reviewStake}>Review Stake</Text>
@@ -297,7 +301,7 @@ const styles = EStyleSheet.create({
 	},
 	winningsContainer: {
 		alignItems: 'center',
-		backgroundColor:'#FFFF',
+		backgroundColor: '#FFFF',
 		paddingVertical: normalize(10),
 		marginBottom: normalize(20),
 		borderRadius: 13,

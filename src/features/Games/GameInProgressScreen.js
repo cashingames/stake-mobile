@@ -79,7 +79,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                 }))
                     .then(unwrapResult)
                     .then(result => {
-                        // console.log('Action logged to server');
+                        console.log(result, 'Action logged to server to end game');
                     })
                     .catch(() => {
                         // console.log('failed to log to server');

@@ -56,6 +56,7 @@ export const endGame = createAsyncThunk(
 
         //make a network request to the server
         const response = await axios.post('v2/game/end/single-player', data)
+        console.log(response)
         return response.data;
     }
 )
@@ -122,6 +123,7 @@ let initialState = {
     consumedBoosts: [],
     activeBoost: [],
     pointsGained: 0,
+    amountWon: null,
     isEnded: true,
     displayedOptions: [],
     displayedQuestion: {},
@@ -136,7 +138,8 @@ let initialState = {
     hasPlayedTrivia: false,
     gameDuration: 60,
     challengeDetails: {},
-    gameStakes: []
+    gameStakes: [],
+    withStaking: false
 }
 
 
@@ -171,6 +174,12 @@ export const GameSlice = createSlice({
         },
         setPointsGained: (state, action) => {
             state.pointsGained = action.payload;
+        },
+        setAmountWon: (state, action) => {
+            state.amountWon = action.payload;
+        },
+        setWithStaking: (state, action) => {
+            state.withStaking = action.payload;
         },
         setIsPlayingTrivia: (state, action) => {
             state.isPlayingTrivia = action.payload;
@@ -252,6 +261,8 @@ export const GameSlice = createSlice({
             .addCase(endGame.fulfilled, (state, action) => {
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
+                state.amountWon= action.payload.data.amount_won;
+                state.withStaking= action.payload.data.with_staking;
                 resetState(state)
             })
             .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
@@ -290,9 +301,9 @@ export const GameSlice = createSlice({
 })
 
 export const { setGameType, setGameMode, setGameCategory,
-    setPointsGained, questionAnswered, nextQuestion, setSelectedFriend,
+    setPointsGained,setAmountWon, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend
+    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend,setWithStaking
 } = GameSlice.actions
 
 

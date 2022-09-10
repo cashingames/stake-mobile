@@ -178,6 +178,26 @@ export const verifyDeviceToken = createAsyncThunk(
     }
 )
 
+export const verifyPhoneOtp = createAsyncThunk(
+    'auth/verifyDeviceToken',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.post('auth/register/verify-token', data);
+        // console.log('gotten phone token',response)
+        return response.data;
+    }
+)
+
+export const ResendPhoneOtp = createAsyncThunk(
+    'auth/ResendPhoneOtp',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.post('auth/register/token/resend', data);
+        // console.log('gotten phone token',response)
+        return response.data;
+    }
+)
+
 export const getFirstTimeUserReward = createAsyncThunk(
     'auth/getFirstTimeUserReward',
     async (data, thunkAPI) => {

@@ -8,7 +8,7 @@ import { formatCurrency } from '../../utils/stringUtl';
 const WalletBalance = ({ balance }) => {
     return (
         <View style={styles.balance}>
-            <Text style={styles.walletTitle}>Wallet Balance</Text>
+            <Text style={styles.walletTitle}>Deposit Balance</Text>
             <Text style={styles.availableAmount}>&#8358;{formatCurrency(balance)}</Text>
             <LottieAnimations
                 animationView={require('../../../assets/moneybag.json')}
@@ -24,7 +24,7 @@ const styles = EStyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: responsiveScreenWidth(10),
+        paddingVertical: responsiveScreenWidth(5),
         borderColor: '#E5E5E5',
         backgroundColor: '#fff',
         borderBottomWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3)

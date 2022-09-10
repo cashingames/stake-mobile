@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Pressable, Text, View, ScrollView, TextInput, Alert } from 'react-native';
+import React, { useState, useEffect} from 'react';
+import { Pressable, Text, View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
 import Constants from 'expo-constants';
 
 import SocialSignUp from '../../shared/SocialSignUp';
@@ -10,7 +9,7 @@ import AuthBanner from '../../shared/AuthBanner';
 import AuthTitle from '../../shared/AuthTitle';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { loginUser, setToken, verifyUser } from './AuthSlice';
+import { loginUser, setToken} from './AuthSlice';
 import Input from '../../shared/Input';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
@@ -29,16 +28,8 @@ export default function LoginScreen({ navigation }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const refRBSheet = useRef();
 
-
-    const openBottomSheet = () => {
-        refRBSheet.current.open()
-    }
-
-    const closeBottomSheet = () => {
-        refRBSheet.current.close()
-    }
+    
 
     const onChangeEmail = (value) => {
         setEmail(value)
@@ -58,6 +49,7 @@ export default function LoginScreen({ navigation }) {
         loginUser({
             email, password
         }).then(response => {
+            console.log(response)
             saveToken(response.data.data)
             dispatch(setToken(response.data.data))
             navigation.navigate('AppRouter')
@@ -75,7 +67,10 @@ export default function LoginScreen({ navigation }) {
                     err.response && err.response.data && err.response.data.errors;
 
                 if (err.response.status === 400) {
-                    openBottomSheet()
+                    navigation.navigate('SignupVerifyPhone', {
+                        phone_number: err.response.data.errors.phoneNumber,
+                        username: err.response.data.errors.username, next_resend_minutes: 0
+                    })
                 }
 
                 const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
@@ -140,11 +135,6 @@ export default function LoginScreen({ navigation }) {
 
             <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
             <RenderCreateAccount />
-            <UniversalBottomSheet
-                refBottomSheet={refRBSheet}
-                height={540}
-                subComponent={<VerifyOTP onClose={closeBottomSheet} />}
-            />
         </ScrollView >
     );
 }
@@ -282,7 +272,7 @@ const styles = EStyleSheet.create({
         opacity: 0.6,
         marginTop: normalize(25)
     },
-    verifyPhoneOtp:{
+    verifyPhoneOtp: {
         paddingHorizontal: normalize(20)
     }
 });
