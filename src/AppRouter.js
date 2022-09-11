@@ -249,7 +249,13 @@ function AppRouter() {
 						<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
 
 						<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
-						{/* <AppStack.Screen name="Notifications" component={NotificationsScreen} options={{ title: 'Notifications' }} /> */}
+						<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{ 
+							title: 'Notifications' ,
+							headerStyle: {
+								backgroundColor: '#072169',
+							},
+							headerTintColor: '#FFFF',
+					}} />
 
 					</>
 				) :

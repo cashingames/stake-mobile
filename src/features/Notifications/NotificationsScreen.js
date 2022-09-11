@@ -7,8 +7,11 @@ import normalize from "../../utils/normalize";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import LottieAnimations from "../../shared/LottieAnimations";
 import PageLoading from "../../shared/PageLoading";
+import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
+import { Ionicons } from "@expo/vector-icons";
 
 const NotificationsScreen = ({ navigation }) => {
+    useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector(state => state.auth.user)
     console.log(user)
 
@@ -30,7 +33,7 @@ const NotificationsScreen = ({ navigation }) => {
         React.useCallback(() => {
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
-            StatusBar.setBarStyle('dark-content');
+            StatusBar.setBarStyle('light-content');
             return () => {
                 StatusBar.setTranslucent(true)
                 StatusBar.setBarStyle('dark-content');
@@ -40,8 +43,8 @@ const NotificationsScreen = ({ navigation }) => {
 
     if (loading) {
         return <PageLoading
-            backgroundColor='#F2F5FF'
-            spinnerColor="000000"
+            backgroundColor='#072169'
+            spinnerColor="FFFF"
         />
     }
 
@@ -86,9 +89,16 @@ const Notification = ({ notification, index }) => {
     }
     return (
         <View style={styles.notificationContainer}>
-            {/* <Text style={styles.notificationIndex}>{index}</Text> */}
+            <View style={styles.bellContainer}>
+                <Ionicons name='notifications-circle' color="#EF2F55" size={24} />
+            </View>
             <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked ? styles.clicked : {}]} onPress={notificationAction}>
                 <Text style={styles.notificationTitle}>{notification.data.title}</Text>
+                {notification.read_at !== null || clicked ?
+                    <Ionicons name='checkmark-circle-sharp' color="#EF2F55" size={24} style={styles.readMark} />
+                    :
+                    <></>
+                }
             </Pressable>
         </View>
     )
@@ -98,8 +108,8 @@ export default NotificationsScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F2F5FF',
-        paddingHorizontal: normalize(18),
+        backgroundColor: '#072169',
+        // paddingHorizontal: normalize(18),
         paddingBottom: normalize(50),
     },
     emojiContainer: {
@@ -109,20 +119,27 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: normalize(10),
+        justifyContent: 'center',
+        marginHorizontal: normalize(18)
 
     },
     notificationTitleContainer: {
+        flexDirection: 'row',
+        // justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        width: '19.5rem',
         borderWidth: 1,
         borderColor: '#E0E0E0',
         paddingVertical: Platform.OS === 'ios' ? normalize(15) : normalize(12),
-        borderRadius: 11,
-        paddingHorizontal: normalize(12),
-        width: '20rem',
+        borderRadius: 30,
+        paddingHorizontal: normalize(15),
         backgroundColor: '#FFFF',
         elevation: 1.5,
         shadowColor: '#000',
         shadowOffset: { width: 0.2, height: 2 },
         shadowOpacity: 0.2,
+        // alignItems: 'center',
+
     },
     notificationIndex: {
         fontFamily: 'graphik-medium',
@@ -134,9 +151,9 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '.7rem',
         color: '#000000',
-        marginRight: '.6rem',
         textAlingn: 'center',
-        lineHeight: '1.4rem'
+        lineHeight: '.85rem',
+        width: '16rem'
     },
     clicked: {
         opacity: 0.6,
@@ -144,7 +161,7 @@ const styles = EStyleSheet.create({
     },
     noNotificationContainer: {
         justifyContent: 'center',
-        alignItems:'center'
+        alignItems: 'center'
 
     },
     noNotification: {
@@ -153,5 +170,14 @@ const styles = EStyleSheet.create({
         color: '#000000',
         textAlingn: 'center',
 
+    },
+    bellContainer: {
+        backgroundColor: "#fac502",
+        borderRadius: 100,
+        padding: '.1rem',
+        marginRight: '.6rem',
+    },
+    readMark: {
+        marginLeft: 'auto',
     }
 })
