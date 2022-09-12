@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useNavigation } from '@react-navigation/core';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
@@ -53,7 +53,18 @@ const HomeRouter = () => {
             screenOptions={AppMainHeaderOptions}>
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
             <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
-            <HomeStack.Screen name="Notifications" component={NotificationsScreen} options={{ title: 'Notifications' }} />
+            {/* <HomeStack.Screen name="Notifications" component={NotificationsScreen} options={{
+                title: 'Notifications',
+                headerStyle: {
+                    backgroundColor: '#072169',
+                },
+                headerTitleStyle: {
+                    fontSize: normalize(20),
+                    lineHeight: normalize(20),
+                    color: "#FFFF",
+                    fontFamily: 'graphik-medium',
+                },
+            }} /> */}
             {/* <HomeStack.Screen name="HowToWin" component={HowToWin} options={{ title: 'How to win' }} /> */}
 
 
@@ -118,78 +129,95 @@ function CustomDrawerContent(props) {
 
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
-            <View style={drawStyles.sideHeader}>
-                <Image
-                    style={drawStyles.avatar}
-                    source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
-                />
-                <Text style={drawStyles.userTitle}> {user.fullName}</Text>
-                <Text style={drawStyles.userName}> @{user.username}</Text>
-                <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
+            <ScrollView>
+                <View style={drawStyles.sideHeader}>
+                    <Image
+                        style={drawStyles.avatar}
+                        source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+                    />
+                    <Text style={drawStyles.userTitle}> {user.fullName}</Text>
+                    <Text style={drawStyles.userName}> @{user.username}</Text>
+                    <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
 
-            </View>
+                </View>
 
 
-            <View style={drawStyles.menu}>
-                <DrawerItem
-                    label={() =>
-                        <View style={drawStyles.item}>
-                            <Text style={drawStyles.itemLabel}>Live Trivia</Text>
-                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                        </View>}
-                    onPress={() => navigation.navigate('LiveTrivias')}
-                    activeTintColor='#EF2F55'
-                    style={drawStyles.label}
-                    labelContainerStyle
-                />
-                <DrawerItem
-                    label={() =>
-                        <View style={drawStyles.item}>
-                            <Text style={drawStyles.itemLabel}>My Challenges</Text>
-                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                        </View>}
-                    onPress={() => navigation.navigate('MyChallenges')}
-                    activeTintColor='#EF2F55'
-                    style={drawStyles.label}
-                    labelContainerStyle
-                />
+                <View style={drawStyles.menu}>
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Live Trivia</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={() => navigation.navigate('LiveTrivias')}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>My Challenges</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={() => navigation.navigate('MyChallenges')}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
 
-                <DrawerItem
-                    label={() =>
-                        <View style={drawStyles.item}>
-                            <Text style={drawStyles.itemLabel}>Store</Text>
-                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                        </View>}
-                    onPress={() => navigation.navigate('GameStore')}
-                    activeTintColor='#EF2F55'
-                    style={drawStyles.label}
-                    labelContainerStyle
-                />
-                <DrawerItem
-                    label={() =>
-                        <View style={drawStyles.item}>
-                            <Text style={drawStyles.itemLabel}>Invite Friends</Text>
-                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                        </View>}
-                    onPress={() => navigation.navigate('Invite')}
-                    activeTintColor='#EF2F55'
-                    style={drawStyles.label}
-                    labelContainerStyle
-                />
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Store</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={() => navigation.navigate('GameStore')}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Invite Friends</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={() => navigation.navigate('Invite')}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
 
-                <DrawerItem
-                    label={() =>
-                        <View style={drawStyles.item}>
-                            <Text style={drawStyles.itemLabel}>Help</Text>
-                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                        </View>}
-                    onPress={() => navigation.navigate('Support')}
-                    activeTintColor='#EF2F55'
-                    style={drawStyles.label}
-                    labelContainerStyle
-                />
-            </View>
-
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Notifications</Text>
+                                <View style={drawStyles.notificationCount}>
+                                    <View style={drawStyles.numberContainer}>
+                                        <Text style={drawStyles.number}>{user.unreadNotificationsCount}</Text>
+                                    </View>
+                                    <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                </View>
+                            </View>}
+                        onPress={() => navigation.navigate('Notifications')}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Help</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={() => navigation.navigate('Support')}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
+                </View>
+            </ScrollView>
             <Pressable onPress={onLogout} style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.logoutText}>Logout</Text>
                 <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
@@ -235,6 +263,7 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         fontFamily: 'graphik-bold',
         fontSize: Platform.OS === 'ios' ? '0.6rem' : '0.6rem',
+        marginTop: normalize(1)
     },
 });
 
@@ -284,7 +313,7 @@ const drawStyles = EStyleSheet.create({
         lineHeight: '0.6rem',
     },
     menu: {
-        flex: 7,
+        // flex: 7,
     },
     label: {
         borderBottomWidth: 1,
@@ -301,11 +330,12 @@ const drawStyles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
     },
     logoutContainer: {
-        flex: 1,
-        justifyContent: 'flex-end'
+        backgroundColor:'#EF2F55'
+        // flex: 1,
+        // justifyContent: 'flex-end'
     },
     logoutText: {
-        color: 'red',
+        color: '#FFFF',
         textAlign: 'center',
         fontSize: '0.8rem',
         fontFamily: 'graphik-medium',
@@ -313,13 +343,32 @@ const drawStyles = EStyleSheet.create({
 
     },
     appVersion: {
-        color: '#333333',
+        color: '#FFFF',
         fontSize: '0.7rem',
         lineHeight: '0.7rem',
         fontFamily: 'graphik-regular',
-        opacity: 0.5,
+        opacity: 0.7,
         marginVertical: 10,
         textAlign: 'center',
+    },
+    numberContainer: {
+        backgroundColor: '#518EF8',
+        borderWidth: 2,
+        borderColor: 'white',
+        borderRadius: 100,
+        width: normalize(25),
+        height: normalize(25),
+    },
+    number: {
+        textAlign: 'center',
+        alignItems: 'center',
+        color: '#FFFF',
+        fontFamily: 'graphik-bold',
+        fontSize: Platform.OS === 'ios' ? '0.6rem' : '0.6rem',
+        marginTop: '.1rem'
+    },
+    notificationCount: {
+        flexDirection: 'row'
     }
 });
 
