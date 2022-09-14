@@ -66,12 +66,12 @@ export default function LoginScreen({ navigation }) {
                 const errors =
                     err.response && err.response.data && err.response.data.errors;
 
-                if (err.response.status === 400) {
-                    navigation.navigate('SignupVerifyPhone', {
-                        phone_number: err.response.data.errors.phoneNumber,
-                        username: err.response.data.errors.username, next_resend_minutes: 1
-                    })
-                }
+                // if (err.response.status === 400) {
+                //     navigation.navigate('SignupVerifyPhone', {
+                //         phone_number: err.response.data.errors.phoneNumber,
+                //         username: err.response.data.errors.username, next_resend_minutes: 1
+                //     })
+                // }
 
                 const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
                 // console.log(firstError)
