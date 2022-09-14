@@ -143,7 +143,7 @@ const RenderCreateAccount = () => {
             </View>
             <Text style={styles.signInText}>or</Text>
             <View style={styles.google}>
-                <SocialSignUp />
+                <SocialSignUp googleText= "SIGN IN" />
             </View>
         </View>
     )
