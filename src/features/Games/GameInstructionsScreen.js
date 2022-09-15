@@ -174,7 +174,10 @@ const AvailableBoosts = ({ onClose }) => {
           data: result.data.questions
         }))
           .then(unwrapResult)
-          .then(result => {
+          .then(async result => {
+            await analytics().logEvent("challenge_startgame", {
+              action: "initiate"
+            })
             // console.log('Action logged to server');
           })
           .catch(() => {
