@@ -10,6 +10,7 @@ import { isTrue } from '../../utils/stringUtl';
 import { getChallengeScores } from '../Auth/AuthSlice';
 import { acceptDeclineChallengeInivite, getChallengeDetails } from './GameSlice';
 import AppButton from '../../shared/AppButton';
+import analytics from '@react-native-firebase/analytics';
 
 
 
@@ -44,11 +45,23 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       challenge_id: challengeDetails.challenegeId,
       status: 1
     }
+      .then(async result => {
+        await analytics().logEvent("challenge_accepted", {
+          action: "initiate"
+        })
+        // console.log('Action logged to server');
+      })
     )).then(() => setClicking(false))
     navigation.navigate('GameInstructions')
   }
 
   const challengerPlays = () => {
+    (async result => {
+      await analytics().logEvent("challenger_plays", {
+        action: "initiate"
+      })
+      // console.log('Action logged to server');
+    })
     navigation.navigate('GameInstructions')
   }
 
@@ -58,6 +71,11 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       challenge_id: challengeDetails.challenegeId,
       status: 0
     }
+      .then(async result => {
+        await analytics().logEvent("challenge_declined", {
+          action: "initiate"
+        })
+      })
     )).then(() => setClicking(false))
     navigation.navigate('Home')
   }
@@ -226,7 +244,7 @@ const ChallengeParticipants = ({ player, user }) => {
             <ChallengerDetails challenger={player} />
           </View>
           <Image
-           style={styles.versus}
+            style={styles.versus}
             source={require('../../../assets/images/versus.png')}
           />
           <View style={styles.winLoseContainer}>
@@ -245,7 +263,7 @@ const ChallengeParticipants = ({ player, user }) => {
         <View style={styles.playersDetails}>
           <ChallengerDetails challenger={player} />
           <Image
-          style={styles.versus}
+            style={styles.versus}
             source={require('../../../assets/images/versus.png')}
           />
           <OpponentDetails opponent={player} />

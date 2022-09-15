@@ -13,6 +13,8 @@ import UserAvailableBoost from "../../shared/UserAvailableBoost";
 import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import { formatCurrency } from "../../utils/stringUtl";
+import analytics from '@react-native-firebase/analytics';
+
 
 
 export default function GameInstructionsScreen({ navigation }) {
@@ -137,7 +139,10 @@ const AvailableBoosts = ({ onClose }) => {
           data: result.data.questions
         }))
           .then(unwrapResult)
-          .then(result => {
+          .then(async result => {
+            await analytics().logEvent("startgame_initiated", {
+              action: "initiate"
+            })
             // console.log('Action logged to server');
           })
           .catch((e) => {
