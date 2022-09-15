@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
-
+import analytics from '@react-native-firebase/analytics';
 import { formatNumber } from '../../utils/stringUtl';
 import AppButton from "../../shared/AppButton";
 
@@ -68,6 +68,11 @@ const AvailableBoosts = ({ onClose, trivia }) => {
             trivia: trivia.id
         }))
             .then(unwrapResult)
+            .then(async () => {
+                await analytics().logEvent('trivia_initiated', {
+                    'action': 'initiate'
+                });
+            })
             .then(result => {
                 setLoading(false);
                 onClose();
