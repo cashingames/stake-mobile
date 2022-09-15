@@ -64,6 +64,12 @@ export default function SignupScreen({ navigation }) {
             <View style={styles.headerBox}>
                 <AuthTitle text='Create an account' />
             </View>
+            <View style={styles.signIn}>
+                <Text style={styles.signInText}>Sign up with google</Text>
+                <View style={styles.google}>
+                    <SocialSignUp googleText="SIGN UP" />
+                </View>
+            </View>
 
             <View style={styles.inputContainer}>
 
@@ -133,10 +139,7 @@ const RenderCreateAccount = () => {
                     <Text style={styles.linkText}> Sign in</Text>
                 </Pressable>
             </View>
-            <Text style={styles.signInText}>or</Text>
-            <View style={styles.google}>
-                <SocialSignUp />
-            </View>
+
         </View>
     )
 }
@@ -153,7 +156,7 @@ const styles = EStyleSheet.create({
     },
     headerBox: {
         marginTop: responsiveScreenWidth(13),
-        paddingTop: responsiveScreenWidth(4)
+        paddingTop: responsiveScreenWidth(2)
     },
     image: {
         flex: 1,
@@ -163,7 +166,7 @@ const styles = EStyleSheet.create({
         top: normalize(10)
     },
     inputContainer: {
-        marginTop: responsiveScreenWidth(13),
+        marginTop: responsiveScreenWidth(8),
     },
     linkText: {
         color: '#EF2F55',
@@ -204,6 +207,6 @@ const styles = EStyleSheet.create({
         fontSize: '0.87rem'
     },
     google: {
-        marginVertical: normalize(10)
+        marginTop: normalize(10)
     }
 });
