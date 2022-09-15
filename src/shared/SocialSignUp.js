@@ -21,7 +21,7 @@ import UniversalBottomSheet from './UniversalBottomSheet';
 
 WebBrowser.maybeCompleteAuthSession();
 
-export default function SocialSignUp() {
+export default function SocialSignUp({googleText}) {
     const navigation = useNavigation();
     const refRBSheet = useRef();
     const dispatch = useDispatch();
@@ -142,7 +142,7 @@ export default function SocialSignUp() {
             <Pressable disabled={!request} onPress={() => {
                 promptAsync();
             }} style={styles.googleButton}>
-                <Text style={styles.googletext}>GOOGLE SIGN IN</Text>
+                <Text style={styles.googletext}>GOOGLE {googleText}</Text>
                 <View style={styles.googleImage}>
                     <Image
                         style={styles.pointsIcon}

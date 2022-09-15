@@ -10,7 +10,7 @@ import AppButton from '../../shared/AppButton';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LottieAnimations from '../../shared/LottieAnimations';
-import { getFirstTimeUserReward, verifyUser } from './AuthSlice';
+import { getFirstTimeUserReward, setToken, verifyUser } from './AuthSlice';
 import { saveToken } from '../../utils/ApiHelper';
 import { unwrapResult } from '@reduxjs/toolkit';
 
@@ -25,6 +25,7 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
     const [loading, setLoading] = useState(false);
 
     const rewards = useSelector(state => state.auth.firstTimeUserReward)
+    console.log(rewards)
     
     const goToDashboard = () => {
         setLoading(true);
@@ -33,6 +34,7 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
             .then(response => {
                 // console.log("email verification response", response);
                 saveToken(response.data)
+                dispatch(setToken(response.data))
                 setLoading(false);
                 navigation.navigate('AppRouter')
             })

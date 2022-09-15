@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Pressable, Text, View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
@@ -9,13 +9,12 @@ import AuthBanner from '../../shared/AuthBanner';
 import AuthTitle from '../../shared/AuthTitle';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { loginUser, setToken} from './AuthSlice';
+import { loginUser, setToken } from './AuthSlice';
 import Input from '../../shared/Input';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { saveToken } from '../../utils/ApiHelper';
-import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import InputOTP from '../../shared/InputOTP';
 
 export default function LoginScreen({ navigation }) {
@@ -29,7 +28,7 @@ export default function LoginScreen({ navigation }) {
     const [error, setError] = useState('');
 
 
-    
+
 
     const onChangeEmail = (value) => {
         setEmail(value)
@@ -49,7 +48,6 @@ export default function LoginScreen({ navigation }) {
         loginUser({
             email, password
         }).then(response => {
-            console.log(response)
             saveToken(response.data.data)
             dispatch(setToken(response.data.data))
             navigation.navigate('AppRouter')
@@ -65,31 +63,13 @@ export default function LoginScreen({ navigation }) {
 
                 const errors =
                     err.response && err.response.data && err.response.data.errors;
-
-                if (err.response.status === 400) {
-                    navigation.navigate('SignupVerifyPhone', {
-                        phone_number: err.response.data.errors.phoneNumber,
-                        username: err.response.data.errors.username, next_resend_minutes: 1
-                    })
-                }
+                // console.log(errors)
 
                 const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
-                // console.log(firstError)
                 setError(firstError)
             }
             setLoading(false);
         });
-        // dispatch(loginUser({ email, password })).then(unwrapResult)
-        //     .then((originalPromiseResult) => {
-        //         // after login eager get commond data for the whole app
-        //         console.log("loggedin");
-        //     })
-        //     .catch((rejectedValueOrSerializedError) => {
-        //         setLoading(false);
-        //         setCanLogin(true);
-        //         console.log(rejectedValueOrSerializedError)
-        //         setError("Invalid username or password provided or unverified account");
-        //     })
     }
 
 
@@ -163,7 +143,7 @@ const RenderCreateAccount = () => {
             </View>
             <Text style={styles.signInText}>or</Text>
             <View style={styles.google}>
-                <SocialSignUp />
+                <SocialSignUp googleText= "SIGN IN" />
             </View>
         </View>
     )
