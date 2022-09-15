@@ -66,7 +66,7 @@ export default function LoginScreen({ navigation }) {
                 const errors =
                     err.response && err.response.data && err.response.data.errors;
 
-                if (err.response.status === 400) {
+                if (err.response.status === 400 && err.response.data.message == 'Account not verified') {
                     navigation.navigate('SignupVerifyPhone', {
                         phone_number: err.response.data.errors.phoneNumber,
                         username: err.response.data.errors.username, next_resend_minutes: 1

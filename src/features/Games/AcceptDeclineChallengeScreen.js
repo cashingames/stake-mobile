@@ -23,14 +23,14 @@ const AcceptDeclineChallengeScreen = ({ navigation, route }) => {
   const challengeDetails = useSelector(state => state.game.challengeDetails);
 
   const acceptChallengeInivite = async () => {
+    await analytics().logEvent('challenge_accepted', {
+      'action': 'accept'
+    });
     dispatch(acceptDeclineChallengeInivite({
       challenge_id: challengeDetails.challenegeId,
       status: 1
     }
     ))
-    await analytics().logEvent('challenge_accepted', {
-      'action': 'accept'
-    });
     navigation.navigate('GameInstructions')
   }
 
