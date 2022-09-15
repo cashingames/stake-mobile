@@ -64,10 +64,6 @@ export default function SignupScreen({ navigation }) {
             <View style={styles.headerBox}>
                 <AuthTitle text='Create an account' />
             </View>
-            <View style={styles.google}>
-                <Text style={styles.signInText}>You can sign up with your google account</Text>
-                <SocialSignUp googleText="SIGN UP" />
-            </View>
 
             <View style={styles.inputContainer}>
 
@@ -137,10 +133,10 @@ const RenderCreateAccount = () => {
                     <Text style={styles.linkText}> Sign in</Text>
                 </Pressable>
             </View>
-            {/* <Text style={styles.signInText}>or</Text>
+            <Text style={styles.signInText}>or</Text>
             <View style={styles.google}>
-                <SocialSignUp googleText="SIGN UP" />
-            </View> */}
+                <SocialSignUp />
+            </View>
         </View>
     )
 }
@@ -157,7 +153,7 @@ const styles = EStyleSheet.create({
     },
     headerBox: {
         marginTop: responsiveScreenWidth(13),
-        paddingTop: responsiveScreenWidth(2)
+        paddingTop: responsiveScreenWidth(4)
     },
     image: {
         flex: 1,
@@ -167,7 +163,7 @@ const styles = EStyleSheet.create({
         top: normalize(10)
     },
     inputContainer: {
-        marginTop: responsiveScreenWidth(8),
+        marginTop: responsiveScreenWidth(13),
     },
     linkText: {
         color: '#EF2F55',
@@ -205,11 +201,9 @@ const styles = EStyleSheet.create({
     signInText: {
         color: '#00000080',
         fontFamily: 'graphik-medium',
-        fontSize: '0.87rem',
-        marginBottom: normalize(10)
+        fontSize: '0.87rem'
     },
     google: {
-        marginTop: normalize(10),
-        alignItems: 'center',
+        marginVertical: normalize(10)
     }
 });

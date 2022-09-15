@@ -15,7 +15,6 @@ import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
 
 import AppButton from '../../shared/AppButton';
-import NotificationsScreen from '../Notifications/NotificationsScreen';
 // import LottieAnimations from '../../shared/LottieAnimations';
 // import HowToWin from '../HowToWin/HowToWin';
 
@@ -79,7 +78,7 @@ const RightButtons = () => {
                 <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
             </Pressable>
-            {/* <Pressable style={[styles.headerIconContainer, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Notifications')}>
+            <Pressable style={[styles.headerIconContainer, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Notifications')}>
                 <View style={styles.notificationContainer}>
                     <Ionicons name='notifications-outline' size={26} style={[styles.headerIcon, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} />
                     {user.unreadNotificationsCount !== 0 &&
@@ -90,7 +89,7 @@ const RightButtons = () => {
 
                 </View>
                 <Text style={styles.headerIconText}>Notification</Text>
-            </Pressable> */}
+            </Pressable>
             {/* <Pressable style={[styles.headerIconContainer, routeName === 'HowToWin' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('HowToWin')}>
                 <Ionicons name='home-outline' size={26} />
                 <LottieAnimations
@@ -177,7 +176,7 @@ function CustomDrawerContent(props) {
                         labelContainerStyle
                     />
 
-                    {/* <DrawerItem
+                    <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
                                 <Text style={drawStyles.itemLabel}>Notifications</Text>
@@ -192,7 +191,7 @@ function CustomDrawerContent(props) {
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
-                    /> */}
+                    />
                     <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>

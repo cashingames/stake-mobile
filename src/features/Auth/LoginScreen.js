@@ -15,6 +15,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { saveToken } from '../../utils/ApiHelper';
+import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import InputOTP from '../../shared/InputOTP';
 
 export default function LoginScreen({ navigation }) {
@@ -48,6 +49,7 @@ export default function LoginScreen({ navigation }) {
         loginUser({
             email, password
         }).then(response => {
+            console.log(response)
             saveToken(response.data.data)
             dispatch(setToken(response.data.data))
             navigation.navigate('AppRouter')
@@ -63,13 +65,31 @@ export default function LoginScreen({ navigation }) {
 
                 const errors =
                     err.response && err.response.data && err.response.data.errors;
-                // console.log(errors)
+
+                if (err.response.status === 400) {
+                    navigation.navigate('SignupVerifyPhone', {
+                        phone_number: err.response.data.errors.phoneNumber,
+                        username: err.response.data.errors.username, next_resend_minutes: 1
+                    })
+                }
 
                 const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
+                // console.log(firstError)
                 setError(firstError)
             }
             setLoading(false);
         });
+        // dispatch(loginUser({ email, password })).then(unwrapResult)
+        //     .then((originalPromiseResult) => {
+        //         // after login eager get commond data for the whole app
+        //         console.log("loggedin");
+        //     })
+        //     .catch((rejectedValueOrSerializedError) => {
+        //         setLoading(false);
+        //         setCanLogin(true);
+        //         console.log(rejectedValueOrSerializedError)
+        //         setError("Invalid username or password provided or unverified account");
+        //     })
     }
 
 
@@ -143,7 +163,7 @@ const RenderCreateAccount = () => {
             </View>
             <Text style={styles.signInText}>or</Text>
             <View style={styles.google}>
-                <SocialSignUp googleText= "SIGN IN" />
+                <SocialSignUp />
             </View>
         </View>
     )
