@@ -28,6 +28,7 @@ const InputOTP = ({ firstDigit, setFirstDigit, secondDigit, setSecondDigit,
                     onChangeText={setSecondDigit}
                     type="phone"
                     keyboardType="numeric"
+                    autoFocus={true}
                     maxLength={1}
                 />
                 <TextInput
@@ -36,6 +37,7 @@ const InputOTP = ({ firstDigit, setFirstDigit, secondDigit, setSecondDigit,
                     onChangeText={setThirdDigit}
                     type="phone"
                     keyboardType="numeric"
+                    autoFocus={true}
                     maxLength={1}
                 />
                 <TextInput
@@ -44,6 +46,7 @@ const InputOTP = ({ firstDigit, setFirstDigit, secondDigit, setSecondDigit,
                     onChangeText={setFourthDigit}
                     type="phone"
                     keyboardType="numeric"
+                    autoFocus={true}
                     maxLength={1}
                 />
                 <TextInput
@@ -52,6 +55,7 @@ const InputOTP = ({ firstDigit, setFirstDigit, secondDigit, setSecondDigit,
                     onChangeText={setFifthDigit}
                     type="phone"
                     keyboardType="numeric"
+                    autoFocus={true}
                     maxLength={1}
                 />
             </View>

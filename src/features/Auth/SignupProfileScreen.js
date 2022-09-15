@@ -41,9 +41,9 @@ export default function SignupProfileScreen({ navigation }) {
             console.log(response.data.data, 'all good')
             // saveToken(response.data.data)
             // dispatch(setToken(response.data.data))
-            // navigation.navigate('SignupVerifyPhone' , { phone_number: userCredentials.phone_number , 
-                // username:username, next_resend_minutes: response.data.data.next_resend_minutes })
-            navigation.navigate('SignupVerifyEmail')
+            navigation.navigate('SignupVerifyPhone' , { phone_number: userCredentials.phone_number , 
+                username:username, next_resend_minutes: response.data.data.next_resend_minutes })
+            // navigation.navigate('EmailVerified')
             // console.log(response)
 
         }, err => {
