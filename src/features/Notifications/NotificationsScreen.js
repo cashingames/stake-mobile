@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, ScrollView, Pressable, StatusBar, ImageBackground } from 'react-native';
+import { Text, View, ScrollView, Pressable, StatusBar, ImageBackground, Dimensions } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, getUserNotifications, markNotificationRead } from "../Auth/AuthSlice";
@@ -62,7 +62,9 @@ const NotificationsScreen = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <ImageBackground source={require('../../../assets/images/studio-illustration.jpg')} style={styles.playerImage} resizeMode="cover">
+            <ImageBackground source={require('../../../assets/images/studio-illustration.jpg')}
+                style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
+                resizeMethod="resize">
                 <View style={styles.emojiContainer}>
                     <LottieAnimations
                         animationView={require('../../../assets/bell.json')}
@@ -112,21 +114,12 @@ const Notification = ({ notification, moment, showText }) => {
                     <Ionicons name='notifications-circle' color="#EF2F55" size={22} />
                 </View>
             }
-            {/* {notification.read_at !== null || clicked ? */}
             <View style={styles.notificationContainer}>
                 <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked ? styles.clicked : {}]} onPress={notificationAction}>
                     <Text style={[styles.notificationTitle, notification.read_at !== null || clicked ? styles.clickedText : {}]}>{notification.data.title}</Text>
                 </Pressable>
                 <Text style={styles.notificationTime}>From {moment(notification.created_at).fromNow()}</Text>
             </View>
-            {/* :
-                <View style={[styles.notificationContainer, { opacity: showText ? 0.7 : 1 }]}>
-                    <Text style={styles.notificationTime}>From {moment(notification.created_at).fromNow()}</Text>
-                    <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked ? styles.clicked : {}]} onPress={notificationAction}>
-                        <Text style={[styles.notificationTitle, notification.read_at !== null || clicked ? styles.clickedText : {}]}>{notification.data.title}</Text>
-                    </Pressable>
-                </View> */}
-            {/* } */}
         </View>
     )
 }
@@ -135,9 +128,10 @@ export default NotificationsScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        // backgroundColor: '#072169',
-        // paddingHorizontal: normalize(18),
         paddingBottom: normalize(50),
+    },
+    imageContainer: {
+        flex: 1,
     },
     emojiContainer: {
         alignItems: 'center',
@@ -149,23 +143,16 @@ const styles = EStyleSheet.create({
         paddingLeft: normalize(20),
         paddingTop: normalize(25),
         borderRadius: 15,
-        maginBottom: normalize(15)
-
     },
     headNotificationContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: normalize(25),
-        // justifyContent: 'center',
-        // marginHorizontal: normalize(18)
 
     },
     notificationContainer: {
         flexDirection: 'column',
         alignItems: 'flex-start',
-        // marginBottom: normalize(10),
-        // justifyContent: 'center',
-        // marginHorizontal: normalize(18)
 
     },
     notificationTime: {
