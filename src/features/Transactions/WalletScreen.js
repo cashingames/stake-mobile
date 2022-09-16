@@ -21,10 +21,10 @@ export default function WalletScreen() {
         <ScrollView style={styles.container}>
             <WalletBalance balance={user.walletBalance} />
             <FundButton />
-            {/* <WithdrawableWalletBalance
+            <WithdrawableWalletBalance
                 withdrawableBalance={user.withdrawableBalance}
                 bookBalance={user.bookBalance}
-            /> */}
+            />
             {/* <UserEarnings point={user.points} /> */}
             <TransactionLink />
         </ScrollView>
