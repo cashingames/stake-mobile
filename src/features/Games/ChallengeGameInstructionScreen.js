@@ -14,7 +14,6 @@ import UserAvailableBoost from "../../shared/UserAvailableBoost";
 import { getChallengeScores, logoutUser } from "../Auth/AuthSlice";
 import LottieAnimations from "../../shared/LottieAnimations";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
-import analytics from '@react-native-firebase/analytics';
 
 
 
@@ -127,12 +126,6 @@ const AvailableChallengeBoosts = ({ onClose }) => {
         setLoading(false);
         onClose();
         navigation.navigate("ChallengeGameInProgress")
-      })
-      .then(async result => {
-        await analytics().logEvent("startchallenge_initiated", {
-          action: "initiate"
-        })
-        // console.log('Action logged to server');
       })
       .catch((rejectedValueOrSerializedError) => {
         // console.log(rejectedValueOrSerializedError);
