@@ -17,6 +17,7 @@ import { logActionToServer } from "../CommonSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import UserAvailableBoost from "../../shared/UserAvailableBoost";
 import GoToStore from "../../shared/GoToStore";
+import analytics from '@react-native-firebase/analytics';
 
 
 const GameStakingScreen = ({ navigation }) => {
@@ -42,10 +43,13 @@ const GameStakingScreen = ({ navigation }) => {
         dispatch(getUser())
     }, [])
 
-    const startGame = () => {
+    const startGame = async () => {
         // dispatch(canStake({staking_amount: amount}))
         //     .then(result => {
                 if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
+                    await analytics().logEvent('staking_low_balance', {
+                        'action': 'initiate'
+                    });
                     openBottomSheet();
                 }
                 openBottomSheet()
