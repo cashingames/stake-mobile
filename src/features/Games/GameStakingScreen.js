@@ -46,7 +46,7 @@ const GameStakingScreen = ({ navigation }) => {
         if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
             openBottomSheet();
         }
-        openBottomSheet() 
+        openBottomSheet()
     }
 
 
@@ -68,6 +68,7 @@ const GameStakingScreen = ({ navigation }) => {
                 <AppButton text="Stake Amount" onPress={startGame} />
             </View>
             <View style={styles.stakeContainer}>
+                <Text style={styles.stakeHeading}>Predictions Table</Text>
                 <View style={styles.stakeHeaders}>
                     {/* <View style={styles.stakeNumber}> */}
                     {/* <Text style={styles.stakeIndex}></Text> */}
@@ -282,11 +283,12 @@ const styles = EStyleSheet.create({
         borderRadius: 64,
     },
     fundAmount: {
-        fontFamily: "graphik-bold",
+        fontFamily: "graphik-medium",
         fontSize: "1.7rem",
         color: "#333333",
         marginVertical: normalize(10),
-        opacity: 0.65
+        opacity: 0.65,
+        textAlign: "center",
         // width: responsiveScreenWidth(100),
     },
     buttonContainer: {
@@ -307,6 +309,9 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '3rem'
+    },
+    stakeHeading: {
+        textAlign:'center'
     },
     stakeHeaders: {
         flexDirection: 'row',
@@ -385,29 +390,29 @@ const styles = EStyleSheet.create({
     },
     storeLinks: {
         alignItems: 'center',
-      },
-      amount: {
+    },
+    amount: {
         fontFamily: 'graphik-bold',
         fontSize: '0.8rem',
         color: '#FF932F'
-      },
-      title: {
+    },
+    title: {
         fontSize: '0.85rem',
         fontFamily: 'graphik-medium',
         color: '#000',
         lineHeight: 23,
         marginBottom: normalize(15)
-      },
-      boosts: {
+    },
+    boosts: {
         // alignItems: ''
-      },
-      noBoosts: {
+    },
+    noBoosts: {
         textAlign: 'center',
         fontSize: '0.85rem',
         fontFamily: 'graphik-regular',
         marginVertical: '1rem'
-      },
-      boostContent: {
+    },
+    boostContent: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -415,52 +420,52 @@ const styles = EStyleSheet.create({
         borderBottomColor: 'rgba(0, 0, 0, 0.1)',
         borderBottomWidth: 1,
         marginBottom: normalize(17)
-      },
-      boostAmount: {
+    },
+    boostAmount: {
         display: 'flex',
         flexDirection: 'row',
-      },
-      availableBoosts: {
+    },
+    availableBoosts: {
         paddingVertical: normalize(14),
         paddingHorizontal: normalize(20),
-      },
-      boostDetails: {
+    },
+    boostDetails: {
         display: 'flex',
         alignItems: 'flex-start',
         marginBottom: normalize(15),
         justifyContent: 'center'
-      },
-      boostName: {
+    },
+    boostName: {
         fontSize: '0.69rem',
         fontFamily: 'graphik-bold',
         color: '#151C2F',
         lineHeight: '1.2rem',
-      },
-      boostDescription: {
+    },
+    boostDescription: {
         fontSize: '0.69rem',
         fontFamily: 'graphik-regular',
         color: '#828282',
         lineHeight: '1.2rem',
         width: responsiveScreenWidth(60),
-      },
-      storeLink: {
+    },
+    storeLink: {
         fontSize: '0.69rem',
         fontFamily: 'graphik-medium',
         color: '#EF2F55',
-      },
-      needBoost: {
+    },
+    needBoost: {
         fontSize: '0.69rem',
         fontFamily: 'graphik-regular',
         color: '#000',
-      },
-      moreBoost: {
+    },
+    moreBoost: {
         alignItems: 'center',
-      },
-      startContainer: {
+    },
+    startContainer: {
         marginTop: normalize(50),
-      },
-      proceedButton: {
+    },
+    proceedButton: {
         marginVertical: 10,
-      },
+    },
 
 })
