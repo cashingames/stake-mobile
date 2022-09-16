@@ -8,7 +8,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { formatCurrency } from "../../utils/stringUtl";
 import Input from "../../shared/Input";
 import AppButton from "../../shared/AppButton";
-import { getGameStakes, setIsPlayingTrivia, startGame } from "./GameSlice";
+import { canStake, getGameStakes, setIsPlayingTrivia, startGame } from "./GameSlice";
 import { Ionicons } from '@expo/vector-icons';
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import FundWalletComponent from "../../shared/FundWalletComponent";
@@ -17,6 +17,7 @@ import { logActionToServer } from "../CommonSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import UserAvailableBoost from "../../shared/UserAvailableBoost";
 import GoToStore from "../../shared/GoToStore";
+import analytics from '@react-native-firebase/analytics';
 
 
 const GameStakingScreen = ({ navigation }) => {
@@ -42,11 +43,32 @@ const GameStakingScreen = ({ navigation }) => {
         dispatch(getUser())
     }, [])
 
-    const startGame = () => {
-        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-            openBottomSheet();
-        }
-        openBottomSheet() 
+    const startGame = async () => {
+        // dispatch(canStake({staking_amount: amount}))
+        //     .then(result => {
+                if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
+                    await analytics().logEvent('staking_low_balance', {
+                        'action': 'initiate'
+                    });
+                    openBottomSheet();
+                }
+                openBottomSheet()
+            // })
+        // var inputedAmount =
+        //     amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
+        // // console.log(Number.parseFloat(amount));
+        // if (inputedAmount < 100) {
+        //     Alert.alert("Amount cannot be less than 100 naira");
+        //     return false;
+        // }
+        // if (inputedAmount > 1000) {
+        //     Alert.alert("Amount cannot be greater than 1000 naira");
+        //     return false;
+        // }
+        // if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
+        //     openBottomSheet();
+        // }
+        // openBottomSheet()
     }
 
 
@@ -68,6 +90,7 @@ const GameStakingScreen = ({ navigation }) => {
                 <AppButton text="Stake Amount" onPress={startGame} />
             </View>
             <View style={styles.stakeContainer}>
+                <Text style={styles.stakeHeading}>Predictions Table</Text>
                 <View style={styles.stakeHeaders}>
                     {/* <View style={styles.stakeNumber}> */}
                     {/* <Text style={styles.stakeIndex}></Text> */}
@@ -254,6 +277,18 @@ const NotEnoughBalance = ({ onClose }) => {
         </View>
     )
 }
+const StakingAmountOutOfRange = ({ onClose }) => {
+    return (
+        <View style={styles.noGames}>
+            <Image style={styles.sadEmoji}
+                source={require('../../../assets/images/sad-face-emoji.png')}
+
+            />
+            <Text style={styles.noGamesText}>Sorry,</Text>
+            <Text style={styles.noGamesText}>You can only stake between &#8358;{formatCurrency(100)} and {formatCurrency(1000)}</Text>
+        </View>
+    )
+}
 export default GameStakingScreen;
 
 const styles = EStyleSheet.create({
@@ -282,11 +317,12 @@ const styles = EStyleSheet.create({
         borderRadius: 64,
     },
     fundAmount: {
-        fontFamily: "graphik-bold",
+        fontFamily: "graphik-medium",
         fontSize: "1.7rem",
         color: "#333333",
         marginVertical: normalize(10),
-        opacity: 0.65
+        opacity: 0.65,
+        textAlign: "center",
         // width: responsiveScreenWidth(100),
     },
     buttonContainer: {
@@ -307,6 +343,14 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '3rem'
+    },
+    stakeHeading: {
+        textAlign: 'center',
+        fontFamily: "graphik-medium",
+        fontSize: "1rem",
+        color: "#EF2F55",
+        marginVertical: '1rem',
+        // opacity:0.7
     },
     stakeHeaders: {
         flexDirection: 'row',
@@ -385,29 +429,29 @@ const styles = EStyleSheet.create({
     },
     storeLinks: {
         alignItems: 'center',
-      },
-      amount: {
+    },
+    amount: {
         fontFamily: 'graphik-bold',
         fontSize: '0.8rem',
         color: '#FF932F'
-      },
-      title: {
+    },
+    title: {
         fontSize: '0.85rem',
         fontFamily: 'graphik-medium',
         color: '#000',
         lineHeight: 23,
         marginBottom: normalize(15)
-      },
-      boosts: {
+    },
+    boosts: {
         // alignItems: ''
-      },
-      noBoosts: {
+    },
+    noBoosts: {
         textAlign: 'center',
         fontSize: '0.85rem',
         fontFamily: 'graphik-regular',
         marginVertical: '1rem'
-      },
-      boostContent: {
+    },
+    boostContent: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -415,52 +459,52 @@ const styles = EStyleSheet.create({
         borderBottomColor: 'rgba(0, 0, 0, 0.1)',
         borderBottomWidth: 1,
         marginBottom: normalize(17)
-      },
-      boostAmount: {
+    },
+    boostAmount: {
         display: 'flex',
         flexDirection: 'row',
-      },
-      availableBoosts: {
+    },
+    availableBoosts: {
         paddingVertical: normalize(14),
         paddingHorizontal: normalize(20),
-      },
-      boostDetails: {
+    },
+    boostDetails: {
         display: 'flex',
         alignItems: 'flex-start',
         marginBottom: normalize(15),
         justifyContent: 'center'
-      },
-      boostName: {
+    },
+    boostName: {
         fontSize: '0.69rem',
         fontFamily: 'graphik-bold',
         color: '#151C2F',
         lineHeight: '1.2rem',
-      },
-      boostDescription: {
+    },
+    boostDescription: {
         fontSize: '0.69rem',
         fontFamily: 'graphik-regular',
         color: '#828282',
         lineHeight: '1.2rem',
         width: responsiveScreenWidth(60),
-      },
-      storeLink: {
+    },
+    storeLink: {
         fontSize: '0.69rem',
         fontFamily: 'graphik-medium',
         color: '#EF2F55',
-      },
-      needBoost: {
+    },
+    needBoost: {
         fontSize: '0.69rem',
         fontFamily: 'graphik-regular',
         color: '#000',
-      },
-      moreBoost: {
+    },
+    moreBoost: {
         alignItems: 'center',
-      },
-      startContainer: {
+    },
+    startContainer: {
         marginTop: normalize(50),
-      },
-      proceedButton: {
+    },
+    proceedButton: {
         marginVertical: 10,
-      },
+    },
 
 })
