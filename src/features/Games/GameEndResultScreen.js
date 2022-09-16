@@ -120,9 +120,9 @@ export default function GameEndResultScreen({ navigation }) {
 			<GameEndClockAnimation />
 			<UserName userName={user.firstName} />
 			<UserResultInfo pointsGained={pointsGained} />
-			{/* {withStaking &&
+			{withStaking &&
 				<StakeWinnings showText={showText} amountWon={amountWon} />
-			} */}
+			}
 			<SeeRank />
 			<FinalScore pointsGained={pointsGained} />
 			<View style={styles.gameButtons}>
@@ -180,9 +180,9 @@ const StakeWinnings = ({ showText, amountWon }) => {
 				<Text style={styles.winningsText}>You have won</Text>
 				<Text style={[styles.winningsCash, { opacity: showText ? 0 : 1 }]}> &#8358;{formatCurrency(amountWon)}!</Text>
 			</View>
-			<Pressable>
+			{/* <Pressable>
 				<Text style={styles.reviewStake}>Review Stake</Text>
-			</Pressable>
+			</Pressable> */}
 		</View>
 	)
 }
