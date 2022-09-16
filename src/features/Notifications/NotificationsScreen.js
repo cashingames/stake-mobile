@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Text, View, ScrollView, Pressable, StatusBar } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { Text, View, ScrollView, Pressable, StatusBar, ImageBackground } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, getUserNotifications, markNotificationRead } from "../Auth/AuthSlice";
@@ -9,6 +9,7 @@ import LottieAnimations from "../../shared/LottieAnimations";
 import PageLoading from "../../shared/PageLoading";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { Ionicons } from "@expo/vector-icons";
+import moment from "moment";
 
 const NotificationsScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -19,6 +20,16 @@ const NotificationsScreen = ({ navigation }) => {
     console.log(notifications)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
+    const [showText, setShowText] = useState(true);
+
+
+    // useEffect(() => {
+    //     // Change the state every second or the time given by User.
+    //     const interval = setInterval(() => {
+    //         setShowText((showText) => !showText);
+    //     }, 2000);
+    //     return () => clearInterval(interval);
+    // }, []);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -51,30 +62,33 @@ const NotificationsScreen = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.emojiContainer}>
-                <LottieAnimations
-                    animationView={require('../../../assets/bell.json')}
-                    height={normalize(150)}
-                />
-            </View>
-            {notifications.length > 0 ?
-                <>
-                    {notifications.map((notification, i) => <Notification key={i} notification={notification}
-                        index={i + 1}
-                    />)}
-                </>
-                :
-                <View style={styles.noNotificationContainer}>
-                    <Text style={styles.noNotification}>No Notification available</Text>
+            <ImageBackground source={require('../../../assets/images/studio-illustration.jpg')} style={styles.playerImage} resizeMode="cover">
+                <View style={styles.emojiContainer}>
+                    <LottieAnimations
+                        animationView={require('../../../assets/bell.json')}
+                        height={normalize(150)}
+                    />
                 </View>
-            }
-
+                {notifications.length > 0 ?
+                    <View style={styles.notificationsContainer}>
+                        {notifications.map((notification, i) => <Notification key={i} notification={notification}
+                            // index={i + 1}
+                            moment={moment}
+                            showText={showText}
+                        />)}
+                    </View>
+                    :
+                    <View style={styles.noNotificationContainer}>
+                        <Text style={styles.noNotification}>No Notification available</Text>
+                    </View>
+                }
+            </ImageBackground>
 
         </ScrollView>
     )
 }
 
-const Notification = ({ notification, index }) => {
+const Notification = ({ notification, moment, showText }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const [clicked, setClicked] = useState(false)
@@ -88,18 +102,31 @@ const Notification = ({ notification, index }) => {
         dispatch(getUser());
     }
     return (
-        <View style={styles.notificationContainer}>
-            <View style={styles.bellContainer}>
-                <Ionicons name='notifications-circle' color="#EF2F55" size={24} />
+        <View style={styles.headNotificationContainer}>
+            {notification.read_at !== null || clicked ?
+                <View style={styles.checkContainer}>
+                    <Ionicons name='checkmark-circle' color="#FAC502" size={22} />
+                </View>
+                :
+                <View style={styles.bellContainer}>
+                    <Ionicons name='notifications-circle' color="#EF2F55" size={22} />
+                </View>
+            }
+            {/* {notification.read_at !== null || clicked ? */}
+            <View style={styles.notificationContainer}>
+                <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked ? styles.clicked : {}]} onPress={notificationAction}>
+                    <Text style={[styles.notificationTitle, notification.read_at !== null || clicked ? styles.clickedText : {}]}>{notification.data.title}</Text>
+                </Pressable>
+                <Text style={styles.notificationTime}>From {moment(notification.created_at).fromNow()}</Text>
             </View>
-            <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked ? styles.clicked : {}]} onPress={notificationAction}>
-                <Text style={styles.notificationTitle}>{notification.data.title}</Text>
-                {notification.read_at !== null || clicked ?
-                    <Ionicons name='checkmark-circle-sharp' color="#EF2F55" size={24} style={styles.readMark} />
-                    :
-                    <></>
-                }
-            </Pressable>
+            {/* :
+                <View style={[styles.notificationContainer, { opacity: showText ? 0.7 : 1 }]}>
+                    <Text style={styles.notificationTime}>From {moment(notification.created_at).fromNow()}</Text>
+                    <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked ? styles.clicked : {}]} onPress={notificationAction}>
+                        <Text style={[styles.notificationTitle, notification.read_at !== null || clicked ? styles.clickedText : {}]}>{notification.data.title}</Text>
+                    </Pressable>
+                </View> */}
+            {/* } */}
         </View>
     )
 }
@@ -108,56 +135,80 @@ export default NotificationsScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#072169',
+        // backgroundColor: '#072169',
         // paddingHorizontal: normalize(18),
         paddingBottom: normalize(50),
     },
     emojiContainer: {
         alignItems: 'center',
     },
-    notificationContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: normalize(10),
-        justifyContent: 'center',
-        marginHorizontal: normalize(18)
+    notificationsContainer: {
+        backgroundColor: '#072169',
+        marginHorizontal: normalize(18),
+        paddingRight: normalize(45),
+        paddingLeft: normalize(20),
+        paddingTop: normalize(25),
+        borderRadius: 15,
+        maginBottom: normalize(15)
 
     },
-    notificationTitleContainer: {
+    headNotificationContainer: {
         flexDirection: 'row',
-        // justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: normalize(25),
+        // justifyContent: 'center',
+        // marginHorizontal: normalize(18)
+
+    },
+    notificationContainer: {
+        flexDirection: 'column',
         alignItems: 'flex-start',
-        width: '19.5rem',
+        // marginBottom: normalize(10),
+        // justifyContent: 'center',
+        // marginHorizontal: normalize(18)
+
+    },
+    notificationTime: {
+        fontFamily: 'graphik-medium',
+        fontSize: '.7rem',
+        color: '#FFFF',
+        textAlingn: 'center',
+        marginLeft: 'auto',
+        marginRight: '1rem',
+        marginTop: '.2rem',
+        fontStyle: 'italic',
+        opacity: 0.8
+    },
+    notificationTitleContainer: {
+        width: '16rem',
         borderWidth: 1,
-        borderColor: '#E0E0E0',
-        paddingVertical: Platform.OS === 'ios' ? normalize(15) : normalize(12),
+        borderColor: '#FAC502',
+        paddingVertical: Platform.OS === 'ios' ? normalize(10) : normalize(9),
         borderRadius: 30,
         paddingHorizontal: normalize(15),
         backgroundColor: '#FFFF',
-        elevation: 1.5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.2, height: 2 },
-        shadowOpacity: 0.2,
-        // alignItems: 'center',
 
-    },
-    notificationIndex: {
-        fontFamily: 'graphik-medium',
-        fontSize: '.7rem',
-        color: '#000000',
-        marginRight: '.6rem'
     },
     notificationTitle: {
         fontFamily: 'graphik-medium',
-        fontSize: '.7rem',
+        fontSize: '.75rem',
         color: '#000000',
         textAlingn: 'center',
-        lineHeight: '.85rem',
-        width: '16rem'
+        lineHeight: '1.1rem',
+    },
+    clickedText: {
+        fontFamily: 'graphik-medium',
+        fontWeight: '700',
+        fontSize: '.75rem',
+        color: '#000000',
+        textAlingn: 'center',
+        lineHeight: '1.1rem',
+        fontStyle: 'italic',
+        opacity: 0.6
     },
     clicked: {
         opacity: 0.6,
-        // backgroundColor:"red"
+        backgroundColor: "#ddf"
     },
     noNotificationContainer: {
         justifyContent: 'center',
@@ -172,12 +223,17 @@ const styles = EStyleSheet.create({
 
     },
     bellContainer: {
-        backgroundColor: "#fac502",
+        backgroundColor: "#FAC502",
         borderRadius: 100,
-        padding: '.1rem',
+        paddingLeft: normalize(3),
         marginRight: '.6rem',
+        marginBottom: '1rem'
     },
-    readMark: {
-        marginLeft: 'auto',
-    }
+    checkContainer: {
+        backgroundColor: "#EF2F55",
+        borderRadius: 100,
+        paddingLeft: normalize(3),
+        marginRight: '.6rem',
+        marginBottom: '1rem'
+    },
 })
