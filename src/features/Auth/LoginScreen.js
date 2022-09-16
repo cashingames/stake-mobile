@@ -49,7 +49,7 @@ export default function LoginScreen({ navigation }) {
         loginUser({
             email, password
         }).then(response => {
-            console.log(response)
+            // console.log(response)
             saveToken(response.data.data)
             dispatch(setToken(response.data.data))
             navigation.navigate('AppRouter')

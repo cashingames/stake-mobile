@@ -93,6 +93,19 @@ export const searchUserFriends = createAsyncThunk(
     }
 )
 
+export const fetchFeatureFlags = createAsyncThunk(
+    'common/fetchFeatureFlags',
+    async () => {
+        const response = await axios.get(`v3/feature-flags`)
+        return response.data;
+    }
+)
+
+export const isFeatureEnabled = async(feature, features={}) => {
+
+    return features.hasOwnProperty(feature) && features[feature].enabled === true
+}
+
 const initialState = {
     initialLoading: true,
     boosts: [],
@@ -109,6 +122,7 @@ const initialState = {
     minVersionCode: '',
     minVersionForce: false,
     userFriends: [],
+    featureFlags: []
 }
 
 export const CommonSlice = createSlice({
@@ -159,6 +173,10 @@ export const CommonSlice = createSlice({
             })
             .addCase(searchUserFriends.fulfilled, (state, action) => {
                 state.userFriends = action.payload
+            })
+            .addCase(fetchFeatureFlags.fulfilled, (state, action) => {
+                console.log("feature states fulfilled", action.payload.data);
+                state.featureFlags = action.payload.data
             })
     },
 });

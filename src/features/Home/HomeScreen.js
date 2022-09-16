@@ -15,7 +15,7 @@ import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
-import { getCommonData, getGlobalLeaders, initialLoadingComplete } from '../CommonSlice';
+import { fetchFeatureFlags, getCommonData, getGlobalLeaders, initialLoadingComplete } from '../CommonSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserItems';
 import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
@@ -32,15 +32,20 @@ const HomeScreen = () => {
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
     const trivia = useSelector(state => state.liveTrivia.data);
+    
 
 
     useEffect(() => {
+        
+
         const _1 = dispatch(getUser());
         const _2 = dispatch(getCommonData());
+        const _3 = dispatch(fetchFeatureFlags())
 
-        Promise.all([_1, _2]).then(() => {
+        Promise.all([_1, _2, _3]).then(() => {
             dispatch(initialLoadingComplete());
         });
+        
         // dispatch(getUser())
         // dispatch(getCommonData())
 
