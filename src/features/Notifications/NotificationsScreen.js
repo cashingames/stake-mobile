@@ -122,7 +122,9 @@ const Notification = ({ notification, moment, showText }) => {
                 <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked ? styles.clicked : {}]} onPress={notificationAction}>
                     <Text style={[styles.notificationTitle, notification.read_at !== null || clicked ? styles.clickedText : {}]}>{notification.data.title}</Text>
                 </Pressable>
+                <View style={styles.notificationTimeContainer}>
                 <Text style={styles.notificationTime}>From {moment(notification.created_at).fromNow()}</Text>
+                </View>
             </View>
         </View>
     )
@@ -161,14 +163,21 @@ const styles = EStyleSheet.create({
         alignItems: 'flex-start',
 
     },
-    notificationTime: {
-        fontFamily: 'graphik-medium',
-        fontSize: '.7rem',
-        color: '#FFFF',
-        textAlingn: 'center',
-        marginLeft: 'auto',
+    notificationTimeContainer: {
         marginRight: '1rem',
         marginTop: '.2rem',
+        marginLeft: 'auto',
+        backgroundColor: "#072169",
+        paddingHorizontal:'.8rem',
+        paddingVertical: normalize(3),
+        borderRadius:30,
+        opacity: 0.6
+    },
+    notificationTime: {
+        fontFamily: 'graphik-medium',
+        fontSize: '.65rem',
+        color: '#FFFF',
+        textAlingn: 'center',       
         fontStyle: 'italic',
         // opacity: 0.8
     },
