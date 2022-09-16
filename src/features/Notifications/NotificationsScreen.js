@@ -167,7 +167,7 @@ const styles = EStyleSheet.create({
     noNotification: {
         fontFamily: 'graphik-medium',
         fontSize: '1rem',
-        color: '#000000',
+        color: '#FFFF',
         textAlingn: 'center',
 
     },

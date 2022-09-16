@@ -65,10 +65,11 @@ export default function SignupScreen({ navigation }) {
                 <AuthTitle text='Create an account' />
             </View>
             <View style={styles.signIn}>
-                <Text style={styles.signInText}>Sign up with google</Text>
+                <Text style={styles.signInText}>Use your social link</Text>
                 <View style={styles.google}>
                     <SocialSignUp googleText="SIGN UP" />
                 </View>
+                <Text style={styles.signInText}>or</Text>
             </View>
 
             <View style={styles.inputContainer}>
@@ -166,7 +167,7 @@ const styles = EStyleSheet.create({
         top: normalize(10)
     },
     inputContainer: {
-        marginTop: responsiveScreenWidth(8),
+        marginTop: responsiveScreenWidth(7),
     },
     linkText: {
         color: '#EF2F55',
@@ -194,7 +195,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'column',
         // justifyContent: 'center',
         alignItems: 'center',
-        // marginTop: responsiveScreenWidth(2)
+        marginTop: responsiveScreenWidth(2)
     },
     create: {
         flexDirection: 'row',
