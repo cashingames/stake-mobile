@@ -241,7 +241,7 @@ const StakeAmount = () => {
         this game
       </Text>
       <Pressable style={styles.stakeButton} onPress={gotoStaking}>
-        <Text style={styles.showMe}>SHOW ME HOW</Text>
+        <Text style={styles.showMe}>PLAY NOW</Text>
       </Pressable>
     </View>
   )

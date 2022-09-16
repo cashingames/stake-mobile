@@ -24,7 +24,7 @@ const GameStakingScreen = ({ navigation }) => {
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
     // console.log(gameStakes)
-    const [amount, setAmount] = useState("");
+    const [amount, setAmount] = useState(100);
     const dispatch = useDispatch();
     const refRBSheet = useRef();
 
@@ -231,7 +231,7 @@ const StakeAmount = ({ gameStake, position, amount }) => {
             {/* </View> */}
             <View style={styles.stakeScoreContainer}>
                 <Ionicons name="checkmark-circle-outline" size={16} color="#333333" />
-                <Text style={styles.stakeScoreDigit}>{gameStake.score}</Text>
+                <Text style={styles.stakeScoreDigit}>{gameStake.score}/10</Text>
             </View>
             <View style={styles.stakeNumber}>
                 <Ionicons name="time-outline" size={16} color="#FF932F" />
