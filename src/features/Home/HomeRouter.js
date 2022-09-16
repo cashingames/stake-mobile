@@ -70,15 +70,7 @@ const RightButtons = () => {
     return (
         <View style={styles.headerIcons}>
 
-            <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Home')}>
-                <Ionicons name='home-outline' size={26} />
-                <Text style={styles.headerIconText}>Home</Text>
-            </Pressable>
-            <Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
-                <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
-                <Text style={styles.headerIconText}>Wallet</Text>
-            </Pressable>
-            <Pressable style={[styles.headerIconContainer, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Notifications')}>
+            <Pressable style={[styles.headerIconContainerNot, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Notifications')}>
                 <View style={styles.notificationContainer}>
                     <Ionicons name='notifications-outline' size={26} style={[styles.headerIcon, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} />
                     {user.unreadNotificationsCount !== 0 &&
@@ -88,7 +80,16 @@ const RightButtons = () => {
                     }
 
                 </View>
-                <Text style={styles.headerIconText}>Notification</Text>
+                {/* <Text style={styles.headerIconText}>Notification</Text> */}
+            </Pressable>
+
+            <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Home')}>
+                <Ionicons name='home-outline' size={26} />
+                <Text style={styles.headerIconText}>Home</Text>
+            </Pressable>
+            <Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
+                <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
+                <Text style={styles.headerIconText}>Wallet</Text>
             </Pressable>
             {/* <Pressable style={[styles.headerIconContainer, routeName === 'HowToWin' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('HowToWin')}>
                 <Ionicons name='home-outline' size={26} />
@@ -130,6 +131,22 @@ function CustomDrawerContent(props) {
 
 
                 <View style={drawStyles.menu}>
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Notifications</Text>
+                                <View style={drawStyles.notificationCount}>
+                                    <View style={drawStyles.numberContainer}>
+                                        <Text style={drawStyles.number}>{user.unreadNotificationsCount}</Text>
+                                    </View>
+                                    <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                </View>
+                            </View>}
+                        onPress={() => navigation.navigate('Notifications')}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
                     <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
@@ -179,22 +196,6 @@ function CustomDrawerContent(props) {
                     <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Notifications</Text>
-                                <View style={drawStyles.notificationCount}>
-                                    <View style={drawStyles.numberContainer}>
-                                        <Text style={drawStyles.number}>{user.unreadNotificationsCount}</Text>
-                                    </View>
-                                    <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                                </View>
-                            </View>}
-                        onPress={() => navigation.navigate('Notifications')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
                                 <Text style={drawStyles.itemLabel}>Help</Text>
                                 <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                             </View>}
@@ -205,10 +206,13 @@ function CustomDrawerContent(props) {
                     />
                 </View>
             </ScrollView>
-            <Pressable onPress={onLogout} style={drawStyles.logoutContainer}>
-                <Text style={drawStyles.logoutText}>Logout</Text>
+            <View style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
-            </Pressable>
+                <Pressable onPress={onLogout}>
+                    <Text style={drawStyles.logoutText}>Logout</Text>
+                </Pressable>
+            </View>
+
 
         </DrawerContentScrollView>
     );
@@ -221,7 +225,13 @@ const styles = EStyleSheet.create({
     headerIconContainer: {
         opacity: 0.5,
         alignItems: 'center',
-        marginLeft: '1.5rem',
+        marginLeft: '1.3rem',
+    },
+    headerIconContainerNot: {
+        opacity: 0.5,
+        alignItems: 'center',
+        marginLeft: '1.3rem',
+        marginTop: '.5rem'
     },
     headerIconText: {
         fontSize: '0.5rem',
@@ -317,21 +327,21 @@ const drawStyles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
     },
     logoutContainer: {
-        backgroundColor:'#EF2F55'
+        backgroundColor: '#FFFF',
         // flex: 1,
         // justifyContent: 'flex-end'
     },
     logoutText: {
-        color: '#FFFF',
+        color: '#EF2F5F',
         textAlign: 'center',
-        fontSize: '0.8rem',
+        fontSize: '0.75rem',
         fontFamily: 'graphik-medium',
         paddingVertical: responsiveScreenHeight(1),
 
     },
     appVersion: {
-        color: '#FFFF',
-        fontSize: '0.7rem',
+        color: '#000000',
+        fontSize: '0.8rem',
         lineHeight: '0.7rem',
         fontFamily: 'graphik-regular',
         opacity: 0.7,
