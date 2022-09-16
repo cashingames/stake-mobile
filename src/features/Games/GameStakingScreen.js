@@ -43,13 +43,13 @@ const GameStakingScreen = ({ navigation }) => {
     }, [])
 
     const startGame = () => {
-        dispatch(canStake())
-            .then(result => {
+        // dispatch(canStake({staking_amount: amount}))
+        //     .then(result => {
                 if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
                     openBottomSheet();
                 }
                 openBottomSheet()
-            })
+            // })
         // var inputedAmount =
         //     amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
         // // console.log(Number.parseFloat(amount));
@@ -270,6 +270,18 @@ const NotEnoughBalance = ({ onClose }) => {
             <Text style={styles.noGamesText}>Sorry,</Text>
             <Text style={styles.noGamesText}>You do not have enough balance to stake this amount</Text>
             <FundWalletComponent onClose={onClose} />
+        </View>
+    )
+}
+const StakingAmountOutOfRange = ({ onClose }) => {
+    return (
+        <View style={styles.noGames}>
+            <Image style={styles.sadEmoji}
+                source={require('../../../assets/images/sad-face-emoji.png')}
+
+            />
+            <Text style={styles.noGamesText}>Sorry,</Text>
+            <Text style={styles.noGamesText}>You can only stake between &#8358;{formatCurrency(100)} and {formatCurrency(1000)}</Text>
         </View>
     )
 }

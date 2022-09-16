@@ -175,7 +175,7 @@ export const CommonSlice = createSlice({
                 state.userFriends = action.payload
             })
             .addCase(fetchFeatureFlags.fulfilled, (state, action) => {
-                console.log("feature states fulfilled", action.payload.data);
+                
                 state.featureFlags = action.payload.data
             })
     },
