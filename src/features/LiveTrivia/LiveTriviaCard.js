@@ -7,10 +7,11 @@ import { useFocusEffect } from '@react-navigation/native';
 // import Animated, { BounceInRight } from 'react-native-reanimated';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
-import { calculateTimeRemaining} from '../../utils/utils';
+import { calculateTimeRemaining } from '../../utils/utils';
 import { getLiveTriviaStatus } from './LiveTriviaSlice';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import LiveTriviaEntryFailedText from './LiveTriviaEntryFailedText';
+import analytics from '@react-native-firebase/analytics';
 
 
 
@@ -27,11 +28,26 @@ const LiveTriviaCard = ({ trivia }) => {
 
     const triviaActionButtonClicked = () => {
         if (trivia.playerStatus === "INSUFFICIENTPOINTS" && trivia.status === "ONGOING") {
-            notEnoughPointNotice.current.open();
+            notEnoughPointNotice.current.open()
+                .then(async () => {
+                    await analytics().logEvent('low_points', {
+                        'action': 'incomplete'
+                    });
+                })
         } else if (trivia.playerStatus === "PLAYED" || trivia.status === "EXPIRED" || trivia.status === "CLOSED") {
-            navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id });
+            navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id })
+                .then(async () => {
+                    await analytics().logEvent('clicked_leaderboard', {
+                        'action': 'complete'
+                    });
+                })
         } else if (trivia.playerStatus === "CANPLAY" && trivia.status !== "EXPIRED") {
             navigation.navigate('TriviaInstructions', { ...trivia })
+                .then(async () => {
+                    await analytics().logEvent('clicked_canplay', {
+                        'action': 'initiate'
+                    });
+                })
         }
     }
     useEffect(() => {
