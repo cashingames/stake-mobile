@@ -8,7 +8,7 @@ import Animated from "react-native-reanimated";
 import { Ionicons } from '@expo/vector-icons';
 import { unwrapResult } from "@reduxjs/toolkit";
 import EStyleSheet from "react-native-extended-stylesheet";
-
+import analytics from '@react-native-firebase/analytics';
 import { buyBoostFromWallet, buyPlanFromWallet } from "./StoreSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
@@ -41,7 +41,7 @@ const GamePlans = () => {
 
     return (
         <View style={styles.storeItems}>
-                <Text style={styles.title}>Buy Games</Text>
+            <Text style={styles.title}>Buy Games</Text>
             <Text style={styles.storeItemsDescription}>
                 You can only play 5 free games daily, Buy Games to enjoy
                 playing without interruptons
@@ -162,8 +162,16 @@ const GameBoosts = () => {
 
 const BoostCard = ({ boost }) => {
     const refRBSheet = useRef();
+    const buyBoost = () => {
+        refRBSheet.current.open()
+            .then(async () => {
+                await analytics().logEvent('boost_details', {
+                    'action': 'initiate'
+                })
+            })
+    }
     return (
-        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}>
+        <Pressable activeOpacity={0.8} onPress={buyBoost}>
             <Animated.View style={styles.storeItemContainer} entering={randomEnteringAnimation().duration(1000)}>
                 <BoostCardDetails boost={boost} />
                 <RBSheet
@@ -227,11 +235,22 @@ const BuyBoost = ({ boost, onClose }) => {
                 dispatch(getUser())
                 onClose()
                 navigation.navigate("GameBoostPurchaseSuccessful")
+                    .then(async () => {
+                        await analytics().logEvent('boost_purchased', {
+                            'action': 'complete'
+                        })
+                    })
             })
+
             .catch(rejectedValueOrSerializedError => {
                 setLoading(false);
                 // Alert.alert("Notice", "Operation could not be completed, please try again");
                 navigation.navigate("GameStoreItemsPurchaseFailed")
+                    .then(async () => {
+                        await analytics().logEvent('boost_purchased', {
+                            'action': 'complete'
+                        })
+                    })
             });
     }
 
