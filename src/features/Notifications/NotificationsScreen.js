@@ -61,10 +61,11 @@ const NotificationsScreen = ({ navigation }) => {
 
 
     return (
-        <ScrollView style={styles.container}>
-            <ImageBackground source={require('../../../assets/images/studio-illustration.jpg')}
-                style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
-                resizeMethod="resize">
+        <ImageBackground source={require('../../../assets/images/studio-illustration.jpg')}
+            style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
+            resizeMethod="resize">
+            <ScrollView style={styles.container}>
+
                 <View style={styles.emojiContainer}>
                     <LottieAnimations
                         animationView={require('../../../assets/bell.json')}
@@ -73,6 +74,7 @@ const NotificationsScreen = ({ navigation }) => {
                 </View>
                 {notifications.length > 0 ?
                     <View style={styles.notificationsContainer}>
+                    {/* <> */}
                         {notifications.map((notification, i) => <Notification key={i} notification={notification}
                             // index={i + 1}
                             moment={moment}
@@ -84,9 +86,10 @@ const NotificationsScreen = ({ navigation }) => {
                         <Text style={styles.noNotification}>No Notification available</Text>
                     </View>
                 }
-            </ImageBackground>
+            </ScrollView>
 
-        </ScrollView>
+        </ImageBackground>
+
     )
 }
 
@@ -107,7 +110,8 @@ const Notification = ({ notification, moment, showText }) => {
         <View style={styles.headNotificationContainer}>
             {notification.read_at !== null || clicked ?
                 <View style={styles.checkContainer}>
-                    <Ionicons name='checkmark-circle' color="#FAC502" size={22} />
+                    <Ionicons name='checkmark-circle' color="#072169" size={22} />
+
                 </View>
                 :
                 <View style={styles.bellContainer}>
@@ -129,18 +133,20 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingBottom: normalize(50),
+        paddingHorizontal: normalize(18)
     },
     imageContainer: {
-        flex: 1,
+        // flex: 1,
     },
     emojiContainer: {
         alignItems: 'center',
     },
     notificationsContainer: {
-        backgroundColor: '#072169',
-        marginHorizontal: normalize(18),
-        paddingRight: normalize(45),
-        paddingLeft: normalize(20),
+        // backgroundColor: '#072169',
+        // marginHorizontal: normalize(18),
+        // paddingRight: normalize(50),
+        // paddingLeft: normalize(13),
+        alignItems:'center',
         paddingTop: normalize(25),
         borderRadius: 15,
     },
@@ -164,7 +170,7 @@ const styles = EStyleSheet.create({
         marginRight: '1rem',
         marginTop: '.2rem',
         fontStyle: 'italic',
-        opacity: 0.8
+        // opacity: 0.8
     },
     notificationTitleContainer: {
         width: '16rem',
@@ -191,11 +197,11 @@ const styles = EStyleSheet.create({
         textAlingn: 'center',
         lineHeight: '1.1rem',
         fontStyle: 'italic',
-        opacity: 0.6
+        opacity: 0.7
     },
     clicked: {
-        opacity: 0.6,
-        backgroundColor: "#ddf"
+        opacity: 0.75,
+        backgroundColor: "#FFFF"
     },
     noNotificationContainer: {
         justifyContent: 'center',
@@ -210,14 +216,14 @@ const styles = EStyleSheet.create({
 
     },
     bellContainer: {
-        backgroundColor: "#FAC502",
+        backgroundColor: "#072169",
         borderRadius: 100,
         paddingLeft: normalize(3),
         marginRight: '.6rem',
         marginBottom: '1rem'
     },
     checkContainer: {
-        backgroundColor: "#EF2F55",
+        backgroundColor: "#FAC502",
         borderRadius: 100,
         paddingLeft: normalize(3),
         marginRight: '.6rem',
