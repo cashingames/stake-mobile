@@ -41,6 +41,8 @@ export default function GameEndResultScreen({ navigation }) {
 
 	const onPlayButtonClick = () => {
 
+		navigation.navigate("GameInstructions")
+		return;
 		if (!hasActivePlan) {
 			openBottomSheet();
 			console.log("NO GAME", hasActivePlan)

@@ -16,6 +16,7 @@ import LottieAnimations from "../../shared/LottieAnimations";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 
 
+
 export default function ChallengeGameInstructionsScreen({ navigation, route }) {
   useApplyHeaderWorkaround(navigation.setOptions);
   const { challengeId } = route.params
