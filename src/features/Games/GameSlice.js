@@ -106,6 +106,17 @@ export const getGameStakes = createAsyncThunk(
     }
 )
 
+export const canStake = createAsyncThunk(
+    'game/canStake',
+    async (data, thunkAPI) => {
+        console.log( 'ooooo')
+        //make a network request to the server
+        const response = await axios.post('v3/game/can-stake-in-game', data)
+        console.log(response, 'bbbbbb')
+        return response.data;
+    }
+)
+
 
 //This is to store the currently ongoing active game
 let initialState = {

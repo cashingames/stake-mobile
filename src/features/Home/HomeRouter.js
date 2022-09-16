@@ -70,6 +70,15 @@ const RightButtons = () => {
     return (
         <View style={styles.headerIcons}>
 
+            <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Home')}>
+                <Ionicons name='home-outline' size={26} />
+                <Text style={styles.headerIconText}>Home</Text>
+            </Pressable>
+            <Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
+                <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
+                <Text style={styles.headerIconText}>Wallet</Text>
+            </Pressable>
+
             <Pressable style={[styles.headerIconContainerNot, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Notifications')}>
                 <View style={styles.notificationContainer}>
                     <Ionicons name='notifications-outline' size={26} style={[styles.headerIcon, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} />
@@ -81,15 +90,6 @@ const RightButtons = () => {
 
                 </View>
                 {/* <Text style={styles.headerIconText}>Notification</Text> */}
-            </Pressable>
-
-            <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Home')}>
-                <Ionicons name='home-outline' size={26} />
-                <Text style={styles.headerIconText}>Home</Text>
-            </Pressable>
-            <Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
-                <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
-                <Text style={styles.headerIconText}>Wallet</Text>
             </Pressable>
             {/* <Pressable style={[styles.headerIconContainer, routeName === 'HowToWin' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('HowToWin')}>
                 <Ionicons name='home-outline' size={26} />

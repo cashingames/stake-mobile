@@ -8,7 +8,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { formatCurrency } from "../../utils/stringUtl";
 import Input from "../../shared/Input";
 import AppButton from "../../shared/AppButton";
-import { getGameStakes, setIsPlayingTrivia, startGame } from "./GameSlice";
+import { canStake, getGameStakes, setIsPlayingTrivia, startGame } from "./GameSlice";
 import { Ionicons } from '@expo/vector-icons';
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import FundWalletComponent from "../../shared/FundWalletComponent";
@@ -24,7 +24,7 @@ const GameStakingScreen = ({ navigation }) => {
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
     // console.log(gameStakes)
-    const [amount, setAmount] = useState("");
+    const [amount, setAmount] = useState(500);
     const dispatch = useDispatch();
     const refRBSheet = useRef();
 
@@ -43,10 +43,28 @@ const GameStakingScreen = ({ navigation }) => {
     }, [])
 
     const startGame = () => {
-        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-            openBottomSheet();
-        }
-        openBottomSheet()
+        dispatch(canStake())
+            .then(result => {
+                if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
+                    openBottomSheet();
+                }
+                openBottomSheet()
+            })
+        // var inputedAmount =
+        //     amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
+        // // console.log(Number.parseFloat(amount));
+        // if (inputedAmount < 100) {
+        //     Alert.alert("Amount cannot be less than 100 naira");
+        //     return false;
+        // }
+        // if (inputedAmount > 1000) {
+        //     Alert.alert("Amount cannot be greater than 1000 naira");
+        //     return false;
+        // }
+        // if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
+        //     openBottomSheet();
+        // }
+        // openBottomSheet()
     }
 
 
@@ -311,7 +329,12 @@ const styles = EStyleSheet.create({
         width: '3rem'
     },
     stakeHeading: {
-        textAlign:'center'
+        textAlign: 'center',
+        fontFamily: "graphik-medium",
+        fontSize: "1rem",
+        color: "#EF2F55",
+        marginVertical: '1rem',
+        // opacity:0.7
     },
     stakeHeaders: {
         flexDirection: 'row',
