@@ -24,11 +24,11 @@ const GameStakingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
-    // console.log(gameStakes)
+    
     const [amount, setAmount] = useState(100);
     const dispatch = useDispatch();
     const refRBSheet = useRef();
-
+    
     const openBottomSheet = () => {
         refRBSheet.current.open()
     }
@@ -60,7 +60,6 @@ const GameStakingScreen = ({ navigation }) => {
                         Alert.alert("Your Network is Offline.");
                     }
                     else if (err.response.status === 400) {
-                        console.log(err.response, 'this is error')
                         Alert.alert(err.response.data.message);
                     }
                 }
@@ -90,6 +89,7 @@ const GameStakingScreen = ({ navigation }) => {
                 <Input
                     style={styles.fundAmount}
                     value={amount}
+                    defaultValue="100"
                     keyboardType="numeric"
                     onChangeText={setAmount}
                     autoFocus={true}

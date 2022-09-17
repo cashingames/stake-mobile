@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 export default function (props) {
-    const { label, type, error, editable } = props;
+    const { label, type, error, editable, defaultValue } = props;
 
     const [hidden, setHidden] = useState(type === "password");
 
