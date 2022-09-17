@@ -43,16 +43,18 @@ const GameStakingScreen = ({ navigation }) => {
         dispatch(getUser())
     }, [])
 
-    const startGame = () => {
+    const startGame = async () => {
+
+        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
+            await analytics().logEvent('staking_low_balance', {
+                'action': 'incomplete'
+            });
+            openBottomSheet();
+            return
+        }
+
         canStake({ staking_amount: amount })
             .then(async response => {
-
-                if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-                    await analytics().logEvent('staking_low_balance', {
-                        'action': 'incomplete'
-                    });
-                    openBottomSheet();
-                }
                 await analytics().logEvent('staking_initiated_successfully', {
                     'action': 'initiate'
                 });
@@ -171,10 +173,10 @@ const AvailableBoosts = ({ onClose, amount }) => {
                     .then(unwrapResult)
                     .then(async result => {
                         await analytics().logEvent("startgame_with_staking", {
-                          action: "initiate"
+                            action: "initiate"
                         })
                         // console.log('Action logged to server');
-                      })
+                    })
                     .catch((e) => {
                         // console.log('Failed to log to server');
                     });
