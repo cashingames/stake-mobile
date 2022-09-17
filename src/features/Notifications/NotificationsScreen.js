@@ -134,11 +134,11 @@ export default NotificationsScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingBottom: normalize(50),
+        // paddingBottom: normalize(18),
         paddingHorizontal: normalize(18)
     },
     imageContainer: {
-        // flex: 1,
+        flex: 1,
     },
     emojiContainer: {
         alignItems: 'center',
@@ -149,7 +149,7 @@ const styles = EStyleSheet.create({
         // paddingRight: normalize(50),
         // paddingLeft: normalize(13),
         alignItems:'center',
-        paddingTop: normalize(25),
+        paddingBottom: normalize(35),
         borderRadius: 15,
     },
     headNotificationContainer: {
