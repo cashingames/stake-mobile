@@ -37,7 +37,7 @@ export default GameQuestions;
     
         },
         options: {
-            // paddingBottom: normalize(80),
+            paddingBottom: normalize(45),
         },
         questions: {
             textAlign: 'center',
