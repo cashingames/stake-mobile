@@ -88,7 +88,7 @@ const TriviaParticipant = ({ player, position }) => {
                 <Text style={styles.position}>{position}</Text>
                 <Text style={styles.username}>{player.username}</Text>
             </View>
-            {/* <Text style={styles.username}>{player.points}pts</Text> */}
+            <Text style={styles.username}>{player.points}pts</Text>
         </View>
     )
 }

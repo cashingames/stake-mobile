@@ -21,7 +21,7 @@ export default function GameInstructionsScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
 
   const gameMode = useSelector(state => state.game.gameMode);
-  
+
   const refRBSheet = useRef();
 
   const openBottomSheet = () => {
@@ -124,7 +124,7 @@ const AvailableBoosts = ({ onClose }) => {
   const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
   const user = useSelector(state => state.auth.user);
   const [loading, setLoading] = useState(false);
-  
+
 
   const onStartGame = () => {
     setLoading(true);
@@ -233,10 +233,10 @@ const AvailableBoosts = ({ onClose }) => {
 
 const StakeAmount = () => {
   const features = useSelector(state => state.common.featureFlags);
-  
+
   const isStakingFeatureEnabled = features['exhibition_game_staking'] !== undefined && features['exhibition_game_staking'].enabled == true;
 
-  if (!isStakingFeatureEnabled){
+  if (!isStakingFeatureEnabled) {
     return null;
   }
   const navigation = useNavigation();
@@ -245,8 +245,8 @@ const StakeAmount = () => {
   }
   return (
     <View style={styles.stakeContainer}>
-      <Text style={styles.stakeAmount}>Win up to &#8358;{formatCurrency(10000)} for playing
-        this game
+      <Text style={styles.stakeAmount}>Stand a chance of winning up to 1 Million
+        Naira by playing this game
       </Text>
       <Pressable style={styles.stakeButton} onPress={gotoStaking}>
         <Text style={styles.showMe}>PLAY NOW</Text>

@@ -43,17 +43,28 @@ const GameStakingScreen = ({ navigation }) => {
         dispatch(getUser())
     }, [])
 
-    const startGame = async () => {
-        // dispatch(canStake({staking_amount: amount}))
-        //     .then(result => {
+    const startGame = () => {
+        canStake({ staking_amount: amount })
+            .then(async response => {
+
                 if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
                     await analytics().logEvent('staking_low_balance', {
                         'action': 'initiate'
                     });
                     openBottomSheet();
                 }
-                openBottomSheet()
-            // })
+                openBottomSheet();
+            },
+                err => {
+                    if (!err || !err.response || err.response === undefined) {
+                        Alert.alert("Your Network is Offline.");
+                    }
+                    else if (err.response.status === 400) {
+                        console.log(err.response, 'this is error')
+                        Alert.alert(err.response.data.message);
+                    }
+                }
+            )
         // var inputedAmount =
         //     amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
         // // console.log(Number.parseFloat(amount));

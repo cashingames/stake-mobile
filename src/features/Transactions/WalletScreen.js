@@ -63,7 +63,7 @@ const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance }) => {
     return (
         <View style={styles.earningsContainer}>
             <View style={styles.earnings}>
-                <Text style={styles.earningText}>My Winnings</Text>
+                <Text style={styles.earningText}>Withdrawable Balance</Text>
                 <Text style={styles.earningAmount}>&#8358;{formatCurrency(withdrawableBalance)}</Text>
             </View>
             <View style={styles.earnings}>

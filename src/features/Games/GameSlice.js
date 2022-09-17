@@ -106,17 +106,11 @@ export const getGameStakes = createAsyncThunk(
     }
 )
 
-export const canStake = createAsyncThunk(
-    'game/canStake',
-    async (data, thunkAPI) => {
-        console.log( 'ooooo', data);
-        //make a network request to the server
-        
-        const response = await axios.post('v3/game/can-stake-in-game', data)
-        console.log(response, 'bbbbbb')
-        return response.data;
-    }
-)
+export const canStake = async (data) => {
+    return axios.post('v3/game/can-stake-in-game', data);
+
+}
+
 
 
 //This is to store the currently ongoing active game
@@ -273,8 +267,8 @@ export const GameSlice = createSlice({
             .addCase(endGame.fulfilled, (state, action) => {
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
-                state.amountWon= action.payload.data.amount_won;
-                state.withStaking= action.payload.data.with_staking;
+                state.amountWon = action.payload.data.amount_won;
+                state.withStaking = action.payload.data.with_staking;
                 resetState(state)
             })
             .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
@@ -283,8 +277,8 @@ export const GameSlice = createSlice({
             .addCase(getChallengeDetails.fulfilled, (state, action) => {
                 state.challengeDetails = action.payload;
                 state.gameMode = {
-                    name:action.payload.gameModeName,
-                    id:action.payload.gameModeId,
+                    name: action.payload.gameModeName,
+                    id: action.payload.gameModeId,
                 };
                 state.gameCategory = {
                     id: action.payload.categoryId
@@ -308,17 +302,17 @@ export const GameSlice = createSlice({
             .addCase(getGameStakes.fulfilled, (state, action) => {
                 state.gameStakes = action.payload.data;
             })
-            .addCase(canStake.rejected, (state, payload) => {
-                console.log(state, payload)
-            })
+        // .addCase(canStake.rejected, (state, payload) => {
+        //     console.log(state, payload)
+        // })
 
     },
 })
 
 export const { setGameType, setGameMode, setGameCategory,
-    setPointsGained,setAmountWon, questionAnswered, nextQuestion, setSelectedFriend,
+    setPointsGained, setAmountWon, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend,setWithStaking
+    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend, setWithStaking
 } = GameSlice.actions
 
 
