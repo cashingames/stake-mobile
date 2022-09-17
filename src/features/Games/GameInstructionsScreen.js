@@ -24,7 +24,10 @@ export default function GameInstructionsScreen({ navigation }) {
 
   const refRBSheet = useRef();
 
-  const openBottomSheet = () => {
+  const openBottomSheet = async () => {
+    await analytics().logEvent('proceed_exhibition_without_staking', {
+      'action': 'proceed'
+  })
     refRBSheet.current.open()
   }
 
@@ -240,7 +243,10 @@ const StakeAmount = () => {
     return null;
   }
   const navigation = useNavigation();
-  const gotoStaking = () => {
+  const gotoStaking = async () => {
+    await analytics().logEvent('initiate_staking', {
+      'action': 'initiate'
+  })
     navigation.navigate("GameStaking")
   }
   return (

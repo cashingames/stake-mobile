@@ -24,12 +24,12 @@ const GameStakingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
-    
+
     const [amount, setAmount] = useState(100);
     const dispatch = useDispatch();
     const refRBSheet = useRef();
-    
-    const openBottomSheet = () => {
+
+    const openBottomSheet = async () => {
         refRBSheet.current.open()
     }
 
@@ -49,10 +49,13 @@ const GameStakingScreen = ({ navigation }) => {
 
                 if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
                     await analytics().logEvent('staking_low_balance', {
-                        'action': 'initiate'
+                        'action': 'incomplete'
                     });
                     openBottomSheet();
                 }
+                await analytics().logEvent('staking_initiated_successfully', {
+                    'action': 'initiate'
+                });
                 openBottomSheet();
             },
                 err => {
@@ -61,6 +64,7 @@ const GameStakingScreen = ({ navigation }) => {
                     }
                     else if (err.response.status === 400) {
                         Alert.alert(err.response.data.message);
+
                     }
                 }
             )
@@ -165,9 +169,12 @@ const AvailableBoosts = ({ onClose, amount }) => {
                     data: result.data.questions
                 }))
                     .then(unwrapResult)
-                    .then(result => {
+                    .then(async result => {
+                        await analytics().logEvent("startgame_with_staking", {
+                          action: "initiate"
+                        })
                         // console.log('Action logged to server');
-                    })
+                      })
                     .catch((e) => {
                         // console.log('Failed to log to server');
                     });
