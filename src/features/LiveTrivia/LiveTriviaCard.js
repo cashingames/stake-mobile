@@ -40,12 +40,10 @@ const LiveTriviaCard = ({ trivia }) => {
             navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id })
 
         } else if (trivia.playerStatus === "CANPLAY" && trivia.status !== "EXPIRED") {
+            await analytics().logEvent('clicked_canplay', {
+                'action': 'initiate'
+            });
             navigation.navigate('TriviaInstructions', { ...trivia })
-                .then(async () => {
-                    await analytics().logEvent('clicked_canplay', {
-                        'action': 'initiate'
-                    });
-                })
         }
     }
     useEffect(() => {

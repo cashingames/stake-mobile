@@ -241,15 +241,13 @@ const BuyBoost = ({ boost, onClose }) => {
                 navigation.navigate("GameBoostPurchaseSuccessful")
             })
 
-            .catch(rejectedValueOrSerializedError => {
+            .catch(async rejectedValueOrSerializedError => {
                 setLoading(false);
                 // Alert.alert("Notice", "Operation could not be completed, please try again");
+                await analytics().logEvent('boost_purchased', {
+                    'action': 'complete'
+                })
                 navigation.navigate("GameStoreItemsPurchaseFailed")
-                    .then(async () => {
-                        await analytics().logEvent('boost_purchased', {
-                            'action': 'complete'
-                        })
-                    })
             });
     }
 

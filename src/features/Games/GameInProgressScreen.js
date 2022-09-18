@@ -87,14 +87,12 @@ export default function GameInProgressScreen({ navigation, route }) {
                 setEnding(false);
                 if (isPlayingTrivia) {
                     dispatch(setHasPlayedTrivia(true))
+                    await analytics().logEvent('trivia_completed', {
+                        'action': 'complete'
+                    })
                     navigation.navigate('TriviaEndResult', {
                         triviaId: params.triviaId,
                     })
-                        .then(async () => {
-                            await analytics().logEvent('trivia_completed', {
-                                'action': 'complete'
-                            })
-                        })
                 } else {
                     navigation.navigate('GameEndResult');
                 }
