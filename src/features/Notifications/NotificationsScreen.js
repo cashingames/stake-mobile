@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 
 const NotificationsScreen = ({ navigation }) => {
-    useApplyHeaderWorkaround(navigation.setOptions);
+    // useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector(state => state.auth.user)
     console.log(user)
 

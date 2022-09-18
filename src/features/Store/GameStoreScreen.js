@@ -162,13 +162,12 @@ const GameBoosts = () => {
 
 const BoostCard = ({ boost }) => {
     const refRBSheet = useRef();
-    const buyBoost = () => {
+    const buyBoost = async () => {
+        await analytics().logEvent('boost_details', {
+            'action': 'initiate'
+        })
+
         refRBSheet.current.open()
-            .then(async () => {
-                await analytics().logEvent('boost_details', {
-                    'action': 'initiate'
-                })
-            })
     }
     return (
         <Pressable activeOpacity={0.8} onPress={buyBoost}>
@@ -231,15 +230,15 @@ const BuyBoost = ({ boost, onClose }) => {
         setLoading(true);
         dispatch(buyBoostFromWallet(boost.id))
             .then(unwrapResult)
+            .then(async () => {
+                await analytics().logEvent('boost_purchased', {
+                    'action': 'complete'
+                })
+            })
             .then(result => {
                 dispatch(getUser())
                 onClose()
                 navigation.navigate("GameBoostPurchaseSuccessful")
-                    .then(async () => {
-                        await analytics().logEvent('boost_purchased', {
-                            'action': 'complete'
-                        })
-                    })
             })
 
             .catch(rejectedValueOrSerializedError => {

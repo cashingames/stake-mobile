@@ -45,23 +45,22 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       challenge_id: challengeDetails.challenegeId,
       status: 1
     }
+    ))
       .then(async result => {
         await analytics().logEvent("challenge_accepted", {
           action: "initiate"
         })
         // console.log('Action logged to server');
       })
-    )).then(() => setClicking(false))
+      .then(() => setClicking(false))
     navigation.navigate('GameInstructions')
   }
 
-  const challengerPlays = () => {
-    (async result => {
+  const challengerPlays = async () => {
       await analytics().logEvent("challenger_plays", {
         action: "initiate"
       })
       // console.log('Action logged to server');
-    })
     navigation.navigate('GameInstructions')
   }
 
@@ -71,12 +70,13 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       challenge_id: challengeDetails.challenegeId,
       status: 0
     }
-      .then(async result => {
-        await analytics().logEvent("challenge_declined", {
-          action: "initiate"
-        })
+    ))
+    .then(async result => {
+      await analytics().logEvent("challenge_declined", {
+        action: "incomplete"
       })
-    )).then(() => setClicking(false))
+    })
+    .then(() => setClicking(false))
     navigation.navigate('Home')
   }
 
