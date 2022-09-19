@@ -20,6 +20,14 @@ import analytics from '@react-native-firebase/analytics';
 export default function GameInstructionsScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
 
+  const features = useSelector(state => state.common.featureFlags);
+
+  const isStakingFeatureEnabled = features['exhibition_game_staking'] !== undefined && features['exhibition_game_staking'].enabled == true;
+
+  if (!isStakingFeatureEnabled) {
+    return null;
+  }
+
   const gameMode = useSelector(state => state.game.gameMode);
 
   const refRBSheet = useRef();
@@ -58,19 +66,29 @@ export default function GameInstructionsScreen({ navigation }) {
           subComponent={<AvailableBoosts onClose={closeBottomSheet} />}
         />
       </ScrollView>
-      <View style={styles.nextButton}>
-        <AppButton
-          onPress={gotoStaking}
-          text='Stake Cash'
-          style={styles.stakingButton}
-          textStyle={styles.stakingButtonText}
-        />
+      {gameMode.name === "EXHIBITION" ?
+
+        <View style={styles.nextButton}>
+          <AppButton
+            onPress={gotoStaking}
+            text='Stake Cash'
+            style={styles.stakingButton}
+            textStyle={styles.stakingButtonText}
+          />
+          <AppButton
+            onPress={openBottomSheet}
+            text='Proceed'
+            style={styles.proceedButton}
+          />
+        </View>
+        :
         <AppButton
           onPress={openBottomSheet}
           text='Proceed'
-          style={styles.proceedButton}
+          style={styles.proceed}
         />
-      </View>
+
+      }
     </View>
   );
 };
@@ -249,7 +267,7 @@ const AvailableBoosts = ({ onClose }) => {
   )
 }
 
-const StakeAmount = ({onPress}) => {
+const StakeAmount = ({ onPress }) => {
   const features = useSelector(state => state.common.featureFlags);
 
   const isStakingFeatureEnabled = features['exhibition_game_staking'] !== undefined && features['exhibition_game_staking'].enabled == true;
@@ -257,7 +275,7 @@ const StakeAmount = ({onPress}) => {
   if (!isStakingFeatureEnabled) {
     return null;
   }
- 
+
   return (
     <View style={styles.stakeContainer}>
       <Text style={styles.stakeAmount}>Stand a chance of winning up to 1 Million
@@ -393,27 +411,30 @@ const styles = EStyleSheet.create({
   startContainer: {
     marginTop: normalize(50),
   },
+  proceed: {
+    marginVertical: 10,
+  },
   proceedButton: {
     marginVertical: 10,
     // paddingHorizontal:'2.5rem',
-    width:'9rem',
+    width: '9rem',
     // height:'1rem'
   },
   stakingButton: {
     marginVertical: 10,
-    backgroundColor:'#FFFF',
+    backgroundColor: '#FFFF',
     // paddingHorizontal:'2.5rem',
-    width:'9rem',
-    borderColor:'#EF2F55',
-    borderWidth:1,
+    width: '9rem',
+    borderColor: '#EF2F55',
+    borderWidth: 1,
     // height:'1rem'
   },
   stakingButtonText: {
-    color:'#EF2F55'
+    color: '#EF2F55'
   },
-  nextButton:{
-    flexDirection:'row',
-    justifyContent:'space-between'
+  nextButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   stakeContainer: {
     backgroundColor: '#518EF8',
