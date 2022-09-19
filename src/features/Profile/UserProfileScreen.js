@@ -87,15 +87,14 @@ const UserAvatar = () => {
 const ProfileTabs = () => {
     const navigation = useNavigation();
     const features = useSelector(state => state.common.featureFlags);
-    const isAchievementBadgeFeatureEnabled = features['achievement_badges'] !== undefined && features['achievement_badges'].enabled == true;
+    const isAchievementBadgeFeatureEnabled = features['achievement_badges'] !== undefined && features['achievement_badges'].enabled === true;
     
     return (
         <View style={styles.profileTabs}>
             <ProfileTab tabName='Edit Details' onPress={() => navigation.navigate('EditDetails')} />
             <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ChangePassword')} />
-            {isAchievementBadgeFeatureEnabled ? 
-                <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('AchievementsMilestone')} /> 
-                : ""}
+            {isAchievementBadgeFeatureEnabled && 
+                <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('AchievementsMilestone')} />}
             <ProfileTab tabName='Stats' onPress={() => navigation.navigate('UserStats')} />
             <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} />
         </View>
