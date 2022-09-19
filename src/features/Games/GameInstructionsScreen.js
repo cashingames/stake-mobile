@@ -24,10 +24,17 @@ export default function GameInstructionsScreen({ navigation }) {
 
   const refRBSheet = useRef();
 
+  const gotoStaking = async () => {
+    await analytics().logEvent('initiate_staking', {
+      'action': 'initiate'
+    })
+    navigation.navigate("GameStaking")
+  }
+
   const openBottomSheet = async () => {
     await analytics().logEvent('proceed_exhibition_without_staking', {
       'action': 'proceed'
-  })
+    })
     refRBSheet.current.open()
   }
 
@@ -51,11 +58,18 @@ export default function GameInstructionsScreen({ navigation }) {
           subComponent={<AvailableBoosts onClose={closeBottomSheet} />}
         />
       </ScrollView>
-      <AppButton
-        onPress={openBottomSheet}
-        text='Proceed'
-        style={styles.proceedButton}
-      />
+      <View style={styles.nextButton}>
+        <AppButton
+          onPress={gotoStaking}
+          text='Stake Cash'
+          style={styles.proceedButton}
+        />
+        <AppButton
+          onPress={openBottomSheet}
+          text='Proceed'
+          style={styles.proceedButton}
+        />
+      </View>
     </View>
   );
 };
@@ -242,21 +256,15 @@ const StakeAmount = () => {
   if (!isStakingFeatureEnabled) {
     return null;
   }
-  const navigation = useNavigation();
-  const gotoStaking = async () => {
-    await analytics().logEvent('initiate_staking', {
-      'action': 'initiate'
-  })
-    navigation.navigate("GameStaking")
-  }
+ 
   return (
     <View style={styles.stakeContainer}>
       <Text style={styles.stakeAmount}>Stand a chance of winning up to 1 Million
         Naira by playing this game
       </Text>
-      <Pressable style={styles.stakeButton} onPress={gotoStaking}>
+      {/* <Pressable style={styles.stakeButton} onPress={gotoStaking}>
         <Text style={styles.showMe}>PLAY NOW</Text>
-      </Pressable>
+      </Pressable> */}
     </View>
   )
 }
@@ -386,13 +394,20 @@ const styles = EStyleSheet.create({
   },
   proceedButton: {
     marginVertical: 10,
+    // paddingHorizontal:'2.5rem',
+    width:'9rem',
+    // height:'1rem'
+  },
+  nextButton:{
+    flexDirection:'row',
+    justifyContent:'space-between'
   },
   stakeContainer: {
     backgroundColor: '#518EF8',
     borderRadius: 15,
-    paddingHorizontal: "1.5rem",
-    paddingVertical: "1rem",
-    marginTop: "1rem",
+    paddingHorizontal: "2.5rem",
+    paddingVertical: "2.5rem",
+    marginTop: ".8rem",
     marginBottom: "1rem",
     alignItems: 'center',
     justifyContent: 'center'
