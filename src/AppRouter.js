@@ -252,9 +252,9 @@ function AppRouter() {
 						<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{ 
 							title: 'Notifications' ,
 							headerStyle: {
-								backgroundColor: '#072169',
+								backgroundColor: '#FFE900',
 							},
-							headerTintColor: '#FFFF',
+							headerTintColor: '#000000',
 					}} />
 
 					</>

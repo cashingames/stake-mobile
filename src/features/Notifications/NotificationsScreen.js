@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 
 const NotificationsScreen = ({ navigation }) => {
-    // useApplyHeaderWorkaround(navigation.setOptions);
+    useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector(state => state.auth.user)
     console.log(user)
 
@@ -44,7 +44,7 @@ const NotificationsScreen = ({ navigation }) => {
         React.useCallback(() => {
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
-            StatusBar.setBarStyle('light-content');
+            StatusBar.setBarStyle('dark-content');
             return () => {
                 StatusBar.setTranslucent(true)
                 StatusBar.setBarStyle('dark-content');
@@ -54,8 +54,8 @@ const NotificationsScreen = ({ navigation }) => {
 
     if (loading) {
         return <PageLoading
-            backgroundColor='#072169'
-            spinnerColor="FFFF"
+            backgroundColor='#FFE900'
+            spinnerColor="000000"
         />
     }
 
