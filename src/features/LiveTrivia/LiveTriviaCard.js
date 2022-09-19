@@ -34,13 +34,13 @@ const LiveTriviaCard = ({ trivia }) => {
             notEnoughPointNotice.current.open()
 
         } else if (trivia.playerStatus === "PLAYED" || trivia.status === "EXPIRED" || trivia.status === "CLOSED") {
-            await analytics().logEvent('clicked_leaderboard', {
+            await analytics().logEvent('clicked_live_trivia_leaderboard', {
                 'action': 'complete'
             })
             navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id })
 
         } else if (trivia.playerStatus === "CANPLAY" && trivia.status !== "EXPIRED") {
-            await analytics().logEvent('clicked_canplay', {
+            await analytics().logEvent('clicked_play_live_trivia', {
                 'action': 'initiate'
             });
             navigation.navigate('TriviaInstructions', { ...trivia })
