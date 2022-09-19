@@ -50,7 +50,7 @@ export default function GameInstructionsScreen({ navigation }) {
         {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
         {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
         {gameMode.name !== "CHALLENGE" &&
-          <StakeAmount />
+          <StakeAmount onPress={gotoStaking} />
         }
         <UniversalBottomSheet
           refBottomSheet={refRBSheet}
@@ -62,7 +62,8 @@ export default function GameInstructionsScreen({ navigation }) {
         <AppButton
           onPress={gotoStaking}
           text='Stake Cash'
-          style={styles.proceedButton}
+          style={styles.stakingButton}
+          textStyle={styles.stakingButtonText}
         />
         <AppButton
           onPress={openBottomSheet}
@@ -248,7 +249,7 @@ const AvailableBoosts = ({ onClose }) => {
   )
 }
 
-const StakeAmount = () => {
+const StakeAmount = ({onPress}) => {
   const features = useSelector(state => state.common.featureFlags);
 
   const isStakingFeatureEnabled = features['exhibition_game_staking'] !== undefined && features['exhibition_game_staking'].enabled == true;
@@ -262,9 +263,9 @@ const StakeAmount = () => {
       <Text style={styles.stakeAmount}>Stand a chance of winning up to 1 Million
         Naira by playing this game
       </Text>
-      {/* <Pressable style={styles.stakeButton} onPress={gotoStaking}>
+      <Pressable style={styles.stakeButton} onPress={onPress}>
         <Text style={styles.showMe}>PLAY NOW</Text>
-      </Pressable> */}
+      </Pressable>
     </View>
   )
 }
@@ -398,6 +399,18 @@ const styles = EStyleSheet.create({
     width:'9rem',
     // height:'1rem'
   },
+  stakingButton: {
+    marginVertical: 10,
+    backgroundColor:'#FFFF',
+    // paddingHorizontal:'2.5rem',
+    width:'9rem',
+    borderColor:'#EF2F55',
+    borderWidth:1,
+    // height:'1rem'
+  },
+  stakingButtonText: {
+    color:'#EF2F55'
+  },
   nextButton:{
     flexDirection:'row',
     justifyContent:'space-between'
@@ -406,7 +419,7 @@ const styles = EStyleSheet.create({
     backgroundColor: '#518EF8',
     borderRadius: 15,
     paddingHorizontal: "2.5rem",
-    paddingVertical: "2.5rem",
+    paddingVertical: "1.3rem",
     marginTop: ".8rem",
     marginBottom: "1rem",
     alignItems: 'center',
@@ -420,7 +433,7 @@ const styles = EStyleSheet.create({
     lineHeight: '1.65rem'
   },
   stakeButton: {
-    marginVertical: '1rem',
+    marginTop: '1rem',
     borderWidth: 1,
     borderColor: "#ffff",
     paddingVertical: '.8rem',
