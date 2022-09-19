@@ -178,7 +178,7 @@ const AvailableBoosts = ({ onClose }) => {
         }))
           .then(unwrapResult)
           .then(async result => {
-            await analytics().logEvent("startgame_initiated", {
+            await analytics().logEvent("exhibition_without_staking_game_started", {
               action: "initiate"
             })
             // console.log('Action logged to server');

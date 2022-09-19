@@ -163,7 +163,7 @@ const GameBoosts = () => {
 const BoostCard = ({ boost }) => {
     const refRBSheet = useRef();
     const buyBoost = async () => {
-        await analytics().logEvent('boost_details', {
+        await analytics().logEvent('initiate_boost_purchase', {
             'action': 'initiate'
         })
 

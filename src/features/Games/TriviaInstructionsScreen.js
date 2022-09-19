@@ -69,7 +69,7 @@ const AvailableBoosts = ({ onClose, trivia }) => {
         }))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('trivia_initiated', {
+                await analytics().logEvent('live_trivia_game_started', {
                     'action': 'initiate'
                 });
             })
