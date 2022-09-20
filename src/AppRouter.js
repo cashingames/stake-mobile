@@ -69,6 +69,7 @@ import analytics from '@react-native-firebase/analytics';
 import GameStakingScreen from './features/Games/GameStakingScreen';
 import NotificationsScreen from './features/Notifications/NotificationsScreen';
 import SignupVerifyPhoneScreen from './features/Auth/SignupVerifyPhoneScreen';
+import ReviewStakeScreen from './features/Games/ReviewStakeScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -194,6 +195,7 @@ function AppRouter() {
 						}} />
 						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
 						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
+						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Challenge - Select a player' }} />
