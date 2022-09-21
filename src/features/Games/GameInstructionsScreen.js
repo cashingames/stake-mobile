@@ -20,14 +20,6 @@ import analytics from '@react-native-firebase/analytics';
 export default function GameInstructionsScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
 
-  const features = useSelector(state => state.common.featureFlags);
-
-  const isStakingFeatureEnabled = features['exhibition_game_staking'] !== undefined && features['exhibition_game_staking'].enabled == true;
-
-  if (!isStakingFeatureEnabled) {
-    return null;
-  }
-
   const gameMode = useSelector(state => state.game.gameMode);
 
   const refRBSheet = useRef();
@@ -69,11 +61,8 @@ export default function GameInstructionsScreen({ navigation }) {
       {gameMode.name === "EXHIBITION" ?
 
         <View style={styles.nextButton}>
-          <AppButton
+          <StakeButton
             onPress={gotoStaking}
-            text='Stake Cash'
-            style={styles.stakingButton}
-            textStyle={styles.stakingButtonText}
           />
           <AppButton
             onPress={openBottomSheet}
@@ -92,6 +81,27 @@ export default function GameInstructionsScreen({ navigation }) {
     </View>
   );
 };
+
+const StakeButton = ({ onPress }) => {
+  const features = useSelector(state => state.common.featureFlags);
+
+  const isStakingFeatureEnabled = features['exhibition_game_staking'] !== undefined && features['exhibition_game_staking'].enabled == true;
+
+  if (!isStakingFeatureEnabled) {
+    return null;
+  }
+
+  return (
+    <AppButton
+      onPress={onPress}
+      text='Stake Cash'
+      style={styles.stakingButton}
+      textStyle={styles.stakingButtonText}
+    />
+  )
+}
+
+
 const ExhibitionInstructions = () => {
   return (
     <>
