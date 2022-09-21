@@ -81,9 +81,6 @@ function AppRouter() {
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
 
-	const notificationListener = useRef();
-	const responseListener = useRef();
-	const [notification, setNotification] = useState(false);
 	const [pushToken, setPushToken] = useState('');
 
 
