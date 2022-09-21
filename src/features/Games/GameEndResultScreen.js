@@ -13,6 +13,8 @@ import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { getUser } from '../Auth/AuthSlice';
 import { formatCurrency } from '../../utils/stringUtl';
+import analytics from '@react-native-firebase/analytics';
+
 
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
@@ -107,6 +109,12 @@ export default function GameEndResultScreen({ navigation }) {
 			}
 		}, [])
 	);
+	const reviewStaking = () => {
+		analytics().logEvent('review_staking', {
+		  'action': 'complete'
+		})
+		navigation.navigate("ReviewStake")
+	  }
 
 	useEffect(() => {
 		// Change the state every second or the time given by User.
@@ -123,7 +131,7 @@ export default function GameEndResultScreen({ navigation }) {
 			<UserName userName={user.firstName} />
 			<UserResultInfo pointsGained={pointsGained} />
 			{withStaking &&
-				<StakeWinnings showText={showText} amountWon={amountWon} />
+				<StakeWinnings showText={showText} amountWon={amountWon} onPress={reviewStaking} />
 			}
 			<SeeRank />
 			<FinalScore pointsGained={pointsGained} />
@@ -175,16 +183,16 @@ const SeeRank = () => {
 	)
 }
 
-const StakeWinnings = ({ showText, amountWon }) => {
+const StakeWinnings = ({ showText, amountWon,onPress }) => {
 	return (
 		<View style={styles.winningsContainer}>
 			<View style={styles.winningsAmount}>
 				<Text style={styles.winningsText}>You have won</Text>
 				<Text style={[styles.winningsCash, { opacity: showText ? 0 : 1 }]}> &#8358;{formatCurrency(amountWon)}!</Text>
 			</View>
-			{/* <Pressable>
+			<Pressable onPress={onPress}>
 				<Text style={styles.reviewStake}>Review Stake</Text>
-			</Pressable> */}
+			</Pressable>
 		</View>
 	)
 }
@@ -329,7 +337,7 @@ const styles = EStyleSheet.create({
 	},
 	reviewStake: {
 		textAlign: 'center',
-		color: '#000000',
+		color: '#EF2F55',
 		fontFamily: 'graphik-regular',
 		fontSize: '.8rem',
 		textDecorationLine: 'underline',
