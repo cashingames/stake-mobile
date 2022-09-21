@@ -1,91 +1,31 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Text, View, ScrollView, Alert, Pressable, Image } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Text, View, ScrollView } from 'react-native';
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { formatCurrency } from "../../utils/stringUtl";
 import Input from "../../shared/Input";
 import AppButton from "../../shared/AppButton";
-import { canStake, getGameStakes, setIsPlayingTrivia, startGame } from "./GameSlice";
+import { getGameStakes } from "./GameSlice";
 import { Ionicons } from '@expo/vector-icons';
-import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
-import FundWalletComponent from "../../shared/FundWalletComponent";
 import { getUser } from "../Auth/AuthSlice";
-import { logActionToServer } from "../CommonSlice";
-import { unwrapResult } from "@reduxjs/toolkit";
-import UserAvailableBoost from "../../shared/UserAvailableBoost";
-import GoToStore from "../../shared/GoToStore";
-import analytics from '@react-native-firebase/analytics';
 
 
 const ReviewStakeScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
-
+    const amountWon = useSelector(state => state.game.amountWon);
+    const amountStaked = useSelector(state => state.game.amountStaked);
     const [amount, setAmount] = useState(100);
     const dispatch = useDispatch();
-    const refRBSheet = useRef();
-
-    const openBottomSheet = async () => {
-        refRBSheet.current.open()
-    }
-
-    const closeBottomSheet = () => {
-        dispatch(getUser());
-        refRBSheet.current.close()
-    }
 
     useEffect(() => {
         dispatch(getGameStakes())
         dispatch(getUser())
     }, [])
 
-    const startGame = async () => {
-
-        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-            await analytics().logEvent('staking_low_balance', {
-                'action': 'incomplete'
-            });
-            openBottomSheet();
-            return
-        }
-
-        canStake({ staking_amount: amount })
-            .then(async response => {
-                await analytics().logEvent('staking_initiated_successfully', {
-                    'action': 'initiate'
-                });
-                openBottomSheet();
-            },
-                err => {
-                    if (!err || !err.response || err.response === undefined) {
-                        Alert.alert("Your Network is Offline.");
-                    }
-                    else if (err.response.status === 400) {
-                        Alert.alert(err.response.data.message);
-
-                    }
-                }
-            )
-        // var inputedAmount =
-        //     amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
-        // // console.log(Number.parseFloat(amount));
-        // if (inputedAmount < 100) {
-        //     Alert.alert("Amount cannot be less than 100 naira");
-        //     return false;
-        // }
-        // if (inputedAmount > 1000) {
-        //     Alert.alert("Amount cannot be greater than 1000 naira");
-        //     return false;
-        // }
-        // if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-        //     openBottomSheet();
-        // }
-        // openBottomSheet()
-    }
 
 
     return (
@@ -95,168 +35,34 @@ const ReviewStakeScreen = ({ navigation }) => {
                 <Input
                     style={styles.fundAmount}
                     value={amount}
-                    defaultValue="100"
+                    defaultValue={amountStaked}
                     keyboardType="numeric"
                     onChangeText={setAmount}
-                    autoFocus={true}
+                    autoFocus={false}
+                    editable={false}
                     placeholder="Enter Stake Amount"
                     min
                 />
             </View>
             <View style={styles.buttonContainer}>
-                <AppButton text="Stake Amount" onPress={startGame} />
+                <AppButton text="Stake Amount" disabled />
             </View>
             <View style={styles.stakeContainer}>
                 <Text style={styles.stakeHeading}>Predictions Table</Text>
                 <View style={styles.stakeHeaders}>
-                    {/* <View style={styles.stakeNumber}> */}
-                    {/* <Text style={styles.stakeIndex}></Text> */}
                     <Text style={styles.stakeHead}>WINNINGS</Text>
-                    {/* </View> */}
-                    {/* <View style={styles.stakeScoreContainer}> */}
                     <Text style={styles.stakeScore}>SCORE</Text>
-                    {/* </View> */}
                     <Text style={styles.stakeHead}>ODDS</Text>
                 </View>
                 {gameStakes.map((gameStake, i) => <StakeAmount key={i} gameStake={gameStake} position={i + 1}
-                    amount={amount} />)}
+                    amount={amountStaked} amountWon={amountWon} />)}
             </View>
-
-            {Number.parseFloat(user.walletBalance) < Number.parseFloat(amount) ?
-                <UniversalBottomSheet
-                    refBottomSheet={refRBSheet}
-                    height={620}
-                    subComponent={<NotEnoughBalance onClose={closeBottomSheet} />}
-                />
-                :
-                <UniversalBottomSheet
-                    refBottomSheet={refRBSheet}
-                    height={460}
-                    subComponent={<AvailableBoosts onClose={closeBottomSheet} amount={amount} />}
-                />
-            }
 
         </ScrollView>
     )
 
 }
 
-const AvailableBoosts = ({ onClose, amount }) => {
-    const dispatch = useDispatch();
-    const navigation = useNavigation();
-    const boosts = useSelector(state => state.auth.user.boosts);
-    const gameCategoryId = useSelector(state => state.game.gameCategory.id);
-    const gameTypeId = useSelector(state => state.game.gameType.id);
-    const gameModeId = useSelector(state => state.game.gameMode.id);
-    const gameMode = useSelector(state => state.game.gameMode);
-    // const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
-    // const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
-    // const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
-    const user = useSelector(state => state.auth.user);
-    const [loading, setLoading] = useState(false);
-
-    const onStartGame = () => {
-        setLoading(true);
-        dispatch(setIsPlayingTrivia(false))
-        dispatch(startGame({
-            category: gameCategoryId,
-            type: gameTypeId,
-            mode: gameModeId,
-            staking_amount: amount
-        }))
-            .then(unwrapResult)
-            .then(result => {
-                dispatch(logActionToServer({
-                    message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
-                    data: result.data.questions
-                }))
-                    .then(unwrapResult)
-                    .then(async result => {
-                        await analytics().logEvent("startgame_with_staking", {
-                            action: "initiate"
-                        })
-                        // console.log('Action logged to server');
-                    })
-                    .catch((e) => {
-                        // console.log('Failed to log to server');
-                    });
-                setLoading(false);
-                onClose();
-                navigation.navigate("GameInProgress")
-            })
-            .catch((rejectedValueOrSerializedError) => {
-                // console.log(rejectedValueOrSerializedError);
-                Alert.alert(rejectedValueOrSerializedError.message)
-                setLoading(false);
-            });
-    }
-
-    // const startChallenge = () => {
-    //   setLoading(true);
-    //   dispatch(startChallengeGame({
-    //     category: challengeCategory,
-    //     type: gameTypeId,
-    //     challenge_id: challengeId
-    //   }))
-    //     .then(unwrapResult)
-    //     .then(result => {
-    //       // console.log(result);
-    //       dispatch(logActionToServer({
-    //         message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
-    //         data: result.data.questions
-    //       }))
-    //         .then(unwrapResult)
-    //         .then(result => {
-    //           // console.log('Action logged to server');
-    //         })
-    //         .catch(() => {
-    //           // console.log('failed to log to server');
-    //         });
-    //       setLoading(false);
-    //       onClose();
-    //       navigation.navigate("ChallengeGameInProgress")
-    //     })
-    //     .catch((rejectedValueOrSerializedError) => {
-    //       // console.log(rejectedValueOrSerializedError);
-    //       Alert.alert('Failed to start game')
-    //       // Alert.alert(rejectedValueOrSerializedError.message)
-    //       setLoading(false);
-    //     });
-    // }
-
-
-    const visitStore = () => {
-        onClose();
-        navigation.navigate('GameStore')
-    }
-
-    const boostsToDisplay = () => {
-        if (gameMode.name === "CHALLENGE") {
-            return boosts.filter(x => x.name.toUpperCase() !== "SKIP");
-        }
-        return boosts;
-    }
-
-    return (
-        <View style={styles.availableBoosts}>
-            <Text style={styles.title}>Available Boosts</Text>
-            {boosts?.length > 0 ?
-                <View style={styles.boosts}>
-                    {boostsToDisplay().map((boost, i) => <UserAvailableBoost boost={boost} key={i} />
-                    )}
-                </View>
-                :
-                <Text style={styles.noBoosts}>No boost available, go to store to purchase boost</Text>
-            }
-            <View style={styles.storeLinks}>
-                <GoToStore onPress={visitStore} />
-            </View>
-            {gameMode.name === "EXHIBITION" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />}
-            {/* {gameMode.name === "CHALLENGE" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={startChallenge} disabled={loading} />} */}
-
-        </View>
-    )
-}
 const UserWalletBalance = ({ balance }) => {
     return (
         <Text style={styles.availableAmount}>
@@ -265,50 +71,24 @@ const UserWalletBalance = ({ balance }) => {
     );
 }
 
-const StakeAmount = ({ gameStake, position, amount }) => {
+const StakeAmount = ({ gameStake, position, amount, amountWon }) => {
     return (
-        <View style={styles.stakeSub}>
-            {/* <View style={styles.stakeNumber}> */}
-            {/* <Text style={styles.stakeIndex}>{position}</Text> */}
-            <Text style={styles.stakeWinnings}>&#8358;{formatCurrency(amount * gameStake.odd)}</Text>
-            {/* </View> */}
-            <View style={styles.stakeScoreContainer}>
-                <Ionicons name="checkmark-circle-outline" size={16} color="#333333" />
-                <Text style={styles.stakeScoreDigit}>{gameStake.score}/10</Text>
+        <>
+            <View style={[styles.stakeSub, (amount * gameStake.odd) === amountWon ? styles.amountWon : {}]}>
+                <Text style={styles.stakeWinnings}>&#8358;{formatCurrency(amount * gameStake.odd)}</Text>
+                <View style={styles.stakeScoreContainer}>
+                    <Ionicons name="checkmark-circle-outline" size={16} color="#333333" />
+                    <Text style={styles.stakeScoreDigit}>{gameStake.score}/10</Text>
+                </View>
+                <View style={styles.stakeNumber}>
+                    <Ionicons name="time-outline" size={16} color="#FF932F" />
+                    <Text style={styles.stakeOddDigit}>x{gameStake.odd}</Text>
+                </View>
             </View>
-            <View style={styles.stakeNumber}>
-                <Ionicons name="time-outline" size={16} color="#FF932F" />
-                <Text style={styles.stakeOddDigit}>x{gameStake.odd}</Text>
-            </View>
-        </View>
+        </>
     )
 }
 
-const NotEnoughBalance = ({ onClose }) => {
-    return (
-        <View style={styles.noGames}>
-            <Image style={styles.sadEmoji}
-                source={require('../../../assets/images/sad-face-emoji.png')}
-
-            />
-            <Text style={styles.noGamesText}>Sorry,</Text>
-            <Text style={styles.noGamesText}>You do not have enough balance to stake this amount</Text>
-            <FundWalletComponent onClose={onClose} />
-        </View>
-    )
-}
-const StakingAmountOutOfRange = ({ onClose }) => {
-    return (
-        <View style={styles.noGames}>
-            <Image style={styles.sadEmoji}
-                source={require('../../../assets/images/sad-face-emoji.png')}
-
-            />
-            <Text style={styles.noGamesText}>Sorry,</Text>
-            <Text style={styles.noGamesText}>You can only stake between &#8358;{formatCurrency(100)} and {formatCurrency(1000)}</Text>
-        </View>
-    )
-}
 export default ReviewStakeScreen;
 
 const styles = EStyleSheet.create({
@@ -526,5 +306,10 @@ const styles = EStyleSheet.create({
     proceedButton: {
         marginVertical: 10,
     },
+    amountWon: {
+        backgroundColor: '#008000',
+        paddingHorizontal: '.2rem',
+        opacity: 0.6
+    }
 
 })

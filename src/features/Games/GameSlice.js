@@ -130,6 +130,7 @@ let initialState = {
     activeBoost: [],
     pointsGained: 0,
     amountWon: null,
+    amountStaked:null,
     isEnded: true,
     displayedOptions: [],
     displayedQuestion: {},
@@ -183,6 +184,9 @@ export const GameSlice = createSlice({
         },
         setAmountWon: (state, action) => {
             state.amountWon = action.payload;
+        },
+        setAmountStaked: (state, action) => {
+            state.amountStaked = action.payload;
         },
         setWithStaking: (state, action) => {
             state.withStaking = action.payload;
@@ -269,6 +273,7 @@ export const GameSlice = createSlice({
                 state.pointsGained = action.payload.data.points_gained;
                 state.amountWon = action.payload.data.amount_won;
                 state.withStaking = action.payload.data.with_staking;
+                state.amountStaked = action.payload.data.amount_staked;
                 resetState(state)
             })
             .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
@@ -310,7 +315,7 @@ export const GameSlice = createSlice({
 })
 
 export const { setGameType, setGameMode, setGameCategory,
-    setPointsGained, setAmountWon, questionAnswered, nextQuestion, setSelectedFriend,
+    setPointsGained, setAmountWon,setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
     setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend, setWithStaking
 } = GameSlice.actions

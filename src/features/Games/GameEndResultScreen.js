@@ -13,6 +13,8 @@ import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { getUser } from '../Auth/AuthSlice';
 import { formatCurrency } from '../../utils/stringUtl';
+import analytics from '@react-native-firebase/analytics';
+
 
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
@@ -107,10 +109,10 @@ export default function GameEndResultScreen({ navigation }) {
 			}
 		}, [])
 	);
-	const reviewStaking = async () => {
-		// await analytics().logEvent('review_staking', {
-		//   'action': 'complete'
-		// })
+	const reviewStaking = () => {
+		analytics().logEvent('review_staking', {
+		  'action': 'complete'
+		})
 		navigation.navigate("ReviewStake")
 	  }
 
@@ -335,7 +337,7 @@ const styles = EStyleSheet.create({
 	},
 	reviewStake: {
 		textAlign: 'center',
-		color: '#000000',
+		color: '#EF2F55',
 		fontFamily: 'graphik-regular',
 		fontSize: '.8rem',
 		textDecorationLine: 'underline',
