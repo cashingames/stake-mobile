@@ -35,10 +35,30 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
         openBottomSheet()
     }
 
+    const gotoStaking = async () => {
+        await analytics().logEvent('initiate_live_trivia_staking', {
+            'action': 'initiate'
+        })
+        navigation.navigate("GameStaking")
+    }
+
     return (
         <ScrollView style={styles.container}>
             <TriviaInstructions />
-            <AppButton onPress={onProceed} text='Proceed' />
+            <StakeAmount onPress={gotoStaking} />
+            <View style={styles.nextButton}>
+                <AppButton
+                    onPress={gotoStaking}
+                    text='Stake Cash'
+                    style={styles.stakingButton}
+                    textStyle={styles.stakingButtonText}
+                />
+                <AppButton
+                    onPress={onProceed}
+                    text='Proceed'
+                    style={styles.proceedButton}
+                />
+            </View>
             <UniversalBottomSheet
                 refBottomSheet={refRBSheet}
                 height={430}
@@ -49,6 +69,20 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
         </ScrollView>
     );
 };
+
+const StakeAmount = ({ onPress }) => {
+
+    return (
+        <View style={styles.stakeContainer}>
+            <Text style={styles.stakeAmount}>Stand a chance of winning up to 1 Million
+                Naira by playing this game
+            </Text>
+            <Pressable style={styles.stakeButton} onPress={onPress}>
+                <Text style={styles.showMe}>PLAY NOW</Text>
+            </Pressable>
+        </View>
+    )
+}
 
 const AvailableBoosts = ({ onClose, trivia }) => {
     const dispatch = useDispatch();
@@ -69,7 +103,7 @@ const AvailableBoosts = ({ onClose, trivia }) => {
         }))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('trivia_initiated', {
+                await analytics().logEvent('live_trivia_game_started', {
                     'action': 'initiate'
                 });
             })
@@ -277,5 +311,61 @@ const styles = EStyleSheet.create({
     boostIcon: {
         width: normalize(35),
         height: normalize(35)
-    }
+    },
+    proceed: {
+        marginVertical: 10,
+      },
+      proceedButton: {
+        marginVertical: 10,
+        // paddingHorizontal:'2.5rem',
+        width: '9rem',
+        // height:'1rem'
+      },
+      stakingButton: {
+        marginVertical: 10,
+        backgroundColor: '#FFFF',
+        // paddingHorizontal:'2.5rem',
+        width: '9rem',
+        borderColor: '#EF2F55',
+        borderWidth: 1,
+        // height:'1rem'
+      },
+      stakingButtonText: {
+        color: '#EF2F55'
+      },
+      nextButton: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+      },
+      stakeContainer: {
+        backgroundColor: '#518EF8',
+        borderRadius: 15,
+        paddingHorizontal: "2.5rem",
+        paddingVertical: "1.3rem",
+        marginTop: ".8rem",
+        marginBottom: "1rem",
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      stakeAmount: {
+        fontSize: '1.1rem',
+        fontFamily: 'graphik-medium',
+        color: '#ffff',
+        textAlign: 'center',
+        lineHeight: '1.65rem'
+      },
+      stakeButton: {
+        marginTop: '1rem',
+        borderWidth: 1,
+        borderColor: "#ffff",
+        paddingVertical: '.8rem',
+        paddingHorizontal: '1.3rem',
+        borderRadius: 8
+      },
+      showMe: {
+        fontSize: '.8rem',
+        fontFamily: 'graphik-regular',
+        color: '#ffff',
+        textAlign: 'center',
+      }
 });
