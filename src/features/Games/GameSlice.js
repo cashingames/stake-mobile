@@ -23,7 +23,6 @@ function getAllIndexes(arr, val) {
 export const startGame = createAsyncThunk(
     'game/startGame',
     async (data, thunkAPI) => {
-        console.log(data)
         const response = await axios.post('v2/game/start/single-player', data)
         console.log(data.staking_amount)
         return response.data
