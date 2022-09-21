@@ -20,14 +20,6 @@ import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 export default function TriviaInstructionsScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
 
-    const features = useSelector(state => state.common.featureFlags);
-
-    const isStakingFeatureEnabled = features['trivia_game_staking'] !== undefined && features['trivia_game_staking'].enabled == true;
-
-    if (!isStakingFeatureEnabled) {
-        return null;
-    }
-
     const params = route.params;
     const refRBSheet = useRef();
 
@@ -42,14 +34,12 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
     const onProceed = () => {
         openBottomSheet()
     }
-    console.log(params, 'instructions')
-
 
     const gotoStaking = async () => {
         await analytics().logEvent('initiate_live_trivia_staking', {
             'action': 'initiate'
         })
-        navigation.navigate("LiveTriviaStaking",params)
+        navigation.navigate("GameStaking")
     }
 
     return (
@@ -57,8 +47,11 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
             <TriviaInstructions />
             <StakeAmount onPress={gotoStaking} />
             <View style={styles.nextButton}>
-                <StakeButton
+                <AppButton
                     onPress={gotoStaking}
+                    text='Stake Cash'
+                    style={styles.stakingButton}
+                    textStyle={styles.stakingButtonText}
                 />
                 <AppButton
                     onPress={onProceed}
@@ -77,33 +70,8 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
     );
 };
 
-const StakeButton = ({ onPress }) => {
-    const features = useSelector(state => state.common.featureFlags);
-
-    const isStakingFeatureEnabled = features['trivia_game_staking'] !== undefined && features['trivia_game_staking'].enabled == true;
-
-    if (!isStakingFeatureEnabled) {
-        return null;
-    }
-
-    return (
-        <AppButton
-            onPress={onPress}
-            text='Stake Cash'
-            style={styles.stakingButton}
-            textStyle={styles.stakingButtonText}
-        />
-    )
-}
-
 const StakeAmount = ({ onPress }) => {
-    const features = useSelector(state => state.common.featureFlags);
 
-    const isStakingFeatureEnabled = features['trivia_game_staking'] !== undefined && features['trivia_game_staking'].enabled == true;
-  
-    if (!isStakingFeatureEnabled) {
-      return null;
-    }
     return (
         <View style={styles.stakeContainer}>
             <Text style={styles.stakeAmount}>Stand a chance of winning up to 1 Million
@@ -346,14 +314,14 @@ const styles = EStyleSheet.create({
     },
     proceed: {
         marginVertical: 10,
-    },
-    proceedButton: {
+      },
+      proceedButton: {
         marginVertical: 10,
         // paddingHorizontal:'2.5rem',
         width: '9rem',
         // height:'1rem'
-    },
-    stakingButton: {
+      },
+      stakingButton: {
         marginVertical: 10,
         backgroundColor: '#FFFF',
         // paddingHorizontal:'2.5rem',
@@ -361,15 +329,15 @@ const styles = EStyleSheet.create({
         borderColor: '#EF2F55',
         borderWidth: 1,
         // height:'1rem'
-    },
-    stakingButtonText: {
+      },
+      stakingButtonText: {
         color: '#EF2F55'
-    },
-    nextButton: {
+      },
+      nextButton: {
         flexDirection: 'row',
         justifyContent: 'space-between'
-    },
-    stakeContainer: {
+      },
+      stakeContainer: {
         backgroundColor: '#518EF8',
         borderRadius: 15,
         paddingHorizontal: "2.5rem",
@@ -378,26 +346,26 @@ const styles = EStyleSheet.create({
         marginBottom: "1rem",
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    stakeAmount: {
+      },
+      stakeAmount: {
         fontSize: '1.1rem',
         fontFamily: 'graphik-medium',
         color: '#ffff',
         textAlign: 'center',
         lineHeight: '1.65rem'
-    },
-    stakeButton: {
+      },
+      stakeButton: {
         marginTop: '1rem',
         borderWidth: 1,
         borderColor: "#ffff",
         paddingVertical: '.8rem',
         paddingHorizontal: '1.3rem',
         borderRadius: 8
-    },
-    showMe: {
+      },
+      showMe: {
         fontSize: '.8rem',
         fontFamily: 'graphik-regular',
         color: '#ffff',
         textAlign: 'center',
-    }
+      }
 });
