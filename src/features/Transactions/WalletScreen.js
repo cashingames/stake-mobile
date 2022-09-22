@@ -38,8 +38,8 @@ export default function WalletScreen() {
         setWithdraw(true)
         withdrawWinnings()
         .then(async response => {
-            await analytics().logEvent('staking_initiated_successfully', {
-                'action': 'initiate'
+            await analytics().logEvent('winnings_withdrawn_successfully', {
+                'action': 'complete'
             });
             openBottomSheet();
         },
