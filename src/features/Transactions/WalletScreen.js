@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Text, View, ScrollView, Pressable } from 'react-native';
+import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,27 +18,22 @@ export default function WalletScreen() {
     }, []);
 
     return (
-        <ScrollView style={styles.container}>
-            <WalletBalance balance={user.walletBalance} />
-            <FundButton />
-            <WithdrawableWalletBalance
-                withdrawableBalance={user.withdrawableBalance}
-                bookBalance={user.bookBalance}
-            />
-            {/* <UserEarnings point={user.points} /> */}
-            <TransactionLink />
-        </ScrollView>
+        <ImageBackground source={require('../../../assets/images/vector-coin-background.jpg')}
+            style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
+            resizeMethod="resize">
+            <ScrollView style={styles.container}>
+                <WalletBalance balance={user.walletBalance} />
+                <WithdrawableWalletBalance
+                    withdrawableBalance={user.withdrawableBalance}
+                    bookBalance={user.bookBalance}
+                />
+                {/* <UserEarnings point={user.points} /> */}
+                <TransactionLink />
+            </ScrollView>
+        </ImageBackground>
     );
 }
 
-const FundButton = () => {
-    const navigation = useNavigation();
-    return (
-        <View style={styles.buttonContainer}>
-            <AppButton text="Fund Wallet" textStyle={styles.fundButton} onPress={() => navigation.navigate('FundWallet')} style={styles.button} />
-        </View>
-    )
-};
 
 const UserEarnings = ({ point }) => {
     return (
@@ -65,6 +60,7 @@ const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance }) => {
             <View style={styles.earnings}>
                 <Text style={styles.earningText}>Withdrawable Balance</Text>
                 <Text style={styles.earningAmount}>&#8358;{formatCurrency(withdrawableBalance)}</Text>
+                <AppButton text="Withdraw" textStyle={styles.fundButton} style={styles.button}/>
             </View>
             <View style={styles.earnings}>
                 <Text style={styles.earningText}>Pending Winnings</Text>
@@ -78,8 +74,8 @@ const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance }) => {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F2F5FF',
-        paddingBottom:'2rem'
+        // backgroundColor: '#F2F5FF',
+        paddingTop: '3rem',
     },
 
     walletTitle: {
@@ -117,42 +113,46 @@ const styles = EStyleSheet.create({
         fontSize: '0.85rem'
     },
     earnings: {
-        backgroundColor: '#fff',
+        backgroundColor: '#000059',
+        opacity:0.8,
         paddingVertical: Platform.OS === 'ios' ? normalize(15) : normalize(12),
-        paddingHorizontal: normalize(15),
         marginHorizontal: normalize(18),
-        marginVertical: normalize(18),
+        marginBottom: normalize(18),
         borderRadius: 8,
         borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
         borderColor: 'rgba(0, 0, 0, 0.15)',
     },
     earningsContainer: {
-        backgroundColor: '#fff',
-        paddingVertical: Platform.OS === 'ios' ? normalize(15) : normalize(12),
-        paddingHorizontal: normalize(15),
-        marginHorizontal: normalize(18),
-        marginVertical: normalize(18),
+        backgroundColor: 'rgba(239, 47, 85, 0.86)',
+        paddingTop: Platform.OS === 'ios' ? normalize(15) : normalize(18),
+        paddingHorizontal: normalize(10),
+        marginHorizontal: normalize(30),
+        marginBottom: normalize(18),
+        marginTop: responsiveScreenWidth(5),
         borderRadius: 8,
         borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
         borderColor: 'rgba(0, 0, 0, 0.15)',
     },
     earningText: {
         fontFamily: 'graphik-medium',
-        fontSize: '0.68rem',
-        color: 'rgba(0, 0, 0, 0.5)',
+        fontSize: '0.75rem',
+        color: '#7C7D7F',
+        textAlign:'center'
     },
     earningAmount: {
         fontFamily: 'graphik-medium',
-        fontSize: '1.6rem',
-        color: 'black',
-        marginTop: Platform.OS === 'ios' ? normalize(8) : normalize(0),
+        fontSize: '1.4rem',
+        color: '#FFFF',
+        textAlign:'center',
+        // marginVertical: Platform.OS === 'ios' ? normalize(8) : normalize(5),
     },
     link: {
-        backgroundColor: '#E5E5E5',
+        backgroundColor: '#FFE900',
+        opacity: 0.8,
         paddingVertical: normalize(12),
         paddingHorizontal: normalize(15),
-        marginHorizontal: normalize(18),
-        marginVertical: normalize(18),
+        marginHorizontal: normalize(30),
+        marginBottom: '8rem',
         borderRadius: 8,
         borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
         borderColor: 'rgba(0, 0, 0, 0.15)',
