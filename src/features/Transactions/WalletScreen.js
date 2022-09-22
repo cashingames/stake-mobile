@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -9,13 +9,53 @@ import { getUser } from '../Auth/AuthSlice';
 import WalletBalance from './WalletBalance';
 import { formatCurrency, formatNumber } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
+import analytics from '@react-native-firebase/analytics';
+import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { withdrawWinnings } from '../CommonSlice';
+
 
 export default function WalletScreen() {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
+    const [withdraw, setWithdraw] = useState(false)
+
+    const refRBSheet = useRef();
+
+    const openBottomSheet = async () => {
+        refRBSheet.current.open()
+    }
+
+    const closeBottomSheet = () => {
+        dispatch(getUser());
+        refRBSheet.current.close()
+    }
     useEffect(() => {
         dispatch(getUser());
     }, []);
+
+    const withdrawBalance = () => {
+        setWithdraw(true)
+        withdrawWinnings()
+        .then(async response => {
+            await analytics().logEvent('staking_initiated_successfully', {
+                'action': 'initiate'
+            });
+            openBottomSheet();
+        },
+            err => {
+                if (!err || !err.response || err.response === undefined) {
+                    Alert.alert("Your Network is Offline.");
+                    setWithdraw(false)
+                }
+                else if (err.response.status === 400) {
+                    Alert.alert(err.response.data.message);
+                    setWithdraw(false)
+
+                }
+            }
+        )
+    }
 
     return (
         <ImageBackground source={require('../../../assets/images/vector-coin-background.jpg')}
@@ -26,9 +66,17 @@ export default function WalletScreen() {
                 <WithdrawableWalletBalance
                     withdrawableBalance={user.withdrawableBalance}
                     bookBalance={user.bookBalance}
+                    onPress={withdrawBalance}
+                    withdraw={withdraw}
                 />
                 {/* <UserEarnings point={user.points} /> */}
                 <TransactionLink />
+                <UniversalBottomSheet
+                    refBottomSheet={refRBSheet}
+                    height={460}
+                    subComponent={<WithdrawnBalance onClose={closeBottomSheet}
+                        withdrawableBalance={user.withdrawableBalance} />}
+                />
             </ScrollView>
         </ImageBackground>
     );
@@ -54,18 +102,36 @@ const TransactionLink = () => {
     )
 };
 
-const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance }) => {
+const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, withdraw }) => {
     return (
         <View style={styles.earningsContainer}>
             <View style={styles.earnings}>
                 <Text style={styles.earningText}>Withdrawable Balance</Text>
                 <Text style={styles.earningAmount}>&#8358;{formatCurrency(withdrawableBalance)}</Text>
-                <AppButton text="Withdraw" textStyle={styles.fundButton} style={styles.button}/>
+                <AppButton text="Withdraw" textStyle={styles.fundButton}
+                    style={styles.button} onPress={onPress}
+                    disabled={withdraw}
+                />
             </View>
             <View style={styles.earnings}>
                 <Text style={styles.earningText}>Pending Winnings</Text>
                 <Text style={styles.earningAmount}>&#8358;{formatCurrency(bookBalance)}</Text>
             </View>
+        </View>
+    )
+}
+
+const WithdrawnBalance = ({ onClose, withdrawableBalance }) => {
+    return (
+        <View style={styles.withdrawn}>
+            <Image style={styles.emoji}
+                source={require('../../../assets/images/thumbs_up.png')}
+
+            />
+            <Text style={styles.withdrawSuccessText}>Congratulations,</Text>
+            <Text style={styles.withdrawSuccessText}>You have successfully withdrawn &#8358;{formatCurrency(withdrawableBalance)}
+                into your provided bank account
+            </Text>
         </View>
     )
 }
@@ -114,7 +180,7 @@ const styles = EStyleSheet.create({
     },
     earnings: {
         backgroundColor: '#000059',
-        opacity:0.8,
+        opacity: 0.8,
         paddingVertical: Platform.OS === 'ios' ? normalize(15) : normalize(12),
         marginHorizontal: normalize(18),
         marginBottom: normalize(18),
@@ -137,13 +203,13 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '0.75rem',
         color: '#7C7D7F',
-        textAlign:'center'
+        textAlign: 'center'
     },
     earningAmount: {
         fontFamily: 'graphik-medium',
         fontSize: '1.4rem',
         color: '#FFFF',
-        textAlign:'center',
+        textAlign: 'center',
         // marginVertical: Platform.OS === 'ios' ? normalize(8) : normalize(5),
     },
     link: {
@@ -165,5 +231,27 @@ const styles = EStyleSheet.create({
         color: '#EF2F55',
         fontFamily: 'graphik-medium',
         fontSize: '0.75rem',
-    }
+    },
+    withdrawn: {
+        backgroundColor: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        // justifyContent: 'center',
+        paddingVertical: normalize(14),
+        paddingHorizontal: normalize(15),
+    },
+    emoji: {
+        width: normalize(50),
+        height: normalize(50),
+        marginBottom: normalize(20)
+    },
+    withdrawSuccessText: {
+        fontFamily: 'graphik-medium',
+        fontSize: normalize(16),
+        // width: normalize(130),
+        textAlign: 'center',
+        color: '#000',
+        lineHeight: normalize(24)
+    },
 });
