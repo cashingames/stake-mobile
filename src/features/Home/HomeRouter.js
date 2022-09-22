@@ -35,6 +35,9 @@ const HomeRouter = () => {
             headerRightContainerStyle: {
                 paddingRight: normalize(20),
             },
+            headerStyle: {
+                backgroundColor: '#FAC502',
+            },
             headerTitleStyle: {
                 fontSize: normalize(20),
                 lineHeight: normalize(20),
@@ -107,13 +110,11 @@ const RightButtons = () => {
 function CustomDrawerContent(props) {
 
     const navigation = useNavigation();
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user)
 
-    const onLogout = () => {
-        dispatch(logoutUser());
-    }
+
 
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
@@ -136,9 +137,13 @@ function CustomDrawerContent(props) {
                             <View style={drawStyles.item}>
                                 <Text style={drawStyles.itemLabel}>Notifications</Text>
                                 <View style={drawStyles.notificationCount}>
-                                    <View style={drawStyles.numberContainer}>
-                                        <Text style={drawStyles.number}>{user.unreadNotificationsCount}</Text>
-                                    </View>
+                                    {user.unreadNotificationsCount > 0 ?
+                                        <View style={drawStyles.numberContainer}>
+                                            <Text style={drawStyles.number}>{user.unreadNotificationsCount}</Text>
+                                        </View>
+                                        :
+                                        <></>
+                                    }
                                     <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                                 </View>
                             </View>}
@@ -208,9 +213,6 @@ function CustomDrawerContent(props) {
             </ScrollView>
             <View style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
-                <Pressable onPress={onLogout}>
-                    <Text style={drawStyles.logoutText}>Logout</Text>
-                </Pressable>
             </View>
 
 
@@ -330,14 +332,6 @@ const drawStyles = EStyleSheet.create({
         backgroundColor: '#FFFF',
         // flex: 1,
         // justifyContent: 'flex-end'
-    },
-    logoutText: {
-        color: '#EF2F5F',
-        textAlign: 'center',
-        fontSize: '0.75rem',
-        fontFamily: 'graphik-medium',
-        paddingVertical: responsiveScreenHeight(1),
-
     },
     appVersion: {
         color: '#000000',

@@ -231,7 +231,9 @@ const styles = EStyleSheet.create({
         flex: 1,
         backgroundColor: '#F2F5FF',
         paddingHorizontal: normalize(18),
-        paddingVertical: normalize(20)
+        paddingTop: normalize(20),
+        paddingBottom: normalize(5)
+
     },
     instruction: {
         flexDirection: 'row',

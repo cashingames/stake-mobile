@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, Pressable, BackHandler } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
@@ -54,6 +54,18 @@ const HomeScreen = () => {
         //     });
 
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            StatusBar.setTranslucent(true)
+            StatusBar.setBackgroundColor("transparent")
+            StatusBar.setBarStyle('dark-content');
+            return () => {
+                StatusBar.setTranslucent(true)
+                // StatusBar.setBarStyle('dark-content');
+            }
+        }, [])
+    );
 
     useEffect(() => {
         //we intentionally allow in preview to enable testing of this functionality

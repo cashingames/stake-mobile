@@ -3,13 +3,14 @@ import { Text, View, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-import normalize from './../../utils/normalize';
+import normalize, { responsiveScreenHeight } from './../../utils/normalize';
 import { fetchFaqAndAnswers } from '../CommonSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import Animated, { FlipInXUp, SlideInRight } from 'react-native-reanimated';
 import PageLoading from '../../shared/PageLoading';
+import { logoutUser } from '../Auth/AuthSlice';
 
 export default function SupportQuestionsScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -21,6 +22,10 @@ export default function SupportQuestionsScreen({ navigation }) {
     useEffect(() => {
         dispatch(fetchFaqAndAnswers()).then(() => setLoading(false));
     }, [])
+
+    const onLogout = () => {
+        dispatch(logoutUser());
+    }
 
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
@@ -44,6 +49,9 @@ export default function SupportQuestionsScreen({ navigation }) {
                             answer={faq.answer} />
                     </Animated.View>
                 )}
+                 <Pressable onPress={onLogout}>
+                    <Text style={styles.logoutText}>Logout</Text>
+                </Pressable>
             </View>
 
         </ScrollView>
@@ -98,6 +106,14 @@ const styles = EStyleSheet.create({
         color: '#151C2F',
         lineHeight: '1.5rem',
         width: normalize(250)
+    },
+    logoutText: {
+        color: '#EF2F5F',
+        textAlign: 'center',
+        fontSize: '0.75rem',
+        fontFamily: 'graphik-medium',
+        paddingVertical: responsiveScreenHeight(1),
+
     },
 
 });
