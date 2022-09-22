@@ -1,23 +1,29 @@
-import React, { useEffect } from 'react'
-import { Text, View, ScrollView, BackHandler, StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { Text, View, ScrollView, BackHandler, StatusBar, Pressable } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { formatNumber } from '../../utils/stringUtl';
+import { formatCurrency, formatNumber } from '../../utils/stringUtl';
 import { getCommonData } from '../CommonSlice';
 import AppButton from '../../shared/AppButton';
 import GameEndClockAnimation from '../../shared/GameEndClockAnimation';
 import { getLiveTriviaLeaders } from './GameSlice';
+import analytics from '@react-native-firebase/analytics';
+
 
 
 
 const TriviaEndResultScreen = ({ route }) => {
     const params = route.params;
     const dispatch = useDispatch();
+    const [showText, setShowText] = useState(true);
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
     console.log(triviaLeaders)
+    const withStaking = useSelector(state => state.game.withStaking);
+    console.log(withStaking)
+    const amountWon = useSelector(state => state.game.amountWon);
     const isGameEnded = useSelector(state => state.game.isEnded);
     const navigation = useNavigation();
 
@@ -37,6 +43,13 @@ const TriviaEndResultScreen = ({ route }) => {
             })
     }, []);
 
+    useEffect(() => {
+		// Change the state every second or the time given by User.
+		const interval = setInterval(() => {
+			setShowText((showText) => !showText);
+		}, 1000);
+		return () => clearInterval(interval);
+	}, []);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -59,13 +72,25 @@ const TriviaEndResultScreen = ({ route }) => {
         navigation.navigate('Home')
     }
 
+    const reviewStaking = () => {
+		analytics().logEvent('review_staking', {
+			'action': 'complete'
+		})
+		navigation.navigate("ReviewStake")
+	}
+
 
     return (
-        <ScrollView style={styles.container}>
-            <ResultContainer />
-            {/* <TriviaParticipants triviaLeaders={triviaLeaders} /> */}
-            <TriviaButton onPress={viewLiveTriviaLeaderboard} onPressHome ={returnToHomeButton} />
-        </ScrollView>
+        <View style={styles.container}>
+            <ScrollView>
+                <ResultContainer />
+                {withStaking &&
+				<StakeWinnings showText={showText} amountWon={amountWon} onPress={reviewStaking} />
+			}
+                <TriviaParticipants triviaLeaders={triviaLeaders} />
+            </ScrollView>
+            <TriviaButton onPress={viewLiveTriviaLeaderboard} onPressHome={returnToHomeButton} />
+        </View>
     )
 }
 
@@ -79,6 +104,20 @@ const ResultContainer = () => {
             </Text>
         </View>
     )
+}
+
+const StakeWinnings = ({ showText, amountWon,onPress }) => {
+	return (
+		<View style={styles.winningsContainer}>
+			<View style={styles.winningsAmount}>
+				<Text style={styles.winningsText}>You have won</Text>
+				<Text style={[styles.winningsCash, { opacity: showText ? 0 : 1 }]}> &#8358;{formatCurrency(amountWon)}!</Text>
+			</View>
+			<Pressable onPress={onPress}>
+				<Text style={styles.reviewStake}>Review Stake</Text>
+			</Pressable>
+		</View>
+	)
 }
 
 const TriviaParticipant = ({ player, position }) => {
@@ -99,12 +138,12 @@ const TriviaParticipants = ({ triviaLeaders }) => {
     )
 }
 
-const TriviaButton = ({onPress, onPressHome}) => {
+const TriviaButton = ({ onPress, onPressHome }) => {
 
     return (
-        <View style={styles.triviaButton}>
-            <AppButton text='View Leaderboard' onPress={onPress} />
-            <AppButton text='Return to Home' onPress={onPressHome} />
+        <View style={styles.triviaButtons}>
+            <AppButton text='Leaderboard' onPress={onPress} style={styles.triviaButton} />
+            <AppButton text='Home' onPress={onPressHome} style={styles.triviaButton} />
         </View>
     )
 }
@@ -226,8 +265,14 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         marginVertical: normalize(30)
     },
+    triviaButtons: {
+        marginHorizontal: normalize(20),
+        flexDirection: 'row',
+        justifyContent:'space-between'
+    },
     triviaButton: {
-        marginHorizontal: normalize(20)
+        width:'9rem',
+        paddingHorizontal:'1rem'
     },
     homeText: {
         fontSize: '0.8rem',
@@ -246,4 +291,40 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         fontFamily: 'graphik-medium',
     },
+    winningsContainer: {
+		alignItems: 'center',
+		backgroundColor: '#EF2F55',
+		paddingVertical: normalize(10),
+		marginVertical: normalize(25),
+		borderRadius: 13,
+        marginHorizontal: normalize(18)
+	},
+	winningsAmount: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: '.7rem'
+	},
+	winningsText: {
+		textAlign: 'center',
+		color: '#FFFF',
+		fontFamily: 'graphik-regular',
+		fontSize: '.9rem',
+		// lineHeight: '1.5rem'
+	},
+	winningsCash: {
+		textAlign: 'center',
+		color: '#FFFF',
+		fontFamily: 'graphik-regular',
+		fontSize: '1.2rem',
+		// lineHeight: '1.5rem'
+	},
+	reviewStake: {
+		textAlign: 'center',
+		color: '#FFFF',
+		fontFamily: 'graphik-regular',
+		fontSize: '.8rem',
+		textDecorationLine: 'underline',
+		// lineHeight: '1.5rem'
+	},
+
 });

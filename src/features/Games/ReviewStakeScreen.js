@@ -17,7 +17,9 @@ const ReviewStakeScreen = ({ navigation }) => {
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
     const amountWon = useSelector(state => state.game.amountWon);
+    console.log(amountWon)
     const amountStaked = useSelector(state => state.game.amountStaked);
+    console.log(amountStaked)
     const [amount, setAmount] = useState(100);
     const dispatch = useDispatch();
 

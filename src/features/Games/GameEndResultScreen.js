@@ -111,10 +111,10 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 	const reviewStaking = () => {
 		analytics().logEvent('review_staking', {
-		  'action': 'complete'
+			'action': 'complete'
 		})
 		navigation.navigate("ReviewStake")
-	  }
+	}
 
 	useEffect(() => {
 		// Change the state every second or the time given by User.
@@ -183,7 +183,7 @@ const SeeRank = () => {
 	)
 }
 
-const StakeWinnings = ({ showText, amountWon,onPress }) => {
+const StakeWinnings = ({ showText, amountWon, onPress }) => {
 	return (
 		<View style={styles.winningsContainer}>
 			<View style={styles.winningsAmount}>

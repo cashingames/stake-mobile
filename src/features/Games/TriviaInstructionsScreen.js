@@ -49,13 +49,23 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
         await analytics().logEvent('initiate_live_trivia_staking', {
             'action': 'initiate'
         })
-        navigation.navigate("LiveTriviaStaking",params)
+        navigation.navigate("LiveTriviaStaking", params)
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <TriviaInstructions />
-            <StakeAmount onPress={gotoStaking} />
+        <>
+            <ScrollView style={styles.container}>
+                <TriviaInstructions />
+                <StakeAmount onPress={gotoStaking} />
+
+                <UniversalBottomSheet
+                    refBottomSheet={refRBSheet}
+                    height={430}
+                    subComponent={<AvailableBoosts onClose={closeBottomSheet}
+                        trivia={params}
+                    />}
+                />
+            </ScrollView>
             <View style={styles.nextButton}>
                 <StakeButton
                     onPress={gotoStaking}
@@ -66,14 +76,7 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
                     style={styles.proceedButton}
                 />
             </View>
-            <UniversalBottomSheet
-                refBottomSheet={refRBSheet}
-                height={430}
-                subComponent={<AvailableBoosts onClose={closeBottomSheet}
-                    trivia={params}
-                />}
-            />
-        </ScrollView>
+        </>
     );
 };
 
@@ -100,9 +103,9 @@ const StakeAmount = ({ onPress }) => {
     const features = useSelector(state => state.common.featureFlags);
 
     const isStakingFeatureEnabled = features['trivia_game_staking'] !== undefined && features['trivia_game_staking'].enabled == true;
-  
+
     if (!isStakingFeatureEnabled) {
-      return null;
+        return null;
     }
     return (
         <View style={styles.stakeContainer}>
@@ -369,7 +372,8 @@ const styles = EStyleSheet.create({
     },
     nextButton: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginHorizontal: normalize(18),
     },
     stakeContainer: {
         backgroundColor: '#518EF8',
