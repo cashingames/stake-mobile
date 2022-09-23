@@ -110,11 +110,13 @@ const RightButtons = () => {
 function CustomDrawerContent(props) {
 
     const navigation = useNavigation();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user)
 
-
+    // const onLogout = () => {
+    //     dispatch(logoutUser());
+    // }
 
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
@@ -211,9 +213,12 @@ function CustomDrawerContent(props) {
                     />
                 </View>
             </ScrollView>
-            <View style={drawStyles.logoutContainer}>
+            {/* <View style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
-            </View>
+                <Pressable onPress={onLogout}>
+                    <Text style={styles.logoutText}>Logout</Text>
+                </Pressable>
+            </View> */}
 
 
         </DrawerContentScrollView>
@@ -263,6 +268,14 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-bold',
         fontSize: Platform.OS === 'ios' ? '0.6rem' : '0.6rem',
         marginTop: normalize(1)
+    },
+    logoutText: {
+        color: '#EF2F5F',
+        textAlign: 'center',
+        fontSize: '0.75rem',
+        fontFamily: 'graphik-medium',
+        paddingVertical: responsiveScreenHeight(1),
+
     },
 });
 

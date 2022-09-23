@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { isTrue } from '../../utils/stringUtl';
-import { getUser, editProfileAvatar } from '../Auth/AuthSlice';
+import { getUser, editProfileAvatar, logoutUser } from '../Auth/AuthSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import Animated from 'react-native-reanimated';
 import { randomEnteringAnimation } from '../../utils/utils';
@@ -35,7 +35,7 @@ const UserAvatar = () => {
     const user = useSelector(state => state.auth.user)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
-    
+
 
     const pickImage = async () => {
         setLoading(true);
@@ -85,18 +85,27 @@ const UserAvatar = () => {
 }
 
 const ProfileTabs = () => {
+    const dispatch = useDispatch();
+
     const navigation = useNavigation();
     const features = useSelector(state => state.common.featureFlags);
     const isAchievementBadgeFeatureEnabled = features['achievement_badges'] !== undefined && features['achievement_badges'].enabled === true;
-    
+
+    // const onLogout = () => {
+    //     dispatch(logoutUser());
+    // }
+
     return (
         <View style={styles.profileTabs}>
             <ProfileTab tabName='Edit Details' onPress={() => navigation.navigate('EditDetails')} />
             <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ChangePassword')} />
-            {isAchievementBadgeFeatureEnabled && 
+            {isAchievementBadgeFeatureEnabled &&
                 <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('AchievementsMilestone')} />}
             <ProfileTab tabName='Stats' onPress={() => navigation.navigate('UserStats')} />
             <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} />
+            {/* <Pressable onPress={onLogout}>
+                <Text style={styles.logoutText}>Logout</Text>
+            </Pressable> */}
         </View>
     )
 }

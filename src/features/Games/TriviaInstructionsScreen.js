@@ -22,9 +22,9 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
 
     const features = useSelector(state => state.common.featureFlags);
 
-    const isStakingFeatureEnabled = features['trivia_game_staking'] !== undefined && features['trivia_game_staking'].enabled == true;
+    const isLiveTriviaStakingFeatureEnabled = features['trivia_game_staking'] !== undefined && features['trivia_game_staking'].enabled == true;
 
-    if (!isStakingFeatureEnabled) {
+    if (!isLiveTriviaStakingFeatureEnabled) {
         return null;
     }
 

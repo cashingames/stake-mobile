@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions, Alert } from 'react-native';
+import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions, Alert, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -22,7 +22,7 @@ export default function WalletScreen() {
 
     const refRBSheet = useRef();
 
-    const openBottomSheet = async () => {
+    const openBottomSheet = () => {
         refRBSheet.current.open()
     }
 
@@ -42,6 +42,8 @@ export default function WalletScreen() {
                 'action': 'complete'
             });
             openBottomSheet();
+            dispatch(getUser())
+            setWithdraw(false)
         },
             err => {
                 if (!err || !err.response || err.response === undefined) {
@@ -73,7 +75,7 @@ export default function WalletScreen() {
                 <TransactionLink />
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
-                    height={460}
+                    height={300}
                     subComponent={<WithdrawnBalance onClose={closeBottomSheet}
                         withdrawableBalance={user.withdrawableBalance} />}
                 />
@@ -103,6 +105,13 @@ const TransactionLink = () => {
 };
 
 const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, withdraw }) => {
+    const features = useSelector(state => state.common.featureFlags);
+
+    const isWithdrawFeatureEnabled = features['withdrawable_wallet'] !== undefined && features['withdrawable_wallet'].enabled == true;
+  
+    if (!isWithdrawFeatureEnabled) {
+      return null;
+    }
     return (
         <View style={styles.earningsContainer}>
             <View style={styles.earnings}>
@@ -129,8 +138,7 @@ const WithdrawnBalance = ({ onClose, withdrawableBalance }) => {
 
             />
             <Text style={styles.withdrawSuccessText}>Congratulations,</Text>
-            <Text style={styles.withdrawSuccessText}>You have successfully withdrawn &#8358;{formatCurrency(withdrawableBalance)}
-                into your provided bank account
+            <Text style={styles.withdrawSuccessText}>You have successfully withdrawn &#8358;{formatCurrency(withdrawableBalance)} into your provided bank account
             </Text>
         </View>
     )
@@ -242,8 +250,8 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(15),
     },
     emoji: {
-        width: normalize(50),
-        height: normalize(50),
+        width: normalize(80),
+        height: normalize(80),
         marginBottom: normalize(20)
     },
     withdrawSuccessText: {

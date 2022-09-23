@@ -11,6 +11,8 @@ import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import Animated, { FlipInXUp, SlideInRight } from 'react-native-reanimated';
 import PageLoading from '../../shared/PageLoading';
 import { logoutUser } from '../Auth/AuthSlice';
+import Constants from 'expo-constants';
+
 
 export default function SupportQuestionsScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -23,20 +25,17 @@ export default function SupportQuestionsScreen({ navigation }) {
         dispatch(fetchFaqAndAnswers()).then(() => setLoading(false));
     }, [])
 
-    const onLogout = () => {
-        dispatch(logoutUser());
-    }
 
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
     }
-
 
     return (
         <ScrollView style={styles.container}>
             <Animated.View style={styles.titleContainer} entering={SlideInRight}>
                 <Text style={styles.title}>Need some help ?</Text>
                 <Text style={styles.title}>Go through our FAQs</Text>
+
             </Animated.View>
             <View style={styles.profileTabs}>
 
@@ -49,10 +48,10 @@ export default function SupportQuestionsScreen({ navigation }) {
                             answer={faq.answer} />
                     </Animated.View>
                 )}
-                 <Pressable onPress={onLogout}>
-                    <Text style={styles.logoutText}>Logout</Text>
-                </Pressable>
+
             </View>
+      
+
 
         </ScrollView>
     );
@@ -114,6 +113,20 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         paddingVertical: responsiveScreenHeight(1),
 
+    },
+    logoutContainer: {
+        backgroundColor: '#FFFF',
+        // flex: 1,
+        // justifyContent: 'flex-end'
+    },
+    appVersion: {
+        color: '#000000',
+        fontSize: '0.8rem',
+        lineHeight: '0.7rem',
+        fontFamily: 'graphik-regular',
+        opacity: 0.7,
+        marginVertical: 10,
+        textAlign: 'center',
     },
 
 });
