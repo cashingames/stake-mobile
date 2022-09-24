@@ -42,8 +42,8 @@ export default function WalletScreen() {
                 'action': 'complete'
             });
             openBottomSheet();
-            dispatch(getUser())
             setWithdraw(false)
+            dispatch(getUser())
         },
             err => {
                 if (!err || !err.response || err.response === undefined) {
@@ -56,6 +56,7 @@ export default function WalletScreen() {
 
                 }
             }
+            
         )
     }
 
@@ -77,7 +78,7 @@ export default function WalletScreen() {
                     refBottomSheet={refRBSheet}
                     height={300}
                     subComponent={<WithdrawnBalance onClose={closeBottomSheet}
-                        withdrawableBalance={user.withdrawableBalance} />}
+                     />}
                 />
             </ScrollView>
         </ImageBackground>
@@ -138,7 +139,7 @@ const WithdrawnBalance = ({ onClose, withdrawableBalance }) => {
 
             />
             <Text style={styles.withdrawSuccessText}>Congratulations,</Text>
-            <Text style={styles.withdrawSuccessText}>You have successfully withdrawn &#8358;{formatCurrency(withdrawableBalance)} into your provided bank account
+            <Text style={styles.withdrawSuccessText}>Your withdrawal request is being processed to your bank account
             </Text>
         </View>
     )
