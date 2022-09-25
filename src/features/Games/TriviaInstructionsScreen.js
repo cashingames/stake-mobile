@@ -20,13 +20,6 @@ import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 export default function TriviaInstructionsScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
 
-    const features = useSelector(state => state.common.featureFlags);
-
-    const isLiveTriviaStakingFeatureEnabled = features['trivia_game_staking'] !== undefined && features['trivia_game_staking'].enabled == true;
-
-    if (!isLiveTriviaStakingFeatureEnabled) {
-        return null;
-    }
 
     const params = route.params;
     const refRBSheet = useRef();
