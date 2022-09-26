@@ -71,7 +71,9 @@ export default function GameInProgressScreen({ navigation, route }) {
             .then(unwrapResult)
             .then(async () => {
                 await analytics().logEvent('exhibition_completed', {
-                    'action': 'complete'
+                    'action': 'complete',
+                    'id': user.username
+
                 });
                 dispatch(logActionToServer({
                     message: "Game session " + gameSessionToken + " chosen options for " + user.username,
@@ -88,7 +90,8 @@ export default function GameInProgressScreen({ navigation, route }) {
                 if (isPlayingTrivia) {
                     dispatch(setHasPlayedTrivia(true))
                     await analytics().logEvent('trivia_completed', {
-                        'action': 'complete'
+                        'action': 'complete',
+                        'id': user.username
                     })
                     navigation.navigate('TriviaEndResult', {
                         triviaId: params.triviaId,

@@ -48,7 +48,8 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
     ))
       .then(async result => {
         await analytics().logEvent("challenge_accepted", {
-          action: "initiate"
+          action: "initiate",
+          'id': user.username
         })
         // console.log('Action logged to server');
       })
@@ -58,7 +59,8 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
 
   const challengerPlays = async () => {
       await analytics().logEvent("challenger_plays", {
-        action: "initiate"
+        action: "initiate",
+        'id': user.username
       })
       // console.log('Action logged to server');
     navigation.navigate('GameInstructions')
@@ -73,7 +75,8 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
     ))
     .then(async result => {
       await analytics().logEvent("challenge_declined", {
-        action: "incomplete"
+        action: "incomplete",
+        'id': user.username
       })
     })
     .then(() => setClicking(false))

@@ -21,19 +21,24 @@ export default function GameInstructionsScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
 
   const gameMode = useSelector(state => state.game.gameMode);
+  const user = useSelector(state => state.auth.user);
 
   const refRBSheet = useRef();
 
   const gotoStaking = async () => {
     await analytics().logEvent('initiate_staking', {
-      'action': 'initiate'
+      'action': 'initiate',
+      'id': user.username
+
     })
     navigation.navigate("GameStaking")
   }
 
   const openBottomSheet = async () => {
     await analytics().logEvent('proceed_exhibition_without_staking', {
-      'action': 'proceed'
+      'action': 'proceed',
+      'id': user.username
+
     })
     refRBSheet.current.open()
   }
@@ -55,7 +60,7 @@ export default function GameInstructionsScreen({ navigation }) {
         <UniversalBottomSheet
           refBottomSheet={refRBSheet}
           height={430}
-          subComponent={<AvailableBoosts onClose={closeBottomSheet} />}
+          subComponent={<AvailableBoosts onClose={closeBottomSheet} user={user} />}
         />
       </ScrollView>
       {gameMode.name === "EXHIBITION" ?
@@ -157,7 +162,7 @@ const ChallengeInstructions = () => {
 };
 
 
-const AvailableBoosts = ({ onClose }) => {
+const AvailableBoosts = ({ onClose, user }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const boosts = useSelector(state => state.auth.user.boosts);
@@ -168,7 +173,6 @@ const AvailableBoosts = ({ onClose }) => {
   const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
   const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
   const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
-  const user = useSelector(state => state.auth.user);
   const [loading, setLoading] = useState(false);
 
 
@@ -189,7 +193,8 @@ const AvailableBoosts = ({ onClose }) => {
           .then(unwrapResult)
           .then(async result => {
             await analytics().logEvent("exhibition_without_staking_game_started", {
-              action: "initiate"
+              action: "initiate",
+              'id': user.username
             })
             // console.log('Action logged to server');
           })
@@ -224,7 +229,8 @@ const AvailableBoosts = ({ onClose }) => {
           .then(unwrapResult)
           .then(async result => {
             await analytics().logEvent("challenge_startgame", {
-              action: "initiate"
+              action: "initiate",
+              'id': user.username
             })
             // console.log('Action logged to server');
           })

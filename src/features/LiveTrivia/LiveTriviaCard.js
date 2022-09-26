@@ -29,19 +29,22 @@ const LiveTriviaCard = ({ trivia }) => {
     const triviaActionButtonClicked = async () => {
         if (trivia.playerStatus === "INSUFFICIENTPOINTS" && trivia.status === "ONGOING") {
             await analytics().logEvent('low_points', {
-                'action': 'incomplete'
+                'action': 'incomplete',
+                'id': user.username
             })
             notEnoughPointNotice.current.open()
 
         } else if (trivia.playerStatus === "PLAYED" || trivia.status === "EXPIRED" || trivia.status === "CLOSED") {
             await analytics().logEvent('clicked_live_trivia_leaderboard', {
-                'action': 'complete'
+                'action': 'complete',
+                'id': user.username
             })
             navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id })
 
         } else if (trivia.playerStatus === "CANPLAY" && trivia.status !== "EXPIRED") {
             await analytics().logEvent('clicked_play_live_trivia', {
-                'action': 'initiate'
+                'action': 'initiate',
+                'id': user.username
             });
             navigation.navigate('TriviaInstructions', { ...trivia })
         }

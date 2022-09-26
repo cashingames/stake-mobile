@@ -111,7 +111,8 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 	const reviewStaking = () => {
 		analytics().logEvent('review_staking', {
-			'action': 'complete'
+			'action': 'complete',
+			'id': user.username
 		})
 		navigation.navigate("ReviewStake")
 	}

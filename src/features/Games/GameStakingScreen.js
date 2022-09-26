@@ -47,7 +47,8 @@ const GameStakingScreen = ({ navigation }) => {
 
         if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
             await analytics().logEvent('staking_low_balance', {
-                'action': 'incomplete'
+                'action': 'incomplete',
+                'id': user.username
             });
             openBottomSheet();
             return
@@ -56,7 +57,8 @@ const GameStakingScreen = ({ navigation }) => {
         canStake({ staking_amount: amount })
             .then(async response => {
                 await analytics().logEvent('staking_initiated_successfully', {
-                    'action': 'initiate'
+                    'action': 'initiate',
+                    'id': user.username
                 });
                 openBottomSheet();
             },
@@ -132,7 +134,10 @@ const GameStakingScreen = ({ navigation }) => {
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={460}
-                    subComponent={<AvailableBoosts onClose={closeBottomSheet} amount={amount} />}
+                    subComponent={<AvailableBoosts onClose={closeBottomSheet} 
+                    amount={amount}
+                    user = {user}
+                     />}
                 />
             }
 
@@ -141,7 +146,7 @@ const GameStakingScreen = ({ navigation }) => {
 
 }
 
-const AvailableBoosts = ({ onClose, amount }) => {
+const AvailableBoosts = ({ onClose, amount, user }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const boosts = useSelector(state => state.auth.user.boosts);
@@ -152,7 +157,6 @@ const AvailableBoosts = ({ onClose, amount }) => {
     // const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
     // const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
     // const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
-    const user = useSelector(state => state.auth.user);
     const [loading, setLoading] = useState(false);
 
     const onStartGame = () => {
@@ -173,7 +177,8 @@ const AvailableBoosts = ({ onClose, amount }) => {
                     .then(unwrapResult)
                     .then(async result => {
                         await analytics().logEvent("startgame_with_staking", {
-                            action: "initiate"
+                            action: "initiate",
+                            'id': user.username
                         })
                         // console.log('Action logged to server');
                     })

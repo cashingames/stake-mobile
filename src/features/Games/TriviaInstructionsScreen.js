@@ -21,6 +21,7 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const features = useSelector(state => state.common.featureFlags);
+    const user = useSelector(state => state.auth.user)
 
     const isStakingFeatureEnabled = features['trivia_game_staking'] !== undefined && features['trivia_game_staking'].enabled == true;
 
@@ -44,7 +45,8 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
 
     const gotoStaking = async () => {
         await analytics().logEvent('initiate_live_trivia_staking', {
-            'action': 'initiate'
+            'action': 'initiate',
+            'id': user.username
         })
         navigation.navigate("LiveTriviaStaking", params)
     }
@@ -60,6 +62,7 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
                     height={430}
                     subComponent={<AvailableBoosts onClose={closeBottomSheet}
                         trivia={params}
+                        user={user}
                     />}
                 />
             </ScrollView>
@@ -126,7 +129,7 @@ const StakeAmount = ({ onPress }) => {
     )
 }
 
-const AvailableBoosts = ({ onClose, trivia }) => {
+const AvailableBoosts = ({ onClose, trivia, user }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const boosts = useSelector(state => state.auth.user.boosts);
@@ -146,7 +149,8 @@ const AvailableBoosts = ({ onClose, trivia }) => {
             .then(unwrapResult)
             .then(async () => {
                 await analytics().logEvent('live_trivia_game_started', {
-                    'action': 'initiate'
+                    'action': 'initiate',
+                    'id': user.username
                 });
             })
             .then(result => {

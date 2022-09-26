@@ -48,7 +48,8 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
 
         if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
             await analytics().logEvent('staking_low_balance', {
-                'action': 'incomplete'
+                'action': 'incomplete',
+                'id': user.username
             });
             openBottomSheet();
             return
@@ -57,7 +58,8 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
         canStake({ staking_amount: amount })
             .then(async response => {
                 await analytics().logEvent('staking_initiated_successfully', {
-                    'action': 'initiate'
+                    'action': 'initiate',
+                    'id': user.username
                 });
                 openBottomSheet();
             },
@@ -113,7 +115,10 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={460}
-                    subComponent={<AvailableBoosts trivia={params} onClose={closeBottomSheet} amount={amount} />}
+                    subComponent={<AvailableBoosts trivia={params} 
+                    onClose={closeBottomSheet} amount={amount}
+                    user = {user}
+                     />}
                 />
             }
 
@@ -122,12 +127,11 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
 
 }
 
-const AvailableBoosts = ({ onClose, trivia, amount }) => {
+const AvailableBoosts = ({ onClose, trivia, amount, user }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const boosts = useSelector(state => state.auth.user.boosts);
     const [loading, setLoading] = useState(false);
-    console.log(trivia)
     const onStartGame = () => {
         setLoading(true);
         dispatch(setIsPlayingTrivia(true))
@@ -144,7 +148,8 @@ const AvailableBoosts = ({ onClose, trivia, amount }) => {
             .then(unwrapResult)
             .then(async () => {
                 await analytics().logEvent('live_trivia_game_started', {
-                    'action': 'initiate'
+                    'action': 'initiate',
+                    'id': user.username
                 });
             })
             .then(result => {
