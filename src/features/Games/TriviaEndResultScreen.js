@@ -20,11 +20,10 @@ const TriviaEndResultScreen = ({ route }) => {
     const dispatch = useDispatch();
     const [showText, setShowText] = useState(true);
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
-    console.log(triviaLeaders)
     const withStaking = useSelector(state => state.game.withStaking);
-    console.log(withStaking)
     const amountWon = useSelector(state => state.game.amountWon);
     const isGameEnded = useSelector(state => state.game.isEnded);
+    const user = useSelector(state => state.auth.user)
     const navigation = useNavigation();
 
 
@@ -74,7 +73,8 @@ const TriviaEndResultScreen = ({ route }) => {
 
     const reviewStaking = () => {
 		analytics().logEvent('review_staking', {
-			'action': 'complete'
+			'action': 'complete',
+            'id': user.username
 		})
 		navigation.navigate("ReviewStake")
 	}

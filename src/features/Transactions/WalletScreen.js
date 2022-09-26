@@ -39,7 +39,8 @@ export default function WalletScreen() {
         withdrawWinnings()
         .then(async response => {
             await analytics().logEvent('winnings_withdrawn_successfully', {
-                'action': 'complete'
+                'action': 'complete',
+                'id': user.username
             });
             openBottomSheet();
             setWithdraw(false)

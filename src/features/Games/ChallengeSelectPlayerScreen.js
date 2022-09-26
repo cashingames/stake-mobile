@@ -26,6 +26,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const userFriends = useSelector(state => state.common.userFriends);
     // console.log(userFriends)
     const selectedOpponent = useSelector(state => state.game.selectedFriend);
+    const user = useSelector(state => state.auth.user);
     const [search, setSearch] = useState("");
     const [searching, setSearching] = useState(false);
     const [sending, setSending] = useState(false)
@@ -55,7 +56,8 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                 // setSending(true)
                 openBottomSheet()
                 await analytics().logEvent("challenge_initiated", {
-                    action: "initiate"
+                    action: "initiate",
+                    'id': user.username
                 })
             })
             .catch((rejectedValueOrSerializedError) => {

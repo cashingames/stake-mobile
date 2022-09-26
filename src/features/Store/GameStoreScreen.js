@@ -23,6 +23,9 @@ export default function ({ navigation }) {
     const dispatch = useDispatch();
     useApplyHeaderWorkaround(navigation.setOptions);
 
+    const user = useSelector(state => state.auth.user)
+
+
     useEffect(() => {
         dispatch(getUser());
     }, []);
@@ -31,7 +34,7 @@ export default function ({ navigation }) {
         <ScrollView contentContainerStyle={styles.container}>
             <UserItems />
             <GamePlans />
-            <GameBoosts />
+            <GameBoosts user ={user} />
         </ScrollView>
     );
 }
@@ -144,7 +147,7 @@ const BuyGamePlan = ({ plan, onClose }) => {
 
 }
 
-const GameBoosts = () => {
+const GameBoosts = (user) => {
     const boosts = useSelector(state => state.common.boosts);
     return (
         <View style={styles.storeItems}>
@@ -154,17 +157,18 @@ const GameBoosts = () => {
                 Buy boosts to let you win more games
             </Text>
             <View style={styles.storeCards}>
-                {boosts.map((boost, i) => <BoostCard key={i} boost={boost} />)}
+                {boosts.map((boost, i) => <BoostCard key={i} boost={boost} user = {user} />)}
             </View>
         </View>
     )
 }
 
-const BoostCard = ({ boost }) => {
+const BoostCard = ({ boost, user }) => {
     const refRBSheet = useRef();
     const buyBoost = async () => {
         await analytics().logEvent('initiate_boost_purchase', {
-            'action': 'initiate'
+            'action': 'initiate',
+            'id': user.username
         })
 
         refRBSheet.current.open()
@@ -191,7 +195,7 @@ const BoostCard = ({ boost }) => {
                         }
                     }}
                 >
-                    <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} />
+                    <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} user ={user} />
                 </RBSheet>
             </Animated.View>
         </Pressable>
@@ -217,7 +221,7 @@ const BoostCardDetails = ({ boost }) => {
     )
 }
 
-const BuyBoost = ({ boost, onClose }) => {
+const BuyBoost = ({ boost, onClose,user }) => {
     const [loading, setLoading] = useState(false);
     const userBalance = useSelector(state => state.auth.user.walletBalance);
 
@@ -232,7 +236,8 @@ const BuyBoost = ({ boost, onClose }) => {
             .then(unwrapResult)
             .then(async () => {
                 await analytics().logEvent('boost_purchased', {
-                    'action': 'complete'
+                    'action': 'complete',
+                    'id': user.username
                 })
             })
             .then(result => {
@@ -245,7 +250,8 @@ const BuyBoost = ({ boost, onClose }) => {
                 setLoading(false);
                 // Alert.alert("Notice", "Operation could not be completed, please try again");
                 await analytics().logEvent('boost_purchased', {
-                    'action': 'complete'
+                    'action': 'complete',
+                    'id': user.username
                 })
                 navigation.navigate("GameStoreItemsPurchaseFailed")
             });
