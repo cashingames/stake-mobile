@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, Image } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
@@ -11,16 +11,19 @@ import LottieAnimations from '../../shared/LottieAnimations';
 const GamePlanPurchaseSuccessfulScreen = () => {
     const navigation = useNavigation();
     return (
-        <View style={styles.container}>
-            <View style={styles.image}>
-                <LottieAnimations
-                    animationView={require('../../../assets/transaction-successful.json')}
-                    width={normalize(100)}
-                    height={normalize(100)}
-                />
+        <View style={styles.topContainer}>
+            <View style={styles.container}>
+                <View style={styles.image}>
+                    <LottieAnimations
+                        animationView={require('../../../assets/transaction-successful.json')}
+                        width={normalize(100)}
+                        height={normalize(100)}
+                    />
+                </View>
+                <Text style={styles.paymentHeader}>Payment Successful</Text>
+                <Text style={styles.message}>You successfully purchased a game plan to continue playing games, climb up the leaderboard and win great prizes</Text>
+
             </View>
-            <Text style={styles.paymentHeader}>Payment Successful</Text>
-            <Text style={styles.message}>You successfully purchased a game plan to continue playing games, climb up the leaderboard and win great prizes</Text>
             <View style={styles.congratsButtons}>
                 <AppButton text={"Play a Game"} onPress={() => navigation.navigate('Home')} style={styles.actionButton} />
                 <AppButton text={"Store"} onPress={() => navigation.navigate('GameStore')} style={styles.actionButton} />
@@ -32,17 +35,20 @@ export default GamePlanPurchaseSuccessfulScreen;
 
 
 const styles = EStyleSheet.create({
-    container: {
+    topContainer: {
         flex: 1,
         backgroundColor: '#FFFF',
-        paddingVertical: responsiveScreenWidth(20),
         paddingHorizontal: responsiveScreenWidth(5),
+
+    },
+    container: {
+        paddingVertical: responsiveScreenWidth(23),
     },
     image: {
         alignItems: 'center',
         marginVertical: normalize(15)
     },
-   success: {
+    success: {
         width: normalize(65),
         height: normalize(65),
         marginVertical: normalize(10),
@@ -62,12 +68,12 @@ const styles = EStyleSheet.create({
         marginTop: normalize(35)
     },
     congratsButtons: {
-        flexDirection: 'column',
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         marginTop: responsiveScreenWidth(40)
     },
     actionButton: {
-        marginHorizontal: normalize(15),
-        marginVertical: normalize(10)
+        marginTop: normalize(10),
+        width: '9rem'
     },
 });

@@ -26,6 +26,7 @@ export default function GameEndResultScreen({ navigation }) {
 	const gameTypeId = useSelector(state => state.game.gameType.id);
 	const gameModeId = useSelector(state => state.game.gameMode.id);
 	const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
+	console.log(hasActivePlan, 'my plan')
 
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
@@ -42,51 +43,50 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	const onPlayButtonClick = () => {
-
-		navigation.navigate("GameInstructions")
-		return;
 		if (!hasActivePlan) {
 			openBottomSheet();
 			console.log("NO GAME", hasActivePlan)
 			return;
 		}
-
 		setLoading(true);
+		navigation.navigate("GameInstructions")
 
-		dispatch(startGame({
-			category: gameCategoryId,
-			type: gameTypeId,
-			mode: gameModeId
-		}))
-			.then(unwrapResult)
-			.then(result => {
-				dispatch(logActionToServer({
-					message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
-					data: result.data.questions
-				}))
-					.then(unwrapResult)
-					.then(result => {
-						console.log('Action logged to server');
-					})
-					.catch(() => {
-						console.log('failed to log to server');
-					});
-				setLoading(false);
-				dispatch(incrementCountdownResetIndex());
-				navigation.navigate("GameInProgress")
-			})
-			.catch((err) => {
-				Alert.alert(err.data.message)
-				setLoading(false);
-			});
+		// 	dispatch(startGame({
+		// 		category: gameCategoryId,
+		// 		type: gameTypeId,
+		// 		mode: gameModeId
+		// 	}))
+		// 		.then(unwrapResult)
+		// 		.then(result => {
+		// 			dispatch(logActionToServer({
+		// 				message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
+		// 				data: result.data.questions
+		// 			}))
+		// 				.then(unwrapResult)
+		// 				.then(result => {
+		// 					console.log('Action logged to server');
+		// 				})
+		// 				.catch(() => {
+		// 					console.log('failed to log to server');
+		// 				});
+		// 			setLoading(false);
+		// 			dispatch(incrementCountdownResetIndex());
+		// 			navigation.navigate("GameInProgress")
+		// 		})
+		// 		.catch((err) => {
+		// 			Alert.alert(err.data.message)
+		// 			setLoading(false);
+		// 		});
 	}
 
 	const onHomeButtonClick = () => {
 		navigation.navigate('Home')
 	}
-	useEffect(() => {
-		dispatch(getUser())
-	}, []);
+	useFocusEffect(
+		React.useCallback(() => {
+			dispatch(getUser())
+		}, [])
+	)
 
 	useFocusEffect(
 		React.useCallback(() => {
