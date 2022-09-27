@@ -43,7 +43,15 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	const onPlayButtonClick = () => {
+		analytics().logEvent('exhibition_play_again_clicked', {
+			'action': 'initiate',
+			'id': user.username
+		})
 		if (!hasActivePlan) {
+			analytics().logEvent('game_plan_exhausted', {
+				'action': 'incomplete',
+				'id': user.username
+			})
 			openBottomSheet();
 			console.log("NO GAME", hasActivePlan)
 			return;
