@@ -46,9 +46,10 @@ const GameStakingScreen = ({ navigation }) => {
     const startGame = async () => {
 
         if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-            await analytics().logEvent('staking_low_balance', {
-                'action': 'incomplete',
-                'id': user.username
+            await analytics().logEvent('exhibition_staking_low_balance', {
+                'id': user.username,
+                'phone_number': user.phoneNumber,
+                'email': user.email
             });
             openBottomSheet();
             return
@@ -56,9 +57,10 @@ const GameStakingScreen = ({ navigation }) => {
 
         canStake({ staking_amount: amount })
             .then(async response => {
-                await analytics().logEvent('staking_initiated_successfully', {
-                    'action': 'initiate',
-                    'id': user.username
+                await analytics().logEvent('exhibition_staking_initiated_successfully', {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
                 });
                 openBottomSheet();
             },
@@ -134,10 +136,10 @@ const GameStakingScreen = ({ navigation }) => {
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={460}
-                    subComponent={<AvailableBoosts onClose={closeBottomSheet} 
-                    amount={amount}
-                    user = {user}
-                     />}
+                    subComponent={<AvailableBoosts onClose={closeBottomSheet}
+                        amount={amount}
+                        user={user}
+                    />}
                 />
             }
 
@@ -176,9 +178,10 @@ const AvailableBoosts = ({ onClose, amount, user }) => {
                 }))
                     .then(unwrapResult)
                     .then(async result => {
-                        await analytics().logEvent("startgame_with_staking", {
-                            action: "initiate",
-                            'id': user.username
+                        await analytics().logEvent("start_exhibition_game_with_staking", {
+                            'id': user.username,
+                            'phone_number': user.phoneNumber,
+                            'email': user.email
                         })
                         // console.log('Action logged to server');
                     })

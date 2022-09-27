@@ -47,9 +47,10 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
     const startGame = async () => {
 
         if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-            await analytics().logEvent('staking_low_balance', {
-                'action': 'incomplete',
-                'id': user.username
+            await analytics().logEvent('live_trivia_staking_low_balance', {
+                'id': user.username,
+                'phone_number': user.phoneNumber,
+                'email': user.email
             });
             openBottomSheet();
             return
@@ -57,9 +58,10 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
 
         canStake({ staking_amount: amount })
             .then(async response => {
-                await analytics().logEvent('staking_initiated_successfully', {
-                    'action': 'initiate',
-                    'id': user.username
+                await analytics().logEvent('live_trivia_staking_initiated_successfully', {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
                 });
                 openBottomSheet();
             },
@@ -115,10 +117,10 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={460}
-                    subComponent={<AvailableBoosts trivia={params} 
-                    onClose={closeBottomSheet} amount={amount}
-                    user = {user}
-                     />}
+                    subComponent={<AvailableBoosts trivia={params}
+                        onClose={closeBottomSheet} amount={amount}
+                        user={user}
+                    />}
                 />
             }
 
@@ -148,8 +150,9 @@ const AvailableBoosts = ({ onClose, trivia, amount, user }) => {
             .then(unwrapResult)
             .then(async () => {
                 await analytics().logEvent('live_trivia_game_started', {
-                    'action': 'initiate',
-                    'id': user.username
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
                 });
             })
             .then(result => {

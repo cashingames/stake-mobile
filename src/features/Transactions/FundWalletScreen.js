@@ -27,14 +27,19 @@ export default function FundWalletScreen() {
 
   const ref = useRef(null);
 
-  const transactionCompleted = (res) => {
+  const transactionCompleted = async (res) => {
     // verifyFunding(res.reference); for local testing
+    await analytics().logEvent('wallet_funding_successfully', {
+      'id': user.username,
+      'phone_number': user.phoneNumber,
+      'email': user.email
+    });
     dispatch(getUser());
     setShowPayment(false);
     navigation.navigate("Wallet");
   };
 
-  const startPayment = () => {
+  const startPayment = async () => {
     var cleanedAmount =
       amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
     // console.log(Number.parseFloat(amount));
@@ -42,6 +47,11 @@ export default function FundWalletScreen() {
       Alert.alert("Amount cannot be less than 100 naira");
       return false;
     }
+    await analytics().logEvent('funding_wallet_initiated', {
+      'id': user.username,
+      'phone_number': user.phoneNumber,
+      'email': user.email
+    });
     setShowPayment(true);
   };
 
