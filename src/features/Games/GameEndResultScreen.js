@@ -44,13 +44,15 @@ export default function GameEndResultScreen({ navigation }) {
 
 	const onPlayButtonClick = () => {
 		analytics().logEvent('exhibition_play_again_clicked', {
-			'action': 'initiate',
-			'id': user.username
+			'id': user.username,
+			'phone_number': user.phoneNumber,
+			'email': user.email
 		})
 		if (!hasActivePlan) {
-			analytics().logEvent('game_plan_exhausted', {
-				'action': 'incomplete',
-				'id': user.username
+			analytics().logEvent('exhibition_game_plan_exhausted', {
+				'id': user.username,
+				'phone_number': user.phoneNumber,
+				'email': user.email
 			})
 			openBottomSheet();
 			console.log("NO GAME", hasActivePlan)
@@ -119,8 +121,9 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 	const reviewStaking = () => {
 		analytics().logEvent('review_staking', {
-			'action': 'complete',
-			'id': user.username
+			'id': user.username,
+			'phone_number': user.phoneNumber,
+			'email': user.email
 		})
 		navigation.navigate("ReviewStake")
 	}
