@@ -57,13 +57,14 @@ const GameStakingScreen = ({ navigation }) => {
 
         canStake({ staking_amount: amount })
             .then(async response => {
-                await analytics().logEvent('exhibition_staking_initiated_successfully', {
+                await analytics().logEvent('exhibition_staking_initiated', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email
                 });
                 openBottomSheet();
             },
+
                 err => {
                     if (!err || !err.response || err.response === undefined) {
                         Alert.alert("Your Network is Offline.");

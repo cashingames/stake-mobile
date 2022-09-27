@@ -110,7 +110,7 @@ const TransactionLink = () => {
 const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, withdraw }) => {
     const features = useSelector(state => state.common.featureFlags);
 
-    const isWithdrawFeatureEnabled = features['withdrawable_wallet'] !== undefined && features['withdrawable_wallet'].enabled == true;
+    const isWithdrawFeatureEnabled = features['withdrawable_wallet'] !== undefined && features['withdrawable_wallet'].enabled === true;
 
     if (!isWithdrawFeatureEnabled) {
         return null;

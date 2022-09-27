@@ -33,13 +33,13 @@ export default function ({ navigation }) {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <UserItems />
-            <GamePlans />
+            <GamePlans user={user} />
             <GameBoosts user={user} />
         </ScrollView>
     );
 }
 
-const GamePlans = () => {
+const GamePlans = ({user}) => {
     const plans = useSelector(state => state.common.plans);
 
     return (
@@ -50,22 +50,21 @@ const GamePlans = () => {
                 playing without interruptons
             </Text>
             <View style={styles.storeCards}>
-                {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} />)}
+                {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} user={user} />)}
             </View>
         </View>
     )
 }
 
-const GamePlanCard = ({ plan }) => {
+const GamePlanCard = ({ plan, user }) => {
     const refRBSheet = useRef();
     const buyGamePlan = async () => {
         await analytics().logEvent('initiate_game_plan_purchase', {
             'id': user.username,
             'phone_number': user.phoneNumber,
-			'email': user.email
+            'email': user.email
         })
-
-        refRBSheet.current.open() 
+        refRBSheet.current.open()
     }
     return (
         <Pressable activeOpacity={0.8} onPress={buyGamePlan}>
@@ -91,7 +90,7 @@ const GamePlanCard = ({ plan }) => {
                     }
                 }}
             >
-                <BuyGamePlan plan={plan} onClose={() => refRBSheet.current.close()} />
+                <BuyGamePlan plan={plan} onClose={() => refRBSheet.current.close()} user={user} />
             </RBSheet>
         </Pressable>
 
@@ -111,7 +110,7 @@ const PlanCardDetails = ({ plan }) => {
     )
 }
 
-const BuyGamePlan = ({ plan, onClose }) => {
+const BuyGamePlan = ({ plan, onClose, user }) => {
     const [loading, setLoading] = useState(false);
     const userBalance = useSelector(state => state.auth.user.walletBalance);
 
@@ -122,7 +121,6 @@ const BuyGamePlan = ({ plan, onClose }) => {
 
     const buyPlanWallet = () => {
         setLoading(true);
-
         dispatch(buyPlanFromWallet(plan.id))
             .then(unwrapResult)
             .then(async () => {
@@ -188,7 +186,7 @@ const BoostCard = ({ boost, user }) => {
         await analytics().logEvent('initiate_boost_purchase', {
             'id': user.username,
             'phone_number': user.phoneNumber,
-			'email': user.email
+            'email': user.email
         })
 
         refRBSheet.current.open()

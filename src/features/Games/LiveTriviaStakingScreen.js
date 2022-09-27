@@ -58,7 +58,7 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
 
         canStake({ staking_amount: amount })
             .then(async response => {
-                await analytics().logEvent('live_trivia_staking_initiated_successfully', {
+                await analytics().logEvent('live_trivia_staking_initiated', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email
