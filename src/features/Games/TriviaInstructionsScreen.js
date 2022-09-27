@@ -45,8 +45,9 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
 
     const gotoStaking = async () => {
         await analytics().logEvent('initiate_live_trivia_staking', {
-            'action': 'initiate',
-            'id': user.username
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
         })
         navigation.navigate("LiveTriviaStaking", params)
     }
@@ -149,8 +150,9 @@ const AvailableBoosts = ({ onClose, trivia, user }) => {
             .then(unwrapResult)
             .then(async () => {
                 await analytics().logEvent('live_trivia_game_started', {
-                    'action': 'initiate',
-                    'id': user.username
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
                 });
             })
             .then(result => {

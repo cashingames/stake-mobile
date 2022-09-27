@@ -28,23 +28,26 @@ const LiveTriviaCard = ({ trivia }) => {
 
     const triviaActionButtonClicked = async () => {
         if (trivia.playerStatus === "INSUFFICIENTPOINTS" && trivia.status === "ONGOING") {
-            await analytics().logEvent('low_points', {
-                'action': 'incomplete',
-                'id': user.username
+            await analytics().logEvent('insufficient_live_trivia_point', {
+                'id': user.username,
+                'phone_number': user.phoneNumber,
+                'email': user.email
             })
             notEnoughPointNotice.current.open()
 
         } else if (trivia.playerStatus === "PLAYED" || trivia.status === "EXPIRED" || trivia.status === "CLOSED") {
             await analytics().logEvent('clicked_live_trivia_leaderboard', {
-                'action': 'complete',
-                'id': user.username
+                'id': user.username,
+                'phone_number': user.phoneNumber,
+                'email': user.email
             })
             navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id })
 
         } else if (trivia.playerStatus === "CANPLAY" && trivia.status !== "EXPIRED") {
             await analytics().logEvent('clicked_play_live_trivia', {
-                'action': 'initiate',
-                'id': user.username
+                'id': user.username,
+                'phone_number': user.phoneNumber,
+                'email': user.email
             });
             navigation.navigate('TriviaInstructions', { ...trivia })
         }

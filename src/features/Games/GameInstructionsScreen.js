@@ -26,19 +26,19 @@ export default function GameInstructionsScreen({ navigation }) {
   const refRBSheet = useRef();
 
   const gotoStaking = async () => {
-    await analytics().logEvent('initiate_staking', {
-      'action': 'initiate',
-      'id': user.username
-
+    await analytics().logEvent('initiate_exhibition_staking', {
+      'id': user.username,
+      'phone_number': user.phoneNumber,
+      'email': user.email
     })
     navigation.navigate("GameStaking")
   }
 
   const openBottomSheet = async () => {
     await analytics().logEvent('proceed_exhibition_without_staking', {
-      'action': 'proceed',
-      'id': user.username
-
+      'id': user.username,
+      'phone_number': user.phoneNumber,
+      'email': user.email
     })
     refRBSheet.current.open()
   }
@@ -193,8 +193,9 @@ const AvailableBoosts = ({ onClose, user }) => {
           .then(unwrapResult)
           .then(async result => {
             await analytics().logEvent("exhibition_without_staking_game_started", {
-              action: "initiate",
-              'id': user.username
+              'id': user.username,
+              'phone_number': user.phoneNumber,
+              'email': user.email
             })
             // console.log('Action logged to server');
           })
@@ -228,9 +229,11 @@ const AvailableBoosts = ({ onClose, user }) => {
         }))
           .then(unwrapResult)
           .then(async result => {
-            await analytics().logEvent("challenge_startgame", {
+            await analytics().logEvent("challenge_start_game", {
               action: "initiate",
-              'id': user.username
+              'id': user.username,
+              'phone_number': user.phoneNumber,
+              'email': user.email
             })
             // console.log('Action logged to server');
           })

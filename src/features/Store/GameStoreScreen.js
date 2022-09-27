@@ -33,13 +33,13 @@ export default function ({ navigation }) {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <UserItems />
-            <GamePlans />
-            <GameBoosts user ={user} />
+            <GamePlans user={user} />
+            <GameBoosts user={user} />
         </ScrollView>
     );
 }
 
-const GamePlans = () => {
+const GamePlans = ({user}) => {
     const plans = useSelector(state => state.common.plans);
 
     return (
@@ -50,16 +50,24 @@ const GamePlans = () => {
                 playing without interruptons
             </Text>
             <View style={styles.storeCards}>
-                {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} />)}
+                {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} user={user} />)}
             </View>
         </View>
     )
 }
 
-const GamePlanCard = ({ plan }) => {
+const GamePlanCard = ({ plan, user }) => {
     const refRBSheet = useRef();
+    const buyGamePlan = async () => {
+        await analytics().logEvent('initiate_game_plan_purchase', {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        refRBSheet.current.open()
+    }
     return (
-        <Pressable activeOpacity={0.8} onPress={() => refRBSheet.current.open()}>
+        <Pressable activeOpacity={0.8} onPress={buyGamePlan}>
             <Animated.View style={styles.storeItemContainer} entering={randomEnteringAnimation().duration(1000)}>
                 <PlanCardDetails plan={plan} />
             </Animated.View>
@@ -82,7 +90,7 @@ const GamePlanCard = ({ plan }) => {
                     }
                 }}
             >
-                <BuyGamePlan plan={plan} onClose={() => refRBSheet.current.close()} />
+                <BuyGamePlan plan={plan} onClose={() => refRBSheet.current.close()} user={user} />
             </RBSheet>
         </Pressable>
 
@@ -102,7 +110,7 @@ const PlanCardDetails = ({ plan }) => {
     )
 }
 
-const BuyGamePlan = ({ plan, onClose }) => {
+const BuyGamePlan = ({ plan, onClose, user }) => {
     const [loading, setLoading] = useState(false);
     const userBalance = useSelector(state => state.auth.user.walletBalance);
 
@@ -113,21 +121,30 @@ const BuyGamePlan = ({ plan, onClose }) => {
 
     const buyPlanWallet = () => {
         setLoading(true);
-
         dispatch(buyPlanFromWallet(plan.id))
             .then(unwrapResult)
+            .then(async () => {
+                await analytics().logEvent('game_plan_purchased_successfully', {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
+                })
+            })
             .then(result => {
                 // console.log(result);
                 dispatch(getUser())
                 onClose()
                 navigation.navigate("GamePlanPurchaseSuccessful")
             })
-            .catch((rejectedValueOrSerializedError) => {
+            .catch(async rejectedValueOrSerializedError => {
                 setLoading(false);
-                // after login eager get commond data for the whole app
-                navigation.navigate("GameStoreItemsPurchaseFailed")
                 // Alert.alert("Notice", "Operation could not be completed, please try again");
-                // console.log(rejectedValueOrSerializedError)
+                await analytics().logEvent('game_plan_purchased_failed', {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
+                })
+                navigation.navigate("GameStoreItemsPurchaseFailed")
             });
     }
 
@@ -157,7 +174,7 @@ const GameBoosts = (user) => {
                 Buy boosts to let you win more games
             </Text>
             <View style={styles.storeCards}>
-                {boosts.map((boost, i) => <BoostCard key={i} boost={boost} user = {user} />)}
+                {boosts.map((boost, i) => <BoostCard key={i} boost={boost} user={user} />)}
             </View>
         </View>
     )
@@ -167,8 +184,9 @@ const BoostCard = ({ boost, user }) => {
     const refRBSheet = useRef();
     const buyBoost = async () => {
         await analytics().logEvent('initiate_boost_purchase', {
-            'action': 'initiate',
-            'id': user.username
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
         })
 
         refRBSheet.current.open()
@@ -195,7 +213,7 @@ const BoostCard = ({ boost, user }) => {
                         }
                     }}
                 >
-                    <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} user ={user} />
+                    <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} user={user} />
                 </RBSheet>
             </Animated.View>
         </Pressable>
@@ -221,7 +239,7 @@ const BoostCardDetails = ({ boost }) => {
     )
 }
 
-const BuyBoost = ({ boost, onClose,user }) => {
+const BuyBoost = ({ boost, onClose, user }) => {
     const [loading, setLoading] = useState(false);
     const userBalance = useSelector(state => state.auth.user.walletBalance);
 
@@ -235,9 +253,10 @@ const BuyBoost = ({ boost, onClose,user }) => {
         dispatch(buyBoostFromWallet(boost.id))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('boost_purchased', {
-                    'action': 'complete',
-                    'id': user.username
+                await analytics().logEvent('boost_purchased_successfully', {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
                 })
             })
             .then(result => {
@@ -249,9 +268,10 @@ const BuyBoost = ({ boost, onClose,user }) => {
             .catch(async rejectedValueOrSerializedError => {
                 setLoading(false);
                 // Alert.alert("Notice", "Operation could not be completed, please try again");
-                await analytics().logEvent('boost_purchased', {
-                    'action': 'complete',
-                    'id': user.username
+                await analytics().logEvent('boost_purchased_failed', {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
                 })
                 navigation.navigate("GameStoreItemsPurchaseFailed")
             });

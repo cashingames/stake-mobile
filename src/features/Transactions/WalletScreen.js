@@ -37,28 +37,29 @@ export default function WalletScreen() {
     const withdrawBalance = () => {
         setWithdraw(true)
         withdrawWinnings()
-        .then(async response => {
-            await analytics().logEvent('winnings_withdrawn_successfully', {
-                'action': 'complete',
-                'id': user.username
-            });
-            openBottomSheet();
-            setWithdraw(false)
-            dispatch(getUser())
-        },
-            err => {
-                if (!err || !err.response || err.response === undefined) {
-                    Alert.alert("Your Network is Offline.");
-                    setWithdraw(false)
-                }
-                else if (err.response.status === 400) {
-                    Alert.alert(err.response.data.message);
-                    setWithdraw(false)
+            .then(async response => {
+                await analytics().logEvent('winnings_withdrawn_successfully', {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
+                });
+                openBottomSheet();
+                setWithdraw(false)
+                dispatch(getUser())
+            },
+                err => {
+                    if (!err || !err.response || err.response === undefined) {
+                        Alert.alert("Your Network is Offline.");
+                        setWithdraw(false)
+                    }
+                    else if (err.response.status === 400) {
+                        Alert.alert(err.response.data.message);
+                        setWithdraw(false)
 
+                    }
                 }
-            }
-            
-        )
+
+            )
     }
 
     return (
@@ -79,7 +80,7 @@ export default function WalletScreen() {
                     refBottomSheet={refRBSheet}
                     height={300}
                     subComponent={<WithdrawnBalance onClose={closeBottomSheet}
-                     />}
+                    />}
                 />
             </ScrollView>
         </ImageBackground>
@@ -109,10 +110,10 @@ const TransactionLink = () => {
 const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, withdraw }) => {
     const features = useSelector(state => state.common.featureFlags);
 
-    const isWithdrawFeatureEnabled = features['withdrawable_wallet'] !== undefined && features['withdrawable_wallet'].enabled == true;
-  
+    const isWithdrawFeatureEnabled = features['withdrawable_wallet'] !== undefined && features['withdrawable_wallet'].enabled === true;
+
     if (!isWithdrawFeatureEnabled) {
-      return null;
+        return null;
     }
     return (
         <View style={styles.earningsContainer}>
@@ -127,6 +128,8 @@ const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, 
             <View style={styles.earnings}>
                 <Text style={styles.earningText}>Pending Winnings</Text>
                 <Text style={styles.earningAmount}>&#8358;{formatCurrency(bookBalance)}</Text>
+                <Text style={styles.earningNote}>Note: Your pending winnings becomes withdrawable after 24hours</Text>
+
             </View>
         </View>
     )
@@ -215,12 +218,21 @@ const styles = EStyleSheet.create({
         color: '#7C7D7F',
         textAlign: 'center'
     },
+    earningNote: {
+        fontFamily: 'graphik-regular',
+        fontSize: '0.7rem',
+        color: '#FFFF',
+        textAlign: 'center',
+        opacity: 0.8,
+        marginTop: normalize(15),
+        lineHeight:'1rem'
+    },
     earningAmount: {
         fontFamily: 'graphik-medium',
         fontSize: '1.4rem',
         color: '#FFFF',
         textAlign: 'center',
-        // marginVertical: Platform.OS === 'ios' ? normalize(8) : normalize(5),
+        marginVertical: normalize(5),
     },
     link: {
         backgroundColor: '#FFE900',
