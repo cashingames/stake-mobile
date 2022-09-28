@@ -138,6 +138,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                 </View>
 
                 <View style={styles.boards}>
+                <Text style={styles.note}>Note: You can select up to 3 friends at a time</Text>
                     {noDATA ?
                         <Text style={styles.noDataText}>No Data</Text>
                         :
@@ -228,6 +229,15 @@ const styles = EStyleSheet.create({
         color: '#000000',
         textAlign: 'center',
         alignItems: 'center'
+    },
+    note: {
+        fontSize: '0.7rem',
+        fontFamily: 'graphik-medium',
+        color: '#000000',
+        // textAlign: 'center',
+        alignItems: 'center',
+        marginBottom:'1rem',
+        opacity:0.7
     },
     icon: {
         opacity: 0.4,
