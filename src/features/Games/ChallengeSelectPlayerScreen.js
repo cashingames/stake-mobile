@@ -24,14 +24,13 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const [loading, setLoading] = useState(true)
     const activeCategory = useSelector(state => state.game.gameCategory);
     const userFriends = useSelector(state => state.common.userFriends);
-    // console.log(userFriends)
-    const selectedOpponent = useSelector(state => state.game.selectedFriend);
-    const user = useSelector(state => state.auth.user);
+    const selectedOpponents = useSelector(state => state.game.selectedFriend);
+    const user = useSelector(state => state.auth.user)
     const [search, setSearch] = useState("");
     const [searching, setSearching] = useState(false);
     const [sending, setSending] = useState(false)
     const [noDATA, setNoData] = useState(false)
-    const [calltimes, setCallTimes] =useState(0);
+    const [calltimes, setCallTimes] = useState(0);
 
     const openBottomSheet = () => {
         refRBSheet.current.open()
@@ -46,23 +45,21 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const sendInvite = () => {
         setSending(false)
         dispatch(sendFriendInvite({
-            opponentId: selectedOpponent.id,
+            opponentId: selectedOpponents.map(opponent => opponent.id),
             categoryId: activeCategory.id
         }
         ))
             .then(unwrapResult)
             .then(async result => {
-                // console.log(result);
-                // setSending(true)
                 openBottomSheet()
                 await analytics().logEvent("challenge_initiated", {
-                    action: "initiate",
-                    'id': user.username
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
                 })
             })
             .catch((rejectedValueOrSerializedError) => {
                 setSending(true)
-                // console.log(rejectedValueOrSerializedError);
                 Alert.alert(rejectedValueOrSerializedError.message)
             });
         setSending(false)
@@ -86,7 +83,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         if (userFriends.length === 0) {
             setNoData(true)
             console.log(noDATA)
-        }else {
+        } else {
             setNoData(false)
         }
     }
@@ -95,15 +92,15 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         if (search.length >= 2) {
             findFriends(search);
             setNoData(false)
-        }else{
+        } else {
             setSearching(false);
         }
     }, [search]);
 
     const findFriends = useCallback(
         debounce(name => {
-                setSearching(true);
-                dispatch(searchUserFriends(name)).then(() => setSearching(false));
+            setSearching(true);
+            dispatch(searchUserFriends(name)).then(() => setSearching(false));
         }, 500),
         []
     )
@@ -147,7 +144,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                         <>
                             {
                                 userFriends.map((userFriend, i) => <FriendDetails key={i} userFriend={userFriend}
-                                    isSelected={userFriend.id === selectedOpponent?.id}
+                                    isSelected={selectedOpponents !== null && selectedOpponents.findIndex(opponent => opponent.id === userFriend.id) !== -1}
                                     onSelect={onSelectedFriend}
                                 />)
                             }
@@ -161,7 +158,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                 />
 
             </ScrollView>
-            <SendInviteButton onPress={sendInvite} disabled={!selectedOpponent || !sending} />
+            <SendInviteButton onPress={sendInvite} disabled={!selectedOpponents || !sending} />
         </View>
     );
 }
@@ -229,7 +226,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.8rem',
         fontFamily: 'graphik-medium',
         color: '#000000',
-        textAlign:'center',
+        textAlign: 'center',
         alignItems: 'center'
     },
     icon: {
