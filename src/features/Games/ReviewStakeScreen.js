@@ -10,6 +10,8 @@ import AppButton from "../../shared/AppButton";
 import { getGameStakes } from "./GameSlice";
 import { Ionicons } from '@expo/vector-icons';
 import { getUser } from "../Auth/AuthSlice";
+import UserWalletBalance from "../../shared/UserWalletBalance";
+import StakingPredictionsTable from "../../shared/StakingPredictionsTable";
 
 
 const ReviewStakeScreen = ({ navigation }) => {
@@ -56,21 +58,15 @@ const ReviewStakeScreen = ({ navigation }) => {
                     <Text style={styles.stakeScore}>SCORE</Text>
                     <Text style={styles.stakeHead}>ODDS</Text>
                 </View>
-                {gameStakes.map((gameStake, i) => <StakeAmount key={i} gameStake={gameStake} position={i + 1}
-                    amount={amountStaked} amountWon={amountWon} />)}
+                {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
+                    amount={amountStaked}
+                    containerStyle={(amount * gameStake.odd) === amountWon ? styles.amountWon : {}}
+                />)}
             </View>
 
         </ScrollView>
     )
 
-}
-
-const UserWalletBalance = ({ balance }) => {
-    return (
-        <Text style={styles.availableAmount}>
-            Wallet Balance: &#8358;{formatCurrency(balance)}
-        </Text>
-    );
 }
 
 const StakeAmount = ({ gameStake, position, amount, amountWon }) => {
@@ -97,7 +93,6 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F8F9FD',
-        // paddingHorizontal: normalize(18),
         paddingBottom: normalize(10)
     },
     amountContainer: {
@@ -108,16 +103,6 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(20),
         backgroundColor: '#FFFF',
     },
-    availableAmount: {
-        fontFamily: "graphik-medium",
-        fontSize: "0.7rem",
-        color: "#01A7DB",
-        textAlign: "center",
-        backgroundColor: "#F3F3F3",
-        paddingVertical: normalize(12),
-        paddingHorizontal: responsiveScreenWidth(8),
-        borderRadius: 64,
-    },
     fundAmount: {
         fontFamily: "graphik-medium",
         fontSize: "1.7rem",
@@ -125,7 +110,6 @@ const styles = EStyleSheet.create({
         marginVertical: normalize(10),
         opacity: 0.65,
         textAlign: "center",
-        // width: responsiveScreenWidth(100),
     },
     buttonContainer: {
         paddingHorizontal: normalize(20),
@@ -152,7 +136,6 @@ const styles = EStyleSheet.create({
         fontSize: "1rem",
         color: "#EF2F55",
         marginVertical: '1rem',
-        // opacity:0.7
     },
     stakeHeaders: {
         flexDirection: 'row',
@@ -179,8 +162,6 @@ const styles = EStyleSheet.create({
         fontFamily: "graphik-medium",
         fontSize: ".8rem",
         color: "#333333",
-        // marginRight: '.7rem',
-        // width: '5rem',
     },
     stakeOddDigit: {
         fontFamily: "graphik-medium",
@@ -206,7 +187,6 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        // justifyContent: 'center',
         paddingVertical: normalize(14),
         paddingHorizontal: normalize(15),
     },
@@ -224,7 +204,6 @@ const styles = EStyleSheet.create({
     noGamesText: {
         fontFamily: 'graphik-medium',
         fontSize: normalize(16),
-        // width: normalize(130),
         textAlign: 'center',
         color: '#000',
         lineHeight: normalize(24)
@@ -243,9 +222,6 @@ const styles = EStyleSheet.create({
         color: '#000',
         lineHeight: 23,
         marginBottom: normalize(15)
-    },
-    boosts: {
-        // alignItems: ''
     },
     noBoosts: {
         textAlign: 'center',
