@@ -131,11 +131,11 @@ let initialState = {
     activeBoost: [],
     pointsGained: 0,
     amountWon: null,
-    amountStaked:null,
+    amountStaked: null,
     isEnded: true,
     displayedOptions: [],
     displayedQuestion: {},
-    selectedFriend: null,
+    selectedFriend: [],
     isPlayingTrivia: false,
     triviaLeaders: [],
     triviaPosition: '',
@@ -168,8 +168,17 @@ export const GameSlice = createSlice({
             state.gameMode = action.payload;
         },
         setSelectedFriend: (state, action) => {
-            // console.log("seeting")
-            state.selectedFriend = action.payload;
+            const friendExist = state.selectedFriend.findIndex(opponent => opponent.id === action.payload.id)
+            if (friendExist === -1) {
+                if (state.selectedFriend.length < 3) {
+                    state.selectedFriend.push(action.payload)
+
+                } else {
+                    alert("You have added maximum number of friends you can challenge at a time")
+                }
+            } else {
+                state.selectedFriend.splice(friendExist, 1)
+            }
         },
         unselectFriend: (state) => {
             state.selectedFriend = null;
@@ -316,7 +325,7 @@ export const GameSlice = createSlice({
 })
 
 export const { setGameType, setGameMode, setGameCategory,
-    setPointsGained, setAmountWon,setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
+    setPointsGained, setAmountWon, setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
     setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend, setWithStaking
 } = GameSlice.actions
