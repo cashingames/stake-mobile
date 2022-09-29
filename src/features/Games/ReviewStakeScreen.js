@@ -60,7 +60,7 @@ const ReviewStakeScreen = ({ navigation }) => {
                 </View>
                 {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
                     amount={amountStaked}
-                    containerStyle={(amount * gameStake.odd) === amountWon ? styles.amountWon : {}}
+                    containerStyle={(formatCurrency(amount * gameStake.odd)) === amountWon ? styles.amountWon : {}}
                 />)}
             </View>
 
@@ -69,23 +69,6 @@ const ReviewStakeScreen = ({ navigation }) => {
 
 }
 
-const StakeAmount = ({ gameStake, position, amount, amountWon }) => {
-    return (
-        <>
-            <View style={[styles.stakeSub, (amount * gameStake.odd) === amountWon ? styles.amountWon : {}]}>
-                <Text style={styles.stakeWinnings}>&#8358;{formatCurrency(amount * gameStake.odd)}</Text>
-                <View style={styles.stakeScoreContainer}>
-                    <Ionicons name="checkmark-circle-outline" size={16} color="#333333" />
-                    <Text style={styles.stakeScoreDigit}>{gameStake.score}/10</Text>
-                </View>
-                <View style={styles.stakeNumber}>
-                    <Ionicons name="time-outline" size={16} color="#FF932F" />
-                    <Text style={styles.stakeOddDigit}>x{gameStake.odd}</Text>
-                </View>
-            </View>
-        </>
-    )
-}
 
 export default ReviewStakeScreen;
 
