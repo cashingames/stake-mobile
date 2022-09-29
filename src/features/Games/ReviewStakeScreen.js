@@ -22,7 +22,7 @@ const ReviewStakeScreen = ({ navigation }) => {
     console.log(amountWon)
     const amountStaked = useSelector(state => state.game.amountStaked);
     console.log(amountStaked)
-    const [amount, setAmount] = useState(100);
+    const [amount, setAmount] = useState(amountStaked);
     const dispatch = useDispatch();
 
     useEffect(() => {

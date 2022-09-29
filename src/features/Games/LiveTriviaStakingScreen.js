@@ -90,7 +90,7 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
                 <Input
                     style={styles.fundAmount}
                     value={amount}
-                    defaultValue="100"
+                    defaultValue="200"
                     keyboardType="numeric"
                     onChangeText={setAmount}
                     autoFocus={true}

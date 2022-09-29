@@ -70,7 +70,7 @@ export default function FundWalletScreen() {
               keyboardType="numeric"
               onChangeText={setAmount}
               autoFocus={true}
-              placeholder="100"
+              placeholder="500"
               min
             />
             <View style={styles.flag}>
