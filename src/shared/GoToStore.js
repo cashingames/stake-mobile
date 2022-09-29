@@ -6,7 +6,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 const GoToStore = ({ onPress }) => {
     return (
-        <View style={styles.moreBoost}>
+        <View style={styles.storeLinks}>
 
             <Pressable onPress={onPress}>
                 <Text style={styles.needBoost}>Need more games?
@@ -38,4 +38,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         color: '#000',
     },
+    storeLinks: {
+        alignItems: 'center',
+      },
 })

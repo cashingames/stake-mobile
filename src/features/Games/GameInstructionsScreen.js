@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Text, View, ScrollView, Alert, Pressable } from 'react-native';
+import { Text, View, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -12,8 +12,10 @@ import AppButton from './../../shared/AppButton';
 import UserAvailableBoost from "../../shared/UserAvailableBoost";
 import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
-import { formatCurrency } from "../../utils/stringUtl";
 import analytics from '@react-native-firebase/analytics';
+import ExhibitionStakeAmount from "../../shared/ExhibitionStakeAmount";
+import StakingButtons from "../../shared/StakingButtons";
+import ExhibitionUserAvailableBoosts from "../../shared/ExhibitionUserAvailableBoosts";
 
 
 
@@ -22,6 +24,11 @@ export default function GameInstructionsScreen({ navigation }) {
 
   const gameMode = useSelector(state => state.game.gameMode);
   const user = useSelector(state => state.auth.user);
+
+  const features = useSelector(state => state.common.featureFlags);
+
+  const isStakingFeatureEnabled = features['exhibition_game_staking'] !== undefined && features['exhibition_game_staking'].enabled == true;
+
 
   const refRBSheet = useRef();
 
@@ -54,8 +61,8 @@ export default function GameInstructionsScreen({ navigation }) {
       <ScrollView>
         {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
         {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
-        {gameMode.name !== "CHALLENGE" &&
-          <StakeAmount onPress={gotoStaking} />
+        {isStakingFeatureEnabled && gameMode.name !== "CHALLENGE" &&
+          <ExhibitionStakeAmount onPress={gotoStaking} />
         }
         <UniversalBottomSheet
           refBottomSheet={refRBSheet}
@@ -63,18 +70,8 @@ export default function GameInstructionsScreen({ navigation }) {
           subComponent={<AvailableBoosts onClose={closeBottomSheet} user={user} />}
         />
       </ScrollView>
-      {gameMode.name === "EXHIBITION" ?
-
-        <View style={styles.nextButton}>
-          <StakeButton
-            onPress={gotoStaking}
-          />
-          <AppButton
-            onPress={openBottomSheet}
-            text='Proceed'
-            style={styles.proceedButton}
-          />
-        </View>
+      {isStakingFeatureEnabled && gameMode.name !== "CHALLENGE" ?
+        <StakingButtons onPress={gotoStaking} onPressProceed={openBottomSheet} />
         :
         <AppButton
           onPress={openBottomSheet}
@@ -87,24 +84,6 @@ export default function GameInstructionsScreen({ navigation }) {
   );
 };
 
-const StakeButton = ({ onPress }) => {
-  const features = useSelector(state => state.common.featureFlags);
-
-  const isStakingFeatureEnabled = features['exhibition_game_staking'] !== undefined && features['exhibition_game_staking'].enabled == true;
-
-  if (!isStakingFeatureEnabled) {
-    return null;
-  }
-
-  return (
-    <AppButton
-      onPress={onPress}
-      text='Stake Cash'
-      style={styles.stakingButton}
-      textStyle={styles.stakingButtonText}
-    />
-  )
-}
 
 
 const ExhibitionInstructions = () => {
@@ -207,7 +186,6 @@ const AvailableBoosts = ({ onClose, user }) => {
         navigation.navigate("GameInProgress")
       })
       .catch((rejectedValueOrSerializedError) => {
-        // console.log(rejectedValueOrSerializedError);
         Alert.alert(rejectedValueOrSerializedError.message)
         setLoading(false);
       });
@@ -222,7 +200,6 @@ const AvailableBoosts = ({ onClose, user }) => {
     }))
       .then(unwrapResult)
       .then(result => {
-        // console.log(result);
         dispatch(logActionToServer({
           message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
           data: result.data.questions
@@ -245,67 +222,21 @@ const AvailableBoosts = ({ onClose, user }) => {
         navigation.navigate("ChallengeGameInProgress")
       })
       .catch((rejectedValueOrSerializedError) => {
-        // console.log(rejectedValueOrSerializedError);
         Alert.alert('Failed to start game')
-        // Alert.alert(rejectedValueOrSerializedError.message)
         setLoading(false);
       });
   }
 
 
-  const visitStore = () => {
-    onClose();
-    navigation.navigate('GameStore')
-  }
-
-  const boostsToDisplay = () => {
-    if (gameMode.name === "CHALLENGE") {
-      return boosts.filter(x => x.name.toUpperCase() !== "SKIP");
-    }
-    return boosts;
-  }
-
   return (
-    <View style={styles.availableBoosts}>
-      <Text style={styles.title}>Available Boosts</Text>
-      {boosts?.length > 0 ?
-        <View style={styles.boosts}>
-          {boostsToDisplay().map((boost, i) => <UserAvailableBoost boost={boost} key={i} />
-          )}
-        </View>
-        :
-        <Text style={styles.noBoosts}>No boost available, go to store to purchase boost</Text>
-      }
-      <View style={styles.storeLinks}>
-        <GoToStore onPress={visitStore} />
-      </View>
-      {gameMode.name === "EXHIBITION" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />}
-      {gameMode.name === "CHALLENGE" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={startChallenge} disabled={loading} />}
-
-    </View>
+    <ExhibitionUserAvailableBoosts gameMode={gameMode}
+      boosts={boosts} onStartGame={onStartGame}
+      startChallenge={startChallenge} loading={loading}
+      onClose={onClose}
+    />
   )
 }
 
-const StakeAmount = ({ onPress }) => {
-  const features = useSelector(state => state.common.featureFlags);
-
-  const isStakingFeatureEnabled = features['exhibition_game_staking'] !== undefined && features['exhibition_game_staking'].enabled == true;
-
-  if (!isStakingFeatureEnabled) {
-    return null;
-  }
-
-  return (
-    <View style={styles.stakeContainer}>
-      <Text style={styles.stakeAmount}>Stand a chance of winning up to 1 Million
-        Naira by playing this game
-      </Text>
-      <Pressable style={styles.stakeButton} onPress={onPress}>
-        <Text style={styles.showMe}>PLAY NOW</Text>
-      </Pressable>
-    </View>
-  )
-}
 
 
 
@@ -344,147 +275,7 @@ const styles = EStyleSheet.create({
     textAlign: 'justify',
     width: responsiveScreenWidth(80)
   },
-  buttonContainer: {
-    marginTop: normalize(90),
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: normalize(12),
-    paddingHorizontal: normalize(32),
-    borderRadius: 12,
-    backgroundColor: '#EF2F55'
-  },
-  storeLinks: {
-    alignItems: 'center',
-  },
-  amount: {
-    fontFamily: 'graphik-bold',
-    fontSize: '0.8rem',
-    color: '#FF932F'
-  },
-  title: {
-    fontSize: '0.85rem',
-    fontFamily: 'graphik-medium',
-    color: '#000',
-    lineHeight: 23,
-    marginBottom: normalize(15)
-  },
-  boosts: {
-    // alignItems: ''
-  },
-  noBoosts: {
-    textAlign: 'center',
-    fontSize: '0.85rem',
-    fontFamily: 'graphik-regular',
-    marginVertical: '1rem'
-  },
-  boostContent: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
-    borderBottomWidth: 1,
-    marginBottom: normalize(17)
-  },
-  boostAmount: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  availableBoosts: {
-    paddingVertical: normalize(14),
-    paddingHorizontal: normalize(20),
-  },
-  boostDetails: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    marginBottom: normalize(15),
-    justifyContent: 'center'
-  },
-  boostName: {
-    fontSize: '0.69rem',
-    fontFamily: 'graphik-bold',
-    color: '#151C2F',
-    lineHeight: '1.2rem',
-  },
-  boostDescription: {
-    fontSize: '0.69rem',
-    fontFamily: 'graphik-regular',
-    color: '#828282',
-    lineHeight: '1.2rem',
-    width: responsiveScreenWidth(60),
-  },
-  storeLink: {
-    fontSize: '0.69rem',
-    fontFamily: 'graphik-medium',
-    color: '#EF2F55',
-  },
-  needBoost: {
-    fontSize: '0.69rem',
-    fontFamily: 'graphik-regular',
-    color: '#000',
-  },
-  moreBoost: {
-    alignItems: 'center',
-  },
-  startContainer: {
-    marginTop: normalize(50),
-  },
   proceed: {
     marginVertical: 10,
   },
-  proceedButton: {
-    marginVertical: 10,
-    // paddingHorizontal:'2.5rem',
-    width: '9rem',
-    // height:'1rem'
-  },
-  stakingButton: {
-    marginVertical: 10,
-    backgroundColor: '#FFFF',
-    // paddingHorizontal:'2.5rem',
-    width: '9rem',
-    borderColor: '#EF2F55',
-    borderWidth: 1,
-    // height:'1rem'
-  },
-  stakingButtonText: {
-    color: '#EF2F55'
-  },
-  nextButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  stakeContainer: {
-    backgroundColor: '#518EF8',
-    borderRadius: 15,
-    paddingHorizontal: "2.5rem",
-    paddingVertical: "1.3rem",
-    marginTop: ".8rem",
-    marginBottom: "1rem",
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  stakeAmount: {
-    fontSize: '1.1rem',
-    fontFamily: 'graphik-medium',
-    color: '#ffff',
-    textAlign: 'center',
-    lineHeight: '1.65rem'
-  },
-  stakeButton: {
-    marginTop: '1rem',
-    borderWidth: 1,
-    borderColor: "#ffff",
-    paddingVertical: '.8rem',
-    paddingHorizontal: '1.3rem',
-    borderRadius: 8
-  },
-  showMe: {
-    fontSize: '.8rem',
-    fontFamily: 'graphik-regular',
-    color: '#ffff',
-    textAlign: 'center',
-  }
 });
