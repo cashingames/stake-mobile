@@ -15,6 +15,8 @@ import Input from "../../shared/Input";
 import { formatCurrency } from "../../utils/stringUtl";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { Paystack } from "react-native-paystack-webview";
+import analytics from '@react-native-firebase/analytics';
+
 
 export default function FundWalletScreen() {
   const dispatch = useDispatch();
@@ -40,6 +42,11 @@ export default function FundWalletScreen() {
   };
 
   const startPayment = async () => {
+    await analytics().logEvent('funding_wallet_initiated', {
+      'id': user.username,
+      'phone_number': user.phoneNumber,
+      'email': user.email
+    });
     var cleanedAmount =
       amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
     // console.log(Number.parseFloat(amount));
@@ -47,11 +54,6 @@ export default function FundWalletScreen() {
       Alert.alert("Amount cannot be less than 100 naira");
       return false;
     }
-    await analytics().logEvent('funding_wallet_initiated', {
-      'id': user.username,
-      'phone_number': user.phoneNumber,
-      'email': user.email
-    });
     setShowPayment(true);
   };
 
