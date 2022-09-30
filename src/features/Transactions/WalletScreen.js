@@ -240,7 +240,7 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(12),
         paddingHorizontal: normalize(15),
         marginHorizontal: normalize(30),
-        marginBottom: '8rem',
+        marginBottom: '13rem',
         borderRadius: 8,
         borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
         borderColor: 'rgba(0, 0, 0, 0.15)',
