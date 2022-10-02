@@ -18,11 +18,9 @@ const ReviewStakeScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
-    const amountWon = useSelector(state => state.game.amountWon);
-    console.log(amountWon)
     const amountStaked = useSelector(state => state.game.amountStaked);
-    console.log(amountStaked)
-    const [amount, setAmount] = useState(amountStaked);
+    const correctCount = useSelector(state => state.game.correctCount);
+    // const [amount, setAmount] = useState(amountStaked);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -38,10 +36,10 @@ const ReviewStakeScreen = ({ navigation }) => {
                 <UserWalletBalance balance={user.walletBalance} />
                 <Input
                     style={styles.fundAmount}
-                    value={amount}
+                    value={amountStaked}
                     defaultValue={amountStaked}
                     keyboardType="numeric"
-                    onChangeText={setAmount}
+                    onChangeText={amountStaked}
                     autoFocus={false}
                     editable={false}
                     placeholder="Enter Stake Amount"
@@ -60,7 +58,7 @@ const ReviewStakeScreen = ({ navigation }) => {
                 </View>
                 {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
                     amount={amountStaked}
-                    containerStyle={(formatCurrency(amount * gameStake.odd)) === amountWon ? styles.amountWon : {}}
+                    containerStyle={correctCount == (gameStake.score) ? styles.amountWon : {}}
                 />)}
             </View>
 

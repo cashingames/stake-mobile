@@ -57,7 +57,7 @@ export const endGame = createAsyncThunk(
 
         //make a network request to the server
         const response = await axios.post('v2/game/end/single-player', data)
-        // console.log(response)
+        console.log(response)
         return response.data;
     }
 )
@@ -147,7 +147,8 @@ let initialState = {
     gameDuration: 60,
     challengeDetails: {},
     gameStakes: [],
-    withStaking: false
+    withStaking: false,
+    correctCount : null,
 }
 
 
@@ -200,6 +201,9 @@ export const GameSlice = createSlice({
         },
         setWithStaking: (state, action) => {
             state.withStaking = action.payload;
+        },
+        setCorrectCount: (state, action) => {
+            state.correctCount = action.payload;
         },
         setIsPlayingTrivia: (state, action) => {
             state.isPlayingTrivia = action.payload;
@@ -284,6 +288,7 @@ export const GameSlice = createSlice({
                 state.amountWon = action.payload.data.amount_won;
                 state.withStaking = action.payload.data.with_staking;
                 state.amountStaked = action.payload.data.amount_staked;
+                state.correctCount = action.payload.data.correct_count;
                 resetState(state)
             })
             .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
@@ -325,7 +330,7 @@ export const GameSlice = createSlice({
 })
 
 export const { setGameType, setGameMode, setGameCategory,
-    setPointsGained, setAmountWon, setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
+    setPointsGained, setAmountWon, setCorrectCount, setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
     setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend, setWithStaking
 } = GameSlice.actions
