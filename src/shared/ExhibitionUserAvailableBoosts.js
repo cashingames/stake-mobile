@@ -37,7 +37,6 @@ const ExhibitionUserAvailableBoosts = ({ gameMode, boosts, onStartGame, startCha
             }
             <GoToStore onPress={visitStore} />
             {gameMode.name === "EXHIBITION" && <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Start Game"} onPress={onStartGame} disabled={loading} />}
-            <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Start Game"} onPress={startChallenge} disabled={loading} />
 
             {gameMode.name === "CHALLENGE" && <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Start Game"} onPress={startChallenge} disabled={loading} />}
 
