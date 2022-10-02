@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Text, View, ScrollView, Alert} from 'react-native';
+import { Text, View, ScrollView, Alert } from 'react-native';
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,8 +23,10 @@ const GameStakingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
-
-    const [amount, setAmount] = useState(100);
+    const maximumStakeAmount = useSelector(state => state.common.maximumStakeAmount);
+    const minimumStakeAmount = useSelector(state => state.common.minimumStakeAmount);
+    const [amount, setAmount] = useState(200);
+    console.log(amount)
     const dispatch = useDispatch();
     const refRBSheet = useRef();
 
@@ -54,7 +56,18 @@ const GameStakingScreen = ({ navigation }) => {
             return
         }
 
+        if (Number.parseFloat(amount) < Number.parseFloat(minimumStakeAmount)) {
+            Alert.alert("Minimum stake amount is 100 naira");
+            return false;
+        }
+
+        if (Number.parseFloat(amount) > Number.parseFloat(maximumStakeAmount)) {
+            Alert.alert("Maximum stake amount is 1000 naira");
+            return false;
+        }
+
         canStake({ staking_amount: amount })
+        console.log(amount, 'iiiiiii')
             .then(async response => {
                 await analytics().logEvent('exhibition_staking_initiated', {
                     'id': user.username,
@@ -178,9 +191,9 @@ const AvailableBoosts = ({ onClose, amount, user }) => {
 
     return (
         <ExhibitionUserAvailableBoosts gameMode={gameMode}
-        boosts={boosts} onStartGame={onStartGame} 
-        loading={loading} onClose={onClose}
-      />
+            boosts={boosts} onStartGame={onStartGame}
+            loading={loading} onClose={onClose}
+        />
     )
 }
 

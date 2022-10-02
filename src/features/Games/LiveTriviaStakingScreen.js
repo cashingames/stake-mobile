@@ -1,23 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Text, View, ScrollView, Alert, Pressable, Image } from 'react-native';
+import { Text, View, ScrollView, Alert} from 'react-native';
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
-import normalize, { responsiveScreenWidth } from "../../utils/normalize";
+import normalize from "../../utils/normalize";
 import { useNavigation, } from '@react-navigation/native';
-import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 import Input from "../../shared/Input";
 import AppButton from "../../shared/AppButton";
 import { canStake, getGameStakes, setGameDuration, setIsPlayingTrivia, setQuestionsCount, startGame } from "./GameSlice";
-import { Ionicons } from '@expo/vector-icons';
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
-import FundWalletComponent from "../../shared/FundWalletComponent";
 import { getUser } from "../Auth/AuthSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
-import GoToStore from "../../shared/GoToStore";
 import analytics from '@react-native-firebase/analytics';
-import Constants from 'expo-constants';
-import UserAvailableBoost from "../../shared/UserAvailableBoost";
 import LiveTriviaUserAvailableBoosts from "../../shared/LiveTriviaUserAvailableBoosts";
 import StakingPredictionsTable from "../../shared/StakingPredictionsTable";
 import LowWalletBalance from "../../shared/LowWalletBalance";
@@ -30,8 +24,10 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
     const params = route.params;
+    const maximumStakeAmount = useSelector(state => state.common.maximumStakeAmount);
+    const minimumStakeAmount = useSelector(state => state.common.minimumStakeAmount);
 
-    const [amount, setAmount] = useState(100);
+    const [amount, setAmount] = useState(200);
     const dispatch = useDispatch();
     const refRBSheet = useRef();
 
@@ -59,6 +55,16 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
             });
             openBottomSheet();
             return
+        }
+
+        if (Number.parseFloat(amount) < Number.parseFloat(minimumStakeAmount)) {
+            Alert.alert("Minimum stake amount is 100 naira");
+            return false;
+        }
+
+        if (Number.parseFloat(amount) > Number.parseFloat(maximumStakeAmount)) {
+            Alert.alert("Maximum stake amount is 1000 naira");
+            return false;
         }
 
         canStake({ staking_amount: amount })
