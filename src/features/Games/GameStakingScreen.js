@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Text, View, ScrollView, Alert } from 'react-native';
+import { Text, View, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +26,7 @@ const GameStakingScreen = ({ navigation }) => {
     const maximumStakeAmount = useSelector(state => state.common.maximumStakeAmount);
     const minimumStakeAmount = useSelector(state => state.common.minimumStakeAmount);
     const [amount, setAmount] = useState(200);
-    console.log(amount)
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const refRBSheet = useRef();
 
@@ -45,7 +45,7 @@ const GameStakingScreen = ({ navigation }) => {
     }, [])
 
     const startGame = async () => {
-
+        setLoading(true);
         if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
             await analytics().logEvent('exhibition_staking_low_balance', {
                 'id': user.username,
@@ -53,21 +53,23 @@ const GameStakingScreen = ({ navigation }) => {
                 'email': user.email
             });
             openBottomSheet();
+            setLoading(false);
             return
         }
 
         if (Number.parseFloat(amount) < Number.parseFloat(minimumStakeAmount)) {
             Alert.alert("Minimum stake amount is 100 naira");
+            setLoading(false);
             return false;
         }
 
         if (Number.parseFloat(amount) > Number.parseFloat(maximumStakeAmount)) {
             Alert.alert("Maximum stake amount is 1000 naira");
+            setLoading(false);
             return false;
         }
 
         canStake({ staking_amount: amount })
-        console.log(amount, 'iiiiiii')
             .then(async response => {
                 await analytics().logEvent('exhibition_staking_initiated', {
                     'id': user.username,
@@ -75,14 +77,17 @@ const GameStakingScreen = ({ navigation }) => {
                     'email': user.email
                 });
                 openBottomSheet();
+                setLoading(false);
             },
 
                 err => {
                     if (!err || !err.response || err.response === undefined) {
                         Alert.alert("Your Network is Offline.");
+                        setLoading(false);
                     }
                     else if (err.response.status === 400) {
                         Alert.alert(err.response.data.message);
+                        setLoading(false);
 
                     }
                 }
@@ -106,7 +111,7 @@ const GameStakingScreen = ({ navigation }) => {
                 />
             </View>
             <View style={styles.buttonContainer}>
-                <AppButton text="Stake Amount" onPress={startGame} />
+                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={startGame} disabled={loading} />
             </View>
             <View style={styles.stakeContainer}>
                 <Text style={styles.stakeHeading}>Predictions Table</Text>

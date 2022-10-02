@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AppButton from "./AppButton";
 import GoToStore from "./GoToStore";
@@ -36,8 +36,10 @@ const ExhibitionUserAvailableBoosts = ({ gameMode, boosts, onStartGame, startCha
                 <Text style={styles.noBoosts}>No boost available, go to store to purchase boost</Text>
             }
             <GoToStore onPress={visitStore} />
-            {gameMode.name === "EXHIBITION" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={onStartGame} disabled={loading} />}
-            {gameMode.name === "CHALLENGE" && <AppButton text={loading ? 'Starting...' : 'Start Game'} onPress={startChallenge} disabled={loading} />}
+            {gameMode.name === "EXHIBITION" && <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Start Game"} onPress={onStartGame} disabled={loading} />}
+            <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Start Game"} onPress={startChallenge} disabled={loading} />
+
+            {gameMode.name === "CHALLENGE" && <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Start Game"} onPress={startChallenge} disabled={loading} />}
 
         </View>
     )
@@ -52,15 +54,15 @@ const styles = EStyleSheet.create({
         color: '#000',
         lineHeight: 23,
         marginBottom: normalize(15)
-      },
-      noBoosts: {
+    },
+    noBoosts: {
         textAlign: 'center',
         fontSize: '0.85rem',
         fontFamily: 'graphik-regular',
         marginVertical: '1rem'
-      },
-      availableBoosts: {
+    },
+    availableBoosts: {
         paddingVertical: normalize(14),
         paddingHorizontal: normalize(20),
-      },
+    },
 })
