@@ -7,6 +7,7 @@ export const getCommonData = createAsyncThunk(
     async () => {
         // console.log("fetching common data");
         const response = await axios.get('v3/game/common');
+        console.log(response);
         return response.data
     }
 )
@@ -107,7 +108,7 @@ export const withdrawWinnings = async (data) => {
 
 }
 
-export const isFeatureEnabled = async(feature, features={}) => {
+export const isFeatureEnabled = async (feature, features = {}) => {
 
     return features.hasOwnProperty(feature) && features[feature].enabled === true
 }
@@ -128,7 +129,9 @@ const initialState = {
     minVersionCode: '',
     minVersionForce: false,
     userFriends: [],
-    featureFlags: []
+    featureFlags: [],
+    maximumStakeAmount:'',
+    minimumStakeAmount: ''
 }
 
 export const CommonSlice = createSlice({
@@ -152,6 +155,8 @@ export const CommonSlice = createSlice({
                 state.gameCategories = data.gameCategories;
                 state.minVersionCode = data.minVersionCode;
                 state.minVersionForce = data.minVersionForce;
+                state.maximumStakeAmount = data.maximumStakeAmount;
+                state.minimumStakeAmount = data.minimumStakeAmount
             })
             .addCase(getBankData.fulfilled, (state, action) => {
                 state.banks = action.payload.data;
