@@ -59,13 +59,13 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
         }
 
         if (Number.parseFloat(amount) < Number.parseFloat(minimumStakeAmount)) {
-            Alert.alert("Minimum stake amount is 100 naira");
+            Alert.alert(`Minimum stake amount is ${minimumStakeAmount} naira`);
             setLoading(false);
             return false;
         }
 
         if (Number.parseFloat(amount) > Number.parseFloat(maximumStakeAmount)) {
-            Alert.alert("Maximum stake amount is 1000 naira");
+            Alert.alert(`Maximum stake amount is ${maximumStakeAmount} naira`);
             setLoading(false);
             return false;
         }
