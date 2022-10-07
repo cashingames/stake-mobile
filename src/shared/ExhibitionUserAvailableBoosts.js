@@ -8,7 +8,8 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import normalize from "../utils/normalize";
 
 
-const ExhibitionUserAvailableBoosts = ({ gameMode, boosts, onStartGame, startChallenge,
+const ExhibitionUserAvailableBoosts = ({ gameMode, boosts, onStartGame, 
+    // startChallenge,
     loading, onClose }) => {
     const navigation = useNavigation();
 
@@ -37,8 +38,7 @@ const ExhibitionUserAvailableBoosts = ({ gameMode, boosts, onStartGame, startCha
             }
             <GoToStore onPress={visitStore} />
             {gameMode.name === "EXHIBITION" && <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Start Game"} onPress={onStartGame} disabled={loading} />}
-
-            {gameMode.name === "CHALLENGE" && <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Start Game"} onPress={startChallenge} disabled={loading} />}
+            {/* {gameMode.name === "CHALLENGE" && <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Start Game"} onPress={startChallenge} disabled={loading} />} */}
 
         </View>
     )

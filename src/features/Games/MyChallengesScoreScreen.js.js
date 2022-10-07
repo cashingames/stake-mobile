@@ -1,16 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import { Text, View, Image, ScrollView, Pressable, ActivityIndicator } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react'
+import { Text, View, Image, ScrollView, Pressable, ActivityIndicator, ImageBackground, Dimensions, Alert } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
 import { useDispatch, useSelector } from 'react-redux';
 import PageLoading from '../../shared/PageLoading';
-import { isTrue } from '../../utils/stringUtl';
-import { getChallengeScores } from '../Auth/AuthSlice';
-import { acceptDeclineChallengeInivite, getChallengeDetails } from './GameSlice';
+import { formatCurrency, isTrue } from '../../utils/stringUtl';
+import { getChallengeScores, getUser } from '../Auth/AuthSlice';
+import { acceptDeclineChallengeInivite, getChallengeDetails, startChallengeGame } from './GameSlice';
 import AppButton from '../../shared/AppButton';
 import analytics from '@react-native-firebase/analytics';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { logActionToServer } from '../CommonSlice';
+import StakeWinnings from '../../shared/StakeWinnings';
+import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
+import LowWalletBalance from '../../shared/LowWalletBalance';
+import ChallengeTermsAndConditions from '../../shared/ChallengeTermsAndConditions';
 
 
 
@@ -19,14 +25,29 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true)
   const [clicking, setClicking] = useState(false)
+  const [showText, setShowText] = useState(true);
   const params = route.params;
-  // console.log("params",params)
   const user = useSelector(state => state.auth.user);
-  // console.log(user.username)
+  const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
+  const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
+  const gameTypeId = useSelector(state => state.game.gameType.id);
   const challengeScores = useSelector(state => state.auth.challengeScores)
-  // console.log("challenge scores", challengeScores)
+  console.log("challenge scores", challengeScores)
   const challengeDetails = useSelector(state => state.game.challengeDetails);
-  // console.log("challenge details", challengeDetails)
+  console.log("challenge details", challengeDetails)
+  const refRBSheet = useRef();
+
+  const openBottomSheet = async () => {
+    refRBSheet.current.open()
+  }
+
+  const closeBottomSheet = () => {
+    dispatch(getUser());
+    refRBSheet.current.close()
+  }
+  const closeTermsSheet = () => {
+    refRBSheet.current.close()
+  }
 
   useEffect(() => {
     dispatch(getChallengeScores(
@@ -39,31 +60,92 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
     );
   }, []);
 
-  const acceptChallengeInivite = () => {
-    setClicking(true)
+  useEffect(() => {
+    // Change the state every second or the time given by User.
+    const interval = setInterval(() => {
+      setShowText((showText) => !showText);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const acceptChallengeInivite = async () => {
+    setClicking(true);
+    if (Number.parseFloat(user.walletBalance) < Number.parseFloat(challengeDetails.stakingAmount)) {
+      await analytics().logEvent('challenge_opponent_staking_low_wallet_balance', {
+        'id': user.username,
+        'phone_number': user.phoneNumber,
+        'email': user.email
+      });
+      openBottomSheet();
+      setLoading(false);
+      return
+    }
     dispatch(acceptDeclineChallengeInivite({
       challenge_id: challengeDetails.challenegeId,
       status: 1
     }
     ))
-      .then(async result => {
-        await analytics().logEvent("challenge_accepted", {
-          action: "initiate",
-          'id': user.username
-        })
-        // console.log('Action logged to server');
+    dispatch(startChallengeGame({
+      category: challengeCategory,
+      type: gameTypeId,
+      challenge_id: challengeId
+    }))
+      .then(unwrapResult)
+      .then(result => {
+        dispatch(logActionToServer({
+          message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
+          data: result.data.questions
+        }))
+          .then(unwrapResult)
+          .then(async result => {
+            await analytics().logEvent("challenge_opponent_accepts_and_start_game", {
+              action: "initiate",
+              'id': user.username,
+              'phone_number': user.phoneNumber,
+              'email': user.email
+            })
+          })
+          .catch(() => {
+          });
+        setClicking(false);
+        navigation.navigate("ChallengeGameInProgress")
       })
-      .then(() => setClicking(false))
-    navigation.navigate('GameInstructions')
+      .catch((rejectedValueOrSerializedError) => {
+        Alert.alert('Failed to start game')
+        setClicking(false);
+      });
   }
 
   const challengerPlays = async () => {
-      await analytics().logEvent("challenger_plays", {
-        action: "initiate",
-        'id': user.username
+    dispatch(startChallengeGame({
+      category: challengeCategory,
+      type: gameTypeId,
+      challenge_id: challengeId
+    }))
+      .then(unwrapResult)
+      .then(result => {
+        dispatch(logActionToServer({
+          message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
+          data: result.data.questions
+        }))
+          .then(unwrapResult)
+          .then(async result => {
+            await analytics().logEvent("challenge_challenger_start_game", {
+              action: "initiate",
+              'id': user.username,
+              'phone_number': user.phoneNumber,
+              'email': user.email
+            })
+          })
+          .catch(() => {
+          });
+        setClicking(false);
+        navigation.navigate("ChallengeGameInProgress")
       })
-      // console.log('Action logged to server');
-    navigation.navigate('GameInstructions')
+      .catch((rejectedValueOrSerializedError) => {
+        Alert.alert('Failed to start game')
+        setClicking(false);
+      });
   }
 
   const declineChallengeInivite = () => {
@@ -73,57 +155,96 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       status: 0
     }
     ))
-    .then(async result => {
-      await analytics().logEvent("challenge_declined", {
-        action: "incomplete",
-        'id': user.username
+      .then(async result => {
+        await analytics().logEvent("challenge_declined", {
+          action: "incomplete",
+          'id': user.username
+        })
       })
-    })
-    .then(() => setClicking(false))
+      .then(() => setClicking(false))
     navigation.navigate('Home')
   }
 
   if (loading) {
     return <PageLoading
-      backgroundColor='#701F88'
-      spinnerColor="#FFFF"
+      backgroundColor='#EDDA74'
+      spinnerColor="#000000"
     />
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.subContainer}>
-        <View style={styles.confetti}>
-          {challengeScores.opponentStatus === "COMPLETED" &&
-            challengeScores.challengerStatus === "COMPLETED" ?
-            <LottieAnimations
-              animationView={require('../../../assets/challenge-end.json')}
-              height={normalize(150)}
-            />
-            :
-            <LottieAnimations
-              animationView={require('../../../assets/battle.json')}
-              height={normalize(120)}
-            />
+    <ImageBackground source={require('../../../assets/images/quiz-stage.jpg')}
+      style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
+      resizeMethod="resize">
+      <ScrollView style={styles.container}>
+        <>
+          <View style={styles.confetti}>
+            {challengeScores.opponentStatus === "COMPLETED" &&
+              challengeScores.challengerStatus === "COMPLETED" &&
+              <LottieAnimations
+                animationView={require('../../../assets/challenge-end.json')}
+                height={normalize(150)}
+              />
+            }
+          </View>
+          <ChallengeMessage playerPoint={challengeScores}
+            user={user}
+            challengeDetails={challengeDetails}
+            showText={showText}
+            amountWon={challengeDetails.finalStakingWinAmount}
+          />
+          <ChallengeParticipants player={challengeScores} user={user} />
+          {challengeDetails.withStaking &&
+            user.username === challengeDetails.opponentUsername &&
+            challengeDetails.status === "PENDING" &&
+            challengeScores.opponentStatus !== "COMPLETED" &&
+            <View style={styles.stakeContainer}>
+              <Text style={styles.stakeText}>Accept challenge to stake <Text style={styles.stakeAmount}>&#8358;{formatCurrency(challengeDetails.stakingAmount)}</Text> and stand a chance of winning double of this amount</Text>
+            </View>
           }
-        </View>
+          {challengeDetails.status === "PENDING" ||
+            challengeScores.opponentStatus !== "COMPLETED" ||
+            challengeScores.challengerStatus !== "COMPLETED" ?
+            <Pressable style={styles.termsContainer} onPress={openBottomSheet}>
+              <Text style={styles.termsText}>Click to view terms and conditions</Text>
+            </Pressable>
+            :
+            <></>
+          }
+          <ResultContainer playerScore={challengeScores} />
+        </>
+        {Number.parseFloat(user.walletBalance) < Number.parseFloat(challengeDetails.stakingAmount) ?
+          <UniversalBottomSheet
+            refBottomSheet={refRBSheet}
+            height={620}
+            subComponent={<LowWalletBalance onClose={closeBottomSheet} />}
+          />
+          :
+          <UniversalBottomSheet
+            refBottomSheet={refRBSheet}
+            height={700}
+            subComponent={<ChallengeTermsAndConditions onClose={closeTermsSheet} staking={challengeDetails.withStaking} />}
+          />
+        }
+      </ScrollView>
+      <View style={styles.subContainer}>
         {user.username === challengeDetails.opponentUsername &&
           <>
             {challengeDetails.status === "PENDING" &&
               challengeScores.opponentStatus === "PENDING" &&
-              challengeScores.opponentStatus !== "COMPLETED" ?
+              challengeScores.opponentStatus !== "COMPLETED" &&
               <View style={styles.buttonContainer}>
-                <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Accept"} style={styles.acceptButton} onPress={acceptChallengeInivite} />
-                <AppButton text="Decline" style={styles.declineButton} onPress={declineChallengeInivite} />
+                <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Accept and Play"} style={styles.acceptButton} onPress={acceptChallengeInivite} />
+                <AppButton text="Decline" textStyle={styles.declineText} style={styles.declineButton} onPress={declineChallengeInivite} />
               </View>
-              :
-              <>
-                {
-                  challengeDetails.status === "ACCEPTED" &&
-                  challengeScores.opponentStatus !== "COMPLETED" &&
-                  <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Play"} onPress={challengerPlays} />
-                }
-              </>
+              // :
+              // <>
+              //   {
+              //     challengeDetails.status === "ACCEPTED" &&
+              //     challengeScores.opponentStatus !== "COMPLETED" &&
+              //     <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Play"} onPress={challengerPlays} />
+              //   }
+              // </>
             }
           </>
         }
@@ -131,20 +252,13 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           <>
             {challengeDetails.status === "ACCEPTED" &&
               challengeScores.challengerStatus === "PENDING" &&
-              <AppButton text="Play" onPress={challengerPlays} />
+              <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Play"} onPress={challengerPlays} />
             }
           </>
 
         }
-        <ChallengeMessage playerPoint={challengeScores}
-          user={user}
-          challengeDetails={challengeDetails}
-        />
-        <ChallengeParticipants player={challengeScores} user={user} />
-        <ResultContainer playerScore={challengeScores} />
       </View>
-
-    </ScrollView>
+    </ImageBackground>
   )
 }
 
@@ -166,7 +280,7 @@ const ResultContainer = ({ playerScore }) => {
   )
 }
 
-const ChallengeMessage = ({ playerPoint, user, challengeDetails }) => {
+const ChallengeMessage = ({ playerPoint, user, challengeDetails, showText, amountWon }) => {
   const challengerwins = playerPoint.challengerPoint > playerPoint.opponentPoint;
   const challengerlose = playerPoint.opponentPoint > playerPoint.challengerPoint;
   const opponentwins = playerPoint.opponentPoint > playerPoint.challengerPoint
@@ -183,12 +297,22 @@ const ChallengeMessage = ({ playerPoint, user, challengeDetails }) => {
             <>
               <Text style={styles.challengeMessageTop}>Congrats {playerPoint.challengerUsername}</Text>
               <Text style={styles.challengeMessageBottom}>You won this challenge</Text>
+              {challengeDetails.withStaking &&
+                <View style={styles.winningsContainer}>
+                  <StakeWinnings showText={showText} amountWon={amountWon} />
+                </View>
+              }
             </>
           }
           {opponentwins && user.username === challengeDetails.opponentUsername &&
             <>
               <Text style={styles.challengeMessageTop}>Congrats {playerPoint.opponentUsername}</Text>
               <Text style={styles.challengeMessageBottom}>You won this challenge</Text>
+              {challengeDetails.withStaking &&
+                <View style={styles.winningsContainer}>
+                  <StakeWinnings showText={showText} amountWon={amountWon} />
+                </View>
+              }
             </>
           }
           {opponentlose && user.username === challengeDetails.opponentUsername &&
@@ -214,7 +338,7 @@ const ChallengeMessage = ({ playerPoint, user, challengeDetails }) => {
         <>
           {user.username === challengeDetails.opponentUsername &&
             challengeDetails.status === "PENDING" &&
-            <Text style={styles.challengeInProgress}>You have not responded to this challenge</Text>
+            <Text style={styles.challengeInProgress}>You have been invited to a challenge</Text>
           }
           {user.username === challengeDetails.playerUsername &&
             challengeDetails.status === "PENDING" &&
@@ -231,7 +355,8 @@ const ChallengeMessage = ({ playerPoint, user, challengeDetails }) => {
 
 const ChallengeParticipants = ({ player, user }) => {
   return (
-    <>
+    <ImageBackground source={require('../../../assets/images/challenge-stage.png')}
+      style={styles.playerImage} imageStyle={{ borderRadius: 20 }} resizeMode="cover">
       {player.challengerStatus === "COMPLETED" &&
         player.opponentStatus === "COMPLETED" ?
         <View style={styles.winDetails}>
@@ -263,7 +388,7 @@ const ChallengeParticipants = ({ player, user }) => {
           </View>
         </View>
         :
-        <View style={styles.playersDetails}>
+        <View style={styles.winDetails}>
           <ChallengerDetails challenger={player} />
           <Image
             style={styles.versus}
@@ -272,7 +397,7 @@ const ChallengeParticipants = ({ player, user }) => {
           <OpponentDetails opponent={player} />
         </View>
       }
-    </>
+    </ImageBackground>
   )
 }
 
@@ -280,7 +405,6 @@ const ChallengerDetails = ({ challenger }) => {
 
   return (
     <View style={styles.playerDetails}>
-      <Text style={styles.PlayerName}>{challenger.challengerUsername}</Text>
       <View style={styles.topPlayerIconContainer}>
         <Image
           style={styles.topPlayerIcon}
@@ -289,6 +413,7 @@ const ChallengerDetails = ({ challenger }) => {
             require("../../../assets/images/user-icon.png")}
         />
       </View>
+      <Text style={styles.PlayerName}>@{challenger.challengerUsername}</Text>
     </View>
   )
 }
@@ -297,7 +422,6 @@ const OpponentDetails = ({ opponent }) => {
 
   return (
     <View style={styles.playerDetails}>
-      <Text style={styles.PlayerName}>{opponent.opponentUsername}</Text>
       <View style={styles.otherPlayerIconContainer}>
         <Image
           style={styles.otherPlayerIcon}
@@ -305,6 +429,7 @@ const OpponentDetails = ({ opponent }) => {
             { uri: opponent.opponentAvatar } :
             require("../../../assets/images/user-icon.png")} />
       </View>
+      <Text style={styles.PlayerName}>@{opponent.opponentUsername}</Text>
     </View>
   )
 }
@@ -314,14 +439,14 @@ export default MyChallengesScoreScreen;
 
 const styles = EStyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#701F88',
+    // flex: 1,
     paddingHorizontal: normalize(20),
-    paddingBottom: responsiveScreenWidth(30),
     paddingTop: responsiveScreenWidth(5),
   },
   subContainer: {
-    justifyContent: 'center'
+    paddingHorizontal: normalize(20),
+    marginBottom: '2rem',
+    flex: 1,
   },
   confetti: {
     alignItems: 'center',
@@ -329,12 +454,14 @@ const styles = EStyleSheet.create({
   resultContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: responsiveScreenWidth(5),
+    marginBottom: responsiveScreenWidth(40),
     justifyContent: 'space-between',
-    backgroundColor: '#F9E821',
+    backgroundColor: '#EDDA74',
     borderRadius: 16,
     paddingHorizontal: normalize(20),
-    paddingVertical: normalize(5)
+    paddingVertical: normalize(5),
+    opacity: 0.9,
+    marginTop: '.3rem'
   },
   playersResult: {
     alignItems: 'center',
@@ -383,7 +510,7 @@ const styles = EStyleSheet.create({
   },
   challengeMessageContainer: {
     alignItems: 'center',
-    marginBottom: normalize(20)
+    marginBottom: normalize(12)
   },
   challengeMessageTop: {
     fontSize: '1.7rem',
@@ -399,20 +526,16 @@ const styles = EStyleSheet.create({
     textAlign: 'center'
   },
   challengeInProgress: {
-    fontSize: '1.2rem',
+    fontSize: '1rem',
     color: '#FFFF',
     fontFamily: 'graphik-regular',
-    opacity: 0.7,
+    opacity: 0.9,
     textAlign: 'center'
   },
-  playersDetails: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
+
   winDetails: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'flex-end'
   },
   topPlayerIcon: {
@@ -456,9 +579,9 @@ const styles = EStyleSheet.create({
   PlayerName: {
     fontSize: '.9rem',
     color: '#FFFF',
-    fontFamily: 'graphik-medium',
-    marginBottom: normalize(10),
-    width: responsiveScreenWidth(27),
+    fontFamily: 'graphik-regular',
+    // marginBottom: normalize(10),
+    // width: responsiveScreenWidth(27),
     textAlign: 'center'
   },
   playerTopDetails: {
@@ -470,14 +593,68 @@ const styles = EStyleSheet.create({
     justifyContent: 'space-between',
   },
   acceptButton: {
-    paddingHorizontal: responsiveScreenWidth(13),
+    paddingHorizontal: responsiveScreenWidth(1),
+    width: '9rem',
     backgroundColor: '#EF2F55'
   },
   declineButton: {
-    paddingHorizontal: responsiveScreenWidth(13),
-    backgroundColor: '#701F88',
+    paddingHorizontal: responsiveScreenWidth(1),
+    width: '9rem',
+    backgroundColor: 'transparent',
     borderColor: '#FFFF',
     borderWidth: 1
   },
+  declineText: {
+    color: '#FFFF'
+  },
+  playerImage: {
+    marginVertical: '.5rem',
+    display: 'flex',
+    paddingVertical: normalize(40),
+    paddingHorizontal: normalize(20),
+    borderRadius: 20,
+    opacity: 0.93
+  },
+  stakeContainer: {
+    backgroundColor: '#EDDA74',
+    borderRadius: 15,
+    paddingHorizontal: normalize(18),
+    paddingVertical: normalize(20),
+    alignItems: 'center'
+  },
+  stakeText: {
+    fontSize: '.8rem',
+    color: '#000000',
+    fontFamily: 'graphik-medium',
+    textAlign: 'center',
+    lineHeight: '1rem'
+  },
+  stakeAmount: {
+    color: '#EF2F55',
+  },
+  winningsContainer: {
+    alignItems: 'center',
+    backgroundColor: '#FFFF',
+    paddingTop: '.3rem',
+    marginTop: normalize(10),
+    borderRadius: 13,
+    paddingHorizontal: '4.2rem'
+  },
+  termsContainer: {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    paddingVertical: '.3rem',
+    marginVertical: normalize(12),
+    borderRadius: 10,
+    paddingHorizontal: '.5rem',
+    borderColor: '#FFFF',
+    borderWidth: 1
+  },
+  termsText: {
+    fontSize: '.8rem',
+    color: '#FFFF',
+    fontFamily: 'graphik-regular',
+    // textAlign: 'center'
+  }
 
 });

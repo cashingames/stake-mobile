@@ -71,6 +71,7 @@ import NotificationsScreen from './features/Notifications/NotificationsScreen';
 import SignupVerifyPhoneScreen from './features/Auth/SignupVerifyPhoneScreen';
 import LiveTriviaStakingScreen from './features/Games/LiveTriviaStakingScreen';
 import ReviewStakeScreen from './features/Games/ReviewStakeScreen';
+import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -205,9 +206,9 @@ function AppRouter() {
 						<AppStack.Screen name="MyChallengesScore" component={MyChallengesScoreScreen} options={{
 							title: 'Scores',
 							headerStyle: {
-								backgroundColor: '#701F88',
+								backgroundColor: '#EDDA74',
 							},
-							headerTintColor: '#FFFF',
+							headerTintColor: '#000000',
 						}} />
 						<AppStack.Screen name="MyChallenges" component={MyChallengesScreen} options={{
 							title: 'My Challenges',
@@ -215,6 +216,13 @@ function AppRouter() {
 								backgroundColor: '#701F88',
 							},
 							headerTintColor: '#FFFF',
+						}} />
+						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{
+							title: 'Challenge Staking',
+							headerStyle: {
+								backgroundColor: '#EDDA74',
+							},
+							headerTintColor: '#000000',
 						}} />
 
 						<AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{ title: 'Game Instructions' }} />

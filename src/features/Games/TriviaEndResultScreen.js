@@ -11,6 +11,7 @@ import AppButton from '../../shared/AppButton';
 import GameEndClockAnimation from '../../shared/GameEndClockAnimation';
 import { getLiveTriviaLeaders } from './GameSlice';
 import analytics from '@react-native-firebase/analytics';
+import StakeWinnings from '../../shared/StakeWinnings';
 
 
 
@@ -43,12 +44,12 @@ const TriviaEndResultScreen = ({ route }) => {
     }, []);
 
     useEffect(() => {
-		// Change the state every second or the time given by User.
-		const interval = setInterval(() => {
-			setShowText((showText) => !showText);
-		}, 1000);
-		return () => clearInterval(interval);
-	}, []);
+        // Change the state every second or the time given by User.
+        const interval = setInterval(() => {
+            setShowText((showText) => !showText);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -72,12 +73,12 @@ const TriviaEndResultScreen = ({ route }) => {
     }
 
     const reviewStaking = () => {
-		analytics().logEvent('review_staking', {
-			'action': 'complete',
+        analytics().logEvent('review_staking', {
+            'action': 'complete',
             'id': user.username
-		})
-		navigation.navigate("ReviewStake")
-	}
+        })
+        navigation.navigate("ReviewStake")
+    }
 
 
     return (
@@ -85,8 +86,8 @@ const TriviaEndResultScreen = ({ route }) => {
             <ScrollView>
                 <ResultContainer />
                 {withStaking &&
-				<StakeWinnings showText={showText} amountWon={amountWon} onPress={reviewStaking} />
-			}
+                    <Winnings showText={showText} amountWon={amountWon} onPress={reviewStaking} />
+                }
                 <TriviaParticipants triviaLeaders={triviaLeaders} />
             </ScrollView>
             <TriviaButton onPress={viewLiveTriviaLeaderboard} onPressHome={returnToHomeButton} />
@@ -106,18 +107,15 @@ const ResultContainer = () => {
     )
 }
 
-const StakeWinnings = ({ showText, amountWon,onPress }) => {
-	return (
-		<View style={styles.winningsContainer}>
-			<View style={styles.winningsAmount}>
-				<Text style={styles.winningsText}>You have won</Text>
-				<Text style={[styles.winningsCash, { opacity: showText ? 0 : 1 }]}> &#8358;{formatCurrency(amountWon)}!</Text>
-			</View>
-			<Pressable onPress={onPress}>
-				<Text style={styles.reviewStake}>Review Stake</Text>
-			</Pressable>
-		</View>
-	)
+const Winnings = ({ showText, amountWon, onPress }) => {
+    return (
+        <View style={styles.winningsContainer}>
+            <StakeWinnings showText={showText} amountWon={amountWon} />
+            <Pressable onPress={onPress}>
+                <Text style={styles.reviewStake}>Review Stake</Text>
+            </Pressable>
+        </View>
+    )
 }
 
 const TriviaParticipant = ({ player, position }) => {
@@ -268,11 +266,11 @@ const styles = EStyleSheet.create({
     triviaButtons: {
         marginHorizontal: normalize(20),
         flexDirection: 'row',
-        justifyContent:'space-between'
+        justifyContent: 'space-between'
     },
     triviaButton: {
-        width:'9rem',
-        paddingHorizontal:'1rem'
+        width: '9rem',
+        paddingHorizontal: '1rem'
     },
     homeText: {
         fontSize: '0.8rem',
@@ -292,39 +290,20 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
     },
     winningsContainer: {
-		alignItems: 'center',
-		backgroundColor: '#EF2F55',
-		paddingVertical: normalize(10),
-		marginVertical: normalize(25),
-		borderRadius: 13,
+        alignItems: 'center',
+        backgroundColor: '#EF2F55',
+        paddingVertical: normalize(10),
+        marginVertical: normalize(25),
+        borderRadius: 13,
         marginHorizontal: normalize(18)
-	},
-	winningsAmount: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginBottom: '.7rem'
-	},
-	winningsText: {
-		textAlign: 'center',
-		color: '#FFFF',
-		fontFamily: 'graphik-regular',
-		fontSize: '.9rem',
-		// lineHeight: '1.5rem'
-	},
-	winningsCash: {
-		textAlign: 'center',
-		color: '#FFFF',
-		fontFamily: 'graphik-regular',
-		fontSize: '1.2rem',
-		// lineHeight: '1.5rem'
-	},
-	reviewStake: {
-		textAlign: 'center',
-		color: '#FFFF',
-		fontFamily: 'graphik-regular',
-		fontSize: '.8rem',
-		textDecorationLine: 'underline',
-		// lineHeight: '1.5rem'
-	},
+    },
+    reviewStake: {
+        textAlign: 'center',
+        color: '#FFFF',
+        fontFamily: 'graphik-regular',
+        fontSize: '.8rem',
+        textDecorationLine: 'underline',
+        // lineHeight: '1.5rem'
+    },
 
 });

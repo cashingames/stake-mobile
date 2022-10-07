@@ -182,7 +182,7 @@ export const GameSlice = createSlice({
             }
         },
         unselectFriend: (state) => {
-            state.selectedFriend = null;
+            state.selectedFriend = [];
         },
         setGameDuration: (state, action) => {
             state.gameDuration = action.payload;

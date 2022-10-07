@@ -1,19 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, Pressable, Alert, BackHandler, StatusBar } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { incrementCountdownResetIndex, startGame } from './GameSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import GameEndClockAnimation from '../../shared/GameEndClockAnimation';
 import UserName from '../../shared/UserName';
-import { logActionToServer } from '../CommonSlice';
 import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { getUser } from '../Auth/AuthSlice';
 import { formatCurrency } from '../../utils/stringUtl';
 import analytics from '@react-native-firebase/analytics';
+import StakeWinnings from '../../shared/StakeWinnings';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -143,7 +141,7 @@ export default function GameEndResultScreen({ navigation }) {
 			<UserName userName={user.firstName} />
 			<UserResultInfo pointsGained={pointsGained} />
 			{withStaking &&
-				<StakeWinnings showText={showText} amountWon={amountWon} onPress={reviewStaking} />
+				<Winnings showText={showText} amountWon={amountWon} onPress={reviewStaking} />
 			}
 			<SeeRank />
 			<FinalScore pointsGained={pointsGained} />
@@ -195,13 +193,10 @@ const SeeRank = () => {
 	)
 }
 
-const StakeWinnings = ({ showText, amountWon, onPress }) => {
+const Winnings = ({ showText, amountWon, onPress }) => {
 	return (
 		<View style={styles.winningsContainer}>
-			<View style={styles.winningsAmount}>
-				<Text style={styles.winningsText}>You have won</Text>
-				<Text style={[styles.winningsCash, { opacity: showText ? 0 : 1 }]}> &#8358;{formatCurrency(amountWon)}!</Text>
-			</View>
+			<StakeWinnings showText={showText} amountWon={amountWon} />
 			<Pressable onPress={onPress}>
 				<Text style={styles.reviewStake}>Review Stake</Text>
 			</Pressable>
@@ -327,25 +322,6 @@ const styles = EStyleSheet.create({
 		paddingVertical: normalize(10),
 		marginBottom: normalize(20),
 		borderRadius: 13,
-	},
-	winningsAmount: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginBottom: '.7rem'
-	},
-	winningsText: {
-		textAlign: 'center',
-		color: '#000000',
-		fontFamily: 'graphik-regular',
-		fontSize: '.9rem',
-		// lineHeight: '1.5rem'
-	},
-	winningsCash: {
-		textAlign: 'center',
-		color: '#EF2F55',
-		fontFamily: 'graphik-regular',
-		fontSize: '1.2rem',
-		// lineHeight: '1.5rem'
 	},
 	reviewStake: {
 		textAlign: 'center',

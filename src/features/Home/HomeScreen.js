@@ -161,8 +161,8 @@ const UserWallet = ({ balance }) => {
 
             <LottieAnimations
                 animationView={require('../../../assets/wallet.json')}
-                width={normalize(50)}
-                height={normalize(50)}
+                width={normalize(55)}
+                height={normalize(60)}
             />
             <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
         </Animated.View>
