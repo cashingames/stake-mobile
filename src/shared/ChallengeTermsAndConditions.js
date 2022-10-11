@@ -1,11 +1,14 @@
 import React from "react";
 import { Text, View } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
+import { useSelector } from "react-redux";
 import normalize, { responsiveScreenWidth } from "../utils/normalize";
 import AppButton from "./AppButton";
 
 
 const ChallengeTermsAndConditions = ({ onClose, staking }) => {
+    const periodBeforeChallengeStakingExpiry = useSelector(state => state.common.periodBeforeChallengeStakingExpiry);
+
     return (
         <View style={styles.instructionsContainer}>
             <Text style={styles.instructionHeader}>Ready to start winning? Let’s get started
@@ -34,7 +37,7 @@ const ChallengeTermsAndConditions = ({ onClose, staking }) => {
                     <Text style={styles.TermsHeader}>Terms and Conditions</Text>
                     <View style={styles.instruction}>
                         <Text style={styles.unicode}>{'\u0031'}.</Text>
-                        <Text style={styles.instructionText}>If this challenge is not accepted in 10 days,
+                        <Text style={styles.instructionText}>If this challenge is not accepted in {periodBeforeChallengeStakingExpiry},
                             amount staked by the challenger would be returned to his wallet balance and the challenge
                             would be automatically cancelled
                         </Text>

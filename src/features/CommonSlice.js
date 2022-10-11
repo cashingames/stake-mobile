@@ -131,7 +131,8 @@ const initialState = {
     userFriends: [],
     featureFlags: [],
     maximumStakeAmount:'',
-    minimumStakeAmount: ''
+    minimumStakeAmount: '',
+    periodBeforeChallengeStakingExpiry: ''
 }
 
 export const CommonSlice = createSlice({
@@ -157,6 +158,7 @@ export const CommonSlice = createSlice({
                 state.minVersionForce = data.minVersionForce;
                 state.maximumStakeAmount = data.maximumStakeAmount;
                 state.minimumStakeAmount = data.minimumStakeAmount
+                state.periodBeforeChallengeStakingExpiry = data.periodBeforeChallengeStakingExpiry
             })
             .addCase(getBankData.fulfilled, (state, action) => {
                 state.banks = action.payload.data;

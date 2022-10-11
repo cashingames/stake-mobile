@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Dimensions, Image, ImageBackground, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
 import AppButton from '../../shared/AppButton';
@@ -69,7 +69,7 @@ const ChallengeStakingScreen = ({ navigation, route }) => {
         dispatch(sendFriendInvite({
             opponentId: params.selectedOpponents.map(opponent => opponent.id),
             categoryId: activeCategory.id,
-            staking_amount: amount 
+            staking_amount: amount
         }
         ))
             .then(unwrapResult)
@@ -92,15 +92,22 @@ const ChallengeStakingScreen = ({ navigation, route }) => {
         <ImageBackground source={require('../../../assets/images/quiz-stage.jpg')}
             style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
             resizeMethod="resize">
-            <ScrollView style={styles.container}>
-                <SelectedPlayers challengeDetails={params.selectedOpponents[0]} user={user} />
-                <InputStakeAmount balance={user.walletBalance}
-                    stakeAmount={stakeAmount}
-                    loading={loading}
-                    amount={amount}
-                    setAmount={setAmount}
-                />
-            </ScrollView>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.headContainer}
+            >
+                <ScrollView style={styles.container}>
+
+                    <SelectedPlayers challengeDetails={params.selectedOpponents[0]} user={user} />
+                    <InputStakeAmount balance={user.walletBalance}
+                        stakeAmount={stakeAmount}
+                        loading={loading}
+                        amount={amount}
+                        setAmount={setAmount}
+                    />
+                </ScrollView>
+            </KeyboardAvoidingView>
+
             {Number.parseFloat(user.walletBalance) < Number.parseFloat(amount) ?
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
@@ -111,11 +118,11 @@ const ChallengeStakingScreen = ({ navigation, route }) => {
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={450}
-                    subComponent={<ChallengeInviteSuccessText 
-                        onClose={closeBottomSheet} 
+                    subComponent={<ChallengeInviteSuccessText
+                        onClose={closeBottomSheet}
                         staking={staking}
-                        amount = {amount}
-                        />}
+                        amount={amount}
+                    />}
                 />
             }
         </ImageBackground>
@@ -151,7 +158,9 @@ const SelectedPlayer = ({ playerName, playerAvatar }) => {
 
 const InputStakeAmount = ({ balance, stakeAmount, loading, amount, setAmount }) => {
     return (
-        <View style={styles.stakeAmountContainer}>
+        <View
+            style={styles.stakeAmountContainer}
+        >
             <UserWalletBalance balance={balance} style={styles.walletContainer} />
             <View style={styles.fundContainer}
             >
@@ -175,12 +184,14 @@ const InputStakeAmount = ({ balance, stakeAmount, loading, amount, setAmount }) 
 export default ChallengeStakingScreen;
 
 const styles = EStyleSheet.create({
+    headContainer: {
+        flex: 1
+    },
     container: {
         paddingHorizontal: normalize(18),
         paddingVertical: normalize(40)
     },
     playerImage: {
-        marginBottom: '2rem',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -188,6 +199,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(20),
         alignItems: 'center',
         borderRadius: 20,
+        marginBottom: '2rem',
     },
     avatarBackground: {
         alignItems: 'center'
@@ -210,7 +222,7 @@ const styles = EStyleSheet.create({
         backgroundColor: '#EDDA74',
         // paddingHorizontal: normalize(18),
         paddingTop: normalize(20),
-        borderRadius: 15
+        borderRadius: 15,
     },
     walletContainer: {
         backgroundColor: '#301934',
@@ -225,7 +237,7 @@ const styles = EStyleSheet.create({
         fontFamily: "graphik-medium",
         fontSize: "1.7rem",
         color: "#333333",
-        marginVertical: normalize(12),
+        marginVertical: normalize(10),
         opacity: 0.65,
         textAlign: "center",
     },

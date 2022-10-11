@@ -26,7 +26,6 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const activeCategory = useSelector(state => state.game.gameCategory);
     const userFriends = useSelector(state => state.common.userFriends);
     const selectedOpponents = useSelector(state => state.game.selectedFriend);
-    console.log(selectedOpponents, 'kkkkk')
     const user = useSelector(state => state.auth.user)
     const [search, setSearch] = useState("");
     const [searching, setSearching] = useState(false);
@@ -57,7 +56,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
             .then(unwrapResult)
             .then(async result => {
                 openBottomSheet()
-                await analytics().logEvent("challenge_initiated", {
+                await analytics().logEvent("challenge_invite_sent_without_staking", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email
@@ -73,7 +72,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const initiateChallengeStaking = async () => {
         setSending(false)
         openBottomSheet()
-        await analytics().logEvent("challenge_staking_initiated", {
+        await analytics().logEvent("challenge_staking_option", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email
@@ -127,9 +126,14 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         setSearching(false)
     }
 
-    const stakeCash = () => {
+    const stakeCash = async () => {
         closeStakeBottomSheet();
-        navigation.navigate('ChallengeStaking',{selectedOpponents : selectedOpponents})
+        await analytics().logEvent("challenge_staking_initiated", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('ChallengeStaking', { selectedOpponents: selectedOpponents })
     }
 
 
@@ -207,7 +211,7 @@ const FriendDetails = ({ userFriend, onSelect, isSelected }) => {
                 <Image
                     source={isTrue(userFriend.avatar) ? { uri: userFriend.avatar } : require("../../../assets/images/user-icon.png")}
                     style={styles.avatar}
-                     
+
                 />
                 <Text style={[styles.friendName, isSelected ? { color: "#FFFF" } : {}]}>{userFriend.username}</Text>
             </View>

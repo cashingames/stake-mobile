@@ -53,6 +53,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
     dispatch(getChallengeScores(
       params.challengeId
     )).then(() => setLoading(false));
+    dispatch(getUser());
   }, [])
 
   useEffect(() => {
@@ -71,13 +72,13 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const acceptChallengeInivite = async () => {
     setClicking(true);
     if (Number.parseFloat(user.walletBalance) < Number.parseFloat(challengeDetails.stakingAmount)) {
-      await analytics().logEvent('challenge_opponent_staking_low_wallet_balance', {
+      await analytics().logEvent('challenge_opponent_staking_low_balance', {
         'id': user.username,
         'phone_number': user.phoneNumber,
         'email': user.email
-      });
+    });
       openBottomSheet();
-      setLoading(false);
+      setClicking(false);
       return
     }
     dispatch(acceptDeclineChallengeInivite({
