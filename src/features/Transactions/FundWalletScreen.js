@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Text, View, Image, Alert } from "react-native";
+import { Text, View, Image, Alert, ScrollView } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
@@ -60,7 +60,7 @@ export default function FundWalletScreen() {
   return (
     <>
       {!showPayment && (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
           <View style={styles.balance}>
             <UserWalletBalance balance={user.walletBalance} />
             <Text style={styles.walletTitle}>
@@ -82,12 +82,8 @@ export default function FundWalletScreen() {
               <Text style={styles.flagText}>NGN</Text>
             </View>
           </View>
-          <AppButton
-            text="Fund Wallet"
-            onPress={startPayment}
-            style={styles.actionButton}
-          />
-        </View>
+
+        </ScrollView>
       )}
 
       {showPayment && (
@@ -112,6 +108,11 @@ export default function FundWalletScreen() {
           autoStart={true}
         />
       )}
+      <AppButton
+        text="Fund Wallet"
+        onPress={startPayment}
+        style={styles.actionButton}
+      />
     </>
   );
 }

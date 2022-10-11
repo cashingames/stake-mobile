@@ -41,7 +41,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         marginHorizontal: responsiveWidth(3),
         flexDirection: "row",
-        borderWidth: Platform.OS === 'ios' ? normalize(0.5) : normalize(1),
+        borderWidth: Platform.OS === 'ios' ? normalize(0.5) : 1,
         borderColor: '#E0E0E0',
         elevation: 3.5,
         shadowColor: '#000',

@@ -207,11 +207,12 @@ const UserPoints = ({ points, todaysPoints }) => {
 const styles = EStyleSheet.create({
     scrollView: {
         paddingBottom: normalize(30),
-        backgroundColor: '#F8F9FD',
+        backgroundColor: '#FFFF',
     },
     container: {
         flex: 1,
         paddingHorizontal: '1.2rem',
+        backgroundColor: '#FFFF',
     },
     userDetails: {
         backgroundColor: '#072169',

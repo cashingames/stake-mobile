@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Text, View, Image, ScrollView, Pressable, ActivityIndicator, ImageBackground, Dimensions, Alert } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, ActivityIndicator, ImageBackground, Dimensions, Alert, Platform } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
@@ -223,7 +223,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           :
           <UniversalBottomSheet
             refBottomSheet={refRBSheet}
-            height={700}
+            height= {Platform.OS === 'ios' ? 820 : 730}
             subComponent={<ChallengeTermsAndConditions onClose={closeTermsSheet} staking={challengeDetails.withStaking} />}
           />
         }

@@ -1,11 +1,11 @@
 const env = process.env.APP_VARIANT;
-const version = "1.0.64"; //Update for every build and publish
+const version = "1.0.66"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
   version: version, //For every publish and build update the version. Update for every publish and new build
-  runtimeVersion: "1.59", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "1.66", //All apps using the same runtime will get the published updates. Generally update for every new build
   orientation: "portrait",
   icon: "./assets/images/adaptive-icon2.png",
   // jsEngine: "hermes",
@@ -55,7 +55,7 @@ export default {
     ]
   },
   ios: {
-    bundleIdentifier: getAppIdentifier(),
+    bundleIdentifier: getIosIdentifier(),
     googleServicesFile: "./GoogleService-Info.plist",
   },
   plugins: [
@@ -69,7 +69,8 @@ export default {
     isProduction: env === 'production' || false,
     isPreview: env === 'preview' || false,
     isStaging: env === "development" || env === "preview",
-    googleClientId: getGoogleAndroidClientId(),
+    googleAndriodClientId: getGoogleAndroidClientId(),
+    googleIosClientId: getGoogleIosClientId(),
     gaTrackingID: getGATrackingID(),
     paystackKey: getPaystackKey(),
     apiBaseUrl: getApiUrl(),
@@ -110,6 +111,19 @@ function getAppIdentifier() {
 
   return `com.cashingames.${identifier}`;
 }
+
+function getIosIdentifier() {
+  var identifier = "cashingames";
+  if (env === "development") {
+    identifier = "dev";
+  } else if (env === "preview") {
+    identifier = "test";
+  }
+
+  return `com.cashinga.${identifier}`;
+}
+
+
 
 // function getSocialLoginClientID() {
 //   var result = "125752028373-mmdihc58hbubpt4obl59875tun5633or.apps.googleusercontent.com";
@@ -173,6 +187,18 @@ function getGoogleAndroidClientId() {
   }
 
   return '520726557605-pmk80q42pnoteo5gp6j2gan93smdv8o7.apps.googleusercontent.com';
+}
+
+function getGoogleIosClientId() {
+  if (env === "development") {
+    return '520726557605-mls5vke3j0t7lhk5a99em1gsvaml8o2a.apps.googleusercontent.com';
+  }
+
+  if (env === "preview") {
+    return '520726557605-snc0m31s1m0c059ktoi6gqk01fkvd17g.apps.googleusercontent.com';
+  }
+
+  return '520726557605-vftmv5ipp71bk5ffi286t4fevfnkfjah.apps.googleusercontent.com';
 }
 
 function getEasProjectId(){

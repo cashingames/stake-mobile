@@ -161,7 +161,7 @@ const InputStakeAmount = ({ balance, stakeAmount, loading, amount, setAmount }) 
         <View
             style={styles.stakeAmountContainer}
         >
-            <UserWalletBalance balance={balance} style={styles.walletContainer} />
+            <UserWalletBalance balance={balance} style={styles.walletContainer} textstyle={styles.walletText} />
             <View style={styles.fundContainer}
             >
                 <Input
@@ -228,6 +228,9 @@ const styles = EStyleSheet.create({
         backgroundColor: '#301934',
         color: "#FFFF",
         marginHorizontal: normalize(18),
+    },
+    walletText: {
+        color: "#FFFF",
     },
     fundContainer: {
         borderBottomColor: 'rgba(0, 0, 0, 0.1)',

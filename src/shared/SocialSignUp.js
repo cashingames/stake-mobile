@@ -93,8 +93,8 @@ export default function SocialSignUp({googleText}) {
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         // expoClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
-        // iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
-        androidClientId: Constants.manifest.extra.googleClientId,
+        iosClientId: Constants.manifest.extra.googleIosClientId,
+        androidClientId: Constants.manifest.extra.googleAndriodClientId,
         webClientId: '520726557605-ckaa4jojbac8mgpir7ta7cnngqmuodm0.apps.googleusercontent.com',
     });
 
