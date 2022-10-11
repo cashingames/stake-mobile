@@ -211,8 +211,8 @@ export const getUserNotifications = createAsyncThunk(
     'auth/getUserNotifications',
     async (data, thunkAPI) => {
         //make a network request to the server
-        const response = await axios.get('v3/notifications/', data)
-        // console.log(response.data.data.data)
+        const response = await axios.get('v3/notifications')
+        // console.log(response.data)
         return response.data;
     }
 )

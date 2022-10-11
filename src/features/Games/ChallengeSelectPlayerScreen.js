@@ -186,7 +186,10 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                     <UniversalBottomSheet
                         refBottomSheet={refRBSheet}
                         height={445}
-                        subComponent={<ChallengeStakingBottomSheet stakeCash={stakeCash} />}
+                        subComponent={<ChallengeStakingBottomSheet
+                            stakeCash={stakeCash}
+                            sendInvite={sendInvite}
+                        />}
                     />
                 }
             </ScrollView>

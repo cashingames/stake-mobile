@@ -14,7 +14,7 @@ import moment from "moment";
 const NotificationsScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector(state => state.auth.user)
-    console.log(user)
+    // console.log(user)
 
     const notifications = useSelector(state => state.auth.userNotifications)
     console.log(notifications)

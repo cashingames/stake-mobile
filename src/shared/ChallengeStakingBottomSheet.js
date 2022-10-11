@@ -9,7 +9,7 @@ import UniversalBottomSheet from "./UniversalBottomSheet";
 import ChallengeInviteSuccessText from "./ChallengeInviteSuccessText";
 
 
-const ChallengeStakingBottomSheet = ({ stakeCash}) => {
+const ChallengeStakingBottomSheet = ({ stakeCash, sendInvite}) => {
     const navigation = useNavigation();
     const refRBSheet = useRef();
 
@@ -22,6 +22,7 @@ const ChallengeStakingBottomSheet = ({ stakeCash}) => {
     }
 
     const proceedWithoutStaking = () => {
+        sendInvite()
         openBottomSheet()
     }
     return (
