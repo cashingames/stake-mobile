@@ -15,6 +15,7 @@ import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { debounce } from 'lodash';
 import { useCallback } from 'react';
 import analytics from '@react-native-firebase/analytics';
+import ChallengeStakingBottomSheet from '../../shared/ChallengeStakingBottomSheet';
 
 
 export default function ChallengeSelectPlayerScreen({ navigation }) {
@@ -40,6 +41,9 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         refRBSheet.current.close()
         navigation.navigate('Home')
     }
+    const closeStakeBottomSheet = () => {
+        refRBSheet.current.close()
+    }
 
 
     const sendInvite = () => {
@@ -52,7 +56,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
             .then(unwrapResult)
             .then(async result => {
                 openBottomSheet()
-                await analytics().logEvent("challenge_initiated", {
+                await analytics().logEvent("challenge_invite_sent_without_staking", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email
@@ -63,6 +67,16 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                 Alert.alert(rejectedValueOrSerializedError.message)
             });
         setSending(false)
+    }
+
+    const initiateChallengeStaking = async () => {
+        setSending(false)
+        openBottomSheet()
+        await analytics().logEvent("challenge_staking_option", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
     }
 
     useEffect(() => {
@@ -112,6 +126,16 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         setSearching(false)
     }
 
+    const stakeCash = async () => {
+        closeStakeBottomSheet();
+        await analytics().logEvent("challenge_staking_initiated", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('ChallengeStaking', { selectedOpponents: selectedOpponents })
+    }
+
 
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
@@ -138,7 +162,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                 </View>
 
                 <View style={styles.boards}>
-                <Text style={styles.note}>Note: You can select up to 3 friends at a time</Text>
+                    <Text style={styles.note}>Note: You can select up to 3 friends at a time</Text>
                     {noDATA ?
                         <Text style={styles.noDataText}>No Data</Text>
                         :
@@ -152,14 +176,21 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                         </>
                     }
                 </View>
-                <UniversalBottomSheet
-                    refBottomSheet={refRBSheet}
-                    height={450}
-                    subComponent={<ChallengeInviteSuccessText onClose={closeBottomSheet} />}
-                />
-
+                {selectedOpponents.length > 1 ?
+                    <UniversalBottomSheet
+                        refBottomSheet={refRBSheet}
+                        height={445}
+                        subComponent={<ChallengeInviteSuccessText onClose={closeBottomSheet} />}
+                    />
+                    :
+                    <UniversalBottomSheet
+                        refBottomSheet={refRBSheet}
+                        height={445}
+                        subComponent={<ChallengeStakingBottomSheet stakeCash={stakeCash} />}
+                    />
+                }
             </ScrollView>
-            <SendInviteButton onPress={sendInvite} disabled={!selectedOpponents || !sending} />
+            <SendInviteButton onPress={selectedOpponents.length > 1 ? sendInvite : initiateChallengeStaking} disabled={!selectedOpponents || !sending} />
         </View>
     );
 }
@@ -180,6 +211,7 @@ const FriendDetails = ({ userFriend, onSelect, isSelected }) => {
                 <Image
                     source={isTrue(userFriend.avatar) ? { uri: userFriend.avatar } : require("../../../assets/images/user-icon.png")}
                     style={styles.avatar}
+
                 />
                 <Text style={[styles.friendName, isSelected ? { color: "#FFFF" } : {}]}>{userFriend.username}</Text>
             </View>
@@ -236,8 +268,8 @@ const styles = EStyleSheet.create({
         color: '#000000',
         // textAlign: 'center',
         alignItems: 'center',
-        marginBottom:'1rem',
-        opacity:0.7
+        marginBottom: '1rem',
+        opacity: 0.7
     },
     icon: {
         opacity: 0.4,
@@ -337,6 +369,6 @@ const styles = EStyleSheet.create({
     },
     disabled: {
         backgroundColor: '#DFCBCF'
-    }
+    },
 
 });

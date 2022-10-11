@@ -4,9 +4,9 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import normalize, { responsiveScreenWidth } from "../utils/normalize";
 import { formatCurrency } from "../utils/stringUtl";
 
-const UserWalletBalance = ({ balance }) => {
+const UserWalletBalance = ({ balance, style}) => {
     return (
-        <Text style={styles.availableAmount}>
+        <Text style={[styles.availableAmount, style]}>
             Wallet Balance: &#8358;{formatCurrency(balance)}
         </Text>
     );

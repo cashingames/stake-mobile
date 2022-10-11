@@ -4,12 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from "react-native-extended-stylesheet";
-import GoToStore from '../../shared/GoToStore';
 import { startGame, setIsPlayingTrivia, startChallengeGame } from "./GameSlice";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import AppButton from './../../shared/AppButton';
-import UserAvailableBoost from "../../shared/UserAvailableBoost";
 import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import analytics from '@react-native-firebase/analytics';
@@ -60,8 +58,9 @@ export default function GameInstructionsScreen({ navigation }) {
     <View style={styles.container}>
       <ScrollView>
         {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
-        {gameMode.name === "CHALLENGE" && <ChallengeInstructions />}
-        {isStakingFeatureEnabled && gameMode.name !== "CHALLENGE" &&
+        {/* {gameMode.name === "CHALLENGE" && <ChallengeInstructions />} */}
+        {/* {isStakingFeatureEnabled && gameMode.name !== "CHALLENGE" && */}
+        {isStakingFeatureEnabled &&
           <ExhibitionStakeAmount onPress={gotoStaking} />
         }
         <UniversalBottomSheet
@@ -70,7 +69,8 @@ export default function GameInstructionsScreen({ navigation }) {
           subComponent={<AvailableBoosts onClose={closeBottomSheet} user={user} />}
         />
       </ScrollView>
-      {isStakingFeatureEnabled && gameMode.name !== "CHALLENGE" ?
+      {/* {isStakingFeatureEnabled && gameMode.name !== "CHALLENGE" ? */}
+      {isStakingFeatureEnabled ?
         <StakingButtons onPress={gotoStaking} onPressProceed={openBottomSheet} />
         :
         <AppButton
@@ -112,33 +112,33 @@ const ExhibitionInstructions = () => {
   )
 };
 
-const ChallengeInstructions = () => {
-  return (
-    <>
-      <Text style={styles.instructionHeader}>Ready to start winning? Let’s get started
-        by reading the following instructions carefully.
-      </Text>
-      <View style={styles.instruction}>
-        <Text style={styles.unicode}>{'\u0031'}.</Text>
-        <Text style={styles.instructionText}>There are 10 questions per session.
-          You are required to answer these 10 questions in 60 seconds</Text>
-      </View>
-      <View style={styles.instruction}>
-        <Text style={styles.unicode}>{'\u0032'}.</Text>
-        <Text style={styles.instructionText}>Click on the “Next” button after answering each question to
-          progress to the next question. You can also see your competitor’s progress
-          opposite yours on the upper right corner of your screen.
-        </Text>
-      </View>
-      <View style={styles.instruction}>
-        <Text style={styles.unicode}>{'\u0033'}.</Text>
-        <Text style={styles.instructionText}>At the end of the session, you will see
-          your total score against that of your competitor.
-        </Text>
-      </View>
-    </>
-  )
-};
+// const ChallengeInstructions = () => {
+//   return (
+//     <>
+//       <Text style={styles.instructionHeader}>Ready to start winning? Let’s get started
+//         by reading the following instructions carefully.
+//       </Text>
+//       <View style={styles.instruction}>
+//         <Text style={styles.unicode}>{'\u0031'}.</Text>
+//         <Text style={styles.instructionText}>There are 10 questions per session.
+//           You are required to answer these 10 questions in 60 seconds</Text>
+//       </View>
+//       <View style={styles.instruction}>
+//         <Text style={styles.unicode}>{'\u0032'}.</Text>
+//         <Text style={styles.instructionText}>Click on the “Next” button after answering each question to
+//           progress to the next question. You can also see your competitor’s progress
+//           opposite yours on the upper right corner of your screen.
+//         </Text>
+//       </View>
+//       <View style={styles.instruction}>
+//         <Text style={styles.unicode}>{'\u0033'}.</Text>
+//         <Text style={styles.instructionText}>At the end of the session, you will see
+//           your total score against that of your competitor.
+//         </Text>
+//       </View>
+//     </>
+//   )
+// };
 
 
 const AvailableBoosts = ({ onClose, user }) => {
@@ -149,9 +149,9 @@ const AvailableBoosts = ({ onClose, user }) => {
   const gameTypeId = useSelector(state => state.game.gameType.id);
   const gameModeId = useSelector(state => state.game.gameMode.id);
   const gameMode = useSelector(state => state.game.gameMode);
-  const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
-  const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
-  const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
+  // const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
+  // const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
+  // const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
   const [loading, setLoading] = useState(false);
 
 
@@ -191,47 +191,48 @@ const AvailableBoosts = ({ onClose, user }) => {
       });
   }
 
-  const startChallenge = () => {
-    setLoading(true);
-    dispatch(startChallengeGame({
-      category: challengeCategory,
-      type: gameTypeId,
-      challenge_id: challengeId
-    }))
-      .then(unwrapResult)
-      .then(result => {
-        dispatch(logActionToServer({
-          message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
-          data: result.data.questions
-        }))
-          .then(unwrapResult)
-          .then(async result => {
-            await analytics().logEvent("challenge_start_game", {
-              action: "initiate",
-              'id': user.username,
-              'phone_number': user.phoneNumber,
-              'email': user.email
-            })
-            // console.log('Action logged to server');
-          })
-          .catch(() => {
-            // console.log('failed to log to server');
-          });
-        setLoading(false);
-        onClose();
-        navigation.navigate("ChallengeGameInProgress")
-      })
-      .catch((rejectedValueOrSerializedError) => {
-        Alert.alert('Failed to start game')
-        setLoading(false);
-      });
-  }
+  // const startChallenge = () => {
+  //   setLoading(true);
+  //   dispatch(startChallengeGame({
+  //     category: challengeCategory,
+  //     type: gameTypeId,
+  //     challenge_id: challengeId
+  //   }))
+  //     .then(unwrapResult)
+  //     .then(result => {
+  //       dispatch(logActionToServer({
+  //         message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
+  //         data: result.data.questions
+  //       }))
+  //         .then(unwrapResult)
+  //         .then(async result => {
+  //           await analytics().logEvent("challenge_start_game", {
+  //             action: "initiate",
+  //             'id': user.username,
+  //             'phone_number': user.phoneNumber,
+  //             'email': user.email
+  //           })
+  //           // console.log('Action logged to server');
+  //         })
+  //         .catch(() => {
+  //           // console.log('failed to log to server');
+  //         });
+  //       setLoading(false);
+  //       onClose();
+  //       navigation.navigate("ChallengeGameInProgress")
+  //     })
+  //     .catch((rejectedValueOrSerializedError) => {
+  //       Alert.alert('Failed to start game')
+  //       setLoading(false);
+  //     });
+  // }
 
 
   return (
     <ExhibitionUserAvailableBoosts gameMode={gameMode}
       boosts={boosts} onStartGame={onStartGame}
-      startChallenge={startChallenge} loading={loading}
+      // startChallenge={startChallenge} 
+      loading={loading}
       onClose={onClose}
     />
   )
