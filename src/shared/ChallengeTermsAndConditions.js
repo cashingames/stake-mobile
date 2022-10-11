@@ -6,7 +6,7 @@ import normalize, { responsiveScreenWidth } from "../utils/normalize";
 import AppButton from "./AppButton";
 
 
-const ChallengeTermsAndConditions = ({ onClose, staking }) => {
+const ChallengeTermsAndConditions = ({ onClose, staking, finalStakingWinAmount, amountStaked }) => {
     const periodBeforeChallengeStakingExpiry = useSelector(state => state.common.periodBeforeChallengeStakingExpiry);
 
     return (
@@ -37,15 +37,20 @@ const ChallengeTermsAndConditions = ({ onClose, staking }) => {
                     <Text style={styles.TermsHeader}>Terms and Conditions</Text>
                     <View style={styles.instruction}>
                         <Text style={styles.unicode}>{'\u0031'}.</Text>
-                        <Text style={styles.instructionText}>If this challenge is not accepted in {periodBeforeChallengeStakingExpiry},
-                            amount staked by the challenger would be returned to his wallet balance and the challenge
-                            would be automatically cancelled
+                        <Text style={styles.instructionText}>
+                            If you do not accept this challenge in {periodBeforeChallengeStakingExpiry}, your opponent will be refunded and the challenge will be canceled.
                         </Text>
                     </View>
                     <View style={styles.instruction}>
                         <Text style={styles.unicode}>{'\u0032'}.</Text>
-                        <Text style={styles.instructionText}>If this challenge ends as a draw, the challenger and
-                            the opponent would be credited individually with the amount staked
+                        <Text style={styles.instructionText}>
+                            This challenge is a winner-take-all challenge. The winner of the challenge wins {finalStakingWinAmount} naira.
+                        </Text>
+                    </View>
+                    <View style={styles.instruction}>
+                        <Text style={styles.unicode}>{'\u0033'}.</Text>
+                        <Text style={styles.instructionText}>If this challenge ends in a draw, the challenger and
+                            the opponent would be credited individually with the amount staked ({amountStaked} naira)
                         </Text>
                     </View>
                 </View>

@@ -224,7 +224,12 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           <UniversalBottomSheet
             refBottomSheet={refRBSheet}
             height= {Platform.OS === 'ios' ? 820 : 730}
-            subComponent={<ChallengeTermsAndConditions onClose={closeTermsSheet} staking={challengeDetails.withStaking} />}
+            subComponent={<ChallengeTermsAndConditions 
+              onClose={closeTermsSheet} 
+              staking={challengeDetails.withStaking}
+              finalStakingWinAmount = {challengeDetails.finalStakingWinAmount}
+              amountStaked={challengeDetails.stakingAmount}
+               />}
           />
         }
       </ScrollView>
