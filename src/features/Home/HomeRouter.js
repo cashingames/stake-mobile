@@ -258,16 +258,17 @@ const styles = EStyleSheet.create({
         borderWidth: 2,
         borderColor: 'white',
         borderRadius: 100,
-        width: normalize(19),
-        height: normalize(19),
+        width: normalize(22),
+        height: normalize(22),
+        padding: '.1.5rem'
     },
     number: {
         textAlign: 'center',
         alignItems: 'center',
         color: '#FFFF',
         fontFamily: 'graphik-bold',
-        fontSize: Platform.OS === 'ios' ? '0.6rem' : '0.6rem',
-        marginTop: normalize(1)
+        fontSize: Platform.OS === 'ios' ? '0.6rem' : '0.55rem',
+        marginTop: Platform.OS === 'ios' ? normalize(3) : normalize(.5),
     },
     logoutText: {
         color: '#EF2F5F',
@@ -360,8 +361,9 @@ const drawStyles = EStyleSheet.create({
         borderWidth: 2,
         borderColor: 'white',
         borderRadius: 100,
-        width: normalize(25),
-        height: normalize(25),
+        width: normalize(26),
+        height: normalize(26),
+        padding: '.1.5rem'
     },
     number: {
         textAlign: 'center',
@@ -369,7 +371,7 @@ const drawStyles = EStyleSheet.create({
         color: '#FFFF',
         fontFamily: 'graphik-bold',
         fontSize: Platform.OS === 'ios' ? '0.6rem' : '0.6rem',
-        marginTop: '.1rem'
+        marginTop: Platform.OS === 'ios' ? '.3rem' : '.081rem',
     },
     notificationCount: {
         flexDirection: 'row'
