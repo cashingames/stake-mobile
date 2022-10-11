@@ -223,7 +223,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           :
           <UniversalBottomSheet
             refBottomSheet={refRBSheet}
-            height= {Platform.OS === 'ios' ? 820 : 730}
+            height= {Platform.OS === 'ios' ? 820 : 800}
             subComponent={<ChallengeTermsAndConditions 
               onClose={closeTermsSheet} 
               staking={challengeDetails.withStaking}
