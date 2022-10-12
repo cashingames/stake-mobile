@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar, Platform } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
@@ -149,7 +149,7 @@ const UserDetails = ({ user, trivia }) => {
             <UserWallet balance={user.walletBalance} />
             <LiveTriviaCard trivia={trivia} />
             <UserPoints points={user.points} todaysPoints={user.todaysPoints} />
-            <UserItems showBuy={true} />
+            <UserItems showBuy={Platform.OS === 'ios' ? false : true} />
             {/* <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} /> */}
         </View>
     );

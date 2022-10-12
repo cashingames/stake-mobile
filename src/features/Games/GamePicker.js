@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Animated from 'react-native-reanimated';
-import { Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import AppButton from '../../shared/AppButton';
@@ -22,10 +22,8 @@ export default ({ title, initialShowPlayButton = true }) => {
     const navigation = useNavigation();
     const refRBSheet = useRef();
     const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
-    // console.log(currentGame)
     const [activeCategory, setActiveCategory] = useState();
     const activeSubcategory = useSelector(state => state.game.gameCategory);
-    // console.log(activeSubcategory)
     const activeGame = useSelector(state => state.game.gameType);
     const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
 
@@ -94,15 +92,13 @@ export default ({ title, initialShowPlayButton = true }) => {
                     <AppButton text='Proceed to Play' onPress={onPlayButtonClick} disabled={!isTrue(activeSubcategory)} />
                 </Animated.View>
             }
-
             <UniversalBottomSheet
                 refBottomSheet={refRBSheet}
-                height={300}
+				height={Platform.OS === 'ios' ? 400 : 350}
                 subComponent={<NoGame
                     onClose={closeBottomSheet}
                 />}
             />
-
         </>
 
     )
