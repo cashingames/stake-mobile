@@ -166,7 +166,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                 </View>
 
                 <View style={styles.boards}>
-                    <Text style={styles.note}>Note: You can select up to 3 friends at a time</Text>
+                    {/* <Text style={styles.note}>Note: You can select up to 3 friends at a time</Text> */}
                     {noDATA ?
                         <Text style={styles.noDataText}>No Data</Text>
                         :
