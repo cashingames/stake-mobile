@@ -73,6 +73,28 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         setSending(false)
     }
 
+    const sendWithoutStaking = () => {
+        setSending(false)
+        dispatch(sendFriendInvite({
+            opponentId: selectedOpponent.id,
+            categoryId: activeCategory.id
+        }
+        ))
+            .then(unwrapResult)
+            .then(async result => {
+                await analytics().logEvent("challenge_invite_sent_without_staking", {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
+                })
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                setSending(true)
+                Alert.alert(rejectedValueOrSerializedError.message)
+            });
+        setSending(false)
+    }
+
     const initiateChallengeStaking = async () => {
         setSending(false)
         openBottomSheet()
@@ -187,7 +209,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                         height={445}
                         subComponent={<ChallengeStakingBottomSheet
                             stakeCash={stakeCash}
-                            sendInvite={sendInvite}
+                            sendInvite={sendWithoutStaking}
                         />}
                     />
                     :

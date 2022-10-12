@@ -13,14 +13,12 @@ const ChallengeStakingBottomSheet = ({ stakeCash, sendInvite}) => {
     const navigation = useNavigation();
     const refRBSheet = useRef();
 
-    const openBottomSheet = () => {
-        refRBSheet.current.open()
-    }
-
     const closeBottomSheet = () => {
         refRBSheet.current.close()
     }
-
+    const openBottomSheet = () => {
+        refRBSheet.current.open()
+    }
     const proceedWithoutStaking = () => {
         sendInvite()
         openBottomSheet()
