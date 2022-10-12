@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useNavigation } from '@react-navigation/core';
-import { Image, Pressable, ScrollView, Text, View } from 'react-native';
+import { Image, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
@@ -77,7 +77,7 @@ const RightButtons = () => {
                 <Ionicons name='home-outline' size={26} />
                 <Text style={styles.headerIconText}>Home</Text>
             </Pressable>
-            <Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
+            < Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
                 <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
             </Pressable>
@@ -103,7 +103,7 @@ const RightButtons = () => {
                 />
                 <Text style={styles.headerIconText}>How to win</Text>
             </Pressable> */}
-        </View>
+        </View >
     )
 }
 
@@ -176,18 +176,21 @@ function CustomDrawerContent(props) {
                         style={drawStyles.label}
                         labelContainerStyle
                     />
-
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Store</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('GameStore')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
+                    {Platform.OS === 'ios' ?
+                        <></>
+                        :
+                        <DrawerItem
+                            label={() =>
+                                <View style={drawStyles.item}>
+                                    <Text style={drawStyles.itemLabel}>Store</Text>
+                                    <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                </View>}
+                            onPress={() => navigation.navigate('GameStore')}
+                            activeTintColor='#EF2F55'
+                            style={drawStyles.label}
+                            labelContainerStyle
+                        />
+                    }
                     <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar, Platform } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -157,7 +157,7 @@ export default function GameEndResultScreen({ navigation }) {
 			</View>
 			<UniversalBottomSheet
 				refBottomSheet={refRBSheet}
-				height={300}
+				height={Platform.OS === 'ios' ? 400 : 350}
 				subComponent={<NoGame onClose={closeBottomSheet} />}
 			/>
 		</ScrollView>

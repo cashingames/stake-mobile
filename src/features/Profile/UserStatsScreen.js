@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, Platform } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from 'react-redux';
 import normalize from '../../utils/normalize';
@@ -29,7 +29,7 @@ export default function UserStatsScreen({ navigation }) {
                 winRate={user.winRate}
                 challengesPlayed={user.totalChallenges}
             />
-            <UserItems showBuy={true} />
+            <UserItems showBuy={Platform.OS === 'ios' ? false : true} />
         </ScrollView>
     );
 }
