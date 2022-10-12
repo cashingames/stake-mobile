@@ -31,7 +31,7 @@ const NoGame = ({ onClose }) => {
                 <Text style={styles.noGamesText}>You have exhausted your games</Text>
             }
             {Platform.OS === 'ios' ?
-                <Text style={styles.noGamesText}>Please come back tomorrow and you would be rewarded with free games</Text>
+                <Text style={styles.noGamesText}>Please come back tomorrow and you will be rewarded with free games</Text>
                 :
                 <></>
             }
