@@ -76,7 +76,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
         'id': user.username,
         'phone_number': user.phoneNumber,
         'email': user.email
-    });
+      });
       openBottomSheet();
       setClicking(false);
       return
@@ -214,7 +214,9 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           }
           <ResultContainer playerScore={challengeScores} />
         </>
-        {Number.parseFloat(user.walletBalance) < Number.parseFloat(challengeDetails.stakingAmount) ?
+        {Number.parseFloat(user.walletBalance) < Number.parseFloat(challengeDetails.stakingAmount) &&
+          challengeScores.challengerStatus !== "COMPLETED" &&
+          challengeScores.opponentStatus !== "COMPLETED" ?
           <UniversalBottomSheet
             refBottomSheet={refRBSheet}
             height={620}
@@ -223,13 +225,13 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           :
           <UniversalBottomSheet
             refBottomSheet={refRBSheet}
-            height= {Platform.OS === 'ios' ? 820 : 800}
-            subComponent={<ChallengeTermsAndConditions 
-              onClose={closeTermsSheet} 
+            height={Platform.OS === 'ios' ? 820 : 800}
+            subComponent={<ChallengeTermsAndConditions
+              onClose={closeTermsSheet}
               staking={challengeDetails.withStaking}
-              finalStakingWinAmount = {challengeDetails.finalStakingWinAmount}
+              finalStakingWinAmount={challengeDetails.finalStakingWinAmount}
               amountStaked={challengeDetails.stakingAmount}
-               />}
+            />}
           />
         }
       </ScrollView>
