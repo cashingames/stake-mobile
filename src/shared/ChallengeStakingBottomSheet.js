@@ -38,7 +38,7 @@ const ChallengeStakingBottomSheet = ({ stakeCash, sendInvite}) => {
             </View>
             <View style={styles.selectButtons}>
                 <AppButton text='Stake Cash' onPress={stakeCash} style={styles.stakeButton} />
-                <AppButton text='Proceed' onPress={proceedWithoutStaking} style={styles.proceedButton} textStyle={styles.proceedText} />
+                <AppButton text='Play for Free' onPress={proceedWithoutStaking} style={styles.proceedButton} textStyle={styles.proceedText} />
             </View>
             <UniversalBottomSheet
                 refBottomSheet={refRBSheet}

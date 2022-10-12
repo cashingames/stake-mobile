@@ -135,7 +135,7 @@ let initialState = {
     isEnded: true,
     displayedOptions: [],
     displayedQuestion: {},
-    selectedFriend: [],
+    selectedFriend: null,
     isPlayingTrivia: false,
     triviaLeaders: [],
     triviaPosition: '',
@@ -169,20 +169,11 @@ export const GameSlice = createSlice({
             state.gameMode = action.payload;
         },
         setSelectedFriend: (state, action) => {
-            const friendExist = state.selectedFriend.findIndex(opponent => opponent.id === action.payload.id)
-            if (friendExist === -1) {
-                if (state.selectedFriend.length < 3) {
-                    state.selectedFriend.push(action.payload)
-
-                } else {
-                    alert("You have added maximum number of friends you can challenge at a time")
-                }
-            } else {
-                state.selectedFriend.splice(friendExist, 1)
-            }
+            // console.log("seeting")
+            state.selectedFriend = action.payload;
         },
         unselectFriend: (state) => {
-            state.selectedFriend = [];
+            state.selectedFriend = null;
         },
         setGameDuration: (state, action) => {
             state.gameDuration = action.payload;

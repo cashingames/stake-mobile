@@ -25,13 +25,17 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const [loading, setLoading] = useState(true)
     const activeCategory = useSelector(state => state.game.gameCategory);
     const userFriends = useSelector(state => state.common.userFriends);
-    const selectedOpponents = useSelector(state => state.game.selectedFriend);
+    const selectedOpponent = useSelector(state => state.game.selectedFriend);
     const user = useSelector(state => state.auth.user)
     const [search, setSearch] = useState("");
     const [searching, setSearching] = useState(false);
     const [sending, setSending] = useState(false)
     const [noDATA, setNoData] = useState(false)
     const [calltimes, setCallTimes] = useState(0);
+    const features = useSelector(state => state.common.featureFlags);
+
+    const isChallengeStakingFeatureEnabled = features['challenge_game_staking'] !== undefined && features['challenge_game_staking'].enabled == true;
+
 
     const openBottomSheet = () => {
         refRBSheet.current.open()
@@ -49,7 +53,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const sendInvite = () => {
         setSending(false)
         dispatch(sendFriendInvite({
-            opponentId: selectedOpponents.map(opponent => opponent.id),
+            opponentId: selectedOpponent.id,
             categoryId: activeCategory.id
         }
         ))
@@ -133,7 +137,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
             'phone_number': user.phoneNumber,
             'email': user.email
         })
-        navigation.navigate('ChallengeStaking', { selectedOpponents: selectedOpponents })
+        navigation.navigate('ChallengeStaking', { selectedOpponent: selectedOpponent })
     }
 
 
@@ -167,22 +171,17 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                         <Text style={styles.noDataText}>No Data</Text>
                         :
                         <>
+
                             {
                                 userFriends.map((userFriend, i) => <FriendDetails key={i} userFriend={userFriend}
-                                    isSelected={selectedOpponents !== null && selectedOpponents.findIndex(opponent => opponent.id === userFriend.id) !== -1}
+                                    isSelected={userFriend.id === selectedOpponent?.id}
                                     onSelect={onSelectedFriend}
                                 />)
                             }
                         </>
                     }
                 </View>
-                {selectedOpponents.length > 1 ?
-                    <UniversalBottomSheet
-                        refBottomSheet={refRBSheet}
-                        height={445}
-                        subComponent={<ChallengeInviteSuccessText onClose={closeBottomSheet} />}
-                    />
-                    :
+                {isChallengeStakingFeatureEnabled ?
                     <UniversalBottomSheet
                         refBottomSheet={refRBSheet}
                         height={445}
@@ -191,9 +190,16 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                             sendInvite={sendInvite}
                         />}
                     />
+                    :
+                    <UniversalBottomSheet
+                        refBottomSheet={refRBSheet}
+                        height={445}
+                        subComponent={<ChallengeInviteSuccessText onClose={closeBottomSheet} />}
+                    />
                 }
             </ScrollView>
-            <SendInviteButton onPress={selectedOpponents.length > 1 ? sendInvite : initiateChallengeStaking} disabled={!selectedOpponents || !sending} />
+            <SendInviteButton onPress={isChallengeStakingFeatureEnabled ? initiateChallengeStaking : sendInvite} disabled={!selectedOpponent || !sending} />
+            {/* <SendInviteButton onPress={selectedOpponents.length > 1 ? sendInvite : initiateChallengeStaking} disabled={!selectedOpponents || !sending} /> */}
         </View>
     );
 }

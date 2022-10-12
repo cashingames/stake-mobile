@@ -67,7 +67,7 @@ const ChallengeStakingScreen = ({ navigation, route }) => {
             return false;
         }
         dispatch(sendFriendInvite({
-            opponentId: params.selectedOpponents.map(opponent => opponent.id),
+            opponentId: params.selectedOpponent.id,
             categoryId: activeCategory.id,
             staking_amount: amount
         }
@@ -98,7 +98,7 @@ const ChallengeStakingScreen = ({ navigation, route }) => {
             >
                 <ScrollView style={styles.container}>
 
-                    <SelectedPlayers challengeDetails={params.selectedOpponents[0]} user={user} />
+                    <SelectedPlayers challengeDetails={params.selectedOpponent} user={user} />
                     <InputStakeAmount balance={user.walletBalance}
                         stakeAmount={stakeAmount}
                         loading={loading}
