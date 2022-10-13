@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar, Platform } from 'react-native';
+import { Text, View, Image, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
@@ -24,6 +24,10 @@ import GamePicker from '../Games/GamePicker';
 import LottieAnimations from '../../shared/LottieAnimations';
 import SelectGameMode from '../Games/SelectGameMode';
 
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 const HomeScreen = () => {
 
     const dispatch = useDispatch();
@@ -32,11 +36,17 @@ const HomeScreen = () => {
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
     const trivia = useSelector(state => state.liveTrivia.data);
-    
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
+
 
 
     useEffect(() => {
-        
+
 
         const _1 = dispatch(getUser());
         const _2 = dispatch(getCommonData());
@@ -45,7 +55,7 @@ const HomeScreen = () => {
         Promise.all([_1, _2, _3]).then(() => {
             dispatch(initialLoadingComplete());
         });
-        
+
         // dispatch(getUser())
         // dispatch(getCommonData())
 
@@ -130,13 +140,23 @@ const HomeScreen = () => {
     }
 
     return (
-        <ScrollView contentContainerStyle={styles.scrollView}>
-            <UserDetails user={user} trivia={trivia} />
-            <View style={styles.container}>
-                <SelectGameMode />
-                <GlobalTopLeadersHero />
-            </View>
-        </ScrollView>
+        <View style={styles.headContainer}>
+            <ScrollView contentContainerStyle={styles.scrollView}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        tintColor="#000000"
+                    />
+                }
+            >
+                <UserDetails user={user} trivia={trivia} />
+                <View style={styles.container}>
+                    <SelectGameMode />
+                    <GlobalTopLeadersHero />
+                </View>
+            </ScrollView>
+        </View>
     );
 }
 
@@ -205,9 +225,13 @@ const UserPoints = ({ points, todaysPoints }) => {
 
 
 const styles = EStyleSheet.create({
+    headContainer: {
+        backgroundColor: '#FAC502',
+    },
     scrollView: {
         paddingBottom: normalize(30),
         backgroundColor: '#FFFF',
+
     },
     container: {
         flex: 1,

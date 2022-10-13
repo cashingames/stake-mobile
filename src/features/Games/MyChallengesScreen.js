@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, ScrollView, Pressable, StatusBar } from 'react-native';
+import { Text, View, ScrollView, Pressable, StatusBar, RefreshControl } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
@@ -10,22 +10,29 @@ import PageLoading from '../../shared/PageLoading';
 import { getUserChallenges } from '../Auth/AuthSlice';
 
 
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const MyChallengesScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
+    const [refreshing, setRefreshing] = useState(false);
 
     const userChallenges = useSelector(state => state.auth.userChallenges);
     console.log(userChallenges)
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        dispatch(getUserChallenges());
+        wait(2000).then(() => setRefreshing(false));
 
-    useEffect(() => {
-        dispatch(getUserChallenges()).then(() => setLoading(false));
     }, []);
 
     useFocusEffect(
         React.useCallback(() => {
+            dispatch(getUserChallenges()).then(() => setLoading(false));
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
             StatusBar.setBarStyle('light-content');
@@ -48,7 +55,15 @@ const MyChallengesScreen = ({ navigation, route }) => {
 
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container}
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor="#FFFF"
+                />
+            }
+        >
             {userChallenges.length > 0 ?
                 <View>
                     {userChallenges.map((userChallenge, i) => <ChallengeCard

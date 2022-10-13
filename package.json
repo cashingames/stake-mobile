@@ -10,6 +10,8 @@
     "build-dev-i": "eas build --profile development --platform ios",
     "build-dev-local": "eas build --local --profile development --platform android",
     "build": "cross-env APP_VARIANT=preview eas build --platform all --profile preview",
+    "build-a": "cross-env APP_VARIANT=preview eas build --platform android --profile preview",
+    "build-i": "cross-env APP_VARIANT=preview eas build --platform ios --profile preview",
     "publish": "cross-env APP_VARIANT=preview expo publish --release-channel preview",
     "build-prod": "eas build --platform all --profile production",
     "build-prod-a": "eas build --platform android --profile production",
