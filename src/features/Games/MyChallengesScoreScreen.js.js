@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Text, View, Image, ScrollView, Pressable, ActivityIndicator, ImageBackground, Dimensions, Alert, Platform } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, ActivityIndicator, ImageBackground, Dimensions, Alert, Platform, RefreshControl, StatusBar, } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
@@ -18,7 +18,9 @@ import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import LowWalletBalance from '../../shared/LowWalletBalance';
 import ChallengeTermsAndConditions from '../../shared/ChallengeTermsAndConditions';
 
-
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const MyChallengesScoreScreen = ({ navigation, route }) => {
   useApplyHeaderWorkaround(navigation.setOptions);
@@ -26,6 +28,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true)
   const [clicking, setClicking] = useState(false)
   const [showText, setShowText] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const params = route.params;
   const user = useSelector(state => state.auth.user);
   const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
@@ -49,17 +52,21 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
     refRBSheet.current.close()
   }
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(getChallengeScores(params.challengeId))
+    dispatch(getChallengeDetails(params.challengeId))
+    wait(2000).then(() => setRefreshing(false));
+
+  }, []);
+
   useEffect(() => {
+    dispatch(getChallengeDetails(params.challengeId))
     dispatch(getChallengeScores(
       params.challengeId
     )).then(() => setLoading(false));
     dispatch(getUser());
   }, [])
-
-  useEffect(() => {
-    dispatch(getChallengeDetails(params.challengeId)).then(() => setLoading(false)
-    );
-  }, []);
 
   useEffect(() => {
     // Change the state every second or the time given by User.
@@ -177,43 +184,56 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
     <ImageBackground source={require('../../../assets/images/quiz-stage.jpg')}
       style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
       resizeMethod="resize">
-      <ScrollView style={styles.container}>
-        <>
-          <View style={styles.confetti}>
-            {challengeScores.opponentStatus === "COMPLETED" &&
-              challengeScores.challengerStatus === "COMPLETED" &&
-              <LottieAnimations
-                animationView={require('../../../assets/challenge-end.json')}
-                height={normalize(150)}
-              />
-            }
-          </View>
-          <ChallengeMessage playerPoint={challengeScores}
-            user={user}
-            challengeDetails={challengeDetails}
-            showText={showText}
-            amountWon={challengeDetails.finalStakingWinAmount}
+      <ScrollView style={styles.container} contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#FFFF"
           />
-          <ChallengeParticipants player={challengeScores} user={user} />
-          {challengeDetails.withStaking &&
-            user.username === challengeDetails.opponentUsername &&
-            challengeDetails.status === "PENDING" &&
-            challengeScores.opponentStatus !== "COMPLETED" &&
-            <View style={styles.stakeContainer}>
-              <Text style={styles.stakeText}>Accept challenge to stake <Text style={styles.stakeAmount}>&#8358;{formatCurrency(challengeDetails.stakingAmount)}</Text> and stand a chance of winning double of this amount</Text>
-            </View>
-          }
-          {challengeDetails.status === "PENDING" ||
-            challengeScores.opponentStatus !== "COMPLETED" ||
-            challengeScores.challengerStatus !== "COMPLETED" ?
-            <Pressable style={styles.termsContainer} onPress={openBottomSheet}>
-              <Text style={styles.termsText}>Click to view terms and conditions</Text>
-            </Pressable>
+        }
+      >
+        <View style={styles.confetti}>
+          {challengeScores.opponentStatus === "COMPLETED" &&
+            challengeScores.challengerStatus === "COMPLETED" ?
+            <LottieAnimations
+              animationView={require('../../../assets/challenge-end.json')}
+              height={110}
+              style={styles.npendingAvatar}
+            />
             :
-            <></>
+            <LottieAnimations
+              animationView={require('../../../assets/challenge.json')}
+              height={120}
+              style={styles.pendingAvatar}
+            />
           }
-          <ResultContainer playerScore={challengeScores} />
-        </>
+        </View>
+        <ChallengeMessage playerPoint={challengeScores}
+          user={user}
+          challengeDetails={challengeDetails}
+          showText={showText}
+          amountWon={challengeDetails.finalStakingWinAmount}
+        />
+        <ChallengeParticipants player={challengeScores} user={user} />
+        {challengeDetails.withStaking &&
+          user.username === challengeDetails.opponentUsername &&
+          challengeDetails.status === "PENDING" &&
+          challengeScores.opponentStatus !== "COMPLETED" &&
+          <View style={styles.stakeContainer}>
+            <Text style={styles.stakeText}>Accept challenge to stake <Text style={styles.stakeAmount}>&#8358;{formatCurrency(challengeDetails.stakingAmount)}</Text> and stand a chance of winning double of this amount</Text>
+          </View>
+        }
+        {challengeDetails.status === "PENDING" ||
+          challengeScores.opponentStatus !== "COMPLETED" ||
+          challengeScores.challengerStatus !== "COMPLETED" ?
+          <Pressable style={styles.termsContainer} onPress={openBottomSheet}>
+            <Text style={styles.termsText}>Click to view terms and conditions</Text>
+          </Pressable>
+          :
+          <></>
+        }
+        <ResultContainer playerScore={challengeScores} />
         {Number.parseFloat(user.walletBalance) < Number.parseFloat(challengeDetails.stakingAmount) &&
           challengeScores.challengerStatus !== "COMPLETED" &&
           challengeScores.opponentStatus !== "COMPLETED" ?
@@ -223,49 +243,66 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
             subComponent={<LowWalletBalance onClose={closeBottomSheet} />}
           />
           :
-          <UniversalBottomSheet
-            refBottomSheet={refRBSheet}
-            height={Platform.OS === 'ios' ? 820 : 800}
-            subComponent={<ChallengeTermsAndConditions
-              onClose={closeTermsSheet}
-              staking={challengeDetails.withStaking}
-              finalStakingWinAmount={challengeDetails.finalStakingWinAmount}
-              amountStaked={challengeDetails.stakingAmount}
-            />}
-          />
-        }
-      </ScrollView>
-      <View style={styles.subContainer}>
-        {user.username === challengeDetails.opponentUsername &&
           <>
-            {challengeDetails.status === "PENDING" &&
-              challengeScores.opponentStatus === "PENDING" &&
-              challengeScores.opponentStatus !== "COMPLETED" &&
-              <View style={styles.buttonContainer}>
-                <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Accept and Play"} style={styles.acceptButton} onPress={acceptChallengeInivite} />
-                <AppButton text="Decline" textStyle={styles.declineText} style={styles.declineButton} onPress={declineChallengeInivite} />
-              </View>
-              // :
-              // <>
-              //   {
-              //     challengeDetails.status === "ACCEPTED" &&
-              //     challengeScores.opponentStatus !== "COMPLETED" &&
-              //     <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Play"} onPress={challengerPlays} />
-              //   }
-              // </>
+            {challengeDetails.withStaking ?
+              <UniversalBottomSheet
+                refBottomSheet={refRBSheet}
+                height={Platform.OS === 'ios' ? 820 : 800}
+                subComponent={<ChallengeTermsAndConditions
+                  onClose={closeTermsSheet}
+                  staking={challengeDetails.withStaking}
+                  finalStakingWinAmount={challengeDetails.finalStakingWinAmount}
+                  amountStaked={challengeDetails.stakingAmount}
+                />}
+              />
+              :
+              <UniversalBottomSheet
+                refBottomSheet={refRBSheet}
+                height={Platform.OS === 'ios' ? 545 : 460}
+                subComponent={<ChallengeTermsAndConditions
+                  onClose={closeTermsSheet}
+                  staking={challengeDetails.withStaking}
+                  finalStakingWinAmount={challengeDetails.finalStakingWinAmount}
+                  amountStaked={challengeDetails.stakingAmount}
+                />}
+              />
             }
           </>
         }
-        {user.username === challengeDetails.playerUsername &&
-          <>
-            {challengeDetails.status === "ACCEPTED" &&
-              challengeScores.challengerStatus === "PENDING" &&
-              <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Play"} onPress={challengerPlays} />
-            }
-          </>
+        <View style={[styles.subContainer, challengeScores.opponentStatus === "COMPLETED" &&
+          challengeScores.challengerStatus === "COMPLETED" ? styles.complete : styles.incomplete]}>
+          {user.username === challengeDetails.opponentUsername &&
+            <>
+              {challengeDetails.status === "PENDING" &&
+                challengeScores.opponentStatus === "PENDING" &&
+                challengeScores.opponentStatus !== "COMPLETED" &&
+                <View style={styles.buttonContainer}>
+                  <AppButton text="Decline" textStyle={styles.declineText} style={styles.declineButton} onPress={declineChallengeInivite} />
+                  <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Accept and Play"} style={styles.acceptButton} onPress={acceptChallengeInivite} />
+                </View>
+                // :
+                // <>
+                //   {
+                //     challengeDetails.status === "ACCEPTED" &&
+                //     challengeScores.opponentStatus !== "COMPLETED" &&
+                //     <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Play"} onPress={challengerPlays} />
+                //   }
+                // </>
+              }
+            </>
+          }
+          {user.username === challengeDetails.playerUsername &&
+            <>
+              {challengeDetails.status === "ACCEPTED" &&
+                challengeScores.challengerStatus === "PENDING" &&
+                <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Play"} onPress={challengerPlays} />
+              }
+            </>
 
-        }
-      </View>
+          }
+        </View>
+      </ScrollView>
+
     </ImageBackground>
   )
 }
@@ -446,17 +483,29 @@ const OpponentDetails = ({ opponent }) => {
 export default MyChallengesScoreScreen;
 
 const styles = EStyleSheet.create({
-  container: {
-    // flex: 1,
-    paddingHorizontal: normalize(20),
-    paddingTop: responsiveScreenWidth(5),
-  },
-  subContainer: {
-    paddingHorizontal: normalize(20),
-    marginBottom: '2rem',
+  scrollView: {
+    flexDirection: 'column',
+    justifyContent: 'center',
     flex: 1,
   },
+  container: {
+    paddingHorizontal: normalize(20),
+    // paddingTop: responsiveScreenWidth(15),
+    // padding: 'auto'
+  },
+  subContainer: {
+    // paddingHorizontal: normalize(20),
+    // marginBottom: '2rem',
+  },
+  incomplete: {
+    marginBottom: '6rem',
+  },
+  complete: {
+    marginBottom: '2rem',
+  },
+
   confetti: {
+    marginTop: '2rem',
     alignItems: 'center',
   },
   resultContainer: {

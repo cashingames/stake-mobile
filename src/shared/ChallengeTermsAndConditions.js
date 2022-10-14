@@ -66,13 +66,14 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+
     },
     instructionsContainer: {
         backgroundColor: '#fff',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        // paddingVertical: normalize(14),
+        paddingTop: normalize(14),
         paddingHorizontal: normalize(15),
     },
     instruction: {

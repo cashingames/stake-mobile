@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions, Alert, Image } from 'react-native';
+import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions, Alert, Image, RefreshControl } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -14,11 +14,16 @@ import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { withdrawWinnings } from '../CommonSlice';
 
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 export default function WalletScreen() {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     const [withdraw, setWithdraw] = useState(false)
+    const [refreshing, setRefreshing] = useState(false);
+
 
     const refRBSheet = useRef();
 
@@ -30,8 +35,11 @@ export default function WalletScreen() {
         dispatch(getUser());
         refRBSheet.current.close()
     }
-    useEffect(() => {
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
         dispatch(getUser());
+        wait(2000).then(() => setRefreshing(false));
     }, []);
 
     const withdrawBalance = () => {
@@ -66,7 +74,15 @@ export default function WalletScreen() {
         <ImageBackground source={require('../../../assets/images/vector-coin-background.jpg')}
             style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
             resizeMethod="resize">
-            <ScrollView style={styles.container}>
+            <ScrollView style={styles.container}
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor="#FFFF"
+                />
+            }
+            >
                 <WalletBalance balance={user.walletBalance} />
                 <WithdrawableWalletBalance
                     withdrawableBalance={user.withdrawableBalance}
