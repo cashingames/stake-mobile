@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Alert } from 'react-native';
+import { Text, View, ScrollView, Alert, Pressable, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import CountryPicker from "react-native-country-codes-picker";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Input from '../../shared/Input';
+import { Ionicons } from "@expo/vector-icons";
 import { editPersonalDetails, getUser } from '../Auth/AuthSlice';
 import normalize from '../../utils/normalize';
 import { isTrue } from '../../utils/stringUtl';
@@ -32,6 +34,8 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const [dateOfBirth, setDateOfBirth] = useState(isTrue(user.dateOfBirth) ? new Date(Date.parse(user.dateOfBirth)) : new Date(2003, 0, 1));
     const [gender, setGender] = useState(user.gender);
     const [showDatePicker, setShowDatePicker] = useState(false);
+    const [show, setShow] = useState(false);
+    const [countryCode, setCountryCode] = useState('+234');
 
     const onChangeDateOfBirth = (event, selectedDate) => {
         const currentDate = selectedDate || dateOfBirth;
@@ -50,7 +54,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
     }
 
     const onChangePhoneNumber = (text) => {
-        text.length > 0 && text.length < 11 ? setPhoneNumberError(true) : setPhoneNumberError(false);
+        text.length > 0 && text.length < 4 ? setPhoneNumberError(true) : setPhoneNumberError(false);
         setPhoneNumber(text)
     }
 
@@ -118,7 +122,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         onChangeText={text => { onChangeLastName(text) }}
                         error={lastNameErr && '*last name must not be empty'}
                     />
-                    <Input
+                    {/* <Input
                         label='Phone number'
                         value={phoneNumber}
                         onChangeText={text => { onChangePhoneNumber(text) }}
@@ -126,6 +130,48 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         type="phone"
                         maxLength={11}
                         keyboardType='numeric'
+                    /> */}
+
+                    <>
+                        <Text style={styles.inputLabel} >phone number</Text>
+                        <View style={styles.phonePicker}>
+                            <Pressable
+                                onPress={() => setShow(true)}
+                                style={styles.codeButton}
+                                disabled
+                            >
+                                <Text style={styles.countryCodeDigit}>
+                                    {countryCode}
+                                </Text>
+                                <Ionicons name="caret-down-outline" size={14} color="#00000080" />
+                            </Pressable>
+                            <TextInput
+                                style={styles.phoneNumberInput}
+                                value={phoneNumber}
+                                onChangeText={text => { onChangePhoneNumber(text) }}
+                                error={phoneNumberErr && '*input a valid phone number'}
+                                type="phone"
+                                maxLength={12}
+                                keyboardType='numeric'
+                                editable={false}
+
+                            />
+                        </View>
+                    </>
+
+                    <CountryPicker
+                        show={show}
+                        style={{
+                            // Styles for whole modal [View]
+                            modal: {
+                                height: 500,
+                                // backgroundColor: 'red'
+                            },
+                        }}
+                        pickerButtonOnPress={(item) => {
+                            setCountryCode(item.dial_code);
+                            setShow(false);
+                        }}
                     />
                     <View style={styles.detail}>
 
@@ -150,6 +196,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                                 />
                             </>
                         }
+
                         <View style={styles.detail}>
                             <Text style={styles.inputLabel}>Select Gender</Text>
                             <Picker
@@ -219,6 +266,32 @@ const styles = EStyleSheet.create({
     },
     saveButton: {
         marginVertical: 10,
+    },
+    phonePicker: {
+        flexDirection: 'row',
+        height: normalize(38),
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingLeft: normalize(10),
+        paddingRight: normalize(20),
+        borderColor: '#CDD4DF',
+        alignItems: 'center'
+    },
+    phoneNumberInput: {
+        fontFamily: 'graphik-regular',
+        color: '#00000080',
+        fontSize: '0.75rem',
+        marginLeft: '.8rem'
+    },
+    countryCodeDigit: {
+        fontFamily: 'graphik-regular',
+        color: '#00000080',
+        fontSize: '0.75rem',
+    },
+    codeButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderColor: ' rgba(0, 0, 0, 0.1)',
+        borderRightWidth: 1,
     }
-
 });
