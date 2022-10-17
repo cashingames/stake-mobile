@@ -54,7 +54,7 @@ export default function SignupScreen({ navigation }) {
 
     const onNext = () => {
         //save this information in store
-        dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone }));
+        dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone, country_code:countryCode }));
         navigation.navigate("SignupProfile")
     }
 
@@ -111,7 +111,7 @@ export default function SignupScreen({ navigation }) {
                         </Pressable>
                         <TextInput
                             style={styles.phoneNumberInput}
-                            placeholder="080xxxxxxxx"
+                            placeholder="80xxxxxxxx"
                             value={phone}
                             onChangeText={text => onChangePhone(text)}
                             error={phoneErr && '*input a valid phone number'}
@@ -263,7 +263,9 @@ const styles = EStyleSheet.create({
         paddingLeft: normalize(10),
         paddingRight: normalize(20),
         borderColor: '#CDD4DF',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: normalize(15),
+
     },
     phoneNumberInput: {
         fontFamily: 'graphik-regular',
@@ -282,5 +284,11 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         borderColor: ' rgba(0, 0, 0, 0.1)',
         borderRightWidth: 1,
-    }
+    },
+    inputLabel: {
+        fontFamily: 'graphik-medium',
+        color: '#000000B2',
+        fontSize:'0.76rem',
+        marginBottom: normalize(8)
+    },
 });

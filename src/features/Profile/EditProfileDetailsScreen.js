@@ -20,6 +20,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user);
+    console.log(user)
 
     const [saving, setSaving] = useState(false);
     const [email, setEmail] = useState(user.email);
@@ -35,7 +36,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const [gender, setGender] = useState(user.gender);
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [show, setShow] = useState(false);
-    const [countryCode, setCountryCode] = useState('+234');
+    const [countryCode, setCountryCode] = useState(user.countryCode);
 
     const onChangeDateOfBirth = (event, selectedDate) => {
         const currentDate = selectedDate || dateOfBirth;
@@ -69,7 +70,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
         dispatch(editPersonalDetails({
             firstName,
             lastName,
-            phoneNumber,
+            // phoneNumber,
             dateOfBirth,
             gender
         }))
@@ -110,27 +111,6 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         onChangeText={setEmail}
                         editable={false}
                     />
-                    <Input
-                        label='First name'
-                        value={firstName}
-                        onChangeText={text => { onChangeFirstName(text) }}
-                        error={firstNameErr && '*first name must not be empty'}
-                    />
-                    <Input
-                        label='Last name'
-                        value={lastName}
-                        onChangeText={text => { onChangeLastName(text) }}
-                        error={lastNameErr && '*last name must not be empty'}
-                    />
-                    {/* <Input
-                        label='Phone number'
-                        value={phoneNumber}
-                        onChangeText={text => { onChangePhoneNumber(text) }}
-                        error={phoneNumberErr && '*input a valid phone number'}
-                        type="phone"
-                        maxLength={11}
-                        keyboardType='numeric'
-                    /> */}
 
                     <>
                         <Text style={styles.inputLabel} >phone number</Text>
@@ -173,6 +153,30 @@ export default function EditProfileDetailsScreen({ navigation }) {
                             setShow(false);
                         }}
                     />
+
+                    <Input
+                        label='First name'
+                        value={firstName}
+                        onChangeText={text => { onChangeFirstName(text) }}
+                        error={firstNameErr && '*first name must not be empty'}
+                    />
+                    <Input
+                        label='Last name'
+                        value={lastName}
+                        onChangeText={text => { onChangeLastName(text) }}
+                        error={lastNameErr && '*last name must not be empty'}
+                    />
+                    {/* <Input
+                        label='Phone number'
+                        value={phoneNumber}
+                        onChangeText={text => { onChangePhoneNumber(text) }}
+                        error={phoneNumberErr && '*input a valid phone number'}
+                        type="phone"
+                        maxLength={11}
+                        keyboardType='numeric'
+                    /> */}
+
+
                     <View style={styles.detail}>
 
                         {!showDatePicker ?
@@ -270,23 +274,20 @@ const styles = EStyleSheet.create({
     phonePicker: {
         flexDirection: 'row',
         height: normalize(38),
-        borderWidth: 1,
-        borderRadius: 10,
-        paddingLeft: normalize(10),
-        paddingRight: normalize(20),
-        borderColor: '#CDD4DF',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom:'.8rem'
     },
     phoneNumberInput: {
         fontFamily: 'graphik-regular',
         color: '#00000080',
         fontSize: '0.75rem',
-        marginLeft: '.8rem'
+        marginLeft: '.5rem'
     },
     countryCodeDigit: {
         fontFamily: 'graphik-regular',
         color: '#00000080',
         fontSize: '0.75rem',
+        marginRight:'.2rem'
     },
     codeButton: {
         flexDirection: 'row',
