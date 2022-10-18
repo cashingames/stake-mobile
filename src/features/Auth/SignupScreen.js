@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable, TextInput } from 'react-native';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
@@ -14,6 +14,9 @@ import { useDispatch } from 'react-redux';
 import { saveCreatedUserCredentials } from './AuthSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import SocialSignUp from '../../shared/SocialSignUp';
+import { Ionicons } from "@expo/vector-icons";
+import CountryPicker from "react-native-country-codes-picker";
+
 
 export default function SignupScreen({ navigation }) {
 
@@ -28,6 +31,8 @@ export default function SignupScreen({ navigation }) {
     const [emailErr, setEmailError] = useState(false);
     const [phoneErr, setPhoneError] = useState(false);
     const [checked, setChecked] = useState(false);
+    const [show, setShow] = useState(false);
+    const [countryCode, setCountryCode] = useState('+234');
 
     const onChangeEmail = (text) => {
         const rule = /^\S+@\S+\.\S+$/;
@@ -40,7 +45,7 @@ export default function SignupScreen({ navigation }) {
         setPassword(text)
     }
     const onChangePhone = (text) => {
-        text.length > 0 && text.length < 11 ? setPhoneError(true) : setPhoneError(false);
+        text.length > 0 && text.length < 4 ? setPhoneError(true) : setPhoneError(false);
         setPhone(text)
     }
     const onChangeConfirmPassword = (text) => {
@@ -49,7 +54,7 @@ export default function SignupScreen({ navigation }) {
 
     const onNext = () => {
         //save this information in store
-        dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone }));
+        dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone, country_code:countryCode }));
         navigation.navigate("SignupProfile")
     }
 
@@ -83,7 +88,7 @@ export default function SignupScreen({ navigation }) {
                     onChangeText={text => onChangeEmail(text)}
                 />
 
-                <Input
+                {/* <Input
                     label='Phone Number'
                     placeholder="080xxxxxxxx"
                     value={phone}
@@ -91,6 +96,46 @@ export default function SignupScreen({ navigation }) {
                     error={phoneErr && '*Phone number cannot be less than 11 digits'}
                     onChangeText={text => onChangePhone(text)}
                     keyboardType="numeric"
+                /> */}
+                <>
+                    <Text style={styles.inputLabel} >phone number</Text>
+                    <View style={styles.phonePicker}>
+                        <Pressable
+                            onPress={() => setShow(true)}
+                            style={styles.codeButton}
+                        >
+                            <Text style={styles.countryCodeDigit}>
+                                {countryCode}
+                            </Text>
+                            <Ionicons name="caret-down-outline" size={14} color="#00000080" />
+                        </Pressable>
+                        <TextInput
+                            style={styles.phoneNumberInput}
+                            placeholder="80xxxxxxxx"
+                            value={phone}
+                            onChangeText={text => onChangePhone(text)}
+                            error={phoneErr && '*input a valid phone number'}
+                            type="phone"
+                            maxLength={12}
+                            keyboardType='numeric'
+
+                        />
+                    </View>
+                </>
+
+                <CountryPicker
+                    show={show}
+                    style={{
+                        // Styles for whole modal [View]
+                        modal: {
+                            height: 500,
+                            // backgroundColor: 'red'
+                        },
+                    }}
+                    pickerButtonOnPress={(item) => {
+                        setCountryCode(item.dial_code);
+                        setShow(false);
+                    }}
                 />
 
                 <Input
@@ -209,5 +254,41 @@ const styles = EStyleSheet.create({
     },
     google: {
         marginTop: normalize(10)
-    }
+    },
+    phonePicker: {
+        flexDirection: 'row',
+        height: normalize(38),
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingLeft: normalize(10),
+        paddingRight: normalize(20),
+        borderColor: '#CDD4DF',
+        alignItems: 'center',
+        marginBottom: normalize(15),
+
+    },
+    phoneNumberInput: {
+        fontFamily: 'graphik-regular',
+        color: '#00000080',
+        fontSize: '0.75rem',
+        marginLeft: '.8rem',
+        width: '8rem'
+    },
+    countryCodeDigit: {
+        fontFamily: 'graphik-regular',
+        color: '#00000080',
+        fontSize: '0.75rem',
+    },
+    codeButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderColor: ' rgba(0, 0, 0, 0.1)',
+        borderRightWidth: 1,
+    },
+    inputLabel: {
+        fontFamily: 'graphik-medium',
+        color: '#000000B2',
+        fontSize:'0.76rem',
+        marginBottom: normalize(8)
+    },
 });
