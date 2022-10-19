@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, ScrollView, Pressable, StatusBar, ImageBackground, Dimensions } from 'react-native';
+import { Text, View, ScrollView, Pressable, StatusBar, ImageBackground, Dimensions, Platform, ActivityIndicator, RefreshControl } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, getUserNotifications, markNotificationRead } from "../Auth/AuthSlice";
 import normalize from "../../utils/normalize";
+import AppButton from '../../shared/AppButton';
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import LottieAnimations from "../../shared/LottieAnimations";
 import PageLoading from "../../shared/PageLoading";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
+
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const NotificationsScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -20,9 +25,17 @@ const NotificationsScreen = ({ navigation }) => {
     console.log(notifications)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
+    const [refreshing, setRefreshing] = useState(false);
     const [showText, setShowText] = useState(true);
+    const [clicked, setClicked] = useState(false)
+    const [clicking, setClicking] = useState(false)
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        dispatch(getUserNotifications());
+        wait(2000).then(() => setRefreshing(false));
 
+    }, []);
     // useEffect(() => {
     //     // Change the state every second or the time given by User.
     //     const interval = setInterval(() => {
@@ -31,17 +44,19 @@ const NotificationsScreen = ({ navigation }) => {
     //     return () => clearInterval(interval);
     // }, []);
 
+    const markAllAsRead = () => {
+        setClicking(true)
+        dispatch(markNotificationRead("all")).then(() => {
+            setClicking(false)
+            setClicked(true)
+        });
+    }
+
     useFocusEffect(
         React.useCallback(() => {
-            console.log('here')
-
             dispatch(getUser());
             dispatch(getUserNotifications()).then(() => setLoading(false));
-        }, [])
-    );
 
-    useFocusEffect(
-        React.useCallback(() => {
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
             StatusBar.setBarStyle('dark-content');
@@ -51,6 +66,7 @@ const NotificationsScreen = ({ navigation }) => {
             }
         }, [])
     );
+
 
     if (loading) {
         return <PageLoading
@@ -64,7 +80,23 @@ const NotificationsScreen = ({ navigation }) => {
         <ImageBackground source={require('../../../assets/images/studio-illustration.jpg')}
             style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
             resizeMethod="resize">
-            <ScrollView style={styles.container}>
+            <ScrollView style={styles.container}
+             refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor="#000000"
+                />
+            }
+            >
+                <Pressable style={styles.markAllButton} onPress={markAllAsRead}>
+                    <Text style={styles.markText}>Mark all as read</Text>
+                    {clicking ? 
+                        <ActivityIndicator size="small" color="#072169" />
+                        :
+                        <Ionicons name='checkmark-circle' color="#072169" size={18} />
+                    }
+                </Pressable>
 
                 <View style={styles.emojiContainer}>
                     <LottieAnimations
@@ -74,11 +106,13 @@ const NotificationsScreen = ({ navigation }) => {
                 </View>
                 {notifications.length > 0 ?
                     <View style={styles.notificationsContainer}>
-                    {/* <> */}
+                        {/* <> */}
                         {notifications.map((notification, i) => <Notification key={i} notification={notification}
                             // index={i + 1}
                             moment={moment}
                             showText={showText}
+                            clicked={clicked}
+                            setClicked={setClicked}
                         />)}
                     </View>
                     :
@@ -93,10 +127,9 @@ const NotificationsScreen = ({ navigation }) => {
     )
 }
 
-const Notification = ({ notification, moment, showText }) => {
+const Notification = ({ notification, moment, showText, clicked, setClicked }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const [clicked, setClicked] = useState(false)
     const notificationAction = () => {
         if (notification.data.action_type === "CHALLENGE") {
             dispatch(markNotificationRead(notification.id)).then(() => setClicked(true));
@@ -123,7 +156,7 @@ const Notification = ({ notification, moment, showText }) => {
                     <Text style={[styles.notificationTitle, notification.read_at !== null || clicked ? styles.clickedText : {}]}>{notification.data.title}</Text>
                 </Pressable>
                 <View style={styles.notificationTimeContainer}>
-                <Text style={styles.notificationTime}>From {moment(notification.created_at).fromNow()}</Text>
+                    <Text style={styles.notificationTime}>From {moment(notification.created_at).fromNow()}</Text>
                 </View>
             </View>
         </View>
@@ -148,7 +181,7 @@ const styles = EStyleSheet.create({
         // marginHorizontal: normalize(18),
         // paddingRight: normalize(50),
         // paddingLeft: normalize(13),
-        alignItems:'center',
+        alignItems: 'center',
         paddingBottom: normalize(35),
         borderRadius: 15,
     },
@@ -168,16 +201,16 @@ const styles = EStyleSheet.create({
         marginTop: '.2rem',
         marginLeft: 'auto',
         backgroundColor: "#072169",
-        paddingHorizontal:'.8rem',
+        paddingHorizontal: '.8rem',
         paddingVertical: normalize(3),
-        borderRadius:30,
+        borderRadius: 30,
         opacity: 0.6
     },
     notificationTime: {
         fontFamily: 'graphik-medium',
         fontSize: '.65rem',
         color: '#FFFF',
-        textAlingn: 'center',       
+        textAlingn: 'center',
         fontStyle: 'italic',
         // opacity: 0.8
     },
@@ -185,7 +218,7 @@ const styles = EStyleSheet.create({
         width: '16rem',
         borderWidth: 1,
         borderColor: '#FAC502',
-        paddingVertical: Platform.OS === 'ios' ? normalize(10) : normalize(9),
+        paddingVertical: Platform.OS === 'ios' ? normalize(8) : normalize(9),
         borderRadius: 30,
         paddingHorizontal: normalize(15),
         backgroundColor: '#FFFF',
@@ -234,8 +267,27 @@ const styles = EStyleSheet.create({
     checkContainer: {
         backgroundColor: "#FAC502",
         borderRadius: 100,
-        paddingLeft: normalize(3),
+        paddingLeft: Platform.OS === 'ios' ? normalize(2) : normalize(3),
         marginRight: '.6rem',
         marginBottom: '1rem'
+    },
+    markAllButton: {
+        paddingVertical: '.3rem',
+        backgroundColor: '#EF2F55',
+        borderRadius: 15,
+        width: Platform.OS === 'ios' ? '6.5rem' : '7rem',
+        marginLeft:'auto',
+        marginTop:'1rem',
+        backgroundColor:'#FFE900',
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'center'
+    },
+    markText: {
+        fontSize: '.65rem',
+        color: '#000000',
+        fontFamily: 'graphik-medium',
+        marginRight:normalize(4)
+
     },
 })

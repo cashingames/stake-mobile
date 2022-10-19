@@ -125,6 +125,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   }
 
   const challengerPlays = async () => {
+    setClicking(true);
     dispatch(startChallengeGame({
       category: challengeCategory,
       type: gameTypeId,

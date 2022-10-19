@@ -72,7 +72,7 @@ export default function SignupScreen({ navigation }) {
             <View style={styles.signIn}>
                 <Text style={styles.signInText}>Use your social link</Text>
                 <View style={styles.google}>
-                    <SocialSignUp googleText="SIGN UP" />
+                    <SocialSignUp googleText="Sign up" />
                 </View>
                 <Text style={styles.signInText}>or</Text>
             </View>
@@ -202,7 +202,7 @@ const styles = EStyleSheet.create({
     },
     headerBox: {
         marginTop: responsiveScreenWidth(13),
-        paddingTop: responsiveScreenWidth(2)
+        paddingTop: responsiveScreenWidth(3)
     },
     image: {
         flex: 1,
@@ -240,7 +240,8 @@ const styles = EStyleSheet.create({
         flexDirection: 'column',
         // justifyContent: 'center',
         alignItems: 'center',
-        marginTop: responsiveScreenWidth(2)
+        // marginTop: normalize(2),
+        marginBottom: normalize(25)
     },
     create: {
         flexDirection: 'row',
@@ -253,7 +254,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.87rem'
     },
     google: {
-        marginTop: normalize(10)
+        marginVertical: normalize(8)
     },
     phonePicker: {
         flexDirection: 'row',

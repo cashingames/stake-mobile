@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import { Button, Pressable, View, Image } from 'react-native';
+import { Button, Pressable, View, Image, Platform } from 'react-native';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginWithGoogle, registerWithGoogle } from '../features/Auth/AuthSlice';
@@ -142,7 +142,7 @@ export default function SocialSignUp({googleText}) {
             <Pressable disabled={!request} onPress={() => {
                 promptAsync();
             }} style={styles.googleButton}>
-                <Text style={styles.googletext}>GOOGLE {googleText}</Text>
+                <Text style={styles.googletext}>{googleText} with Google</Text>
                 <View style={styles.googleImage}>
                     <Image
                         style={styles.pointsIcon}
@@ -243,7 +243,7 @@ const styles = EStyleSheet.create({
     googleButton: {
         backgroundColor: '#4299f5',
         flexDirection: 'row',
-        paddingVertical: normalize(10),
+        paddingVertical: Platform.OS === 'ios' ? normalize(6) : normalize(9),
         paddingHorizontal: normalize(11),
         alignItems: 'center',
         borderRadius: 10,
@@ -251,8 +251,12 @@ const styles = EStyleSheet.create({
     googleImage: {
         backgroundColor: '#FFFF',
         borderRadius: 100,
-        padding: normalize(7),
+        padding: Platform.OS === 'ios' ? normalize(3) : normalize(5),
         marginLeft: normalize(5)
+    },
+    pointsIcon: {
+        width: Platform.OS === 'ios' ? '.6rem' : '.65rem',
+        height:Platform.OS === 'ios' ? '.6rem' : '.65rem',
     },
     googletext: {
         color: '#FFFF',
