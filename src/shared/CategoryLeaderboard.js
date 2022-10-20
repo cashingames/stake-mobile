@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, Platform } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
@@ -14,7 +14,7 @@ export default function CategoryLeaderboard({ category, leaders }) {
         <View style={styles.category}>
             <Text style={styles.categoryTitle}>{category}</Text>
             <CategoryTopLeaders leaders={leaders} />
-            <OtherLeaders leaders={leaders} />
+            <OtherLeaders leaders={leaders} otherStyles={styles.otherLeaders} otherName={styles.otherName} />
         </View>
     )
 }
@@ -76,7 +76,7 @@ function CategoryTopLeader({ avatar, name, position, point, topLeaderStyle }) {
 const styles = EStyleSheet.create({
     categoryTitle: {
         fontSize: '0.9rem',
-        color: '#000',
+        color: '#FFFF',
         fontFamily: 'graphik-medium',
         lineHeight: '2rem',
         textAlign: 'center',
@@ -102,6 +102,8 @@ const styles = EStyleSheet.create({
         paddingBottom: responsiveScreenWidth(10),
         borderTopEndRadius: 10,
         borderTopStartRadius: 10,
+        borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
+        borderColor:'#808080'
     },
     leaderPoint: {
         alignItems: 'center',
@@ -155,5 +157,11 @@ const styles = EStyleSheet.create({
     },
     firstPosition: {
         top: normalize(-30)
-    }
+    },
+    otherLeaders: {
+        backgroundColor: '#9C3DB8',
+    },
+    otherName: {
+        color:'#FFFF'
+    },
 });

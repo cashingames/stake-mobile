@@ -14,6 +14,7 @@ import analytics from '@react-native-firebase/analytics';
 import ExhibitionStakeAmount from "../../shared/ExhibitionStakeAmount";
 import StakingButtons from "../../shared/StakingButtons";
 import ExhibitionUserAvailableBoosts from "../../shared/ExhibitionUserAvailableBoosts";
+import LottieAnimations from "../../shared/LottieAnimations";
 
 
 
@@ -57,6 +58,13 @@ export default function GameInstructionsScreen({ navigation }) {
 
     <View style={styles.container}>
       <ScrollView>
+        <View style={styles.animation}>
+          <LottieAnimations
+            animationView={require('../../../assets/guidelines.json')}
+            width={normalize(150)}
+            height={normalize(150)}
+          />
+        </View>
         {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
         {/* {gameMode.name === "CHALLENGE" && <ChallengeInstructions />} */}
         {/* {isStakingFeatureEnabled && gameMode.name !== "CHALLENGE" && */}
@@ -249,9 +257,12 @@ const styles = EStyleSheet.create({
     paddingTop: normalize(20),
     paddingBottom: normalize(5)
   },
+  animation: {
+    alignItems: 'center'
+  },
   instruction: {
     flexDirection: 'row',
-    marginBottom: normalize(20)
+    marginBottom: normalize(15)
   },
   instructionHeader: {
     fontSize: '0.9rem',
@@ -272,7 +283,7 @@ const styles = EStyleSheet.create({
     fontSize: '0.9rem',
     fontFamily: 'graphik-regular',
     color: '#4F4F4F',
-    lineHeight: '1.4rem',
+    lineHeight: '1.3rem',
     textAlign: 'justify',
     width: responsiveScreenWidth(80)
   },

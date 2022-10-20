@@ -123,14 +123,14 @@ function AppRouter() {
 						action: "clicked"
 					})
 					routeDecider(remoteMessage, navigation)
-					
+
 				}
 			})
-			
+
 		});
 		messaging().onNotificationOpenedApp(async remoteMessage => {
-			if (!remoteMessage){}
-			else{
+			if (!remoteMessage) { }
+			else {
 				await analytics().logEvent("bg_notification", {
 					state: "background"
 				})
@@ -139,14 +139,14 @@ function AppRouter() {
 				// 	navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
 				// }
 			}
-			
+
 		});
 
 		// Check whether an initial notification is available
 		messaging()
 			.getInitialNotification()
 			.then(async remoteMessage => {
-				if ( remoteMessage){
+				if (remoteMessage) {
 					await analytics().logEvent("bg_notification", {
 						state: "quit"
 					})
@@ -172,7 +172,13 @@ function AppRouter() {
 					<>
 						<AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
-						<AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{ title: 'Leaderboards', headerRight: () => <LeaderBoardFilter /> }} />
+						<AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{
+							title: 'Leaderboards', headerRight: () => <LeaderBoardFilter />,
+							headerStyle: {
+								backgroundColor: '#5d5fef',
+							},
+							headerTintColor: '#FFFF',
+						}} />
 						<AppStack.Screen name="LiveTriviaLeaderboard" component={LiveTriviaLeaderBoard}
 							options={{
 								title: 'Leaderboard',
@@ -192,7 +198,12 @@ function AppRouter() {
 							},
 							headerTintColor: '#FFFF',
 						}} />
-						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ title: 'Game Instructions' }} />
+						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{
+							title: 'Game Instructions', headerStyle: {
+								backgroundColor: '#F2F5FF',
+							},
+							headerTintColor: '#000000',
+						}} />
 						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
 						<AppStack.Screen name="LiveTriviaStaking" component={LiveTriviaStakingScreen} options={{ title: 'Game Staking' }} />
 						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
@@ -258,13 +269,13 @@ function AppRouter() {
 						<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
 
 						<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
-						<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{ 
-							title: 'Notifications' ,
+						<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{
+							title: 'Notifications',
 							headerStyle: {
 								backgroundColor: '#FFE900',
 							},
 							headerTintColor: '#000000',
-					}} />
+						}} />
 
 					</>
 				) :
@@ -328,7 +339,7 @@ async function registerForPushNotificationsAsync() {
 		return;
 	}
 	deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
-	
+
 
 
 	if (Platform.OS === 'android') {

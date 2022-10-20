@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, StatusBar } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import CategoryLeaderboard from '../../shared/CategoryLeaderboard';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import LottieAnimations from '../../shared/LottieAnimations';
 
 
 export default function ExtendedLeaderboard({ navigation }) {
@@ -36,6 +37,18 @@ export default function ExtendedLeaderboard({ navigation }) {
         }, [])
     );
 
+    useFocusEffect(
+        React.useCallback(() => {
+            StatusBar.setTranslucent(true)
+            StatusBar.setBackgroundColor("transparent")
+            StatusBar.setBarStyle('light-content');
+            return () => {
+                StatusBar.setTranslucent(true)
+                StatusBar.setBarStyle('dark-content');
+            }
+        }, [])
+    );
+
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
     }
@@ -43,7 +56,15 @@ export default function ExtendedLeaderboard({ navigation }) {
     const categories = Object.keys(categoryLeaders);
     return (
         <View style={styles.container}>
+            
             <ScrollView>
+            <View style={styles.animation}>
+                <LottieAnimations
+                    animationView={require('../../../assets/gamepadii.json')}
+                    width={normalize(200)}
+                    height={normalize(200)}
+                />
+            </View>
                 <SwiperFlatList showPagination paginationActiveColor='red' renderAll={true} >
                     <GlobalLeaderboard leaders={leaders} />
                     {categories.map((c, i) => <CategoryLeaderboard key={i} category={c} leaders={categoryLeaders[c]} />)}
@@ -59,7 +80,7 @@ function GlobalLeaderboard({ leaders }) {
         <View style={styles.global}>
             <Text style={styles.title}>Global Leaderboard</Text>
             <GlobalTopLeaders leaders={leaders} />
-            <OtherLeaders leaders={leaders} />
+            <OtherLeaders leaders={leaders} otherStyles={styles.otherLeaders} />
         </View>
 
     )
@@ -68,7 +89,10 @@ function GlobalLeaderboard({ leaders }) {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#5d5fef',
+    },
+    animation: {
+        alignItems: 'center'
     },
     global: {
         paddingHorizontal: normalize(15),
@@ -76,7 +100,7 @@ const styles = EStyleSheet.create({
     },
     title: {
         fontSize: '0.9rem',
-        color: '#000',
+        color: '#FFFF',
         fontFamily: 'graphik-medium',
         lineHeight: '2rem',
         textAlign: 'center',
@@ -89,5 +113,8 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         marginBottom: responsiveScreenWidth(5),
         marginTop: responsiveScreenWidth(3)
-    }
+    },
+    otherLeaders:{
+        backgroundColor: '#FAC502',
+    },
 });

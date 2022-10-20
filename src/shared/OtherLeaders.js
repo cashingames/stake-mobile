@@ -6,23 +6,24 @@ import Constants from 'expo-constants';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber, isTrue } from '../utils/stringUtl';
 
-export default function OtherLeaders({ leaders }) {
+export default function OtherLeaders({ leaders, otherStyles, otherName }) {
     const currentLeadedrs = leaders?.slice(3, leaders.length) ?? null;
     if (currentLeadedrs === null) {
         return <></>;
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, otherStyles]}>
             {currentLeadedrs.map((leader, i) => <OtherLeader key={i} leader={leader}
                 position={formatNumber(i + 4)}
                 indexArrow={require('../../assets/images/up_arrow.png')}
+                otherName={otherName}
             />)}
             {currentLeadedrs.length === 0 && <Text style={otherLeaderStyles.noData}>No data</Text>}
         </View>
     );
 }
-function OtherLeader({ leader, position, indexArrow }) {
+function OtherLeader({ leader, position, indexArrow, otherName }) {
     return (
         <View style={otherLeaderStyles.container}>
             <View style={otherLeaderStyles.avatar}>
@@ -33,7 +34,7 @@ function OtherLeader({ leader, position, indexArrow }) {
                         require("../../assets/images/user-icon.png")}
                 />
                 <View style={otherLeaderStyles.username}>
-                    <Text style={otherLeaderStyles.names}>{`${leader.username}`}</Text>
+                    <Text style={[otherLeaderStyles.names, otherName]}>{`${leader.username}`}</Text>
                     <Text style={otherLeaderStyles.point}>{formatNumber(leader.points)} pts</Text>
                 </View>
             </View>
@@ -54,12 +55,12 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         justifyContent: 'space-between',
-        backgroundColor: '#F2F5FF',
+        // backgroundColor: '#FAC502',
         paddingHorizontal: responsiveScreenWidth(4),
         paddingVertical: responsiveScreenWidth(6),
         borderBottomEndRadius: 10,
         borderBottomStartRadius: 10,
-        marginBottom: responsiveScreenWidth(19)
+        marginBottom: responsiveScreenWidth(19),
     },
 });
 
@@ -69,7 +70,8 @@ const otherLeaderStyles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: responsiveScreenWidth(6)
+        marginBottom: responsiveScreenWidth(6),
+        alignItems:'flex-start'
     },
     profilePic: {
         width: normalize(30),
@@ -110,13 +112,14 @@ const otherLeaderStyles = EStyleSheet.create({
         fontFamily: 'graphik-bold',
     },
     point: {
-        color: '#BDBDBD',
+        color: '#FFFF',
         fontSize: '0.55rem',
         fontFamily: 'graphik-bold',
+        marginTop:'.5rem'
     },
     noData: {
         textAlign: 'center',
-        color: '#BDBDBD',
+        color: '#FFFF',
         fontSize: '0.9rem',
         fontFamily: 'graphik-bold',
     }

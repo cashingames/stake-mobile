@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Pressable, Text } from 'react-native';
+import { Pressable, StatusBar, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { responsiveScreenWidth } from '../../utils/normalize';
 import {
@@ -8,11 +8,20 @@ import {
 } from '../CommonSlice';
 import DatePicker from 'react-native-date-ranges';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const LeaderBoardFilter = () => {
     const dispatch = useDispatch();
     const datePickerRef = useRef();
+
+    useFocusEffect(
+        React.useCallback(() => {
+            StatusBar.setTranslucent(true)
+            StatusBar.setBackgroundColor("transparent")
+            StatusBar.setBarStyle('light-content');
+        }, [])
+    );
 
     const onFilterLeaders = (dateRange) => {
         const startDate = dateRange.startDate
@@ -51,7 +60,7 @@ const LeaderBoardFilter = () => {
                 customStyles={{
                     placeholderText: { fontSize: 14, color: '#EF2F55', },
                     headerStyle: { backgroundColor: '#FAC502' },
-                    headerMarkTitle: { fontSize: 15 },
+                    headerMarkTitle: { fontSize: 15, color: '#FFFF' },
                     headerDateTitle: { fontSize: 15 },
                     contentInput: { backgroundColor: '#FAC502', height: 0, width: 0 },
                     contentText: { fontSize: 14, color: '#EF2F55', } //after selected daterange, this replaces the placeholder Style
@@ -63,7 +72,7 @@ const LeaderBoardFilter = () => {
                 customButton={customButton}
                 selectedBgColor={'#EF2F55'}
             />
-            <Text style={{ fontSize: 14, color: '#EF2F55' }} onPress={() => datePickerRef.current.setModalVisible(true)}> Filter by date</Text>
+            <Text style={{ fontSize: 14, color: '#FFFF' }} onPress={() => datePickerRef.current.setModalVisible(true)}> Filter by date</Text>
 
         </>
     )

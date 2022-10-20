@@ -44,7 +44,7 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(2.3),
         paddingHorizontal: normalize(6),
         position: 'absolute',
-        bottom: 10,
+        bottom: 8,
     },
     point: {
         color: '#FFFF',
