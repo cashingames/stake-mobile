@@ -110,7 +110,7 @@ const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory })
         <Animated.View entering={randomEnteringAnimation()}>
             <Text style={styles.title}>Choose category</Text>
             <View style={styles.subcategories}>
-                <SwiperFlatList >
+                {/* <SwiperFlatList > */}
                     {category.subcategories.map((subcategory, i) =>
                         <GameSubcategoryCard
                             key={i}
@@ -118,7 +118,7 @@ const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory })
                             isSelected={subcategory === selectedSubcategory}
                             onSelect={onSubCategorySelected} />
                     )}
-                </SwiperFlatList>
+                {/* </SwiperFlatList> */}
             </View>
         </Animated.View>
     )
@@ -234,8 +234,9 @@ const styles = EStyleSheet.create({
         textAlign: 'center'
     },
     subcategories: {
+        flex:1,
         flexDirection: 'row',
-        // flexWrap: 'wrap',
+        flexWrap: 'wrap',
     },
     activeSubcategory: {
         color: '#FFF',
