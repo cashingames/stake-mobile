@@ -48,8 +48,8 @@ const styles = EStyleSheet.create({
         paddingTop: responsiveScreenWidth(7),
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
-        borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
-        borderColor:Platform.OS === 'ios' ? '#E0E0E0': '#FFFF'
+        // borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
+        // borderColor:Platform.OS === 'ios' ? '#E0E0E0': '#FFFF'
     },
 
 });

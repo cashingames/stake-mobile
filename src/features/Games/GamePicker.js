@@ -16,14 +16,14 @@ import GameSubcategoryCard from './GameSubcategoryCard';
 import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 
-export default ({ title, initialShowPlayButton = true }) => {
+export default ({ title, initialShowPlayButton = true ,activeSubcategory}) => {
 
     const dispatch = useDispatch();
-    const navigation = useNavigation();
-    const refRBSheet = useRef();
+    // const navigation = useNavigation();
+    // const refRBSheet = useRef();
     const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
     const [activeCategory, setActiveCategory] = useState();
-    const activeSubcategory = useSelector(state => state.game.gameCategory);
+    // const activeSubcategory = useSelector(state => state.game.gameCategory);
     const activeGame = useSelector(state => state.game.gameType);
     const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
 
@@ -36,30 +36,30 @@ export default ({ title, initialShowPlayButton = true }) => {
         dispatch(setGameCategory(subcategory));
     }
 
-    const openBottomSheet = () => {
-        refRBSheet.current.open()
-    }
+    // const openBottomSheet = () => {
+    //     refRBSheet.current.open()
+    // }
 
-    const closeBottomSheet = () => {
-        refRBSheet.current.close()
-    }
+    // const closeBottomSheet = () => {
+    //     refRBSheet.current.close()
+    // }
 
-    const onPlayButtonClick = () => {
-        // hasActivePlan ? onSelectGameMode() : openBottomSheet();
-        onSelectGameMode();
-    }
-    const gameMode = useSelector(state => state.game.gameMode);
+    // const onPlayButtonClick = () => {
+    //     // hasActivePlan ? onSelectGameMode() : openBottomSheet();
+    //     onSelectGameMode();
+    // }
+    // const gameMode = useSelector(state => state.game.gameMode);
     // console.log(" log it", gameMode, "this is it right here")
 
-    const onSelectGameMode = () => {
-        if (gameMode.name === "EXHIBITION") {
-            hasActivePlan ? navigation.navigate('GameInstructions') : openBottomSheet();
-        }
-        else if (gameMode.name === "CHALLENGE") {
-            navigation.navigate('ChallengeSelectPlayer')
-        }
+    // const onSelectGameMode = () => {
+    //     if (gameMode.name === "EXHIBITION") {
+    //         hasActivePlan ? navigation.navigate('GameInstructions') : openBottomSheet();
+    //     }
+    //     else if (gameMode.name === "CHALLENGE") {
+    //         navigation.navigate('ChallengeSelectPlayer')
+    //     }
 
-    };
+    // };
 
     useFocusEffect(
         React.useCallback(() => {
@@ -87,18 +87,18 @@ export default ({ title, initialShowPlayButton = true }) => {
                 )}
             </View>
             {isTrue(activeCategory) && <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />}
-            {(initialShowPlayButton || isTrue(activeSubcategory)) &&
+            {/* {(initialShowPlayButton || isTrue(activeSubcategory)) &&
                 < Animated.View entering={randomEnteringAnimation()}>
                     <AppButton text='Proceed to Play' onPress={onPlayButtonClick} disabled={!isTrue(activeSubcategory)} />
                 </Animated.View>
-            }
-            <UniversalBottomSheet
+            } */}
+            {/* <UniversalBottomSheet
                 refBottomSheet={refRBSheet}
-				height={Platform.OS === 'ios' ? 400 : 350}
+                height={Platform.OS === 'ios' ? 400 : 350}
                 subComponent={<NoGame
                     onClose={closeBottomSheet}
                 />}
-            />
+            /> */}
         </>
 
     )
@@ -111,13 +111,13 @@ const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory })
             <Text style={styles.title}>Choose category</Text>
             <View style={styles.subcategories}>
                 {/* <SwiperFlatList > */}
-                    {category.subcategories.map((subcategory, i) =>
-                        <GameSubcategoryCard
-                            key={i}
-                            game={subcategory}
-                            isSelected={subcategory === selectedSubcategory}
-                            onSelect={onSubCategorySelected} />
-                    )}
+                {category.subcategories.map((subcategory, i) =>
+                    <GameSubcategoryCard
+                        key={i}
+                        game={subcategory}
+                        isSelected={subcategory === selectedSubcategory}
+                        onSelect={onSubCategorySelected} />
+                )}
                 {/* </SwiperFlatList> */}
             </View>
         </Animated.View>
@@ -234,7 +234,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center'
     },
     subcategories: {
-        flex:1,
+        flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
     },

@@ -228,8 +228,8 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
 const SendInviteButton = ({ onPress, disabled }) => {
     return (
-        <Pressable onPress={onPress} style={[styles.selectButton, disabled ? styles.disabled : {}]} >
-            <Ionicons name='checkmark-sharp' size={26} color='#FFFF' />
+        <Pressable onPress={onPress} style={[styles.selectButton, disabled ? styles.disabled : {}]} disabled={disabled} >
+            <Ionicons name='checkmark-sharp' size={30} color='#FFFF' />
         </Pressable>
     )
 }
@@ -389,8 +389,8 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 100,
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
         elevation: 5,
         backgroundColor: '#EF2F55',
         position: 'absolute',

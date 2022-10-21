@@ -1,6 +1,6 @@
 
 import React, { useRef } from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Platform, Text, View } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/native';
 import normalize from "../utils/normalize";
@@ -87,10 +87,12 @@ const styles = EStyleSheet.create({
         backgroundColor: '#FFFF',
         borderColor: '#EF2F55',
         borderWidth: 1,
-        width: normalize(150)
+        width: normalize(155),
+        paddingVertical: Platform.OS === 'ios' ? normalize(12) : normalize(15),
     },
     stakeButton: {
-        width: normalize(150)
+        width: normalize(155),
+        paddingVertical: Platform.OS === 'ios' ? normalize(12) : normalize(15),
     },
     proceedText: {
         color: '#EF2F55',

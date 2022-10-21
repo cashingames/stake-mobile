@@ -225,6 +225,13 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
             <Text style={styles.stakeText}>Accept challenge to stake <Text style={styles.stakeAmount}>&#8358;{formatCurrency(challengeDetails.stakingAmount)}</Text> and stand a chance of winning double of this amount</Text>
           </View>
         }
+        {challengeDetails.withStaking &&
+          challengeDetails.status === 'ACCEPTED' &&
+          challengeScores.challengerStatus !== "COMPLETED" &&
+          <View style={styles.stakedContainer}>
+            <Text style={styles.stakedAmount}>Amount Staked : &#8358;{formatCurrency(challengeDetails.stakingAmount)}</Text>
+          </View>
+        }
         {challengeDetails.status === "PENDING" ||
           challengeScores.opponentStatus !== "COMPLETED" ||
           challengeScores.challengerStatus !== "COMPLETED" ?
@@ -506,7 +513,7 @@ const styles = EStyleSheet.create({
   },
 
   confetti: {
-    marginTop: '2rem',
+    marginTop: '4.5rem',
     alignItems: 'center',
   },
   resultContainer: {
@@ -680,6 +687,13 @@ const styles = EStyleSheet.create({
     paddingVertical: normalize(20),
     alignItems: 'center'
   },
+  stakedContainer: {
+    backgroundColor: '#EDDA74',
+    borderRadius: 15,
+    paddingHorizontal: normalize(18),
+    paddingVertical: normalize(10),
+    alignItems: 'center'
+  },
   stakeText: {
     fontSize: '.8rem',
     color: '#000000',
@@ -689,6 +703,12 @@ const styles = EStyleSheet.create({
   },
   stakeAmount: {
     color: '#EF2F55',
+  },
+  stakedAmount: {
+    color: '#EF2F55',
+    fontSize: '.8rem',
+    fontFamily: 'graphik-medium',
+    textAlign: 'center',
   },
   winningsContainer: {
     alignItems: 'center',

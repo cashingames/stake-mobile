@@ -32,6 +32,7 @@ const HomeScreen = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
+    // console.log(user)
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
