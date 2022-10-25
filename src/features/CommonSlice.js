@@ -73,7 +73,15 @@ export const logActionToServer = createAsyncThunk(
 export const fetchRecentLiveTrivia = createAsyncThunk(
     'common/fetchRecentLiveTrivia',
     async (data, thunkAPI) => {
-        const response = await axios.get('v3/live-trivia/recent', data)
+        const response = await axios.get(`v3/live-trivia/recent?page=${data}`)
+        return response.data;
+    }
+)
+
+export const fetchUserTransactions = createAsyncThunk(
+    'common/fetchUserTransactions',
+    async (data, thunkAPI) => {
+        const response = await axios.get(`v2/wallet/me/transactions?page=${data}`)
         return response.data;
     }
 )
@@ -90,6 +98,35 @@ export const searchUserFriends = createAsyncThunk(
     'common/searchUserFriends',
     async (data, thunkAPI) => {
         const response = await axios.get(`v3/user/search/friends?search=${data}`)
+        return response.data;
+    }
+)
+
+export const getUserChallenges = createAsyncThunk(
+    'common/getUserChallenges  ',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.get(`v3/user/challenges?page=${data}`)
+        // console.log(response)
+        return response.data;
+    }
+)
+
+export const getUserNotifications = createAsyncThunk(
+    'common/getUserNotifications',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.get('v3/notifications')
+        // console.log(response.data)
+        return response.data;
+    }
+)
+
+export const markNotificationRead = createAsyncThunk(
+    'common/markNotificationRead',
+    async (data, thunkAPI) => {
+        //make a network request to the server
+        const response = await axios.put(`v3/notifications/read/${data}`, data)
         return response.data;
     }
 )
@@ -129,7 +166,10 @@ const initialState = {
     minVersionCode: '',
     minVersionForce: false,
     userFriends: [],
+    userChallenges: [],
+    userNotifications: [],
     featureFlags: [],
+    userTransactions: [],
     maximumStakeAmount:'',
     minimumStakeAmount: '',
     periodBeforeChallengeStakingExpiry: ''
@@ -179,13 +219,23 @@ export const CommonSlice = createSlice({
                 state.faqAndAnswers = action.payload
             })
             .addCase(fetchRecentLiveTrivia.fulfilled, (state, action) => {
-                state.trivias = action.payload
+                state.trivias = state.trivias.concat(action.payload);
+
             })
             .addCase(fetchUserFriends.fulfilled, (state, action) => {
                 state.userFriends = action.payload
             })
             .addCase(searchUserFriends.fulfilled, (state, action) => {
                 state.userFriends = action.payload
+            })
+            .addCase(getUserChallenges.fulfilled, (state, action) => {
+                state.userChallenges = state.userChallenges.concat(action.payload);
+            })
+            .addCase(getUserNotifications.fulfilled, (state, action) => {
+                state.userNotifications = action.payload.data.data;
+            })
+            .addCase(fetchUserTransactions.fulfilled, (state, action) => {
+                state.userTransactions = state.userTransactions.concat(action.payload);
             })
             .addCase(fetchFeatureFlags.fulfilled, (state, action) => {
                 state.featureFlags = action.payload.data

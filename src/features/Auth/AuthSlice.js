@@ -24,7 +24,7 @@ export const verifyUser = createAsyncThunk(
     'auth/verifyUser',
     async (data, thunkAPI) => {
         const response = await axios.post('auth/user/authenticate', data)
-        
+
         return response.data
     }
 )
@@ -71,6 +71,15 @@ export const logoutUser = createAsyncThunk(
     async (data, thunkAPI) => {
         await AsyncStorage.removeItem("token");
         return true;
+    }
+)
+
+export const deleteUserAccount = createAsyncThunk(
+    'auth/deleteUserAccount',
+    async (data, thunkAPI) => {
+        const response = await axios.post('v3/account/delete', data)
+
+        return response.data
     }
 )
 
@@ -150,14 +159,7 @@ export const editProfileAvatar = createAsyncThunk(
     }
 )
 
-export const getUserChallenges = createAsyncThunk(
-    'auth/getUserChallenges  ',
-    async (data, thunkAPI) => {
-        //make a network request to the server
-        const response = await axios.get('v3/user/challenges', data)
-        return response.data;
-    }
-)
+
 
 export const getChallengeScores = createAsyncThunk(
     'auth/getChallengeScores',
@@ -207,24 +209,6 @@ export const getFirstTimeUserReward = createAsyncThunk(
     }
 )
 
-export const getUserNotifications = createAsyncThunk(
-    'auth/getUserNotifications',
-    async (data, thunkAPI) => {
-        //make a network request to the server
-        const response = await axios.get('v3/notifications')
-        // console.log(response.data)
-        return response.data;
-    }
-)
-
-export const markNotificationRead = createAsyncThunk(
-    'auth/markNotificationRead',
-    async (data, thunkAPI) => {
-        //make a network request to the server
-        const response = await axios.put(`v3/notifications/read/${data}`, data)
-        return response.data;
-    }
-)
 
 export const getUser = createAsyncThunk(
     'auth/user/get',
@@ -260,11 +244,9 @@ const initialState = {
         // email: 'oyekunmi@gmail.com'
     },
     createAccount: {},
-    userChallenges: [],
     challengeScores: {},
     firstTimeUserReward: [],
     loginError: "",
-    userNotifications: []
 }
 
 export const AuthSlice = createSlice({
@@ -327,9 +309,6 @@ export const AuthSlice = createSlice({
             .addCase(verifyAccount.fulfilled, (state, action) => {
                 state.passwordReset.email = action.meta.arg.email;
             })
-            .addCase(getUserChallenges.fulfilled, (state, action) => {
-                state.userChallenges = action.payload;
-            })
             .addCase(verifyUser.fulfilled, (state, action) => {
                 state.token = action.payload.data;
 
@@ -345,9 +324,6 @@ export const AuthSlice = createSlice({
             })
             .addCase(getFirstTimeUserReward.fulfilled, (state, action) => {
                 state.firstTimeUserReward = action.payload.data;
-            })
-            .addCase(getUserNotifications.fulfilled, (state, action) => {
-                state. userNotifications = action.payload.data.data;
             })
 
     },

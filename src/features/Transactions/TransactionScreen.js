@@ -1,63 +1,103 @@
-import React, { useEffect } from 'react';
-import { Text, View, ScrollView, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, ScrollView, Image, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser } from '../Auth/AuthSlice';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { formatCurrency, isTrue } from '../../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import PageLoading from '../../shared/PageLoading';
+import { fetchUserTransactions } from '../CommonSlice';
 
 export default function TransactionScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const dispatch = useDispatch();
-
-    const transactions = useSelector(state => state.auth.user.transactions);
+    const [loading, setLoading] = useState(true)
+    const [pageNumber, setPageNumber] = useState(1)
+    const [loadingMore, setLoadingMore] = useState(false)
+    const transactions = useSelector(state => state.common.userTransactions);
+    console.log(transactions)
 
     useEffect(() => {
-        dispatch(getUser());
-    }, []);
+        setLoadingMore(true)
+        dispatch(fetchUserTransactions(pageNumber))
+            .then(() => {
+                console.log("fetching page ", pageNumber)
+                setLoading(false)
+                setLoadingMore(false)
+            })
+    }, [pageNumber]);
 
-    if (!isTrue(transactions) || transactions.length === 0)
+    const fundTransactions = ({ item }) => {
+
         return (
-            <View style={styles.noTransactionContainer}>
-                <Image
-                    style={styles.unavailable}
-                    source={require('../../../assets/images/cart-icon1.png')}
-                />
-                <Text style={styles.noTransaction}>
-                    No available transaction. Buy boost , buy game plan and fund your wallet to see transactions
-                </Text>
+            <View style={styles.transactionDetails}>
+                <View style={styles.narationDetails}>
+                    <View style={styles.naration}>
+                        <Text style={styles.narationTitle}>{item.type}</Text>
+                    </View>
+                    <Text style={item.type === "DEBIT" ? styles.transactionAmountWithdraw : styles.transactionAmountReceived}>&#8358;{formatCurrency(item.amount)}</Text>
+                </View>
+                <View style={styles.typeAndDate}>
+                    <Text style={styles.transactionType}>{item.description}</Text>
+                    <Text style={styles.transactionType}>{item.transactionDate}</Text>
+                </View>
             </View>
-        );
+        )
+
+    }
+
+    const renderLoader = () => {
+        return (
+            <>
+                {loadingMore ?
+                    <PageLoading
+                        backgroundColor='#FFFF'
+                        spinnerColor="#000000"
+                    />
+                    :
+                    <></>
+                }
+
+            </>
+        )
+    }
+
+    if (loading) {
+        return <PageLoading
+            backgroundColor='#FFFF'
+            spinnerColor="#000000"
+        />
+    }
+
     return (
-        <ScrollView style={styles.container}>
-            {transactions && (
-                transactions.map((x, i) => <FundTransactions key={i} transaction={x} />)
-            )}
-        </ScrollView>
+        <View style={styles.container}>
+            {transactions.length > 0 ?
+                <FlatList
+                    data={transactions}
+                    renderItem={fundTransactions}
+                    keyExtractor={item => item.transactionId}
+                    ListFooterComponent={renderLoader}
+                    onEndReached={() => setPageNumber(pageNumber + 1)}
+                    onEndReachedThreshold={0.2}
+                />
+                :
+                <View style={styles.noTransactionContainer}>
+                    <Image
+                        style={styles.unavailable}
+                        source={require('../../../assets/images/cart-icon1.png')}
+                    />
+                    <Text style={styles.noTransaction}>
+                        No available transaction. Buy boost , buy game plan and fund your wallet to see transactions
+                    </Text>
+                </View>
+            }
+        </View>
     );
 
 }
 
-const FundTransactions = ({ transaction }) => {
 
-    return (
-        <View style={styles.transactionDetails}>
-            <View style={styles.narationDetails}>
-                <View style={styles.naration}>
-                    <Text style={styles.narationTitle}>{transaction.type}</Text>
-                </View>
-                <Text style={transaction.type === "DEBIT" ? styles.transactionAmountWithdraw : styles.transactionAmountReceived}>&#8358;{formatCurrency(transaction.amount)}</Text>
-            </View>
-            <View style={styles.typeAndDate}>
-                <Text style={styles.transactionType}>{transaction.description}</Text>
-                <Text style={styles.transactionType}>{transaction.transactionDate}</Text>
-            </View>
-        </View>
-    )
-
-}
 
 
 const styles = EStyleSheet.create({
