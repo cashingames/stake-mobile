@@ -1,38 +1,37 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, ScrollView, Pressable, StatusBar, RefreshControl } from 'react-native';
+import { Text, View, Pressable, StatusBar, FlatList } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { useDispatch, useSelector } from 'react-redux';
 import LottieAnimations from '../../shared/LottieAnimations';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import PageLoading from '../../shared/PageLoading';
-import { getUserChallenges } from '../Auth/AuthSlice';
+import { getUserChallenges } from '../CommonSlice';
+import AppButton from '../../shared/AppButton';
 
-
-const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-}
 
 const MyChallengesScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
-    const [refreshing, setRefreshing] = useState(false);
+    const [pageNumber, setPageNumber] = useState(1)
+    const [loadingMore, setLoadingMore] = useState(false)
+    const challenges = useSelector(state => state.common.userChallenges);
 
-    const userChallenges = useSelector(state => state.auth.userChallenges);
-    console.log(userChallenges)
+    useEffect(() => {
+        setLoadingMore(true)
+        dispatch(getUserChallenges(pageNumber))
+            .then(() => {
+                console.log("fetching page ", pageNumber)
+                setLoading(false)
+                setLoadingMore(false)
+            })
+    }, [pageNumber]);
 
-    const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
-        dispatch(getUserChallenges());
-        wait(2000).then(() => setRefreshing(false));
-
-    }, []);
 
     useFocusEffect(
         React.useCallback(() => {
-            dispatch(getUserChallenges()).then(() => setLoading(false));
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
             StatusBar.setBarStyle('light-content');
@@ -43,6 +42,85 @@ const MyChallengesScreen = ({ navigation, route }) => {
         }, [])
     );
 
+    const checkScores = (item) => {
+        navigation.navigate('MyChallengesScore', {
+            challengeId: item.challengeId
+        })
+
+    }
+    const challengeContent = ({ item }) => {
+        const challengeDeclined = item.status === "DECLINED"
+        return < View style={styles.challengeContainer}>
+            <View style={styles.categoryContainer}>
+                <Text style={styles.challengeCategory}>{item.subcategory}</Text>
+                {item.status === "CLOSED" ?
+                    <>
+                        {item.flag === "WON" &&
+                            <View style={styles.winnerContainer}>
+                                <Text style={styles.winner}>WON</Text>
+                                <LottieAnimations
+                                    animationView={require('../../../assets/trophy.json')}
+                                    height={normalize(32)}
+                                />
+                            </View>
+                        }
+                        {item.flag === "LOST" &&
+                            <View style={styles.winnerContainer}>
+                                <Text style={styles.winner}>LOST</Text>
+                                <LottieAnimations
+                                    animationView={require('../../../assets/loser.json')}
+                                    height={normalize(30)}
+                                />
+                            </View>
+                        }
+                        {item.flag === "DRAW" &&
+
+                            <View style={styles.winnerContainer}>
+                                <Text style={styles.winner}>DRAW</Text>
+                                <LottieAnimations
+                                    animationView={require('../../../assets/trophy.json')}
+                                    height={normalize(30)}
+                                />
+                            </View>
+                        }
+                    </>
+                    :
+                    <LottieAnimations
+                        animationView={require('../../../assets/challenge.json')}
+                        height={normalize(50)}
+                    />
+                }
+            </View>
+            <Text style={styles.status}>{item.date}</Text>
+            <Text style={styles.status}>STATUS : {item.status}</Text>
+            <View style={styles.competitorsContainer}>
+                <Text style={styles.challenger}>{item.playerUsername}</Text>
+                <Text style={styles.versus}>vs</Text>
+                <Text style={styles.opponent}>{item.opponentUsername}</Text>
+            </View>
+            <AppButton
+                onPress={() => checkScores(item)}
+                disabled={challengeDeclined}
+                text={item.status === "DECLINED" ? "Declined" : [item.status === "CLOSED" ? "Scores" : "View challenge details"]}
+            />
+        </View>
+    }
+
+    const renderLoader = () => {
+        return (
+            <>
+                {loadingMore ?
+                    <PageLoading
+                        backgroundColor='#701F88'
+                        spinnerColor="#FFFF"
+                    />
+                    :
+                    <></>
+                }
+
+            </>
+        )
+    }
 
     if (loading) {
         return <PageLoading
@@ -51,114 +129,26 @@ const MyChallengesScreen = ({ navigation, route }) => {
         />
     }
 
-
-
-
     return (
-        <ScrollView style={styles.container}
-            refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    tintColor="#FFFF"
+        <View style={styles.container}>
+            {challenges.length > 0 ?
+                <FlatList
+                    data={challenges}
+                    renderItem={challengeContent}
+                    keyExtractor={item => item.challengeId}
+                    ListFooterComponent={renderLoader}
+                    onEndReached={() => setPageNumber(pageNumber + 1)}
+                    onEndReachedThreshold={0.2}
                 />
-            }
-        >
-            {userChallenges.length > 0 ?
-                <View>
-                    {userChallenges.map((userChallenge, i) => <ChallengeCard
-                        key={i}
-                        userChallenge={userChallenge}
-                    />
-                    )}
-                </View>
                 :
                 <NoChallenges />
 
             }
-
-        </ScrollView>
-    )
-}
-
-const ChallengeCard = ({ userChallenge }) => {
-    const navigation = useNavigation();
-
-    const checkScores = () => {
-        navigation.navigate('MyChallengesScore', {
-            challengeId: userChallenge.challengeId
-        })
-
-    }
-    const challengeDeclined = userChallenge.status === "DECLINED";
-    return (
-        <>
-            {!challengeDeclined ?
-                < View style={styles.challengeContainer}>
-                    <View style={styles.categoryContainer}>
-                        <Text style={styles.challengeCategory}>{userChallenge.subcategory}</Text>
-                        {userChallenge.status === "CLOSED" ?
-                            <>
-                                {userChallenge.flag === "WON" &&
-                                    <View style={styles.winnerContainer}>
-                                        <Text style={styles.winner}>WON</Text>
-                                        <LottieAnimations
-                                            animationView={require('../../../assets/trophy.json')}
-                                            height={normalize(32)}
-                                        />
-                                    </View>
-                                }
-                                {userChallenge.flag === "LOST" &&
-                                    <View style={styles.winnerContainer}>
-                                        <Text style={styles.winner}>LOST</Text>
-                                        <LottieAnimations
-                                            animationView={require('../../../assets/loser.json')}
-                                            height={normalize(30)}
-                                        />
-                                    </View>
-                                }
-                                {userChallenge.flag === "DRAW" &&
-
-                                    <View style={styles.winnerContainer}>
-                                        <Text style={styles.winner}>DRAW</Text>
-                                        <LottieAnimations
-                                            animationView={require('../../../assets/trophy.json')}
-                                            height={normalize(30)}
-                                        />
-                                    </View>
-                                }
-                            </>
-                            :
-                            <LottieAnimations
-                                animationView={require('../../../assets/challenge.json')}
-                                height={normalize(50)}
-                            />
-                        }
-                    </View>
-                    <Text style={styles.status}>{userChallenge.date}</Text>
-                    <Text style={styles.status}>STATUS : {userChallenge.status}</Text>
-                    <View style={styles.competitorsContainer}>
-                        <Text style={styles.challenger}>{userChallenge.playerUsername}</Text>
-                        <Text style={styles.versus}>vs</Text>
-                        <Text style={styles.opponent}>{userChallenge.opponentUsername}</Text>
-                    </View>
-                    {/* <AppButton text={'Challenge Declined'} disabled={challengeDeclined} style={styles.disabled} /> */}
-
-                    <Pressable style={styles.scoresButton} onPress={checkScores}>
-                        {userChallenge.status === "CLOSED" ?
-                            <Text style={styles.scoresText}>Scores</Text>
-                            :
-                            <Text style={styles.scoresText}>View challenge details</Text>
-                        }
-                    </Pressable>
-                </View>
-                :
-                <></>
-            }
-        </>
+        </View>
 
     )
 }
+
 
 const NoChallenges = () => {
     return (

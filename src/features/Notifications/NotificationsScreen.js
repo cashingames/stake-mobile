@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Text, View, ScrollView, Pressable, StatusBar, ImageBackground, Dimensions, Platform, ActivityIndicator, RefreshControl } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser, getUserNotifications, markNotificationRead } from "../Auth/AuthSlice";
+import { getUser} from "../Auth/AuthSlice";
 import normalize from "../../utils/normalize";
-import AppButton from '../../shared/AppButton';
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import LottieAnimations from "../../shared/LottieAnimations";
 import PageLoading from "../../shared/PageLoading";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
+import { getUserNotifications, markNotificationRead } from "../CommonSlice";
 
 const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -18,15 +18,13 @@ const wait = (timeout) => {
 
 const NotificationsScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
-    const user = useSelector(state => state.auth.user)
-    // console.log(user)
+    
 
-    const notifications = useSelector(state => state.auth.userNotifications)
+    const notifications = useSelector(state => state.common.userNotifications)
     console.log(notifications)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
     const [refreshing, setRefreshing] = useState(false);
-    const [showText, setShowText] = useState(true);
     const [clicked, setClicked] = useState(false)
     const [clicking, setClicking] = useState(false)
 
@@ -36,13 +34,6 @@ const NotificationsScreen = ({ navigation }) => {
         wait(2000).then(() => setRefreshing(false));
 
     }, []);
-    // useEffect(() => {
-    //     // Change the state every second or the time given by User.
-    //     const interval = setInterval(() => {
-    //         setShowText((showText) => !showText);
-    //     }, 2000);
-    //     return () => clearInterval(interval);
-    // }, []);
 
     const markAllAsRead = () => {
         setClicking(true)
@@ -56,7 +47,11 @@ const NotificationsScreen = ({ navigation }) => {
         React.useCallback(() => {
             dispatch(getUser());
             dispatch(getUserNotifications()).then(() => setLoading(false));
+        }, [])
+    );
 
+    useFocusEffect(
+        React.useCallback(() => {
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
             StatusBar.setBarStyle('dark-content');
@@ -66,7 +61,6 @@ const NotificationsScreen = ({ navigation }) => {
             }
         }, [])
     );
-
 
     if (loading) {
         return <PageLoading
@@ -81,17 +75,17 @@ const NotificationsScreen = ({ navigation }) => {
             style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
             resizeMethod="resize">
             <ScrollView style={styles.container}
-             refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    tintColor="#000000"
-                />
-            }
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        tintColor="#000000"
+                    />
+                }
             >
                 <Pressable style={styles.markAllButton} onPress={markAllAsRead}>
                     <Text style={styles.markText}>Mark all as read</Text>
-                    {clicking ? 
+                    {clicking ?
                         <ActivityIndicator size="small" color="#072169" />
                         :
                         <Ionicons name='checkmark-circle' color="#072169" size={18} />
@@ -110,7 +104,6 @@ const NotificationsScreen = ({ navigation }) => {
                         {notifications.map((notification, i) => <Notification key={i} notification={notification}
                             // index={i + 1}
                             moment={moment}
-                            showText={showText}
                             clicked={clicked}
                             setClicked={setClicked}
                         />)}
@@ -127,7 +120,7 @@ const NotificationsScreen = ({ navigation }) => {
     )
 }
 
-const Notification = ({ notification, moment, showText, clicked, setClicked }) => {
+const Notification = ({ notification, moment, clicked, setClicked }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const notificationAction = () => {
@@ -218,7 +211,7 @@ const styles = EStyleSheet.create({
         width: '16rem',
         borderWidth: 1,
         borderColor: '#FAC502',
-        paddingVertical: Platform.OS === 'ios' ? normalize(8) : normalize(9),
+        paddingVertical: Platform.OS === 'ios' ? normalize(10) : normalize(9),
         borderRadius: 30,
         paddingHorizontal: normalize(15),
         backgroundColor: '#FFFF',
@@ -267,7 +260,7 @@ const styles = EStyleSheet.create({
     checkContainer: {
         backgroundColor: "#FAC502",
         borderRadius: 100,
-        paddingLeft: Platform.OS === 'ios' ? normalize(2) : normalize(3),
+        paddingLeft: normalize(2),
         marginRight: '.6rem',
         marginBottom: '1rem'
     },
@@ -276,18 +269,18 @@ const styles = EStyleSheet.create({
         backgroundColor: '#EF2F55',
         borderRadius: 15,
         width: Platform.OS === 'ios' ? '6.5rem' : '7rem',
-        marginLeft:'auto',
-        marginTop:'1rem',
-        backgroundColor:'#FFE900',
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'center'
+        marginLeft: 'auto',
+        marginTop: '1rem',
+        backgroundColor: '#FFE900',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     markText: {
         fontSize: '.65rem',
         color: '#000000',
         fontFamily: 'graphik-medium',
-        marginRight:normalize(4)
+        marginRight: normalize(4)
 
     },
 })

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { View, ScrollView, Text, StatusBar} from 'react-native';
+import { View, ScrollView, Text, StatusBar, FlatList } from 'react-native';
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { fetchRecentLiveTrivia } from '../CommonSlice';
@@ -16,11 +16,20 @@ const LiveTriviasScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const [loading, setLoading] = useState(true)
+    const [pageNumber, setPageNumber] = useState(1)
+    const [loadingMore, setLoadingMore] = useState(false)
 
     const trivia = useSelector(state => state.common.trivias)
+    console.log(trivia)
     useEffect(() => {
-        dispatch(fetchRecentLiveTrivia()).then(() => setLoading(false));
-    }, []);
+        setLoadingMore(true)
+        dispatch(fetchRecentLiveTrivia(pageNumber))
+            .then(() => {
+                console.log("fetching page ", pageNumber)
+                setLoading(false)
+                setLoadingMore(false)
+            });
+    }, [pageNumber]);
 
 
     useFocusEffect(
@@ -35,6 +44,30 @@ const LiveTriviasScreen = ({ navigation }) => {
         }, [])
     );
 
+    const triviaCardContainer = ({ item }) => {
+        return (
+            <View style={styles.cardContainer}>
+                <LiveTriviaCard trivia={item} />
+            </View>
+        )
+    }
+
+    const renderLoader = () => {
+        return (
+            <>
+                {loadingMore ?
+                    <PageLoading
+                        backgroundColor='#072169'
+                        spinnerColor="#FFFF"
+                    />
+                    :
+                    <></>
+                }
+
+            </>
+        )
+    }
+
     if (loading) {
         return <PageLoading
             backgroundColor='#072169'
@@ -43,25 +76,34 @@ const LiveTriviasScreen = ({ navigation }) => {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            {trivia ?
+        // <ScrollView style={styles.container}>
+        // <View style={styles.boards}>
+        //     {trivia.map((trivia, i) => <TriviaCardContainer key={i} trivia={trivia} />)}
+        // </View>
+        <View style={styles.container}>
+
+            {trivia.length > 0 ?
                 <View style={styles.boards}>
-                    {trivia.map((trivia, i) => <TriviaCardContainer key={i} trivia={trivia} />)}
+                    <FlatList
+                        data={trivia}
+                        renderItem={triviaCardContainer}
+                        keyExtractor={item => item.id}
+                        ListFooterComponent={renderLoader}
+                        onEndReached={() => setPageNumber(pageNumber + 1)}
+                        onEndReachedThreshold={0.2}
+
+                    />
                 </View>
                 :
                 <Text style={styles.noLiveTrivia}>No recent live trivia</Text>
             }
-        </ScrollView>
+
+        </View>
+        // </ScrollView>
     )
 }
 
-const TriviaCardContainer = ({ trivia }) => {
-    return (
-        <View style={styles.cardContainer}>
-            <LiveTriviaCard trivia={trivia} />
-        </View>
-    )
-}
+
 
 
 

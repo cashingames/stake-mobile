@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Alert } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Text, View, ScrollView, Alert, Pressable, Platform } from 'react-native';
 import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch } from 'react-redux';
@@ -7,8 +7,10 @@ import Constants from 'expo-constants';
 import normalize from '../../utils/normalize';
 import AppButton from '../../shared/AppButton';
 import Input from '../../shared/Input';
-import { changePassword } from '../Auth/AuthSlice';
+import { changePassword, deleteUserAccount, logoutUser } from '../Auth/AuthSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
+import DeleteAccount from '../../shared/DeleteAccount';
 
 
 export default function ChangePasswordScreen({ navigation }) {
@@ -22,6 +24,23 @@ export default function ChangePasswordScreen({ navigation }) {
     const [new_password_confirmation, setConfirmPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
     const [passErr, setPassError] = useState(false);
 
+    const refRBSheet = useRef();
+
+	const openBottomSheet = () => {
+		refRBSheet.current.open()
+	}
+
+	const closeBottomSheet = () => {
+		refRBSheet.current.close()
+	}
+
+
+    const deleteAccount = () => {
+        dispatch(deleteUserAccount())
+        .then(() => {
+            dispatch(logoutUser())
+        }) 
+    }
 
     const onChangePassword = (text) => {
         text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
@@ -93,6 +112,17 @@ export default function ChangePasswordScreen({ navigation }) {
                     />
                 </>
                 <PasswordRequirement />
+                <Pressable style={styles.deleteContainer} onPress={openBottomSheet}>
+                    <Text style={styles.deleteText}>Delete Account</Text>
+                </Pressable>
+                <UniversalBottomSheet
+				refBottomSheet={refRBSheet}
+				height={Platform.OS === 'ios' ? 300 : 250}
+				subComponent={<DeleteAccount 
+                    onClose={closeBottomSheet} 
+                    onPressYes ={deleteAccount}
+                    />}
+			/>
             </ScrollView>
             <AppButton
                 text={saving ? 'Saving' : 'Change Password'}
@@ -200,6 +230,14 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         color: '#000000',
         opacity: 0.4,
+    },
+    deleteContainer: {
+        marginTop: normalize(15)
+    },
+    deleteText: {
+        fontSize: '0.75rem',
+        fontFamily: 'graphik-regular',
+        color: '#EF2F55', 
     },
     saveButton: {
         marginVertical: 10,
