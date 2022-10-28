@@ -170,6 +170,9 @@ const initialState = {
     userNotifications: [],
     featureFlags: [],
     userTransactions: [],
+    loadMoreTransactions: true,
+    loadMoreChallenges: true,
+    loadMoreLiveTrivias: true,
     maximumStakeAmount:'',
     minimumStakeAmount: '',
     periodBeforeChallengeStakingExpiry: ''
@@ -219,8 +222,8 @@ export const CommonSlice = createSlice({
                 state.faqAndAnswers = action.payload
             })
             .addCase(fetchRecentLiveTrivia.fulfilled, (state, action) => {
+                state.loadMoreLiveTrivias = !(action.payload.length < 10);
                 state.trivias = state.trivias.concat(action.payload);
-
             })
             .addCase(fetchUserFriends.fulfilled, (state, action) => {
                 state.userFriends = action.payload
@@ -229,12 +232,14 @@ export const CommonSlice = createSlice({
                 state.userFriends = action.payload
             })
             .addCase(getUserChallenges.fulfilled, (state, action) => {
+                state.loadMoreChallenges = !(action.payload.length < 10);
                 state.userChallenges = state.userChallenges.concat(action.payload);
             })
             .addCase(getUserNotifications.fulfilled, (state, action) => {
                 state.userNotifications = action.payload.data.data;
             })
             .addCase(fetchUserTransactions.fulfilled, (state, action) => {
+                state.loadMoreTransactions = !(action.payload.length < 10);
                 state.userTransactions = state.userTransactions.concat(action.payload);
             })
             .addCase(fetchFeatureFlags.fulfilled, (state, action) => {

@@ -16,12 +16,26 @@ const LiveTriviasScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const [loading, setLoading] = useState(true)
-    const [pageNumber, setPageNumber] = useState(1)
+    const [pageNumber, setPageNumber] = useState()
     const [loadingMore, setLoadingMore] = useState(false)
+    const loadMoreLiveTrivias = useSelector(state => state.common.loadMoreLiveTrivias);
+
 
     const trivia = useSelector(state => state.common.trivias)
-    console.log(trivia)
+
+    useEffect(()=>{
+        setPageNumber(getPageNo());
+    }, [])
+
     useEffect(() => {
+        if(!pageNumber){
+            return;
+        }
+        if(!loadMoreLiveTrivias){
+            setLoadingMore(false)
+            setLoading(false)
+            return;
+        }
         setLoadingMore(true)
         dispatch(fetchRecentLiveTrivia(pageNumber))
             .then(() => {
@@ -29,7 +43,18 @@ const LiveTriviasScreen = ({ navigation }) => {
                 setLoading(false)
                 setLoadingMore(false)
             });
-    }, [pageNumber]);
+    }, [pageNumber, loadMoreLiveTrivias]);
+
+    const loadMoreItems = () => {
+        console.log("loading more")
+        if(!loadMoreLiveTrivias)
+            return;
+        //check if length of transactions has changed
+        setPageNumber(getPageNo())
+    }
+
+    const getPageNo = () => parseInt(trivia.length/10) + 1;
+
 
 
     useFocusEffect(
@@ -89,7 +114,7 @@ const LiveTriviasScreen = ({ navigation }) => {
                         renderItem={triviaCardContainer}
                         keyExtractor={item => item.id}
                         ListFooterComponent={renderLoader}
-                        onEndReached={() => setPageNumber(pageNumber + 1)}
+                        onEndReached={loadMoreItems}
                         onEndReachedThreshold={0.2}
 
                     />

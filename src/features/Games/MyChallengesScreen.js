@@ -15,11 +15,27 @@ const MyChallengesScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
-    const [pageNumber, setPageNumber] = useState(1)
+    const [pageNumber, setPageNumber] = useState()
     const [loadingMore, setLoadingMore] = useState(false)
     const challenges = useSelector(state => state.common.userChallenges);
+    const loadMoreChallenges = useSelector(state => state.common.loadMoreChallenges);
+
+    useEffect(()=>{
+        setPageNumber(getPageNo());
+    }, [])
+
 
     useEffect(() => {
+
+        if(!pageNumber){
+            return;
+        }
+        if(!loadMoreChallenges ){
+            setLoadingMore(false)
+            setLoading(false)
+            return;
+        }
+
         setLoadingMore(true)
         dispatch(getUserChallenges(pageNumber))
             .then(() => {
@@ -27,7 +43,17 @@ const MyChallengesScreen = ({ navigation, route }) => {
                 setLoading(false)
                 setLoadingMore(false)
             })
-    }, [pageNumber]);
+    }, [pageNumber, loadMoreChallenges]);
+
+    const loadMoreItems = () => {
+        console.log("loading more")
+        if(!loadMoreChallenges)
+            return;
+        //check if length of transactions has changed
+        setPageNumber(getPageNo())
+    }
+
+    const getPageNo = () => parseInt(challenges.length/10) + 1;
 
 
     useFocusEffect(
@@ -48,8 +74,9 @@ const MyChallengesScreen = ({ navigation, route }) => {
         })
 
     }
-    const challengeContent = ({ item }) => {
+    const renderItem = ({ item }) => {
         const challengeDeclined = item.status === "DECLINED"
+        const challengeExpired = item.status === "EXPIRED"
         return < View style={styles.challengeContainer}>
             <View style={styles.categoryContainer}>
                 <Text style={styles.challengeCategory}>{item.subcategory}</Text>
@@ -100,8 +127,8 @@ const MyChallengesScreen = ({ navigation, route }) => {
             </View>
             <AppButton
                 onPress={() => checkScores(item)}
-                disabled={challengeDeclined}
-                text={item.status === "DECLINED" ? "Declined" : [item.status === "CLOSED" ? "Scores" : "View challenge details"]}
+                disabled={challengeDeclined || challengeExpired}
+                text={item.status === "DECLINED" ? "Declined" : item.status === "EXPIRED" ? "Expired" : [item.status === "CLOSED" ? "Scores" : "View challenge details"]}
             />
         </View>
     }
@@ -134,10 +161,10 @@ const MyChallengesScreen = ({ navigation, route }) => {
             {challenges.length > 0 ?
                 <FlatList
                     data={challenges}
-                    renderItem={challengeContent}
+                    renderItem={renderItem}
                     keyExtractor={item => item.challengeId}
                     ListFooterComponent={renderLoader}
-                    onEndReached={() => setPageNumber(pageNumber + 1)}
+                    onEndReached={loadMoreItems}
                     onEndReachedThreshold={0.2}
                 />
                 :

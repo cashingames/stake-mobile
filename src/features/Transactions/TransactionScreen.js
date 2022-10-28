@@ -13,12 +13,26 @@ export default function TransactionScreen({ navigation }) {
 
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
-    const [pageNumber, setPageNumber] = useState(1)
     const [loadingMore, setLoadingMore] = useState(false)
     const transactions = useSelector(state => state.common.userTransactions);
-    console.log(transactions)
+    const [pageNumber, setPageNumber] = useState()
+
+    const loadMoreTransactions = useSelector(state => state.common.loadMoreTransactions);
 
     useEffect(() => {
+        setPageNumber(getPageNo());
+    }, [])
+
+    useEffect(() => {
+        if (!pageNumber) {
+            return;
+        }
+        if (!loadMoreTransactions) {
+            setLoadingMore(false)
+            setLoading(false)
+            return;
+        }
+
         setLoadingMore(true)
         dispatch(fetchUserTransactions(pageNumber))
             .then(() => {
@@ -26,7 +40,17 @@ export default function TransactionScreen({ navigation }) {
                 setLoading(false)
                 setLoadingMore(false)
             })
-    }, [pageNumber]);
+    }, [pageNumber, loadMoreTransactions]);
+
+    const loadMoreItems = () => {
+        console.log("loading more")
+        if (!loadMoreTransactions)
+            return;
+        //check if length of transactions has changed
+        setPageNumber(getPageNo())
+    }
+
+    const getPageNo = () => parseInt(transactions.length / 10) + 1;
 
     const fundTransactions = ({ item }) => {
 
@@ -47,7 +71,7 @@ export default function TransactionScreen({ navigation }) {
 
     }
 
-    const renderLoader = () => {
+    const renderFooterLoader = () => {
         return (
             <>
                 {loadingMore ?
@@ -77,8 +101,8 @@ export default function TransactionScreen({ navigation }) {
                     data={transactions}
                     renderItem={fundTransactions}
                     keyExtractor={item => item.transactionId}
-                    ListFooterComponent={renderLoader}
-                    onEndReached={() => setPageNumber(pageNumber + 1)}
+                    ListFooterComponent={renderFooterLoader}
+                    onEndReached={loadMoreItems}
                     onEndReachedThreshold={0.2}
                 />
                 :
