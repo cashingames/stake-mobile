@@ -5,7 +5,7 @@ export default {
   name: getAppName(),
   slug: getSlug(),
   version: version, //For every publish and build update the version. Update for every publish and new build
-  runtimeVersion: "1.59", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "1.67", //All apps using the same runtime will get the published updates. Generally update for every new build
   orientation: "portrait",
   icon: "./assets/images/adaptive-icon2.png",
   // jsEngine: "hermes",
@@ -62,7 +62,15 @@ export default {
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
     "@react-native-google-signin/google-signin",
-    "expo-notifications"
+    "expo-notifications",
+    [
+      "expo-build-properties",
+      {
+        "ios": {
+          "useFrameworks": "static"
+        }
+      }
+    ]
   ],
   extra: {
     isDevelopment: env === 'development' || false,

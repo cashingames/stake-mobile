@@ -114,9 +114,9 @@ function CustomDrawerContent(props) {
 
     const user = useSelector(state => state.auth.user)
 
-    // const onLogout = () => {
-    //     dispatch(logoutUser());
-    // }
+    const onLogout = () => {
+        dispatch(logoutUser());
+    }
 
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Pressable, Text, View, ScrollView } from 'react-native';
+import { Pressable, Text, View, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
@@ -17,6 +17,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { saveToken } from '../../utils/ApiHelper';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import InputOTP from '../../shared/InputOTP';
+import AppleSignUp from '../../shared/AppleSignUp';
 
 export default function LoginScreen({ navigation }) {
 
@@ -165,6 +166,9 @@ const RenderCreateAccount = () => {
             <View style={styles.google}>
                 <SocialSignUp googleText="Sign in" />
             </View>
+            {Platform.OS === 'ios' &&
+                <AppleSignUp />
+            }
         </View>
     )
 }
