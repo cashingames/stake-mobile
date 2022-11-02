@@ -23,6 +23,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import GamePicker from '../Games/GamePicker';
 import LottieAnimations from '../../shared/LottieAnimations';
 import SelectGameMode from '../Games/SelectGameMode';
+import ChallengeWeeklyTopLeaders from '../Leaderboard/ChallengeWeeklyTopLeaders';
 
 const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -154,6 +155,7 @@ const HomeScreen = () => {
                 <UserDetails user={user} trivia={trivia} />
                 <View style={styles.container}>
                     <SelectGameMode />
+                    <ChallengeWeeklyTopLeaders />
                     <GlobalTopLeadersHero />
                 </View>
             </ScrollView>
