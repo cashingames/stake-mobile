@@ -64,7 +64,7 @@ const config = {
     FundWallet: 'fund',
     UserProfile: 'profile',
     Invite: 'invite',
-    AcceptDeclineChallenge: 'challenge/:challengeId',
+    MyChallengesScore: 'challenge/:challengeId',
     ChallengeGameInstruction: 'instructions/:challengeId',
     EmailVerified: 'verifyemail/:email'
   },

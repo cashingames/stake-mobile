@@ -51,7 +51,7 @@ import TriviaEndResultScreen from './features/Games/TriviaEndResultScreen';
 import LiveTriviaLeaderBoard from './features/LiveTrivia/LiveTriviaLeaderboard';
 import LiveTriviasScreen from './features/Games/LiveTriviasScreen';
 import ChallengeSelectPlayerScreen from './features/Games/ChallengeSelectPlayerScreen';
-import AcceptDeclineChallengeScreen from './features/Games/AcceptDeclineChallengeScreen';
+// import AcceptDeclineChallengeScreen from './features/Games/AcceptDeclineChallengeScreen';
 import ChallengeEndGameScreen from './features/Games/ChallengeEndGameScreen';
 import ChallengeGameInProgressScreen from './features/Games/ChallengeGameInProgressScreen';
 import ChallengeGameInstructionsScreen from './features/Games/ChallengeGameInstructionScreen';
@@ -213,7 +213,7 @@ function AppRouter() {
 						<AppStack.Screen name="ChallengeGameInstruction" component={ChallengeGameInstructionsScreen} options={{ title: 'Game Instructions' }} />
 						<AppStack.Screen name="ChallengeGameInProgress" component={ChallengeGameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeEndGameScreen" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="AcceptDeclineChallenge" component={AcceptDeclineChallengeScreen} options={{ headerShown: false }} />
+						{/* <AppStack.Screen name="AcceptDeclineChallenge" component={AcceptDeclineChallengeScreen} options={{ headerShown: false }} /> */}
 						<AppStack.Screen name="MyChallengesScore" component={MyChallengesScoreScreen} options={{
 							title: 'Scores',
 							headerStyle: {

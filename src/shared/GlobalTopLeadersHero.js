@@ -15,7 +15,7 @@ export default function GlobalTopLeadersHero() {
     return (
         <Animated.View style={styles.leaderboard} entering={BounceInDown.duration(2000)}>
             <View style={styles.leaderboardHeader}>
-                <Text style={styles.title}>Leaderboard</Text>
+                <Text style={styles.title}>Top Players</Text>
                 <View style={styles.extended}>
                     <Text onPress={() => navigation.navigate('Leaderboard')}>
                         <Text style={styles.extendedText}>Extended Leaderboard</Text>

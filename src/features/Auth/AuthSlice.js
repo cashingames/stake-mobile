@@ -47,8 +47,8 @@ export const loginUser = async (data) => {
     return axios.post('auth/login', data);
 }
 
-export const loginWithGoogle = createAsyncThunk(
-    'auth/loginWithGoogle',
+export const loginWithSocialLink = createAsyncThunk(
+    'auth/loginWithSocialLink',
     async (data, thunkAPI) => {
         const response = await axios.post('/auth/social-login/authenticate', data)
         // console.log(response)
@@ -56,8 +56,8 @@ export const loginWithGoogle = createAsyncThunk(
     }
 )
 
-export const registerWithGoogle = createAsyncThunk(
-    'auth/registerWithGoogle',
+export const registerWithSocialLink = createAsyncThunk(
+    'auth/registerWithSocialLink',
     async (data, thunkAPI) => {
         const response = await axios.post('/auth/social-login/create-account', data)
         // console.log(response)
@@ -313,10 +313,10 @@ export const AuthSlice = createSlice({
                 state.token = action.payload.data;
 
             })
-            .addCase(loginWithGoogle.fulfilled, (state, action) => {
+            .addCase(loginWithSocialLink.fulfilled, (state, action) => {
                 state.token = action.payload.data.token;
             })
-            .addCase(registerWithGoogle.fulfilled, (state, action) => {
+            .addCase(registerWithSocialLink.fulfilled, (state, action) => {
                 state.token = action.payload.data;
             })
             .addCase(getChallengeScores.fulfilled, (state, action) => {

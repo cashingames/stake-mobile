@@ -155,7 +155,7 @@ const HomeScreen = () => {
                 <UserDetails user={user} trivia={trivia} />
                 <View style={styles.container}>
                     <SelectGameMode />
-                    <ChallengeWeeklyTopLeaders />
+                    {/* <ChallengeWeeklyTopLeaders /> */}
                     <GlobalTopLeadersHero />
                 </View>
             </ScrollView>

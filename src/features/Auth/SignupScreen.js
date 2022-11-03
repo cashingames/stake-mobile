@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, TextInput } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable, TextInput, Platform } from 'react-native';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +16,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import SocialSignUp from '../../shared/SocialSignUp';
 import { Ionicons } from "@expo/vector-icons";
 import CountryPicker from "react-native-country-codes-picker";
+import AppleSignUp from '../../shared/AppleSignUp';
 
 
 export default function SignupScreen({ navigation }) {
@@ -54,7 +55,7 @@ export default function SignupScreen({ navigation }) {
 
     const onNext = () => {
         //save this information in store
-        dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone, country_code:countryCode }));
+        dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone, country_code: countryCode }));
         navigation.navigate("SignupProfile")
     }
 
@@ -73,6 +74,9 @@ export default function SignupScreen({ navigation }) {
                 <Text style={styles.signInText}>Use your social link</Text>
                 <View style={styles.google}>
                     <SocialSignUp googleText="Sign up" />
+                    {Platform.OS === 'ios' &&
+                        <AppleSignUp />
+                    }
                 </View>
                 <Text style={styles.signInText}>or</Text>
             </View>
@@ -289,7 +293,7 @@ const styles = EStyleSheet.create({
     inputLabel: {
         fontFamily: 'graphik-medium',
         color: '#000000B2',
-        fontSize:'0.76rem',
+        fontSize: '0.76rem',
         marginBottom: normalize(8)
     },
 });

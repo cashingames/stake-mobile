@@ -4,7 +4,6 @@ import * as Google from 'expo-auth-session/providers/google';
 import { Button, Pressable, View, Image, Platform } from 'react-native';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { loginWithGoogle, registerWithGoogle } from '../features/Auth/AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { Text } from 'react-native';
@@ -16,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import Constants from "expo-constants";
 import normalize from '../utils/normalize';
 import UniversalBottomSheet from './UniversalBottomSheet';
+import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/AuthSlice';
 
 
 
@@ -74,7 +74,7 @@ export default function SocialSignUp({googleText}) {
 
     const registerUserWithGoogle = () => {
         setSaving(true);
-        dispatch(registerWithGoogle({
+        dispatch(registerWithSocialLink({
             email,
             firstName,
             lastName,
@@ -113,7 +113,7 @@ export default function SocialSignUp({googleText}) {
                 .then(function (response) {
                     const userDetails = response.data
                     // console.log('user details', userDetails)
-                    dispatch(loginWithGoogle({
+                    dispatch(loginWithSocialLink({
                         firstName: userDetails.given_name,
                         lastName: userDetails.family_name,
                         email: userDetails.email
@@ -243,10 +243,11 @@ const styles = EStyleSheet.create({
     googleButton: {
         backgroundColor: '#4299f5',
         flexDirection: 'row',
-        paddingVertical: Platform.OS === 'ios' ? normalize(6) : normalize(9),
-        paddingHorizontal: normalize(11),
+        paddingVertical: Platform.OS === 'ios' ? normalize(9) : normalize(9),
+        paddingHorizontal: normalize(12),
+        justifyContent:'center',
         alignItems: 'center',
-        borderRadius: 10,
+        borderRadius: 5,
     },
     googleImage: {
         backgroundColor: '#FFFF',
@@ -261,7 +262,7 @@ const styles = EStyleSheet.create({
     googletext: {
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        fontSize: '0.65rem'
+        fontSize: '0.7rem'
     },
     inputContainer: {
         paddingHorizontal: normalize(18)

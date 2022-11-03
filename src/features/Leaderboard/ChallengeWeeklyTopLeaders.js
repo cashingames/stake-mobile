@@ -6,7 +6,7 @@ import normalize from "../../utils/normalize";
 const ChallengeWeeklyTopLeaders = () => {
     return (
         <View>
-            <Text style={styles.topChallengersHeader}>Top Challenge Leaders for this week</Text>
+            <Text style={styles.topChallengersHeader}>Top Challengers</Text>
             <TopWeeklyChallengers />
         </View>
     )
