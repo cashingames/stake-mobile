@@ -1,53 +1,86 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
+import { useDispatch, useSelector } from "react-redux";
 import normalize from "../../utils/normalize";
+import { isTrue } from "../../utils/stringUtl";
+import { challengeTopLeaders } from "../Games/GameSlice";
 
 const ChallengeWeeklyTopLeaders = () => {
+    const dispatch = useDispatch();
+    const challengeLeaders = useSelector(state => state.game.challengeLeaders)
+
+
+
+    useEffect(() => {
+        dispatch(challengeTopLeaders());
+    }, [])
+
     return (
         <View>
             <Text style={styles.topChallengersHeader}>Top Challengers</Text>
-            <TopWeeklyChallengers />
+            <TopWeeklyChallengers challengeLeaders={challengeLeaders} />
         </View>
     )
 }
 
-const TopWeeklyChallengers = () => {
+const TopWeeklyChallengers = ({ challengeLeaders }) => {
+    const topLeaders = challengeLeaders?.slice(0, 3) ?? null;
+    const firstLeader = topLeaders[0] ?? { username: "..." };
+    const secondLeader = topLeaders[1] ?? { username: "..." };
+    const thirdLeader = topLeaders[2] ?? { username: "..." };
+
     return (
         <View style={styles.topChallengersContainer}>
-            <TopWeeklyChallenger
-                leaderCrown={require("../../../assets/images/third-crown.png")}
-                leaderUsername="Jaybewa"
-                leaderStage={require("../../../assets/images/third-stage.png")}
-            />
-            <TopWeeklyChallenger
-                leaderCrown={require("../../../assets/images/first-crown.png")}
-                leaderUsername="Jaybewa"
-                leaderStage={require("../../../assets/images/first-stage.png")}
-            />
-            <TopWeeklyChallenger
-                leaderCrown={require("../../../assets/images/second-crown.png")}
-                leaderUsername="Jaybewa"
-                leaderStage={require("../../../assets/images/second-stage.png")}
-            />
+
+            {challengeLeaders.length > 0 ?
+                <>
+                    <TopWeeklyChallenger
+                        trophyImageUrl={require('../../../assets/images/third-crown.png')}
+                        stageImageUrl={require("../../../assets/images/third-stage.png")}
+                        username={thirdLeader.username}
+                        avatar={thirdLeader.avatar}
+
+                    />
+                    <TopWeeklyChallenger
+                        trophyImageUrl={require('../../../assets/images/first-crown.png')}
+                        stageImageUrl={require("../../../assets/images/first-stage.png")}
+                        username={firstLeader.username}
+                        avatar={firstLeader.avatar}
+
+                    />
+                    <TopWeeklyChallenger
+                        trophyImageUrl={require('../../../assets/images/second-crown.png')}
+                        stageImageUrl={require("../../../assets/images/second-stage.png")}
+                        username={secondLeader.username}
+                        avatar={secondLeader.avatar}
+
+                    />
+                </>
+                :
+                <></>
+
+            }
+
         </View>
     )
 }
 
-const TopWeeklyChallenger = ({ leaderCrown, leaderUsername, leaderStage }) => {
+const TopWeeklyChallenger = ({ username, avatar, stageImageUrl, trophyImageUrl }) => {
+
     return (
         <View style={styles.topChallengerContainer}>
             <Image
-                source={leaderCrown}
+                source={trophyImageUrl}
                 style={styles.crown}
             />
             <Image
-                source={require("../../../assets/images/user-icon.png")}
+                source={isTrue(avatar) ? { uri: avatar } : require("../../../assets/images/user-icon.png")}
                 style={styles.avatar}
             />
-            <Text style={styles.leaderUsername}>{leaderUsername}</Text>
+            <Text style={styles.leaderUsername}>{username}</Text>
             <Image
-                source={leaderStage}
+                source={stageImageUrl}
                 style={styles.stage}
             />
         </View>
@@ -75,12 +108,12 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     crown: {
-        width: normalize(38),
-        height: normalize(38),
+        width: normalize(45),
+        height: normalize(45),
     },
     avatar: {
-        width: normalize(40),
-        height: normalize(40),
+        width: normalize(45),
+        height: normalize(45),
         backgroundColor: '#FFFF',
         borderRadius: 50,
     },
