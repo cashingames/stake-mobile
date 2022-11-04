@@ -82,7 +82,7 @@ function AppRouter() {
 	const [loading, setLoading] = useState(true);
 
 	const token = useSelector(state => state.auth.token);
-	const showIntro = useSelector(state => state.auth.showIntro);
+	// const showIntro = useSelector(state => state.auth.showIntro);
 
 	const [pushToken, setPushToken] = useState('');
 
@@ -161,9 +161,9 @@ function AppRouter() {
 		return <PageLoading spinnerColor="#0000ff" />
 	}
 
-	if (showIntro) {
-		return <IntroSlide />;
-	}
+	// if (showIntro) {
+	// 	return <IntroSlide />;
+	// }
 
 	return (
 		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' } }} >
