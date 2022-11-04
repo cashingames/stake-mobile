@@ -69,6 +69,15 @@ export const getLiveTriviaLeaders = createAsyncThunk(
         return response.data;
     }
 )
+export const challengeTopLeaders = createAsyncThunk(
+    'game/challengeTopLeaders',
+    async (data, sthunkAPI) => {
+        //make a network request to the server
+        const response = await axios.post('v3/challenge/leaders/global');
+        console.log(response.data, 'this is response')
+        return response.data;
+    }
+)
 
 export const sendFriendInvite = createAsyncThunk(
     'game/sendFriendInvite',
@@ -138,6 +147,7 @@ let initialState = {
     selectedFriend: null,
     isPlayingTrivia: false,
     triviaLeaders: [],
+    challengeLeaders: [],
     triviaPosition: '',
     triviaCategory: '',
     triviaType: '',
@@ -284,6 +294,9 @@ export const GameSlice = createSlice({
             })
             .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
                 state.triviaLeaders = action.payload;
+            })
+            .addCase(challengeTopLeaders.fulfilled, (state, action) => {
+                state.challengeLeaders = action.payload;
             })
             .addCase(getChallengeDetails.fulfilled, (state, action) => {
                 state.challengeDetails = action.payload;
