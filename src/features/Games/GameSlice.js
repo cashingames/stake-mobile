@@ -74,7 +74,7 @@ export const challengeTopLeaders = createAsyncThunk(
     async (data, sthunkAPI) => {
         //make a network request to the server
         const response = await axios.post('v3/challenge/leaders/global');
-        console.log(response.data, 'this is response')
+        // console.log(response.data, 'this is response')
         return response.data;
     }
 )
