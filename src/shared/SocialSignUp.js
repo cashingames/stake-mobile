@@ -21,18 +21,18 @@ import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/Au
 
 WebBrowser.maybeCompleteAuthSession();
 
-export default function SocialSignUp({googleText}) {
+export default function SocialSignUp({ googleText }) {
     const navigation = useNavigation();
     const refRBSheet = useRef();
     const dispatch = useDispatch();
-    const [password, setPassword] = useState('');
-    const [password_confirmation, setPasswordConfirmation] = useState('');
+    // const [password, setPassword] = useState('');
+    // const [password_confirmation, setPasswordConfirmation] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [username, setUsername] = useState('');
     const [referrer, setReferrer] = useState('');
     const [phoneNumberErr, setPhoneNumberError] = useState(false);
     const [usernameErr, setUsernameError] = useState(false);
-    const [passErr, setPassError] = useState(false);
+    // const [passErr, setPassError] = useState(false);
     const [email, setEmail] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -59,14 +59,14 @@ export default function SocialSignUp({googleText}) {
         setUsername(text)
     }
 
-    const onChangePassword = (text) => {
-        text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
-        setPassword(text)
-    }
+    // const onChangePassword = (text) => {
+    //     text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
+    //     setPassword(text)
+    // }
 
-    const onChangeConfirmPassword = (text) => {
-        setPasswordConfirmation(text)
-    }
+    // const onChangeConfirmPassword = (text) => {
+    //     setPasswordConfirmation(text)
+    // }
 
     const onChangReferrer = (text) => {
         setReferrer(text)
@@ -80,8 +80,8 @@ export default function SocialSignUp({googleText}) {
             lastName,
             phoneNumber,
             username,
-            password,
-            password_confirmation,
+            // password,
+            // password_confirmation,
             referrer
         })).then(unwrapResult)
             .then((originalPromiseResult) => {
@@ -99,11 +99,18 @@ export default function SocialSignUp({googleText}) {
     });
 
 
+
     useEffect(() => {
-        const invalid = usernameErr || username === '' || passErr || password === '' ||
-            phoneNumber === '' || phoneNumberErr || password_confirmation !== password;
+        const invalid = usernameErr || username === '' ||
+            phoneNumber === '' || phoneNumberErr;
         setCanSave(!invalid);
-    }, [usernameErr, username, passErr, password, phoneNumber, phoneNumberErr, password_confirmation])
+    }, [usernameErr, username, phoneNumber, phoneNumberErr])
+
+    // useEffect(() => {
+    //     const invalid = usernameErr || username === '' || passErr || password === '' ||
+    //         phoneNumber === '' || phoneNumberErr || password_confirmation !== password;
+    //     setCanSave(!invalid);
+    // }, [usernameErr, username, passErr, password, phoneNumber, phoneNumberErr, password_confirmation])
 
     useEffect(() => {
         if (response?.type === 'success') {
@@ -112,13 +119,15 @@ export default function SocialSignUp({googleText}) {
             axios.get('https://www.googleapis.com/oauth2/v3/userinfo?access_token=' + accessToken)
                 .then(function (response) {
                     const userDetails = response.data
-                    // console.log('user details', userDetails)
+
+                    console.log('user details', userDetails)
                     dispatch(loginWithSocialLink({
                         firstName: userDetails.given_name,
                         lastName: userDetails.family_name,
                         email: userDetails.email
                     })).then(unwrapResult)
                         .then((originalPromiseResult) => {
+                            console.log(originalPromiseResult)
                             if (originalPromiseResult.data.isFirstTime) {
                                 setEmail(originalPromiseResult.data.email)
                                 setFirstName(originalPromiseResult.data.firstName)
@@ -126,7 +135,9 @@ export default function SocialSignUp({googleText}) {
                                 openBottomSheet()
                                 return
                             }
-                            // console.log(originalPromiseResult);
+                            openBottomSheet()
+
+                            console.log(originalPromiseResult);
                             saveToken(originalPromiseResult.data.token)
                             navigation.navigate('AppRouter')
                         })
@@ -152,20 +163,21 @@ export default function SocialSignUp({googleText}) {
             </Pressable>
             <UniversalBottomSheet
                 refBottomSheet={refRBSheet}
-                height={570}
+                height={560}
                 subComponent={<FirstTimeUserDetails
                     onPress={registerUserWithGoogle}
-                    password={password}
-                    password_confirmation={password_confirmation}
+                    // password={password}
+                    // password_confirmation={password_confirmation}
                     phoneNumber={phoneNumber}
-                    username={username} passErr={passErr}
+                    username={username}
+                    // passErr={passErr}
                     referrer={referrer}
                     phoneNumberErr={phoneNumberErr}
                     onChangePhoneNumber={onChangePhoneNumber}
                     onChangeUserName={onChangeUserName}
-                    onChangePassword={onChangePassword}
+                    // onChangePassword={onChangePassword}
                     usernameErr={usernameErr} onChangReferrer={onChangReferrer}
-                    onChangeConfirmPassword={onChangeConfirmPassword}
+                    // onChangeConfirmPassword={onChangeConfirmPassword}
                     canSave={canSave}
                     saving={saving}
                     onClose={closeBottomSheet}
@@ -175,13 +187,13 @@ export default function SocialSignUp({googleText}) {
     );
 }
 const FirstTimeUserDetails = ({ onPress,
-    password,
-    password_confirmation,
+    // password,
+    // password_confirmation,
     phoneNumber,
     username,
     referrer,
     phoneNumberErr, onChangePhoneNumber,
-    passErr, onChangeConfirmPassword,
+    // passErr, onChangeConfirmPassword,
     onChangeUserName, usernameErr,
     onChangePassword, onChangReferrer,
     canSave, saving
@@ -189,24 +201,24 @@ const FirstTimeUserDetails = ({ onPress,
     return (
         <View style={styles.inputContainer}>
             <Text style={styles.inputText}>Please input your details</Text>
+            <View style={styles.inputBoxes}>
+                <Input
+                    label='Username'
+                    placeholder="John"
+                    value={username}
+                    error={usernameErr && '*username must not be empty'}
+                    onChangeText={text => onChangeUserName(text)}
+                />
 
-            <Input
-                label='Username'
-                placeholder="John"
-                value={username}
-                error={usernameErr && '*username must not be empty'}
-                onChangeText={text => onChangeUserName(text)}
-            />
-
-            <Input
-                label='Phone Number'
-                placeholder="080xxxxxxxx"
-                value={phoneNumber}
-                onChangeText={text => { onChangePhoneNumber(text) }}
-                error={phoneNumberErr && '*input a valid phone number'}
-                keyboardType="numeric"
-            />
-
+                <Input
+                    label='Phone Number'
+                    placeholder="080xxxxxxxx"
+                    value={phoneNumber}
+                    onChangeText={text => { onChangePhoneNumber(text) }}
+                    error={phoneNumberErr && '*input a valid phone number'}
+                    keyboardType="numeric"
+                />
+                {/* 
             <Input
                 type="password"
                 label='Password'
@@ -214,23 +226,24 @@ const FirstTimeUserDetails = ({ onPress,
                 placeholder="Enter password"
                 error={passErr && '*password must not be less than 8 digits'}
                 onChangeText={text => { onChangePassword(text) }}
-            />
+            /> */}
 
-            <Input
+                {/* <Input
                 type="password"
                 label='Password'
                 value={password_confirmation}
                 placeholder="Confirm password"
                 error={password_confirmation !== password && '*password confirmation must match password'}
                 onChangeText={text => { onChangeConfirmPassword(text) }}
-            />
-            <Input
-                label='Referral'
-                value={referrer}
-                placeholder="Input referral code(optional)"
-                onChangeText={text => { onChangReferrer(text) }}
+            /> */}
+                <Input
+                    label='Referral'
+                    value={referrer}
+                    placeholder="Input referral code(optional)"
+                    onChangeText={text => { onChangReferrer(text) }}
 
-            />
+                />
+            </View>
 
             <AppButton onPress={onPress}
                 text={saving ? 'Saving' : 'Proceed'}
@@ -245,9 +258,12 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         paddingVertical: Platform.OS === 'ios' ? normalize(9) : normalize(9),
         paddingHorizontal: normalize(12),
-        justifyContent:'center',
+        justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
+    },
+    inputBoxes: {
+        marginTop: '2.5rem'
     },
     googleImage: {
         backgroundColor: '#FFFF',
@@ -257,7 +273,7 @@ const styles = EStyleSheet.create({
     },
     pointsIcon: {
         width: Platform.OS === 'ios' ? '.6rem' : '.65rem',
-        height:Platform.OS === 'ios' ? '.6rem' : '.65rem',
+        height: Platform.OS === 'ios' ? '.6rem' : '.65rem',
     },
     googletext: {
         color: '#FFFF',

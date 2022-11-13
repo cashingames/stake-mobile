@@ -6,10 +6,8 @@ import normalize from "../../utils/normalize";
 import { isTrue } from "../../utils/stringUtl";
 import { challengeTopLeaders } from "../Games/GameSlice";
 
-const ChallengeWeeklyTopLeaders = () => {
+const ChallengeWeeklyTopLeaders = ({ challengeLeaders }) => {
     const dispatch = useDispatch();
-    const challengeLeaders = useSelector(state => state.game.challengeLeaders)
-
 
 
     useEffect(() => {
@@ -17,10 +15,16 @@ const ChallengeWeeklyTopLeaders = () => {
     }, [])
 
     return (
-        <View>
-            <Text style={styles.topChallengersHeader}>Top Challengers</Text>
-            <TopWeeklyChallengers challengeLeaders={challengeLeaders} />
-        </View>
+        <>
+            {challengeLeaders.length > 0 &&
+
+                <View>
+                    <Text style={styles.topChallengersHeader}>Top Challengers</Text>
+                    <TopWeeklyChallengers challengeLeaders={challengeLeaders} />
+                </View>
+            }
+        </>
+
     )
 }
 

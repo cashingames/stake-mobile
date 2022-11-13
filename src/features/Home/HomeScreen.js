@@ -38,6 +38,7 @@ const HomeScreen = () => {
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
     const trivia = useSelector(state => state.liveTrivia.data);
+    const challengeLeaders = useSelector(state => state.game.challengeLeaders)
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
@@ -155,7 +156,7 @@ const HomeScreen = () => {
                 <UserDetails user={user} trivia={trivia} />
                 <View style={styles.container}>
                     <SelectGameMode />
-                    <ChallengeWeeklyTopLeaders />
+                    <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
                     <GlobalTopLeadersHero />
                 </View>
             </ScrollView>
