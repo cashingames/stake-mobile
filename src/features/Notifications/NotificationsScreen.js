@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Text, View, ScrollView, Pressable, StatusBar, ImageBackground, Dimensions, Platform, ActivityIndicator, RefreshControl } from 'react-native';
+import { Text, View, ScrollView, Pressable, StatusBar, ImageBackground, Dimensions, Platform, ActivityIndicator } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser} from "../Auth/AuthSlice";
-import normalize from "../../utils/normalize";
+import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import LottieAnimations from "../../shared/LottieAnimations";
 import PageLoading from "../../shared/PageLoading";
@@ -12,9 +12,6 @@ import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { getUserNotifications, markNotificationRead } from "../CommonSlice";
 
-const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-}
 
 const NotificationsScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -24,16 +21,9 @@ const NotificationsScreen = ({ navigation }) => {
     console.log(notifications)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
-    const [refreshing, setRefreshing] = useState(false);
     const [clicked, setClicked] = useState(false)
     const [clicking, setClicking] = useState(false)
 
-    const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
-        dispatch(getUserNotifications());
-        wait(2000).then(() => setRefreshing(false));
-
-    }, []);
 
     const markAllAsRead = () => {
         setClicking(true)
@@ -75,13 +65,6 @@ const NotificationsScreen = ({ navigation }) => {
             style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
             resizeMethod="resize">
             <ScrollView style={styles.container}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                        tintColor="#000000"
-                    />
-                }
             >
                 <Pressable style={styles.markAllButton} onPress={markAllAsRead}>
                     <Text style={styles.markText}>Mark all as read</Text>
@@ -161,7 +144,8 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         // paddingBottom: normalize(18),
-        paddingHorizontal: normalize(18)
+        paddingHorizontal: normalize(18),
+        paddingVertical: responsiveScreenWidth(3)
     },
     imageContainer: {
         flex: 1,
@@ -175,7 +159,7 @@ const styles = EStyleSheet.create({
         // paddingRight: normalize(50),
         // paddingLeft: normalize(13),
         alignItems: 'center',
-        paddingBottom: normalize(35),
+        marginBottom: responsiveScreenWidth(40),
         borderRadius: 15,
     },
     headNotificationContainer: {

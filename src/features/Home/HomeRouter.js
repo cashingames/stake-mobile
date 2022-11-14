@@ -263,15 +263,15 @@ const styles = EStyleSheet.create({
         borderRadius: 100,
         width: normalize(22),
         height: normalize(22),
-        padding: '.1.5rem'
+        alignItems:'center',
+        justifyContent:'center',
     },
     number: {
         textAlign: 'center',
-        alignItems: 'center',
         color: '#FFFF',
-        fontFamily: 'graphik-bold',
-        fontSize: Platform.OS === 'ios' ? '0.6rem' : '0.55rem',
-        marginTop: Platform.OS === 'ios' ? normalize(3) : normalize(.5),
+        fontFamily: 'graphik-medium',
+        fontSize: Platform.OS === 'ios' ? '0.43rem' : '0.43rem',
+        // marginTop: Platform.OS === 'ios' ? normalize(3) : normalize(.5),
     },
     logoutText: {
         color: '#EF2F5F',
@@ -364,17 +364,19 @@ const drawStyles = EStyleSheet.create({
         borderWidth: 2,
         borderColor: 'white',
         borderRadius: 100,
-        width: normalize(26),
-        height: normalize(26),
-        padding: '.1.5rem'
+        width: normalize(24),
+        height: normalize(24),
+        alignItems:'center',
+        justifyContent:'center'
+        // padding: '.1.5rem'
     },
     number: {
         textAlign: 'center',
         alignItems: 'center',
         color: '#FFFF',
-        fontFamily: 'graphik-bold',
-        fontSize: Platform.OS === 'ios' ? '0.6rem' : '0.6rem',
-        marginTop: Platform.OS === 'ios' ? '.3rem' : '.081rem',
+        fontFamily: 'graphik-medium',
+        fontSize: Platform.OS === 'ios' ? '0.5rem' : '0.5rem',
+        // marginTop: Platform.OS === 'ios' ? '.3rem' : '.081rem',
     },
     notificationCount: {
         flexDirection: 'row'
