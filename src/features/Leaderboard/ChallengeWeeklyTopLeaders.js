@@ -44,6 +44,10 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
                         stageImageUrl={require("../../../assets/images/third-stage.png")}
                         username={thirdLeader.username}
                         avatar={thirdLeader.avatar}
+                        styleProp={styles.others}
+                        avatarProp={styles.otherAvatar}
+
+
 
                     />
                     <TopWeeklyChallenger
@@ -51,6 +55,8 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
                         stageImageUrl={require("../../../assets/images/first-stage.png")}
                         username={firstLeader.username}
                         avatar={firstLeader.avatar}
+                        styleProp={styles.winner}
+                        avatarProp={styles.avatar}
 
                     />
                     <TopWeeklyChallenger
@@ -58,6 +64,10 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
                         stageImageUrl={require("../../../assets/images/second-stage.png")}
                         username={secondLeader.username}
                         avatar={secondLeader.avatar}
+                        styleProp={styles.others}
+                        avatarProp={styles.otherAvatar}
+
+
 
                     />
                 </>
@@ -70,19 +80,21 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
     )
 }
 
-const TopWeeklyChallenger = ({ username, avatar, stageImageUrl, trophyImageUrl }) => {
+const TopWeeklyChallenger = ({ username, avatar, stageImageUrl, trophyImageUrl, styleProp,avatarProp }) => {
 
     return (
         <View style={styles.topChallengerContainer}>
-            <Image
-                source={trophyImageUrl}
-                style={styles.crown}
-            />
-            <Image
-                source={isTrue(avatar) ? { uri: avatar } : require("../../../assets/images/user-icon.png")}
-                style={styles.avatar}
-            />
-            <Text style={styles.leaderUsername}>{username}</Text>
+            <View style={styleProp}>
+                <Image
+                    source={trophyImageUrl}
+                    style={styles.crown}
+                />
+                <Image
+                    source={isTrue(avatar) ? { uri: avatar } : require("../../../assets/images/user-icon.png")}
+                    style={avatarProp}
+                />
+                <Text style={styles.leaderUsername}>{username}</Text>
+            </View>
             <Image
                 source={stageImageUrl}
                 style={styles.stage}
@@ -103,10 +115,10 @@ const styles = EStyleSheet.create({
         backgroundColor: '#701F88',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingTop: normalize(15),
+        paddingTop: normalize(25),
         alignItems: 'flex-end',
         borderRadius: 15,
-        paddingHorizontal: normalize(5)
+        paddingLeft: normalize(5),
     },
     topChallengerContainer: {
         alignItems: 'center'
@@ -116,6 +128,12 @@ const styles = EStyleSheet.create({
         height: normalize(45),
     },
     avatar: {
+        width: normalize(65),
+        height: normalize(65),
+        backgroundColor: '#FFFF',
+        borderRadius: 50,
+    },
+    otherAvatar: {
         width: normalize(45),
         height: normalize(45),
         backgroundColor: '#FFFF',
@@ -128,5 +146,18 @@ const styles = EStyleSheet.create({
         marginTop: normalize(3),
         width: normalize(65),
         textAlign: 'center'
+    },
+    winner: {
+        // marginBottom : normalize(35),
+        alignItems:'center',
+        // position:'absolute',
+        // bottom:100
+    },
+    others: {
+        // marginTop : normalize(10),
+        alignItems:'center',
+        position:'absolute',
+        bottom:80
+
     }
 })

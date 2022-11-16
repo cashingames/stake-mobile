@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Text, View, ScrollView, Alert } from 'react-native';
+import { Text, View, ScrollView, Alert, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -15,6 +15,7 @@ import ExhibitionStakeAmount from "../../shared/ExhibitionStakeAmount";
 import StakingButtons from "../../shared/StakingButtons";
 import ExhibitionUserAvailableBoosts from "../../shared/ExhibitionUserAvailableBoosts";
 import LottieAnimations from "../../shared/LottieAnimations";
+import NoGame from "../../shared/NoGame";
 
 
 
@@ -23,6 +24,7 @@ export default function GameInstructionsScreen({ navigation }) {
 
   const gameMode = useSelector(state => state.game.gameMode);
   const user = useSelector(state => state.auth.user);
+  const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
 
   const features = useSelector(state => state.common.featureFlags);
 
@@ -71,11 +73,23 @@ export default function GameInstructionsScreen({ navigation }) {
         {isStakingFeatureEnabled &&
           <ExhibitionStakeAmount onPress={gotoStaking} />
         }
-        <UniversalBottomSheet
-          refBottomSheet={refRBSheet}
-          height={430}
-          subComponent={<AvailableBoosts onClose={closeBottomSheet} user={user} />}
-        />
+        {hasActivePlan ?
+          <UniversalBottomSheet
+            refBottomSheet={refRBSheet}
+            height={430}
+            subComponent={<AvailableBoosts onClose={closeBottomSheet} user={user} />}
+          />
+          :
+          <UniversalBottomSheet
+            refBottomSheet={refRBSheet}
+            height={Platform.OS === 'ios' ? 400 : 350}
+            subComponent={<NoGame
+              onClose={closeBottomSheet}
+              onPress={gotoStaking}
+            />}
+          />
+        }
+
       </ScrollView>
       {/* {isStakingFeatureEnabled && gameMode.name !== "CHALLENGE" ? */}
       {isStakingFeatureEnabled ?
