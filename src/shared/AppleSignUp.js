@@ -12,14 +12,14 @@ const AppleSignUp = () => {
     const navigation = useNavigation();
     const refRBSheet = useRef();
     const dispatch = useDispatch();
-    const [password, setPassword] = useState('');
-    const [password_confirmation, setPasswordConfirmation] = useState('');
+    // const [password, setPassword] = useState('');
+    // const [password_confirmation, setPasswordConfirmation] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [username, setUsername] = useState('');
     const [referrer, setReferrer] = useState('');
     const [phoneNumberErr, setPhoneNumberError] = useState(false);
     const [usernameErr, setUsernameError] = useState(false);
-    const [passErr, setPassError] = useState(false);
+    // const [passErr, setPassError] = useState(false);
     const [email, setEmail] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -44,14 +44,14 @@ const AppleSignUp = () => {
         setUsername(text)
     }
 
-    const onChangePassword = (text) => {
-        text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
-        setPassword(text)
-    }
+    // const onChangePassword = (text) => {
+    //     text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
+    //     setPassword(text)
+    // }
 
-    const onChangeConfirmPassword = (text) => {
-        setPasswordConfirmation(text)
-    }
+    // const onChangeConfirmPassword = (text) => {
+    //     setPasswordConfirmation(text)
+    // }
 
     const onChangReferrer = (text) => {
         setReferrer(text)
@@ -131,17 +131,18 @@ const AppleSignUp = () => {
                 height={570}
                 subComponent={<FirstTimeUserDetails
                     onPress={registerUserWithApple}
-                    password={password}
-                    password_confirmation={password_confirmation}
+                    // password={password}
+                    // password_confirmation={password_confirmation}
                     phoneNumber={phoneNumber}
-                    username={username} passErr={passErr}
+                    username={username} 
+                    // passErr={passErr}
                     referrer={referrer}
                     phoneNumberErr={phoneNumberErr}
                     onChangePhoneNumber={onChangePhoneNumber}
                     onChangeUserName={onChangeUserName}
-                    onChangePassword={onChangePassword}
+                    // onChangePassword={onChangePassword}
                     usernameErr={usernameErr} onChangReferrer={onChangReferrer}
-                    onChangeConfirmPassword={onChangeConfirmPassword}
+                    // onChangeConfirmPassword={onChangeConfirmPassword}
                     canSave={canSave}
                     saving={saving}
                     onClose={closeBottomSheet}

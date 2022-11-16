@@ -6,15 +6,17 @@ import AppButton from "./AppButton";
 import Input from "./Input";
 
 const FirstTimeUserDetails = ({ onPress,
-    password,
-    password_confirmation,
+    // password,
+    // password_confirmation,
     phoneNumber,
     username,
     referrer,
     phoneNumberErr, onChangePhoneNumber,
-    passErr, onChangeConfirmPassword,
+    // passErr, 
+    // onChangeConfirmPassword,
     onChangeUserName, usernameErr,
-    onChangePassword, onChangReferrer,
+    // onChangePassword, 
+    onChangReferrer,
     canSave, saving
 }) => {
     return (
@@ -37,7 +39,7 @@ const FirstTimeUserDetails = ({ onPress,
                 error={phoneNumberErr && '*input a valid phone number'}
                 keyboardType="numeric"
             />
-
+{/* 
             <Input
                 type="password"
                 label='Password'
@@ -45,8 +47,8 @@ const FirstTimeUserDetails = ({ onPress,
                 placeholder="Enter password"
                 error={passErr && '*password must not be less than 8 digits'}
                 onChangeText={text => { onChangePassword(text) }}
-            />
-
+            /> */}
+{/* 
             <Input
                 type="password"
                 label='Password'
@@ -54,7 +56,7 @@ const FirstTimeUserDetails = ({ onPress,
                 placeholder="Confirm password"
                 error={password_confirmation !== password && '*password confirmation must match password'}
                 onChangeText={text => { onChangeConfirmPassword(text) }}
-            />
+            /> */}
             <Input
                 label='Referral'
                 value={referrer}
