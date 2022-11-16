@@ -23,7 +23,7 @@ export default function GameEndResultScreen({ navigation }) {
 	const gameCategoryId = useSelector(state => state.game.gameCategory.id);
 	const gameTypeId = useSelector(state => state.game.gameType.id);
 	const gameModeId = useSelector(state => state.game.gameMode.id);
-	const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
+	// const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
 	// console.log(hasActivePlan, 'my plan')
 
 	const isGameEnded = useSelector(state => state.game.isEnded);
@@ -46,17 +46,17 @@ export default function GameEndResultScreen({ navigation }) {
 			'phone_number': user.phoneNumber,
 			'email': user.email
 		})
-		if (!hasActivePlan) {
-			analytics().logEvent('exhibition_game_plan_exhausted', {
-				'id': user.username,
-				'phone_number': user.phoneNumber,
-				'email': user.email
-			})
-			openBottomSheet();
-			console.log("NO GAME", hasActivePlan)
-			return;
-		}
-		setLoading(true);
+		// if (!hasActivePlan) {
+		// 	analytics().logEvent('exhibition_game_plan_exhausted', {
+		// 		'id': user.username,
+		// 		'phone_number': user.phoneNumber,
+		// 		'email': user.email
+		// 	})
+		// 	openBottomSheet();
+		// 	console.log("NO GAME", hasActivePlan)
+		// 	return;
+		// }
+		// setLoading(true);
 		navigation.navigate("GameInstructions")
 
 		// 	dispatch(startGame({

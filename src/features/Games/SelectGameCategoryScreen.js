@@ -16,14 +16,14 @@ import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const activeSubcategory = useSelector(state => state.game.gameCategory);
-    const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
+    // const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
     const gameMode = useSelector(state => state.game.gameMode);
     const refRBSheet = useRef();
 
 
-    const openBottomSheet = () => {
-        refRBSheet.current.open()
-    }
+    // const openBottomSheet = () => {
+    //     refRBSheet.current.open()
+    // }
 
     const closeBottomSheet = () => {
         refRBSheet.current.close()
@@ -36,8 +36,11 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
 
     const onSelectGameMode = () => {
         if (gameMode.name === "EXHIBITION") {
-            hasActivePlan ? navigation.navigate('GameInstructions') : openBottomSheet();
+            navigation.navigate('GameInstructions');
         }
+        // if (gameMode.name === "EXHIBITION") {
+        //     hasActivePlan ? navigation.navigate('GameInstructions') : openBottomSheet();
+        // }
         else if (gameMode.name === "CHALLENGE") {
             navigation.navigate('ChallengeSelectPlayer')
         }
