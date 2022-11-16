@@ -58,10 +58,10 @@ const AppleSignUp = () => {
     }
 
     useEffect(() => {
-        const invalid = usernameErr || username === '' || passErr || password === '' ||
-            phoneNumber === '' || phoneNumberErr || password_confirmation !== password;
+        const invalid = usernameErr || username === '' ||
+            phoneNumber === '' || phoneNumberErr
         setCanSave(!invalid);
-    }, [usernameErr, username, passErr, password, phoneNumber, phoneNumberErr, password_confirmation])
+    }, [usernameErr, username, phoneNumber, phoneNumberErr])
 
     const registerUserWithApple = () => {
         setSaving(true);
@@ -91,12 +91,15 @@ const AppleSignUp = () => {
                 ],
             });
             console.log(credential, 'this is the credentials')
+
             dispatch(loginWithSocialLink({
                 firstName: credential.fullName.givenName,
                 lastName: credential.fullName.familyName,
                 email: credential.email
             })).then(unwrapResult)
+
                 .then((originalPromiseResult) => {
+
                     if (originalPromiseResult.data.isFirstTime) {
                         setEmail(originalPromiseResult.data.email)
                         setFirstName(originalPromiseResult.data.firstName)
@@ -123,7 +126,7 @@ const AppleSignUp = () => {
                 buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
                 buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
                 cornerRadius={5}
-                style={{ width: 200, height: 40, marginTop:20 }}
+                style={{ width: 200, height: 40, marginTop: 20 }}
                 onPress={loginWithApple}
             />
             <UniversalBottomSheet
@@ -134,7 +137,7 @@ const AppleSignUp = () => {
                     // password={password}
                     // password_confirmation={password_confirmation}
                     phoneNumber={phoneNumber}
-                    username={username} 
+                    username={username}
                     // passErr={passErr}
                     referrer={referrer}
                     phoneNumberErr={phoneNumberErr}
