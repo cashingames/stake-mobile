@@ -144,7 +144,7 @@ const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, 
             <View style={styles.earnings}>
                 <Text style={styles.earningText}>Pending Winnings</Text>
                 <Text style={styles.earningAmount}>&#8358;{formatCurrency(bookBalance)}</Text>
-                <Text style={styles.earningNote}>Note: Your pending winnings becomes withdrawable after 24hours</Text>
+                <Text style={styles.earningNote}>Note: Your pending winnings becomes withdrawable after 1hour</Text>
 
             </View>
         </View>
