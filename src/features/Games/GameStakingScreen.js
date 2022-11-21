@@ -63,11 +63,11 @@ const GameStakingScreen = ({ navigation }) => {
             return false;
         }
 
-        if (Number.parseFloat(amount) > Number.parseFloat(maximumStakeAmount)) {
-            Alert.alert(`Maximum stake amount is ${maximumStakeAmount} naira`);
-            setLoading(false);
-            return false;
-        }
+        // if (Number.parseFloat(amount) > Number.parseFloat(maximumStakeAmount)) {
+        //     Alert.alert(`Maximum stake amount is ${maximumStakeAmount} naira`);
+        //     setLoading(false);
+        //     return false;
+        // }
 
         canStake({ staking_amount: amount })
             .then(async response => {

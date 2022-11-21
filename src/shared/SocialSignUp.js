@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import { Button, Pressable, View, Image, Platform } from 'react-native';
+import { Button, Pressable, View, Image, Platform, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -16,6 +16,7 @@ import Constants from "expo-constants";
 import normalize from '../utils/normalize';
 import UniversalBottomSheet from './UniversalBottomSheet';
 import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/AuthSlice';
+import PageLoading from './PageLoading';
 
 
 
@@ -38,6 +39,7 @@ export default function SocialSignUp({ googleText }) {
     const [lastName, setLastName] = useState('')
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
+    const [loading, setloading] = useState(false)
 
     const openBottomSheet = () => {
         refRBSheet.current.open()
@@ -119,7 +121,7 @@ export default function SocialSignUp({ googleText }) {
             axios.get('https://www.googleapis.com/oauth2/v3/userinfo?access_token=' + accessToken)
                 .then(function (response) {
                     const userDetails = response.data
-
+                    setloading(true)
                     console.log('user details', userDetails)
                     dispatch(loginWithSocialLink({
                         firstName: userDetails.given_name,
@@ -132,6 +134,7 @@ export default function SocialSignUp({ googleText }) {
                                 setEmail(originalPromiseResult.data.email)
                                 setFirstName(originalPromiseResult.data.firstName)
                                 setLastName(originalPromiseResult.data.lastName)
+                                setloading(false)
                                 openBottomSheet()
                                 return
                             }
@@ -139,6 +142,7 @@ export default function SocialSignUp({ googleText }) {
 
                             console.log(originalPromiseResult);
                             saveToken(originalPromiseResult.data.token)
+                            setloading(false)
                             navigation.navigate('AppRouter')
                         })
                         .catch((rejectedValueOrSerializedError) => {
@@ -148,19 +152,12 @@ export default function SocialSignUp({ googleText }) {
         }
     }, [response]);
 
+
     return (
         <>
-            <Pressable disabled={!request} onPress={() => {
+            <GoogleButton disabled={!request || loading} onPress={() => {
                 promptAsync();
-            }} style={styles.googleButton}>
-                <Text style={styles.googletext}>{googleText} with Google</Text>
-                <View style={styles.googleImage}>
-                    <Image
-                        style={styles.pointsIcon}
-                        source={require('../../assets/images/google_icon.png')}
-                    />
-                </View>
-            </Pressable>
+            }} loading={loading} googleText={googleText} />
             <UniversalBottomSheet
                 refBottomSheet={refRBSheet}
                 height={560}
@@ -186,6 +183,21 @@ export default function SocialSignUp({ googleText }) {
         </>
     );
 }
+const GoogleButton = ({ loading, disabled, onPress, googleText }) => {
+    return (
+        <Pressable disabled={disabled} onPress={onPress} style={[styles.googleButton, disabled ? styles.disabled : {}]}>
+            <Text style={styles.googletext}>{googleText} with Google</Text>
+            <View style={styles.googleImage}>
+                <Image
+                    style={styles.pointsIcon}
+                    source={require('../../assets/images/google_icon.png')}
+                />
+            </View>
+            {loading && <ActivityIndicator size="small" color='#ffff' />}
+        </Pressable>
+    )
+}
+
 const FirstTimeUserDetails = ({ onPress,
     // password,
     // password_confirmation,
@@ -289,5 +301,8 @@ const styles = EStyleSheet.create({
         fontSize: '0.8rem',
         textAlign: 'center',
         paddingVertical: normalize(5)
+    },
+    disabled: {
+        opacity: 0.6
     }
 })
