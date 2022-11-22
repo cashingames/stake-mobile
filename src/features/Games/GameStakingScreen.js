@@ -23,8 +23,9 @@ const GameStakingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
-    const maximumStakeAmount = useSelector(state => state.common.maximumStakeAmount);
-    const minimumStakeAmount = useSelector(state => state.common.minimumStakeAmount);
+    const maximumExhibitionStakeAmount  = useSelector(state => state.common.maximumExhibitionStakeAmount );
+    const minimumExhibitionStakeAmount  = useSelector(state => state.common.minimumExhibitionStakeAmount );
+
     const [amount, setAmount] = useState(200);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
@@ -57,17 +58,17 @@ const GameStakingScreen = ({ navigation }) => {
             return
         }
 
-        if (Number.parseFloat(amount) < Number.parseFloat(minimumStakeAmount)) {
-            Alert.alert(`Minimum stake amount is ${minimumStakeAmount} naira`);
+        if (Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount )) {
+            Alert.alert(`Minimum stake amount is ${minimumExhibitionStakeAmount } naira`);
             setLoading(false);
             return false;
         }
 
-        // if (Number.parseFloat(amount) > Number.parseFloat(maximumStakeAmount)) {
-        //     Alert.alert(`Maximum stake amount is ${maximumStakeAmount} naira`);
-        //     setLoading(false);
-        //     return false;
-        // }
+        if (Number.parseFloat(amount) > Number.parseFloat(maximumExhibitionStakeAmount )) {
+            Alert.alert(`Maximum stake amount is ${maximumExhibitionStakeAmount } naira`);
+            setLoading(false);
+            return false;
+        }
 
         canStake({ staking_amount: amount })
             .then(async response => {

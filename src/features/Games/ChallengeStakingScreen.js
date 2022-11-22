@@ -25,7 +25,7 @@ const ChallengeStakingScreen = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     const maximumStakeAmount = useSelector(state => state.common.maximumStakeAmount);
-    const minimumStakeAmount = useSelector(state => state.common.minimumStakeAmount);
+    const minimumChallengeStakeAmount = useSelector(state => state.common.minimumChallengeStakeAmount);
     const activeCategory = useSelector(state => state.game.gameCategory);
     const [amount, setAmount] = useState(200);
     const [loading, setLoading] = useState(false);
@@ -55,8 +55,8 @@ const ChallengeStakingScreen = ({ navigation, route }) => {
             return
         }
 
-        if (Number.parseFloat(amount) < Number.parseFloat(minimumStakeAmount)) {
-            Alert.alert(`Minimum stake amount is ${minimumStakeAmount} naira`);
+        if (Number.parseFloat(amount) < Number.parseFloat(minimumChallengeStakeAmount)) {
+            Alert.alert(`Minimum stake amount is ${minimumChallengeStakeAmount} naira`);
             setLoading(false);
             return false;
         }

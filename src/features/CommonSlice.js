@@ -173,8 +173,10 @@ const initialState = {
     loadMoreTransactions: true,
     loadMoreChallenges: true,
     loadMoreLiveTrivias: true,
-    maximumStakeAmount:'',
-    minimumStakeAmount: '',
+    maximumExhibitionStakeAmount:'',
+    minimumExhibitionStakeAmount : '',
+    maximumChallengeStakeAmount : '',
+    minimumChallengeStakeAmount: '',
     periodBeforeChallengeStakingExpiry: ''
 }
 
@@ -199,8 +201,10 @@ export const CommonSlice = createSlice({
                 state.gameCategories = data.gameCategories;
                 state.minVersionCode = data.minVersionCode;
                 state.minVersionForce = data.minVersionForce;
-                state.maximumStakeAmount = data.maximumStakeAmount;
-                state.minimumStakeAmount = data.minimumStakeAmount
+                state.maximumExhibitionStakeAmount = data.maximumExhibitionStakeAmount;
+                state.minimumExhibitionStakeAmount  = data.minimumExhibitionStakeAmount; 
+                state.maximumChallengeStakeAmount   = data.maximumChallengeStakeAmount; 
+                state.minimumChallengeStakeAmount   = data.minimumChallengeStakeAmount; 
                 state.periodBeforeChallengeStakingExpiry = data.periodBeforeChallengeStakingExpiry
             })
             .addCase(getBankData.fulfilled, (state, action) => {
