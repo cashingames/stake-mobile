@@ -221,6 +221,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           user.username === challengeDetails.opponentUsername &&
           challengeDetails.status === "PENDING" &&
           challengeScores.opponentStatus !== "COMPLETED" &&
+          challengeDetails.isExpired !== true &&
           <View style={styles.stakeContainer}>
             <Text style={styles.stakeText}>Accept challenge to stake <Text style={styles.stakeAmount}>&#8358;{formatCurrency(challengeDetails.stakingAmount)}</Text> and stand a chance of winning double of this amount</Text>
           </View>
@@ -284,6 +285,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
               {challengeDetails.status === "PENDING" &&
                 challengeScores.opponentStatus === "PENDING" &&
                 challengeScores.opponentStatus !== "COMPLETED" &&
+                challengeDetails.isExpired !== true &&
                 <View style={styles.buttonContainer}>
                   <AppButton text="Decline" textStyle={styles.declineText} style={styles.declineButton} onPress={declineChallengeInivite} />
                   <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Accept and Play"} style={styles.acceptButton} onPress={acceptChallengeInivite} />
@@ -303,6 +305,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
             <>
               {challengeDetails.status === "ACCEPTED" &&
                 challengeScores.challengerStatus === "PENDING" &&
+                challengeDetails.isExpired !== true &&
                 <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFFF" /> : "Play"} onPress={challengerPlays} />
               }
             </>

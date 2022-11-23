@@ -21,15 +21,13 @@ const NotificationsScreen = ({ navigation }) => {
     console.log(notifications)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
-    const [clicked, setClicked] = useState(false)
     const [clicking, setClicking] = useState(false)
 
 
     const markAllAsRead = () => {
         setClicking(true)
-        dispatch(markNotificationRead("all")).then(() => {
+        dispatch(markNotificationRead('all')).then(() => {
             setClicking(false)
-            setClicked(true)
         });
     }
 
@@ -87,8 +85,6 @@ const NotificationsScreen = ({ navigation }) => {
                         {notifications.map((notification, i) => <Notification key={i} notification={notification}
                             // index={i + 1}
                             moment={moment}
-                            clicked={clicked}
-                            setClicked={setClicked}
                         />)}
                     </View>
                     :
@@ -103,9 +99,11 @@ const NotificationsScreen = ({ navigation }) => {
     )
 }
 
-const Notification = ({ notification, moment, clicked, setClicked }) => {
+const Notification = ({ notification, moment }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const [clicked, setClicked] = useState(false)
+
     const notificationAction = () => {
         if (notification.data.action_type === "CHALLENGE") {
             dispatch(markNotificationRead(notification.id)).then(() => setClicked(true));

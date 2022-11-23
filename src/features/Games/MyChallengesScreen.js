@@ -18,6 +18,7 @@ const MyChallengesScreen = ({ navigation, route }) => {
     const [pageNumber, setPageNumber] = useState()
     const [loadingMore, setLoadingMore] = useState(false)
     const challenges = useSelector(state => state.common.userChallenges);
+    console.log(challenges)
     const loadMoreChallenges = useSelector(state => state.common.loadMoreChallenges);
 
     useEffect(()=>{
