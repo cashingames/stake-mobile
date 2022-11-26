@@ -1,14 +1,13 @@
 const env = process.env.APP_VARIANT;
-const version = "1.0.68"; //Update for every build and publish
+const version = "1.2.71"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
-  version: version, //For every publish and build update the version. Update for every publish and new build
-  runtimeVersion: "1.67", //All apps using the same runtime will get the published updates. Generally update for every new build
-  orientation: "portrait",
+  version: version, 
+  runtimeVersion: "2.71", //All apps using the same runtime will get the published updates. Generally update for every new build
   icon: "./assets/images/adaptive-icon2.png",
-  // jsEngine: "hermes",
+  jsEngine: "hermes",
   scheme: "cashingames",
   splash: {
     image: "./assets/images/splash2.png",
@@ -32,7 +31,6 @@ export default {
     package: getAppIdentifier(),
     versionCode: getAndriodVersionCode(),
     googleServicesFile: "./google-services.json",
-    useNextNotificationsApi: true,
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon2.png",
       backgroundColor: "#FFFFFF"
@@ -91,7 +89,7 @@ export default {
 }
 
 function getAndriodVersionCode() {
-  var _v = version.split(".");
+  const _v = version.split(".");
   return Number(_v[_v.length - 1]);
 }
 
@@ -110,7 +108,7 @@ function getSlug() {
 }
 
 function getAppIdentifier() {
-  var identifier = "cashingames";
+  let identifier = "cashingames";
   if (env === "development") {
     identifier = "dev";
   } else if (env === "preview") {
@@ -121,7 +119,7 @@ function getAppIdentifier() {
 }
 
 function getIosIdentifier() {
-  var identifier = "cashingames";
+  let identifier = "cashingames";
   if (env === "development") {
     identifier = "dev";
   } else if (env === "preview") {
@@ -130,19 +128,6 @@ function getIosIdentifier() {
 
   return `com.cashinga.${identifier}`;
 }
-
-
-
-// function getSocialLoginClientID() {
-//   var result = "125752028373-mmdihc58hbubpt4obl59875tun5633or.apps.googleusercontent.com";
-//   if (env === "development") {
-//     result = '125752028373-ik9v848h4d8n8c95bq5lrva1k5anffdo.apps.googleusercontent.com';
-//   } else if (env === "preview") {
-//     result = "125752028373-f3pls3bjaq22s82p9elsg57bd7bc0kbh.apps.googleusercontent.com";
-//   }
-
-//   return result;
-// }
 
 function getGATrackingID() {
   if (env === "development" || env === "preview") {
@@ -162,7 +147,6 @@ function getPaystackKey() {
 
 function getApiUrl() {
   if (env === "development" || env === "preview") {
-    // return 'http://192.168.1.147:8000/api';
     return 'https://stg-api.cashingames.com/api';
   }
 
