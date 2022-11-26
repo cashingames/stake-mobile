@@ -22,12 +22,14 @@ const NotificationsScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
     const [clicking, setClicking] = useState(false)
+    const [readAll, setReadAll] = useState(false)
 
 
     const markAllAsRead = () => {
         setClicking(true)
         dispatch(markNotificationRead('all')).then(() => {
             setClicking(false)
+            setReadAll(true)
         });
     }
 
@@ -66,9 +68,10 @@ const NotificationsScreen = ({ navigation }) => {
             >
                 <Pressable style={styles.markAllButton} onPress={markAllAsRead}>
                     <Text style={styles.markText}>Mark all as read</Text>
-                    {clicking ?
+                    {clicking &&
                         <ActivityIndicator size="small" color="#072169" />
-                        :
+                    }
+                    {!clicking &&
                         <Ionicons name='checkmark-circle' color="#072169" size={18} />
                     }
                 </Pressable>
@@ -85,6 +88,7 @@ const NotificationsScreen = ({ navigation }) => {
                         {notifications.map((notification, i) => <Notification key={i} notification={notification}
                             // index={i + 1}
                             moment={moment}
+                            readAll={readAll}
                         />)}
                     </View>
                     :
@@ -99,7 +103,7 @@ const NotificationsScreen = ({ navigation }) => {
     )
 }
 
-const Notification = ({ notification, moment }) => {
+const Notification = ({ notification, moment, readAll }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const [clicked, setClicked] = useState(false)
@@ -115,7 +119,7 @@ const Notification = ({ notification, moment }) => {
     }
     return (
         <View style={styles.headNotificationContainer}>
-            {notification.read_at !== null || clicked ?
+            {notification.read_at !== null || clicked || readAll ?
                 <View style={styles.checkContainer}>
                     <Ionicons name='checkmark-circle' color="#072169" size={22} />
 
@@ -126,8 +130,8 @@ const Notification = ({ notification, moment }) => {
                 </View>
             }
             <View style={styles.notificationContainer}>
-                <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked ? styles.clicked : {}]} onPress={notificationAction}>
-                    <Text style={[styles.notificationTitle, notification.read_at !== null || clicked ? styles.clickedText : {}]}>{notification.data.title}</Text>
+                <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked || readAll ? styles.clicked : {}]} onPress={notificationAction}>
+                    <Text style={[styles.notificationTitle, notification.read_at !== null || clicked || readAll ? styles.clickedText : {}]}>{notification.data.title}</Text>
                 </Pressable>
                 <View style={styles.notificationTimeContainer}>
                     <Text style={styles.notificationTime}>From {moment(notification.created_at).fromNow()}</Text>
