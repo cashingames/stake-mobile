@@ -32,7 +32,6 @@ import GameModeScreen from './features/Games/GameModeScreen';
 import GameInstructionsScreen from './features/Games/GameInstructionsScreen';
 import GameInProgressScreen from './features/Games/GameInProgressScreen';
 import GameEndResultScreen from './features/Games/GameEndResultScreen';
-import IntroSlide from './features/Auth/IntroSlide';
 import LoginScreen from './features/Auth/LoginScreen';
 import SignupScreen from './features/Auth/SignupScreen';
 import SignupProfileScreen from './features/Auth/SignupProfileScreen';
