@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Text, View, Image, Alert } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useNavigation } from "@react-navigation/native";
@@ -21,8 +21,6 @@ const FundWalletComponent = ({ onClose }) => {
     const [amount, setAmount] = useState("");
     const [showPayment, setShowPayment] = useState(false);
 
-    const ref = useRef(null);
-
     const transactionCompleted = (res) => {
         // verifyFunding(res.reference); for local testing
         dispatch(getUser());
@@ -31,10 +29,9 @@ const FundWalletComponent = ({ onClose }) => {
     };
 
     const startPayment = () => {
-        var cleanedAmount =
+        const cleanedAmount =
             amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
-        // console.log(Number.parseFloat(amount));
-        if (cleanedAmount < 100) {
+        if (cleanedAmount < 200) {
             Alert.alert("Amount cannot be less than 100 naira");
             return false;
         }

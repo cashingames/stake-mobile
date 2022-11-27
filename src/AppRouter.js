@@ -46,11 +46,9 @@ import GameStoreItemsPurchaseFailed from './features/Store/GameStoreItemsPurchas
 import LeaderBoardFilter from './features/Leaderboard/LeaderBoardFilter';
 import TriviaInstructionsScreen from './features/Games/TriviaInstructionsScreen';
 import TriviaEndResultScreen from './features/Games/TriviaEndResultScreen';
-// import TournamentScreen from './features/Games/TournamentScreen';
 import LiveTriviaLeaderBoard from './features/LiveTrivia/LiveTriviaLeaderboard';
 import LiveTriviasScreen from './features/Games/LiveTriviasScreen';
 import ChallengeSelectPlayerScreen from './features/Games/ChallengeSelectPlayerScreen';
-// import AcceptDeclineChallengeScreen from './features/Games/AcceptDeclineChallengeScreen';
 import ChallengeEndGameScreen from './features/Games/ChallengeEndGameScreen';
 import ChallengeGameInProgressScreen from './features/Games/ChallengeGameInProgressScreen';
 import ChallengeGameInstructionsScreen from './features/Games/ChallengeGameInstructionScreen';
@@ -81,7 +79,6 @@ function AppRouter() {
 	const [loading, setLoading] = useState(true);
 
 	const token = useSelector(state => state.auth.token);
-	// const showIntro = useSelector(state => state.auth.showIntro);
 
 	const [pushToken, setPushToken] = useState('');
 
@@ -128,16 +125,12 @@ function AppRouter() {
 
 		});
 		messaging().onNotificationOpenedApp(async remoteMessage => {
-			if (!remoteMessage) { }
-			else {
-				await analytics().logEvent("bg_notification", {
-					state: "background"
-				})
-				routeDecider(remoteMessage, navigation);
-				// if (remoteMessage.data && remoteMessage.data.action_type == "CHALLENGE"){
-				// 	navigation.navigate('MyChallengesScore', { challengeId: remoteMessage.data.action_id })
-				// }
-			}
+			if (!remoteMessage) return;
+
+			await analytics().logEvent("bg_notification", {
+				state: "background"
+			})
+			routeDecider(remoteMessage, navigation);
 
 		});
 
@@ -159,11 +152,7 @@ function AppRouter() {
 	if (loading) {
 		return <PageLoading spinnerColor="#0000ff" />
 	}
-
-	// if (showIntro) {
-	// 	return <IntroSlide />;
-	// }
-
+	
 	return (
 		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' } }} >
 			{isTrue(token) ?
@@ -311,7 +300,6 @@ export default AppRouter;
 
 const booststrapAxios = async function (token) {
 	axios.defaults.baseURL = Constants.manifest.extra.apiBaseUrl;
-	// console.log(axios.defaults.baseURL);
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {

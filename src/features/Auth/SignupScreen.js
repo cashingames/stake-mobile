@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, TextInput, Platform } from 'react-native';
+import { Text, View, ScrollView, Pressable, TextInput, Platform } from 'react-native';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { useNavigation } from '@react-navigation/native';
-// import SocialSignUp from '../../shared/SocialSignUp';
-import { Link } from '@react-navigation/native';
+import { useNavigation, Link } from '@react-navigation/native';
 import AuthBanner from '../../shared/AuthBanner';
 import Input from '../../shared/Input';
-// import SocialSigninDivider from '../../shared/SocialSigninDivider';
 import { CheckBox } from 'react-native-elements'
 import AuthTitle from '../../shared/AuthTitle';
 import { useDispatch } from 'react-redux';

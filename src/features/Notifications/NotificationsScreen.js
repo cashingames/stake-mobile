@@ -252,7 +252,6 @@ const styles = EStyleSheet.create({
     },
     markAllButton: {
         paddingVertical: '.3rem',
-        backgroundColor: '#EF2F55',
         borderRadius: 15,
         width: Platform.OS === 'ios' ? '6.5rem' : '7rem',
         marginLeft: 'auto',

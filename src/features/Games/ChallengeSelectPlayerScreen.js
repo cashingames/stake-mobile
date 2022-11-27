@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { Text, View, Image, ScrollView, TextInput, Pressable, Alert, ActivityIndicator, } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,7 +13,6 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import ChallengeInviteSuccessText from '../../shared/ChallengeInviteSuccessText';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { debounce } from 'lodash';
-import { useCallback } from 'react';
 import analytics from '@react-native-firebase/analytics';
 import ChallengeStakingBottomSheet from '../../shared/ChallengeStakingBottomSheet';
 
@@ -31,11 +30,9 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
     const [searching, setSearching] = useState(false);
     const [sending, setSending] = useState(false)
     const [noDATA, setNoData] = useState(false)
-    const [calltimes, setCallTimes] = useState(0);
     const features = useSelector(state => state.common.featureFlags);
 
-    const isChallengeStakingFeatureEnabled = features['challenge_game_staking'] !== undefined && features['challenge_game_staking'].enabled == true;
-
+    const isChallengeStakingFeatureEnabled = features['challenge_game_staking'] !== undefined && features['challenge_game_staking'].enabled;
 
     const openBottomSheet = () => {
         refRBSheet.current.open()

@@ -1,13 +1,12 @@
 import 'react-native-gesture-handler';
 import React, { useRef } from 'react';
 import { Dimensions, PixelRatio, Text } from 'react-native';
-import { CommonActions, NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import Constants from 'expo-constants';
-import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
