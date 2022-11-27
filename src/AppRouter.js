@@ -8,6 +8,7 @@ import messaging from '@react-native-firebase/messaging';
 
 import axios from "axios";
 
+import LandingPage from './features/LandingPage/LandingPageScreen'
 import PageLoading from './shared/PageLoading';
 import HomeRouter from './features/Home/HomeRouter';
 import ExtendedLeaderboard from './features/Leaderboard/ExtendedLeaderboard';
@@ -283,7 +284,7 @@ function AppRouter() {
 
 					<AppStack.Group screenOptions={{ title: "", headerShadowVisible: false }}>
 						{/* unauthenticated */}
-						<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="Login" component={LandingPage} options={{ headerShown: false }} />
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
 						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
