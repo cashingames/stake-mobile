@@ -284,7 +284,7 @@ function AppRouter() {
 
 					<AppStack.Group screenOptions={{ title: "", headerShadowVisible: false }}>
 						{/* unauthenticated */}
-						<AppStack.Screen name="Login" component={LandingPage} options={{ headerShown: false }} />
+						<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
 						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
