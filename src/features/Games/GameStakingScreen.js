@@ -190,7 +190,7 @@ const AvailableBoosts = ({ onClose, amount, user }) => {
             })
             .catch((rejectedValueOrSerializedError) => {
                 // console.log(rejectedValueOrSerializedError);
-                Alert.alert(rejectedValueOrSerializedError.message)
+                Alert.alert('The selected category is not available for now, try again later.');
                 setLoading(false);
             });
     }

@@ -208,7 +208,7 @@ const AvailableBoosts = ({ onClose, user }) => {
         navigation.navigate("GameInProgress")
       })
       .catch((rejectedValueOrSerializedError) => {
-        Alert.alert(rejectedValueOrSerializedError.message)
+        Alert.alert('The selected category is not available for now, try again later.')
         setLoading(false);
       });
   }
