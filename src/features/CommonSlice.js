@@ -173,10 +173,11 @@ const initialState = {
     loadMoreTransactions: true,
     loadMoreChallenges: true,
     loadMoreLiveTrivias: true,
-    maximumExhibitionStakeAmount:'',
-    minimumExhibitionStakeAmount : '',
-    maximumChallengeStakeAmount : '',
+    maximumExhibitionStakeAmount: '',
+    minimumExhibitionStakeAmount: '',
+    maximumChallengeStakeAmount: '',
     minimumChallengeStakeAmount: '',
+    minimumWalletFundableAmount: '',
     periodBeforeChallengeStakingExpiry: ''
 }
 
@@ -193,6 +194,7 @@ export const CommonSlice = createSlice({
         builder
             .addCase(getCommonData.fulfilled, (state, action) => {
                 var data = action.payload.data;
+                // console.log(data)
                 state.boosts = data.boosts;
                 state.achievements = data.achievements;
                 state.plans = data.plans;
@@ -202,9 +204,10 @@ export const CommonSlice = createSlice({
                 state.minVersionCode = data.minVersionCode;
                 state.minVersionForce = data.minVersionForce;
                 state.maximumExhibitionStakeAmount = data.maximumExhibitionStakeAmount;
-                state.minimumExhibitionStakeAmount  = data.minimumExhibitionStakeAmount; 
-                state.maximumChallengeStakeAmount   = data.maximumChallengeStakeAmount; 
-                state.minimumChallengeStakeAmount   = data.minimumChallengeStakeAmount; 
+                state.minimumExhibitionStakeAmount = data.minimumExhibitionStakeAmount;
+                state.maximumChallengeStakeAmount = data.maximumChallengeStakeAmount;
+                state.minimumChallengeStakeAmount = data.minimumChallengeStakeAmount;
+                state.minimumWalletFundableAmount = data.minimumWalletFundableAmount;
                 state.periodBeforeChallengeStakingExpiry = data.periodBeforeChallengeStakingExpiry
             })
             .addCase(getBankData.fulfilled, (state, action) => {
