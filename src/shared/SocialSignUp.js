@@ -17,6 +17,7 @@ import normalize from '../utils/normalize';
 import UniversalBottomSheet from './UniversalBottomSheet';
 import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/AuthSlice';
 import PageLoading from './PageLoading';
+import FirstTimeUserDetails from './FirstTimeUserDetails';
 
 
 
@@ -26,14 +27,11 @@ export default function SocialSignUp({ googleText }) {
     const navigation = useNavigation();
     const refRBSheet = useRef();
     const dispatch = useDispatch();
-    // const [password, setPassword] = useState('');
-    // const [password_confirmation, setPasswordConfirmation] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phone_number, setPhoneNumber] = useState('');
     const [username, setUsername] = useState('');
     const [referrer, setReferrer] = useState('');
     const [phoneNumberErr, setPhoneNumberError] = useState(false);
     const [usernameErr, setUsernameError] = useState(false);
-    // const [passErr, setPassError] = useState(false);
     const [email, setEmail] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -61,35 +59,27 @@ export default function SocialSignUp({ googleText }) {
         setUsername(text)
     }
 
-    // const onChangePassword = (text) => {
-    //     text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
-    //     setPassword(text)
-    // }
-
-    // const onChangeConfirmPassword = (text) => {
-    //     setPasswordConfirmation(text)
-    // }
-
     const onChangReferrer = (text) => {
         setReferrer(text)
     }
 
     const registerUserWithGoogle = () => {
+        console.log('here')
         setSaving(true);
         dispatch(registerWithSocialLink({
             email,
             firstName,
             lastName,
-            phoneNumber,
+            phone_number,
             username,
-            // password,
-            // password_confirmation,
             referrer
         })).then(unwrapResult)
             .then((originalPromiseResult) => {
-                // console.log(originalPromiseResult);
+                console.log(originalPromiseResult, 'hitting');
                 saveToken(originalPromiseResult.data.token)
+                closeBottomSheet()
                 navigation.navigate('AppRouter')
+                setSaving(false)
             })
     }
 
@@ -104,25 +94,19 @@ export default function SocialSignUp({ googleText }) {
 
     useEffect(() => {
         const invalid = usernameErr || username === '' ||
-            phoneNumber === '' || phoneNumberErr;
+            phone_number === '' || phoneNumberErr;
         setCanSave(!invalid);
-    }, [usernameErr, username, phoneNumber, phoneNumberErr])
-
-    // useEffect(() => {
-    //     const invalid = usernameErr || username === '' || passErr || password === '' ||
-    //         phoneNumber === '' || phoneNumberErr || password_confirmation !== password;
-    //     setCanSave(!invalid);
-    // }, [usernameErr, username, passErr, password, phoneNumber, phoneNumberErr, password_confirmation])
+    }, [usernameErr, username, phone_number, phoneNumberErr])
 
     useEffect(() => {
         if (response?.type === 'success') {
             const accessToken = response.authentication.accessToken
-            // console.log(accessToken)
+            console.log(accessToken)
             axios.get('https://www.googleapis.com/oauth2/v3/userinfo?access_token=' + accessToken)
                 .then(function (response) {
                     const userDetails = response.data
                     setloading(true)
-                    console.log('user details', userDetails)
+                    // console.log('user details', userDetails)
                     dispatch(loginWithSocialLink({
                         firstName: userDetails.given_name,
                         lastName: userDetails.family_name,
@@ -138,7 +122,6 @@ export default function SocialSignUp({ googleText }) {
                                 openBottomSheet()
                                 return
                             }
-                            openBottomSheet()
 
                             console.log(originalPromiseResult);
                             saveToken(originalPromiseResult.data.token)
@@ -153,6 +136,22 @@ export default function SocialSignUp({ googleText }) {
     }, [response]);
 
 
+    const GoogleButton = ({ loading, disabled, onPress, googleText }) => {
+        return (
+            <Pressable disabled={disabled} onPress={onPress} style={[styles.googleButton, disabled ? styles.disabled : {}]}>
+                <Text style={styles.googletext}>{googleText} with Google</Text>
+                <View style={styles.googleImage}>
+                    <Image
+                        style={styles.pointsIcon}
+                        source={require('../../assets/images/google_icon.png')}
+                    />
+                </View>
+                {loading && <ActivityIndicator size="small" color='#ffff' />}
+            </Pressable>
+        )
+    }
+
+
     return (
         <>
             <GoogleButton disabled={!request || loading} onPress={() => {
@@ -163,107 +162,23 @@ export default function SocialSignUp({ googleText }) {
                 height={560}
                 subComponent={<FirstTimeUserDetails
                     onPress={registerUserWithGoogle}
-                    // password={password}
-                    // password_confirmation={password_confirmation}
-                    phoneNumber={phoneNumber}
+                    phoneNumber={phone_number}
                     username={username}
-                    // passErr={passErr}
                     referrer={referrer}
                     phoneNumberErr={phoneNumberErr}
                     onChangePhoneNumber={onChangePhoneNumber}
                     onChangeUserName={onChangeUserName}
-                    // onChangePassword={onChangePassword}
-                    usernameErr={usernameErr} onChangReferrer={onChangReferrer}
-                    // onChangeConfirmPassword={onChangeConfirmPassword}
+                    usernameErr={usernameErr}
+                    onChangReferrer={onChangReferrer}
                     canSave={canSave}
                     saving={saving}
-                    onClose={closeBottomSheet}
                 />}
             />
         </>
     );
 }
-const GoogleButton = ({ loading, disabled, onPress, googleText }) => {
-    return (
-        <Pressable disabled={disabled} onPress={onPress} style={[styles.googleButton, disabled ? styles.disabled : {}]}>
-            <Text style={styles.googletext}>{googleText} with Google</Text>
-            <View style={styles.googleImage}>
-                <Image
-                    style={styles.pointsIcon}
-                    source={require('../../assets/images/google_icon.png')}
-                />
-            </View>
-            {loading && <ActivityIndicator size="small" color='#ffff' />}
-        </Pressable>
-    )
-}
 
-const FirstTimeUserDetails = ({ onPress,
-    // password,
-    // password_confirmation,
-    phoneNumber,
-    username,
-    referrer,
-    phoneNumberErr, onChangePhoneNumber,
-    // passErr, onChangeConfirmPassword,
-    onChangeUserName, usernameErr,
-    onChangePassword, onChangReferrer,
-    canSave, saving
-}) => {
-    return (
-        <View style={styles.inputContainer}>
-            <Text style={styles.inputText}>Please input your details</Text>
-            <View style={styles.inputBoxes}>
-                <Input
-                    label='Username'
-                    placeholder="John"
-                    value={username}
-                    error={usernameErr && '*username must not be empty'}
-                    onChangeText={text => onChangeUserName(text)}
-                />
 
-                <Input
-                    label='Phone Number'
-                    placeholder="080xxxxxxxx"
-                    value={phoneNumber}
-                    onChangeText={text => { onChangePhoneNumber(text) }}
-                    error={phoneNumberErr && '*input a valid phone number'}
-                    keyboardType="numeric"
-                />
-                {/* 
-            <Input
-                type="password"
-                label='Password'
-                value={password}
-                placeholder="Enter password"
-                error={passErr && '*password must not be less than 8 digits'}
-                onChangeText={text => { onChangePassword(text) }}
-            /> */}
-
-                {/* <Input
-                type="password"
-                label='Password'
-                value={password_confirmation}
-                placeholder="Confirm password"
-                error={password_confirmation !== password && '*password confirmation must match password'}
-                onChangeText={text => { onChangeConfirmPassword(text) }}
-            /> */}
-                <Input
-                    label='Referral'
-                    value={referrer}
-                    placeholder="Input referral code(optional)"
-                    onChangeText={text => { onChangReferrer(text) }}
-
-                />
-            </View>
-
-            <AppButton onPress={onPress}
-                text={saving ? 'Saving' : 'Proceed'}
-                disabled={!canSave}
-            />
-        </View>
-    )
-}
 const styles = EStyleSheet.create({
     googleButton: {
         backgroundColor: '#4299f5',
