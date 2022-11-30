@@ -87,7 +87,7 @@ const SignupScreen = () => {
                     onChangeText={text => onChangeEmail(text)}
                 />
                 <>
-                    <Text style={styles.inputLabel} >phone number</Text>
+                    <Text style={styles.inputLabel} >Phone number</Text>
                     <View style={styles.phonePicker}>
                         <Pressable
                             onPress={() => setShow(true)}
