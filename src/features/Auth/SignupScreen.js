@@ -12,12 +12,12 @@ import { saveCreatedUserCredentials } from './AuthSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import SocialSignUp from '../../shared/SocialSignUp';
 import { Ionicons } from "@expo/vector-icons";
-import CountryPicker from "react-native-country-codes-picker";
+import { CountryPicker } from "react-native-country-codes-picker";
 import AppleSignUp from '../../shared/AppleSignUp';
 
 
-export default function SignupScreen({ navigation }) {
-
+const SignupScreen = () => {
+    const navigation = useNavigation();
     const dispatch = useDispatch();
 
     const [email, setEmail] = useState('');
@@ -77,9 +77,7 @@ export default function SignupScreen({ navigation }) {
                 </View>
                 <Text style={styles.signInText}>or</Text>
             </View>
-
             <View style={styles.inputContainer}>
-
                 <Input
                     label='Email'
                     placeholder="johndoe@example.com"
@@ -88,16 +86,6 @@ export default function SignupScreen({ navigation }) {
                     error={emailErr && '*email is not valid'}
                     onChangeText={text => onChangeEmail(text)}
                 />
-
-                {/* <Input
-                    label='Phone Number'
-                    placeholder="080xxxxxxxx"
-                    value={phone}
-                    type="phone"
-                    error={phoneErr && '*Phone number cannot be less than 11 digits'}
-                    onChangeText={text => onChangePhone(text)}
-                    keyboardType="numeric"
-                /> */}
                 <>
                     <Text style={styles.inputLabel} >phone number</Text>
                     <View style={styles.phonePicker}>
@@ -147,7 +135,6 @@ export default function SignupScreen({ navigation }) {
                     error={passErr && '*password must not be less than 8 digits'}
                     onChangeText={text => { onChangePassword(text) }}
                 />
-
                 <Input
                     type="password"
                     label='Password'
@@ -171,7 +158,7 @@ export default function SignupScreen({ navigation }) {
             />
             <AppButton text='Continue' onPress={onNext} disabled={!canSend} />
             <RenderCreateAccount />
-        </ScrollView >
+        </ScrollView>
     );
 }
 
@@ -191,7 +178,7 @@ const RenderCreateAccount = () => {
     )
 }
 
-
+export default SignupScreen;
 
 const styles = EStyleSheet.create({
 

@@ -154,6 +154,7 @@ const RenderForgotPassword = () => {
 
 const RenderCreateAccount = () => {
     const navigation = useNavigation();
+
     return (
         <View style={styles.signIn}>
             <View style={styles.create}>
