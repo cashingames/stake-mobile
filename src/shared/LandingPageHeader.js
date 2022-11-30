@@ -1,27 +1,27 @@
 import { View, Text, Image, Pressable } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { isLoggedIn } from '../Auth/AuthSlice'
+import { isLoggedIn } from '../features/Auth/AuthSlice'
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 
-const LandingPageHeader = ({navigation}) => {
+const LandingPageHeader = ({onPress, goToDashboard}) => {
 
   const userToken = useSelector(state => state.auth.token)
 
   return (
     <View style={styles.landingHeader}>
        <Image
-            source={require('../../../assets/images/logo-small.png')}
+            source={require('../../assets/images/logo-small.png')}
         />
         { userToken ?
         <Pressable style={styles.link}
-        onPress={() => navigation.navigate('Home')}>
+        onPress={goToDashboard}>
           <Text style={styles.linkText}>Dashboard</Text>
         </Pressable>
         :
         <Pressable style={styles.link} 
-        onPress={() => navigation.navigate('Login')}>
+        onPress={onPress}>
           <Text style={styles.linkText}>Sign in</Text>
         </Pressable>
 }

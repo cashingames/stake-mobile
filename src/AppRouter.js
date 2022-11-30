@@ -8,7 +8,6 @@ import messaging from '@react-native-firebase/messaging';
 
 import axios from "axios";
 
-import LandingPage from './features/LandingPage/LandingPageScreen'
 import PageLoading from './shared/PageLoading';
 import HomeRouter from './features/Home/HomeRouter';
 import ExtendedLeaderboard from './features/Leaderboard/ExtendedLeaderboard';
@@ -70,6 +69,7 @@ import SignupVerifyPhoneScreen from './features/Auth/SignupVerifyPhoneScreen';
 import LiveTriviaStakingScreen from './features/Games/LiveTriviaStakingScreen';
 import ReviewStakeScreen from './features/Games/ReviewStakeScreen';
 import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
+import LandingPageScreen from './features/LandingPage/LandingPageScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -80,6 +80,7 @@ function AppRouter() {
 	const [loading, setLoading] = useState(true);
 
 	const token = useSelector(state => state.auth.token);
+	const showIntro = useSelector(state => state.auth.showIntro);
 
 	const [pushToken, setPushToken] = useState('');
 
@@ -153,7 +154,10 @@ function AppRouter() {
 	if (loading) {
 		return <PageLoading spinnerColor="#0000ff" />
 	}
-	
+	// if (showIntro) {
+	// 	return <LandingPageScreen />;
+	// }
+
 	return (
 		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' } }} >
 			{isTrue(token) ?
@@ -272,6 +276,9 @@ function AppRouter() {
 
 					<AppStack.Group screenOptions={{ title: "", headerShadowVisible: false }}>
 						{/* unauthenticated */}
+						{showIntro &&
+							<AppStack.Screen name="Landing" component={LandingPageScreen} options={{ headerShown: false }} />
+						}
 						<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
@@ -281,6 +288,8 @@ function AppRouter() {
 						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} />
 						<AppStack.Screen name="SignupVerifyEmail" component={SignupVerifyEmailScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupVerifyPhone" component={SignupVerifyPhoneScreen} options={{ headerShown: false }} />
+
+
 					</AppStack.Group >
 				)
 			}

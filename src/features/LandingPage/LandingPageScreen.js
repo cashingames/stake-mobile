@@ -1,24 +1,31 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
-    Pressable,
-    Text,
-    View,
     ScrollView,
-    Platform
 } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import LandingPageHeader from './LandingPageHeader';
-import LandingBanner from './LandingBanner'
-import LandingPageInfo from './LandingPageInfo';
-import MainFooter from './MainFooter';
-import LandingFooter from './LandingFooter';
+import LandingPageHeader from '../../shared/LandingPageHeader';
+import LandingBanner from '../../shared/LandingBanner';
+import LandingPageInfo from '../../shared/LandingPageInfo';
+import MainFooter from '../../shared/MainFooter';
+import LandingFooter from '../../shared/LandingFooter';
 
-export default function LandingPageScreen({navigation}) {
+
+const LandingPageScreen = ({navigation}) => {
+    // const navigation = useNavigation();
+
+    const goToLogin = () => {
+        navigation.navigate('Login')
+    }
+
+    const goToDashboard = () => {
+        navigation.navigate('AppRouter')
+    }
+
     return (
         <SafeAreaView>
             <ScrollView>
-                    <LandingPageHeader />
+                    <LandingPageHeader onPress={goToLogin} goToDashboard={goToDashboard} />
                     <LandingBanner />
                     <LandingPageInfo />
                     <MainFooter />
@@ -27,3 +34,5 @@ export default function LandingPageScreen({navigation}) {
         </SafeAreaView>
     )
 }
+
+export default LandingPageScreen;

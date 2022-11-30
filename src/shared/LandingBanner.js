@@ -8,7 +8,7 @@ const LandingBanner = () => {
     <View style={styles.banner}>
        <Image
           resizeMode='contain'
-            source={require('../../../assets/images/carousel-image1.png')}
+            source={require('../../assets/images/carousel-image1.png')}
         style={styles.img}/>
     </View>
   )

@@ -8,7 +8,7 @@ const MainFooter = () => {
   return (
     <View style={styles.mainFooter}>
       <Text style={styles.mainFooterHeader}>Welcome Bonus</Text>
-      <Image source={require('../../../assets/images/bonus.png')}/>
+      <Image source={require('../../assets/images/bonus.png')}/>
       <Text style={styles.mainFooterText}>Join our live trivia and</Text>
       <Text style={styles.mainFooterText}>win amazing prizes</Text>
       <Pressable style={styles.mainFooterBtn} onPress={() => navigation.navigate('Signup')}>

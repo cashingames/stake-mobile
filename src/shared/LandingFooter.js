@@ -10,7 +10,7 @@ const LandingFooter = () => {
   return (
     <View style={styles.landingFooter}>
       <View style={styles.footerLogo}>
-        <Image source={require('../../../assets/images/logo-small.png')} />
+        <Image source={require('../../assets/images/logo-small.png')} />
       </View>
       <View style={styles.footerLinkContainer}>
         <Pressable onPress={() => navigation.navigate('Terms')}> 

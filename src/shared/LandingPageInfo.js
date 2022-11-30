@@ -1,9 +1,9 @@
 import { View, Text, Image, Pressable } from 'react-native'
-import { responsiveScreenWidth } from '../../utils/normalize'
+import { responsiveScreenWidth } from '../utils/normalize'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet'
-import AppButton from '../../shared/AppButton'
+import AppButton from './AppButton'
 
 
 
@@ -15,13 +15,13 @@ const LandingPageInfo = () => {
      <View style={styles.landingImage}>
      <Image
           resizeMode='cover'
-            source={require('../../../assets/images/infoImage1.png')}
+            source={require('../../assets/images/infoImage1.png')}
        style={styles.image1} />
     </View>
     <View style={styles.landingImage2}>
       <Image 
         resizeMode='cover'
-        source={require('../../../assets/images/infoImage2.png')} 
+        source={require('../../assets/images/infoImage2.png')} 
         style={styles.image2}/>
         <View style={styles.extraInfo}>
           <Text style={styles.extraTitle}> Multiplayer Level Games</Text>
@@ -33,7 +33,7 @@ const LandingPageInfo = () => {
     </View>
     <View style={styles.landingImage3}>
       <Image resizeMode='cover'
-        source={require('../../../assets/images/infoImage3.png')} 
+        source={require('../../assets/images/infoImage3.png')} 
         style={styles.image3} />
     </View>
      </View>
@@ -99,7 +99,7 @@ const styles = EStyleSheet.create({
       paddingTop:'0.8rem',
       borderTopWidth:1,
       color:'#fff',
-      fontFamily:'graphik',
+      fontFamily:'graphik-medium',
       borderColor:'#fff',
       marginVertical:10
     },
