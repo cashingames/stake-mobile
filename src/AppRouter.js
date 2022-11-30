@@ -8,6 +8,7 @@ import messaging from '@react-native-firebase/messaging';
 
 import axios from "axios";
 
+import LandingPage from './features/LandingPage/LandingPageScreen'
 import PageLoading from './shared/PageLoading';
 import HomeRouter from './features/Home/HomeRouter';
 import ExtendedLeaderboard from './features/Leaderboard/ExtendedLeaderboard';
