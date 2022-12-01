@@ -1,13 +1,13 @@
 import React from "react";
 import { View, Animated, Text } from "react-native";
-import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import AnsweredGameProgress from "./AnsweredGameProgress";
 import LottieAnimations from "./LottieAnimations";
 
-const GameTopicProgress = ({onComplete, ending }) => {
+const GameTopicProgress = ({ onComplete, ending }) => {
     const countdownKey = useSelector(state => state.game.countdownKey);
     const isGamePaused = useSelector(state => state.game.countdownFrozen);
     const gameDuration = useSelector(state => state.game.gameDuration);
@@ -24,12 +24,36 @@ const GameTopicProgress = ({onComplete, ending }) => {
             <View style={styles.topicProgressRight}>
                 <AnsweredGameProgress />
                 <View style={styles.questionsAnsweredContainer}>
+
                     {!isEnded &&
+                        <CountdownCircleTimer
+                            isPlaying
+                            duration={gameDuration}
+                            colors={['#fff', '#F7B801', '#A30000']}
+                            colorsTime={[gameDuration/2, gameDuration/4, 0]}
+                            trailColor="#2D9CDB"
+                            size={60}
+                            strokeWidth={5}
+                            key={countdownKey}
+                            onComplete={onComplete}
+
+                        >
+                            {({ remainingTime, animatedColor }) => (
+                                <Animated.Text style={styles.timeText}>
+                                    {remainingTime}
+                                </Animated.Text>
+                            )}
+                        </CountdownCircleTimer>
+                    }
+                </View>
+
+                <View style={styles.questionsAnsweredContainer}>
+                    {/* {!isEnded &&
                         <CountdownCircleTimer
                             isPlaying={!isGamePaused && !ending}
                             duration={gameDuration}
-                            colors={[["#fff", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
-                            trailColor="#2D9CDB"
+                            // colors={[["#fff", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
+                            // trailColor="#2D9CDB"
 
                             size={60}
                             strokeWidth={5}
@@ -41,7 +65,7 @@ const GameTopicProgress = ({onComplete, ending }) => {
                                 </Animated.Text>
                             )}
                         </CountdownCircleTimer>
-                    }
+                    } */}
                 </View>
             </View>
         </View>
@@ -70,5 +94,5 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '0.7rem'
     },
-    
+
 })

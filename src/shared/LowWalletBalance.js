@@ -5,14 +5,14 @@ import normalize from "../utils/normalize";
 import FundWalletComponent from "./FundWalletComponent";
 
 
-const LowWalletBalance = ({ onClose }) => {
+const LowWalletBalance = ({ onClose, errorDescription }) => {
     return (
         <View style={styles.noGames}>
             <Image style={styles.sadEmoji}
                 source={require('../../assets/images/sad-face-emoji.png')}
             />
             <Text style={styles.noGamesText}>Sorry,</Text>
-            <Text style={styles.noGamesText}>You do not have enough balance to stake this amount</Text>
+            <Text style={styles.noGamesText}>{errorDescription}</Text>
             <FundWalletComponent onClose={onClose} />
         </View>
     )

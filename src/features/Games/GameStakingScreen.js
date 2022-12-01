@@ -129,7 +129,11 @@ const GameStakingScreen = ({ navigation }) => {
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={620}
-                    subComponent={<LowWalletBalance onClose={closeBottomSheet} />}
+                    subComponent={
+                    <LowWalletBalance 
+                    onClose={closeBottomSheet}
+                    errorDescription="You do not have enough balance to stake this amount"
+                     />}
                 />
                 :
                 <UniversalBottomSheet
