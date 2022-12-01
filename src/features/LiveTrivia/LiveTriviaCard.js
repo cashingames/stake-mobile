@@ -8,10 +8,16 @@ import { useFocusEffect } from '@react-navigation/native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import { calculateTimeRemaining } from '../../utils/utils';
-import { getLiveTriviaStatus } from './LiveTriviaSlice';
+import { formatCurrency } from '../../utils/stringUtl';
+import { getLiveTriviaStatus, liveTriviaPayment } from './LiveTriviaSlice';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import LiveTriviaEntryFailedText from './LiveTriviaEntryFailedText';
 import analytics from '@react-native-firebase/analytics';
+import LowWalletBalance from '../../shared/LowWalletBalance';
+import { getUser } from '../Auth/AuthSlice';
+import { Alert } from 'react-native';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { ActivityIndicator } from 'react-native';
 
 
 
@@ -21,10 +27,43 @@ const LiveTriviaCard = ({ trivia }) => {
     const notEnoughPointNotice = useRef();
     const user = useSelector(state => state.auth.user)
     const [showText, setShowText] = useState(true);
+    const [loading, setLoading] = useState(false);
 
 
     const initialLoading = useSelector(state => state.common.initialLoading);
     // const trivia = useSelector(state => state.liveTrivia.data);
+
+    const openBottomSheet = async () => {
+        notEnoughPointNotice.current.open()
+    }
+
+    const closeBottomSheet = () => {
+        dispatch(getUser());
+        notEnoughPointNotice.current.close()
+    }
+
+    const TriviaEntryFeePaid = () => {
+        dispatch(liveTriviaPayment({
+            liveTriviaId: trivia.id
+        }))
+            .then(unwrapResult)
+            .then(async () => {
+                await analytics().logEvent('live_trivia_payment_made', {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
+                });
+            })
+            .then(result => {
+                setLoading(false);
+                Alert.alert('You have successfully paid for this live triva')
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                // console.log(rejectedValueOrSerializedError);
+                Alert.alert(rejectedValueOrSerializedError.message)
+                setLoading(false);
+            });
+    }
 
     const triviaActionButtonClicked = async () => {
         if (trivia.playerStatus === "INSUFFICIENTPOINTS" && trivia.status === "ONGOING") {
@@ -35,7 +74,16 @@ const LiveTriviaCard = ({ trivia }) => {
             })
             notEnoughPointNotice.current.open()
 
-        } else if (trivia.playerStatus === "PLAYED" || trivia.status === "EXPIRED" || trivia.status === "CLOSED") {
+        }
+        else if (trivia.entryFee > user.walletBalance && trivia.status === "ONGOING") {
+            await analytics().logEvent('insufficient_wallet_balance', {
+                'id': user.username,
+                'phone_number': user.phoneNumber,
+                'email': user.email
+            })
+            openBottomSheet()
+        }
+        else if (trivia.playerStatus === "PLAYED" || trivia.status === "EXPIRED" || trivia.status === "CLOSED") {
             await analytics().logEvent('clicked_live_trivia_leaderboard', {
                 'id': user.username,
                 'phone_number': user.phoneNumber,
@@ -43,12 +91,37 @@ const LiveTriviaCard = ({ trivia }) => {
             })
             navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id })
 
-        } else if (trivia.playerStatus === "CANPLAY" && trivia.status !== "EXPIRED") {
+        }
+        else if (trivia.playerStatus === "CANPLAY" && trivia.status !== "EXPIRED") {
             await analytics().logEvent('clicked_play_live_trivia', {
                 'id': user.username,
                 'phone_number': user.phoneNumber,
                 'email': user.email
             });
+            {
+                trivia.isFreeLiveTrivia === false && trivia.entryFreePaid === false &&
+                    dispatch(liveTriviaPayment({
+                        liveTriviaId: trivia.id
+                    }))
+                        .then(unwrapResult)
+                        .then(async () => {
+                            await analytics().logEvent('live_trivia_payment_made', {
+                                'id': user.username,
+                                'phone_number': user.phoneNumber,
+                                'email': user.email
+                            });
+                        })
+                        .then(result => {
+                            setLoading(false);
+                            console.log('paid')
+                            navigation.navigate('TriviaInstructions', { ...trivia })
+                        })
+                        .catch((rejectedValueOrSerializedError) => {
+                            // console.log(rejectedValueOrSerializedError);
+                            Alert.alert(rejectedValueOrSerializedError.message)
+                            setLoading(false);
+                        });
+            }
             navigation.navigate('TriviaInstructions', { ...trivia })
         }
     }
@@ -80,30 +153,47 @@ const LiveTriviaCard = ({ trivia }) => {
                 imageStyle={{ borderRadius: 20 }}
                 style={styles.triviaBackground}
                 resizeMode='cover'>
-                <UniversalBottomSheet
-                    refBottomSheet={notEnoughPointNotice}
-                    height={350}
-                    subComponent={<LiveTriviaEntryFailedText
-                        onClose={() => notEnoughPointNotice.current.close()}
-                        pointsRequired={trivia.pointsRequired}
-                        userPoints={user.todaysPoints}
-                    />}
-                />
+                {trivia.playerStatus === "INSUFFICIENTPOINTS" &&
+                    <UniversalBottomSheet
+                        refBottomSheet={notEnoughPointNotice}
+                        height={350}
+                        subComponent={<LiveTriviaEntryFailedText
+                            onClose={() => notEnoughPointNotice.current.close()}
+                            pointsRequired={trivia.pointsRequired}
+                            userPoints={user.todaysPoints}
+                        />}
+                    />
+                }
+                {trivia.entryFee > user.walletBalance &&
+                    <UniversalBottomSheet
+                        refBottomSheet={notEnoughPointNotice}
+                        height={620}
+                        subComponent={
+                            <LowWalletBalance
+                                onClose={closeBottomSheet}
+                                errorDescription="You do not have enough balance to play this live trivia"
+                            />}
+                    />
+                }
                 <View style={styles.triviaContainer}>
                     <View style={styles.triviaTop}>
                         <Text style={styles.triviaTopText}>{trivia.title}</Text>
                         {trivia.status === "WAITING" || trivia.status === "ONGOING" ?
                             <Animated.View style={[styles.triviaRequiredContainer, { opacity: showText ? 0 : 1 }]}>
+                                <Text style={styles.triviaRequiredText}>Entry Fee: &#8358;{formatCurrency(trivia.entryFee)}</Text>
                                 <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
                                 <Text style={styles.triviaRequiredText}>Required</Text>
                             </Animated.View>
                             :
                             <View style={styles.triviaRequiredContainer}>
+                                <Text style={styles.triviaRequiredText}>Entry Fee: &#8358;{formatCurrency(entryFee)}</Text>
                                 <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
                                 <Text style={styles.triviaRequiredText}>Required</Text>
                             </View>
                         }
+
                     </View>
+
                     <Text style={styles.triviaTitle}>{trivia.prizeDisplayText}</Text>
                     {/* <Text style={styles.triviaAdText}>up for grabs !</Text> */}
                     {trivia.status === "EXPIRED" ?
@@ -111,7 +201,22 @@ const LiveTriviaCard = ({ trivia }) => {
                         :
                         <Text style={styles.triviaAdText}>{trivia.startDateDisplayText}</Text>
                     }
-
+                    {trivia.isFreeLiveTrivia === false &&
+                        <>
+                            {trivia.status !== "EXPIRED" && trivia.entryFreePaid === true &&
+                                <View style={styles.eligibleButton}>
+                                    <Text style={styles.eligibleText}>Eligible</Text>
+                                    <Ionicons name="checkmark-circle-outline" size={20} color="#FFFF" />
+                                </View>
+                            }
+                            {trivia.status === "WAITING" && trivia.entryFreePaid === false &&
+                                <Pressable style={styles.ineligibleButton} onPress={TriviaEntryFeePaid}>
+                                    <Text Text style={styles.triviaButtonText}>Pay Now</Text>
+                                    <Ionicons name="checkmark-circle-outline" size={20} color="#4F4949" />
+                                </Pressable>
+                            }
+                        </>
+                    }
                     <View style={styles.triviaBoardBottom}>
                         <View>
                             <View style={styles.triviaTimeCountdown}>
@@ -121,7 +226,7 @@ const LiveTriviaCard = ({ trivia }) => {
                                 source={require('../../../assets/images/yellow-line-bottom.png')}
                             />
                         </View>
-                        <TriviaAction trivia={trivia} action={triviaActionButtonClicked} />
+                        <TriviaAction trivia={trivia} action={triviaActionButtonClicked} loading={loading} />
                     </View>
                 </View>
             </ImageBackground>
@@ -173,7 +278,7 @@ function TriviaCountDown({ trivia }) {
     )
 }
 
-function TriviaAction({ trivia, action }) {
+function TriviaAction({ trivia, action, loading }) {
 
     let { actionDisplayText } = trivia;
 
@@ -182,9 +287,12 @@ function TriviaAction({ trivia, action }) {
     }
 
     return (
-        <Pressable style={styles.triviaButton} onPress={action}>
+        <Pressable style={styles.triviaButton} onPress={action} >
             <Text style={styles.triviaButtonText}>{actionDisplayText}</Text>
-            <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
+            {loading ?
+                <ActivityIndicator size="small" color="#4F4949" /> :
+                <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
+            }
         </Pressable>
     )
 }
@@ -242,7 +350,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: "flex-end",
-        marginTop: normalize(45)
+        marginTop: normalize(35)
     },
     triviaTimeCountdown: {
         flexDirection: 'row',
@@ -257,6 +365,25 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         fontFamily: 'graphik-regular',
         lineHeight: '0.7rem'
+    },
+    eligibleButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: '.2rem',
+    },
+    ineligibleButton: {
+        flexDirection: 'row',
+        backgroundColor: '#FFD064',
+        borderRadius: 12,
+        borderLeftWidth: 8,
+        borderRightWidth: 8,
+        paddingHorizontal: normalize(5),
+        paddingVertical: normalize(5.5),
+        borderColor: '#C39938',
+        alignItems: 'center',
+        width: '6.5rem',
+        marginTop: '.5rem',
+        justifyContent: 'center'
     },
     triviaButton: {
         flexDirection: 'row',
@@ -274,7 +401,24 @@ const styles = EStyleSheet.create({
         lineHeight: '.65rem',
         color: '#4F4949',
         fontFamily: 'graphik-medium',
+        marginRight: '.3rem'
     },
+    eligibleText: {
+        fontSize: '.8rem',
+        // lineHeight: '.65rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+        marginRight: '.3rem'
+    },
+    notEligibleText: {
+        fontSize: '.7rem',
+        lineHeight: '1rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-regular',
+        marginTop: '.5rem',
+        width: '14rem'
+
+    }
 });
 
 export default LiveTriviaCard

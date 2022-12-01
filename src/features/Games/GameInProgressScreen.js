@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Text, View, Image, ScrollView, ImageBackground, Alert, StatusBar, BackHandler } from 'react-native';
 import normalize from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -154,6 +154,9 @@ export default function GameInProgressScreen({ navigation, route }) {
     }
 
     return (
+        // <View>
+        //     <Text>me</Text>
+        // </View>
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
                 <PlayGameHeader onPress={() => onEndGame(true)} onPressBoost={openBottomSheet} />

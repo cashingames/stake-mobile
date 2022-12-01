@@ -14,6 +14,14 @@ export const getLiveTriviaStatus = createAsyncThunk(
     }
 )
 
+export const liveTriviaPayment = createAsyncThunk(
+    'liveTrivia/payment',
+    async (data, thunkAPI) => {
+        const response = await axios.post(`v3/live-trivia/entrance/pay`,data )
+        return response.data;
+    }
+)
+
 export const LiveTriviaSlice = createSlice({
     name: 'liveTrivia',
     initialState,

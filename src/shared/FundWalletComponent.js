@@ -20,6 +20,8 @@ const FundWalletComponent = ({ onClose }) => {
     const user = useSelector((state) => state.auth.user);
     const [amount, setAmount] = useState("");
     const [showPayment, setShowPayment] = useState(false);
+    const minimumWalletFundableAmount  = useSelector(state => state.common.minimumWalletFundableAmount);
+
 
     const transactionCompleted = (res) => {
         // verifyFunding(res.reference); for local testing
@@ -31,7 +33,7 @@ const FundWalletComponent = ({ onClose }) => {
     const startPayment = () => {
         const cleanedAmount =
             amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
-        if (cleanedAmount < 200) {
+        if (cleanedAmount < minimumWalletFundableAmount) {
             Alert.alert("Amount cannot be less than 100 naira");
             return false;
         }
