@@ -33,7 +33,9 @@ export default function ({ navigation }) {
                 setLoading(false);
                 setCanSend(true);
                 // console.log(originalPromiseResult);
-                navigation.navigate("VerifyEmail");
+                navigation.navigate("VerifyEmail", {
+                    email:email
+                });
             })
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);
