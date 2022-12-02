@@ -24,7 +24,7 @@ const LandingPageScreen = ({navigation}) => {
 
     return (
         <SafeAreaView>
-            <ScrollView>
+            <ScrollView style={{backgroundColor:'#fff'}}>
                     <LandingPageHeader onPress={goToLogin} goToDashboard={goToDashboard} />
                     <LandingBanner />
                     <LandingPageInfo />
