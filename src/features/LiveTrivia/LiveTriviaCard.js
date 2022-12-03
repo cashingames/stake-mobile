@@ -43,6 +43,10 @@ const LiveTriviaCard = ({ trivia }) => {
     }
 
     const TriviaEntryFeePaid = () => {
+        if(trivia.entryFee > user.walletBalance ) {
+            openBottomSheet()
+            return
+        }
         dispatch(liveTriviaPayment({
             liveTriviaId: trivia.id
         }))
