@@ -190,7 +190,7 @@ const LiveTriviaCard = ({ trivia }) => {
                             </Animated.View>
                             :
                             <View style={styles.triviaRequiredContainer}>
-                                <Text style={styles.triviaRequiredText}>Entry Fee: &#8358;{formatCurrency(entryFee)}</Text>
+                                <Text style={styles.triviaRequiredText}>Entry Fee: &#8358;{formatCurrency(trivia.entryFee)}</Text>
                                 <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
                                 <Text style={styles.triviaRequiredText}>Required</Text>
                             </View>

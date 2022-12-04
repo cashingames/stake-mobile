@@ -22,6 +22,7 @@ const LiveTriviasScreen = ({ navigation }) => {
 
 
     const trivia = useSelector(state => state.common.trivias)
+    console.log(trivia)
 
     useEffect(()=>{
         setPageNumber(getPageNo());

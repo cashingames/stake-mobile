@@ -73,7 +73,9 @@ export const logActionToServer = createAsyncThunk(
 export const fetchRecentLiveTrivia = createAsyncThunk(
     'common/fetchRecentLiveTrivia',
     async (data, thunkAPI) => {
+        console.log(data, 'data')
         const response = await axios.get(`v3/live-trivia/recent?page=${data}`)
+        console.log(response, 'response')
         return response.data;
     }
 )
