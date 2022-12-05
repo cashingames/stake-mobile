@@ -69,8 +69,7 @@ import SignupVerifyPhoneScreen from './features/Auth/SignupVerifyPhoneScreen';
 import LiveTriviaStakingScreen from './features/Games/LiveTriviaStakingScreen';
 import ReviewStakeScreen from './features/Games/ReviewStakeScreen';
 import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
-import LandingPageScreen from './features/LandingPage/LandingPageScreen';
-
+import LandingPage from './features/LandingPage/LandingPage';
 const AppStack = createNativeStackNavigator();
 
 function AppRouter() {
@@ -277,7 +276,7 @@ function AppRouter() {
 					<AppStack.Group screenOptions={{ title: "", headerShadowVisible: false }}>
 						{/* unauthenticated */}
 						{showIntro &&
-							<AppStack.Screen name="Landing" component={LandingPageScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="Landing" component={LandingPage} options={{ headerShown: false }} />
 						}
 						<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />

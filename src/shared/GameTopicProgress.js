@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Animated, Text } from "react-native";
-import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useSelector } from "react-redux";
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import normalize from "../utils/normalize";
 import AnsweredGameProgress from "./AnsweredGameProgress";
 import LottieAnimations from "./LottieAnimations";
@@ -15,7 +15,6 @@ const GameTopicProgress = ({ onComplete, ending }) => {
 
     return (
         <View style={styles.topicProgress}>
-            {/* <Text style={styles.title}>{gameCategory} {gameTopic}</Text> */}
             <LottieAnimations
                 animationView={require('../../assets/game-board.json')}
                 width={normalize(110)}
@@ -45,27 +44,6 @@ const GameTopicProgress = ({ onComplete, ending }) => {
                             )}
                         </CountdownCircleTimer>
                     }
-                </View>
-
-                <View style={styles.questionsAnsweredContainer}>
-                    {/* {!isEnded &&
-                        <CountdownCircleTimer
-                            isPlaying={!isGamePaused && !ending}
-                            duration={gameDuration}
-                            // colors={[["#fff", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
-                            // trailColor="#2D9CDB"
-
-                            size={60}
-                            strokeWidth={5}
-                            key={countdownKey}
-                            onComplete={onComplete} >
-                            {({ remainingTime, animatedColor }) => (
-                                <Animated.Text style={styles.timeText}>
-                                    {remainingTime}
-                                </Animated.Text>
-                            )}
-                        </CountdownCircleTimer>
-                    } */}
                 </View>
             </View>
         </View>
