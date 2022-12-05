@@ -218,9 +218,9 @@ function CustomDrawerContent(props) {
             </ScrollView>
             <View style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
-                {/* <Pressable onPress={onLogout}>
+                <Pressable onPress={onLogout}>
                     <Text style={styles.logoutText}>Logout</Text>
-                </Pressable> */}
+                </Pressable>
             </View>
 
 
