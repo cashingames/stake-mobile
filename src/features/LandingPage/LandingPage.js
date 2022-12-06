@@ -22,11 +22,16 @@ const LandingPage = ({navigation}) => {
         navigation.navigate('AppRouter')
     }
 
+    const goToSignup = () => {
+        console.log('here')
+        navigation.navigate('Signup')
+      }
+
     return (
         <SafeAreaView>
             <ScrollView style={{backgroundColor:'#fff'}}>
                     <LandingPageHeader onPress={goToLogin} goToDashboard={goToDashboard} />
-                    <LandingBanner />
+                    <LandingBanner onPress={goToSignup} />
                     <LandingPageInfo />
                     <MainFooter />
                     <LandingFooter />

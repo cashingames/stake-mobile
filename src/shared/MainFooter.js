@@ -2,6 +2,7 @@ import { View, Text, Image, Pressable } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet'
+import { responsiveScreenWidth } from '../utils/normalize';
 
 const MainFooter = () => {
   const navigation = useNavigation()
@@ -24,35 +25,35 @@ const styles = EStyleSheet.create({
         marginTop:'3rem',
         alignItems:'center',
         backgroundColor:'#EF2F55',
-        padding:'2.5rem'
+        padding:'.8rem'
     },
     mainFooterHeader:{
-      fontSize:'1.5rem',
+      fontSize:'1.2rem',
       fontFamily:'graphik-medium',
       color:'#fff',
-      marginVertical:'2rem'
+      marginVertical:'1rem'
     },
     mainFooterText:{
       color:'#fff',
       marginVertical:'0.2rem',
-      fontSize:'1rem',
+      fontSize:'.8rem',
       fontFamily:'graphik-regular',
       lineSpacing:'2rem'
     },
 
     mainFooterBtn:{
-      padding:'0.8rem',
+      paddingVertical:'0.6rem',
+      paddingHorizontal:'1rem',
       borderWidth:1,
       borderColor:'#fff',
-      marginTop:30,
+      marginTop:responsiveScreenWidth(4),
       alingSelf:'flex-end',
       alignItems:'center',
       borderRadius:30,
       backgroundColor:'#ef2f55',
-      width:158
     },
     mainFooterBtnText:{
-      fontSize:'0.8rem',
+      fontSize:'0.7rem',
       color:'#fff',
       fontFamily:'graphik-medium'
     }

@@ -46,7 +46,7 @@ const LandingFooter = () => {
 const styles = EStyleSheet.create({
     landingFooter:{
         backgroundColor:'#141B2E',
-        paddingVertical:'2rem'
+        paddingVertical:'1.5rem'
     },
     footerLogo:{
         alignItems:'center',
