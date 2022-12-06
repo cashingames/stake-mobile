@@ -11,7 +11,7 @@ import MainFooter from '../../shared/MainFooter';
 import LandingFooter from '../../shared/LandingFooter';
 
 
-const LandingPageScreen = ({navigation}) => {
+const LandingPage = ({navigation}) => {
     // const navigation = useNavigation();
 
     const goToLogin = () => {
@@ -35,4 +35,4 @@ const LandingPageScreen = ({navigation}) => {
     )
 }
 
-export default LandingPageScreen;
+export default LandingPage;
