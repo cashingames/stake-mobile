@@ -3,6 +3,7 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { isLoggedIn } from '../features/Auth/AuthSlice'
 import EStyleSheet from 'react-native-extended-stylesheet';
+import normalize from '../utils/normalize';
 
 
 const LandingPageHeader = ({onPress, goToDashboard}) => {
@@ -46,13 +47,14 @@ const styles = EStyleSheet.create({
     },
     link:{
       backgroundColor:'#ef2f55',
-      paddingVertical:5,
-      paddingHorizontal:'0.8rem',
+      paddingBottom:normalize(8),
+      paddingTop:normalize(4),
+      paddingHorizontal:'0.9rem',
       borderRadius:30
     },
     linkText:{
       color:'#fff',
       fontFamily:'graphik-medium',
-      fontSize:'1rem'
+      fontSize:'.8rem',
     }
 })
