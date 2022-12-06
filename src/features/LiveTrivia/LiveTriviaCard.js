@@ -63,6 +63,7 @@ const LiveTriviaCard = ({ trivia }) => {
             })
             .then(result => {
                 setLoading(false);
+                dispatch(getLiveTriviaStatus())
                 Alert.alert('You have successfully paid for this live triva')
             })
             .catch((rejectedValueOrSerializedError) => {
@@ -184,54 +185,41 @@ const LiveTriviaCard = ({ trivia }) => {
                 }
                 <View style={styles.triviaContainer}>
                     <View style={styles.triviaTop}>
-                        <Text style={styles.triviaTopText}>{trivia.title}</Text>
-                        <View style={styles.triviaRequiredContainer}>
-                            {trivia.isFreeLiveTrivia === false && trivia.entryFee !== 0 &&
-                                <>
-                                    <Text style={styles.triviaRequiredText}>Entry Fee</Text>
-                                    <Text style={styles.triviaRequiredText}>&#8358;{formatCurrency(trivia.entryFee)}</Text>
-                                </>
-                            }
-                            {trivia.pointsRequired !== 0 &&
-                                <>
-                                    <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
-                                    <Text style={styles.triviaRequiredText}>Required</Text>
-                                </>
-                            }
-                            {trivia.pointsRequired === 0 && trivia.entryFee === 0 &&
-                                <>
-                                    <Text style={styles.triviaRequiredText}>Free</Text>
-                                </>
-                            }
-                            {trivia.isFreeLiveTrivia === false && trivia.status !== "EXPIRED" && trivia.status !== "CLOSED" &&
-                                <>
-                                    {trivia.entryFreePaid === true &&
-                                        <View style={styles.eligibleButton}>
-                                            <Text style={styles.eligibleText}>Paid</Text>
-                                            <Ionicons name="checkmark-circle-outline" size={20} color="#FFFF" />
-                                        </View>
-                                    }
-                                    {trivia.status === "WAITING" && trivia.entryFreePaid === false &&
-                                        <Pressable style={styles.ineligibleButton} onPress={TriviaEntryFeePaid}>
-                                            {loading ?
-                                                <ActivityIndicator size="small" color="#4F4949" /> :
-                                                <Text Text style={styles.triviaButtonText}>Pay Now</Text>
-                                            }
-                                        </Pressable>
-                                    }
-                                </>
+                        <View style={styles.triviaLeft}>
+                            <Text style={styles.triviaTopText}>{trivia.title}</Text>
+                            <Text style={styles.triviaTitle}>{trivia.prizeDisplayText}</Text>
+                            {trivia.status === "EXPIRED" ?
+                                <Text style={styles.triviaAdText}>{trivia.startAt}</Text>
+                                :
+                                <Text style={styles.triviaAdText}>{trivia.startDateDisplayText}</Text>
                             }
 
                         </View>
+                        <View style={styles.triviaRight}>
+                            <View style={styles.triviaRequiredContainer}>
+                                {trivia.isFreeLiveTrivia === false && trivia.entryFee !== 0 &&
+                                    <>
+                                        <Text style={styles.triviaRequiredText}>Entry Fee</Text>
+                                        <Text style={styles.triviaRequiredText}>&#8358;{formatCurrency(trivia.entryFee)}</Text>
+                                    </>
+                                }
+                                {trivia.pointsRequired !== 0 &&
+                                    <>
+                                        <Text style={styles.triviaRequiredText}>{trivia.pointsRequired} pts</Text>
+                                        <Text style={styles.triviaRequiredText}>Required</Text>
+                                    </>
+                                }
+                                {trivia.pointsRequired === 0 && trivia.entryFee === 0 &&
+                                    <>
+                                        <Text style={styles.triviaRequiredText}>Free</Text>
+                                    </>
+                                }
+
+
+                            </View>
+                        </View>
                     </View>
-                    <Text style={styles.triviaTitle}>{trivia.prizeDisplayText}</Text>
-                    {/* <Text style={styles.triviaAdText}>up for grabs !</Text> */}
-                    {trivia.status === "EXPIRED" ?
-                        <Text style={styles.triviaAdText}>{trivia.startAt}</Text>
-                        :
-                        <Text style={styles.triviaAdText}>{trivia.startDateDisplayText}</Text>
-                    }
-                    <View style={styles.triviaBoardBottom}>
+                    <View style={styles.triviaBottom}>
                         <View>
                             <View style={styles.triviaTimeCountdown}>
                                 <TriviaStatus trivia={trivia} />
@@ -241,6 +229,24 @@ const LiveTriviaCard = ({ trivia }) => {
                             />
                         </View>
                         <TriviaAction trivia={trivia} action={triviaActionButtonClicked} />
+                        {trivia.isFreeLiveTrivia === false && trivia.status === 'WAITING' &&
+                            <>
+                                {trivia.entryFreePaid === true &&
+                                    <View style={styles.eligibleButton}>
+                                        <Text style={styles.eligibleText}>Paid</Text>
+                                        <Ionicons name="checkmark-circle-outline" size={20} color="#FFD064" />
+                                    </View>
+                                }
+                                {trivia.status === "WAITING" && trivia.entryFreePaid === false &&
+                                    <Pressable style={styles.ineligibleButton} onPress={TriviaEntryFeePaid}>
+                                        {loading ?
+                                            <ActivityIndicator size="small" color="#4F4949" /> :
+                                            <Text Text style={styles.triviaButtonText}>Pay Now</Text>
+                                        }
+                                    </Pressable>
+                                }
+                            </>
+                        }
                     </View>
                 </View>
             </ImageBackground>
@@ -292,7 +298,7 @@ function TriviaCountDown({ trivia }) {
     )
 }
 
-function TriviaAction({ trivia, action}) {
+function TriviaAction({ trivia, action }) {
 
     let { actionDisplayText } = trivia;
 
@@ -303,7 +309,7 @@ function TriviaAction({ trivia, action}) {
     return (
         <Pressable style={styles.triviaButton} onPress={action} >
             <Text style={styles.triviaButtonText}>{actionDisplayText}</Text>
-                <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
+            <Ionicons name="chevron-forward-outline" size={24} color="#4F4949" />
         </Pressable>
     )
 }
@@ -313,22 +319,24 @@ const styles = EStyleSheet.create({
     },
     triviaContainer: {
         paddingVertical: '1.1rem',
-        paddingHorizontal: '1.1rem'
+        paddingHorizontal: '1rem',
+        flexDirection: 'column',
     },
     triviaTop: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    triviaBottom: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end'
+    },
+
+    triviaLeft: {
 
     },
     triviaRequiredContainer: {
-        alignItems: 'flex-end',
-        // backgroundColor: '#FFD064',
-        // paddingHorizontal: normalize(15),
-        // borderRadius: normalize(12),
-        // paddingVertical: normalize(5),
-        // borderLeftWidth: 8,
-        // borderRightWidth: 8,
-        // borderColor: '#C39938',
+
     },
     triviaTopText: {
         fontSize: '.85rem',
@@ -340,7 +348,7 @@ const styles = EStyleSheet.create({
     },
     triviaRequiredText: {
         fontSize: '.8rem',
-        lineHeight: '.85rem',
+        lineHeight: '.95rem',
         color: '#FFD064',
         opacity: 0.8,
         fontFamily: 'graphik-bold',
@@ -350,18 +358,18 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         lineHeight: '2.1rem',
         fontFamily: 'graphik-medium',
+        marginVertical: responsiveScreenWidth(1)
     },
     triviaAdText: {
         fontSize: '.85rem',
         color: '#FFFF',
         opacity: 0.8,
         fontFamily: 'graphik-medium',
+        marginBottom: normalize(35)
     },
-    triviaBoardBottom: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+    triviaRight: {
+        flexDirection: 'column',
         alignItems: "flex-end",
-        marginTop: normalize(35)
     },
     triviaTimeCountdown: {
         flexDirection: 'row',
@@ -388,11 +396,10 @@ const styles = EStyleSheet.create({
         borderRadius: 12,
         borderLeftWidth: 8,
         borderRightWidth: 8,
-        paddingHorizontal: normalize(7),
-        paddingVertical: normalize(10),
+        paddingHorizontal: normalize(10),
+        paddingVertical: normalize(7),
         borderColor: '#C39938',
         alignItems: 'center',
-        width: '6.5rem',
         marginTop: '.5rem',
         justifyContent: 'center'
     },
@@ -412,14 +419,13 @@ const styles = EStyleSheet.create({
         lineHeight: '.65rem',
         color: '#4F4949',
         fontFamily: 'graphik-medium',
-        marginRight: '.3rem'
+        marginRight: '.2rem'
     },
     eligibleText: {
-        fontSize: '.8rem',
-        // lineHeight: '.65rem',
+        fontSize: '.9rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        marginRight: '.3rem'
+        marginRight: '.2rem'
     },
     notEligibleText: {
         fontSize: '.7rem',
