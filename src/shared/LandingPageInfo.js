@@ -42,7 +42,7 @@ const LandingPageInfo = () => {
           source={require('../../assets/images/img3.png')}
           style={styles.image3} />
         <View style={[{ transform: [{ rotate: '180deg' }] }, styles.imgText2]}>
-          <Text style={[{ transform: [{ rotate: '270deg' }] }, styles.landingImageText2]}>Category Leader</Text>
+          <Text style={[{ transform: [{ rotate: '270deg' }] }, styles.landingImageText2]}>Category Leaderboard</Text>
         </View>
       </View>
     </View>
@@ -191,10 +191,10 @@ const styles = EStyleSheet.create({
 
   landingImageText2: {
     color: '#fff',
-    fontSize: '1.7rem',
+    fontSize: '1.2rem',
     width: responsiveScreenWidth(100),
     fontFamily: 'graphik-medium',
-    paddingLeft: Platform.OS === 'ios' ? '3.5rem' : '4rem',
+    paddingLeft: Platform.OS === 'ios' ? '3.8rem' : '4.3rem',
     letterSpacing: 1,
   },
 
