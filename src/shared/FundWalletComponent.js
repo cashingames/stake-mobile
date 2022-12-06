@@ -54,7 +54,7 @@ const FundWalletComponent = ({ onClose }) => {
                                 value={amount}
                                 keyboardType="numeric"
                                 onChangeText={setAmount}
-                                autoFocus={true}
+                                autoFocus={false}
                                 placeholder="100"
                                 min
                             />
