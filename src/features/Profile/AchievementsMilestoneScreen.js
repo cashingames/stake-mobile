@@ -3,8 +3,7 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
-
-import * as Progress from 'react-native-progress';
+import { LinearProgress } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
@@ -41,15 +40,13 @@ const MilestoneStatus = ({ milestoneIcon, pointsProgress, milestoneName, progres
     return (
         <View style={styles.status}>
             <View>
-                <Progress.Bar
-                    progress={progress}
-                    width={124}
-                    color='#EF2F55'
-                    unfilledColor='#F0BACB'
-                    height={8}
-                    borderRadius={16}
-                    borderWidth={0}
-                />
+                <LinearProgress 
+                color='#EF2F55'
+                value = {progress}
+                trackColor='#F0BACB'
+                variant= "determinate"
+                style= {styles.progressBar}
+                 />
                 <Text style={styles.statusText}>{pointsProgress} points to Unlock {milestoneName}</Text>
             </View>
             <Image
@@ -170,5 +167,10 @@ const styles = EStyleSheet.create({
     padlock: {
         width: normalize(35),
         height: normalize(35)
+    },
+    progressBar: {
+        width: 124,
+        height:8,
+        borderRadius: 16
     }
 });

@@ -100,7 +100,8 @@ const ProfileTabs = () => {
             <ProfileTab tabName='Edit Details' onPress={() => navigation.navigate('EditDetails')} />
             <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ChangePassword')} />
             {isAchievementBadgeFeatureEnabled &&
-                <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('AchievementsMilestone')} />}
+                <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('AchievementsMilestone')} />
+            }
             <ProfileTab tabName='Stats' onPress={() => navigation.navigate('UserStats')} />
             <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} />
             {/* <Pressable onPress={onLogout}>

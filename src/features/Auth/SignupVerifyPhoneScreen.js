@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, ScrollView, BackHandler, TextInput, Pressable, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import Input from '../../shared/Input';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
@@ -9,7 +8,6 @@ import LottieAnimations from '../../shared/LottieAnimations';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useFocusEffect } from '@react-navigation/native';
 import ResendOtp from '../../shared/ResendOtp';
-import InputOTP from '../../shared/InputOTP';
 import { ResendPhoneOtp, setToken, verifyPhoneOtp, verifyUser } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { createIconSetFromFontello } from '@expo/vector-icons';
@@ -22,19 +20,26 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     const dispatch = useDispatch();
 
 
-    const [firstDigit, setFirstDigit] = useState('')
-    const [secondDigit, setSecondDigit] = useState('')
-    const [thirdDigit, setThirdDigit] = useState('')
-    const [fourthDigit, setFourthDigit] = useState('')
-    const [fifthDigit, setFifthDigit] = useState('')
+    const pin1Ref = useRef(null)
+    const pin2Ref = useRef(null)
+    const pin3Ref = useRef(null)
+    const pin4Ref = useRef(null)
+    const pin5Ref = useRef(null)
+
+
+    const [otp1, setOtp1] = useState('')
+    const [otp2, setOtp2] = useState('')
+    const [otp3, setOtp3] = useState('')
+    const [otp4, setOtp4] = useState('')
+    const [otp5, setOtp5] = useState('')
     const [counter, setCounter] = useState('');
     const [isCountdownInProgress, setIsCountdownInProgress] = useState(true);
+
+    const token = `${otp1}${otp2}${otp3}${otp4}${otp5}`
     const params = route.params;
-
-
+    console.log(token)
 
     useEffect(() => {
-
         const onComplete = () => {
             clearInterval(countDown);
             setIsCountdownInProgress(false)
@@ -66,7 +71,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
         setLoading(true);
         dispatch(verifyPhoneOtp({
             phone_number: params.phone_number,
-            token: `${firstDigit}${secondDigit}${thirdDigit}${fourthDigit}${fifthDigit}`
+            token: token
         }))
             // console.log("token phone", token)
 
@@ -109,21 +114,74 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                     />
                 </View>
                 <VerifyEmailText params={params} />
-                <InputOTP
-                    firstDigit={firstDigit}
-                    setFirstDigit={setFirstDigit}
-                    secondDigit={secondDigit}
-                    setSecondDigit={setSecondDigit}
-                    thirdDigit={thirdDigit}
-                    setThirdDigit={setThirdDigit}
-                    fourthDigit={fourthDigit}
-                    setFourthDigit={setFourthDigit}
-                    fifthDigit={fifthDigit}
-                    setFifthDigit={setFifthDigit}
-                    onPress={resendButton}
-                    counter={counter}
-                    isCountdownInProgress={isCountdownInProgress}
-                />
+
+                <View style={styles.form}>
+                    <TextInput
+                        ref={pin1Ref}
+                        keyboardType={'number-pad'}
+                        maxLength={1}
+                        value={otp1}
+                        onChangeText={(otp1) => {
+                            setOtp1(otp1);
+                            if (otp1 !== '') {
+                                pin2Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        ref={pin2Ref}
+                        keyboardType={'number-pad'}
+                        maxLength={1}
+                        onChangeText={(otp2) => {
+                            setOtp2(otp2);
+                            if (otp2 !== '') {
+                                pin3Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        ref={pin3Ref}
+                        keyboardType={'number-pad'}
+                        maxLength={1}
+                        onChangeText={(otp3) => {
+                            setOtp3(otp3);
+                            if (otp3 !== '') {
+                                pin4Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        ref={pin4Ref}
+                        keyboardType={'number-pad'}
+                        maxLength={1}
+                        onChangeText={(otp4) => {
+                            setOtp4(otp4);
+                            if (otp4 !== '') {
+                                pin5Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
+
+                    <TextInput
+                        ref={pin5Ref}
+                        keyboardType={'number-pad'}
+                        maxLength={1}
+                        onChangeText={(otp5) => {
+                            setOtp5(otp5)
+                        }}
+                        style={styles.input}
+                    />
+
+                </View>
+                <View>
+                    <ResendOtp counter={counter}
+                        isCountdownInProgress={isCountdownInProgress}
+                        onPress={resendButton} />
+                </View>
                 <AppButton text={loading ? 'Verifying...' : 'Login'} disabled={loading} onPress={goToDashboard} />
             </ScrollView>
         </View>
@@ -131,7 +189,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     )
 }
 
-const VerifyEmailText = ({params}) => {
+const VerifyEmailText = ({ params }) => {
     return (
         <View style={styles.verifyText}>
             <Text style={styles.verifyHeadText}>
@@ -181,4 +239,20 @@ const styles = EStyleSheet.create({
         opacity: 0.6,
         marginTop: normalize(25)
     },
+    form: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: normalize(48),
+    },
+    input: {
+        height: 40,
+        borderWidth: 1,
+        borderRadius: 10,
+        width: 50,
+        borderColor: '#CDD4DF',
+        fontFamily: 'graphik-regular',
+        textAlign: 'center',
+        color: "#000",
+    }
 });

@@ -24,6 +24,7 @@ import GamePicker from '../Games/GamePicker';
 import LottieAnimations from '../../shared/LottieAnimations';
 import SelectGameMode from '../Games/SelectGameMode';
 import ChallengeWeeklyTopLeaders from '../Leaderboard/ChallengeWeeklyTopLeaders';
+import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
 
 const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -43,6 +44,9 @@ const HomeScreen = () => {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
+        dispatch(getUser())
+        dispatch(getCommonData())
+        dispatch(getLiveTriviaStatus())
         wait(2000).then(() => setRefreshing(false));
     }, []);
 

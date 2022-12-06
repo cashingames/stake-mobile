@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     StyleSheet,
     View,
@@ -6,56 +6,39 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
-
 import AppButton from '../../shared/AppButton';
-import Input from '../../shared/Input';
 import normalize from '../../utils/normalize';
-import { setUserPasswordResetToken, verifyOtp } from './AuthSlice';
+import ResendOtp from '../../shared/ResendOtp';
+import { setUserPasswordResetToken, verifyOtp, verifyAccount } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { calculateTimeRemaining } from '../../utils/utils';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import { TextInput } from 'react-native';
 
 export default function VerifyEmailScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
+    const params = route.params 
 
-    const [codes, setCodes] = useState([]);
+    const pin1Ref = useRef(null)
+    const pin2Ref = useRef(null)
+    const pin3Ref = useRef(null)
+    const pin4Ref = useRef(null)
+    const pin5Ref = useRef(null)
+
+
+    const [otp1, setOtp1] = useState('')
+    const [otp2, setOtp2] = useState('')
+    const [otp3, setOtp3] = useState('')
+    const [otp4, setOtp4] = useState('')
+    const [otp5, setOtp5] = useState('')
+    const [counter, setCounter] = useState('');
+    const [isCountdownInProgress, setIsCountdownInProgress] = useState(true);
     const [active, setActive] = useState(false);
-    const token = codes.join("");
+
+    const token = `${otp1}${otp2}${otp3}${otp4}${otp5}`
+
     const [error, setError] = useState('');
-
-    const onChangeInput1 = (text) => {
-        
-        let newArr = [...codes];
-        newArr[0] = text;
-        setCodes(newArr)
-    }
-
-    const onChangeInput2 = (text) => {
-        
-        let newArr = [...codes];
-        newArr[1] = text;
-        setCodes(newArr)
-    }
-
-    const onChangeInput3 = (text) => {
-        
-        let newArr = [...codes];
-        newArr[2] = text;
-        setCodes(newArr)
-    }
-
-    const onChangeInput4 = (text) => {
-        
-        let newArr = [...codes];
-        newArr[3] = text;
-        setCodes(newArr)
-    }
-
-    const onChangeInput5 = (text) => {
-        let newArr = [...codes];
-        newArr[4] = text;
-        setCodes(newArr)
-    }
 
     const nextAction = () => {
         setActive(false);
@@ -75,12 +58,39 @@ export default function VerifyEmailScreen({ navigation, route }) {
 
     useEffect(() => {
         // console.log(codes.length);
-        if (codes.length < 5) {
+        if (token.length < 5) {
             setActive(false)
             return;
         }
         setActive(true);
-    }, [codes])
+    }, [token])
+
+    useEffect(() => {
+        const onComplete = () => {
+            clearInterval(countDown);
+            setIsCountdownInProgress(false)
+        }
+        let nextResendMinutes = 2;
+        const futureDateStamp = new Date()
+        futureDateStamp.setMinutes(futureDateStamp.getMinutes() + nextResendMinutes)
+
+        const futureDate = futureDateStamp.getTime()
+        
+        const countDown = setInterval(() => {
+            const timeString = calculateTimeRemaining(futureDate, onComplete);
+            setCounter(timeString);
+        }, 1000);
+
+        return () => clearInterval(countDown);
+
+    }, [])
+
+    const resend = () => {
+        dispatch(verifyAccount({
+            email:params.email
+        }))
+        setIsCountdownInProgress(true)
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -94,43 +104,73 @@ export default function VerifyEmailScreen({ navigation, route }) {
                 <Text style={styles.errorBox}>{error}</Text>
             }
             <View style={styles.form}>
-                <Input
-                    onChangeText={text => onChangeInput1(text)}
+                <TextInput
+                    ref={pin1Ref}
+                    keyboardType={'number-pad'}
                     maxLength={1}
-                    returnKeyType="next"
-                    keyboardType="numeric"
+                    value={otp1}
+                    onChangeText={(otp1) => {
+                        setOtp1(otp1);
+                        if (otp1 !== '') {
+                            pin2Ref.current.focus()
+                        } 
+                    }}
+                    style={styles.input}
+                />
+                <TextInput
+                    ref={pin2Ref}
+                    keyboardType={'number-pad'}
+                    maxLength={1}
+                    onChangeText={(otp2) => {
+                        setOtp2(otp2);
+                        if (otp2 !== '') {
+                            pin3Ref.current.focus()
+                        }
+                    }}
+                    style={styles.input}
+                />
+                <TextInput
+                    ref={pin3Ref}
+                    keyboardType={'number-pad'}
+                    maxLength={1}
+                    onChangeText={(otp3) => {
+                        setOtp3(otp3);
+                        if (otp3 !== '') {
+                            pin4Ref.current.focus()
+                        }
+                    }}
+                    style={styles.input}
+                />
+                <TextInput
+                    ref={pin4Ref}
+                    keyboardType={'number-pad'}
+                    maxLength={1}
+                    onChangeText={(otp4) => {
+                        setOtp4(otp4);
+                        if (otp4 !== '') {
+                            pin5Ref.current.focus()
+                        }
+                    }}
+                    style={styles.input}
                 />
 
-                <Input
-                    onChangeText={text => onChangeInput2(text)}
+                <TextInput
+                    ref={pin5Ref}
+                    keyboardType={'number-pad'}
                     maxLength={1}
-                    returnKeyType="next"
-                    keyboardType="numeric"
-                />
-
-                <Input
-                    onChangeText={text => onChangeInput3(text)}
-                    maxLength={1}
-                    returnKeyType="next"
-                    keyboardType="numeric"
-                />
-
-                <Input
-                    onChangeText={text => onChangeInput4(text)}
-                    maxLength={1}
-                    returnKeyType="next"
-                    keyboardType="numeric"
-                />
-
-                <Input
-                    onChangeText={text => onChangeInput5(text)}
-                    maxLength={1}
-                    returnKeyType={"done"}
-                    keyboardType="numeric"
+                    onChangeText={(otp5) => {
+                        setOtp5(otp5)
+                    }}
+                    style={styles.input}
                 />
 
             </View>
 
+            <View style={styles.reset}>
+            <ResendOtp  counter={counter}
+                    isCountdownInProgress={isCountdownInProgress}
+                    onPress={resend} />
+            </View>
             <View style={styles.button}>
                 <AppButton onPress={() => nextAction()} text="Continue" disabled={!active} />
             </View>
@@ -171,23 +211,26 @@ const styles = StyleSheet.create({
         fontSize: normalize(10)
     },
     form: {
-        flex: 1,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: normalize(48),
     },
     input: {
-        height: normalize(40),
-        borderWidth: normalize(1),
-        borderRadius: normalize(5),
-        width: normalize(40),
+        height: 40,
+        borderWidth: 1,
+        borderRadius: 10,
+        width: 50,
         borderColor: '#CDD4DF',
         fontFamily: 'graphik-regular',
         textAlign: 'center',
-        fontSize: 25,
         color: "#000",
     },
+
+    reset:{
+        flex:1,
+    },
+
     button: {
         marginTop: normalize(150),
     }
