@@ -42,14 +42,7 @@ const LiveTriviaCard = ({ trivia }) => {
         notEnoughPointNotice.current.close()
     }
 
-    const TriviaEntryFeePaid = () => {
-        setLoading(true)
-        if (trivia.entryFee > user.walletBalance) {
-            setLoading(false);
-            openBottomSheet()
-            return
-        }
-
+    const payForLiveTrivia = () => {
         dispatch(liveTriviaPayment({
             liveTriviaId: trivia.id
         }))
@@ -62,15 +55,77 @@ const LiveTriviaCard = ({ trivia }) => {
                 });
             })
             .then(result => {
-                setLoading(false);
                 dispatch(getLiveTriviaStatus())
-                Alert.alert('You have successfully paid for this live triva')
+                dispatch(getUser());
+                if (trivia.status === "WAITING") {
+                    Alert.alert('You have successfully paid for this live triva')
+                    return;
+                }
+                if (trivia.playerStatus === "CANPLAY" && trivia.status !== "EXPIRED") {
+                    navigation.navigate('TriviaInstructions', { ...trivia })
+                    return;
+                }
+                setLoading(false);
             })
             .catch((rejectedValueOrSerializedError) => {
                 // console.log(rejectedValueOrSerializedError);
                 Alert.alert(rejectedValueOrSerializedError.message)
                 setLoading(false);
             });
+    }
+
+    const payForOngoingLiveTrivia = () => {
+        setLoading(true)
+        dispatch(liveTriviaPayment({
+            liveTriviaId: trivia.id
+        }))
+            .then(unwrapResult)
+            .then(async () => {
+                await analytics().logEvent('live_trivia_payment_made', {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
+                });
+            })
+            .then(result => {
+                console.log('paid')
+                navigation.navigate('TriviaInstructions', { ...trivia })
+                setLoading(false);
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                // console.log(rejectedValueOrSerializedError);
+                Alert.alert(rejectedValueOrSerializedError.message)
+                setLoading(false);
+            });
+    }
+
+    const TriviaEntryFeePaymentConfirmation = () => {
+        setLoading(true)
+        if (trivia.entryFee > user.walletBalance) {
+            setLoading(false);
+            openBottomSheet()
+            return
+        }
+
+        if (trivia.entryFee < user.walletBalance) {
+            setLoading(false);
+            Alert.alert(
+                "Live Trivia",
+                `An amount of ${trivia.entryFee} naira would be deducted from your wallet balance as entry fee for this live trivia  `,
+                [
+                    {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                    },
+                    { text: "Proceed", onPress: () => payForLiveTrivia() }
+                ]
+            );
+
+            return
+        }
+
+
     }
 
     const triviaActionButtonClicked = async () => {
@@ -108,29 +163,24 @@ const LiveTriviaCard = ({ trivia }) => {
             });
             {
                 trivia.isFreeLiveTrivia === false && trivia.entryFreePaid === false &&
-                    dispatch(liveTriviaPayment({
-                        liveTriviaId: trivia.id
-                    }))
-                        .then(unwrapResult)
-                        .then(async () => {
-                            await analytics().logEvent('live_trivia_payment_made', {
-                                'id': user.username,
-                                'phone_number': user.phoneNumber,
-                                'email': user.email
-                            });
-                        })
-                        .then(result => {
-                            setLoading(false);
-                            console.log('paid')
-                            navigation.navigate('TriviaInstructions', { ...trivia })
-                        })
-                        .catch((rejectedValueOrSerializedError) => {
-                            // console.log(rejectedValueOrSerializedError);
-                            Alert.alert(rejectedValueOrSerializedError.message)
-                            setLoading(false);
-                        });
+
+                    Alert.alert(
+                        "Live Trivia",
+                        `An amount of ${trivia.entryFee} naira would be deducted from your wallet balance as entry fee for this live trivia  `,
+                        [
+                            {
+                                text: "Cancel",
+                                onPress: () => console.log("Cancel Pressed"),
+                                style: "cancel"
+                            },
+                            { text: "Proceed", onPress: () => payForOngoingLiveTrivia() }
+                        ]
+                    );
             }
-            navigation.navigate('TriviaInstructions', { ...trivia })
+            {
+                trivia.isFreeLiveTrivia === false && trivia.entryFreePaid === true &&
+                    navigation.navigate('TriviaInstructions', { ...trivia })
+            }
         }
     }
     useEffect(() => {
@@ -211,7 +261,7 @@ const LiveTriviaCard = ({ trivia }) => {
                                 }
                                 {trivia.pointsRequired === 0 && trivia.entryFee === 0 &&
                                     <>
-                                        <Text style={styles.triviaRequiredText}>Free</Text>
+                                        <Text style={styles.triviaRequiredText}>FREE</Text>
                                     </>
                                 }
 
@@ -238,7 +288,7 @@ const LiveTriviaCard = ({ trivia }) => {
                                     </View>
                                 }
                                 {trivia.status === "WAITING" && trivia.entryFreePaid === false &&
-                                    <Pressable style={styles.ineligibleButton} onPress={TriviaEntryFeePaid}>
+                                    <Pressable style={styles.ineligibleButton} onPress={TriviaEntryFeePaymentConfirmation}>
                                         {loading ?
                                             <ActivityIndicator size="small" color="#4F4949" /> :
                                             <Text Text style={styles.triviaButtonText}>Pay Now</Text>
