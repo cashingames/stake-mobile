@@ -5,19 +5,13 @@ import normalize from "../utils/normalize";
 import AppButton from "./AppButton";
 
 
-const StakingButtons = ({onPress, onPressProceed}) => {
+const StakingButtons = ({onPress}) => {
     return (
         <View style={styles.nextButton}>
             <AppButton
                 onPress={onPress}
                 text='Stake Cash'
                 style={styles.stakingButton}
-                textStyle={styles.stakingButtonText}
-            />
-            <AppButton
-                onPress={onPressProceed}
-                text='Proceed'
-                style={styles.proceedButton}
             />
         </View>
     )
@@ -32,10 +26,7 @@ const styles = EStyleSheet.create({
       },
       stakingButton: {
         marginVertical: 10,
-        backgroundColor: '#FFFF',
         width: '9rem',
-        borderColor: '#EF2F55',
-        borderWidth: 1,
       },
       stakingButtonText: {
         color: '#EF2F55'

@@ -68,8 +68,6 @@ export default function GameInstructionsScreen({ navigation }) {
           />
         </View>
         {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
-        {/* {gameMode.name === "CHALLENGE" && <ChallengeInstructions />} */}
-        {/* {isStakingFeatureEnabled && gameMode.name !== "CHALLENGE" && */}
         {isStakingFeatureEnabled &&
           <ExhibitionStakeAmount onPress={gotoStaking} />
         }
@@ -82,7 +80,7 @@ export default function GameInstructionsScreen({ navigation }) {
           :
           <UniversalBottomSheet
             refBottomSheet={refRBSheet}
-            height={Platform.OS === 'ios' ? 400 : 350}
+            height={Platform.OS === 'ios' ? 500 : 350}
             subComponent={<NoGame
               onClose={closeBottomSheet}
               onPress={gotoStaking}
@@ -91,17 +89,20 @@ export default function GameInstructionsScreen({ navigation }) {
         }
 
       </ScrollView>
-      {/* {isStakingFeatureEnabled && gameMode.name !== "CHALLENGE" ? */}
-      {isStakingFeatureEnabled ?
-        <StakingButtons onPress={gotoStaking} onPressProceed={openBottomSheet} />
-        :
+      <View style={styles.playButtons}>
         <AppButton
           onPress={openBottomSheet}
           text='Proceed'
-          style={styles.proceed}
-        />
+          style={isStakingFeatureEnabled ? styles.proceed : styles.noStakeProcced}
+          textStyle={isStakingFeatureEnabled && styles.proceedText} />
 
-      }
+        {isStakingFeatureEnabled &&
+          <StakingButtons onPress={gotoStaking} onPressProceed={openBottomSheet} />
+        }
+      </View>
+
+
+
     </View>
   );
 };
@@ -134,33 +135,8 @@ const ExhibitionInstructions = () => {
   )
 };
 
-// const ChallengeInstructions = () => {
-//   return (
-//     <>
-//       <Text style={styles.instructionHeader}>Ready to start winning? Let’s get started
-//         by reading the following instructions carefully.
-//       </Text>
-//       <View style={styles.instruction}>
-//         <Text style={styles.unicode}>{'\u0031'}.</Text>
-//         <Text style={styles.instructionText}>There are 10 questions per session.
-//           You are required to answer these 10 questions in 60 seconds</Text>
-//       </View>
-//       <View style={styles.instruction}>
-//         <Text style={styles.unicode}>{'\u0032'}.</Text>
-//         <Text style={styles.instructionText}>Click on the “Next” button after answering each question to
-//           progress to the next question. You can also see your competitor’s progress
-//           opposite yours on the upper right corner of your screen.
-//         </Text>
-//       </View>
-//       <View style={styles.instruction}>
-//         <Text style={styles.unicode}>{'\u0033'}.</Text>
-//         <Text style={styles.instructionText}>At the end of the session, you will see
-//           your total score against that of your competitor.
-//         </Text>
-//       </View>
-//     </>
-//   )
-// };
+
+
 
 
 const AvailableBoosts = ({ onClose, user }) => {
@@ -303,5 +279,23 @@ const styles = EStyleSheet.create({
   },
   proceed: {
     marginVertical: 10,
+    backgroundColor: '#FFFF',
+    width: '9rem',
+    borderColor: '#EF2F55',
+    borderWidth: 1,
   },
+  noStakeProcced: {
+    width: '100%',
+    marginVertical: 10,
+  },
+  proceedText: {
+    color: '#EF2F55',
+  },
+  noStakeText: {
+    color: '#FFFF',
+  },
+  playButtons: {
+    flexDirection: 'row',
+    justifyContent:'space-between'
+  }
 });

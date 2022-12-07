@@ -110,7 +110,7 @@ const LiveTriviaCard = ({ trivia }) => {
         if (trivia.entryFee < user.walletBalance) {
             setLoading(false);
             Alert.alert(
-                "Live Trivia",
+                "Payment Notification",
                 `An amount of ${trivia.entryFee} naira would be deducted from your wallet balance as entry fee for this live trivia  `,
                 [
                     {
@@ -165,7 +165,7 @@ const LiveTriviaCard = ({ trivia }) => {
                 trivia.isFreeLiveTrivia === false && trivia.entryFreePaid === false &&
 
                     Alert.alert(
-                        "Live Trivia",
+                        "Payment Notification",
                         `An amount of ${trivia.entryFee} naira would be deducted from your wallet balance as entry fee for this live trivia  `,
                         [
                             {
@@ -179,6 +179,10 @@ const LiveTriviaCard = ({ trivia }) => {
             }
             {
                 trivia.isFreeLiveTrivia === false && trivia.entryFreePaid === true &&
+                    navigation.navigate('TriviaInstructions', { ...trivia })
+            }
+            {
+                trivia.isFreeLiveTrivia === true && 
                     navigation.navigate('TriviaInstructions', { ...trivia })
             }
         }

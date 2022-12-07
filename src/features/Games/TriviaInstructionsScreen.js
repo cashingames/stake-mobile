@@ -68,16 +68,21 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
                     />}
                 />
             </ScrollView>
-            {isStakingFeatureEnabled ?
-                <StakingButtons onPress={gotoStaking} onPressProceed={onProceed} />
-                :
+            <View style={styles.playButtons}>
                 <AppButton
                     onPress={onProceed}
                     text='Proceed'
-                    style={styles.proceed}
+                    style={isStakingFeatureEnabled ? styles.proceed : styles.noStakeProcced}
+                    textStyle={isStakingFeatureEnabled && styles.proceedText}
                 />
+                {isStakingFeatureEnabled &&
+                    <StakingButtons onPress={gotoStaking} onPressProceed={onProceed} />
+                }
 
-            }
+            </View>
+
+
+
 
         </View>
     );
@@ -140,11 +145,11 @@ const AvailableBoosts = ({ onClose, trivia, user }) => {
             });
     }
 
-        return (
-            <LiveTriviaUserAvailableBoosts onClose={onClose} boosts={boosts}
-                loading={loading} onStartGame={onStartGame} />
-        )
- 
+    return (
+        <LiveTriviaUserAvailableBoosts onClose={onClose} boosts={boosts}
+            loading={loading} onStartGame={onStartGame} />
+    )
+
 }
 
 
@@ -200,5 +205,23 @@ const styles = EStyleSheet.create({
     },
     proceed: {
         marginVertical: 10,
-      },
+        backgroundColor: '#FFFF',
+        width: '9rem',
+        borderColor: '#EF2F55',
+        borderWidth: 1,
+    },
+    noStakeProcced: {
+        width: '100%',
+        marginVertical: 10,
+    },
+    proceedText: {
+        color: '#EF2F55',
+    },
+    noStakeText: {
+        color: '#FFFF',
+    },
+    playButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    }
 });

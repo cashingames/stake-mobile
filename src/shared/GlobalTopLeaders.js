@@ -14,7 +14,7 @@ function GlobalTopLeaders({ leaders }) {
     const thirdLeader = topLeaders[2] ?? { username: "..." };
     return (
         <View style={styles.content}>
-            {topLeaders.length > 0 ? <>
+            {/* {topLeaders.length > 0 ? <> */}
                 <TopLeader
                     podPosition={require('../../assets/images/position3.png')}
                     name={`${thirdLeader.username}`}
@@ -30,8 +30,8 @@ function GlobalTopLeaders({ leaders }) {
                     name={`${secondLeader.username}`}
                     point={`${formatNumber(secondLeader.points ? `${secondLeader.points}` : 0)} pts`}
                     avatar={secondLeader.avatar} />
-            </> : <></>
-            }
+            {/* </> : <></>
+            } */}
         </View>
     )
 }
