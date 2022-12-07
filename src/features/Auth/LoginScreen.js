@@ -80,17 +80,6 @@ export default function LoginScreen({ navigation }) {
             }
             setLoading(false);
         });
-        // dispatch(loginUser({ email, password })).then(unwrapResult)
-        //     .then((originalPromiseResult) => {
-        //         // after login eager get commond data for the whole app
-        //         console.log("loggedin");
-        //     })
-        //     .catch((rejectedValueOrSerializedError) => {
-        //         setLoading(false);
-        //         setCanLogin(true);
-        //         console.log(rejectedValueOrSerializedError)
-        //         setError("Invalid username or password provided or unverified account");
-        //     })
     }
 
 

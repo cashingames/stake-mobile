@@ -16,6 +16,7 @@ import StakingButtons from "../../shared/StakingButtons";
 import ExhibitionUserAvailableBoosts from "../../shared/ExhibitionUserAvailableBoosts";
 import LottieAnimations from "../../shared/LottieAnimations";
 import NoGame from "../../shared/NoGame";
+import crashlytics from '@react-native-firebase/crashlytics';
 
 
 
@@ -147,9 +148,6 @@ const AvailableBoosts = ({ onClose, user }) => {
   const gameTypeId = useSelector(state => state.game.gameType.id);
   const gameModeId = useSelector(state => state.game.gameMode.id);
   const gameMode = useSelector(state => state.game.gameMode);
-  // const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
-  // const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
-  // const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
   const [loading, setLoading] = useState(false);
 
 
@@ -168,7 +166,9 @@ const AvailableBoosts = ({ onClose, user }) => {
           data: result.data.questions
         }))
           .then(unwrapResult)
+
           .then(async result => {
+            crashlytics().log('User started exhibition game');
             await analytics().logEvent("exhibition_without_staking_game_started", {
               'id': user.username,
               'phone_number': user.phoneNumber,
@@ -176,7 +176,9 @@ const AvailableBoosts = ({ onClose, user }) => {
             })
             // console.log('Action logged to server');
           })
-          .catch((e) => {
+          .catch((error) => {
+            crashlytics().recordError(error);
+            crashlytics().log('failed to start exhibition game');
             // console.log('Failed to log to server');
           });
         setLoading(false);
@@ -189,47 +191,44 @@ const AvailableBoosts = ({ onClose, user }) => {
       });
   }
 
-  // const startChallenge = () => {
+  // const onStartGame = () => {
   //   setLoading(true);
-  //   dispatch(startChallengeGame({
-  //     category: challengeCategory,
-  //     type: gameTypeId,
-  //     challenge_id: challengeId
-  //   }))
-  //     .then(unwrapResult)
-  //     .then(result => {
-  //       dispatch(logActionToServer({
-  //         message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
-  //         data: result.data.questions
-  //       }))
-  //         .then(unwrapResult)
-  //         .then(async result => {
-  //           await analytics().logEvent("challenge_start_game", {
-  //             action: "initiate",
-  //             'id': user.username,
-  //             'phone_number': user.phoneNumber,
-  //             'email': user.email
-  //           })
-  //           // console.log('Action logged to server');
+
+  //   try {
+  //     dispatch(setIsPlayingTrivia(false))
+  //     dispatch(startGame({
+  //       category: gameCategoryId,
+  //       type: gameTypeId,
+  //       mode: gameModeId
+  //     }))
+  //       .then(unwrapResult)
+  //       .then(async result => {
+  //         crashlytics().log('User started exhibition game');
+  //         await analytics().logEvent("exhibition_without_staking_game_started", {
+  //           'id': user.username,
+  //           'phone_number': user.phoneNumber,
+  //           'email': user.email
   //         })
-  //         .catch(() => {
-  //           // console.log('failed to log to server');
-  //         });
-  //       setLoading(false);
-  //       onClose();
-  //       navigation.navigate("ChallengeGameInProgress")
-  //     })
-  //     .catch((rejectedValueOrSerializedError) => {
-  //       Alert.alert('Failed to start game')
-  //       setLoading(false);
-  //     });
+  //         // console.log('Action logged to server');
+  //       })
+  //     setLoading(false);
+  //     onClose();
+  //     navigation.navigate("GameInProgress")
+  //   }
+  //   catch (err) {
+  //     crashlytics().recordError(err);
+  //     crashlytics().log('failed to start exhibition game');
+  //     Alert.alert('The selected category is not available for now, try again later.')
+  //     setLoading(false);
+  //     // console.log('Failed to log to server');
+  //   }
   // }
+
 
 
   return (
     <ExhibitionUserAvailableBoosts gameMode={gameMode}
       boosts={boosts} onStartGame={onStartGame}
-      // startChallenge={startChallenge} 
       loading={loading}
       onClose={onClose}
     />
@@ -296,6 +295,6 @@ const styles = EStyleSheet.create({
   },
   playButtons: {
     flexDirection: 'row',
-    justifyContent:'space-between'
+    justifyContent: 'space-between'
   }
 });

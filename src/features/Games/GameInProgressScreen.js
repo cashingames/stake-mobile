@@ -4,6 +4,8 @@ import normalize from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
+import crashlytics from '@react-native-firebase/crashlytics';
+
 
 
 import {
@@ -70,6 +72,7 @@ export default function GameInProgressScreen({ navigation, route }) {
         }))
             .then(unwrapResult)
             .then(async () => {
+                crashlytics().log('User completed exhibition');
                 await analytics().logEvent('exhibition_game_completed', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
@@ -84,11 +87,14 @@ export default function GameInProgressScreen({ navigation, route }) {
                         // console.log(result, 'Action logged to server to end game');
                     })
                     .catch(() => {
+                        crashlytics().recordError(error);
+                        crashlytics().log('failed to end exhibition game');
                         // console.log('failed to log to server');
                     });
                 setEnding(false);
                 if (isPlayingTrivia) {
                     dispatch(setHasPlayedTrivia(true))
+                    crashlytics().log('User completed live trivia');
                     await analytics().logEvent('live_trivia_completed', {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
