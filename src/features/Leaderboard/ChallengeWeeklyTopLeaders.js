@@ -15,15 +15,15 @@ const ChallengeWeeklyTopLeaders = ({ challengeLeaders }) => {
     }, [])
 
     return (
-        <>
-            {challengeLeaders.length > 0 &&
+        // <>
+        //     {challengeLeaders.length > 0 &&
 
                 <View>
                     <Text style={styles.topChallengersHeader}>Top Challengers</Text>
                     <TopWeeklyChallengers challengeLeaders={challengeLeaders} />
                 </View>
-            }
-        </>
+        //     }
+        // </>
 
     )
 }
@@ -37,8 +37,8 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
     return (
         <View style={styles.topChallengersContainer}>
 
-            {challengeLeaders.length > 0 ?
-                <>
+            {/* {challengeLeaders.length > 0 ? */}
+                {/* <> */}
                     <TopWeeklyChallenger
                         trophyImageUrl={require('../../../assets/images/third-crown.png')}
                         stageImageUrl={require("../../../assets/images/third-stage.png")}
@@ -70,11 +70,11 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
 
 
                     />
-                </>
-                :
-                <></>
+                {/* </> */}
+                {/* :
+                <></> */}
 
-            }
+            {/* } */}
 
         </View>
     )
