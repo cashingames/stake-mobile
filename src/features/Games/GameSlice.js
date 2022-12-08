@@ -25,7 +25,7 @@ export const startGame = createAsyncThunk(
     async (data, thunkAPI) => {
         console.log(data, 'ordinary data')
         const response = await axios.post('v2/game/start/single-player', data)
-        console.log(data.staking_amount,'stake amount')
+        console.log(data.staking_amount, 'stake amount')
         return response.data
     }
 )
@@ -158,7 +158,7 @@ let initialState = {
     challengeDetails: {},
     gameStakes: [],
     withStaking: false,
-    correctCount : null,
+    correctCount: null,
 }
 
 
@@ -370,8 +370,8 @@ function resetState(state) {
     state.triviaCategory = '';
     state.triviaType = '';
     state.triviaMode = '';
-    state.triviaId = '',
-        state.hasPlayedTrivia = false;
+    state.triviaId = '';
+    state.hasPlayedTrivia = false;
     state.gameDuration = 60;
     state.challengeDetails = {};
     state.userChallenges = [];
