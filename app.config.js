@@ -31,6 +31,7 @@ export default {
     package: getAppIdentifier(),
     versionCode: getAndriodVersionCode(),
     googleServicesFile: "./google-services.json",
+    enableDangerousExperimentalLeanBuilds: true,
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon2.png",
       backgroundColor: "#FFFFFF"
@@ -64,6 +65,9 @@ export default {
     [
       "expo-build-properties",
       {
+        "android": {
+          "enableProguardInReleaseBuilds": true,
+        },
         "ios": {
           "useFrameworks": "static"
         }
