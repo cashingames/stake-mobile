@@ -16,6 +16,7 @@ import StakingButtons from "../../shared/StakingButtons";
 import ExhibitionUserAvailableBoosts from "../../shared/ExhibitionUserAvailableBoosts";
 import LottieAnimations from "../../shared/LottieAnimations";
 import NoGame from "../../shared/NoGame";
+import crashlytics from '@react-native-firebase/crashlytics';
 
 
 
@@ -162,29 +163,24 @@ const AvailableBoosts = ({ onClose, user }) => {
       mode: gameModeId
     }))
       .then(unwrapResult)
-      .then(result => {
+      .then(async result => {
+        crashlytics().log('User started exhibition game');
+        await analytics().logEvent("exhibition_without_staking_game_started", {
+          'id': user.username,
+          'phone_number': user.phoneNumber,
+          'email': user.email
+        })
         dispatch(logActionToServer({
           message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
           data: result.data.questions
         }))
-          .then(unwrapResult)
-          .then(async result => {
-            await analytics().logEvent("exhibition_without_staking_game_started", {
-              'id': user.username,
-              'phone_number': user.phoneNumber,
-              'email': user.email
-            })
-            // console.log('Action logged to server');
-          })
-          .catch((e) => {
-            // console.log('Failed to log to server');
-          });
         setLoading(false);
         onClose();
         navigation.navigate("GameInProgress")
       })
-      .catch((rejectedValueOrSerializedError) => {
-        Alert.alert('The selected category is not available for now, try again later.')
+      .catch((error) => {
+        crashlytics().recordError(error);
+        crashlytics().log('failed to start exhibition game');
         setLoading(false);
       });
   }
@@ -224,6 +220,7 @@ const AvailableBoosts = ({ onClose, user }) => {
   //       setLoading(false);
   //     });
   // }
+
 
 
   return (

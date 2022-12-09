@@ -20,6 +20,8 @@ import UserAvailableBoosts from "../../shared/UserAvailableBoosts";
 import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
+
 
 export default function ChallengeGameInProgressScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
@@ -65,6 +67,7 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
     }))
       .then(unwrapResult)
       .then(async () => {
+        crashlytics().log('User completed challenge game');
         await analytics().logEvent('challenge_completed', {
           'action': 'complete'
         });
@@ -72,18 +75,13 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
           message: "Challenge Game session " + gameSessionToken + " chosen options for " + user.username,
           data: chosenOptions
         }))
-          .then(unwrapResult)
-          .then(result => {
-            // console.log('Action logged to server');
-          })
-          .catch(() => {
-            // console.log('failed to log to server');
-          });
         setEnding(false);
         navigation.navigate('ChallengeEndGameScreen')
 
       })
       .catch((rejectedValueOrSerializedError) => {
+        crashlytics().recordError(error);
+        crashlytics().log('failed to end challenge game');
         setEnding(false);
         // console.log(rejectedValueOrSerializedError);
         Alert.alert('failed to end game')
