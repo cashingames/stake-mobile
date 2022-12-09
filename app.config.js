@@ -31,7 +31,6 @@ export default {
     package: getAppIdentifier(),
     versionCode: getAndriodVersionCode(),
     googleServicesFile: "./google-services.json",
-    enableDangerousExperimentalLeanBuilds: true,
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon2.png",
       backgroundColor: "#FFFFFF"
@@ -60,13 +59,13 @@ export default {
   plugins: [
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
-    "@react-native-google-signin/google-signin",
     "expo-notifications",
     [
       "expo-build-properties",
       {
         "android": {
           "enableProguardInReleaseBuilds": true,
+          "enableDangerousExperimentalLeanBuilds": true,
         },
         "ios": {
           "useFrameworks": "static"
