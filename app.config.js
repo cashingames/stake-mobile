@@ -54,12 +54,11 @@ export default {
   },
   ios: {
     bundleIdentifier: getIosIdentifier(),
-    googleServicesFile: "./GoogleService-Info.plist",
+    googleServicesFile: getIosGoogleServices(),
   },
   plugins: [
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
-    "@react-native-google-signin/google-signin",
     "expo-notifications",
     [
       "expo-build-properties",
@@ -127,6 +126,17 @@ function getIosIdentifier() {
   }
 
   return `com.cashinga.${identifier}`;
+}
+
+function getIosGoogleServices() {
+  let services = "./GoogleService-Info.plist";
+  if (env === "development") {
+    services = "./GoogleService-Info-com.cashinga.dev.plist";
+  } else if (env === "preview") {
+    services = "./GoogleService-Info-com.cashinga.test.plist";
+  }
+
+  return services;
 }
 
 function getGATrackingID() {

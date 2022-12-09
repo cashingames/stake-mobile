@@ -160,8 +160,6 @@ const AvailableBoosts = ({ onClose, user }) => {
       mode: gameModeId
     }))
       .then(unwrapResult)
-      // throw Error("custom error thrown")
-
       .then(async result => {
         crashlytics().log('User started exhibition game');
         await analytics().logEvent("exhibition_without_staking_game_started", {
@@ -177,7 +175,7 @@ const AvailableBoosts = ({ onClose, user }) => {
         onClose();
         navigation.navigate("GameInProgress")
       })
-      .catch((rejectedValueOrSerializedError, error) => {
+      .catch((error) => {
         crashlytics().recordError(error);
         crashlytics().log('failed to start exhibition game');
         setLoading(false);

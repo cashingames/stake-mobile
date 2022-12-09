@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>520726557605-mls5vke3j0t7lhk5a99em1gsvaml8o2a.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.520726557605-mls5vke3j0t7lhk5a99em1gsvaml8o2a</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>520726557605-n6htks6ao6ge2thkbevhosc0ipk35odr.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDpcRKDdeF3592tm9b-86qS0g_rqPjsPCM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>520726557605</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.cashinga.dev</string>
+	<key>PROJECT_ID</key>
+	<string>cashingames-8730a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cashingames-8730a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:520726557605:ios:c51069f1e50fe6551aee4c</string>
+	<key>DATABASE_URL</key>
+	<string>https://cashingames-8730a-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
