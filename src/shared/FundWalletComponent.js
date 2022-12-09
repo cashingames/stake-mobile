@@ -34,7 +34,7 @@ const FundWalletComponent = ({ onClose }) => {
         const cleanedAmount =
             amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
         if (cleanedAmount < minimumWalletFundableAmount) {
-            Alert.alert("Amount cannot be less than 100 naira");
+            Alert.alert(`Amount cannot be less than ${minimumWalletFundableAmount} naira`);
             return false;
         }
         setShowPayment(true);
@@ -55,7 +55,7 @@ const FundWalletComponent = ({ onClose }) => {
                                 keyboardType="numeric"
                                 onChangeText={setAmount}
                                 autoFocus={false}
-                                placeholder="100"
+                                placeholder="500"
                                 min
                             />
                             <View style={styles.flag}>

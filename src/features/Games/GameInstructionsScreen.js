@@ -148,6 +148,9 @@ const AvailableBoosts = ({ onClose, user }) => {
   const gameTypeId = useSelector(state => state.game.gameType.id);
   const gameModeId = useSelector(state => state.game.gameMode.id);
   const gameMode = useSelector(state => state.game.gameMode);
+  // const challengeType = useSelector(state => state.game.challengeDetails.gameModeId);
+  // const challengeCategory = useSelector(state => state.game.challengeDetails.categoryId);
+  // const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
   const [loading, setLoading] = useState(false);
 
 
@@ -182,11 +185,48 @@ const AvailableBoosts = ({ onClose, user }) => {
       });
   }
 
+  // const startChallenge = () => {
+  //   setLoading(true);
+  //   dispatch(startChallengeGame({
+  //     category: challengeCategory,
+  //     type: gameTypeId,
+  //     challenge_id: challengeId
+  //   }))
+  //     .then(unwrapResult)
+  //     .then(result => {
+  //       dispatch(logActionToServer({
+  //         message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
+  //         data: result.data.questions
+  //       }))
+  //         .then(unwrapResult)
+  //         .then(async result => {
+  //           await analytics().logEvent("challenge_start_game", {
+  //             action: "initiate",
+  //             'id': user.username,
+  //             'phone_number': user.phoneNumber,
+  //             'email': user.email
+  //           })
+  //           // console.log('Action logged to server');
+  //         })
+  //         .catch(() => {
+  //           // console.log('failed to log to server');
+  //         });
+  //       setLoading(false);
+  //       onClose();
+  //       navigation.navigate("ChallengeGameInProgress")
+  //     })
+  //     .catch((rejectedValueOrSerializedError) => {
+  //       Alert.alert('Failed to start game')
+  //       setLoading(false);
+  //     });
+  // }
+
 
 
   return (
     <ExhibitionUserAvailableBoosts gameMode={gameMode}
       boosts={boosts} onStartGame={onStartGame}
+      // startChallenge={startChallenge} 
       loading={loading}
       onClose={onClose}
     />
@@ -253,6 +293,6 @@ const styles = EStyleSheet.create({
   },
   playButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent:'space-between'
   }
 });

@@ -246,7 +246,8 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           <UniversalBottomSheet
             refBottomSheet={refRBSheet}
             height={620}
-            subComponent={<LowWalletBalance onClose={closeBottomSheet} />}
+            subComponent={<LowWalletBalance onClose={closeBottomSheet} 
+            errorDescription='You do not have enough wallet balance to stake this amount' />}
           />
           :
           <>

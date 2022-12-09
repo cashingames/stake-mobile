@@ -89,24 +89,25 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
   }
 
   const showExitConfirmation = () => {
-    Alert.alert(
-      'Exit Game?',
-      'You have an ongoing game. Do you want to submit this game ?',
-      [
-        {
-          text: "Continue playing",
-          style: 'cancel',
-          onPress: () => setEnding(false)
-        },
-        {
-          text: 'Exit',
-          onPress: () => {
-            // console.log("show exit from exit button")
-            onEndGame();
-          },
-        },
-      ]
-    );
+    onEndGame();
+    // Alert.alert(
+    //   'Exit Game?',
+    //   'You have an ongoing game. Do you want to submit this game ?',
+    //   [
+    //     {
+    //       text: "Continue playing",
+    //       style: 'cancel',
+    //       onPress: () => setEnding(false)
+    //     },
+    //     {
+    //       text: 'Exit',
+    //       onPress: () => {
+    //         // console.log("show exit from exit button")
+    //         onEndGame();
+    //       },
+    //     },
+    //   ]
+    // );
   }
 
   //disable back button
