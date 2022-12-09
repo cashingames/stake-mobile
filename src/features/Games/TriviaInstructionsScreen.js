@@ -11,8 +11,7 @@ import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import ExhibitionStakeAmount from "../../shared/ExhibitionStakeAmount";
-import UserAvailableBoost from "../../shared/UserAvailableBoost";
-import GoToStore from "../../shared/GoToStore";
+import crashlytics from '@react-native-firebase/crashlytics';
 import StakingButtons from "../../shared/StakingButtons";
 import LiveTriviaUserAvailableBoosts from "../../shared/LiveTriviaUserAvailableBoosts";
 
@@ -127,6 +126,7 @@ const AvailableBoosts = ({ onClose, trivia, user }) => {
         }))
             .then(unwrapResult)
             .then(async () => {
+                crashlytics().log('User started live trivia game');
                 await analytics().logEvent('live_trivia_game_started', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
@@ -138,10 +138,12 @@ const AvailableBoosts = ({ onClose, trivia, user }) => {
                 onClose();
                 navigation.navigate("GameInProgress", { triviaId: trivia.id })
             })
-            .catch((rejectedValueOrSerializedError) => {
+            .catch((error, rejectedValueOrSerializedError) => {
                 // console.log(rejectedValueOrSerializedError);
-                Alert.alert(rejectedValueOrSerializedError.message)
+                crashlytics().recordError(error);
+                crashlytics().log('failed to start live trivia game');
                 setLoading(false);
+                Alert.alert(rejectedValueOrSerializedError.message)
             });
     }
 

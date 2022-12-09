@@ -160,69 +160,29 @@ const AvailableBoosts = ({ onClose, user }) => {
       mode: gameModeId
     }))
       .then(unwrapResult)
-      .then(result => {
+      // throw Error("custom error thrown")
+
+      .then(async result => {
+        crashlytics().log('User started exhibition game');
+        await analytics().logEvent("exhibition_without_staking_game_started", {
+          'id': user.username,
+          'phone_number': user.phoneNumber,
+          'email': user.email
+        })
         dispatch(logActionToServer({
           message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
           data: result.data.questions
         }))
-          .then(unwrapResult)
-
-          .then(async result => {
-            crashlytics().log('User started exhibition game');
-            await analytics().logEvent("exhibition_without_staking_game_started", {
-              'id': user.username,
-              'phone_number': user.phoneNumber,
-              'email': user.email
-            })
-            // console.log('Action logged to server');
-          })
-          .catch((error) => {
-            crashlytics().recordError(error);
-            crashlytics().log('failed to start exhibition game');
-            // console.log('Failed to log to server');
-          });
         setLoading(false);
         onClose();
         navigation.navigate("GameInProgress")
       })
-      .catch((rejectedValueOrSerializedError) => {
-        Alert.alert('The selected category is not available for now, try again later.')
+      .catch((rejectedValueOrSerializedError, error) => {
+        crashlytics().recordError(error);
+        crashlytics().log('failed to start exhibition game');
         setLoading(false);
       });
   }
-
-  // const onStartGame = () => {
-  //   setLoading(true);
-
-  //   try {
-  //     dispatch(setIsPlayingTrivia(false))
-  //     dispatch(startGame({
-  //       category: gameCategoryId,
-  //       type: gameTypeId,
-  //       mode: gameModeId
-  //     }))
-  //       .then(unwrapResult)
-  //       .then(async result => {
-  //         crashlytics().log('User started exhibition game');
-  //         await analytics().logEvent("exhibition_without_staking_game_started", {
-  //           'id': user.username,
-  //           'phone_number': user.phoneNumber,
-  //           'email': user.email
-  //         })
-  //         // console.log('Action logged to server');
-  //       })
-  //     setLoading(false);
-  //     onClose();
-  //     navigation.navigate("GameInProgress")
-  //   }
-  //   catch (err) {
-  //     crashlytics().recordError(err);
-  //     crashlytics().log('failed to start exhibition game');
-  //     Alert.alert('The selected category is not available for now, try again later.')
-  //     setLoading(false);
-  //     // console.log('Failed to log to server');
-  //   }
-  // }
 
 
 
