@@ -80,7 +80,7 @@ export default function GameInstructionsScreen({ navigation }) {
           :
           <UniversalBottomSheet
             refBottomSheet={refRBSheet}
-            height={Platform.OS === 'ios' ? 400 : 350}
+            height={Platform.OS === 'ios' ? 500 : 350}
             subComponent={<NoGame
               onClose={closeBottomSheet}
               onPress={gotoStaking}
@@ -90,7 +90,7 @@ export default function GameInstructionsScreen({ navigation }) {
 
       </ScrollView>
       <View style={styles.stakingButtons}>
-      <AppButton
+        <AppButton
           onPress={openBottomSheet}
           text={isStakingFeatureEnabled ? 'Play exhibition' : 'Proceed'}
           style={isStakingFeatureEnabled ? styles.proceed : styles.noStaking}
@@ -237,22 +237,22 @@ const styles = EStyleSheet.create({
     backgroundColor: '#FFFF',
     borderColor: '#EF2F55',
     borderWidth: 1,
-    width:'9rem',
-    paddingHorizontal:normalize(5)
+    width: '9rem',
+    paddingHorizontal: normalize(5)
   },
   noStaking: {
     marginVertical: 10,
     backgroundColor: '#EF2F55',
-    width:'100%'
+    width: '100%'
   },
   stakingButtons: {
-    flexDirection:'row',
-    justifyContent:'space-between'
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   buttonText: {
     color: '#EF2F55'
   },
   noStakingText: {
-    color:'#FFFF'
+    color: '#FFFF'
   }
 });

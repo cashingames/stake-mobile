@@ -29,8 +29,8 @@ const styles = EStyleSheet.create({
 	},
     winningsCash: {
 		textAlign: 'center',
-		color: '#EF2F55',
-		fontFamily: 'graphik-regular',
+		color: '#000000',
+		fontFamily: 'graphik-bold',
 		fontSize: '1.2rem',
 	},
 })

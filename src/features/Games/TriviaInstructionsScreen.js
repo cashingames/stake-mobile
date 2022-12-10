@@ -68,16 +68,18 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
                     />}
                 />
             </ScrollView>
-            {isStakingFeatureEnabled ?
-                <StakingButtons onPress={gotoStaking} onPressProceed={onProceed} />
-                :
+
+            <View style={styles.stakingButtons}>
                 <AppButton
                     onPress={onProceed}
-                    text='Proceed'
-                    style={styles.proceed}
+                    text={isStakingFeatureEnabled ? 'Play exhibition' : 'Proceed'}
+                    style={isStakingFeatureEnabled ? styles.proceed : styles.noStaking}
+                    textStyle={isStakingFeatureEnabled ? styles.buttonText : styles.noStakingText}
                 />
-
-            }
+                {isStakingFeatureEnabled &&
+                    <StakingButtons onPress={gotoStaking} />
+                }
+            </View>
 
         </View>
     );
@@ -140,11 +142,11 @@ const AvailableBoosts = ({ onClose, trivia, user }) => {
             });
     }
 
-        return (
-            <LiveTriviaUserAvailableBoosts onClose={onClose} boosts={boosts}
-                loading={loading} onStartGame={onStartGame} />
-        )
- 
+    return (
+        <LiveTriviaUserAvailableBoosts onClose={onClose} boosts={boosts}
+            loading={loading} onStartGame={onStartGame} />
+    )
+
 }
 
 
@@ -200,5 +202,25 @@ const styles = EStyleSheet.create({
     },
     proceed: {
         marginVertical: 10,
-      },
+        backgroundColor: '#FFFF',
+        borderColor: '#EF2F55',
+        borderWidth: 1,
+        width: '9rem',
+        paddingHorizontal: normalize(5)
+    },
+    noStaking: {
+        marginVertical: 10,
+        backgroundColor: '#EF2F55',
+        width: '100%'
+    },
+    stakingButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    buttonText: {
+        color: '#EF2F55'
+    },
+    noStakingText: {
+        color: '#FFFF'
+    }
 });

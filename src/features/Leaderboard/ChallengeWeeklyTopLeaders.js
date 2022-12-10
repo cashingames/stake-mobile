@@ -15,15 +15,11 @@ const ChallengeWeeklyTopLeaders = ({ challengeLeaders }) => {
     }, [])
 
     return (
-        <>
-            {challengeLeaders.length > 0 &&
 
-                <View>
-                    <Text style={styles.topChallengersHeader}>Top Challengers</Text>
-                    <TopWeeklyChallengers challengeLeaders={challengeLeaders} />
-                </View>
-            }
-        </>
+        <View>
+            <Text style={styles.topChallengersHeader}>Top Challengers</Text>
+            <TopWeeklyChallengers challengeLeaders={challengeLeaders} />
+        </View>
 
     )
 }
@@ -36,51 +32,42 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
 
     return (
         <View style={styles.topChallengersContainer}>
-
-            {challengeLeaders.length > 0 ?
-                <>
-                    <TopWeeklyChallenger
-                        trophyImageUrl={require('../../../assets/images/third-crown.png')}
-                        stageImageUrl={require("../../../assets/images/third-stage.png")}
-                        username={thirdLeader.username}
-                        avatar={thirdLeader.avatar}
-                        styleProp={styles.others}
-                        avatarProp={styles.otherAvatar}
+            <TopWeeklyChallenger
+                trophyImageUrl={require('../../../assets/images/third-crown.png')}
+                stageImageUrl={require("../../../assets/images/third-stage.png")}
+                username={thirdLeader.username}
+                avatar={thirdLeader.avatar}
+                styleProp={styles.others}
+                avatarProp={styles.otherAvatar}
 
 
 
-                    />
-                    <TopWeeklyChallenger
-                        trophyImageUrl={require('../../../assets/images/first-crown.png')}
-                        stageImageUrl={require("../../../assets/images/first-stage.png")}
-                        username={firstLeader.username}
-                        avatar={firstLeader.avatar}
-                        styleProp={styles.winner}
-                        avatarProp={styles.avatar}
+            />
+            <TopWeeklyChallenger
+                trophyImageUrl={require('../../../assets/images/first-crown.png')}
+                stageImageUrl={require("../../../assets/images/first-stage.png")}
+                username={firstLeader.username}
+                avatar={firstLeader.avatar}
+                styleProp={styles.winner}
+                avatarProp={styles.avatar}
 
-                    />
-                    <TopWeeklyChallenger
-                        trophyImageUrl={require('../../../assets/images/second-crown.png')}
-                        stageImageUrl={require("../../../assets/images/second-stage.png")}
-                        username={secondLeader.username}
-                        avatar={secondLeader.avatar}
-                        styleProp={styles.others}
-                        avatarProp={styles.otherAvatar}
+            />
+            <TopWeeklyChallenger
+                trophyImageUrl={require('../../../assets/images/second-crown.png')}
+                stageImageUrl={require("../../../assets/images/second-stage.png")}
+                username={secondLeader.username}
+                avatar={secondLeader.avatar}
+                styleProp={styles.others}
+                avatarProp={styles.otherAvatar}
 
 
 
-                    />
-                </>
-                :
-                <></>
-
-            }
-
+            />
         </View>
     )
 }
 
-const TopWeeklyChallenger = ({ username, avatar, stageImageUrl, trophyImageUrl, styleProp,avatarProp }) => {
+const TopWeeklyChallenger = ({ username, avatar, stageImageUrl, trophyImageUrl, styleProp, avatarProp }) => {
 
     return (
         <View style={styles.topChallengerContainer}>
@@ -149,15 +136,15 @@ const styles = EStyleSheet.create({
     },
     winner: {
         // marginBottom : normalize(35),
-        alignItems:'center',
+        alignItems: 'center',
         // position:'absolute',
         // bottom:100
     },
     others: {
         // marginTop : normalize(10),
-        alignItems:'center',
-        position:'absolute',
-        bottom:80
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 80
 
     }
 })
