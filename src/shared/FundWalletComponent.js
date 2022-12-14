@@ -11,6 +11,8 @@ import { getUser } from "../features/Auth/AuthSlice";
 import AppButton from "./AppButton";
 import normalize, { responsiveScreenWidth } from "../utils/normalize";
 import { formatCurrency } from "../utils/stringUtl";
+import analytics from '@react-native-firebase/analytics';
+
 
 const FundWalletComponent = ({ onClose }) => {
     const dispatch = useDispatch();
@@ -20,17 +22,27 @@ const FundWalletComponent = ({ onClose }) => {
     const user = useSelector((state) => state.auth.user);
     const [amount, setAmount] = useState("");
     const [showPayment, setShowPayment] = useState(false);
-    const minimumWalletFundableAmount  = useSelector(state => state.common.minimumWalletFundableAmount);
+    const minimumWalletFundableAmount = useSelector(state => state.common.minimumWalletFundableAmount);
 
 
-    const transactionCompleted = (res) => {
+    const transactionCompleted = async (res) => {
+        await analytics().logEvent('wallet_funding_successfully', {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        });
         // verifyFunding(res.reference); for local testing
         dispatch(getUser());
         setShowPayment(false);
         onClose()
     };
 
-    const startPayment = () => {
+    const startPayment = async () => {
+        await analytics().logEvent('funding_wallet_initiated', {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        });
         const cleanedAmount =
             amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
         if (cleanedAmount < minimumWalletFundableAmount) {
