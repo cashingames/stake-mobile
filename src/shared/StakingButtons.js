@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from 'react-native';
+import { View} from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import normalize from "../utils/normalize";
 import AppButton from "./AppButton";
@@ -39,3 +39,5 @@ const styles = EStyleSheet.create({
     justifyContent: 'space-between',
   },
 })
+
+

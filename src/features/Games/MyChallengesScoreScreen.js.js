@@ -11,6 +11,7 @@ import { getChallengeScores, getUser } from '../Auth/AuthSlice';
 import { acceptDeclineChallengeInivite, getChallengeDetails, startChallengeGame } from './GameSlice';
 import AppButton from '../../shared/AppButton';
 import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { logActionToServer } from '../CommonSlice';
 import StakeWinnings from '../../shared/StakeWinnings';
@@ -99,26 +100,24 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       challenge_id: challengeId
     }))
       .then(unwrapResult)
-      .then(result => {
+      .then(async result => {
+        crashlytics().log('Opponent started game');
+        await analytics().logEvent("challenge_opponent_accepts_and_start_game", {
+          action: "initiate",
+          'id': user.username,
+          'phone_number': user.phoneNumber,
+          'email': user.email
+        })
         dispatch(logActionToServer({
           message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
           data: result.data.questions
         }))
-          .then(unwrapResult)
-          .then(async result => {
-            await analytics().logEvent("challenge_opponent_accepts_and_start_game", {
-              action: "initiate",
-              'id': user.username,
-              'phone_number': user.phoneNumber,
-              'email': user.email
-            })
-          })
-          .catch(() => {
-          });
         setClicking(false);
         navigation.navigate("ChallengeGameInProgress")
       })
-      .catch((rejectedValueOrSerializedError) => {
+      .catch((error, rejectedValueOrSerializedError) => {
+        crashlytics().recordError(error);
+        crashlytics().log('failed to start opponent game');
         Alert.alert('Failed to start game')
         setClicking(false);
       });
@@ -132,26 +131,24 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       challenge_id: challengeId
     }))
       .then(unwrapResult)
-      .then(result => {
+      .then(async result => {
+        crashlytics().log('Challenger started game');
+        await analytics().logEvent("challenge_challenger_start_game", {
+          action: "initiate",
+          'id': user.username,
+          'phone_number': user.phoneNumber,
+          'email': user.email
+        })
         dispatch(logActionToServer({
           message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
           data: result.data.questions
         }))
-          .then(unwrapResult)
-          .then(async result => {
-            await analytics().logEvent("challenge_challenger_start_game", {
-              action: "initiate",
-              'id': user.username,
-              'phone_number': user.phoneNumber,
-              'email': user.email
-            })
-          })
-          .catch(() => {
-          });
         setClicking(false);
         navigation.navigate("ChallengeGameInProgress")
       })
-      .catch((rejectedValueOrSerializedError) => {
+      .catch((error, rejectedValueOrSerializedError) => {
+        crashlytics().recordError(error);
+        crashlytics().log('failed to start challenger game');
         Alert.alert('Failed to start game')
         setClicking(false);
       });
@@ -252,7 +249,6 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
             subComponent={<LowWalletBalance onClose={closeBottomSheet}
             errorDescription='You dont have enough wallet balance to stake this amount'
              />}
-          />
           :
           <>
             {challengeDetails.withStaking ?

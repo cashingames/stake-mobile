@@ -11,8 +11,7 @@ import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import ExhibitionStakeAmount from "../../shared/ExhibitionStakeAmount";
-import UserAvailableBoost from "../../shared/UserAvailableBoost";
-import GoToStore from "../../shared/GoToStore";
+import crashlytics from '@react-native-firebase/crashlytics';
 import StakingButtons from "../../shared/StakingButtons";
 import LiveTriviaUserAvailableBoosts from "../../shared/LiveTriviaUserAvailableBoosts";
 
@@ -68,7 +67,6 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
                     />}
                 />
             </ScrollView>
-
             <View style={styles.stakingButtons}>
                 <AppButton
                     onPress={onProceed}
@@ -124,6 +122,7 @@ const AvailableBoosts = ({ onClose, trivia, user }) => {
         }))
             .then(unwrapResult)
             .then(async () => {
+                crashlytics().log('User started live trivia game');
                 await analytics().logEvent('live_trivia_game_started', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
@@ -135,10 +134,12 @@ const AvailableBoosts = ({ onClose, trivia, user }) => {
                 onClose();
                 navigation.navigate("GameInProgress", { triviaId: trivia.id })
             })
-            .catch((rejectedValueOrSerializedError) => {
+            .catch((error, rejectedValueOrSerializedError) => {
                 // console.log(rejectedValueOrSerializedError);
-                Alert.alert(rejectedValueOrSerializedError.message)
+                crashlytics().recordError(error);
+                crashlytics().log('failed to start live trivia game');
                 setLoading(false);
+                Alert.alert(rejectedValueOrSerializedError.message)
             });
     }
 
@@ -222,5 +223,23 @@ const styles = EStyleSheet.create({
     },
     noStakingText: {
         color: '#FFFF'
+        width: '9rem',
+        borderColor: '#EF2F55',
+        borderWidth: 1,
+    },
+    noStakeProcced: {
+        width: '100%',
+        marginVertical: 10,
+    },
+    proceedText: {
+        color: '#EF2F55',
+    },
+    noStakeText: {
+        color: '#FFFF',
+    },
+    playButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+
     }
 });

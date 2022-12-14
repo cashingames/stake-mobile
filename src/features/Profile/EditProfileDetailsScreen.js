@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Alert, Pressable, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import {CountryPicker} from "react-native-country-codes-picker";
+import { CountryPicker } from "react-native-country-codes-picker";
+
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -166,15 +167,6 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         onChangeText={text => { onChangeLastName(text) }}
                         error={lastNameErr && '*last name must not be empty'}
                     />
-                    {/* <Input
-                        label='Phone number'
-                        value={phoneNumber}
-                        onChangeText={text => { onChangePhoneNumber(text) }}
-                        error={phoneNumberErr && '*input a valid phone number'}
-                        type="phone"
-                        maxLength={11}
-                        keyboardType='numeric'
-                    /> */}
 
 
                     <View style={styles.detail}>

@@ -16,6 +16,7 @@ import StakingButtons from "../../shared/StakingButtons";
 import ExhibitionUserAvailableBoosts from "../../shared/ExhibitionUserAvailableBoosts";
 import LottieAnimations from "../../shared/LottieAnimations";
 import NoGame from "../../shared/NoGame";
+import crashlytics from '@react-native-firebase/crashlytics';
 
 
 
@@ -100,6 +101,7 @@ export default function GameInstructionsScreen({ navigation }) {
         }
         {isStakingFeatureEnabled &&
           <StakingButtons gameMode={gameMode} onPress={gotoStaking} />
+ 
         }
       </View>
     </View>
@@ -136,6 +138,8 @@ const ExhibitionInstructions = () => {
 
 
 
+
+
 const AvailableBoosts = ({ onClose, user }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -156,33 +160,27 @@ const AvailableBoosts = ({ onClose, user }) => {
       mode: gameModeId
     }))
       .then(unwrapResult)
-      .then(result => {
+      .then(async result => {
+        crashlytics().log('User started exhibition game');
+        await analytics().logEvent("exhibition_without_staking_game_started", {
+          'id': user.username,
+          'phone_number': user.phoneNumber,
+          'email': user.email
+        })
         dispatch(logActionToServer({
           message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
           data: result.data.questions
         }))
-          .then(unwrapResult)
-          .then(async result => {
-            await analytics().logEvent("exhibition_without_staking_game_started", {
-              'id': user.username,
-              'phone_number': user.phoneNumber,
-              'email': user.email
-            })
-            // console.log('Action logged to server');
-          })
-          .catch((e) => {
-            // console.log('Failed to log to server');
-          });
         setLoading(false);
         onClose();
         navigation.navigate("GameInProgress")
       })
-      .catch((rejectedValueOrSerializedError) => {
-        Alert.alert('The selected category is not available for now, try again later.')
+      .catch((error) => {
+        crashlytics().recordError(error);
+        crashlytics().log('failed to start exhibition game');
         setLoading(false);
       });
   }
-
 
   return (
     <ExhibitionUserAvailableBoosts gameMode={gameMode}
@@ -237,24 +235,32 @@ const styles = EStyleSheet.create({
   proceed: {
     marginVertical: 10,
     backgroundColor: '#FFFF',
+    width: '9rem',
     borderColor: '#EF2F55',
     borderWidth: 1,
-    width: '9rem',
     paddingHorizontal: normalize(5)
+
   },
-  noStaking: {
+  noStakeProcced: {
+    width: '100%',
     marginVertical: 10,
     backgroundColor: '#EF2F55',
-    width: '100%'
   },
   stakingButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  buttonText: {
-    color: '#EF2F55'
+  proceedText: {
+    color: '#EF2F55',
+  },
+  noStakeText: {
+    color: '#FFFF',
   },
   noStakingText: {
     color: '#FFFF'
+
+  playButtons: {
+    flexDirection: 'row',
+    justifyContent:'space-between'
   }
 });

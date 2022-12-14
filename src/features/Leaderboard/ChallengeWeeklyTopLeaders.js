@@ -39,18 +39,14 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
                 avatar={thirdLeader.avatar}
                 styleProp={styles.others}
                 avatarProp={styles.otherAvatar}
-
-
-
-            />
-            <TopWeeklyChallenger
-                trophyImageUrl={require('../../../assets/images/first-crown.png')}
-                stageImageUrl={require("../../../assets/images/first-stage.png")}
-                username={firstLeader.username}
-                avatar={firstLeader.avatar}
-                styleProp={styles.winner}
-                avatarProp={styles.avatar}
-
+                 />
+                <TopWeeklyChallenger
+                   trophyImageUrl={require('../../../assets/images/first-crown.png')}
+                    stageImageUrl={require("../../../assets/images/first-stage.png")}
+                    username={firstLeader.username}
+                    avatar={firstLeader.avatar}
+                    styleProp={styles.winner}
+                    avatarProp={styles.avatar}
             />
             <TopWeeklyChallenger
                 trophyImageUrl={require('../../../assets/images/second-crown.png')}
@@ -59,9 +55,6 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
                 avatar={secondLeader.avatar}
                 styleProp={styles.others}
                 avatarProp={styles.otherAvatar}
-
-
-
             />
         </View>
     )
