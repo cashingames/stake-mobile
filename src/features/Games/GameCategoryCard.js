@@ -40,7 +40,7 @@ const styles = EStyleSheet.create({
     },
     cardIcon: {
         width: 40,
-        height: 40,
+        height: 41.5,
         borderRadius: normalize(10)
     },
     cardTitle: {

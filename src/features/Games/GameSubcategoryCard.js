@@ -19,7 +19,6 @@ export default ({ game, onSelect, isSelected}) => {
             />
             <View style={styles.cardContent}>
                 <Text style={[styles.cardTitle,  isSelected ?{ color:  "#FFFF" }  : {}]}>{game.name}</Text>
-                {/* <Pressable onPress={() => onSelect(game)}><Text style={styles.replay}>Replay</Text></Pressable> */}
             </View>
         </Pressable >
     );

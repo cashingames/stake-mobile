@@ -50,6 +50,7 @@ const AvailableMode = ({ gameMode, onPress, isSelected }) => {
                         source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${gameMode.icon}` }}
                         style={styles.cardIcon}
                     />
+
                     {/* <Ionicons name={isSelected ? "md-ellipse-sharp" : "md-ellipse"} size={24} color={isSelected ? "#EF2F55" : "#FFFF"} /> */}
                 </View>
                 <Text style={styles.cardTitle}>{gameMode.name}</Text>
@@ -60,26 +61,6 @@ const AvailableMode = ({ gameMode, onPress, isSelected }) => {
     )
 }
 
-const StakingMode = ({ onPress, isSelected, stakeMode }) => {
-    return (
-        <Animated.View style={[styles.card, { backgroundColor: stakeMode.bgColor }]} entering={BounceInRight.duration(2000)}>
-            <Pressable
-                onPress={onPress}
-            >
-                <View style={styles.categoryCardTopRow}>
-                    <Image
-                        source={require('../../../assets/images/money-bag.png')}
-                        style={styles.cardIcon}
-                    />
-                    {/* <Ionicons name={isSelected ? "md-ellipse-sharp" : "md-ellipse"} size={24} color={isSelected ? "#EF2F55" : "#FFFF"} /> */}
-                </View>
-                <Text style={styles.cardTitle}>{stakeMode.name}</Text>
-                <Text style={styles.cardInstruction}>{stakeMode.description}</Text>
-
-            </Pressable>
-        </Animated.View>
-    )
-}
 
 export default SelectGameMode;
 
@@ -96,8 +77,8 @@ const styles = EStyleSheet.create({
         marginRight: normalize(10)
     },
     cardIcon: {
-        width: 50,
-        height: 50,
+        width: 55,
+        height: 55,
         borderRadius: normalize(10)
     },
     cardTitle: {

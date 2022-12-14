@@ -201,8 +201,8 @@ export const CommonSlice = createSlice({
                 state.gameTypes = data.gameTypes;
                 state.gameModes = [
                     {
-                        "icon": "icon/money-bag.png",
-                        "bgColor": "#FAC502",
+                        "icon": "icons/money-bag.png",
+                        "bgColor": "#EF2F55",
                         "description": "Bet on your knowledge",
                         "displayName": "Staking",
                         "id": 1,
