@@ -6,7 +6,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from '../../utils/normalize';
 import LottieAnimations from '../../shared/LottieAnimations';
 import { useFocusEffect } from '@react-navigation/native';
-import AppButton from '../../shared/AppButton';
 import { Ionicons } from '@expo/vector-icons';
 import { isTrue } from '../../utils/stringUtl';
 import { useSelector } from 'react-redux';
@@ -16,7 +15,6 @@ import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const activeSubcategory = useSelector(state => state.game.gameCategory);
-    // const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
     const gameMode = useSelector(state => state.game.gameMode);
     const refRBSheet = useRef();
 
@@ -30,21 +28,14 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     }
 
     const onPlayButtonClick = () => {
-        // hasActivePlan ? onSelectGameMode() : openBottomSheet();
         onSelectGameMode();
     }
 
     const onSelectGameMode = () => {
-        if (gameMode.name === "EXHIBITION") {
+        if (gameMode.name === "CHALLENGE")
+            navigation.navigate('ChallengeSelectPlayer');
+        else
             navigation.navigate('GameInstructions');
-        }
-        // if (gameMode.name === "EXHIBITION") {
-        //     hasActivePlan ? navigation.navigate('GameInstructions') : openBottomSheet();
-        // }
-        else if (gameMode.name === "CHALLENGE") {
-            navigation.navigate('ChallengeSelectPlayer')
-        }
-
     };
 
     useFocusEffect(
@@ -80,10 +71,7 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
                     />}
                 />
             </ScrollView>
-            {/* {(initialShowPlayButton || isTrue(activeSubcategory)) && */}
             <ProceedButton disabled={!isTrue(activeSubcategory)} onPress={onPlayButtonClick} />
-
-            {/* } */}
         </View>
     )
 }

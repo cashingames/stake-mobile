@@ -193,13 +193,23 @@ export const CommonSlice = createSlice({
         // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
         builder
             .addCase(getCommonData.fulfilled, (state, action) => {
-                var data = action.payload.data;
-                // console.log(data)
+                const data = action.payload.data;
+                console.log(data.gameModes)
                 state.boosts = data.boosts;
                 state.achievements = data.achievements;
                 state.plans = data.plans;
                 state.gameTypes = data.gameTypes;
-                state.gameModes = data.gameModes;
+                state.gameModes = [
+                    {
+                        "icon": "icon/money-bag.png",
+                        "bgColor": "#FAC502",
+                        "description": "Bet on your knowledge",
+                        "displayName": "Staking",
+                        "id": 1,
+                        "name": "STAKING",
+                    },
+                    ...data.gameModes
+                ]
                 state.gameCategories = data.gameCategories;
                 state.minVersionCode = data.minVersionCode;
                 state.minVersionForce = data.minVersionForce;

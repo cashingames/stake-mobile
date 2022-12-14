@@ -30,7 +30,7 @@ export default function GameInstructionsScreen({ navigation }) {
 
   const isStakingFeatureEnabled = features['exhibition_game_staking'] !== undefined && features['exhibition_game_staking'].enabled == true;
 
-
+  const isStakingEntryMode = () => gameMode.name === "STAKING";
   const refRBSheet = useRef();
 
   const gotoStaking = async () => {
@@ -67,7 +67,7 @@ export default function GameInstructionsScreen({ navigation }) {
             height={normalize(150)}
           />
         </View>
-        {gameMode.name === "EXHIBITION" && <ExhibitionInstructions />}
+        <ExhibitionInstructions />
         {isStakingFeatureEnabled &&
           <ExhibitionStakeAmount onPress={gotoStaking} />
         }
@@ -90,14 +90,16 @@ export default function GameInstructionsScreen({ navigation }) {
 
       </ScrollView>
       <View style={styles.stakingButtons}>
-        <AppButton
-          onPress={openBottomSheet}
-          text={isStakingFeatureEnabled ? 'Play exhibition' : 'Proceed'}
-          style={isStakingFeatureEnabled ? styles.proceed : styles.noStaking}
-          textStyle={isStakingFeatureEnabled ? styles.buttonText : styles.noStakingText}
-        />
+        {!isStakingEntryMode() &&
+          <AppButton
+            onPress={openBottomSheet}
+            text={isStakingFeatureEnabled ? 'Play exhibition' : 'Proceed'}
+            style={isStakingFeatureEnabled ? styles.proceed : styles.noStaking}
+            textStyle={isStakingFeatureEnabled ? styles.buttonText : styles.noStakingText}
+          />
+        }
         {isStakingFeatureEnabled &&
-          <StakingButtons onPress={gotoStaking} />
+          <StakingButtons gameMode={gameMode} onPress={gotoStaking} />
         }
       </View>
     </View>
