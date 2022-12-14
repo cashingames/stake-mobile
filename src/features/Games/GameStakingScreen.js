@@ -157,7 +157,6 @@ const AvailableBoosts = ({ onClose, amount, user }) => {
     const boosts = useSelector(state => state.auth.user.boosts);
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
     const gameTypeId = useSelector(state => state.game.gameType.id);
-    const gameModeId = useSelector(state => state.game.gameMode.id);
     const gameMode = useSelector(state => state.game.gameMode);
     const [loading, setLoading] = useState(false);
 
@@ -167,7 +166,7 @@ const AvailableBoosts = ({ onClose, amount, user }) => {
         dispatch(startGame({
             category: gameCategoryId,
             type: gameTypeId,
-            mode: gameModeId,
+            mode: gameMode.id,
             staking_amount: amount
         }))
             .then(unwrapResult)

@@ -492,4 +492,4 @@ const styles = EStyleSheet.create({
     }
 });
 
-export default LiveTriviaCard
+export default LiveTriviaCard;

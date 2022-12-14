@@ -36,7 +36,6 @@ export default ({ title, initialShowPlayButton = true ,activeSubcategory}) => {
         dispatch(setGameCategory(subcategory));
     }
 
-    // const openBottomSheet = () => {
     //     refRBSheet.current.open()
     // }
 
@@ -87,18 +86,6 @@ export default ({ title, initialShowPlayButton = true ,activeSubcategory}) => {
                 )}
             </View>
             {isTrue(activeCategory) && <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />}
-            {/* {(initialShowPlayButton || isTrue(activeSubcategory)) &&
-                < Animated.View entering={randomEnteringAnimation()}>
-                    <AppButton text='Proceed to Play' onPress={onPlayButtonClick} disabled={!isTrue(activeSubcategory)} />
-                </Animated.View>
-            } */}
-            {/* <UniversalBottomSheet
-                refBottomSheet={refRBSheet}
-                height={Platform.OS === 'ios' ? 400 : 350}
-                subComponent={<NoGame
-                    onClose={closeBottomSheet}
-                />}
-            /> */}
         </>
 
     )

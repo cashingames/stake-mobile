@@ -67,21 +67,17 @@ export default function TriviaInstructionsScreen({ navigation, route }) {
                     />}
                 />
             </ScrollView>
-            <View style={styles.playButtons}>
+            <View style={styles.stakingButtons}>
                 <AppButton
                     onPress={onProceed}
-                    text='Proceed'
-                    style={isStakingFeatureEnabled ? styles.proceed : styles.noStakeProcced}
-                    textStyle={isStakingFeatureEnabled && styles.proceedText}
+                    text={isStakingFeatureEnabled ? 'Play exhibition' : 'Proceed'}
+                    style={isStakingFeatureEnabled ? styles.proceed : styles.noStaking}
+                    textStyle={isStakingFeatureEnabled ? styles.buttonText : styles.noStakingText}
                 />
                 {isStakingFeatureEnabled &&
-                    <StakingButtons onPress={gotoStaking} onPressProceed={onProceed} />
+                    <StakingButtons onPress={gotoStaking} />
                 }
-
             </View>
-
-
-
 
         </View>
     );
@@ -208,6 +204,25 @@ const styles = EStyleSheet.create({
     proceed: {
         marginVertical: 10,
         backgroundColor: '#FFFF',
+        borderColor: '#EF2F55',
+        borderWidth: 1,
+        width: '9rem',
+        paddingHorizontal: normalize(5)
+    },
+    noStaking: {
+        marginVertical: 10,
+        backgroundColor: '#EF2F55',
+        width: '100%'
+    },
+    stakingButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    buttonText: {
+        color: '#EF2F55'
+    },
+    noStakingText: {
+        color: '#FFFF'
         width: '9rem',
         borderColor: '#EF2F55',
         borderWidth: 1,
@@ -225,5 +240,6 @@ const styles = EStyleSheet.create({
     playButtons: {
         flexDirection: 'row',
         justifyContent: 'space-between'
+
     }
 });

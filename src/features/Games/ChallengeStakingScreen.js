@@ -61,11 +61,6 @@ const ChallengeStakingScreen = ({ navigation, route }) => {
             return false;
         }
 
-        // if (Number.parseFloat(amount) > Number.parseFloat(maximumStakeAmount)) {
-        //     Alert.alert(`Maximum stake amount is ${maximumStakeAmount} naira`);
-        //     setLoading(false);
-        //     return false;
-        // }
         dispatch(sendFriendInvite({
             opponentId: params.selectedOpponent.id,
             categoryId: activeCategory.id,
@@ -111,7 +106,6 @@ const ChallengeStakingScreen = ({ navigation, route }) => {
             {Number.parseFloat(user.walletBalance) < Number.parseFloat(amount) ?
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
-                    height={620}
                     subComponent={<LowWalletBalance
                         onClose={closeBottomSheet}
                         errorDescription='You do not have enough wallet balance to stake this amount'
