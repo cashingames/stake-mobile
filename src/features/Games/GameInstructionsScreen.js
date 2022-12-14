@@ -253,14 +253,10 @@ const styles = EStyleSheet.create({
   proceedText: {
     color: '#EF2F55',
   },
-  noStakeText: {
-    color: '#FFFF',
-  },
   noStakingText: {
     color: '#FFFF'
-
-  playButtons: {
-    flexDirection: 'row',
-    justifyContent:'space-between'
-  }
+  },
+  buttonText: {
+    color: '#EF2F55'
+  },
 });
