@@ -92,17 +92,7 @@ const RightButtons = () => {
                     }
 
                 </View>
-                {/* <Text style={styles.headerIconText}>Notification</Text> */}
             </Pressable>
-            {/* <Pressable style={[styles.headerIconContainer, routeName === 'HowToWin' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('HowToWin')}>
-                <Ionicons name='home-outline' size={26} />
-                <LottieAnimations
-                    animationView={require('../../../assets/info.json')}
-                    width={normalize(28)}
-                    height={normalize(28)}
-                />
-                <Text style={styles.headerIconText}>How to win</Text>
-            </Pressable> */}
         </View >
     )
 }
@@ -218,9 +208,9 @@ function CustomDrawerContent(props) {
             </ScrollView>
             <View style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
-                {/* <Pressable onPress={onLogout}>
+                <Pressable onPress={onLogout}>
                     <Text style={styles.logoutText}>Logout</Text>
-                </Pressable> */}
+                </Pressable>
             </View>
 
 

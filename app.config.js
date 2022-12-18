@@ -1,10 +1,11 @@
 const env = process.env.APP_VARIANT;
+const isDevelopment = env === 'development' || env === 'local' || false;
 const version = "1.2.72"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
-  version: version, 
+  version: version,
   runtimeVersion: "2.72", //All apps using the same runtime will get the published updates. Generally update for every new build
   icon: "./assets/images/adaptive-icon2.png",
   jsEngine: "hermes",
@@ -74,10 +75,9 @@ export default {
     ]
   ],
   extra: {
-    isDevelopment: env === 'development' || false,
+    isDevelopment: isDevelopment,
     isProduction: env === 'production' || false,
-    isPreview: env === 'preview' || false,
-    isStaging: env === "development" || env === "preview",
+    isStaging: isDevelopment || env === "preview",
     googleAndriodClientId: getGoogleAndroidClientId(),
     googleIosClientId: getGoogleIosClientId(),
     gaTrackingID: getGATrackingID(),
@@ -85,8 +85,8 @@ export default {
     apiBaseUrl: getApiUrl(),
     appDomain: getDomain(),
     assetBaseUrl: getAssetsBaseUrl(),
-    "eas": {
-      "projectId": getEasProjectId()
+    eas: {
+      projectId: getEasProjectId()
     }
   },
 }
@@ -97,7 +97,7 @@ function getAndriodVersionCode() {
 }
 
 function getAppName() {
-  if (env === "development") {
+  if (isDevelopment) {
     return "Cashingames Dev";
   } else if (env === "preview") {
     return "Cashingames Test";
@@ -112,7 +112,7 @@ function getSlug() {
 
 function getAppIdentifier() {
   let identifier = "cashingames";
-  if (env === "development") {
+  if (isDevelopment) {
     identifier = "dev";
   } else if (env === "preview") {
     identifier = "test";
@@ -123,7 +123,7 @@ function getAppIdentifier() {
 
 function getIosIdentifier() {
   let identifier = "cashingames";
-  if (env === "development") {
+  if (isDevelopment) {
     identifier = "dev";
   } else if (env === "preview") {
     identifier = "test";
@@ -134,7 +134,7 @@ function getIosIdentifier() {
 
 function getIosGoogleServices() {
   let services = "./GoogleService-Info.plist";
-  if (env === "development") {
+  if (isDevelopment) {
     services = "./GoogleService-Info-com.cashinga.dev.plist";
   } else if (env === "preview") {
     services = "./GoogleService-Info-com.cashinga.test.plist";
@@ -144,7 +144,7 @@ function getIosGoogleServices() {
 }
 
 function getGATrackingID() {
-  if (env === "development" || env === "preview") {
+  if (isDevelopment || env === "preview") {
     return 'UA-173622310-2';
   }
 
@@ -152,7 +152,7 @@ function getGATrackingID() {
 }
 
 function getPaystackKey() {
-  if (env === "development" || env === "preview") {
+  if (isDevelopment || env === "preview") {
     return 'pk_test_965f5765e86ccbbf918507efddf3b87eeed1ede8';
   }
 
@@ -160,15 +160,19 @@ function getPaystackKey() {
 }
 
 function getApiUrl() {
-  if (env === "development" || env === "preview") {
-    return 'https://stg-api.cashingames.com/api';
+  switch (env) {
+    case "local":
+      return 'http://192.168.1.147:8000/api';
+    case "development":
+    case "preview":
+      return 'https://stg-api.cashingames.com/api';
+    default:
+      return 'https://api.cashingames.com/api';
   }
-
-  return 'https://api.cashingames.com/api'
 }
 
 function getDomain() {
-  if (env === "development" || env === "preview") {
+  if (isDevelopment || env === "preview") {
     return 'https://stg.cashingames.com';
   }
 
@@ -176,7 +180,7 @@ function getDomain() {
 }
 
 function getAssetsBaseUrl() {
-  if (env === "development" || env === "preview") {
+  if (isDevelopment || env === "preview") {
     return 'https://stg-api.cashingames.com';
   }
 
@@ -184,7 +188,7 @@ function getAssetsBaseUrl() {
 }
 
 function getGoogleAndroidClientId() {
-  if (env === "development") {
+  if (isDevelopment) {
     return '520726557605-n6htks6ao6ge2thkbevhosc0ipk35odr.apps.googleusercontent.com';
   }
 
@@ -196,7 +200,7 @@ function getGoogleAndroidClientId() {
 }
 
 function getGoogleIosClientId() {
-  if (env === "development") {
+  if (isDevelopment) {
     return '520726557605-mls5vke3j0t7lhk5a99em1gsvaml8o2a.apps.googleusercontent.com';
   }
 
@@ -207,6 +211,6 @@ function getGoogleIosClientId() {
   return '520726557605-vftmv5ipp71bk5ffi286t4fevfnkfjah.apps.googleusercontent.com';
 }
 
-function getEasProjectId(){
+function getEasProjectId() {
   return "0e946637-631c-4661-a1ca-5f28b92a1e12";
 }

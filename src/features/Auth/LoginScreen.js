@@ -15,7 +15,6 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { saveToken } from '../../utils/ApiHelper';
-import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import InputOTP from '../../shared/InputOTP';
 import AppleSignUp from '../../shared/AppleSignUp';
 
@@ -28,9 +27,6 @@ export default function LoginScreen({ navigation }) {
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
-
-
 
     const onChangeEmail = (value) => {
         setEmail(value)
@@ -84,7 +80,7 @@ export default function LoginScreen({ navigation }) {
 
 
     useEffect(() => {
-        var valid = email.length > 1 && password.length > 7;
+        const valid = email.length > 1 && password.length > 7;
         setCanLogin(valid);
         setError('');
     }, [email, password]);

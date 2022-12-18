@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Constants from 'expo-constants';
@@ -26,7 +26,7 @@ import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScree
 import SupportQuestionsScreen from './features/Support/SupportQuestionsScreen';
 import SupportAnswerScreen from './features/Support/SupportAnswerScreen';
 
-import { isLoggedIn, shouldShowIntro, verifyDeviceToken } from './features/Auth/AuthSlice';
+import { isLoggedIn, verifyDeviceToken } from './features/Auth/AuthSlice';
 import { isTrue } from './utils/stringUtl';
 import GameModeScreen from './features/Games/GameModeScreen';
 import GameInstructionsScreen from './features/Games/GameInstructionsScreen';
@@ -82,30 +82,26 @@ function AppRouter() {
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
 
-	const [pushToken, setPushToken] = useState('');
-
-
-	booststrapAxios(token); //sets basic api call params
-
 	//during app restart, check localstorage for these info
 	useEffect(() => {
+		setupAxios();
 		const _1 = dispatch(isLoggedIn());
-		const _2 = dispatch(shouldShowIntro());
 
-		Promise.all([_1, _2]).then(() => {
+		Promise.all([_1]).then(() => {
 			setLoading(false);
 		});
 	}, []);
 
 	useEffect(() => {
-		if (isTrue(token)) {
-			registerForPushNotificationsAsync().then(device_token => {
-				setPushToken(device_token);
-				dispatch(verifyDeviceToken(device_token))
-
-			});
-
+		appendAxiosAuthHeader(token);
+		if (!isTrue(token)) {
+			return;
 		}
+
+		registerForPushNotificationsAsync().then(deviceToken => {
+			dispatch(verifyDeviceToken(deviceToken))
+		});
+
 		const unsubscribe = messaging().onMessage(async remoteMessage => {
 			await analytics().logEvent('challenge_notification', {
 				'action': 'received'
@@ -126,6 +122,7 @@ function AppRouter() {
 			})
 
 		});
+		
 		messaging().onNotificationOpenedApp(async remoteMessage => {
 			if (!remoteMessage) return;
 
@@ -154,9 +151,6 @@ function AppRouter() {
 	if (loading) {
 		return <PageLoading spinnerColor="#0000ff" />
 	}
-	// if (showIntro) {
-	// 	return <LandingPageScreen />;
-	// }
 
 	return (
 		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' } }} >
@@ -308,8 +302,30 @@ function AppRouter() {
 
 export default AppRouter;
 
-const booststrapAxios = async function (token) {
+const setupAxios = async function () {
 	axios.defaults.baseURL = Constants.manifest.extra.apiBaseUrl;
+	//axios logout on 401
+	axios.interceptors.response.use(
+		response => response,
+		error => {
+			console.log(error.message);
+			// console.log(error.request);
+			// if (error.response.status === 401) {
+			// 	// store.dispatch(logout());
+			// }
+			// return Promise.reject(error);
+		}
+	);
+
+
+	axios.interceptors.request.use(request => {
+		console.log('Starting Request', JSON.stringify(request.url, null, 2))
+		return request
+	})
+
+}
+
+const appendAxiosAuthHeader = async function (token) {
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {
@@ -317,6 +333,8 @@ const booststrapAxios = async function (token) {
 		/*if setting null does not remove `Authorization` header then try  */
 		delete axios.defaults.headers.common['Authorization'];
 	}
+
+
 };
 
 async function registerForPushNotificationsAsync() {

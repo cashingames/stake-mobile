@@ -18,23 +18,19 @@ import { getUser } from '../Auth/AuthSlice';
 import { fetchFeatureFlags, getCommonData, getGlobalLeaders, initialLoadingComplete } from '../CommonSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserItems';
-import { networkIssueNotify, notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
+import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import crashlytics from '@react-native-firebase/crashlytics';
-import GamePicker from '../Games/GamePicker';
 import LottieAnimations from '../../shared/LottieAnimations';
 import SelectGameMode from '../Games/SelectGameMode';
 import ChallengeWeeklyTopLeaders from '../Leaderboard/ChallengeWeeklyTopLeaders';
 import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
 
-const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-}
+const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
 const HomeScreen = () => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
-    // console.log(user)
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
@@ -43,18 +39,16 @@ const HomeScreen = () => {
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
-        dispatch(getUser())
-        dispatch(getCommonData())
-        dispatch(getLiveTriviaStatus())
-        wait(2000).then(() => setRefreshing(false));
+        // setRefreshing(true);
+        // dispatch(getUser())
+        // dispatch(getCommonData())
+        // dispatch(getLiveTriviaStatus())
+        // wait(2000).then(() => setRefreshing(false));
     }, []);
 
 
 
     useEffect(() => {
-
-
         const _1 = dispatch(getUser());
         const _2 = dispatch(getCommonData());
         const _3 = dispatch(fetchFeatureFlags())
@@ -62,13 +56,6 @@ const HomeScreen = () => {
         Promise.all([_1, _2, _3]).then(() => {
             dispatch(initialLoadingComplete());
         });
-
-        // dispatch(getUser())
-        // dispatch(getCommonData())
-
-        //     .then(() => {
-        //         dispatch(initialLoadingComplete());
-        //     });
 
     }, []);
 
@@ -79,25 +66,17 @@ const HomeScreen = () => {
             StatusBar.setBarStyle('dark-content');
             return () => {
                 StatusBar.setTranslucent(true)
-                // StatusBar.setBarStyle('dark-content');
             }
         }, [])
     );
 
     useEffect(() => {
-        //we intentionally allow in preview to enable testing of this functionality
         if (!Constants.manifest.extra.isDevelopment) {
             return;
         }
         //whether we are forcing or not, show the first time
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }, [minVersionCode]);
-
-    // useEffect(() => {
-    //     if (!loading && !isTrue(user.walletBalance)) {
-    //         networkIssueNotify()
-    //     }
-    // }, [user, loading])
 
     useFocusEffect(
         React.useCallback(() => {
@@ -106,30 +85,21 @@ const HomeScreen = () => {
                 return;
             }
 
-            dispatch(getUser());
-            dispatch(getGlobalLeaders())
+            // dispatch(getUser());
+            // dispatch(getGlobalLeaders());
+
             if (Constants.manifest.extra.isDevelopment) {
                 return;
             }
-            notifyOfPublishedUpdates();
+
+            notifyOfPublishedUpdates(minPublishedVersionCode);
+
             if (minVersionForce) {
-                //if we are forcing, anytime they come to home, show
                 notifyOfStoreUpdates(minVersionCode, minVersionForce);
             }
+
         }, [loading])
     );
-
-    // useFocusEffect(
-    //     React.useCallback(() => {
-    //         const onBackPress = () => {
-    //             return true;
-    //         };
-    //         BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-    //         return () =>
-    //             BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    //     }, [])
-    // )
 
     useEffect(() => {
         if (!user || !isTrue(user.walletBalance)) {
@@ -178,7 +148,6 @@ const UserDetails = ({ user, trivia }) => {
             <LiveTriviaCard trivia={trivia} />
             <UserPoints points={user.points} todaysPoints={user.todaysPoints} />
             <UserItems showBuy={Platform.OS === 'ios' ? false : true} />
-            {/* <UserRanking gamesCount={user.gamesCount} ranking={user.globalRank} /> */}
         </View>
     );
 }

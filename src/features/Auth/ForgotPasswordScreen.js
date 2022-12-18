@@ -32,7 +32,6 @@ export default function ({ navigation }) {
             .then((originalPromiseResult) => {
                 setLoading(false);
                 setCanSend(true);
-                // console.log(originalPromiseResult);
                 navigation.navigate("VerifyEmail", {
                     email:email
                 });
@@ -40,14 +39,13 @@ export default function ({ navigation }) {
             .catch((rejectedValueOrSerializedError) => {
                 setLoading(false);
                 setCanSend(true);
-                // console.log(rejectedValueOrSerializedError)
                 setError("Please Use Registered Email Address");
             })
 
     }
 
     useEffect(() => {
-        var valid = email.length > 5;
+        const valid = email.length > 5;
         setCanSend(valid);
         setError('');
     }, [email]);

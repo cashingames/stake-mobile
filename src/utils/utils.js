@@ -14,7 +14,7 @@ export const randomElement = (arr) => {
 }
 
 export const randomEnteringAnimation = () => {
-    var slides = [
+    const slides = [
         SlideInLeft, SlideInRight, SlideInDown, SlideInUp,
         BounceInLeft, BounceInRight, BounceInDown, BounceInUp,
         RotateInUpLeft, RotateInUpRight, RotateInDownLeft, RotateInDownRight,
@@ -24,11 +24,11 @@ export const randomEnteringAnimation = () => {
     return randomElement(slides);
 }
 
-export const appNeedsUpdate = (minVersion) => {
-    var installedVersionCodes = nativeApplicationVersion.split(".");
-    var minVersionCodes = minVersion.split(".");
+export const appNeedsStoreUpdate = (minVersion) => {
+    const installedVersionCodes = nativeApplicationVersion.split(".");
+    const minVersionCodes = minVersion.split(".");
 
-    for (var i = 0; i < installedVersionCodes.length; i++) {
+    for (let i = 0; i < installedVersionCodes.length; i++) {
         if (Number.parseInt(installedVersionCodes[i]) < Number.parseInt(minVersionCodes[i])) {
             return true;
         }
@@ -36,12 +36,16 @@ export const appNeedsUpdate = (minVersion) => {
     return false;
 }
 
+export const appNeedsPublishedRestart = async (minPublishedVersionCode) => {
+    return true;
+}
+
 export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
-    if (!appNeedsUpdate(minVersionCode)) {
+    if (!appNeedsStoreUpdate(minVersionCode)) {
         return;
     }
 
-    var config = [];
+    let config = [];
     if (!forceUpdate) {
         config.push({
             text: 'Skip',
@@ -62,7 +66,11 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
     );
 }
 
-export const notifyOfPublishedUpdates = async () => {
+export const notifyOfPublishedUpdates = async (minPublishedVersionCode) => {
+    if (!appNeedsPublishedRestart(minPublishedVersionCode)) {
+        return;
+    }
+
     try {
         Updates.checkForUpdateAsync().then(x => {
 
@@ -86,9 +94,7 @@ export const notifyOfPublishedUpdates = async () => {
             });
         });
     } catch (e) {
-        // handle or log error
         crashlytics().recordError(error);
-        // console.log(e);
     }
 }
 
@@ -110,7 +116,7 @@ export const networkIssueNotify = async () => {
 }
 
 export const calculateTimeRemaining = (futureTime, onComplete) => {
-    var diff = futureTime - new Date().getTime();
+    const diff = futureTime - new Date().getTime();
 
     // console.log(diff, typeof(diff), diff < 2000, diff < Number(2000))
     if (diff < 3000) {
@@ -119,8 +125,8 @@ export const calculateTimeRemaining = (futureTime, onComplete) => {
         return "1s";
     }
 
-    var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     var seconds = Math.floor((diff % (1000 * 60)) / 1000);
 

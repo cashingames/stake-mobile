@@ -5,9 +5,7 @@ import axios from 'axios';
 export const getCommonData = createAsyncThunk(
     'common/get',
     async () => {
-        // console.log("fetching common data");
         const response = await axios.get('v3/game/common');
-        // console.log(response);
         return response.data
     }
 )
@@ -20,12 +18,9 @@ export const getBankData = createAsyncThunk(
     }
 )
 
-
-
 export const getGlobalLeaders = createAsyncThunk(
     'common/globalLeaders/get',
     async () => {
-        // console.log("getting global leaders")
         const response = await axios.post('v2/leaders/global');
         return response.data
     }
@@ -105,9 +100,7 @@ export const searchUserFriends = createAsyncThunk(
 export const getUserChallenges = createAsyncThunk(
     'common/getUserChallenges  ',
     async (data, thunkAPI) => {
-        //make a network request to the server
         const response = await axios.get(`v3/user/challenges?page=${data}`)
-        // console.log(response)
         return response.data;
     }
 )
@@ -115,9 +108,7 @@ export const getUserChallenges = createAsyncThunk(
 export const getUserNotifications = createAsyncThunk(
     'common/getUserNotifications',
     async (data, thunkAPI) => {
-        //make a network request to the server
         const response = await axios.get('v3/notifications')
-        // console.log(response.data)
         return response.data;
     }
 )
@@ -125,7 +116,6 @@ export const getUserNotifications = createAsyncThunk(
 export const markNotificationRead = createAsyncThunk(
     'common/markNotificationRead',
     async (data, thunkAPI) => {
-        //make a network request to the server
         const response = await axios.post(`v3/notifications/read/${data}`, data)
         return response.data;
     }
@@ -181,6 +171,16 @@ const initialState = {
     periodBeforeChallengeStakingExpiry: ''
 }
 
+const stakingGameMode =
+{
+    "icon": "icons/money-bag.png",
+    "bgColor": "#EF2F55",
+    "description": "Bet on your knowledge",
+    "displayName": "Staking",
+    "id": 1,
+    "name": "STAKING",
+};
+
 export const CommonSlice = createSlice({
     name: 'common',
     initialState,
@@ -190,26 +190,14 @@ export const CommonSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        // Add reducers for additional action types here, and handle loading sAWAWAWAWtate as needed
         builder
             .addCase(getCommonData.fulfilled, (state, action) => {
                 const data = action.payload.data;
-                console.log(data.gameModes)
                 state.boosts = data.boosts;
                 state.achievements = data.achievements;
                 state.plans = data.plans;
                 state.gameTypes = data.gameTypes;
-                state.gameModes = [
-                    {
-                        "icon": "icons/money-bag.png",
-                        "bgColor": "#EF2F55",
-                        "description": "Bet on your knowledge",
-                        "displayName": "Staking",
-                        "id": 1,
-                        "name": "STAKING",
-                    },
-                    ...data.gameModes
-                ]
+                state.gameModes = [stakingGameMode, ...data.gameModes];
                 state.gameCategories = data.gameCategories;
                 state.minVersionCode = data.minVersionCode;
                 state.minVersionForce = data.minVersionForce;
@@ -239,7 +227,7 @@ export const CommonSlice = createSlice({
                 state.faqAndAnswers = action.payload
             })
             .addCase(fetchRecentLiveTrivia.fulfilled, (state, action) => {
-                state.loadMoreLiveTrivias = !(action.payload.length < 10);
+                state.loadMoreLiveTrivias = action.payload.length >= 10;
                 state.trivias = state.trivias.concat(action.payload);
             })
             .addCase(fetchUserFriends.fulfilled, (state, action) => {
@@ -249,14 +237,14 @@ export const CommonSlice = createSlice({
                 state.userFriends = action.payload
             })
             .addCase(getUserChallenges.fulfilled, (state, action) => {
-                state.loadMoreChallenges = !(action.payload.length < 10);
+                state.loadMoreChallenges = action.payload.length >= 10;
                 state.userChallenges = state.userChallenges.concat(action.payload);
             })
             .addCase(getUserNotifications.fulfilled, (state, action) => {
                 state.userNotifications = action.payload.data.data;
             })
             .addCase(fetchUserTransactions.fulfilled, (state, action) => {
-                state.loadMoreTransactions = !(action.payload.length < 10);
+                state.loadMoreTransactions = action.payload.length >= 10;
                 state.userTransactions = state.userTransactions.concat(action.payload);
             })
             .addCase(fetchFeatureFlags.fulfilled, (state, action) => {
