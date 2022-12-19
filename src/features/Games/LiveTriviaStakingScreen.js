@@ -24,8 +24,8 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
     const params = route.params;
-    const maximumStakeAmount = useSelector(state => state.common.maximumStakeAmount);
-    const minimumStakeAmount = useSelector(state => state.common.minimumStakeAmount);
+    const maximumExhibitionStakeAmount  = useSelector(state => state.common.maximumExhibitionStakeAmount );
+    const minimumExhibitionStakeAmount  = useSelector(state => state.common.minimumExhibitionStakeAmount );
     const [loading, setLoading] = useState(false);
     const [amount, setAmount] = useState(200);
     const dispatch = useDispatch();
@@ -47,6 +47,17 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
 
     const startGame = async () => {
         setLoading(true);
+        if (Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount )) {
+            Alert.alert(`Minimum stake amount is ${minimumExhibitionStakeAmount } naira`);
+            setLoading(false);
+            return false;
+        }
+
+        if (Number.parseFloat(amount) > Number.parseFloat(maximumExhibitionStakeAmount )) {
+            Alert.alert(`Maximum stake amount is ${maximumExhibitionStakeAmount } naira`);
+            setLoading(false);
+            return false;
+        }
         if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
             await analytics().logEvent('live_trivia_staking_low_balance', {
                 'id': user.username,
@@ -56,18 +67,6 @@ const LiveTriviaStakingScreen = ({ navigation, route }) => {
             openBottomSheet();
             setLoading(false);
             return
-        }
-
-        if (Number.parseFloat(amount) < Number.parseFloat(minimumStakeAmount)) {
-            Alert.alert(`Minimum stake amount is ${minimumStakeAmount} naira`);
-            setLoading(false);
-            return false;
-        }
-
-        if (Number.parseFloat(amount) > Number.parseFloat(maximumStakeAmount)) {
-            Alert.alert(`Maximum stake amount is ${maximumStakeAmount} naira`);
-            setLoading(false);
-            return false;
         }
 
         canStake({ staking_amount: amount })
