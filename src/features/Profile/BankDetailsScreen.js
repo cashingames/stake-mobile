@@ -90,6 +90,7 @@ export default function BankDetailsScreen({ navigation }) {
                         onChangeText={text => { onChangeAccountName(text) }}
                         error={accountNameErr && '*account name must not be empty'}
                     />
+                    <Text style={styles.nameNotice}>Note: The account name should be exactly as it was registered with your bank</Text>
                     <View style={styles.banksContainer}>
                         <Text style={styles.bankLabel}>Select Bank</Text>
 
@@ -138,6 +139,11 @@ const styles = EStyleSheet.create({
     },
     pickerItem: {
         fontSize: '0.75rem',
+    },
+    nameNotice: {
+        fontFamily: 'graphik-regular',
+        color: '#EF2F55',
+        fontSize: '0.6rem',
     }
 
 });
