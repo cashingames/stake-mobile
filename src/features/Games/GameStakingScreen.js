@@ -47,17 +47,6 @@ const GameStakingScreen = ({ navigation }) => {
 
     const startGame = async () => {
         setLoading(true);
-        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-            await analytics().logEvent('exhibition_staking_low_balance', {
-                'id': user.username,
-                'phone_number': user.phoneNumber,
-                'email': user.email
-            });
-            openBottomSheet();
-            setLoading(false);
-            return
-        }
-
         if (Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount )) {
             Alert.alert(`Minimum stake amount is ${minimumExhibitionStakeAmount } naira`);
             setLoading(false);
@@ -69,6 +58,17 @@ const GameStakingScreen = ({ navigation }) => {
             setLoading(false);
             return false;
         }
+        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
+            await analytics().logEvent('exhibition_staking_low_balance', {
+                'id': user.username,
+                'phone_number': user.phoneNumber,
+                'email': user.email
+            });
+            openBottomSheet();
+            setLoading(false);
+            return
+        }
+
 
         canStake({ staking_amount: amount })
             .then(async response => {
