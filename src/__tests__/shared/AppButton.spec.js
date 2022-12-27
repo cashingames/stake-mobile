@@ -1,7 +1,7 @@
 import AppButton from "../../shared/AppButton";
 import { render, fireEvent } from '@testing-library/react-native';
 
-test('form submits two answers', () => {
+test('that the passed onPress was called', () => {
 
     //write test for AppButton
     const mockFn = jest.fn();
