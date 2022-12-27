@@ -39,11 +39,11 @@ const HomeScreen = () => {
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
-        // setRefreshing(true);
-        // dispatch(getUser())
-        // dispatch(getCommonData())
-        // dispatch(getLiveTriviaStatus())
-        // wait(2000).then(() => setRefreshing(false));
+        setRefreshing(true);
+        dispatch(getUser())
+        dispatch(getCommonData())
+        dispatch(getLiveTriviaStatus())
+        wait(2000).then(() => setRefreshing(false));
     }, []);
 
 
@@ -85,8 +85,8 @@ const HomeScreen = () => {
                 return;
             }
 
-            // dispatch(getUser());
-            // dispatch(getGlobalLeaders());
+            dispatch(getUser());
+            dispatch(getGlobalLeaders());
 
             if (Constants.manifest.extra.isDevelopment) {
                 return;
