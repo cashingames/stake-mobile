@@ -92,6 +92,7 @@ const HomeScreen = () => {
                 return;
             }
 
+            const minPublishedVersionCode = 1;
             notifyOfPublishedUpdates(minPublishedVersionCode);
 
             if (minVersionForce) {

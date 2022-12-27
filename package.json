@@ -40,7 +40,7 @@
     "expo": "^47.0.0",
     "expo-apple-authentication": "~5.0.1",
     "expo-application": "~5.0.1",
-    "expo-auth-session": "~3.7.3",
+    "expo-auth-session": "~3.8.0",
     "expo-clipboard": "~4.0.1",
     "expo-constants": "~14.0.2",
     "expo-device": "~5.0.0",
@@ -79,14 +79,14 @@
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
-    "pod-install": "^0.1.32",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "cross-env": "^7.0.3",
     "dotenv": "^14.2.0",
     "expo-build-properties": "~0.4.1",
-    "expo-linking": "~3.2.3",
+    "expo-cli": "^6.0.8",
     "expo-dev-client": "~2.0.1",
-    "expo-cli": "^6.0.8"
+    "expo-linking": "~3.2.3",
+    "pod-install": "^0.1.32"
   },
   "resolutions": {
     "@expo/config-plugins": "~5.0.2",
