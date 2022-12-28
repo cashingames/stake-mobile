@@ -30,17 +30,17 @@ export default function GlobalTopLeadersHero() {
 
 const styles = EStyleSheet.create({
     leaderboard: {
-        paddingTop: normalize(20),
+        // paddingTop: normalize(20),
     },
     leaderboardHeader: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: normalize(12)
+        marginBottom: normalize(8)
     },
     title: {
-        fontSize: '1rem',
+        fontSize: '.9rem',
         lineHeight: '1.3rem',
         color: '#151C2F',
         fontFamily: 'graphik-bold',
