@@ -9,7 +9,6 @@ import AuthBanner from '../../shared/AuthBanner';
 import AuthTitle from '../../shared/AuthTitle';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { loginUser, setToken } from './AuthSlice';
 import Input from '../../shared/Input';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
@@ -19,8 +18,6 @@ import InputOTP from '../../shared/InputOTP';
 import AppleSignUp from '../../shared/AppleSignUp';
 
 export default function LoginScreen({ navigation }) {
-
-    const dispatch = useDispatch();
 
     const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'arunajoy2602@gmail.com' : '');
     const [password, setPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
@@ -37,45 +34,42 @@ export default function LoginScreen({ navigation }) {
     }
 
     const onLogin = async () => {
-        crashlytics().log('User signed in.');
-        await analytics().logEvent('LoginClicked')
+        crashlytics().log('login clicked');
+        await analytics().logEvent('login_clicked')
         setLoading(true);
         setCanLogin(false);
         setError("");
 
-        loginUser({
-            email, password
-        }).then(response => {
-            // console.log(response)
-            saveToken(response.data.data)
-            dispatch(setToken(response.data.data))
-            navigation.navigate('AppRouter')
+        // loginUser({
+        //     email, password
+        // }).then(response => {
+        //     saveToken(response.data.data)
+        //     dispatch(setToken(response.data.data))
+        // }, err => {
+        //     if (!err || !err.response || err.response === undefined) {
+        //         setError("Your Network is Offline.");
+        //     }
+        //     else if (err.response.status === 500) {
+        //         setError("Service not currently available. Please contact support");
+        //     }
+        //     else {
 
-        }, err => {
-            if (!err || !err.response || err.response === undefined) {
-                setError("Your Network is Offline.");
-            }
-            else if (err.response.status === 500) {
-                setError("Service not currently available. Please contact support");
-            }
-            else {
+        //         const errors =
+        //             err.response && err.response.data && err.response.data.errors;
 
-                const errors =
-                    err.response && err.response.data && err.response.data.errors;
+        //         if (err.response.status === 400 && err.response.data.message == 'Account not verified') {
+        //             navigation.navigate('SignupVerifyPhone', {
+        //                 phone_number: err.response.data.errors.phoneNumber,
+        //                 username: err.response.data.errors.username, next_resend_minutes: 1
+        //             })
+        //         }
 
-                if (err.response.status === 400 && err.response.data.message == 'Account not verified') {
-                    navigation.navigate('SignupVerifyPhone', {
-                        phone_number: err.response.data.errors.phoneNumber,
-                        username: err.response.data.errors.username, next_resend_minutes: 1
-                    })
-                }
-
-                const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
-                // console.log(firstError)
-                setError(firstError)
-            }
-            setLoading(false);
-        });
+        //         const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
+        //         // console.log(firstError)
+        //         setError(firstError)
+        //     }
+        //     setLoading(false);
+        // });
     }
 
 

@@ -15,7 +15,7 @@ import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
-import { fetchFeatureFlags, getCommonData, getGlobalLeaders, initialLoadingComplete } from '../CommonSlice';
+import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../CommonSlice';
 import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserItems';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
@@ -31,15 +31,14 @@ const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 const HomeScreen = () => {
 
     const dispatch = useDispatch();
-    const user = useSelector(state => state.auth.user);
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
-    const trivia = useSelector(state => state.liveTrivia.data);
     const challengeLeaders = useSelector(state => state.game.challengeLeaders)
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
+        console.info('refreshing')
         setRefreshing(true);
         dispatch(getUser())
         dispatch(getCommonData())
@@ -50,26 +49,16 @@ const HomeScreen = () => {
 
 
     useEffect(() => {
-        const _1 = dispatch(getUser());
+        console.info('initial loading')
+
         const _2 = dispatch(getCommonData());
         const _3 = dispatch(fetchFeatureFlags())
 
-        Promise.all([_1, _2, _3]).then(() => {
+        Promise.all([ _2, _3]).then(() => {
             dispatch(initialLoadingComplete());
         });
 
     }, []);
-
-    useFocusEffect(
-        React.useCallback(() => {
-            StatusBar.setTranslucent(true)
-            StatusBar.setBackgroundColor("transparent")
-            StatusBar.setBarStyle('dark-content');
-            return () => {
-                StatusBar.setTranslucent(true)
-            }
-        }, [])
-    );
 
     useEffect(() => {
         if (!Constants.manifest.extra.isDevelopment) {
@@ -79,6 +68,7 @@ const HomeScreen = () => {
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }, [minVersionCode]);
 
+
     useFocusEffect(
         React.useCallback(() => {
 
@@ -86,8 +76,7 @@ const HomeScreen = () => {
                 return;
             }
 
-            dispatch(getUser());
-            dispatch(getGlobalLeaders());
+            console.info('home screen focus effect')
 
             if (Constants.manifest.extra.isDevelopment) {
                 return;
@@ -100,19 +89,20 @@ const HomeScreen = () => {
                 notifyOfStoreUpdates(minVersionCode, minVersionForce);
             }
 
-        }, [loading])
+        }, [])
     );
 
-    useEffect(() => {
-        if (!user || !isTrue(user.walletBalance)) {
-            return;
-        }
+    useFocusEffect(
+        React.useCallback(() => {
+            StatusBar.setTranslucent(true)
+            StatusBar.setBackgroundColor("transparent")
+            StatusBar.setBarStyle('dark-content');
+            return () => {
+                StatusBar.setTranslucent(true)
+            }
+        }, [])
+    );
 
-        Promise.all([
-            crashlytics().setAttribute('username', user.username),
-        ]);
-
-    }, [user]);
 
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
@@ -129,7 +119,7 @@ const HomeScreen = () => {
                     />
                 }
             >
-                <UserDetails user={user} trivia={trivia} />
+                <UserDetails />
                 <View style={styles.container}>
                     <SelectGameMode />
                         <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
@@ -144,13 +134,34 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
-const UserDetails = ({ user, trivia }) => {
+const UserDetails = () => {
+
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user);
+
+    useEffect(() => {
+        if (!user || !isTrue(user.walletBalance)) {
+            return;
+        }
+
+        Promise.all([
+            crashlytics().setAttribute('username', user.username),
+        ]);
+
+    }, [user]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            console.info('UserDetails focus effect')
+            dispatch(getUser());
+        }, [])
+    );
 
     return (
         <View style={styles.userDetails}>
-            <UserWallet balance={user.walletBalance} />
-            <LiveTriviaCard trivia={trivia} />
-            <UserPoints points={user.points} todaysPoints={user.todaysPoints} />
+            <UserWallet balance={user.walletBalance ?? 0} />
+            <LiveTriviaBanner />
+            <UserPoints points={user.points ?? 0} todaysPoints={user.todaysPoints ?? 0} />
             <UserItems showBuy={Platform.OS === 'ios' ? false : true} />
         </View>
     );
@@ -201,6 +212,26 @@ const UserPoints = ({ points, todaysPoints }) => {
             </View>
         </Animated.View>
     );
+}
+
+const LiveTriviaBanner = () => {
+    const [show, setShow] = useState(false);
+    const trivia = useSelector(state => state.liveTrivia.data);
+    const dispatch = useDispatch();
+
+    useFocusEffect(
+        React.useCallback(() => {
+            console.info('LiveTriviaBanner focus effect')
+            dispatch(getLiveTriviaStatus());
+        
+        }, [])
+    );
+
+    useEffect(() => {
+        setShow(isTrue(trivia));
+    }, [trivia]);
+
+    return show ? <LiveTriviaCard trivia={ triviaData } /> : null;
 }
 
 

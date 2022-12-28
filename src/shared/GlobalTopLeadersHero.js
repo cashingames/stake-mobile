@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Text, View } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import GlobalTopLeaders from "./GlobalTopLeaders";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Animated, { BounceInDown } from 'react-native-reanimated';
+import { getGlobalLeaders } from '../features/CommonSlice';
 
 export default function GlobalTopLeadersHero() {
     const navigation = useNavigation();
     const leaders = useSelector(state => state.common.globalLeaders)
+
+    const dispatch = useDispatch();
+
+    useFocusEffect(
+        React.useCallback(() => {
+            console.info("Global leaderboard useFocusEffect");
+            dispatch(getGlobalLeaders());
+        }, [])
+    );
 
     return (
         <Animated.View style={styles.leaderboard} entering={BounceInDown.duration(2000)}>

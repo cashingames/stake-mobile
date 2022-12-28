@@ -22,9 +22,12 @@ export const verifyUser = createAsyncThunk(
     }
 )
 
-export const loginUser = async (data) => {
-    return axios.post('auth/login', data);
-}
+export const loginUser = createAsyncThunk(
+    'auth/login',
+    async (data, thunkAPI) => {
+        return (await axios.post('auth/login', data)).data;
+    }
+)
 
 export const loginWithSocialLink = createAsyncThunk(
     'auth/loginWithSocialLink',
@@ -41,7 +44,6 @@ export const registerWithSocialLink = createAsyncThunk(
         return response.data
     }
 )
-
 
 export const logoutUser = createAsyncThunk(
     'auth/logoutUser',
@@ -256,12 +258,12 @@ export const AuthSlice = createSlice({
                 state.passwordReset = {};
                 state.createAccount = {};
             })
-            // .addCase(loginUser.fulfilled, (state, action) => {
-            //     state.token = action.payload;
-            // })
-            // .addCase(loginUser.rejected, (state, action) => {
-            //     console.log("login rejected payload", action.payload);
-            // })
+            .addCase(loginUser.fulfilled, (state, action) => {
+                state.token = action.payload;
+            })
+            .addCase(loginUser.rejected, (state, action) => {
+                console.log("login rejected payload", action.payload);
+            })
             .addCase(resetPassword.fulfilled, (state) => {
                 state.passwordReset = {};
             })

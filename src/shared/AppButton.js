@@ -15,7 +15,6 @@ export default function AppButton({ onPress, text, disabled, style, textStyle })
             <Text style={[styles.text, textStyle]}>{text}</Text>
         </Pressable>
     );
-
 }
 
 const styles = EStyleSheet.create({

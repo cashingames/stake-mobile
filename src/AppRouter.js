@@ -26,7 +26,7 @@ import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScree
 import SupportQuestionsScreen from './features/Support/SupportQuestionsScreen';
 import SupportAnswerScreen from './features/Support/SupportAnswerScreen';
 
-import { isLoggedIn, verifyDeviceToken } from './features/Auth/AuthSlice';
+import { isLoggedIn, logoutUser, verifyDeviceToken } from './features/Auth/AuthSlice';
 import { isTrue } from './utils/stringUtl';
 import GameModeScreen from './features/Games/GameModeScreen';
 import GameInstructionsScreen from './features/Games/GameInstructionsScreen';
@@ -86,7 +86,7 @@ function AppRouter() {
 	useEffect(() => {
 		setupAxios();
 		const _1 = dispatch(isLoggedIn());
-
+		setLoading(true);
 		Promise.all([_1]).then(() => {
 			setLoading(false);
 		});
@@ -99,6 +99,7 @@ function AppRouter() {
 		}
 
 		registerForPushNotificationsAsync().then(deviceToken => {
+			console.info('verify device token')
 			dispatch(verifyDeviceToken(deviceToken))
 		});
 
@@ -122,7 +123,7 @@ function AppRouter() {
 			})
 
 		});
-		
+
 		messaging().onNotificationOpenedApp(async remoteMessage => {
 			if (!remoteMessage) return;
 
@@ -303,20 +304,28 @@ function AppRouter() {
 export default AppRouter;
 
 const setupAxios = async function () {
+	console.log("here in axios")
 	axios.defaults.baseURL = Constants.manifest.extra.apiBaseUrl;
 	//axios logout on 401
 	axios.interceptors.response.use(
 		response => response,
 		error => {
-			console.log(error.message);
-			// console.log(error.request);
-			// if (error.response.status === 401) {
-			// 	// store.dispatch(logout());
-			// }
-			// return Promise.reject(error);
-		}
-	);
+			console.log(error.config.url, error.message);
 
+			if (error.response && error.response.status === 401) {
+				dispatch(logoutUser());
+			} else if (error.request) {
+				// The request was made but no response was received
+				// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+				// http.ClientRequest in node.js
+				// console.log(error.request);
+			} else {
+				// Something happened in setting up the request that triggered an Error
+				// console.log('Error', error.message);
+			}
+			// console.log("checking config", error.config);
+			return Promise.reject(error);
+		});
 
 	axios.interceptors.request.use(request => {
 		console.log('Starting Request', JSON.stringify(request.url, null, 2))
@@ -333,8 +342,6 @@ const appendAxiosAuthHeader = async function (token) {
 		/*if setting null does not remove `Authorization` header then try  */
 		delete axios.defaults.headers.common['Authorization'];
 	}
-
-
 };
 
 async function registerForPushNotificationsAsync() {

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { Image, Platform, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch } from "react-redux";
@@ -10,10 +11,12 @@ import { challengeTopLeaders } from "../Games/GameSlice";
 const ChallengeWeeklyTopLeaders = ({ challengeLeaders }) => {
     const dispatch = useDispatch();
 
-
-    useEffect(() => {
-        dispatch(challengeTopLeaders());
-    }, [])
+    useFocusEffect(
+        React.useCallback(() => {
+            console.info("ChallengeWeeklyTopLeaders useFocusEffect");
+            dispatch(challengeTopLeaders());
+        }, [])
+    );
 
     return (
         <Animated.View style={styles.leaderboard} entering={BounceInLeft.duration(2000)}>
