@@ -132,12 +132,10 @@ const HomeScreen = () => {
                 <UserDetails user={user} trivia={trivia} />
                 <View style={styles.container}>
                     <SelectGameMode />
-                    <View style={styles.leaderboardContainer}>
                         <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
                             <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
                             <GlobalTopLeadersHero />
                         </SwiperFlatList>
-                    </View>
                 </View>
             </ScrollView>
         </View>
