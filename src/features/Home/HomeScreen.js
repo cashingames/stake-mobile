@@ -24,6 +24,7 @@ import LottieAnimations from '../../shared/LottieAnimations';
 import SelectGameMode from '../Games/SelectGameMode';
 import ChallengeWeeklyTopLeaders from '../Leaderboard/ChallengeWeeklyTopLeaders';
 import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
+import SwiperFlatList from 'react-native-swiper-flatlist';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -131,8 +132,10 @@ const HomeScreen = () => {
                 <UserDetails user={user} trivia={trivia} />
                 <View style={styles.container}>
                     <SelectGameMode />
-                    <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
-                    <GlobalTopLeadersHero />
+                        <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
+                            <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
+                            <GlobalTopLeadersHero />
+                        </SwiperFlatList>
                 </View>
             </ScrollView>
         </View>
@@ -215,6 +218,10 @@ const styles = EStyleSheet.create({
         flex: 1,
         paddingHorizontal: '1.2rem',
         backgroundColor: '#FFFF',
+    },
+    leaderboardContainer: {
+        flexDirection:'row',
+        alignItems:'flex-start'
     },
     userDetails: {
         backgroundColor: '#072169',

@@ -55,7 +55,7 @@ const styles = EStyleSheet.create({
         color: '#535761',
         fontSize: '0.65rem',
         fontFamily: 'graphik-medium',
-        width: responsiveScreenWidth(24),
+        width: responsiveScreenWidth(22),
         textAlign: 'center',
         marginTop: Platform.OS === 'ios' ? normalize(4) : normalize(2),
 
