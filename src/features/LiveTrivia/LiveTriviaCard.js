@@ -31,7 +31,6 @@ const LiveTriviaCard = ({ trivia }) => {
 
 
     const initialLoading = useSelector(state => state.common.initialLoading);
-    // const trivia = useSelector(state => state.liveTrivia.data);
 
     const openBottomSheet = async () => {
         notEnoughPointNotice.current.open()
@@ -93,7 +92,6 @@ const LiveTriviaCard = ({ trivia }) => {
                 setLoading(false);
             })
             .catch((rejectedValueOrSerializedError) => {
-                // console.log(rejectedValueOrSerializedError);
                 Alert.alert(rejectedValueOrSerializedError.message)
                 setLoading(false);
             });
@@ -187,6 +185,7 @@ const LiveTriviaCard = ({ trivia }) => {
             }
         }
     }
+
     useEffect(() => {
         // Change the state every second or the time given by User.
         const interval = setInterval(() => {
@@ -194,7 +193,6 @@ const LiveTriviaCard = ({ trivia }) => {
         }, 1000);
         return () => clearInterval(interval);
     }, []);
-
 
     useFocusEffect(
         React.useCallback(() => {

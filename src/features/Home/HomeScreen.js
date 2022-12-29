@@ -49,8 +49,6 @@ const HomeScreen = () => {
 
 
     useEffect(() => {
-        console.info('initial loading')
-
         const _2 = dispatch(getCommonData());
         const _3 = dispatch(fetchFeatureFlags())
 
