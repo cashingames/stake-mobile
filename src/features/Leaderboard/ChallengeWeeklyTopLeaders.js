@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { Image, Platform, Text, View } from "react-native";
+import { Image, Platform, Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch } from "react-redux";
 import Animated, { BounceInLeft } from 'react-native-reanimated';
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { isTrue } from "../../utils/stringUtl";
 import { challengeTopLeaders } from "../Games/GameSlice";
+import { Ionicons } from "@expo/vector-icons";
 
 const ChallengeWeeklyTopLeaders = ({ challengeLeaders }) => {
     const dispatch = useDispatch();
@@ -20,10 +21,10 @@ const ChallengeWeeklyTopLeaders = ({ challengeLeaders }) => {
 
     return (
         <Animated.View style={styles.leaderboard} entering={BounceInLeft.duration(2000)}>
-        <View style={styles.container}>
-            <Text style={styles.topChallengersHeader}>Top Challengers</Text>
-            <TopWeeklyChallengers challengeLeaders={challengeLeaders} />
-        </View>
+            <View style={styles.container}>
+                {/* <Text style={styles.topChallengersHeader}>Top Challengers</Text> */}
+                <TopWeeklyChallengers challengeLeaders={challengeLeaders} />
+            </View>
         </Animated.View>
 
 
@@ -37,39 +38,49 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
     const thirdLeader = topLeaders[2] ?? { username: "..." };
 
     return (
-        <View style={styles.topChallengersContainer}>
-            <TopWeeklyChallenger
-                trophyImageUrl={require('../../../assets/images/third-crown.png')}
-                stageImageUrl={require("../../../assets/images/third-stage.png")}
-                username={thirdLeader.username}
-                avatar={thirdLeader.avatar}
-                styleProp={styles.others}
-                avatarProp={styles.otherAvatar}
-                crownProp={styles.otherCrown}
-                 />
+        <View style={styles.contentContainer}>
+            <View style={styles.headerContainer}>
+                <Ionicons name="information-circle" size={20} color="#FFFF" />
+                <Text style={styles.topChallengersHeader}>Top Challengers</Text>
+                <Pressable style={styles.viewContainer}>
+                    <Text style={styles.viewText}>View more</Text>
+                    <Ionicons name="md-arrow-forward-sharp" size={18} color="#FFFF" />
+                </Pressable>
+            </View>
+            <View style={styles.topChallengersContainer}>
                 <TopWeeklyChallenger
-                   trophyImageUrl={require('../../../assets/images/first-crown.png')}
+                    trophyImageUrl={require('../../../assets/images/third-crown.png')}
+                    stageImageUrl={require("../../../assets/images/third-stage.png")}
+                    username={thirdLeader.username}
+                    avatar={thirdLeader.avatar}
+                    styleProp={styles.others}
+                    avatarProp={styles.otherAvatar}
+                    crownProp={styles.otherCrown}
+                />
+                <TopWeeklyChallenger
+                    trophyImageUrl={require('../../../assets/images/first-crown.png')}
                     stageImageUrl={require("../../../assets/images/first-stage.png")}
                     username={firstLeader.username}
                     avatar={firstLeader.avatar}
                     styleProp={styles.winner}
                     avatarProp={styles.avatar}
                     crownProp={styles.crown}
-            />
-            <TopWeeklyChallenger
-                trophyImageUrl={require('../../../assets/images/second-crown.png')}
-                stageImageUrl={require("../../../assets/images/second-stage.png")}
-                username={secondLeader.username}
-                avatar={secondLeader.avatar}
-                styleProp={styles.others}
-                avatarProp={styles.otherAvatar}
-                crownProp={styles.otherCrown}
-            />
+                />
+                <TopWeeklyChallenger
+                    trophyImageUrl={require('../../../assets/images/second-crown.png')}
+                    stageImageUrl={require("../../../assets/images/second-stage.png")}
+                    username={secondLeader.username}
+                    avatar={secondLeader.avatar}
+                    styleProp={styles.others}
+                    avatarProp={styles.otherAvatar}
+                    crownProp={styles.otherCrown}
+                />
+            </View>
         </View>
     )
 }
 
-const TopWeeklyChallenger = ({ username, avatar, stageImageUrl, trophyImageUrl, styleProp, avatarProp,crownProp }) => {
+const TopWeeklyChallenger = ({ username, avatar, stageImageUrl, trophyImageUrl, styleProp, avatarProp, crownProp }) => {
 
     return (
         <View style={styles.topChallengerContainer}>
@@ -95,44 +106,68 @@ export default ChallengeWeeklyTopLeaders;
 
 const styles = EStyleSheet.create({
     container: {
-        marginRight: normalize(10)
+        // marginRight: normalize(10)
+    },
+    headerContainer: {
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'space-between'
     },
     topChallengersHeader: {
-        fontSize: '.9rem',
-        lineHeight: '1.3rem',
-        color: '#151C2F',
+        // textAlign: 'center',
+        fontSize: '.8rem',
+        // lineHeight: '1.3rem',
+        color: '#FFFF',
         fontFamily: 'graphik-bold',
-        marginBottom: normalize(8)
+    },
+    viewContainer: {
+        flexDirection:'row',
+        alignItems:'center',
+        width: '2rem'
+    },
+    viewText: {
+        // textAlign: 'center',
+        fontSize: '.6rem',
+        // lineHeight: '1.3rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-regular',
+    },
+    contentContainer: {
+        backgroundColor: '#701F88',
+        flexDirection: 'column',
+        paddingTop: normalize(12),
+        borderRadius: 15,
+        paddingHorizontal: normalize(8),
     },
     topChallengersContainer: {
-        backgroundColor: '#701F88',
+        // backgroundColor: '#701F88',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingTop: normalize(10),
+        marginTop: normalize(5),
         alignItems: 'flex-end',
-        borderRadius: 15,
-        paddingLeft: normalize(5),
+        // borderRadius: 15,
+        // paddingLeft: normalize(5),
     },
     topChallengerContainer: {
         alignItems: 'center'
     },
     crown: {
-        width: normalize(40),
-        height: normalize(40),
+        width: normalize(35),
+        height: normalize(35),
     },
     otherCrown: {
-        width: normalize(30),
-        height: normalize(30),
+        width: normalize(25),
+        height: normalize(25),
     },
     avatar: {
-        width: normalize(55),
-        height: normalize(55),
+        width: normalize(50),
+        height: normalize(50),
         backgroundColor: '#FFFF',
         borderRadius: 50,
     },
     otherAvatar: {
-        width: normalize(35),
-        height: normalize(35),
+        width: normalize(30),
+        height: normalize(30),
         backgroundColor: '#FFFF',
         borderRadius: 50,
     },
