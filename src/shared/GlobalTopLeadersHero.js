@@ -23,8 +23,9 @@ export default function GlobalTopLeadersHero() {
     );
 
     return (
-        <Animated.View style={styles.leaderboard} entering={BounceInDown.duration(2000)}>
-            <View style={styles.leaderboardHeader}>
+        // <Animated.View style={styles.leaderboard} entering={BounceInDown.duration(2000)}>
+        <View style={styles.leaderboard}>
+            {/* <View style={styles.leaderboardHeader}>
                 <Text style={styles.title}>Top Players</Text>
                 <View style={styles.extended}>
                     <Text onPress={() => navigation.navigate('Leaderboard')}>
@@ -32,15 +33,16 @@ export default function GlobalTopLeadersHero() {
                     </Text>
                     <Ionicons name="md-arrow-forward-sharp" size={24} color="#EF2F55" />
                 </View>
-            </View>
+            </View> */}
             <GlobalTopLeaders leaders={leaders} />
-        </Animated.View>
+            </View>
+        // </Animated.View>
     )
 }
 
 const styles = EStyleSheet.create({
     leaderboard: {
-        // paddingTop: normalize(20),
+        marginRight: normalize(10)
     },
     leaderboardHeader: {
         display: 'flex',

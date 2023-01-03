@@ -6,7 +6,8 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, {
     BounceInRight, BounceInUp,
-    useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming
+    useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, Extrapolate,
+    interpolate,
 } from 'react-native-reanimated';
 import normalize, {
     responsiveHeight, responsiveScreenWidth, responsiveWidth
@@ -25,6 +26,7 @@ import SelectGameMode from '../Games/SelectGameMode';
 import ChallengeWeeklyTopLeaders from '../Leaderboard/ChallengeWeeklyTopLeaders';
 import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
 import SwiperFlatList from 'react-native-swiper-flatlist';
+import Carousel from 'react-native-reanimated-carousel';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -52,7 +54,7 @@ const HomeScreen = () => {
         const _2 = dispatch(getCommonData());
         const _3 = dispatch(fetchFeatureFlags())
 
-        Promise.all([ _2, _3]).then(() => {
+        Promise.all([_2, _3]).then(() => {
             dispatch(initialLoadingComplete());
         });
 
@@ -101,6 +103,11 @@ const HomeScreen = () => {
         }, [])
     );
 
+    const items = [
+        <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />,
+        <GlobalTopLeadersHero />
+    ]
+
 
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
@@ -120,10 +127,10 @@ const HomeScreen = () => {
                 <UserDetails />
                 <View style={styles.container}>
                     <SelectGameMode />
-                        <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
-                            <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
-                            <GlobalTopLeadersHero />
-                        </SwiperFlatList>
+                    <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
+                        <GlobalTopLeadersHero />
+                        <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
+                    </SwiperFlatList>                  
                 </View>
             </ScrollView>
         </View>
@@ -221,7 +228,7 @@ const LiveTriviaBanner = () => {
         React.useCallback(() => {
             console.info('LiveTriviaBanner focus effect')
             dispatch(getLiveTriviaStatus());
-        
+
         }, [])
     );
 
@@ -229,7 +236,7 @@ const LiveTriviaBanner = () => {
         setShow(isTrue(trivia));
     }, [trivia]);
 
-    return show ? <LiveTriviaCard trivia={ triviaData } /> : null;
+    return show ? <LiveTriviaCard trivia={trivia} /> : null;
 }
 
 
@@ -249,8 +256,8 @@ const styles = EStyleSheet.create({
         backgroundColor: '#FFFF',
     },
     leaderboardContainer: {
-        flexDirection:'row',
-        alignItems:'flex-start'
+        flexDirection: 'row',
+        alignItems: 'flex-start'
     },
     userDetails: {
         backgroundColor: '#072169',
@@ -415,4 +422,13 @@ const styles = EStyleSheet.create({
         textTransform: 'uppercase',
         marginTop: Platform.OS === 'ios' ? normalize(5) : normalize(1),
     },
+    leaderHeader: {
+        textAlign:'center',
+        fontSize: '0.7rem',
+        color: '#EF2F55',
+        fontFamily: 'graphik-bold',
+        textTransform: 'uppercase',
+        marginBottom:  normalize(5),
+
+    }
 });
