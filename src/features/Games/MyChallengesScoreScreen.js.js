@@ -90,7 +90,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       return
     }
     dispatch(acceptDeclineChallengeInivite({
-      challenge_id: challengeDetails.challenegeId,
+      challenge_id: challengeId,
       status: 1
     }
     ))
@@ -102,8 +102,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       .then(unwrapResult)
       .then(async result => {
         crashlytics().log('Opponent started game');
-        await analytics().logEvent("challenge_opponent_accepts_and_start_game", {
-          action: "initiate",
+        await analytics().logEvent("challenge_opponent_accepts_game", {
           'id': user.username,
           'phone_number': user.phoneNumber,
           'email': user.email
@@ -116,12 +115,56 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
         navigation.navigate("ChallengeGameInProgress")
       })
       .catch((error, rejectedValueOrSerializedError) => {
-        crashlytics().recordError(error);
-        crashlytics().log('failed to start opponent game');
         Alert.alert('Failed to start game')
         setClicking(false);
       });
   }
+
+  // const acceptChallengeInivite = async () => {
+  //   setClicking(true);
+  //   if (Number.parseFloat(user.walletBalance) < Number.parseFloat(challengeDetails.stakingAmount)) {
+  //     await analytics().logEvent('challenge_opponent_staking_low_balance', {
+  //       'id': user.username,
+  //       'phone_number': user.phoneNumber,
+  //       'email': user.email
+  //     });
+  //     openBottomSheet();
+  //     setClicking(false);
+  //     return
+  //   }
+  //   dispatch(acceptDeclineChallengeInivite({
+  //     challenge_id: challengeId,
+  //     status: 1
+  //   }
+  //   ))
+  //   dispatch(startChallengeGame({
+  //     category: challengeCategory,
+  //     type: gameTypeId,
+  //     challenge_id: challengeId
+  //   }))
+  //     .then(unwrapResult)
+  //     .then(async result => {
+  //       crashlytics().log('Opponent started game');
+  //       await analytics().logEvent("challenge_opponent_accepts_and_start_game", {
+  //         action: "initiate",
+  //         'id': user.username,
+  //         'phone_number': user.phoneNumber,
+  //         'email': user.email
+  //       })
+  //       dispatch(logActionToServer({
+  //         message: "Challenge Game session " + result.data.game.token + " questions recieved for " + user.username,
+  //         data: result.data.questions
+  //       }))
+  //       setClicking(false);
+  //       navigation.navigate("ChallengeGameInProgress")
+  //     })
+  //     .catch((error, rejectedValueOrSerializedError) => {
+  //       crashlytics().recordError(error);
+  //       crashlytics().log('failed to start opponent game');
+  //       Alert.alert('Failed to start game')
+  //       setClicking(false);
+  //     });
+  // }
 
   const challengerPlays = async () => {
     setClicking(true);
@@ -242,12 +285,13 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
         <ResultContainer playerScore={challengeScores} />
         {Number.parseFloat(user.walletBalance) < Number.parseFloat(challengeDetails.stakingAmount) &&
           challengeScores.challengerStatus !== "COMPLETED" &&
+          user.username === challengeDetails.opponentUsername &&
           challengeScores.opponentStatus !== "COMPLETED" ?
           <UniversalBottomSheet
             refBottomSheet={refRBSheet}
             height={620}
-            subComponent={<LowWalletBalance onClose={closeBottomSheet} 
-            errorDescription='You do not have enough wallet balance to stake this amount' />}
+            subComponent={<LowWalletBalance onClose={closeBottomSheet}
+              errorDescription='You do not have enough wallet balance to stake this amount' />}
           />
           :
           <>
