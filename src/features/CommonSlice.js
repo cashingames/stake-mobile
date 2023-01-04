@@ -151,6 +151,8 @@ const initialState = {
     banks: [],
     categoryLeaders: [],
     globalLeaders: [],
+    globalLeadersbyDate: [],
+    categoryLeadersbyDate: [],
     faqAndAnswers: [],
     trivias: [],
     minVersionCode: '',
@@ -215,13 +217,13 @@ export const CommonSlice = createSlice({
                 state.globalLeaders = action.payload.data
             })
             .addCase(getGlobalLeadersByDate.fulfilled, (state, action) => {
-                state.globalLeaders = action.payload.data
+                state.globalLeadersbyDate = action.payload.data
             })
             .addCase(getCategoryLeaders.fulfilled, (state, action) => {
                 state.categoryLeaders = action.payload.data
             })
             .addCase(getCategoryLeadersByDate.fulfilled, (state, action) => {
-                state.categoryLeaders = action.payload.data
+                state.categoryLeadersbyDate = action.payload.data
             })
             .addCase(fetchFaqAndAnswers.fulfilled, (state, action) => {
                 state.faqAndAnswers = action.payload

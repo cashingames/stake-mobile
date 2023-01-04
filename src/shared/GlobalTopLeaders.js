@@ -5,9 +5,12 @@ import { formatNumber } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import TopLeader from './TopLeader';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 function GlobalTopLeaders({ leaders }) {
+    const navigation = useNavigation();
 
     const topLeaders = leaders?.slice(0, 3) ?? null;
     const firstLeader = topLeaders[0] ?? { username: "..." };
@@ -16,12 +19,9 @@ function GlobalTopLeaders({ leaders }) {
     return (
         <View style={styles.contentContainer}>
             <View style={styles.headerContainer}>
-                <Ionicons name="information-circle" size={20} color="#FFFF" />
+                <View></View>
                 <Text style={styles.title}>Top Players</Text>
-                <Pressable style={styles.viewContainer}>
-                    <Text style={styles.viewText}>View more</Text>
-                    <Ionicons name="md-arrow-forward-sharp" size={18} color="#FFFF" />
-                </Pressable>
+                <Ionicons name="information-circle" size={20} color="#FFFF" />
             </View>
             <View style={styles.content}>
                 <TopLeader
@@ -50,13 +50,13 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#FAC502',
-        paddingHorizontal: responsiveScreenWidth(3),
-        paddingTop: responsiveScreenWidth(5),
-        borderRadius: 15,
-        // borderTopRightRadius: 10,
-        // borderTopLeftRadius: 10,
-        // borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
-        // borderColor:Platform.OS === 'ios' ? '#E0E0E0': '#FFFF'
+        paddingHorizontal: responsiveScreenWidth(6.5),
+        paddingTop: responsiveScreenWidth(3),
+        // borderRadius: 15,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+        borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
+        borderColor:Platform.OS === 'ios' ? '#E0E0E0': '#FFFF'
     },
     content: {
         display: 'flex',
