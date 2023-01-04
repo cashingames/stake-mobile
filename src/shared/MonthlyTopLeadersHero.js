@@ -1,38 +1,55 @@
-import React, { useEffect } from 'react';
-import { Ionicons } from "@expo/vector-icons";
+import React from 'react';
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import normalize from "../utils/normalize";
-import GlobalTopLeaders from "./GlobalTopLeaders";
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Animated, { BounceInDown } from 'react-native-reanimated';
-import { getGlobalLeaders } from '../features/CommonSlice';
+import { getGlobalLeadersByDate } from '../features/CommonSlice';
+import MonthlyTopLeaders from './MonthlyTopLeaders';
 
-export default function GlobalTopLeadersHero() {
+export default function MonthlyTopLeadersHero() {
     const navigation = useNavigation();
-    const leaders = useSelector(state => state.common.globalLeaders)
-
+    const leaders = useSelector(state => state.common.globalLeadersbyDate)
     const dispatch = useDispatch();
+
+    const date = new Date();
+    function getLastDayOfMonth(year, month) {
+        return new Date(year, month + 1, 0);
+    }
+    function getFirstDayOfMonth(year, month) {
+        return new Date(year, month, 1);
+    }
+
+    const startDate = getFirstDayOfMonth(
+        date.getFullYear(),
+        date.getMonth(),
+    );
+
+    const endDate = getLastDayOfMonth(
+        date.getFullYear(),
+        date.getMonth(),
+    );
+
+    
 
     useFocusEffect(
         React.useCallback(() => {
-            console.info("Global leaderboard useFocusEffect");
-            dispatch(getGlobalLeaders());
+            dispatch(getGlobalLeadersByDate({
+                startDate,
+                endDate
+            }));
         }, [])
     );
 
     return (
-        // <Animated.View style={styles.leaderboard} entering={BounceInDown.duration(2000)}>
         <View style={styles.leaderboard}>
-            <GlobalTopLeaders leaders={leaders} />
+            <MonthlyTopLeaders leaders={leaders} />
             <View style={styles.extended}>
-                <Text onPress={() => navigation.navigate('Leaderboard')}>
-                    <Text style={styles.extendedText}> See Extended Leaderboard</Text>
-                </Text>
+                    <Text onPress={() => navigation.navigate('MonthlyLeaderboard')}>
+                        <Text style={styles.extendedText}>View More</Text>
+                    </Text>
+                </View>
             </View>
-        </View>
-        // </Animated.View>
     )
 }
 
@@ -61,7 +78,7 @@ const styles = EStyleSheet.create({
     extended: {
         display: 'flex',
         alignItems: 'center',
-        backgroundColor:'#FAC502',
+        backgroundColor:'#5d5fef',
         justifyContent:'center',
         paddingVertical:normalize(5)
     },

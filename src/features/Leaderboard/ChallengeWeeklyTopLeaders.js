@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Image, Platform, Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch } from "react-redux";
@@ -10,6 +10,7 @@ import { challengeTopLeaders } from "../Games/GameSlice";
 import { Ionicons } from "@expo/vector-icons";
 
 const ChallengeWeeklyTopLeaders = ({ challengeLeaders }) => {
+    const navigation = useNavigation();
     const dispatch = useDispatch();
 
     useFocusEffect(
@@ -21,10 +22,15 @@ const ChallengeWeeklyTopLeaders = ({ challengeLeaders }) => {
 
     return (
         <Animated.View style={styles.leaderboard} entering={BounceInLeft.duration(2000)}>
-            <View style={styles.container}>
-                {/* <Text style={styles.topChallengersHeader}>Top Challengers</Text> */}
+            <View style={styles.container}>              
                 <TopWeeklyChallengers challengeLeaders={challengeLeaders} />
             </View>
+            <View style={styles.extended}>
+                    <Text onPress={() => navigation.navigate('Leaderboard')}>
+                        <Text style={styles.extendedText}>View More</Text>
+                    </Text>
+                    {/* <Ionicons name="md-arrow-forward-sharp" size={24} color="#EF2F55" /> */}
+                </View>  
         </Animated.View>
 
 
@@ -40,12 +46,12 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
     return (
         <View style={styles.contentContainer}>
             <View style={styles.headerContainer}>
-                <Ionicons name="information-circle" size={20} color="#FFFF" />
+                {/* <Ionicons name="information-circle" size={20} color="#FFFF" /> */}
                 <Text style={styles.topChallengersHeader}>Top Challengers</Text>
-                <Pressable style={styles.viewContainer}>
+                {/* <Pressable style={styles.viewContainer}>
                     <Text style={styles.viewText}>View more</Text>
                     <Ionicons name="md-arrow-forward-sharp" size={18} color="#FFFF" />
-                </Pressable>
+                </Pressable> */}
             </View>
             <View style={styles.topChallengersContainer}>
                 <TopWeeklyChallenger
@@ -109,59 +115,56 @@ const styles = EStyleSheet.create({
         // marginRight: normalize(10)
     },
     headerContainer: {
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'space-between'
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     topChallengersHeader: {
-        // textAlign: 'center',
+        textAlign: 'center',
         fontSize: '.8rem',
-        // lineHeight: '1.3rem',
         color: '#FFFF',
         fontFamily: 'graphik-bold',
     },
     viewContainer: {
-        flexDirection:'row',
-        alignItems:'center',
+        flexDirection: 'row',
+        alignItems: 'center',
         width: '2rem'
     },
     viewText: {
-        // textAlign: 'center',
-        fontSize: '.6rem',
-        // lineHeight: '1.3rem',
+        fontSize: '.65rem',
         color: '#FFFF',
         fontFamily: 'graphik-regular',
     },
     contentContainer: {
         backgroundColor: '#701F88',
         flexDirection: 'column',
-        paddingTop: normalize(12),
-        borderRadius: 15,
-        paddingHorizontal: normalize(8),
+        paddingTop: responsiveScreenWidth(3),
+        paddingHorizontal: responsiveScreenWidth(6),
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+        borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
+        borderColor: Platform.OS === 'ios' ? '#E0E0E0' : '#FFFF'
     },
     topChallengersContainer: {
-        // backgroundColor: '#701F88',
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginTop: normalize(5),
         alignItems: 'flex-end',
-        // borderRadius: 15,
-        // paddingLeft: normalize(5),
     },
     topChallengerContainer: {
         alignItems: 'center'
     },
     crown: {
-        width: normalize(35),
-        height: normalize(35),
+        width: normalize(33),
+        height: normalize(33),
     },
     otherCrown: {
-        width: normalize(25),
-        height: normalize(25),
+        width: normalize(23),
+        height: normalize(23),
     },
     avatar: {
-        width: normalize(50),
-        height: normalize(50),
+        width: normalize(48),
+        height: normalize(48),
         backgroundColor: '#FFFF',
         borderRadius: 50,
     },
@@ -175,7 +178,7 @@ const styles = EStyleSheet.create({
         fontSize: '.65rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        marginTop: Platform.OS === 'ios' ? normalize(4) : normalize(2),
+        marginTop: Platform.OS === 'ios' ? normalize(3) : normalize(2),
         width: responsiveScreenWidth(22),
         textAlign: 'center'
     },
@@ -194,5 +197,17 @@ const styles = EStyleSheet.create({
     stage: {
         width: normalize(98),
         height: normalize(98),
+    },
+    extendedText: {
+        fontSize: '0.7rem',
+        color: '#EF2F55',
+        fontFamily: 'graphik-medium',
+    },
+    extended: {
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor:'#701F88',
+        justifyContent:'center',
+        paddingVertical:normalize(5)
     },
 })

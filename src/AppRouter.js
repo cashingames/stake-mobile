@@ -70,12 +70,15 @@ import LiveTriviaStakingScreen from './features/Games/LiveTriviaStakingScreen';
 import ReviewStakeScreen from './features/Games/ReviewStakeScreen';
 import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
 import LandingPage from './features/LandingPage/LandingPage';
+import MonthlyLeaderboard from './features/Leaderboard/MonthlyLeaderboard';
+import TopLeadersModal from './shared/TopLeadersModal';
 
 const AppStack = createNativeStackNavigator();
 
 function AppRouter() {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
+	const [modalVisible, setModalVisible] = useState(false);
 
 	const [loading, setLoading] = useState(true);
 
@@ -164,6 +167,13 @@ function AppRouter() {
 							title: 'Leaderboards', headerRight: () => <LeaderBoardFilter />,
 							headerStyle: {
 								backgroundColor: '#5d5fef',
+							},
+							headerTintColor: '#FFFF',
+						}} />
+						<AppStack.Screen name="MonthlyLeaderboard" component={MonthlyLeaderboard} options={{
+							title: 'Leaderboards',
+							headerStyle: {
+								backgroundColor: '#FCAB00',
 							},
 							headerTintColor: '#FFFF',
 						}} />
