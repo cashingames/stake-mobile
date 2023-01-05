@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView, StatusBar } from 'react-native';
+import { Text, View, ScrollView, StatusBar, Image, Pressable } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import PageLoading from '../../shared/PageLoading';
 import OtherLeaders from '../../shared/OtherLeaders';
+import Constants from 'expo-constants';
 import {
     getGlobalLeadersByDate,
 } from '../CommonSlice';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
-import LottieAnimations from '../../shared/LottieAnimations';
-import MonthlyLeader from '../../shared/MonthlyLeader';
 import TopLeadersModal from '../../shared/TopLeadersModal';
-import { formatNumber } from '../../utils/stringUtl';
-// import MonthlyTopLeaders from '../../shared/MonthlyTopLeaders';
+import { formatNumber, isTrue } from '../../utils/stringUtl';
+import { Ionicons } from '@expo/vector-icons';
+import OtherMonthlyLeaders from '../../shared/OtherMonthlyLeaders';
 
 
 export default function MonthlyLeaderboard({ navigation }) {
@@ -74,26 +75,28 @@ export default function MonthlyLeaderboard({ navigation }) {
     );
 
     if (loading) {
-        return <PageLoading spinnerColor="#0000ff" backgroundColor='#FCAB00'
+        return <PageLoading spinnerColor="#0000ff" backgroundColor='#701F88'
         />
     }
 
     return (
-        <View style={styles.container}>
-            <ScrollView>
-                <Text style={styles.prizeTitle} onPress={() => setModalVisible(true)}> View prize pool</Text>
-                <View style={styles.animation}>
-                    <LottieAnimations
-                        animationView={require('../../../assets/gamepadii.json')}
-                        width={normalize(200)}
-                        height={normalize(200)}
-                    />
-                </View>
-                <Text style={styles.title}>Top Players for the month</Text>
-                {/* <Text style={styles.prizeTitle} onPress={() => setModalVisible(true)}> View prize pool</Text> */}
-                <MonthlyGlobalLeaderboard leaders={leaders} />
-                <TopLeadersModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
-            </ScrollView>
+        <View style={styles.linearContainer}>
+            <LinearGradient
+                colors={['#701F88', '#752A00']}
+                style={styles.container}
+            >
+                <ScrollView>
+                    <View style={styles.prizeHeaderContainer}>
+                        <Text style={styles.prizeHeaderText}>Monthly Leaders</Text>
+                        <Pressable style={styles.prizeContainer}>
+                            <Text style={styles.prizeTitle} onPress={() => setModalVisible(true)}>Prize pool</Text>
+                            <Ionicons name="information-circle-outline" size={16} color="#FFFF" style={styles.icon} />
+                        </Pressable>
+                    </View>
+                    <MonthlyGlobalLeaderboard leaders={leaders} />
+                    <TopLeadersModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
+                </ScrollView>
+            </LinearGradient>
         </View>
     )
 }
@@ -103,7 +106,20 @@ function MonthlyGlobalLeaderboard({ leaders }) {
     return (
         <View style={styles.global}>
             <MonthlyTopLeaders leaders={leaders} />
-            <OtherLeaders leaders={leaders} otherStyles={styles.otherLeaders} />
+            <LinearGradient
+                colors={['#F5870F', '#770D0F']}
+                style={styles.rankLinear}
+            >
+                <Text style={styles.linearInfo}>Climb up th leaderboard to win cash prizes at the end of the month. Click on prize pool above to see cash prizes to be won</Text>
+                {/* <Text style={styles.rankText}>Your current rank</Text>
+                <View style={styles.pointPosition}>
+                    <Text style={styles.userPoint}>95pts</Text>
+                    <View style={styles.userPositionContainer}>
+                        <Text style={styles.userPosition}>13</Text>
+                    </View>
+                </View> */}
+            </LinearGradient>
+            <OtherMonthlyLeaders leaders={leaders} otherStyles={styles.otherLeaders} />
         </View>
 
     )
@@ -116,123 +132,93 @@ function MonthlyTopLeaders({ leaders }) {
     const thirdLeader = topLeaders[2] ?? { username: "..." };
     return (
         <View style={styles.contentContainer}>
-            <View style={styles.content}>
-                <MonthlyLeader
-                    podPosition={require('../../../assets/images/month-pod3.png')}
-                    name={`${thirdLeader.username}`}
-                    point={`${formatNumber(thirdLeader.points ? `${thirdLeader.points}` : 0)} pts`}
-                    avatar={thirdLeader.avatar}
-                    styleProp={styles.others}
-                    avatarProp={styles.otherAvatar}
-                    stage={styles.stage}
-                />
-                <MonthlyLeader
-                    podPosition={require('../../../assets/images/month-pod1.png')}
-                    name={`${firstLeader.username}`}
-                    point={`${formatNumber(firstLeader.points ? `${firstLeader.points}` : 0)} pts`}
-                    avatar={firstLeader.avatar}
-                    styleProp={styles.winner}
-                    avatarProp={styles.avatar}
-                    stage={styles.winnerStage}
+            <MonthlyLeader
+                position={formatNumber(3)}
+                name={`${thirdLeader.username}`}
+                point={`${formatNumber(thirdLeader.points ? `${thirdLeader.points}` : 0)} pts`}
+                avatar={thirdLeader.avatar}
+                avatarProp={styles.thirdAvatar}
+                positionProp={styles.thirdPosition}
+                source={require("../../../assets/images/month-crown.png")}
+                crownProp={styles.crowns}
+            />
+            <MonthlyLeader
+                position={formatNumber(1)}
+                name={`${firstLeader.username}`}
+                point={`${formatNumber(firstLeader.points ? `${firstLeader.points}` : 0)} pts`}
+                avatar={firstLeader.avatar}
+                avatarProp={styles.avatar}
+                positionProp={styles.winnerPosition}
+                source={require("../../../assets/images/month-winner-crown.png")}
+                crownProp={styles.winnerCrown}
 
-                />
-                <MonthlyLeader
-                    podPosition={require('../../../assets/images/month-pod2.png')}
-                    name={`${secondLeader.username}`}
-                    point={`${formatNumber(secondLeader.points ? `${secondLeader.points}` : 0)} pts`}
-                    avatar={secondLeader.avatar}
-                    styleProp={styles.others}
-                    avatarProp={styles.otherAvatar}
-                    stage={styles.stage}
+            />
+            <MonthlyLeader
+                position={formatNumber(2)}
+                name={`${secondLeader.username}`}
+                point={`${formatNumber(secondLeader.points ? `${secondLeader.points}` : 0)} pts`}
+                avatar={secondLeader.avatar}
+                avatarProp={styles.secondAvatar}
+                positionProp={styles.secondPosition}
+                source={require("../../../assets/images/month-crown.png")}
+                crownProp={styles.crowns}
 
-                />
-            </View>
+            />
         </View>
     )
+}
+
+function MonthlyLeader({ avatar, position, positionProp, name, point, crownProp, avatarProp, source }) {
+    return (
+        <View style={styles.winner}>
+            <Image
+                style={crownProp}
+                source={source}
+            />
+            <View style={styles.avatarContainer}>
+                <Image
+                    style={avatarProp}
+                    source={isTrue(avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${avatar}` } : require("../../../assets/images/user-icon.png")}
+                />
+                <View style={positionProp}>
+                    <Text style={styles.position}>{position}</Text>
+                </View>
+            </View>
+            <Text style={styles.leaderName}>{name}</Text>
+            <Text style={styles.point}>{point}</Text>
+        </View>
+
+    );
 }
 
 const styles = EStyleSheet.create({
     contentContainer: {
         display: 'flex',
-        backgroundColor: '#5d5fef',
-        flexDirection: 'column',
-        paddingTop: responsiveScreenWidth(3.5),
-        paddingHorizontal: responsiveScreenWidth(7),
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
-        borderColor: Platform.OS === 'ios' ? '#E0E0E0' : '#FFFF'
+        flexDirection: 'row',
+        marginVertical: '2rem',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end'
+    },
+    prizeHeaderContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    prizeContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    prizeHeaderText: {
+        fontSize: '1rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
     },
     prizeTitle: {
         fontSize: '.6rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
         textDecoration: 'underline',
-        marginLeft: 'auto',
-        marginTop: normalize(30)
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22,
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: '#5d5fef',
-        borderRadius: 20,
-        paddingHorizontal: normalize(30),
-        paddingVertical: normalize(18),
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    buttonClose: {
-        marginLeft: 'auto',
-        marginBottom: normalize(20)
-    },
-    closeStyle: {
-        fontSize: '0.6rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-    },
-    modalItems: {
-        marginTop: normalize(25)
-    },
-    resultContainer: {
-        alignItems: 'center'
-    },
-    modalItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: normalize(10)
-
-    },
-    modalWinnerItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: normalize(18)
-    },
-    modalTopText: {
-        fontSize: '1rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        marginBottom: normalize(10)
-    },
-    winnerItemText: {
-        fontSize: '0.9rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-bold',
-    },
-    itemText: {
-        fontSize: '0.7rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
+        marginRight: '.2rem'
     },
     content: {
         display: 'flex',
@@ -241,97 +227,155 @@ const styles = EStyleSheet.create({
         alignItems: 'flex-end',
         marginTop: responsiveScreenWidth(4),
     },
-    title: {
-        fontSize: '.8rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-bold',
-        textAlign: 'center'
+    avatarContainer: {
+        alignItems: 'center',
+        marginBottom: '.7rem'
+    },
+    crowns: {
+        width: 30,
+        height: 30,
+    },
+    winnerCrown: {
+        width: 50,
+        height: 50,
     },
     winner: {
         alignItems: 'center',
     },
-    others: {
-        alignItems: 'center',
-        position: 'absolute',
-        bottom: 75
-    },
     avatar: {
-        width: normalize(55),
-        height: normalize(55),
+        width: 120,
+        height: 120,
         backgroundColor: '#FFFF',
-        borderRadius: 50,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: '#FFD700'
     },
-    otherAvatar: {
-        width: normalize(40),
-        height: normalize(40),
+    secondAvatar: {
+        width: 70,
+        height: 70,
         backgroundColor: '#FFFF',
-        borderRadius: 50,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: '#2D9CDB'
     },
-    viewContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '2rem'
-    },
-    viewText: {
-        fontSize: '.6rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-regular',
+    thirdAvatar: {
+        width: 70,
+        height: 70,
+        backgroundColor: '#FFFF',
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: '#9C3DB8'
     },
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
     },
-    stage: {
-        width: normalize(88),
-        height: normalize(88),
-    },
-    winnerStage: {
-        width: normalize(98),
-        height: normalize(98),
-    },
 
-
+    linearContainer: {
+        flex: 1,
+    },
     container: {
         flex: 1,
-        backgroundColor: '#FCAB00',
-        paddingHorizontal: normalize(18)
-    },
-    contentContainer: {
-        display: 'flex',
-        backgroundColor: '#5d5fef',
-        flexDirection: 'column',
-        paddingTop: responsiveScreenWidth(3.5),
-        paddingHorizontal: responsiveScreenWidth(2),
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
-        borderColor: Platform.OS === 'ios' ? '#E0E0E0' : '#FFFF'
-    },
-    animation: {
-        alignItems: 'center'
+        paddingHorizontal: normalize(18),
+        paddingVertical: '1rem'
     },
     global: {
-        paddingHorizontal: normalize(15),
-        marginBottom: normalize(10),
+        // // paddingHorizontal: normalize(15),
+        // marginBottom: normalize(10),
     },
-    title: {
-        fontSize: '0.9rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        lineHeight: '2rem',
+    position: {
+        color: '#000000',
         textAlign: 'center',
-        marginVertical: normalize(10)
+        fontFamily: 'graphik-bold',
+        fontSize: '.6rem'
     },
-    dateRange: {
-        borderRadius: 5,
-        borderColor: '#CDD4DF',
-        borderWidth: 1,
+    secondPosition: {
+        backgroundColor: '#2D9CDB',
+        width: '.8rem',
+        height: '.8rem',
+        borderRadius: 50,
+        justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: responsiveScreenWidth(5),
-        marginTop: responsiveScreenWidth(3)
+        position: 'absolute',
+        bottom: -8
     },
-    otherLeaders: {
-        backgroundColor: '#5d5fef',
+    thirdPosition: {
+        backgroundColor: '#9C3DB8',
+        width: '.8rem',
+        height: '.8rem',
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: -8
     },
+    winnerPosition: {
+        backgroundColor: '#FFD700',
+        width: '.8rem',
+        height: '.8rem',
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: -8
+    },
+    point: {
+        color: '#FFFF',
+        fontSize: '0.6rem',
+        fontFamily: 'graphik-medium',
+    },
+    leaderName: {
+        color: '#FFFF',
+        fontSize: '0.6rem',
+        fontFamily: 'graphik-medium',
+        width: responsiveScreenWidth(22),
+        marginBottom: '.2rem',
+        textAlign: 'center',
+
+    },
+    rankLinear: {
+        borderRadius: 18,
+        paddingHorizontal: normalize(13),
+        paddingVertical: normalize(10),
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop:'1rem',
+        marginBottom:'2rem'
+    },
+    linearInfo: {
+        color: '#FFFF',
+        fontSize: '0.65rem',
+        fontFamily: 'graphik-medium',
+        textAlign:'center',
+        lineHeight:'1rem'
+    },
+    rankText: {
+        color: '#FFFF',
+        fontSize: '0.75rem',
+        fontFamily: 'graphik-medium',
+    },
+    pointPosition: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    userPoint: {
+        color: '#FFFF',
+        fontSize: '0.6rem',
+        fontFamily: 'graphik-medium',
+    },
+    userPositionContainer: {
+        borderRadius: 50,
+        borderWidth: 1,
+        borderColor: '#A32725',
+        marginLeft:'.4rem',
+        padding:'.4rem'
+    },
+    userPosition: {
+        color: '#FFFF',
+        fontSize: '0.6rem',
+        fontFamily: 'graphik-medium',
+    },
+
 });

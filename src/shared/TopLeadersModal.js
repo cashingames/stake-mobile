@@ -86,7 +86,7 @@ const styles = EStyleSheet.create({
     },
     modalView: {
         margin: 20,
-        backgroundColor: '#5d5fef',
+        backgroundColor: '#66142E',
         borderRadius: 20,
         paddingHorizontal: normalize(30),
         paddingVertical: normalize(18),

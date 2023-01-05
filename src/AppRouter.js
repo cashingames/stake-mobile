@@ -171,9 +171,9 @@ function AppRouter() {
 							headerTintColor: '#FFFF',
 						}} />
 						<AppStack.Screen name="MonthlyLeaderboard" component={MonthlyLeaderboard} options={{
-							title: 'Leaderboards',
+							title: 'Leaderboard',
 							headerStyle: {
-								backgroundColor: '#FCAB00',
+								backgroundColor: '#701F88',
 							},
 							headerTintColor: '#FFFF',
 						}} />

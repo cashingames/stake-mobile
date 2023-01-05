@@ -180,9 +180,9 @@ function getDomain() {
 }
 
 function getAssetsBaseUrl() {
-  if (isDevelopment || env === "preview") {
-    return 'https://stg-api.cashingames.com';
-  }
+  // if (isDevelopment || env === "preview") {
+  //   return 'https://stg-api.cashingames.com';
+  // }
 
   return 'https://api.cashingames.com';
 }
