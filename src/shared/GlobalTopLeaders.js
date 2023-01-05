@@ -20,8 +20,8 @@ function GlobalTopLeaders({ leaders }) {
         <View style={styles.contentContainer}>
             <View style={styles.headerContainer}>
                 <View></View>
-                <Text style={styles.title}>Top Players</Text>
-                <Ionicons name="information-circle" size={20} color="#FFFF" />
+                {/* <Text style={styles.title}>Top Players</Text> */}
+                <Text style={styles.extendedText} onPress={() => navigation.navigate('Leaderboard')}> Click to view more</Text>
             </View>
             <View style={styles.content}>
                 <TopLeader
@@ -50,7 +50,7 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#FAC502',
-        paddingHorizontal: responsiveScreenWidth(6.5),
+        paddingHorizontal: responsiveScreenWidth(5.5),
         paddingTop: responsiveScreenWidth(3),
         // borderRadius: 15,
         borderTopRightRadius: 10,
@@ -63,7 +63,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
-        marginTop: responsiveScreenWidth(4),
+        paddingTop: responsiveScreenWidth(6.5),
     },
     title: {
         // textAlign: 'center',
@@ -77,6 +77,12 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '2rem'
+    },
+    extendedText: {
+        fontSize: '.6rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-regular',
+        textDecoration: 'underline',
     },
     viewText: {
         // textAlign: 'center',

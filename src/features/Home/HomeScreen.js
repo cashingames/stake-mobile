@@ -124,10 +124,10 @@ const HomeScreen = () => {
                 <View style={styles.container}>
                     <SelectGameMode />
                     <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
-                        <GlobalTopLeadersHero />
                         <MonthlyTopLeadersHero />
+                        <GlobalTopLeadersHero />
                         <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
-                    </SwiperFlatList>                  
+                    </SwiperFlatList>
                 </View>
             </ScrollView>
         </View>
@@ -420,12 +420,12 @@ const styles = EStyleSheet.create({
         marginTop: Platform.OS === 'ios' ? normalize(5) : normalize(1),
     },
     leaderHeader: {
-        textAlign:'center',
+        textAlign: 'center',
         fontSize: '0.7rem',
         color: '#EF2F55',
         fontFamily: 'graphik-bold',
         textTransform: 'uppercase',
-        marginBottom:  normalize(5),
+        marginBottom: normalize(5),
 
     }
 });

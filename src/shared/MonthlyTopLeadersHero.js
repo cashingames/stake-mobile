@@ -30,7 +30,7 @@ export default function MonthlyTopLeadersHero() {
         date.getMonth(),
     );
 
-    
+
 
     useFocusEffect(
         React.useCallback(() => {
@@ -43,13 +43,17 @@ export default function MonthlyTopLeadersHero() {
 
     return (
         <View style={styles.leaderboard}>
-            <MonthlyTopLeaders leaders={leaders} />
-            <View style={styles.extended}>
-                    <Text onPress={() => navigation.navigate('MonthlyLeaderboard')}>
-                        <Text style={styles.extendedText}>View More</Text>
-                    </Text>
-                </View>
+            <View style={styles.leaderboardHeader}>
+                <Text style={styles.title}>Top Players for the month</Text>
+                <Text style={styles.extendedText} onPress={() => navigation.navigate('MonthlyLeaderboard')}>View More</Text>
             </View>
+            <MonthlyTopLeaders leaders={leaders} />
+            {/* <View style={styles.extended}>
+                <Text onPress={() => navigation.navigate('MonthlyLeaderboard')}>
+                    <Text style={styles.extendedText}>View More</Text>
+                </Text>
+            </View> */}
+        </View>
     )
 }
 
@@ -62,10 +66,10 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: normalize(8)
+        marginBottom: normalize(3)
     },
     title: {
-        fontSize: '.9rem',
+        fontSize: '.8rem',
         lineHeight: '1.3rem',
         color: '#151C2F',
         fontFamily: 'graphik-bold',
@@ -78,9 +82,9 @@ const styles = EStyleSheet.create({
     extended: {
         display: 'flex',
         alignItems: 'center',
-        backgroundColor:'#5d5fef',
-        justifyContent:'center',
-        paddingVertical:normalize(5)
+        backgroundColor: '#5d5fef',
+        justifyContent: 'center',
+        paddingVertical: normalize(5)
     },
 
 })
