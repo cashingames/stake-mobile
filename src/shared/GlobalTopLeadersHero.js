@@ -25,12 +25,14 @@ export default function GlobalTopLeadersHero() {
     return (
         // <Animated.View style={styles.leaderboard} entering={BounceInDown.duration(2000)}>
         <View style={styles.leaderboard}>
-            <GlobalTopLeaders leaders={leaders} />
-            <View style={styles.extended}>
-                <Text onPress={() => navigation.navigate('Leaderboard')}>
-                    <Text style={styles.extendedText}> See Extended Leaderboard</Text>
-                </Text>
+            <View style={styles.leaderboardHeader}>
+                <Text style={styles.title}>Daily Top Players</Text>
+                {/* <Text style={styles.extendedText} onPress={() => navigation.navigate('Leaderboard')}>Extended Leaderboard</Text> */}
             </View>
+            <GlobalTopLeaders leaders={leaders} />
+            {/* <View style={styles.extended}>
+                
+            </View> */}
         </View>
         // </Animated.View>
     )
@@ -45,13 +47,14 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: normalize(8)
+        marginBottom: normalize(3),
     },
     title: {
-        fontSize: '.9rem',
+        fontSize: '.8rem',
         lineHeight: '1.3rem',
         color: '#151C2F',
         fontFamily: 'graphik-bold',
+        marginLeft:'.5rem'
     },
     extendedText: {
         fontSize: '0.65rem',
@@ -61,9 +64,9 @@ const styles = EStyleSheet.create({
     extended: {
         display: 'flex',
         alignItems: 'center',
-        backgroundColor:'#FAC502',
-        justifyContent:'center',
-        paddingVertical:normalize(5)
+        backgroundColor: '#FAC502',
+        justifyContent: 'center',
+        paddingVertical: normalize(5)
     },
 
 })

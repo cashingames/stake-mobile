@@ -4,8 +4,10 @@ import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatCurrency, formatNumber } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import MonthlyLeader from './MonthlyLeader';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
 import LottieAnimations from './LottieAnimations';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
@@ -16,11 +18,18 @@ function MonthlyTopLeaders({ leaders }) {
     const secondLeader = topLeaders[1] ?? { username: "..." };
     const thirdLeader = topLeaders[2] ?? { username: "..." };
     return (
-        <View style={styles.contentContainer}>
+        <View >
+              <LinearGradient
+                colors={['#EF2F55', '#5D5FEF']}
+                style={styles.contentContainer}
+            >
             <View style={styles.headerContainer}>
                 <View></View>
-                <Text style={styles.title}>Top Players for the month</Text>
-                <Text style={styles.prizeTitle} onPress={() => setModalVisible(true)}> View prize pool</Text>
+                {/* <Text style={styles.title}>Top Players for the month</Text> */}
+                <Pressable onPress={() => setModalVisible(true)} style={styles.poolContainer}>
+                    <Text style={styles.prizeTitle}>Prize pool</Text>
+                    <Ionicons name="information-circle-outline" size={16} color="#FFFF" style={styles.icon} />
+                </Pressable>
             </View>
             <View style={styles.content}>
                 <MonthlyLeader
@@ -52,61 +61,62 @@ function MonthlyTopLeaders({ leaders }) {
                     stage={styles.stage}
 
                 />
-              <TopLeadersModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
+                <TopLeadersModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
             </View>
+            </LinearGradient>
         </View>
     )
 }
 
-const TopLeadersModal = ({setModalVisible, modalVisible}) => {
+const TopLeadersModal = ({ setModalVisible, modalVisible }) => {
     return (
         <View style={styles.onView}>
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setModalVisible(!modalVisible);
-            }}
-        >
-            <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setModalVisible(!modalVisible)}
-                    >
-                        <Text style={styles.closeStyle}>Close x</Text>
-                    </Pressable>
-                    <Text style={styles.modalTopText}>Monthly Leaders Prizes</Text>
-                    <View style={styles.resultContainer}>
-                        <LottieAnimations
-                            animationView={require('../../assets/leaderboard.json')}
-                            width={normalize(170)}
-                            height={normalize(170)}
-                        />
-                    </View>
-                    <View style={styles.modalItems}>
-                        <View style={styles.modalWinnerItem}>
-                            <Text style={styles.winnerItemText}>Grand Prize</Text>
-                            <Text style={styles.winnerItemText}>&#8358;{formatCurrency(5000)}</Text>
-
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setModalVisible(!modalVisible)}
+                        >
+                            <Text style={styles.closeStyle}>Close x</Text>
+                        </Pressable>
+                        <Text style={styles.modalTopText}>Monthly Leaders Prizes</Text>
+                        <View style={styles.resultContainer}>
+                            <LottieAnimations
+                                animationView={require('../../assets/leaderboard.json')}
+                                width={normalize(170)}
+                                height={normalize(170)}
+                            />
                         </View>
-                        <View style={styles.modalItem}>
-                            <Text style={styles.itemText}>2nd Prize</Text>
-                            <Text style={styles.itemText}>&#8358;{formatCurrency(3000)}</Text>
+                        <View style={styles.modalItems}>
+                            <View style={styles.modalWinnerItem}>
+                                <Text style={styles.winnerItemText}>Grand Prize</Text>
+                                <Text style={styles.winnerItemText}>&#8358;{formatCurrency(5000)}</Text>
 
-                        </View>
-                        <View style={styles.modalItem}>
-                            <Text style={styles.itemText}>3rd Prize</Text>
-                            <Text style={styles.itemText}>&#8358;{formatCurrency(2000)}</Text>
+                            </View>
+                            <View style={styles.modalItem}>
+                                <Text style={styles.itemText}>2nd Prize</Text>
+                                <Text style={styles.itemText}>&#8358;{formatCurrency(3000)}</Text>
 
+                            </View>
+                            <View style={styles.modalItem}>
+                                <Text style={styles.itemText}>3rd Prize</Text>
+                                <Text style={styles.itemText}>&#8358;{formatCurrency(2000)}</Text>
+
+                            </View>
                         </View>
                     </View>
                 </View>
-            </View>
-        </Modal>
-    </View>
+            </Modal>
+        </View>
     )
 }
 
@@ -115,10 +125,10 @@ export default MonthlyTopLeaders;
 const styles = EStyleSheet.create({
     contentContainer: {
         display: 'flex',
-        backgroundColor: '#5d5fef',
+        // backgroundColor: '#5d5fef',
         flexDirection: 'column',
         paddingTop: responsiveScreenWidth(3.5),
-        paddingHorizontal: responsiveScreenWidth(7),
+        paddingHorizontal: responsiveScreenWidth(1),
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
         borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
@@ -128,7 +138,8 @@ const styles = EStyleSheet.create({
         fontSize: '.6rem',
         color: '#FFFF',
         fontFamily: 'graphik-regular',
-        textDecoration:'underline'
+        textDecoration: 'underline',
+        marginRight:'.3rem'
     },
     centeredView: {
         flex: 1,
@@ -239,6 +250,11 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'
+    },
+    poolContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight:'.4rem'
     },
     stage: {
         width: normalize(88),

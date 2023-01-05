@@ -1,16 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { Image, Platform, Pressable, Text, View } from "react-native";
+import { Image, Platform, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch } from "react-redux";
 import Animated, { BounceInLeft } from 'react-native-reanimated';
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { isTrue } from "../../utils/stringUtl";
 import { challengeTopLeaders } from "../Games/GameSlice";
-import { Ionicons } from "@expo/vector-icons";
 
 const ChallengeWeeklyTopLeaders = ({ challengeLeaders }) => {
-    const navigation = useNavigation();
     const dispatch = useDispatch();
 
     useFocusEffect(
@@ -22,15 +20,12 @@ const ChallengeWeeklyTopLeaders = ({ challengeLeaders }) => {
 
     return (
         <Animated.View style={styles.leaderboard} entering={BounceInLeft.duration(2000)}>
-            <View style={styles.container}>              
+            <View style={styles.container}>
+            <View style={styles.leaderboardHeader}>
+                <Text style={styles.title}>Top Challengers</Text>
+            </View>
                 <TopWeeklyChallengers challengeLeaders={challengeLeaders} />
             </View>
-            <View style={styles.extended}>
-                    <Text onPress={() => navigation.navigate('Leaderboard')}>
-                        <Text style={styles.extendedText}>View More</Text>
-                    </Text>
-                    {/* <Ionicons name="md-arrow-forward-sharp" size={24} color="#EF2F55" /> */}
-                </View>  
         </Animated.View>
 
 
@@ -38,6 +33,8 @@ const ChallengeWeeklyTopLeaders = ({ challengeLeaders }) => {
 }
 
 const TopWeeklyChallengers = ({ challengeLeaders }) => {
+    const navigation = useNavigation();
+
     const topLeaders = challengeLeaders?.slice(0, 3) ?? null;
     const firstLeader = topLeaders[0] ?? { username: "..." };
     const secondLeader = topLeaders[1] ?? { username: "..." };
@@ -46,12 +43,8 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
     return (
         <View style={styles.contentContainer}>
             <View style={styles.headerContainer}>
-                {/* <Ionicons name="information-circle" size={20} color="#FFFF" /> */}
-                <Text style={styles.topChallengersHeader}>Top Challengers</Text>
-                {/* <Pressable style={styles.viewContainer}>
-                    <Text style={styles.viewText}>View more</Text>
-                    <Ionicons name="md-arrow-forward-sharp" size={18} color="#FFFF" />
-                </Pressable> */}
+                <View></View>
+                <Text style={styles.extendedText} onPress={() => navigation.navigate('Leaderboard')}> Click to view more</Text>
             </View>
             <View style={styles.topChallengersContainer}>
                 <TopWeeklyChallenger
@@ -114,10 +107,24 @@ const styles = EStyleSheet.create({
     container: {
         // marginRight: normalize(10)
     },
+    leaderboardHeader: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: normalize(3),
+    },
+    title: {
+        fontSize: '.8rem',
+        lineHeight: '1.3rem',
+        color: '#151C2F',
+        fontFamily: 'graphik-bold',
+        marginLeft:'.5rem'
+    },
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'space-between'
     },
     topChallengersHeader: {
         textAlign: 'center',
@@ -139,7 +146,7 @@ const styles = EStyleSheet.create({
         backgroundColor: '#701F88',
         flexDirection: 'column',
         paddingTop: responsiveScreenWidth(3),
-        paddingHorizontal: responsiveScreenWidth(6),
+        paddingHorizontal: responsiveScreenWidth(2),
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
         borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
@@ -148,7 +155,7 @@ const styles = EStyleSheet.create({
     topChallengersContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginTop: normalize(5),
+        paddingTop: responsiveScreenWidth(3.5),
         alignItems: 'flex-end',
     },
     topChallengerContainer: {
@@ -199,15 +206,17 @@ const styles = EStyleSheet.create({
         height: normalize(98),
     },
     extendedText: {
-        fontSize: '0.7rem',
-        color: '#EF2F55',
-        fontFamily: 'graphik-medium',
+        fontSize: '.6rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-regular',
+        marginRight:'.3rem',
+        textDecoration: 'underline',
     },
     extended: {
         display: 'flex',
         alignItems: 'center',
-        backgroundColor:'#701F88',
-        justifyContent:'center',
-        paddingVertical:normalize(5)
+        backgroundColor: '#701F88',
+        justifyContent: 'center',
+        paddingVertical: normalize(5)
     },
 })

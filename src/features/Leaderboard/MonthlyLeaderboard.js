@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, ScrollView, StatusBar, Image, Pressable } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import PageLoading from '../../shared/PageLoading';
-import OtherLeaders from '../../shared/OtherLeaders';
 import Constants from 'expo-constants';
 import {
     getGlobalLeadersByDate,
