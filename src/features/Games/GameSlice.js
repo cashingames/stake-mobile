@@ -158,6 +158,7 @@ let initialState = {
     challengeDetails: {},
     gameStakes: [],
     withStaking: false,
+    endedWithoutStaking:null,
     correctCount: null,
 }
 
@@ -184,6 +185,9 @@ export const GameSlice = createSlice({
         },
         unselectFriend: (state) => {
             state.selectedFriend = null;
+        },
+        showStakingPopup: (state) => {
+            state.endedWithoutStaking = true;
         },
         setGameDuration: (state, action) => {
             state.gameDuration = action.payload;
@@ -336,7 +340,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, setAmountWon, setCorrectCount, setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend, setWithStaking
+    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend, setWithStaking,showStakingPopup
 } = GameSlice.actions
 
 

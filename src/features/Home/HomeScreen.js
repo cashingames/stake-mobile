@@ -26,8 +26,8 @@ import SelectGameMode from '../Games/SelectGameMode';
 import ChallengeWeeklyTopLeaders from '../Leaderboard/ChallengeWeeklyTopLeaders';
 import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import Carousel from 'react-native-reanimated-carousel';
 import MonthlyTopLeadersHero from '../../shared/MonthlyTopLeadersHero';
+import Stakingpopup from '../../shared/Stakingpopup';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -38,18 +38,28 @@ const HomeScreen = () => {
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
     const challengeLeaders = useSelector(state => state.game.challengeLeaders)
+    const endedWithoutStaking = useSelector(state => state.game.withStaking);
+    console.log(endedWithoutStaking,'staking')
+
+    const [modalVisible, setModalVisible] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
-        console.info('refreshing')
+        // console.info('refreshing')
         setRefreshing(true);
         dispatch(getUser())
         dispatch(getCommonData())
         dispatch(getLiveTriviaStatus())
         wait(2000).then(() => setRefreshing(false));
     }, []);
-
-
+    
+    useEffect(() => {
+		// Change the state every second or the time given by User.
+		const interval = setInterval(() => {
+			setModalVisible(true);
+		}, 300000);
+		return () => clearInterval(interval);
+	}, []);
 
     useEffect(() => {
         const _2 = dispatch(getCommonData());
@@ -77,7 +87,7 @@ const HomeScreen = () => {
                 return;
             }
 
-            console.info('home screen focus effect')
+            // console.info('home screen focus effect')
 
             if (Constants.manifest.extra.isDevelopment) {
                 return;
@@ -129,6 +139,7 @@ const HomeScreen = () => {
                         <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
                     </SwiperFlatList>
                 </View>
+                <Stakingpopup setModalVisible={setModalVisible} modalVisible={modalVisible} />
             </ScrollView>
         </View>
     );
@@ -154,7 +165,7 @@ const UserDetails = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            console.info('UserDetails focus effect')
+            // console.info('UserDetails focus effect')
             dispatch(getUser());
         }, [])
     );
@@ -223,7 +234,7 @@ const LiveTriviaBanner = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            console.info('LiveTriviaBanner focus effect')
+            // console.info('LiveTriviaBanner focus effect')
             dispatch(getLiveTriviaStatus());
 
         }, [])

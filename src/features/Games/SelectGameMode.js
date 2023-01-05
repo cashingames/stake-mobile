@@ -15,7 +15,7 @@ const SelectGameMode = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const gameModes = useSelector(state => state.common.gameModes);
-    console.log(gameModes)
+    // console.log(gameModes)
 
     const onSelectGameMode = (mode) => {
         dispatch(setGameMode(mode));
