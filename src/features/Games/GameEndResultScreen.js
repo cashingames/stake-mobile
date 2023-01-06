@@ -9,10 +9,8 @@ import UserName from '../../shared/UserName';
 import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { getUser } from '../Auth/AuthSlice';
-import TopLeadersModal from '../../shared/TopLeadersModal';
 import analytics from '@react-native-firebase/analytics';
 import StakeWinnings from '../../shared/StakeWinnings';
-import { showStakingPopup } from './GameSlice';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -43,18 +41,7 @@ export default function GameEndResultScreen({ navigation }) {
 			'id': user.username,
 			'phone_number': user.phoneNumber,
 			'email': user.email
-		})
-		// if (!hasActivePlan) {
-		// 	analytics().logEvent('exhibition_game_plan_exhausted', {
-		// 		'id': user.username,
-		// 		'phone_number': user.phoneNumber,
-		// 		'email': user.email
-		// 	})
-		// 	openBottomSheet();
-		// 	console.log("NO GAME", hasActivePlan)
-		// 	return;
-		// }
-		// setLoading(true);
+		});
 		navigation.navigate("GameInstructions")
 		setLoading(false);
 
@@ -86,7 +73,8 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	const onHomeButtonClick = () => {
-		navigation.navigate('Home')
+		console.log("showing staking pop", !withStaking)
+		navigation.navigate('Home', { showStakingAdvert: !withStaking})
 	}
 	useFocusEffect(
 		React.useCallback(() => {

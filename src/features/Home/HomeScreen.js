@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, Image, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, {
@@ -31,15 +31,15 @@ import Stakingpopup from '../../shared/Stakingpopup';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
-const HomeScreen = () => {
+const HomeScreen = ({route}) => {
 
     const dispatch = useDispatch();
+
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
-    const challengeLeaders = useSelector(state => state.game.challengeLeaders)
-    const endedWithoutStaking = useSelector(state => state.game.withStaking);
-    console.log(endedWithoutStaking,'staking')
+    const challengeLeaders = useSelector(state => state.game.challengeLeaders);
+    const showStakingAdvert = route.params?.showStakingAdvert ?? false;
 
     const [modalVisible, setModalVisible] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
@@ -52,14 +52,6 @@ const HomeScreen = () => {
         dispatch(getLiveTriviaStatus())
         wait(2000).then(() => setRefreshing(false));
     }, []);
-    
-    useEffect(() => {
-		// Change the state every second or the time given by User.
-		const interval = setInterval(() => {
-			setModalVisible(true);
-		}, 300000);
-		return () => clearInterval(interval);
-	}, []);
 
     useEffect(() => {
         const _2 = dispatch(getCommonData());
@@ -79,6 +71,9 @@ const HomeScreen = () => {
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }, [minVersionCode]);
 
+    useEffect(()=>{
+        setModalVisible(showStakingAdvert);
+    }, [showStakingAdvert])
 
     useFocusEffect(
         React.useCallback(() => {
@@ -113,7 +108,6 @@ const HomeScreen = () => {
             }
         }, [])
     );
-
 
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
