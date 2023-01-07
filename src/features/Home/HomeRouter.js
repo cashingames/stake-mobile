@@ -184,6 +184,29 @@ function CustomDrawerContent(props) {
                     <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Leaderboards</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={() => navigation.navigate('Leaderboard')}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
+
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Get Help</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={() => navigation.navigate('Support')}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
                                 <Text style={drawStyles.itemLabel}>Invite Friends</Text>
                                 <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                             </View>}
@@ -193,17 +216,6 @@ function CustomDrawerContent(props) {
                         labelContainerStyle
                     />
 
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}> Get Help</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('Support')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
                 </View>
             </ScrollView>
             <View style={drawStyles.logoutContainer}>
@@ -253,8 +265,8 @@ const styles = EStyleSheet.create({
         borderRadius: 100,
         width: normalize(22),
         height: normalize(22),
-        alignItems:'center',
-        justifyContent:'center',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     number: {
         textAlign: 'center',
@@ -282,7 +294,7 @@ const drawStyles = EStyleSheet.create({
         justifyContent: 'flex-end',
         borderBottomWidth: 1,
         borderBottomColor: "rgba(0, 0, 0, 0.1)",
-        paddingTop: responsiveScreenHeight(10),
+        paddingTop: responsiveScreenHeight(6),
         paddingBottom: responsiveScreenHeight(2),
         backgroundColor: '#F2F5FF',
     },
@@ -324,7 +336,7 @@ const drawStyles = EStyleSheet.create({
     label: {
         borderBottomWidth: 1,
         borderColor: 'rgba(0, 0, 0, 0.1)',
-        paddingVertical: responsiveScreenHeight(0.7),
+        paddingVertical: responsiveScreenHeight(0.4),
     },
     item: {
         flexDirection: 'row',
@@ -356,8 +368,8 @@ const drawStyles = EStyleSheet.create({
         borderRadius: 100,
         width: normalize(24),
         height: normalize(24),
-        alignItems:'center',
-        justifyContent:'center'
+        alignItems: 'center',
+        justifyContent: 'center'
         // padding: '.1.5rem'
     },
     number: {

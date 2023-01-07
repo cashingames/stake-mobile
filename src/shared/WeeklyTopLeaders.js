@@ -125,7 +125,7 @@ const styles = EStyleSheet.create({
     contentContainer: {
         display: 'flex',
         flexDirection: 'column',
-        paddingTop: responsiveScreenWidth(4.7),
+        paddingTop: responsiveScreenWidth(3.5),
         paddingHorizontal: responsiveScreenWidth(2),
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,

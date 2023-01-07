@@ -44,7 +44,7 @@ const TopWeeklyChallengers = ({ challengeLeaders }) => {
         <View style={styles.contentContainer}>
             <View style={styles.headerContainer}>
                 <View></View>
-                <Text style={styles.extendedText} onPress={() => navigation.navigate('Leaderboard')}> Click to view more</Text>
+                {/* <Text style={styles.extendedText} onPress={() => navigation.navigate('Leaderboard')}> Click to view more</Text> */}
             </View>
             <View style={styles.topChallengersContainer}>
                 <TopWeeklyChallenger
@@ -145,7 +145,7 @@ const styles = EStyleSheet.create({
     contentContainer: {
         backgroundColor: '#701F88',
         flexDirection: 'column',
-        paddingTop: responsiveScreenWidth(3),
+        paddingTop: responsiveScreenWidth(5),
         paddingHorizontal: responsiveScreenWidth(2),
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
