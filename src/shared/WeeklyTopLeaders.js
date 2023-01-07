@@ -1,20 +1,16 @@
 import * as React from 'react';
-import { Platform, Pressable, Text, View, Modal } from 'react-native';
+import { Platform, View} from 'react-native';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
-import { formatCurrency, formatNumber } from '../utils/stringUtl';
+import { formatNumber } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import MonthlyLeader from './WeeklyLeader';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useState } from 'react';
-import LottieAnimations from './LottieAnimations';
-import { Ionicons } from '@expo/vector-icons';
 import WeeklyLeader from './WeeklyLeader';
 import PrizePoolTitle from './PrizePoolTitle';
 
 
 
 function WeeklyTopLeaders({ leaders }) {
-    const [modalVisible, setModalVisible] = useState(false);
     const topLeaders = leaders?.slice(0, 3) ?? null;
     const firstLeader = topLeaders[0] ?? { username: "..." };
     const secondLeader = topLeaders[1] ?? { username: "..." };
@@ -27,7 +23,6 @@ function WeeklyTopLeaders({ leaders }) {
             >
                 <View style={styles.headerContainer}>
                     <View></View>
-                    {/* <Text style={styles.title}>Top Players for the month</Text> */}
                   <PrizePoolTitle />
                 </View>
                 <View style={styles.content}>
@@ -60,64 +55,12 @@ function WeeklyTopLeaders({ leaders }) {
                         stage={styles.stage}
 
                     />
-                    <TopLeadersModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
                 </View>
             </LinearGradient>
         </View>
     )
 }
 
-const TopLeadersModal = ({ setModalVisible, modalVisible }) => {
-    return (
-        <View style={styles.onView}>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => setModalVisible(!modalVisible)}
-                        >
-                            <Text style={styles.closeStyle}>Close x</Text>
-                        </Pressable>
-                        <Text style={styles.modalTopText}>Weekly Prize Pool</Text>
-                        <View style={styles.resultContainer}>
-                            <LottieAnimations
-                                animationView={require('../../assets/leaderboard.json')}
-                                width={normalize(170)}
-                                height={normalize(170)}
-                            />
-                        </View>
-                        <View style={styles.modalItems}>
-                            <View style={styles.modalWinnerItem}>
-                                <Text style={styles.winnerItemText}>Grand Prize</Text>
-                                <Text style={styles.winnerItemText}>&#8358;{formatCurrency(50000)}</Text>
-
-                            </View>
-                            <View style={styles.modalItem}>
-                                <Text style={styles.itemText}>2nd Prize</Text>
-                                <Text style={styles.itemText}>&#8358;{formatCurrency(30000)}</Text>
-
-                            </View>
-                            <View style={styles.modalItem}>
-                                <Text style={styles.itemText}>3rd Prize</Text>
-                                <Text style={styles.itemText}>&#8358;{formatCurrency(20000)}</Text>
-
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-        </View>
-    )
-}
 
 export default WeeklyTopLeaders;
 
@@ -247,7 +190,7 @@ const styles = EStyleSheet.create({
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'flex-end'
     },
     poolContainer: {
         flexDirection: 'row',

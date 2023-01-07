@@ -11,9 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
-import TopLeadersModal from '../../shared/TopLeadersModal';
 import { formatNumber, isTrue } from '../../utils/stringUtl';
-import { Ionicons } from '@expo/vector-icons';
 import OtherMonthlyLeaders from '../../shared/OtherMonthlyLeaders';
 import PrizePoolTitle from '../../shared/PrizePoolTitle';
 
@@ -24,7 +22,6 @@ export default function WeeklyLeaderboard({ navigation }) {
     const leaders = useSelector(state => state.common.weeklyLeaderboard.leaderboard)
     const userRank = useSelector(state => state.common.weeklyLeaderboard.userRank)
     const [loading, setLoading] = useState(true);
-    const [modalVisible, setModalVisible] = useState(false);
 
 
     // function getLastDayOfMonth(year, month) {
@@ -94,7 +91,6 @@ export default function WeeklyLeaderboard({ navigation }) {
                         <PrizePoolTitle />
                     </View>
                     <WeeklyGlobalLeaderboard leaders={leaders} userRank={userRank} />
-                    <TopLeadersModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
                 </ScrollView>
             </LinearGradient>
         </View>
