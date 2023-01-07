@@ -165,11 +165,11 @@ const initialState = {
     loadMoreTransactions: true,
     loadMoreChallenges: true,
     loadMoreLiveTrivias: true,
-    maximumExhibitionStakeAmount: '',
-    minimumExhibitionStakeAmount: '',
-    maximumChallengeStakeAmount: '',
-    minimumChallengeStakeAmount: '',
-    minimumWalletFundableAmount: '',
+    maximumExhibitionStakeAmount: 0,
+    minimumExhibitionStakeAmount: 0,
+    maximumChallengeStakeAmount: 0,
+    minimumChallengeStakeAmount: 0,
+    minimumWalletFundableAmount: 0,
     periodBeforeChallengeStakingExpiry: ''
 }
 

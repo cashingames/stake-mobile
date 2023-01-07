@@ -21,7 +21,6 @@ function GlobalTopLeaders({ leaders }) {
             <View style={styles.headerContainer}>
                 <View></View>
                 {/* <Text style={styles.title}>Top Players</Text> */}
-                <Text style={styles.extendedText} onPress={() => navigation.navigate('Leaderboard')}> Click to view more</Text>
             </View>
             <View style={styles.content}>
                 <TopLeader

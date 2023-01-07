@@ -23,18 +23,13 @@ export default function GlobalTopLeadersHero() {
     );
 
     return (
-        // <Animated.View style={styles.leaderboard} entering={BounceInDown.duration(2000)}>
         <View style={styles.leaderboard}>
             <View style={styles.leaderboardHeader}>
                 <Text style={styles.title}>Daily Top Players</Text>
-                {/* <Text style={styles.extendedText} onPress={() => navigation.navigate('Leaderboard')}>Extended Leaderboard</Text> */}
+                <Text style={styles.extendedText} onPress={() => navigation.navigate('Leaderboard')}>View more</Text>
             </View>
             <GlobalTopLeaders leaders={leaders} />
-            {/* <View style={styles.extended}>
-                
-            </View> */}
         </View>
-        // </Animated.View>
     )
 }
 

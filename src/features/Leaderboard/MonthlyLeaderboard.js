@@ -24,25 +24,28 @@ export default function MonthlyLeaderboard({ navigation }) {
     const [loading, setLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
 
-    // const startDate = getFirstDayOfMonth(2022, 11);
-    // const endDate = getLastDayOfMonth(2022, 11);
-    const date = new Date();
-    function getLastDayOfMonth(year, month) {
-        return new Date(year, month + 1, 0);
-    }
-    function getFirstDayOfMonth(year, month) {
-        return new Date(year, month, 1);
-    }
 
-    const startDate = getFirstDayOfMonth(
-        date.getFullYear(),
-        date.getMonth(),
-    );
+    // function getLastDayOfMonth(year, month) {
+    //     return new Date(year, month + 1, 0);
+    // }
+    // function getFirstDayOfMonth(year, month) {
+    //     return new Date(year, month, 1);
+    // }
 
-    const endDate = getLastDayOfMonth(
-        date.getFullYear(),
-        date.getMonth(),
-    );
+    // const startDate = getFirstDayOfMonth(
+    //     date.getFullYear(),
+    //     date.getMonth(),
+    // );
+
+    // const endDate = getLastDayOfMonth(
+    //     date.getFullYear(),
+    //     date.getMonth(),
+    // );
+
+    const today = new Date();
+    const startDate = new Date(today.setDate(today.getDate() - today.getDay()));
+
+    const endDate = new Date(today.setDate(today.getDate() - today.getDay() + 6));
 
 
     useEffect(() => {
@@ -86,7 +89,7 @@ export default function MonthlyLeaderboard({ navigation }) {
             >
                 <ScrollView>
                     <View style={styles.prizeHeaderContainer}>
-                        <Text style={styles.prizeHeaderText}>Monthly Leaders</Text>
+                        <Text style={styles.prizeHeaderText}>Weekly Leaders</Text>
                         <Pressable style={styles.prizeContainer}>
                             <Text style={styles.prizeTitle} onPress={() => setModalVisible(true)}>Prize pool</Text>
                             <Ionicons name="information-circle-outline" size={16} color="#FFFF" style={styles.icon} />

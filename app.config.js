@@ -1,12 +1,12 @@
 const env = process.env.APP_VARIANT;
 const isDevelopment = env === 'development' || env === 'local' || false;
-const version = "1.2.72"; //Update for every build and publish
+const version = "1.2.73"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
   version: version,
-  runtimeVersion: "2.72", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "2.73", //All apps using the same runtime will get the published updates. Generally update for every new build
   icon: "./assets/images/adaptive-icon2.png",
   jsEngine: "hermes",
   scheme: "cashingames",
@@ -180,9 +180,9 @@ function getDomain() {
 }
 
 function getAssetsBaseUrl() {
-  // if (isDevelopment || env === "preview") {
-  //   return 'https://stg-api.cashingames.com';
-  // }
+  if (isDevelopment || env === "preview") {
+    return 'https://stg-api.cashingames.com';
+  }
 
   return 'https://api.cashingames.com';
 }

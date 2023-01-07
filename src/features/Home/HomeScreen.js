@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
+import { Text, View, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, {
     BounceInRight, BounceInUp,
-    useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, Extrapolate,
-    interpolate,
+    useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming
 } from 'react-native-reanimated';
 import normalize, {
     responsiveHeight, responsiveScreenWidth, responsiveWidth
@@ -26,7 +25,6 @@ import SelectGameMode from '../Games/SelectGameMode';
 import ChallengeWeeklyTopLeaders from '../Leaderboard/ChallengeWeeklyTopLeaders';
 import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import Carousel from 'react-native-reanimated-carousel';
 import MonthlyTopLeadersHero from '../../shared/MonthlyTopLeadersHero';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));

@@ -28,7 +28,7 @@ const TopLeadersModal = ({setModalVisible, modalVisible}) => {
                     >
                         <Text style={styles.closeStyle}>Close x</Text>
                     </Pressable>
-                    <Text style={styles.modalTopText}>Monthly Leaders Prizes</Text>
+                    <Text style={styles.modalTopText}>Weekly Leaders Prizes</Text>
                     <View style={styles.resultContainer}>
                         <LottieAnimations
                             animationView={require('../../assets/leaderboard.json')}
