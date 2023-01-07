@@ -25,7 +25,7 @@ import SelectGameMode from '../Games/SelectGameMode';
 import ChallengeWeeklyTopLeaders from '../Leaderboard/ChallengeWeeklyTopLeaders';
 import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import MonthlyTopLeadersHero from '../../shared/MonthlyTopLeadersHero';
+import WeeklyTopLeadersHero from '../../shared/WeeklyTopLeadersHero';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -122,8 +122,8 @@ const HomeScreen = () => {
                 <View style={styles.container}>
                     <SelectGameMode />
                     <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
-                        <MonthlyTopLeadersHero />
-                        <GlobalTopLeadersHero />
+                        <WeeklyTopLeadersHero />
+                        {/* <GlobalTopLeadersHero /> */}
                         <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
                     </SwiperFlatList>
                 </View>

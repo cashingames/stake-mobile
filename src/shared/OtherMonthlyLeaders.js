@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { LinearGradient } from 'expo-linear-gradient';
 import Constants from 'expo-constants';
 
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
@@ -25,7 +26,12 @@ export default function OtherMonthlyLeaders({ leaders, otherStyles, otherName })
 }
 function OtherLeader({ leader, position, indexArrow, otherName }) {
     return (
-        <View style={otherLeaderStyles.container}>
+        <LinearGradient
+            colors={['#701F88', '#752A00']}
+            style={otherLeaderStyles.container}
+        >
+
+            {/* <View style={otherLeaderStyles.container}> */}
             <View style={otherLeaderStyles.avatar}>
                 <Image
                     style={otherLeaderStyles.profilePic}
@@ -42,12 +48,8 @@ function OtherLeader({ leader, position, indexArrow, otherName }) {
                 <View style={otherLeaderStyles.rank}>
                     <Text style={otherLeaderStyles.rankText}>{position}</Text>
                 </View>
-                {/* <Image
-                    style={otherLeaderStyles.arrow}
-                    source={indexArrow}
-                /> */}
             </View>
-        </View>
+        </LinearGradient>
     );
 }
 
@@ -55,9 +57,7 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         justifyContent: 'space-between',
-        // backgroundColor: '#FAC502',
-        paddingHorizontal: responsiveScreenWidth(4),
-        paddingVertical: responsiveScreenWidth(6),
+        paddingTop: responsiveScreenWidth(6),
         borderBottomEndRadius: 10,
         borderBottomStartRadius: 10,
         marginBottom: responsiveScreenWidth(19),
@@ -71,7 +71,12 @@ const otherLeaderStyles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: responsiveScreenWidth(6),
-        alignItems:'center'
+        alignItems: 'center',
+        borderColor: '#737575',
+        borderWidth: 1,
+        borderRadius: 18,
+        paddingHorizontal: normalize(14),
+        paddingVertical: '.5rem'
     },
     profilePic: {
         width: 40,
@@ -85,7 +90,7 @@ const otherLeaderStyles = EStyleSheet.create({
     avatar: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems:'center'
+        alignItems: 'center'
 
     },
     position: {
@@ -98,7 +103,7 @@ const otherLeaderStyles = EStyleSheet.create({
     },
     names: {
         color: '#FFFF',
-        fontSize: '0.66rem',
+        fontSize: '0.75rem',
         fontFamily: 'graphik-medium',
     },
     rank: {
@@ -107,20 +112,20 @@ const otherLeaderStyles = EStyleSheet.create({
         height: normalize(30),
         borderRadius: 100,
         borderWidth: 1,
-        borderColor:'#EF2F55',
-        alignItems:'center',
-        justifyContent:'center'
+        borderColor: '#EF2F55',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     rankText: {
         color: '#FFFF',
-        fontSize: '0.65rem',
+        fontSize: '0.7rem',
         fontFamily: 'graphik-medium',
     },
     point: {
         color: '#FFFF',
         fontSize: '0.55rem',
         fontFamily: 'graphik-medium',
-        marginTop:'.25rem'
+        marginTop: '.25rem'
     },
     noData: {
         textAlign: 'center',

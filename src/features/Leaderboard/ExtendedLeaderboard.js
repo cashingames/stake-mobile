@@ -21,13 +21,15 @@ export default function ExtendedLeaderboard({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
     const leaders = useSelector(state => state.common.globalLeaders)
+    console.log(leaders,'extended leaders')
     const categoryLeaders = useSelector(state => state.common.categoryLeaders)
     const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
+        dispatch(getGlobalLeaders());
         dispatch(getCategoryLeaders())
-        setLoading(false);
+        setLoading(false)
     }, []);
 
     useFocusEffect(

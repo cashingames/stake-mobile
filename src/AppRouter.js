@@ -70,8 +70,7 @@ import LiveTriviaStakingScreen from './features/Games/LiveTriviaStakingScreen';
 import ReviewStakeScreen from './features/Games/ReviewStakeScreen';
 import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
 import LandingPage from './features/LandingPage/LandingPage';
-import MonthlyLeaderboard from './features/Leaderboard/MonthlyLeaderboard';
-import TopLeadersModal from './shared/TopLeadersModal';
+import WeeklyLeaderboard from './features/Leaderboard/WeeklyLeaderboard';
 
 const AppStack = createNativeStackNavigator();
 
@@ -170,7 +169,7 @@ function AppRouter() {
 							},
 							headerTintColor: '#FFFF',
 						}} />
-						<AppStack.Screen name="MonthlyLeaderboard" component={MonthlyLeaderboard} options={{
+						<AppStack.Screen name="WeeklyLeaderboard" component={WeeklyLeaderboard} options={{
 							title: 'Leaderboard',
 							headerStyle: {
 								backgroundColor: '#701F88',

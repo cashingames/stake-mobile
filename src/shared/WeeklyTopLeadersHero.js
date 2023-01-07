@@ -4,13 +4,12 @@ import { Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { getGlobalLeadersByDate } from '../features/CommonSlice';
-import MonthlyTopLeaders from './MonthlyTopLeaders';
+import { getWeeklyLeadersByDate } from '../features/CommonSlice';
+import WeeklyTopLeaders from './WeeklyTopLeaders';
 
-export default function MonthlyTopLeadersHero() {
+export default function WeeklyTopLeadersHero() {
     const navigation = useNavigation();
-    const leaders = useSelector(state => state.common.globalLeadersbyDate)
-    // const leaders = useSelector(state => state.common.globalLeaders)
+    const leaders = useSelector(state => state.common.weeklyLeaderboard.leaderboard)
     const dispatch = useDispatch();
 
     const today = new Date();
@@ -38,7 +37,7 @@ export default function MonthlyTopLeadersHero() {
 
     useFocusEffect(
         React.useCallback(() => {
-            dispatch(getGlobalLeadersByDate({
+            dispatch(getWeeklyLeadersByDate({
                 startDate,
                 endDate
             }));
@@ -49,14 +48,9 @@ export default function MonthlyTopLeadersHero() {
         <View style={styles.leaderboard}>
             <View style={styles.leaderboardHeader}>
                 <Text style={styles.title}>Top Players for the week</Text>
-                <Text style={styles.extendedText} onPress={() => navigation.navigate('MonthlyLeaderboard')}>View More</Text>
+                <Text style={styles.extendedText} onPress={() => navigation.navigate('WeeklyLeaderboard')}>View More</Text>
             </View>
-            <MonthlyTopLeaders leaders={leaders} />
-            {/* <View style={styles.extended}>
-                <Text onPress={() => navigation.navigate('MonthlyLeaderboard')}>
-                    <Text style={styles.extendedText}>View More</Text>
-                </Text>
-            </View> */}
+            <WeeklyTopLeaders leaders={leaders} />
         </View>
     )
 }

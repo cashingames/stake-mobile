@@ -11,7 +11,7 @@ const ExhibitionStakeAmount = ({ onPress }) => {
                 Naira by playing this game
             </Text>
             <Pressable style={styles.stakeButton} onPress={onPress}>
-                <Text style={styles.showMe}>PLAY NOW</Text>
+                <Text style={styles.showMe}>STAKE NOW</Text>
             </Pressable>
         </View>
     )

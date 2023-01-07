@@ -33,6 +33,13 @@ export const getGlobalLeadersByDate = createAsyncThunk(
         return response.data
     }
 )
+export const getWeeklyLeadersByDate = createAsyncThunk(
+    'common/getWeeklyLeadersByDate/get',
+    async (data) => {
+        const response = await axios.post('v3/leaders/global', data);
+        return response.data
+    }
+)
 export const getCategoryLeaders = createAsyncThunk(
     'common/categoryLeaders/get',
     async () => {
@@ -151,8 +158,10 @@ const initialState = {
     banks: [],
     categoryLeaders: [],
     globalLeaders: [],
-    globalLeadersbyDate: [],
-    categoryLeadersbyDate: [],
+    weeklyLeaderboard: {
+        leaderboard: [],
+        userRank: {}
+    },
     faqAndAnswers: [],
     trivias: [],
     minVersionCode: '',
@@ -217,13 +226,19 @@ export const CommonSlice = createSlice({
                 state.globalLeaders = action.payload.data
             })
             .addCase(getGlobalLeadersByDate.fulfilled, (state, action) => {
-                state.globalLeadersbyDate = action.payload.data
+                state.globalLeaders = action.payload.data;
+            })
+            .addCase(getWeeklyLeadersByDate.fulfilled, (state, action) => {
+                state.weeklyLeaderboard = {
+                    leaderboard:  action.payload.data.leaderboard,
+                    userRank: action.payload.data.userRank,
+                }
             })
             .addCase(getCategoryLeaders.fulfilled, (state, action) => {
                 state.categoryLeaders = action.payload.data
             })
             .addCase(getCategoryLeadersByDate.fulfilled, (state, action) => {
-                state.categoryLeadersbyDate = action.payload.data
+                state.categoryLeaders = action.payload.data
             })
             .addCase(fetchFaqAndAnswers.fulfilled, (state, action) => {
                 state.faqAndAnswers = action.payload

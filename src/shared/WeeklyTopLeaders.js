@@ -3,15 +3,17 @@ import { Platform, Pressable, Text, View, Modal } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatCurrency, formatNumber } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import MonthlyLeader from './MonthlyLeader';
+import MonthlyLeader from './WeeklyLeader';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
 import LottieAnimations from './LottieAnimations';
 import { Ionicons } from '@expo/vector-icons';
+import WeeklyLeader from './WeeklyLeader';
+import PrizePoolTitle from './PrizePoolTitle';
 
 
 
-function MonthlyTopLeaders({ leaders }) {
+function WeeklyTopLeaders({ leaders }) {
     const [modalVisible, setModalVisible] = useState(false);
     const topLeaders = leaders?.slice(0, 3) ?? null;
     const firstLeader = topLeaders[0] ?? { username: "..." };
@@ -19,50 +21,47 @@ function MonthlyTopLeaders({ leaders }) {
     const thirdLeader = topLeaders[2] ?? { username: "..." };
     return (
         <View >
-              <LinearGradient
+            <LinearGradient
                 colors={['#EF2F55', '#5D5FEF']}
                 style={styles.contentContainer}
             >
-            <View style={styles.headerContainer}>
-                <View></View>
-                {/* <Text style={styles.title}>Top Players for the month</Text> */}
-                <Pressable onPress={() => setModalVisible(true)} style={styles.poolContainer}>
-                    <Text style={styles.prizeTitle}>Prize pool</Text>
-                    <Ionicons name="information-circle-outline" size={16} color="#FFFF" style={styles.icon} />
-                </Pressable>
-            </View>
-            <View style={styles.content}>
-                <MonthlyLeader
-                    podPosition={require('../../assets/images/month-pod3.png')}
-                    name={`${thirdLeader.username}`}
-                    point={`${formatNumber(thirdLeader.points ? `${thirdLeader.points}` : 0)} pts`}
-                    avatar={thirdLeader.avatar}
-                    styleProp={styles.others}
-                    avatarProp={styles.otherAvatar}
-                    stage={styles.stage}
-                />
-                <MonthlyLeader
-                    podPosition={require('../../assets/images/month-pod1.png')}
-                    name={`${firstLeader.username}`}
-                    point={`${formatNumber(firstLeader.points ? `${firstLeader.points}` : 0)} pts`}
-                    avatar={firstLeader.avatar}
-                    styleProp={styles.winner}
-                    avatarProp={styles.avatar}
-                    stage={styles.winnerStage}
+                <View style={styles.headerContainer}>
+                    <View></View>
+                    {/* <Text style={styles.title}>Top Players for the month</Text> */}
+                  <PrizePoolTitle />
+                </View>
+                <View style={styles.content}>
+                    <MonthlyLeader
+                        podPosition={require('../../assets/images/month-pod3.png')}
+                        name={`${thirdLeader.username}`}
+                        point={`${formatNumber(thirdLeader.points ? `${thirdLeader.points}` : 0)} pts`}
+                        avatar={thirdLeader.avatar}
+                        styleProp={styles.others}
+                        avatarProp={styles.otherAvatar}
+                        stage={styles.stage}
+                    />
+                    <MonthlyLeader
+                        podPosition={require('../../assets/images/month-pod1.png')}
+                        name={`${firstLeader.username}`}
+                        point={`${formatNumber(firstLeader.points ? `${firstLeader.points}` : 0)} pts`}
+                        avatar={firstLeader.avatar}
+                        styleProp={styles.winner}
+                        avatarProp={styles.avatar}
+                        stage={styles.winnerStage}
 
-                />
-                <MonthlyLeader
-                    podPosition={require('../../assets/images/month-pod2.png')}
-                    name={`${secondLeader.username}`}
-                    point={`${formatNumber(secondLeader.points ? `${secondLeader.points}` : 0)} pts`}
-                    avatar={secondLeader.avatar}
-                    styleProp={styles.others}
-                    avatarProp={styles.otherAvatar}
-                    stage={styles.stage}
+                    />
+                    <WeeklyLeader
+                        podPosition={require('../../assets/images/month-pod2.png')}
+                        name={`${secondLeader.username}`}
+                        point={`${formatNumber(secondLeader.points ? `${secondLeader.points}` : 0)} pts`}
+                        avatar={secondLeader.avatar}
+                        styleProp={styles.others}
+                        avatarProp={styles.otherAvatar}
+                        stage={styles.stage}
 
-                />
-                <TopLeadersModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
-            </View>
+                    />
+                    <TopLeadersModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
+                </View>
             </LinearGradient>
         </View>
     )
@@ -88,7 +87,7 @@ const TopLeadersModal = ({ setModalVisible, modalVisible }) => {
                         >
                             <Text style={styles.closeStyle}>Close x</Text>
                         </Pressable>
-                        <Text style={styles.modalTopText}>Weekly Leaders Prizes</Text>
+                        <Text style={styles.modalTopText}>Weekly Prize Pool</Text>
                         <View style={styles.resultContainer}>
                             <LottieAnimations
                                 animationView={require('../../assets/leaderboard.json')}
@@ -99,17 +98,17 @@ const TopLeadersModal = ({ setModalVisible, modalVisible }) => {
                         <View style={styles.modalItems}>
                             <View style={styles.modalWinnerItem}>
                                 <Text style={styles.winnerItemText}>Grand Prize</Text>
-                                <Text style={styles.winnerItemText}>&#8358;{formatCurrency(5000)}</Text>
+                                <Text style={styles.winnerItemText}>&#8358;{formatCurrency(50000)}</Text>
 
                             </View>
                             <View style={styles.modalItem}>
                                 <Text style={styles.itemText}>2nd Prize</Text>
-                                <Text style={styles.itemText}>&#8358;{formatCurrency(3000)}</Text>
+                                <Text style={styles.itemText}>&#8358;{formatCurrency(30000)}</Text>
 
                             </View>
                             <View style={styles.modalItem}>
                                 <Text style={styles.itemText}>3rd Prize</Text>
-                                <Text style={styles.itemText}>&#8358;{formatCurrency(2000)}</Text>
+                                <Text style={styles.itemText}>&#8358;{formatCurrency(20000)}</Text>
 
                             </View>
                         </View>
@@ -120,15 +119,14 @@ const TopLeadersModal = ({ setModalVisible, modalVisible }) => {
     )
 }
 
-export default MonthlyTopLeaders;
+export default WeeklyTopLeaders;
 
 const styles = EStyleSheet.create({
     contentContainer: {
         display: 'flex',
-        // backgroundColor: '#5d5fef',
         flexDirection: 'column',
-        paddingTop: responsiveScreenWidth(3.5),
-        paddingHorizontal: responsiveScreenWidth(1),
+        paddingTop: responsiveScreenWidth(4.7),
+        paddingHorizontal: responsiveScreenWidth(2),
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
         borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
@@ -138,8 +136,7 @@ const styles = EStyleSheet.create({
         fontSize: '.6rem',
         color: '#FFFF',
         fontFamily: 'graphik-regular',
-        textDecoration: 'underline',
-        marginRight:'.3rem'
+        marginLeft: '.3rem',
     },
     centeredView: {
         flex: 1,
@@ -151,7 +148,7 @@ const styles = EStyleSheet.create({
         margin: 20,
         backgroundColor: '#5d5fef',
         borderRadius: 20,
-        paddingHorizontal: normalize(30),
+        paddingHorizontal: normalize(35),
         paddingVertical: normalize(18),
         shadowColor: "#000",
         shadowOffset: {
@@ -192,10 +189,11 @@ const styles = EStyleSheet.create({
         fontSize: '1rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        marginBottom: normalize(10)
+        marginBottom: normalize(10),
+        textAlign:'center'
     },
     winnerItemText: {
-        fontSize: '0.9rem',
+        fontSize: '0.7rem',
         color: '#FFFF',
         fontFamily: 'graphik-bold',
     },
@@ -254,7 +252,7 @@ const styles = EStyleSheet.create({
     poolContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginRight:'.4rem'
+        marginRight: '.4rem'
     },
     stage: {
         width: normalize(88),

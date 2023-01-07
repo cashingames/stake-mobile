@@ -50,7 +50,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'column',
         backgroundColor: '#FAC502',
         paddingHorizontal: responsiveScreenWidth(5.5),
-        paddingTop: responsiveScreenWidth(3),
+        paddingTop: responsiveScreenWidth(5.5),
         // borderRadius: 15,
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,

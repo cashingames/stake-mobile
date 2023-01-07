@@ -28,7 +28,7 @@ const TopLeadersModal = ({setModalVisible, modalVisible}) => {
                     >
                         <Text style={styles.closeStyle}>Close x</Text>
                     </Pressable>
-                    <Text style={styles.modalTopText}>Weekly Leaders Prizes</Text>
+                    <Text style={styles.modalTopText}>Weekly Prize Pool</Text>
                     <View style={styles.resultContainer}>
                         <LottieAnimations
                             animationView={require('../../assets/leaderboard.json')}
@@ -39,17 +39,17 @@ const TopLeadersModal = ({setModalVisible, modalVisible}) => {
                     <View style={styles.modalItems}>
                         <View style={styles.modalWinnerItem}>
                             <Text style={styles.winnerItemText}>Grand Prize</Text>
-                            <Text style={styles.winnerItemText}>&#8358;{formatCurrency(5000)}</Text>
+                            <Text style={styles.winnerItemText}>&#8358;{formatCurrency(50000)}</Text>
 
                         </View>
                         <View style={styles.modalItem}>
                             <Text style={styles.itemText}>2nd Prize</Text>
-                            <Text style={styles.itemText}>&#8358;{formatCurrency(3000)}</Text>
+                            <Text style={styles.itemText}>&#8358;{formatCurrency(30000)}</Text>
 
                         </View>
                         <View style={styles.modalItem}>
                             <Text style={styles.itemText}>3rd Prize</Text>
-                            <Text style={styles.itemText}>&#8358;{formatCurrency(2000)}</Text>
+                            <Text style={styles.itemText}>&#8358;{formatCurrency(20000)}</Text>
 
                         </View>
                     </View>
@@ -88,7 +88,7 @@ const styles = EStyleSheet.create({
         margin: 20,
         backgroundColor: '#66142E',
         borderRadius: 20,
-        paddingHorizontal: normalize(30),
+        paddingHorizontal: normalize(35),
         paddingVertical: normalize(18),
         shadowColor: "#000",
         shadowOffset: {
@@ -129,10 +129,11 @@ const styles = EStyleSheet.create({
         fontSize: '1rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        marginBottom: normalize(10)
+        marginBottom: normalize(10),
+        textAlign:'center'
     },
     winnerItemText: {
-        fontSize: '0.9rem',
+        fontSize: '0.7rem',
         color: '#FFFF',
         fontFamily: 'graphik-bold',
     },
