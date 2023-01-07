@@ -25,7 +25,15 @@ export const verifyUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
     'auth/login',
     async (data, thunkAPI) => {
-        return (await axios.post('auth/login', data)).data;
+        try {
+            const response = await axios.post('auth/login', data);
+            await AsyncStorage.setItem("token", response.data.data);
+            console.log("login response X", response.data);
+            return response.data;
+        } catch (err) {
+            console.log("login error 1", err);
+            return thunkAPI.rejectWithValue(err.response.data);
+        }
     }
 )
 
@@ -259,9 +267,11 @@ export const AuthSlice = createSlice({
                 state.createAccount = {};
             })
             .addCase(loginUser.fulfilled, (state, action) => {
-                state.token = action.payload;
+                console.log("action response X", action.payload.data);
+                state.token = action.payload.data;
             })
             .addCase(loginUser.rejected, (state, action) => {
+                
                 console.log("login rejected payload", action.payload);
             })
             .addCase(resetPassword.fulfilled, (state) => {

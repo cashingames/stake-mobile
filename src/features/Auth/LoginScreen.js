@@ -16,6 +16,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { saveToken } from '../../utils/ApiHelper';
 import InputOTP from '../../shared/InputOTP';
 import AppleSignUp from '../../shared/AppleSignUp';
+import { loginUser } from './AuthSlice';
 
 export default function LoginScreen({ navigation }) {
 
@@ -24,6 +25,7 @@ export default function LoginScreen({ navigation }) {
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const dispatch = useDispatch();
 
     const onChangeEmail = (value) => {
         setEmail(value)
@@ -40,36 +42,29 @@ export default function LoginScreen({ navigation }) {
         setCanLogin(false);
         setError("");
 
-        // loginUser({
-        //     email, password
-        // }).then(response => {
-        //     saveToken(response.data.data)
-        //     dispatch(setToken(response.data.data))
-        // }, err => {
-        //     if (!err || !err.response || err.response === undefined) {
-        //         setError("Your Network is Offline.");
-        //     }
-        //     else if (err.response.status === 500) {
-        //         setError("Service not currently available. Please contact support");
-        //     }
-        //     else {
+        dispatch(loginUser({ email, password })).unwrap().then((response) => {
+            console.info("login response 1", response);
+        }).catch((err) => {
+            processLoginError(err)
+        }).finally(() => {
+            setLoading(false);
+            setCanLogin(true);
+        });
 
-        //         const errors =
-        //             err.response && err.response.data && err.response.data.errors;
+    }
 
-        //         if (err.response.status === 400 && err.response.data.message == 'Account not verified') {
-        //             navigation.navigate('SignupVerifyPhone', {
-        //                 phone_number: err.response.data.errors.phoneNumber,
-        //                 username: err.response.data.errors.username, next_resend_minutes: 1
-        //             })
-        //         }
+    const processLoginError = (err) => {
+        const errors = err.errors;
 
-        //         const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
-        //         // console.log(firstError)
-        //         setError(firstError)
-        //     }
-        //     setLoading(false);
-        // });
+        if (err.message == 'Account not verified') {
+            navigation.navigate('SignupVerifyPhone', {
+                phone_number: errors.phoneNumber,
+                username: errors.username, next_resend_minutes: 1
+            })
+        }
+
+        const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
+        setError(firstError)
     }
 
 

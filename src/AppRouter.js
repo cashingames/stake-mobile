@@ -77,12 +77,12 @@ const AppStack = createNativeStackNavigator();
 function AppRouter() {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const [modalVisible, setModalVisible] = useState(false);
 
 	const [loading, setLoading] = useState(true);
 
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
+	appendAxiosAuthHeader(token);
 
 	//during app restart, check localstorage for these info
 	useEffect(() => {
@@ -95,7 +95,6 @@ function AppRouter() {
 	}, []);
 
 	useEffect(() => {
-		appendAxiosAuthHeader(token);
 		if (!isTrue(token)) {
 			return;
 		}
@@ -343,7 +342,7 @@ const setupAxios = async function () {
 
 }
 
-const appendAxiosAuthHeader = async function (token) {
+const appendAxiosAuthHeader = function (token) {
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {
