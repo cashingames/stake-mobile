@@ -66,11 +66,7 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
     );
 }
 
-export const notifyOfPublishedUpdates = async (minPublishedVersionCode) => {
-    if (!appNeedsPublishedRestart(minPublishedVersionCode)) {
-        return;
-    }
-
+export const notifyOfPublishedUpdates = async () => {
     try {
         Updates.checkForUpdateAsync().then(x => {
 

@@ -16,7 +16,6 @@ import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../CommonSlice';
-import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserItems';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -81,14 +80,13 @@ const HomeScreen = () => {
                 return;
             }
 
-            const minPublishedVersionCode = 1;
-            notifyOfPublishedUpdates(minPublishedVersionCode);
+            notifyOfPublishedUpdates();
 
             if (minVersionForce) {
                 notifyOfStoreUpdates(minVersionCode, minVersionForce);
             }
 
-        }, [])
+        }, [loading])
     );
 
     useFocusEffect(
