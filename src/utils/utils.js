@@ -53,14 +53,15 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
             style: 'cancel',
         });
     }
-
+    
+    const link = Platform.OS === 'ios' ?
+        "https://apps.apple.com/us/app/cashingames/id6443878628"
+        :
+        "https://play.google.com/store/apps/details?id=com.cashingames.cashingames";
+    
     config.push({
         text: 'OK',
-        onPress: () => Linking.openURL(
-            Platform.OS === 'ios' ?
-                "https://apps.apple.com/ng/app/cashingames/id6443878628"
-                :
-                "https://play.google.com/store/apps/details?id=com.cashingames.cashingames"),
+        onPress: () => Linking.openURL(link),
     });
 
     Alert.alert(
