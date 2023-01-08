@@ -165,8 +165,13 @@ export const verifyDeviceToken = createAsyncThunk(
 export const verifyPhoneOtp = createAsyncThunk(
     'auth/verifyPhoneOtp',
     async (data, thunkAPI) => {
-        const response = await axios.post('auth/register/verify-token', data);
-        return response.data;
+        try {
+            const response = await axios.post('auth/register/verify-token', data);
+            await AsyncStorage.setItem("token", response.data.data);
+            return response.data;
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response.data);
+        }
     }
 )
 
@@ -239,6 +244,7 @@ export const AuthSlice = createSlice({
         setToken: (state, action) => {
             state.token = action.payload;
             state.showIntro = false;
+            console.log("token set");
         },
         showLogin: (state) => {
             state.showIntro = false;
@@ -293,6 +299,9 @@ export const AuthSlice = createSlice({
             .addCase(verifyUser.fulfilled, (state, action) => {
                 state.token = action.payload.data;
 
+            })
+            .addCase(verifyPhoneOtp.fulfilled, (state, action) => {
+                state.token = action.payload.data;
             })
             .addCase(loginWithSocialLink.fulfilled, (state, action) => {
                 state.token = action.payload.data.token;

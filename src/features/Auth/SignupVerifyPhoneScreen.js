@@ -37,7 +37,6 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
 
     const token = `${otp1}${otp2}${otp3}${otp4}${otp5}`
     const params = route.params;
-    console.log(token)
 
     useEffect(() => {
         const onComplete = () => {
@@ -60,7 +59,6 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     }, [])
 
     const resendButton = () => {
-        console.log('otp resent')
         dispatch(ResendPhoneOtp({
             username: params.username
         }))
@@ -73,19 +71,13 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
             phone_number: params.phone_number,
             token: token
         }))
-            // console.log("token phone", token)
-
             .then(unwrapResult)
             .then(response => {
-                console.log("phone verification response", response.data);
-                saveToken(response.data)
-                dispatch(setToken(response.data))
                 setLoading(false);
-                // navigation.navigate('Home')
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError)
-                Alert.alert("Failed to log in");
+                Alert.alert("Invalid authentication code provided");
                 setLoading(false);
             })
     }

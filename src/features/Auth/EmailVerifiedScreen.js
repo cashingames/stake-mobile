@@ -25,21 +25,17 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
     const [loading, setLoading] = useState(false);
 
     const rewards = useSelector(state => state.auth.firstTimeUserReward)
-    console.log(rewards)
     
     const goToDashboard = () => {
         setLoading(true);
         dispatch(verifyUser({ email: params.email }))
             .then(unwrapResult)
             .then(response => {
-                // console.log("email verification response", response);
-                saveToken(response.data)
-                dispatch(setToken(response.data))
-                setLoading(false);
-                navigation.navigate('AppRouter')
+                saveToken(response.data);
+                dispatch(setToken(response.data));
+                navigation.navigate('AppRouter', { screen: 'Home' });
             })
             .catch((rejectedValueOrSerializedError) => {
-                
                 Alert.alert("Failed to log in");
                 setLoading(false);
             })
@@ -57,7 +53,7 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
 
 
     if (user.username) {
-        navigation.navigate("AppRouter");
+        navigation.navigate('AppRouter', { screen: 'Home' });
         return null;
     }
 
@@ -81,7 +77,7 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
                 </View>
                 <FirstTimeUserRewards rewards={rewards} />
             </ScrollView>
-            <AppButton text={loading ? 'Verifying...' : 'Login'} onPress={goToDashboard}
+            <AppButton text={loading ? 'Verifying...' : 'Go Dashboard'} onPress={goToDashboard}
                 disabled={loading} />
 
         </View>
