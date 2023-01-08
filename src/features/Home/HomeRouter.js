@@ -127,26 +127,6 @@ function CustomDrawerContent(props) {
                     <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Notifications</Text>
-                                <View style={drawStyles.notificationCount}>
-                                    {user.unreadNotificationsCount > 0 ?
-                                        <View style={drawStyles.numberContainer}>
-                                            <Text style={drawStyles.number}>{user.unreadNotificationsCount}</Text>
-                                        </View>
-                                        :
-                                        <></>
-                                    }
-                                    <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                                </View>
-                            </View>}
-                        onPress={() => navigation.navigate('Notifications')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
                                 <Text style={drawStyles.itemLabel}>Live Trivia</Text>
                                 <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                             </View>}

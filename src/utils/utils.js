@@ -56,7 +56,11 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
 
     config.push({
         text: 'OK',
-        onPress: () => Linking.openURL("https://play.google.com/store/apps/details?id=com.cashingames.cashingames"),
+        onPress: () => Linking.openURL(
+            Platform.OS === 'ios' ?
+                "https://apps.apple.com/ng/app/cashingames/id6443878628"
+                :
+                "https://play.google.com/store/apps/details?id=com.cashingames.cashingames"),
     });
 
     Alert.alert(
