@@ -59,7 +59,7 @@ const HomeScreen = () => {
     }, []);
 
     useEffect(() => {
-        if (!Constants.manifest.extra.isDevelopment) {
+        if (Constants.manifest.extra.isDevelopment) {
             return;
         }
         //whether we are forcing or not, show the first time
