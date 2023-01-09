@@ -145,7 +145,7 @@ const styles = EStyleSheet.create({
     contentContainer: {
         backgroundColor: '#701F88',
         flexDirection: 'column',
-        paddingTop: responsiveScreenWidth(5),
+        paddingTop: responsiveScreenWidth(7),
         paddingHorizontal: responsiveScreenWidth(2),
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
