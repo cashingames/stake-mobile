@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, View} from 'react-native';
+import { Platform, View } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -7,10 +7,11 @@ import MonthlyLeader from './WeeklyLeader';
 import { LinearGradient } from 'expo-linear-gradient';
 import WeeklyLeader from './WeeklyLeader';
 import PrizePoolTitle from './PrizePoolTitle';
+import { Text } from 'react-native';
 
 
 
-function WeeklyTopLeaders({ leaders }) {
+function WeeklyTopLeaders({ leaders, firstDay, lastDay }) {
     const topLeaders = leaders?.slice(0, 3) ?? null;
     const firstLeader = topLeaders[0] ?? { username: "..." };
     const secondLeader = topLeaders[1] ?? { username: "..." };
@@ -22,8 +23,8 @@ function WeeklyTopLeaders({ leaders }) {
                 style={styles.contentContainer}
             >
                 <View style={styles.headerContainer}>
-                    <View></View>
-                  <PrizePoolTitle />
+                    <Text style={styles.modalDateText}>{firstDay} - {lastDay}</Text>
+                    <PrizePoolTitle />
                 </View>
                 <View style={styles.content}>
                     <MonthlyLeader
@@ -114,6 +115,13 @@ const styles = EStyleSheet.create({
     modalItems: {
         marginTop: normalize(25)
     },
+    modalDateText: {
+        fontSize: '.6rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+        marginBottom: normalize(10),
+        textAlign: 'center'
+    },
     resultContainer: {
         alignItems: 'center'
     },
@@ -133,7 +141,7 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         fontFamily: 'graphik-medium',
         marginBottom: normalize(10),
-        textAlign:'center'
+        textAlign: 'center'
     },
     winnerItemText: {
         fontSize: '0.7rem',
@@ -189,8 +197,8 @@ const styles = EStyleSheet.create({
     },
     headerContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-end'
+        // alignItems: 'center',
+        justifyContent: 'space-between'
     },
     poolContainer: {
         flexDirection: 'row',

@@ -4,8 +4,8 @@ import { Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { getWeeklyLeadersByDate } from '../features/CommonSlice';
 import WeeklyTopLeaders from './WeeklyTopLeaders';
+import { getWeeklyLeadersByDate } from '../features/CommonSlice';
 
 export default function WeeklyTopLeadersHero() {
     const navigation = useNavigation();
@@ -16,23 +16,9 @@ export default function WeeklyTopLeadersHero() {
     const startDate = new Date(today.setDate(today.getDate() - today.getDay()));
 
     const endDate = new Date(today.setDate(today.getDate() - today.getDay() + 6));
-    // function getLastDayOfMonth(year, month) {
-    //     return new Date(year, month + 1, 0);
-    // }
-    // function getFirstDayOfMonth(year, month) {
-    //     return new Date(year, month, 1);
-    // }
-
-    // const startDate = getFirstDayOfMonth(
-    //     date.getFullYear(),
-    //     date.getMonth(),
-    // );
-
-    // const endDate = getLastDayOfMonth(
-    //     date.getFullYear(),
-    //     date.getMonth(),
-    // );
-
+   
+    const firstDayString = startDate.toDateString()
+    const lastDayString = endDate.toDateString()
 
 
     useFocusEffect(
@@ -50,7 +36,7 @@ export default function WeeklyTopLeadersHero() {
                 <Text style={styles.title}>Top Players for the week</Text>
                 <Text style={styles.extendedText} onPress={() => navigation.navigate('WeeklyLeaderboard')}>View More</Text>
             </View>
-            <WeeklyTopLeaders leaders={leaders} />
+            <WeeklyTopLeaders leaders={leaders} firstDay={firstDayString} lastDay={lastDayString} />
         </View>
     )
 }

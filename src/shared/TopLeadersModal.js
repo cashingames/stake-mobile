@@ -9,6 +9,15 @@ import LottieAnimations from './LottieAnimations';
 
 
 const TopLeadersModal = ({setModalVisible, modalVisible}) => {
+
+    const today = new Date();
+    const startDate = new Date(today.setDate(today.getDate() - today.getDay()));
+    const endDate = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+
+    const firstDay = startDate.toDateString()
+    const lastDay = endDate.toDateString()
+
+
     return (
         <View style={styles.onView}>
         <Modal
@@ -29,6 +38,7 @@ const TopLeadersModal = ({setModalVisible, modalVisible}) => {
                         <Text style={styles.closeStyle}>Close x</Text>
                     </Pressable>
                     <Text style={styles.modalTopText}>Weekly Prize Pool</Text>
+                    <Text style={styles.modalDateText}>{firstDay} - {lastDay}</Text>
                     <View style={styles.resultContainer}>
                         <LottieAnimations
                             animationView={require('../../assets/leaderboard.json')}
@@ -124,6 +134,13 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: normalize(18)
+    },
+    modalDateText: {
+        fontSize: '.6rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+        marginBottom: normalize(10),
+        textAlign:'center'
     },
     modalTopText: {
         fontSize: '1rem',

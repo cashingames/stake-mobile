@@ -4,18 +4,19 @@ import { Text } from "react-native";
 import { Pressable } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import TopLeadersModal from "./TopLeadersModal";
+import { View } from "react-native";
 
 
 const PrizePoolTitle = () => {
     const [modalVisible, setModalVisible] = useState(false);
     return (
-        <>
+        <View>
             <Pressable style={styles.prizeContainer}>
                 <Ionicons name="information-circle-outline" size={13} color="#FFFF" style={styles.icon} />
                 <Text style={styles.prizeTitle} onPress={() => setModalVisible(true)}>PRIZE POOL</Text>
             </Pressable>
             <TopLeadersModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
-        </>
+        </View>
     )
 }
 export default PrizePoolTitle;

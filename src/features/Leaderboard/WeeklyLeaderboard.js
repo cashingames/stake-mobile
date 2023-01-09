@@ -3,9 +3,6 @@ import { Text, View, ScrollView, StatusBar, Image, Pressable } from 'react-nativ
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import PageLoading from '../../shared/PageLoading';
 import Constants from 'expo-constants';
-import {
-    getWeeklyLeadersByDate,
-} from '../CommonSlice';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
@@ -14,6 +11,7 @@ import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { formatNumber, isTrue } from '../../utils/stringUtl';
 import OtherMonthlyLeaders from '../../shared/OtherMonthlyLeaders';
 import PrizePoolTitle from '../../shared/PrizePoolTitle';
+import { getWeeklyLeadersByDate } from '../CommonSlice';
 
 
 export default function WeeklyLeaderboard({ navigation }) {
@@ -23,23 +21,6 @@ export default function WeeklyLeaderboard({ navigation }) {
     const userRank = useSelector(state => state.common.weeklyLeaderboard.userRank)
     const [loading, setLoading] = useState(true);
 
-
-    // function getLastDayOfMonth(year, month) {
-    //     return new Date(year, month + 1, 0);
-    // }
-    // function getFirstDayOfMonth(year, month) {
-    //     return new Date(year, month, 1);
-    // }
-
-    // const startDate = getFirstDayOfMonth(
-    //     date.getFullYear(),
-    //     date.getMonth(),
-    // );
-
-    // const endDate = getLastDayOfMonth(
-    //     date.getFullYear(),
-    //     date.getMonth(),
-    // );
 
     const today = new Date();
     const startDate = new Date(today.setDate(today.getDate() - today.getDay()));
