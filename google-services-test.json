@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "283687151805",
+    "project_id": "cashingames-test",
+    "storage_bucket": "cashingames-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283687151805:android:2e5f46a354671471d3afd4",
+        "android_client_info": {
+          "package_name": "com.cashingames.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "283687151805-v41n03pk61mb9tk84od4cgv9dmudnv82.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cashingames.test",
+            "certificate_hash": "2918b909537fc12660054e79879f10ec56f466eb"
+          }
+        },
+        {
+          "client_id": "283687151805-5v9ecpjrjo2fu7q8qqphepovhp7j4pjk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5PLyps0jtK-6-i4qp6z_yA1eFa24L30k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "283687151805-5v9ecpjrjo2fu7q8qqphepovhp7j4pjk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "283687151805-lq9lvlant4obs1cpg8jhcmluai0lgida.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cashinga.test"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
