@@ -31,7 +31,7 @@ export default {
   android: {
     package: getAppIdentifier(),
     versionCode: getAndriodVersionCode(),
-    googleServicesFile: "./google-services.json",
+    googleServicesFile: getAndroidGoogleServices(),
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon2.png",
       backgroundColor: "#FFFFFF"
@@ -138,6 +138,17 @@ function getIosGoogleServices() {
     services = "./GoogleService-Info-com.cashinga.dev.plist";
   } else if (env === "preview") {
     services = "./GoogleService-Info-com.cashinga.test.plist";
+  }
+
+  return services;
+}
+
+function getAndroidGoogleServices() {
+  let services = "./google-services.json";
+  if (isDevelopment) {
+    services = "./google-services-dev.json";
+  } else if (env === "preview") {
+    services = "./google-services-test.json";
   }
 
   return services;
