@@ -89,25 +89,25 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
   }
 
   const showExitConfirmation = () => {
-    onEndGame();
-    // Alert.alert(
-    //   'Exit Game?',
-    //   'You have an ongoing game. Do you want to submit this game ?',
-    //   [
-    //     {
-    //       text: "Continue playing",
-    //       style: 'cancel',
-    //       onPress: () => setEnding(false)
-    //     },
-    //     {
-    //       text: 'Exit',
-    //       onPress: () => {
-    //         // console.log("show exit from exit button")
-    //         onEndGame();
-    //       },
-    //     },
-    //   ]
-    // );
+    // onEndGame();
+    Alert.alert(
+      'Exit Game?',
+      'You have an ongoing game. Do you want to submit this game ?',
+      [
+        {
+          text: "Continue playing",
+          style: 'cancel',
+          onPress: () => setEnding(false)
+        },
+        {
+          text: 'Exit',
+          onPress: () => {
+            // console.log("show exit from exit button")
+            onEndGame();
+          },
+        },
+      ]
+    );
   }
 
   //disable back button
@@ -136,7 +136,7 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
   return (
     <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
       <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
-        <PlayGameHeader onPress={() => onEndGame(true)} onPressBoost={openBottomSheet} />
+        <PlayGameHeader onPress={showExitConfirmation} onPressBoost={openBottomSheet} />
         <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
         <GameQuestions />
         <UniversalBottomSheet
