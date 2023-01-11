@@ -244,14 +244,17 @@ const styles = EStyleSheet.create({
         borderWidth:1.5,
         backgroundColor:'transparent',
         alignItems:'center',
+        justifyContent:'center',
         marginVertical:'0.5rem',
         borderRadius:5,
-        padding:'0.5rem'
+        padding:'0.5rem',
+        paddingTop:'0.4rem'
     },
     playText: {
         fontFamily:'graphik-medium',
         color:'#fff',
         fontSize:'0.7rem',
+        lineHeight:'1rem'
     }
 
 });
