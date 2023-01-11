@@ -169,7 +169,7 @@ export default function GameEndResultScreen({ navigation }) {
 const UserResultInfo = ({ pointsGained }) => {
 	return (
 		<View style={styles.infoContainer}>
-			<Text style={styles.info}>you scored {pointsGained} points, Play again to climb up the leaderboard</Text>
+			<Text style={styles.info}>you scored {pointsGained} points, Play more games to climb up the leaderboard and stand a chance to earn cash prizes every week!</Text>
 		</View>
 	)
 }

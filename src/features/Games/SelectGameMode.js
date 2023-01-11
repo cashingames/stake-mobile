@@ -15,7 +15,9 @@ const SelectGameMode = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const gameModes = useSelector(state => state.common.gameModes);
-    console.log(gameModes)
+
+    const games = [...gameModes].sort((a, b) => a.id - b.id);
+
 
     const onSelectGameMode = (mode) => {
         dispatch(setGameMode(mode));
@@ -27,7 +29,7 @@ const SelectGameMode = () => {
             <Text style={styles.title}>Select game mode</Text>
             <View style={styles.subcategories}>
                 <SwiperFlatList>
-                    {gameModes.map((gameMode, i) =>
+                    {games.map((gameMode, i) =>
                         <AvailableMode
                             key={i}
                             gameMode={gameMode}
