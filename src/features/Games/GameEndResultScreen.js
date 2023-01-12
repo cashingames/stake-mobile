@@ -44,32 +44,7 @@ export default function GameEndResultScreen({ navigation }) {
 		});
 		navigation.navigate("GameInstructions")
 		setLoading(false);
-
-		// 		category: gameCategoryId,
-		// 		type: gameTypeId,
-		// 		mode: gameModeId
-		// 	}))
-		// 		.then(unwrapResult)
-		// 		.then(result => {
-		// 			dispatch(logActionToServer({
-		// 				message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
-		// 				data: result.data.questions
-		// 			}))
-		// 				.then(unwrapResult)
-		// 				.then(result => {
-		// 					console.log('Action logged to server');
-		// 				})
-		// 				.catch(() => {
-		// 					console.log('failed to log to server');
-		// 				});
-		// 			setLoading(false);
-		// 			dispatch(incrementCountdownResetIndex());
-		// 			navigation.navigate("GameInProgress")
-		// 		})
-		// 		.catch((err) => {
-		// 			Alert.alert(err.data.message)
-		// 			setLoading(false);
-		// 		});
+		
 	}
 
 	const onHomeButtonClick = () => {
