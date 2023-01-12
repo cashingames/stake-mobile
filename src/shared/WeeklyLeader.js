@@ -6,7 +6,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { isTrue } from '../utils/stringUtl';
 
-function MonthlyLeader({ avatar, podPosition, name, point,styleProp,avatarProp,stage }) {
+function WeeklyLeader({ avatar, podPosition, name, point,styleProp,avatarProp,stage }) {
     return (
         <View style={styles.position}>
             <View style={styleProp}>
@@ -28,7 +28,7 @@ function MonthlyLeader({ avatar, podPosition, name, point,styleProp,avatarProp,s
         </View>
     );
 }
-export default MonthlyLeader;
+export default WeeklyLeader;
 
 const styles = EStyleSheet.create({
     avatar: {

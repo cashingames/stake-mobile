@@ -1,12 +1,12 @@
 const env = process.env.APP_VARIANT;
 const isDevelopment = env === 'development' || env === 'local' || false;
-const version = "1.2.72"; //Update for every build and publish
+const version = "1.2.75"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
   version: version,
-  runtimeVersion: "2.72", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "2.75", //All apps using the same runtime will get the published updates. Generally update for every new build
   icon: "./assets/images/adaptive-icon2.png",
   jsEngine: "hermes",
   scheme: "cashingames",
@@ -31,7 +31,7 @@ export default {
   android: {
     package: getAppIdentifier(),
     versionCode: getAndriodVersionCode(),
-    googleServicesFile: "./google-services.json",
+    googleServicesFile: getAndroidGoogleServices(),
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon2.png",
       backgroundColor: "#FFFFFF"
@@ -143,6 +143,17 @@ function getIosGoogleServices() {
   return services;
 }
 
+function getAndroidGoogleServices() {
+  let services = "./google-services.json";
+  if (isDevelopment) {
+    services = "./google-services-dev.json";
+  } else if (env === "preview") {
+    services = "./google-services-test.json";
+  }
+
+  return services;
+}
+
 function getGATrackingID() {
   if (isDevelopment || env === "preview") {
     return 'UA-173622310-2';
@@ -180,9 +191,9 @@ function getDomain() {
 }
 
 function getAssetsBaseUrl() {
-  // if (isDevelopment || env === "preview") {
-  //   return 'https://stg-api.cashingames.com';
-  // }
+  if (isDevelopment || env === "preview") {
+    return 'https://stg-api.cashingames.com';
+  }
 
   return 'https://api.cashingames.com';
 }

@@ -126,7 +126,7 @@ export default function SocialSignUp({ googleText }) {
                             console.log(originalPromiseResult);
                             saveToken(originalPromiseResult.data.token)
                             setloading(false)
-                            navigation.navigate('AppRouter')
+                            // navigation.navigate('AppRouter')
                         })
                         .catch((rejectedValueOrSerializedError) => {
                             // console.log(rejectedValueOrSerializedError)

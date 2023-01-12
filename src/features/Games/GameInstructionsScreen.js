@@ -69,7 +69,7 @@ export default function GameInstructionsScreen({ navigation }) {
           />
         </View>
         <ExhibitionInstructions />
-        {isStakingFeatureEnabled &&
+        {isStakingFeatureEnabled && gameMode.name !== "STAKING" &&
           <ExhibitionStakeAmount onPress={gotoStaking} />
         }
         {hasActivePlan ?
@@ -91,7 +91,13 @@ export default function GameInstructionsScreen({ navigation }) {
 
       </ScrollView>
       <View style={styles.stakingButtons}>
-        {!isStakingEntryMode() &&
+        <AppButton
+          onPress={gameMode.name === "STAKING" ? gotoStaking : openBottomSheet}
+          text='Proceed'
+          style={styles.noStakeProcced}
+          textStyle={styles.noStakingText}
+        />
+        {/* {!isStakingEntryMode() &&
           <AppButton
             onPress={openBottomSheet}
             text={isStakingFeatureEnabled ? 'Play exhibition' : 'Proceed'}
@@ -102,7 +108,7 @@ export default function GameInstructionsScreen({ navigation }) {
         {isStakingFeatureEnabled &&
           <StakingButtons gameMode={gameMode} onPress={gotoStaking} />
  
-        }
+        } */}
       </View>
     </View>
   );

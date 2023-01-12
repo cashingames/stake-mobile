@@ -70,20 +70,19 @@ import LiveTriviaStakingScreen from './features/Games/LiveTriviaStakingScreen';
 import ReviewStakeScreen from './features/Games/ReviewStakeScreen';
 import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
 import LandingPage from './features/LandingPage/LandingPage';
-import MonthlyLeaderboard from './features/Leaderboard/MonthlyLeaderboard';
-import TopLeadersModal from './shared/TopLeadersModal';
+import WeeklyLeaderboard from './features/Leaderboard/WeeklyLeaderboard';
 
 const AppStack = createNativeStackNavigator();
 
 function AppRouter() {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const [modalVisible, setModalVisible] = useState(false);
 
 	const [loading, setLoading] = useState(true);
 
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
+	appendAxiosAuthHeader(token);
 
 	//during app restart, check localstorage for these info
 	useEffect(() => {
@@ -96,7 +95,6 @@ function AppRouter() {
 	}, []);
 
 	useEffect(() => {
-		appendAxiosAuthHeader(token);
 		if (!isTrue(token)) {
 			return;
 		}
@@ -170,7 +168,7 @@ function AppRouter() {
 							},
 							headerTintColor: '#FFFF',
 						}} />
-						<AppStack.Screen name="MonthlyLeaderboard" component={MonthlyLeaderboard} options={{
+						<AppStack.Screen name="WeeklyLeaderboard" component={WeeklyLeaderboard} options={{
 							title: 'Leaderboard',
 							headerStyle: {
 								backgroundColor: '#701F88',
@@ -344,7 +342,7 @@ const setupAxios = async function () {
 
 }
 
-const appendAxiosAuthHeader = async function (token) {
+const appendAxiosAuthHeader = function (token) {
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {

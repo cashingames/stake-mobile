@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, View, Image, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { Text, View, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, {
     BounceInRight, BounceInUp,
-    useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, Extrapolate,
-    interpolate,
+    useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming
 } from 'react-native-reanimated';
 import normalize, {
     responsiveHeight, responsiveScreenWidth, responsiveWidth
@@ -17,7 +16,6 @@ import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../CommonSlice';
-import GlobalTopLeadersHero from '../../shared/GlobalTopLeadersHero';
 import UserItems from '../../shared/UserItems';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -26,8 +24,8 @@ import SelectGameMode from '../Games/SelectGameMode';
 import ChallengeWeeklyTopLeaders from '../Leaderboard/ChallengeWeeklyTopLeaders';
 import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import MonthlyTopLeadersHero from '../../shared/MonthlyTopLeadersHero';
 import Stakingpopup from '../../shared/Stakingpopup';
+import WeeklyTopLeadersHero from '../../shared/WeeklyTopLeadersHero';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -40,8 +38,8 @@ const HomeScreen = ({route}) => {
     const loading = useSelector(state => state.common.initialLoading);
     const challengeLeaders = useSelector(state => state.game.challengeLeaders);
     const showStakingAdvert = route.params?.showStakingAdvert ?? false;
-
     const [modalVisible, setModalVisible] = useState(false);
+    const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
@@ -64,7 +62,7 @@ const HomeScreen = ({route}) => {
     }, []);
 
     useEffect(() => {
-        if (!Constants.manifest.extra.isDevelopment) {
+        if (Constants.manifest.extra.isDevelopment) {
             return;
         }
         //whether we are forcing or not, show the first time
@@ -88,14 +86,13 @@ const HomeScreen = ({route}) => {
                 return;
             }
 
-            const minPublishedVersionCode = 1;
-            notifyOfPublishedUpdates(minPublishedVersionCode);
+            notifyOfPublishedUpdates();
 
             if (minVersionForce) {
                 notifyOfStoreUpdates(minVersionCode, minVersionForce);
             }
 
-        }, [])
+        }, [loading])
     );
 
     useFocusEffect(
@@ -128,8 +125,8 @@ const HomeScreen = ({route}) => {
                 <View style={styles.container}>
                     <SelectGameMode />
                     <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
-                        <MonthlyTopLeadersHero />
-                        <GlobalTopLeadersHero />
+                        <WeeklyTopLeadersHero gameModes={gameModes} />
+                        {/* <GlobalTopLeadersHero /> */}
                         <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
                     </SwiperFlatList>
                 </View>

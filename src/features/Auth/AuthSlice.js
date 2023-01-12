@@ -25,7 +25,15 @@ export const verifyUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
     'auth/login',
     async (data, thunkAPI) => {
-        return (await axios.post('auth/login', data)).data;
+        try {
+            const response = await axios.post('auth/login', data);
+            await AsyncStorage.setItem("token", response.data.data);
+            console.log("login response X", response.data);
+            return response.data;
+        } catch (err) {
+            console.log("login error 1", err);
+            return thunkAPI.rejectWithValue(err.response.data);
+        }
     }
 )
 
@@ -157,8 +165,13 @@ export const verifyDeviceToken = createAsyncThunk(
 export const verifyPhoneOtp = createAsyncThunk(
     'auth/verifyPhoneOtp',
     async (data, thunkAPI) => {
-        const response = await axios.post('auth/register/verify-token', data);
-        return response.data;
+        try {
+            const response = await axios.post('auth/register/verify-token', data);
+            await AsyncStorage.setItem("token", response.data.data);
+            return response.data;
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response.data);
+        }
     }
 )
 
@@ -231,6 +244,7 @@ export const AuthSlice = createSlice({
         setToken: (state, action) => {
             state.token = action.payload;
             state.showIntro = false;
+            console.log("token set");
         },
         showLogin: (state) => {
             state.showIntro = false;
@@ -259,9 +273,11 @@ export const AuthSlice = createSlice({
                 state.createAccount = {};
             })
             .addCase(loginUser.fulfilled, (state, action) => {
-                state.token = action.payload;
+                console.log("action response X", action.payload.data);
+                state.token = action.payload.data;
             })
             .addCase(loginUser.rejected, (state, action) => {
+                
                 console.log("login rejected payload", action.payload);
             })
             .addCase(resetPassword.fulfilled, (state) => {
@@ -283,6 +299,9 @@ export const AuthSlice = createSlice({
             .addCase(verifyUser.fulfilled, (state, action) => {
                 state.token = action.payload.data;
 
+            })
+            .addCase(verifyPhoneOtp.fulfilled, (state, action) => {
+                state.token = action.payload.data;
             })
             .addCase(loginWithSocialLink.fulfilled, (state, action) => {
                 state.token = action.payload.data.token;

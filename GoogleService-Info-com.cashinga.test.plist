@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>520726557605-snc0m31s1m0c059ktoi6gqk01fkvd17g.apps.googleusercontent.com</string>
+	<string>283687151805-lq9lvlant4obs1cpg8jhcmluai0lgida.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.520726557605-snc0m31s1m0c059ktoi6gqk01fkvd17g</string>
+	<string>com.googleusercontent.apps.283687151805-lq9lvlant4obs1cpg8jhcmluai0lgida</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>520726557605-n6htks6ao6ge2thkbevhosc0ipk35odr.apps.googleusercontent.com</string>
+	<string>283687151805-v41n03pk61mb9tk84od4cgv9dmudnv82.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDpcRKDdeF3592tm9b-86qS0g_rqPjsPCM</string>
+	<string>AIzaSyB6TuORFXqMpS6b1-0R_-g6qjshro3IZCE</string>
 	<key>GCM_SENDER_ID</key>
-	<string>520726557605</string>
+	<string>283687151805</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.cashinga.test</string>
 	<key>PROJECT_ID</key>
-	<string>cashingames-8730a</string>
+	<string>cashingames-test</string>
 	<key>STORAGE_BUCKET</key>
-	<string>cashingames-8730a.appspot.com</string>
+	<string>cashingames-test.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:520726557605:ios:92bccfd17ef750bc1aee4c</string>
-	<key>DATABASE_URL</key>
-	<string>https://cashingames-8730a-default-rtdb.firebaseio.com</string>
+	<string>1:283687151805:ios:203c070048d4abdfd3afd4</string>
 </dict>
 </plist>

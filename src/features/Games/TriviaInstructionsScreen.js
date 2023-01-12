@@ -223,7 +223,6 @@ const styles = EStyleSheet.create({
     },
     noStakingText: {
         color: '#FFFF',
-        width: '9rem',
         borderColor: '#EF2F55',
         borderWidth: 1,
     },

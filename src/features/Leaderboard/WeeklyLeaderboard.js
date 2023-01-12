@@ -3,50 +3,33 @@ import { Text, View, ScrollView, StatusBar, Image, Pressable } from 'react-nativ
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import PageLoading from '../../shared/PageLoading';
 import Constants from 'expo-constants';
-import {
-    getGlobalLeadersByDate,
-} from '../CommonSlice';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
-import TopLeadersModal from '../../shared/TopLeadersModal';
 import { formatNumber, isTrue } from '../../utils/stringUtl';
-import { Ionicons } from '@expo/vector-icons';
 import OtherMonthlyLeaders from '../../shared/OtherMonthlyLeaders';
+import PrizePoolTitle from '../../shared/PrizePoolTitle';
+import { getWeeklyLeadersByDate } from '../CommonSlice';
 
 
-export default function MonthlyLeaderboard({ navigation }) {
+export default function WeeklyLeaderboard({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
-    const leaders = useSelector(state => state.common.globalLeadersbyDate)
+    const leaders = useSelector(state => state.common.weeklyLeaderboard.leaderboard)
+    const userRank = useSelector(state => state.common.weeklyLeaderboard.userRank)
     const [loading, setLoading] = useState(true);
-    const [modalVisible, setModalVisible] = useState(false);
 
-    // const startDate = getFirstDayOfMonth(2022, 11);
-    // const endDate = getLastDayOfMonth(2022, 11);
-    const date = new Date();
-    function getLastDayOfMonth(year, month) {
-        return new Date(year, month + 1, 0);
-    }
-    function getFirstDayOfMonth(year, month) {
-        return new Date(year, month, 1);
-    }
 
-    const startDate = getFirstDayOfMonth(
-        date.getFullYear(),
-        date.getMonth(),
-    );
+    const today = new Date();
+    const startDate = new Date(today.setDate(today.getDate() - today.getDay()));
 
-    const endDate = getLastDayOfMonth(
-        date.getFullYear(),
-        date.getMonth(),
-    );
+    const endDate = new Date(today.setDate(today.getDate() - today.getDay() + 6));
 
 
     useEffect(() => {
-        dispatch(getGlobalLeadersByDate({
+        dispatch(getWeeklyLeadersByDate({
             startDate,
             endDate
         })).then(() => setLoading(false));
@@ -54,7 +37,7 @@ export default function MonthlyLeaderboard({ navigation }) {
 
     useFocusEffect(
         React.useCallback(() => {
-            dispatch(getGlobalLeadersByDate({
+            dispatch(getWeeklyLeadersByDate({
                 startDate,
                 endDate
             }));
@@ -86,14 +69,9 @@ export default function MonthlyLeaderboard({ navigation }) {
             >
                 <ScrollView>
                     <View style={styles.prizeHeaderContainer}>
-                        <Text style={styles.prizeHeaderText}>Monthly Leaders</Text>
-                        <Pressable style={styles.prizeContainer}>
-                            <Text style={styles.prizeTitle} onPress={() => setModalVisible(true)}>Prize pool</Text>
-                            <Ionicons name="information-circle-outline" size={16} color="#FFFF" style={styles.icon} />
-                        </Pressable>
+                        <PrizePoolTitle />
                     </View>
-                    <MonthlyGlobalLeaderboard leaders={leaders} />
-                    <TopLeadersModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
+                    <WeeklyGlobalLeaderboard leaders={leaders} userRank={userRank} />
                 </ScrollView>
             </LinearGradient>
         </View>
@@ -101,22 +79,22 @@ export default function MonthlyLeaderboard({ navigation }) {
 }
 
 
-function MonthlyGlobalLeaderboard({ leaders }) {
+function WeeklyGlobalLeaderboard({ leaders, userRank }) {
     return (
         <View style={styles.global}>
-            <MonthlyTopLeaders leaders={leaders} />
+            <WeeklyTopLeaders leaders={leaders} />
             <LinearGradient
                 colors={['#F5870F', '#770D0F']}
                 style={styles.rankLinear}
             >
-                <Text style={styles.linearInfo}>Climb up th leaderboard to win cash prizes at the end of the month. Click on prize pool above to see cash prizes to be won</Text>
-                {/* <Text style={styles.rankText}>Your current rank</Text>
+                {/* <Text style={styles.linearInfo}>Climb up th leaderboard to win cash prizes at the end of the month. Click on prize pool above to see cash prizes to be won</Text> */}
+                <Text style={styles.rankText}>Your current rank</Text>
                 <View style={styles.pointPosition}>
-                    <Text style={styles.userPoint}>95pts</Text>
-                    <View style={styles.userPositionContainer}>
-                        <Text style={styles.userPosition}>13</Text>
+                    <Text style={styles.userPoint}>{userRank.points} pts</Text>
+                    <View style={[userRank.rank < 999 ? styles.userPositionContainer : styles.userPositionContainer1]}>
+                        <Text style={styles.userPosition}>{userRank.rank}</Text>
                     </View>
-                </View> */}
+                </View>
             </LinearGradient>
             <OtherMonthlyLeaders leaders={leaders} otherStyles={styles.otherLeaders} />
         </View>
@@ -124,42 +102,39 @@ function MonthlyGlobalLeaderboard({ leaders }) {
     )
 }
 
-function MonthlyTopLeaders({ leaders }) {
+function WeeklyTopLeaders({ leaders }) {
     const topLeaders = leaders?.slice(0, 3) ?? null;
     const firstLeader = topLeaders[0] ?? { username: "..." };
     const secondLeader = topLeaders[1] ?? { username: "..." };
     const thirdLeader = topLeaders[2] ?? { username: "..." };
     return (
         <View style={styles.contentContainer}>
-            <MonthlyLeader
+            <WeeklyLeader
                 position={formatNumber(3)}
                 name={`${thirdLeader.username}`}
                 point={`${formatNumber(thirdLeader.points ? `${thirdLeader.points}` : 0)} pts`}
                 avatar={thirdLeader.avatar}
                 avatarProp={styles.thirdAvatar}
                 positionProp={styles.thirdPosition}
-                source={require("../../../assets/images/month-crown.png")}
                 crownProp={styles.crowns}
             />
-            <MonthlyLeader
+            <WeeklyLeader
                 position={formatNumber(1)}
                 name={`${firstLeader.username}`}
                 point={`${formatNumber(firstLeader.points ? `${firstLeader.points}` : 0)} pts`}
                 avatar={firstLeader.avatar}
                 avatarProp={styles.avatar}
                 positionProp={styles.winnerPosition}
-                source={require("../../../assets/images/month-winner-crown.png")}
                 crownProp={styles.winnerCrown}
 
             />
-            <MonthlyLeader
+            <WeeklyLeader
                 position={formatNumber(2)}
                 name={`${secondLeader.username}`}
                 point={`${formatNumber(secondLeader.points ? `${secondLeader.points}` : 0)} pts`}
                 avatar={secondLeader.avatar}
                 avatarProp={styles.secondAvatar}
                 positionProp={styles.secondPosition}
-                source={require("../../../assets/images/month-crown.png")}
                 crownProp={styles.crowns}
 
             />
@@ -167,13 +142,10 @@ function MonthlyTopLeaders({ leaders }) {
     )
 }
 
-function MonthlyLeader({ avatar, position, positionProp, name, point, crownProp, avatarProp, source }) {
+function WeeklyLeader({ avatar, position, positionProp, name, point, crownProp, avatarProp, source }) {
     return (
         <View style={styles.winner}>
-            <Image
-                style={crownProp}
-                source={source}
-            />
+
             <View style={styles.avatarContainer}>
                 <Image
                     style={avatarProp}
@@ -200,7 +172,7 @@ const styles = EStyleSheet.create({
     },
     prizeHeaderContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
     },
     prizeContainer: {
@@ -217,7 +189,7 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         fontFamily: 'graphik-medium',
         textDecoration: 'underline',
-        marginRight: '.2rem'
+        marginLeft: '.2rem'
     },
     content: {
         display: 'flex',
@@ -240,6 +212,7 @@ const styles = EStyleSheet.create({
     },
     winner: {
         alignItems: 'center',
+
     },
     avatar: {
         width: 120,
@@ -326,7 +299,7 @@ const styles = EStyleSheet.create({
     },
     leaderName: {
         color: '#FFFF',
-        fontSize: '0.6rem',
+        fontSize: '0.7rem',
         fontFamily: 'graphik-medium',
         width: responsiveScreenWidth(22),
         marginBottom: '.2rem',
@@ -340,15 +313,15 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop:'1rem',
-        marginBottom:'2rem'
+        marginTop: '1rem',
+        marginBottom: '2rem'
     },
     linearInfo: {
         color: '#FFFF',
         fontSize: '0.65rem',
         fontFamily: 'graphik-medium',
-        textAlign:'center',
-        lineHeight:'1rem'
+        textAlign: 'center',
+        lineHeight: '1rem'
     },
     rankText: {
         color: '#FFFF',
@@ -365,11 +338,32 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
     },
     userPositionContainer: {
-        borderRadius: 50,
+        borderRadius: 100,
         borderWidth: 1,
         borderColor: '#A32725',
-        marginLeft:'.4rem',
-        padding:'.4rem'
+        marginLeft: '.4rem',
+        width: '1.7rem',
+        height: '1.7rem',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#752A00',
+        // paddingHorizontal:'.1rem',
+        // paddingVertical:'.5rem',
+
+    },
+    userPositionContainer1: {
+        borderRadius: 100,
+        borderWidth: 1,
+        borderColor: '#A32725',
+        marginLeft: '.4rem',
+        width: '2.2rem',
+        height: '2.2rem',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#752A00',
+        // paddingHorizontal:'.1rem',
+        // paddingVertical:'.5rem',
+
     },
     userPosition: {
         color: '#FFFF',

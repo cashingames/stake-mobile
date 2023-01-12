@@ -4,37 +4,26 @@ import { Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { getGlobalLeadersByDate } from '../features/CommonSlice';
-import MonthlyTopLeaders from './MonthlyTopLeaders';
+import WeeklyTopLeaders from './WeeklyTopLeaders';
+import { getWeeklyLeadersByDate } from '../features/CommonSlice';
 
-export default function MonthlyTopLeadersHero() {
+export default function WeeklyTopLeadersHero({gameModes}) {
     const navigation = useNavigation();
-    const leaders = useSelector(state => state.common.globalLeadersbyDate)
+    const leaders = useSelector(state => state.common.weeklyLeaderboard.leaderboard)
     const dispatch = useDispatch();
 
-    const date = new Date();
-    function getLastDayOfMonth(year, month) {
-        return new Date(year, month + 1, 0);
-    }
-    function getFirstDayOfMonth(year, month) {
-        return new Date(year, month, 1);
-    }
+    const today = new Date();
+    const startDate = new Date(today.setDate(today.getDate() - today.getDay()));
 
-    const startDate = getFirstDayOfMonth(
-        date.getFullYear(),
-        date.getMonth(),
-    );
-
-    const endDate = getLastDayOfMonth(
-        date.getFullYear(),
-        date.getMonth(),
-    );
-
+    const endDate = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+   
+    const firstDayString = startDate.toDateString()
+    const lastDayString = endDate.toDateString()
 
 
     useFocusEffect(
         React.useCallback(() => {
-            dispatch(getGlobalLeadersByDate({
+            dispatch(getWeeklyLeadersByDate({
                 startDate,
                 endDate
             }));
@@ -44,15 +33,10 @@ export default function MonthlyTopLeadersHero() {
     return (
         <View style={styles.leaderboard}>
             <View style={styles.leaderboardHeader}>
-                <Text style={styles.title}>Top Players for the month</Text>
-                <Text style={styles.extendedText} onPress={() => navigation.navigate('MonthlyLeaderboard')}>View More</Text>
+                <Text style={styles.title}>Top Players for the week</Text>
+                <Text style={styles.extendedText} onPress={() => navigation.navigate('WeeklyLeaderboard')}>View More</Text>
             </View>
-            <MonthlyTopLeaders leaders={leaders} />
-            {/* <View style={styles.extended}>
-                <Text onPress={() => navigation.navigate('MonthlyLeaderboard')}>
-                    <Text style={styles.extendedText}>View More</Text>
-                </Text>
-            </View> */}
+            <WeeklyTopLeaders leaders={leaders} firstDay={firstDayString} lastDay={lastDayString} gameModes={gameModes} />
         </View>
     )
 }

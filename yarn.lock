@@ -10954,11 +10954,6 @@ react-native-gradle-plugin@^0.70.3:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.70.3.tgz#cbcf0619cbfbddaa9128701aa2d7b4145f9c4fc8"
   integrity sha512-oOanj84fJEXUg9FoEAQomA8ISG+DVIrTZ3qF7m69VQUJyOGYyDZmPqKcjvRku4KXlEH6hWO9i4ACLzNBh8gC0A==
 
-react-native-linear-gradient@^2.6.2:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.6.2.tgz#56598a76832724b2afa7889747635b5c80948f38"
-  integrity sha512-Z8Xxvupsex+9BBFoSYS87bilNPWcRfRsGC0cpJk72Nxb5p2nEkGSBv73xZbEHnW2mUFvP+huYxrVvjZkr/gRjQ==
-
 react-native-paystack-webview@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/react-native-paystack-webview/-/react-native-paystack-webview-4.0.3.tgz#f2d7599a544c07e3ec206196bd2fce5ec989a8cd"
@@ -10978,11 +10973,6 @@ react-native-raw-bottom-sheet@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/react-native-raw-bottom-sheet/-/react-native-raw-bottom-sheet-2.2.0.tgz#d11dabb86aadb014273767ef7b554924b13633c5"
   integrity sha512-qL4JKIqvbcVxbkKzeh51hjV7suoJN3ouxzvLmOg0FBUV1yiJAfEbacjQdtRCI6+OU5pyGFBIifLsTXcFDwHggg==
-
-react-native-reanimated-carousel@^3.1.5:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated-carousel/-/react-native-reanimated-carousel-3.1.5.tgz#9737071fb06137632bd3dc7e92e75eeaf7de17a2"
-  integrity sha512-s3+Qoaajpic6u4npfqLHZeIDG8G1jbBSf5fCf0gRioWCiSNw8+1kzvfU9kB5knY10XCYTksMZ0eJfi8EqEvWEw==
 
 react-native-reanimated@~2.12.0:
   version "2.12.0"
