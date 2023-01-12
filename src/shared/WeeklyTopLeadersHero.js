@@ -7,7 +7,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import WeeklyTopLeaders from './WeeklyTopLeaders';
 import { getWeeklyLeadersByDate } from '../features/CommonSlice';
 
-export default function WeeklyTopLeadersHero() {
+export default function WeeklyTopLeadersHero({gameModes}) {
     const navigation = useNavigation();
     const leaders = useSelector(state => state.common.weeklyLeaderboard.leaderboard)
     const dispatch = useDispatch();
@@ -36,7 +36,7 @@ export default function WeeklyTopLeadersHero() {
                 <Text style={styles.title}>Top Players for the week</Text>
                 <Text style={styles.extendedText} onPress={() => navigation.navigate('WeeklyLeaderboard')}>View More</Text>
             </View>
-            <WeeklyTopLeaders leaders={leaders} firstDay={firstDayString} lastDay={lastDayString} />
+            <WeeklyTopLeaders leaders={leaders} firstDay={firstDayString} lastDay={lastDayString} gameModes={gameModes} />
         </View>
     )
 }

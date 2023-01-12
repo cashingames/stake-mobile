@@ -1,21 +1,35 @@
 import * as React from 'react';
-import { Platform, View } from 'react-native';
+import { Platform, View, Pressable } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import MonthlyLeader from './WeeklyLeader';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useDispatch } from "react-redux";
+import { setGameMode } from '../features/Games/GameSlice';
 import WeeklyLeader from './WeeklyLeader';
 import PrizePoolTitle from './PrizePoolTitle';
 import { Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
 
-function WeeklyTopLeaders({ leaders, firstDay, lastDay }) {
+function WeeklyTopLeaders({ leaders, firstDay, lastDay, gameModes }) {
     const topLeaders = leaders?.slice(0, 3) ?? null;
     const firstLeader = topLeaders[0] ?? { username: "..." };
     const secondLeader = topLeaders[1] ?? { username: "..." };
     const thirdLeader = topLeaders[2] ?? { username: "..." };
+
+    const navigation = useNavigation();
+    const dispatch = useDispatch()
+
+    const gameModeSelected = gameModes.find(mode => mode.name === 'EXHIBITION')
+
+    const playGame = () => {
+        dispatch(setGameMode(gameModeSelected));
+        navigation.navigate('SelectGameCategory')    
+    }
+
     return (
         <View >
             <LinearGradient
@@ -56,6 +70,14 @@ function WeeklyTopLeaders({ leaders, firstDay, lastDay }) {
                         stage={styles.stage}
 
                     />
+                </View>
+                <View style={styles.playContainer}>
+                <Pressable
+                onPress={playGame}
+                    style={styles.playBtn}
+                >
+                    <Text style={styles.playText}>Play now</Text>
+                </Pressable>
                 </View>
             </LinearGradient>
         </View>
@@ -213,5 +235,26 @@ const styles = EStyleSheet.create({
         width: normalize(98),
         height: normalize(98),
     },
+
+    playContainer: {
+        alignItems:'center'
+    },
+    playBtn : {
+        borderColor:'#fff',
+        borderWidth:1.5,
+        backgroundColor:'transparent',
+        alignItems:'center',
+        justifyContent:'center',
+        marginVertical:'0.5rem',
+        borderRadius:5,
+        padding:'0.5rem',
+        paddingTop:'0.4rem'
+    },
+    playText: {
+        fontFamily:'graphik-medium',
+        color:'#fff',
+        fontSize:'0.7rem',
+        lineHeight:'1rem'
+    }
 
 });

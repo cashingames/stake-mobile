@@ -155,7 +155,7 @@ const styles = EStyleSheet.create({
     topChallengersContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingTop: responsiveScreenWidth(3.5),
+        paddingTop: responsiveScreenWidth(14),
         alignItems: 'flex-end',
     },
     topChallengerContainer: {

@@ -35,6 +35,7 @@ const HomeScreen = () => {
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
     const challengeLeaders = useSelector(state => state.game.challengeLeaders)
+    const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
@@ -120,7 +121,7 @@ const HomeScreen = () => {
                 <View style={styles.container}>
                     <SelectGameMode />
                     <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
-                        <WeeklyTopLeadersHero />
+                        <WeeklyTopLeadersHero gameModes={gameModes} />
                         {/* <GlobalTopLeadersHero /> */}
                         <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
                     </SwiperFlatList>
