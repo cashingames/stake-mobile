@@ -241,19 +241,22 @@ const styles = EStyleSheet.create({
     },
     playBtn : {
         borderColor:'#fff',
-        borderWidth:1.5,
+        borderWidth:1,
         backgroundColor:'transparent',
         alignItems:'center',
         justifyContent:'center',
         marginVertical:'0.5rem',
         borderRadius:5,
-        padding:'0.5rem',
-        paddingTop:'0.4rem'
+        paddingHorizontal:'0.5rem',
+        paddingVertical:'0.1rem',
+        width:'100%'
+        // padding:'0.5rem',
+        // paddingTop:'0.4rem'
     },
     playText: {
         fontFamily:'graphik-medium',
         color:'#fff',
-        fontSize:'0.7rem',
+        fontSize:'0.6rem',
         lineHeight:'1rem'
     }
 

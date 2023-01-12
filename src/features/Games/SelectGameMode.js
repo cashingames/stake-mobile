@@ -48,17 +48,20 @@ const AvailableMode = ({ gameMode, onPress, isSelected }) => {
             <Pressable
                 onPress={onPress}
             >
-                <View style={styles.categoryCardTopRow}>
-                    <Image
-                        source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${gameMode.icon}` }}
-                        style={styles.cardIcon}
-                    />
-
-                    {/* <Ionicons name={isSelected ? "md-ellipse-sharp" : "md-ellipse"} size={24} color={isSelected ? "#EF2F55" : "#FFFF"} /> */}
+                <View style={styles.cardTopRow}>
+                    <View style={styles.categoryCardTopRow}>
+                        <Image
+                            source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${gameMode.icon}` }}
+                            style={styles.cardIcon}
+                        />
+                        {/* <Ionicons name={isSelected ? "md-ellipse-sharp" : "md-ellipse"} size={24} color={isSelected ? "#EF2F55" : "#FFFF"} /> */}
+                    </View>
+                    <Text style={styles.cardTitle}>{gameMode.name}</Text>
+                    <Text style={styles.cardInstruction}>{gameMode.description}</Text>
                 </View>
-                <Text style={styles.cardTitle}>{gameMode.name}</Text>
-                <Text style={styles.cardInstruction}>{gameMode.description}</Text>
-
+                <View style={gameMode.name === 'EXHIBITION' ? styles.cardActionContainer1 : styles.cardActionContainer}>
+                    <Text style={styles.cardAction}>Play Now</Text>
+                </View>
             </Pressable>
         </Animated.View>
     )
@@ -74,7 +77,8 @@ const styles = EStyleSheet.create({
     },
     card: {
         width: normalize(130),
-        padding: normalize(15),
+        // padding: normalize(15),
+        // paddingBottom: 0,
         borderRadius: normalize(7),
         marginBottom: normalize(15),
         marginRight: normalize(10)
@@ -96,8 +100,35 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         fontFamily: 'graphik-regular',
     },
+    cardActionContainer1: {
+        borderTopWidth: 1,
+        borderColor:'#fff',
+        alignItems:'center',
+        justifyContent:'center',
+        paddingVertical:'.5rem'
+,        marginTop:'.75rem'
+    },
+    cardActionContainer: {
+        borderTopWidth: 1,
+        borderColor:'#fff',
+        alignItems:'center',
+        justifyContent:'center',
+        paddingVertical:'.5rem'
+    },
+    cardAction: {
+        fontSize: '0.6rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-regular',
+        // marginLeft: 'auto'
+        // marginTop: '.6rem',
+        // textAlign: 'center',
+    },
     checkbox: {
         // backgroundColor: '#FFFF',
+    },
+    cardTopRow: {
+        padding: normalize(15),
+        // paddingBottom: 0,
     },
     categoryCardTopRow: {
         display: 'flex',
