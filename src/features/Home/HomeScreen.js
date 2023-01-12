@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Text, View, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, {
@@ -24,30 +24,32 @@ import SelectGameMode from '../Games/SelectGameMode';
 import ChallengeWeeklyTopLeaders from '../Leaderboard/ChallengeWeeklyTopLeaders';
 import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
 import SwiperFlatList from 'react-native-swiper-flatlist';
+import Stakingpopup from '../../shared/Stakingpopup';
 import WeeklyTopLeadersHero from '../../shared/WeeklyTopLeadersHero';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
-const HomeScreen = () => {
+const HomeScreen = ({route}) => {
 
     const dispatch = useDispatch();
+
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
-    const challengeLeaders = useSelector(state => state.game.challengeLeaders)
+    const challengeLeaders = useSelector(state => state.game.challengeLeaders);
+    const showStakingAdvert = route.params?.showStakingAdvert ?? false;
+    const [modalVisible, setModalVisible] = useState(false);
     const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
-        console.info('refreshing')
+        // console.info('refreshing')
         setRefreshing(true);
         dispatch(getUser())
         dispatch(getCommonData())
         dispatch(getLiveTriviaStatus())
         wait(2000).then(() => setRefreshing(false));
     }, []);
-
-
 
     useEffect(() => {
         const _2 = dispatch(getCommonData());
@@ -67,6 +69,9 @@ const HomeScreen = () => {
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }, [minVersionCode]);
 
+    useEffect(()=>{
+        setModalVisible(showStakingAdvert);
+    }, [showStakingAdvert])
 
     useFocusEffect(
         React.useCallback(() => {
@@ -75,7 +80,7 @@ const HomeScreen = () => {
                 return;
             }
 
-            console.info('home screen focus effect')
+            // console.info('home screen focus effect')
 
             if (Constants.manifest.extra.isDevelopment) {
                 return;
@@ -101,7 +106,6 @@ const HomeScreen = () => {
         }, [])
     );
 
-
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
     }
@@ -126,6 +130,7 @@ const HomeScreen = () => {
                         <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
                     </SwiperFlatList>
                 </View>
+                <Stakingpopup setModalVisible={setModalVisible} modalVisible={modalVisible} />
             </ScrollView>
         </View>
     );
@@ -151,7 +156,7 @@ const UserDetails = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            console.info('UserDetails focus effect')
+            // console.info('UserDetails focus effect')
             dispatch(getUser());
         }, [])
     );
@@ -220,7 +225,7 @@ const LiveTriviaBanner = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            console.info('LiveTriviaBanner focus effect')
+            // console.info('LiveTriviaBanner focus effect')
             dispatch(getLiveTriviaStatus());
 
         }, [])

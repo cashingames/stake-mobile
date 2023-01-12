@@ -9,7 +9,6 @@ import UserName from '../../shared/UserName';
 import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { getUser } from '../Auth/AuthSlice';
-import { formatCurrency } from '../../utils/stringUtl';
 import analytics from '@react-native-firebase/analytics';
 import StakeWinnings from '../../shared/StakeWinnings';
 
@@ -20,15 +19,11 @@ export default function GameEndResultScreen({ navigation }) {
 	const pointsGained = useSelector(state => state.game.pointsGained);
 	const amountWon = useSelector(state => state.game.amountWon);
 	const withStaking = useSelector(state => state.game.withStaking);
-	const gameCategoryId = useSelector(state => state.game.gameCategory.id);
-	const gameTypeId = useSelector(state => state.game.gameType.id);
-	const gameModeId = useSelector(state => state.game.gameMode.id);
-	// const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
-	// console.log(hasActivePlan, 'my plan')
 
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
 	const [showText, setShowText] = useState(true);
+
 
 	const refRBSheet = useRef();
 
@@ -41,25 +36,15 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	const onPlayButtonClick = () => {
+		setLoading(true);
 		analytics().logEvent('exhibition_play_again_clicked', {
 			'id': user.username,
 			'phone_number': user.phoneNumber,
 			'email': user.email
-		})
-		// if (!hasActivePlan) {
-		// 	analytics().logEvent('exhibition_game_plan_exhausted', {
-		// 		'id': user.username,
-		// 		'phone_number': user.phoneNumber,
-		// 		'email': user.email
-		// 	})
-		// 	openBottomSheet();
-		// 	console.log("NO GAME", hasActivePlan)
-		// 	return;
-		// }
-		// setLoading(true);
+		});
 		navigation.navigate("GameInstructions")
+		setLoading(false);
 
-		// 	dispatch(startGame({
 		// 		category: gameCategoryId,
 		// 		type: gameTypeId,
 		// 		mode: gameModeId
@@ -88,7 +73,8 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	const onHomeButtonClick = () => {
-		navigation.navigate('Home')
+		console.log("showing staking pop", !withStaking)
+		navigation.navigate('Home', { showStakingAdvert: !withStaking})
 	}
 	useFocusEffect(
 		React.useCallback(() => {

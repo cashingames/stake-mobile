@@ -13,17 +13,14 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { randomEnteringAnimation } from '../../utils/utils';
 import GameCategoryCard from './GameCategoryCard';
 import GameSubcategoryCard from './GameSubcategoryCard';
-import NoGame from '../../shared/NoGame';
-import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
+
 
 export default ({ title, initialShowPlayButton = true ,activeSubcategory}) => {
 
     const dispatch = useDispatch();
-    // const navigation = useNavigation();
-    // const refRBSheet = useRef();
+   
     const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
     const [activeCategory, setActiveCategory] = useState();
-    // const activeSubcategory = useSelector(state => state.game.gameCategory);
     const activeGame = useSelector(state => state.game.gameType);
     const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
 
@@ -36,29 +33,6 @@ export default ({ title, initialShowPlayButton = true ,activeSubcategory}) => {
         dispatch(setGameCategory(subcategory));
     }
 
-    //     refRBSheet.current.open()
-    // }
-
-    // const closeBottomSheet = () => {
-    //     refRBSheet.current.close()
-    // }
-
-    // const onPlayButtonClick = () => {
-    //     // hasActivePlan ? onSelectGameMode() : openBottomSheet();
-    //     onSelectGameMode();
-    // }
-    // const gameMode = useSelector(state => state.game.gameMode);
-    // console.log(" log it", gameMode, "this is it right here")
-
-    // const onSelectGameMode = () => {
-    //     if (gameMode.name === "EXHIBITION") {
-    //         hasActivePlan ? navigation.navigate('GameInstructions') : openBottomSheet();
-    //     }
-    //     else if (gameMode.name === "CHALLENGE") {
-    //         navigation.navigate('ChallengeSelectPlayer')
-    //     }
-
-    // };
 
     useFocusEffect(
         React.useCallback(() => {
