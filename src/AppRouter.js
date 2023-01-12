@@ -71,6 +71,8 @@ import ReviewStakeScreen from './features/Games/ReviewStakeScreen';
 import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
 import LandingPage from './features/LandingPage/LandingPage';
 import WeeklyLeaderboard from './features/Leaderboard/WeeklyLeaderboard';
+import HelpPages from './features/Support/HelpPages';
+import ContactUs from './features/Support/ContactUs';
 
 const AppStack = createNativeStackNavigator();
 
@@ -300,8 +302,10 @@ function AppRouter() {
 			{/** general */}
 			<AppStack.Screen name="Terms" component={TermsAndConditionsScreen} options={{ title: 'Terms & Conditions' }} />
 			<AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
-			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Support' }} />
+			<AppStack.Screen name="Help" component={HelpPages} options={{ title: 'Support' }} />
+			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Help' }} />
 			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
+			<AppStack.Screen name="ContactUs" component={ContactUs} options={{ title: 'Contact Us' }} />
 			<AppStack.Screen name="EmailVerified" component={EmailVerifiedScreen} options={{ headerShown: false }} />
 			<AppStack.Screen name="ChallengeNotPending" component={ChallengeNotPendingScreen} options={{ headerShown: false }} />
 			{/* <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} /> */}
