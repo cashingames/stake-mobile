@@ -7,13 +7,12 @@ import TopLeadersModal from "./TopLeadersModal";
 import { View } from "react-native";
 
 
-const PrizePoolTitle = () => {
-    const [modalVisible, setModalVisible] = useState(false);
+const PrizePoolTitle = ({onPress, setModalVisible,modalVisible}) => {
     return (
         <View>
-            <Pressable style={styles.prizeContainer}>
+            <Pressable style={styles.prizeContainer} onPress={onPress}>
                 <Ionicons name="information-circle-outline" size={13} color="#FFFF" style={styles.icon} />
-                <Text style={styles.prizeTitle} onPress={() => setModalVisible(true)}>PRIZE POOL</Text>
+                <Text style={styles.prizeTitle}>PRIZE POOL</Text>
             </Pressable>
             <TopLeadersModal setModalVisible={setModalVisible} modalVisible={modalVisible} />
         </View>

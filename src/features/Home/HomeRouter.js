@@ -7,12 +7,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import HomeScreen from './HomeScreen';
 import WalletScreen from '../Transactions/WalletScreen';
 import { logoutUser } from '../Auth/AuthSlice';
 import { isTrue } from '../../utils/stringUtl';
+import analytics from '@react-native-firebase/analytics';
 
 import AppButton from '../../shared/AppButton';
 // import LottieAnimations from '../../shared/LottieAnimations';
@@ -65,24 +65,48 @@ const HomeRouter = () => {
 const RightButtons = () => {
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
-    // console.log(user)
     const route = useRoute();
-
     const routeName = route.name
+
+    const viewHome = async () => {
+        await analytics().logEvent("home_button_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('Home')
+    }
+
+    const viewWallet = async () => {
+        await analytics().logEvent("wallet_button_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('Wallet')
+    }
+
+    const viewNotifications = async () => {
+        await analytics().logEvent("notification_button_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('Notifications')    }
 
     return (
         <View style={styles.headerIcons}>
 
-            <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Home')}>
+            <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={viewHome}>
                 <Ionicons name='home-outline' size={26} />
                 <Text style={styles.headerIconText}>Home</Text>
             </Pressable>
-            < Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Wallet')}>
+            < Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={viewWallet}>
                 <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
             </Pressable>
 
-            <Pressable style={[styles.headerIconContainerNot, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={() => navigation.navigate('Notifications')}>
+            <Pressable style={[styles.headerIconContainerNot, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={viewNotifications}>
                 <View style={styles.notificationContainer}>
                     <Ionicons name='notifications-outline' size={26} style={[styles.headerIcon, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} />
                     {user.unreadNotificationsCount !== 0 &&

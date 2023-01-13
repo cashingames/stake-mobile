@@ -4,15 +4,15 @@ import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LottieAnimations from '../shared/LottieAnimations';
-
 import { formatNumber } from '../utils/stringUtl';
-import normalize, { responsiveHeight, responsiveScreenWidth } from "../utils/normalize";
+import normalize from "../utils/normalize";
 import Animated, { BounceInLeft } from "react-native-reanimated";
+import analytics from '@react-native-firebase/analytics';
+
 
 const UserItems = ({ showBuy }) => {
-
     const navigation = useNavigation();
-
+    const user = useSelector(state => state.auth.user)
     var plans = useSelector(state => state.auth.user.activePlans ?? []);
     var boosts = useSelector(state => state.auth.user.boosts ?? []);
     const [sumOfPlans, setSumOfPlans] = useState(0);
@@ -32,6 +32,16 @@ const UserItems = ({ showBuy }) => {
 
     }, [boosts, plans]);
 
+
+    const buyMore = async () => {
+        await analytics().logEvent("buy_more_clicked_on_home", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('GameStore')
+    }
+
     return (
         <Animated.View entering={BounceInLeft.duration(2000)} style={styles.container}>
             <View style={styles.topRow}>
@@ -47,7 +57,7 @@ const UserItems = ({ showBuy }) => {
                     <Text style={[styles.commonRow, boosts?.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
                 </View>
             </View>
-            {showBuy && <Text onPress={() => navigation.navigate('GameStore')} style={styles.buyMore}>Buy more</Text>}
+            {showBuy && <Text onPress={buyMore} style={styles.buyMore}>Buy more</Text>}
         </Animated.View>
     )
 }
