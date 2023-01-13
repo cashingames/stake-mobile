@@ -130,7 +130,7 @@ const HomeScreen = ({route}) => {
                         <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
                     </SwiperFlatList>
                 </View>
-                <Stakingpopup setModalVisible={setModalVisible} modalVisible={modalVisible} />
+                <Stakingpopup setModalVisible={setModalVisible} modalVisible={modalVisible} gameModes={gameModes} />
             </ScrollView>
         </View>
     );

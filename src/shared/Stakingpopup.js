@@ -1,15 +1,23 @@
 import * as React from 'react';
 import { Platform, Pressable, Text, View, Modal } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
-import { formatCurrency } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import LottieAnimations from './LottieAnimations';
 import { Image } from 'react-native';
+import { setGameMode } from '../features/Games/GameSlice';
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from 'react-redux';
 
 
-
-
-const Stakingpopup = ({ setModalVisible, modalVisible }) => {
+const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const gameModeSelected = gameModes.find(mode => mode.name === 'STAKING')
+console.log(gameModeSelected)
+    const playStaking = () => {
+        setModalVisible(!modalVisible)
+        dispatch(setGameMode(gameModeSelected));
+        navigation.navigate('SelectGameCategory')    
+    }
     return (
         <View style={styles.onView}>
             <Modal
@@ -45,7 +53,7 @@ const Stakingpopup = ({ setModalVisible, modalVisible }) => {
                         </View>
                         <View style={styles.modalItems}>
                             <Text style={styles.infoText}>A fellow Cashingamer just cashed out, stake cash now 🤑. and stand a chance to win big</Text>
-                            <Pressable style={styles.stake} onPress={() => setModalVisible(!modalVisible)}>
+                            <Pressable style={styles.stake} onPress={playStaking}>
                                 <Text style={styles.stakeText}>
                                     Stake cash now
                                 </Text>
