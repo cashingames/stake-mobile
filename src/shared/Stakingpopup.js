@@ -130,9 +130,8 @@ const styles = EStyleSheet.create({
     infoText: {
         textAlign: 'center',
         width: '12rem',
-        fontSize:'1rem',
+        fontSize:'.8rem',
         fontFamily: 'graphik-medium',
-        lineHeight: '1rem'
     },
     resultContainer: {
         alignItems: 'center'
@@ -170,7 +169,7 @@ const styles = EStyleSheet.create({
         fontSize: '1rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        marginBottom: normalize(10),
+        marginBottom: normalize(8),
         textAlign: 'center'
     },
     winnerItemText: {
