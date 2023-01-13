@@ -45,14 +45,15 @@ const Stakingpopup = ({ setModalVisible, modalVisible }) => {
                         </View>
                         <View style={styles.modalItems}>
                             <Text style={styles.infoText}>A fellow Cashingamer just cashed out, stake cash now 🤑. and stand a chance to win big</Text>
+                            <Pressable style={styles.stake} onPress={() => setModalVisible(!modalVisible)}>
+                                <Text style={styles.stakeText}>
+                                    Stake cash now
+                                </Text>
+                            </Pressable>
                         </View>
 
                     </View>
-                    <Pressable style={styles.stake} onPress={() => setModalVisible(!modalVisible)}>
-                        <Text style={styles.stakeText}>
-                            Stake cash now
-                        </Text>
-                    </Pressable>
+
                 </View>
             </Modal>
         </View>
@@ -105,10 +106,10 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(2),
         backgroundColor: '#FAC502',
         borderRadius: 100,
-        width: '.75rem',
-        height: '.75rem',
+        width: '1rem',
+        height: '1rem',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent:'flex-start'
     },
     closeStyle: {
         fontSize: '0.6rem',
@@ -129,6 +130,7 @@ const styles = EStyleSheet.create({
     infoText: {
         textAlign: 'center',
         width: '12rem',
+        fontSize:'1rem',
         fontFamily: 'graphik-medium',
         lineHeight: '1rem'
     },
@@ -141,7 +143,7 @@ const styles = EStyleSheet.create({
         marginTop: '1rem'
     },
     modalItem: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
         marginBottom: normalize(10)
 
@@ -150,10 +152,9 @@ const styles = EStyleSheet.create({
         backgroundColor: '#EF2F55',
         padding: '.3rem',
         borderRadius: 10,
-        position: 'absolute',
-        bottom: 230,
         borderColor: '#66142E',
-        borderWidth: 1
+        borderWidth: 1,
+        top:normalize(25),
     },
     stakeText: {
         fontSize: '0.65rem',
