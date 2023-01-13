@@ -15,10 +15,9 @@ import analytics from '@react-native-firebase/analytics';
 
 const ContactUs = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
-
     const user = useSelector(state => state.auth.user);
+   
 
-  
 
 
     return (
@@ -32,14 +31,16 @@ const ContactUs = ({ navigation }) => {
 const ContactForm = ({ user }) => {
     const dispatch = useDispatch();
     const [saving, setSaving] = useState(false);
-    const [first_name, setFirstName] = useState('');
-    const [last_name, setLastName] = useState('');
+    // const [first_name, setFirstName] = useState('');
+    // const [last_name, setLastName] = useState('');
     const [email, setEmail] = useState(user.email);
     const [message_body, setMessage] = useState('');
-    const [firstNameErr, setFirstNameError] = useState(false);
-    const [lastNameErr, setLastNameError] = useState(false);
+    // const [firstNameErr, setFirstNameError] = useState(false);
+    // const [lastNameErr, setLastNameError] = useState(false);
     const [messageError, setMessageError] = useState(false);
     const [canSave, setCanSave] = useState(false);
+    const first_name = user.firstName
+    const last_name = user.lastName
 
 
     const sendFeedback = () => {
@@ -58,24 +59,26 @@ const ContactForm = ({ user }) => {
                     'phone_number': user.phoneNumber,
                     'email': user.email
                 })
+                setMessage('')
                 setSaving(false)
             })
             .catch((rejectedValueOrSerializedError) => {
+                setMessage('')
                 setSaving(false)
                 Alert.alert(rejectedValueOrSerializedError.message)
             });
 
     }
 
-    const onChangeFirstName = (text) => {
-        text.length > 0 && text.length < 3 ? setFirstNameError(true) : setFirstNameError(false);
-        setFirstName(text)
-    }
+    // const onChangeFirstName = (text) => {
+    //     text.length > 0 && text.length < 3 ? setFirstNameError(true) : setFirstNameError(false);
+    //     setFirstName(text)
+    // }
 
-    const onChangeLastName = (text) => {
-        text.length > 0 && text.length < 3 ? setLastNameError(true) : setLastNameError(false);
-        setLastName(text)
-    }
+    // const onChangeLastName = (text) => {
+    //     text.length > 0 && text.length < 3 ? setLastNameError(true) : setLastNameError(false);
+    //     setLastName(text)
+    // }
 
     const onChangeMessage = (text) => {
         text.length > 0 && text.length < 3 ? setMessageError(true) : setMessageError(false);
@@ -84,24 +87,24 @@ const ContactForm = ({ user }) => {
 
 
     useEffect(() => {
-        const invalid = firstNameErr || first_name === '' || lastNameErr || last_name === '' || messageError || message_body === ''
+        const invalid = messageError || message_body === ''
         setCanSave(!invalid);
-    }, [firstNameErr, first_name, lastNameErr, last_name, messageError, message_body])
+    }, [messageError, message_body])
 
     return (
         <View style={styles.formContainer}>
-            <Input
+            {/* <Input
                 label='First name'
                 value={first_name}
                 onChangeText={text => { onChangeFirstName(text) }}
                 error={firstNameErr && '*first name must not be empty'}
-            />
-            <Input
+            /> */}
+            {/* <Input
                 label='Last name'
                 value={last_name}
                 onChangeText={text => { onChangeLastName(text) }}
                 error={lastNameErr && '*last name must not be empty'}
-            />
+            /> */}
             <Input
                 label='Email'
                 value={email}
