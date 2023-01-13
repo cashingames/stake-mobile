@@ -6,18 +6,19 @@ import Animated from 'react-native-reanimated';
 import { randomEnteringAnimation } from '../../utils/utils';
 import { useNavigation } from '@react-navigation/core';
 import normalize from "../../utils/normalize";
+import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 
 
 const HelpPages = () => {
     const navigation = useNavigation();
+    useApplyHeaderWorkaround(navigation.setOptions);
+
 
     return (
         <ScrollView style={styles.container}>
             <View style={styles.profileTabs}>
-                <HelpTab tabName='FAQs' onPress={() => navigation.navigate('Support')} />
                 <HelpTab tabName='Contact Us' onPress={() => navigation.navigate('ContactUs')} />
-                {/* <HelpTab tabName='FAQs' onPress={() => navigation.navigate('Support')} />
-            <HelpTab tabName='Contact Us' onPress={() => navigation.navigate('Support')} /> */}
+                <HelpTab tabName='FAQs' onPress={() => navigation.navigate('Support')} />
             </View>
         </ScrollView>
     )
@@ -40,7 +41,7 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFF',
-        paddingHorizontal:normalize(18),
+        paddingHorizontal: normalize(18),
     },
     profileTab: {
         flexDirection: 'row',
@@ -57,7 +58,7 @@ const styles = EStyleSheet.create({
     },
     profileTabs: {
         paddingVertical: normalize(25),
-        justifyContent:'center'
+        justifyContent: 'center'
 
     }
 })
