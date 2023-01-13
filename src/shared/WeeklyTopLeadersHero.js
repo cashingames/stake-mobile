@@ -6,11 +6,14 @@ import normalize from "../utils/normalize";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import WeeklyTopLeaders from './WeeklyTopLeaders';
 import { getWeeklyLeadersByDate } from '../features/CommonSlice';
+import analytics from '@react-native-firebase/analytics';
+
 
 export default function WeeklyTopLeadersHero({gameModes}) {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const leaders = useSelector(state => state.common.weeklyLeaderboard.leaderboard)
-    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user)
 
     const today = new Date();
     const startDate = new Date(today.setDate(today.getDate() - today.getDay()));
@@ -30,11 +33,20 @@ export default function WeeklyTopLeadersHero({gameModes}) {
         }, [])
     );
 
+    const viewLeaderboard = async () => {
+        await analytics().logEvent("weekly_leaderboard_view_more_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('WeeklyLeaderboard')
+    }
+
     return (
         <View style={styles.leaderboard}>
             <View style={styles.leaderboardHeader}>
                 <Text style={styles.title}>Top Players for the week</Text>
-                <Text style={styles.extendedText} onPress={() => navigation.navigate('WeeklyLeaderboard')}>View More</Text>
+                <Text style={styles.extendedText} onPress={viewLeaderboard}>View More</Text>
             </View>
             <WeeklyTopLeaders leaders={leaders} firstDay={firstDayString} lastDay={lastDayString} gameModes={gameModes} />
         </View>

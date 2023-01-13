@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Image, Pressable, Text, View } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import Animated, { BounceInRight } from "react-native-reanimated";
 import Constants from 'expo-constants';
 import normalize from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/core';
+import analytics from '@react-native-firebase/analytics';
 
 
 
@@ -15,12 +16,19 @@ const SelectGameMode = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const gameModes = useSelector(state => state.common.gameModes);
+    const user = useSelector(state => state.auth.user)
 
     const games = [...gameModes].sort((a, b) => a.id - b.id);
 
 
-    const onSelectGameMode = (mode) => {
+    const onSelectGameMode = async (mode) => {
         dispatch(setGameMode(mode));
+        await analytics().logEvent("game_mode_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+            'gamemode': mode.displayName,
+        })
         navigation.navigate('SelectGameCategory')
     };
 
@@ -102,18 +110,18 @@ const styles = EStyleSheet.create({
     },
     cardActionContainer1: {
         borderTopWidth: 1,
-        borderColor:'#fff',
-        alignItems:'center',
-        justifyContent:'center',
-        paddingVertical:'.5rem'
-,        marginTop:'.75rem'
+        borderColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: '.5rem'
+        , marginTop: '.75rem'
     },
     cardActionContainer: {
         borderTopWidth: 1,
-        borderColor:'#fff',
-        alignItems:'center',
-        justifyContent:'center',
-        paddingVertical:'.5rem'
+        borderColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: '.5rem'
     },
     cardAction: {
         fontSize: '0.6rem',

@@ -5,12 +5,14 @@ import { formatNumber } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import MonthlyLeader from './WeeklyLeader';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setGameMode } from '../features/Games/GameSlice';
 import WeeklyLeader from './WeeklyLeader';
 import PrizePoolTitle from './PrizePoolTitle';
 import { Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
+import { useState } from 'react';
 
 
 
@@ -19,6 +21,10 @@ function WeeklyTopLeaders({ leaders, firstDay, lastDay, gameModes }) {
     const firstLeader = topLeaders[0] ?? { username: "..." };
     const secondLeader = topLeaders[1] ?? { username: "..." };
     const thirdLeader = topLeaders[2] ?? { username: "..." };
+    const [modalVisible, setModalVisible] = useState(false);
+    const user = useSelector(state => state.auth.user)
+
+
 
     const navigation = useNavigation();
     const dispatch = useDispatch()
@@ -30,6 +36,15 @@ function WeeklyTopLeaders({ leaders, firstDay, lastDay, gameModes }) {
         navigation.navigate('SelectGameCategory')    
     }
 
+    const viewPrizePool = async () => {
+        await analytics().logEvent("weekly_leaderboard_prize_pool_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        setModalVisible(true)
+    }
+
     return (
         <View >
             <LinearGradient
@@ -38,7 +53,7 @@ function WeeklyTopLeaders({ leaders, firstDay, lastDay, gameModes }) {
             >
                 <View style={styles.headerContainer}>
                     <Text style={styles.modalDateText}>{firstDay} - {lastDay}</Text>
-                    <PrizePoolTitle />
+                    <PrizePoolTitle setModalVisible={setModalVisible} modalVisible={modalVisible} onPress={viewPrizePool}  />
                 </View>
                 <View style={styles.content}>
                     <MonthlyLeader

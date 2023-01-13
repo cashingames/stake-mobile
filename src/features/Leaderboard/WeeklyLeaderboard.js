@@ -12,6 +12,7 @@ import { formatNumber, isTrue } from '../../utils/stringUtl';
 import OtherMonthlyLeaders from '../../shared/OtherMonthlyLeaders';
 import PrizePoolTitle from '../../shared/PrizePoolTitle';
 import { getWeeklyLeadersByDate } from '../CommonSlice';
+import analytics from '@react-native-firebase/analytics';
 
 
 export default function WeeklyLeaderboard({ navigation }) {
@@ -20,6 +21,8 @@ export default function WeeklyLeaderboard({ navigation }) {
     const leaders = useSelector(state => state.common.weeklyLeaderboard.leaderboard)
     const userRank = useSelector(state => state.common.weeklyLeaderboard.userRank)
     const [loading, setLoading] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
+    const user = useSelector(state => state.auth.user)
 
 
     const today = new Date();
@@ -27,6 +30,14 @@ export default function WeeklyLeaderboard({ navigation }) {
 
     const endDate = new Date(today.setDate(today.getDate() - today.getDay() + 6));
 
+    const viewPrizePool = async () => {
+        await analytics().logEvent("weekly_leaderboard_prize_pool_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        setModalVisible(true)
+    }
 
     useEffect(() => {
         dispatch(getWeeklyLeadersByDate({
@@ -69,7 +80,7 @@ export default function WeeklyLeaderboard({ navigation }) {
             >
                 <ScrollView>
                     <View style={styles.prizeHeaderContainer}>
-                        <PrizePoolTitle />
+                    <PrizePoolTitle setModalVisible={setModalVisible} modalVisible={modalVisible} onPress={viewPrizePool}  />
                     </View>
                     <WeeklyGlobalLeaderboard leaders={leaders} userRank={userRank} />
                 </ScrollView>

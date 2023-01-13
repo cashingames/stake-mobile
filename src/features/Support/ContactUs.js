@@ -58,6 +58,7 @@ const ContactForm = ({ user }) => {
                     'phone_number': user.phoneNumber,
                     'email': user.email
                 })
+                setSaving(false)
             })
             .catch((rejectedValueOrSerializedError) => {
                 setSaving(false)
