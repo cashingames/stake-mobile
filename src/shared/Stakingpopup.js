@@ -12,7 +12,6 @@ const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const gameModeSelected = gameModes.find(mode => mode.name === 'STAKING')
-console.log(gameModeSelected)
     const playStaking = () => {
         setModalVisible(!modalVisible)
         dispatch(setGameMode(gameModeSelected));
