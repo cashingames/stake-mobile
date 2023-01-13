@@ -106,13 +106,13 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(2),
         backgroundColor: '#FAC502',
         borderRadius: 100,
-        width: '1rem',
-        height: '1rem',
+        width: '.9rem',
+        height: '.9rem',
         alignItems: 'center',
-        justifyContent:'flex-start'
+        justifyContent:'center'
     },
     closeStyle: {
-        fontSize: '0.6rem',
+        fontSize: '0.7rem',
         color: '#FFFF',
         fontFamily: 'graphik-bold',
     },
