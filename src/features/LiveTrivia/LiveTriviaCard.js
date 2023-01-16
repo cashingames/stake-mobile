@@ -198,7 +198,14 @@ const LiveTriviaCard = ({ trivia }) => {
         React.useCallback(() => {
             if (initialLoading)
                 return;
-            dispatch(getLiveTriviaStatus())
+            
+            // logic to confirm if status isn't expired
+            const _statusDisplayText = trivia.statusDisplayText;
+            const _constraint = ["EXPIRED", "CLOSED"];
+            if(!(_constraint.includes(_statusDisplayText)))
+                dispatch(getLiveTriviaStatus())
+            
+
         }, [initialLoading])
     );
 
