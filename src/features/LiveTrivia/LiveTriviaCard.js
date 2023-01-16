@@ -199,7 +199,7 @@ const LiveTriviaCard = ({ trivia }) => {
             if (initialLoading)
                 return;
             
-            // logic to confirm if status isn't expired
+            // logic to confirm if status isn't part of constraint
             const _statusDisplayText = trivia.statusDisplayText;
             const _constraint = ["EXPIRED", "CLOSED"];
             if(!(_constraint.includes(_statusDisplayText)))
