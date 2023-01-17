@@ -353,6 +353,7 @@ const drawStyles = EStyleSheet.create({
     },
     logoutContainer: {
         backgroundColor: '#FFFF',
+        marginBottom: 22,
         // flex: 1,
         // justifyContent: 'flex-end'
     },

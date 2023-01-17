@@ -28,10 +28,8 @@ export const loginUser = createAsyncThunk(
         try {
             const response = await axios.post('auth/login', data);
             await AsyncStorage.setItem("token", response.data.data);
-            console.log("login response X", response.data);
             return response.data;
         } catch (err) {
-            console.log("login error 1", err);
             return thunkAPI.rejectWithValue(err.response.data);
         }
     }
