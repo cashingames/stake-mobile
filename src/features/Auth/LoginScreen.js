@@ -67,6 +67,11 @@ export default function LoginScreen({ navigation }) {
         setError(firstError)
     }
 
+    const contactUs = async () => {
+        await analytics().logEvent("clicked_contact_us_from_login")
+        navigation.navigate('AuthContact')
+    }
+
 
     useEffect(() => {
         const valid = email.length > 1 && password.length > 7;
@@ -110,6 +115,7 @@ export default function LoginScreen({ navigation }) {
 
             <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
             <RenderCreateAccount />
+            <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
         </ScrollView >
     );
 }
@@ -253,5 +259,12 @@ const styles = EStyleSheet.create({
     },
     verifyPhoneOtp: {
         paddingHorizontal: normalize(20)
+    },
+    contactUs: {
+        fontSize: '.7rem',
+        fontFamily: 'graphik-medium',
+        color:'#EF2F55',
+        textAlign:'center',
+        marginTop:'1rem'
     }
 });

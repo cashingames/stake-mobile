@@ -73,6 +73,7 @@ import LandingPage from './features/LandingPage/LandingPage';
 import WeeklyLeaderboard from './features/Leaderboard/WeeklyLeaderboard';
 import HelpPages from './features/Support/HelpPages';
 import ContactUs from './features/Support/ContactUs';
+import AuthContactUs from './features/Support/AuthContactUs';
 
 const AppStack = createNativeStackNavigator();
 
@@ -285,6 +286,7 @@ function AppRouter() {
 							<AppStack.Screen name="Landing" component={LandingPage} options={{ headerShown: false }} />
 						}
 						<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="AuthContact" component={AuthContactUs} options={{ headerShown: false }} />
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
 						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
