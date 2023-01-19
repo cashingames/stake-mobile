@@ -165,7 +165,8 @@ function AppRouter() {
 						<AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
 						<AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{
-							title: 'Leaderboards', headerRight: () => <LeaderBoardFilter />,
+							title: 'Leaderboards',
+							headerRight: () => <LeaderBoardFilter />,
 							headerStyle: {
 								backgroundColor: '#5d5fef',
 							},
@@ -337,7 +338,6 @@ const setupAxios = async function () {
 				// Something happened in setting up the request that triggered an Error
 				// console.log('Error', error.message);
 			}
-			// console.log("checking config", error.config);
 			return Promise.reject(error);
 		});
 

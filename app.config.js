@@ -6,7 +6,7 @@ export default {
   name: getAppName(),
   slug: getSlug(),
   version: version,
-  runtimeVersion: "2.75", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "2.76", //All apps using the same runtime will get the published updates. Generally update for every new build
   icon: "./assets/images/adaptive-icon2.png",
   jsEngine: "hermes",
   scheme: "cashingames",
