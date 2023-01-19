@@ -31,8 +31,13 @@ function WeeklyTopLeaders({ leaders, firstDay, lastDay, gameModes }) {
 
     const gameModeSelected = gameModes.find(mode => mode.name === 'EXHIBITION')
 
-    const playGame = () => {
+    const playGame = async () => {
         dispatch(setGameMode(gameModeSelected));
+        await analytics().logEvent("weekly_leaderboard_play_now_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
         navigation.navigate('SelectGameCategory')    
     }
 

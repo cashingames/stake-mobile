@@ -14,6 +14,8 @@ import SocialSignUp from '../../shared/SocialSignUp';
 import { Ionicons } from "@expo/vector-icons";
 import { CountryPicker } from "react-native-country-codes-picker";
 import AppleSignUp from '../../shared/AppleSignUp';
+import analytics from '@react-native-firebase/analytics';
+
 
 
 const SignupScreen = () => {
@@ -31,6 +33,11 @@ const SignupScreen = () => {
     const [checked, setChecked] = useState(false);
     const [show, setShow] = useState(false);
     const [countryCode, setCountryCode] = useState('+234');
+
+    const contactUs = async () => {
+        await analytics().logEvent("clicked_contact_us_from_login")
+        navigation.navigate('AuthContact')
+    }
 
     const onChangeEmail = (text) => {
         const rule = /^\S+@\S+\.\S+$/;
@@ -158,6 +165,7 @@ const SignupScreen = () => {
             />
             <AppButton text='Continue' onPress={onNext} disabled={!canSend} />
             <RenderCreateAccount />
+            <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
         </ScrollView>
     );
 }
@@ -165,6 +173,7 @@ const SignupScreen = () => {
 
 const RenderCreateAccount = () => {
     const navigation = useNavigation();
+
     return (
         <View style={styles.signIn}>
             <View style={styles.create}>
@@ -173,7 +182,6 @@ const RenderCreateAccount = () => {
                     <Text style={styles.linkText}> Sign in</Text>
                 </Pressable>
             </View>
-
         </View>
     )
 }
@@ -280,4 +288,11 @@ const styles = EStyleSheet.create({
         fontSize: '0.76rem',
         marginBottom: normalize(8)
     },
+    contactUs: {
+        fontSize: '.7rem',
+        fontFamily: 'graphik-medium',
+        color:'#EF2F55',
+        textAlign:'center',
+        // marginTop:'.2rem'
+    }
 });

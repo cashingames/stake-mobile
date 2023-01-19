@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Text, View, Image, Alert, ScrollView } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useNavigation } from "@react-navigation/native";
@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Constants from "expo-constants";
 
 import normalize, {
-  responsiveScreenHeight,
   responsiveScreenWidth,
 } from "../../utils/normalize";
 import { getUser } from "../Auth/AuthSlice";
@@ -26,11 +25,7 @@ export default function FundWalletScreen() {
   const user = useSelector((state) => state.auth.user);
   const [amount, setAmount] = useState("");
   const [showPayment, setShowPayment] = React.useState(false);
-  const minimumWalletFundableAmount  = useSelector(state => state.common.minimumWalletFundableAmount);
-  console.log(minimumWalletFundableAmount)
-
-
-  const ref = useRef(null);
+  const minimumWalletFundableAmount = useSelector(state => state.common.minimumWalletFundableAmount);
 
   const transactionCompleted = async (res) => {
     // verifyFunding(res.reference); for local testing
@@ -50,9 +45,8 @@ export default function FundWalletScreen() {
       'phone_number': user.phoneNumber,
       'email': user.email
     });
-    var cleanedAmount =
+    const cleanedAmount =
       amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
-    // console.log(Number.parseFloat(amount));
     if (cleanedAmount < minimumWalletFundableAmount) {
       Alert.alert("Amount cannot be less than 100 naira");
       return false;
@@ -105,7 +99,7 @@ export default function FundWalletScreen() {
           activityIndicatorColor="green"
           onCancel={(e) => {
             setShowPayment(false);
-            alert("Failed...");
+            Alert.alert("Failed...");
           }}
           onSuccess={transactionCompleted}
           autoStart={true}

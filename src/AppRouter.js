@@ -73,6 +73,7 @@ import LandingPage from './features/LandingPage/LandingPage';
 import WeeklyLeaderboard from './features/Leaderboard/WeeklyLeaderboard';
 import HelpPages from './features/Support/HelpPages';
 import ContactUs from './features/Support/ContactUs';
+import AuthContactUs from './features/Support/AuthContactUs';
 
 const AppStack = createNativeStackNavigator();
 
@@ -164,7 +165,8 @@ function AppRouter() {
 						<AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
 						<AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{
-							title: 'Leaderboards', headerRight: () => <LeaderBoardFilter />,
+							title: 'Leaderboards',
+							headerRight: () => <LeaderBoardFilter />,
 							headerStyle: {
 								backgroundColor: '#5d5fef',
 							},
@@ -285,6 +287,7 @@ function AppRouter() {
 							<AppStack.Screen name="Landing" component={LandingPage} options={{ headerShown: false }} />
 						}
 						<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="AuthContact" component={AuthContactUs} options={{ headerShown: false }} />
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
 						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
@@ -335,7 +338,6 @@ const setupAxios = async function () {
 				// Something happened in setting up the request that triggered an Error
 				// console.log('Error', error.message);
 			}
-			// console.log("checking config", error.config);
 			return Promise.reject(error);
 		});
 
@@ -359,7 +361,7 @@ const appendAxiosAuthHeader = function (token) {
 async function registerForPushNotificationsAsync() {
 	let deviceToken;
 	if (!Device.isDevice) {
-		alert('Must use physical device for Push Notifications')
+		Alert.alert('Must use physical device for Push Notifications')
 		return;
 	}
 	const { status: existingStatus } = await Notifications.getPermissionsAsync();

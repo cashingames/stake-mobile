@@ -180,7 +180,6 @@ const AvailableBoosts = ({ onClose, trivia, amount, user }) => {
                 navigation.navigate("GameInProgress", { triviaId: trivia.id })
             })
             .catch((rejectedValueOrSerializedError) => {
-                // console.log(rejectedValueOrSerializedError);
                 Alert.alert(rejectedValueOrSerializedError.message)
                 setLoading(false);
             });

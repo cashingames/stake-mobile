@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { Platform, Pressable, Text, View, Modal } from 'react-native';
+import { Platform, Pressable, Text, View, Modal, Image } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Image } from 'react-native';
 import { setGameMode } from '../features/Games/GameSlice';
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from 'react-redux';
@@ -24,7 +23,6 @@ const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
                     setModalVisible(!modalVisible);
                 }}
             >

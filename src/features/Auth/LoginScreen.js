@@ -13,8 +13,6 @@ import Input from '../../shared/Input';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { saveToken } from '../../utils/ApiHelper';
-import InputOTP from '../../shared/InputOTP';
 import AppleSignUp from '../../shared/AppleSignUp';
 import { loginUser } from './AuthSlice';
 
@@ -53,10 +51,14 @@ export default function LoginScreen({ navigation }) {
 
     }
 
-    const processLoginError = (err) => {
+    const processLoginError = async (err) => {
         const errors = err.errors;
 
         if (err.message == 'Account not verified') {
+            await analytics().logEvent("unverified_user", {
+                'username' : errors.username,
+                'phone_number': errors.phone_number
+            })
             navigation.navigate('SignupVerifyPhone', {
                 phone_number: errors.phoneNumber,
                 username: errors.username, next_resend_minutes: 1
@@ -65,6 +67,11 @@ export default function LoginScreen({ navigation }) {
 
         const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
         setError(firstError)
+    }
+
+    const contactUs = async () => {
+        await analytics().logEvent("clicked_contact_us_from_login")
+        navigation.navigate('AuthContact')
     }
 
 
@@ -110,6 +117,7 @@ export default function LoginScreen({ navigation }) {
 
             <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
             <RenderCreateAccount />
+            <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
         </ScrollView >
     );
 }
@@ -140,50 +148,11 @@ const RenderCreateAccount = () => {
             <Text style={styles.signInText}>or</Text>
             <View style={styles.google}>
                 <SocialSignUp googleText="Sign in" />
-                {Platform.OS === 'ios' &&
-                    <AppleSignUp />
-                }
+                {Platform.OS === 'ios' && <AppleSignUp /> }
             </View>
         </View>
     )
 }
-
-const VerifyOTP = ({ onClose }) => {
-    const [loading, setLoading] = useState(false);
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
-
-    const goToDashboard = () => {
-        setLoading(true);
-        dispatch(verifyUser({ email: params.email }))
-            .then(unwrapResult)
-            .then(response => {
-                // console.log("email verification response", response);
-                saveToken(response.data)
-                setLoading(false);
-                navigation.navigate('AppRouter')
-            })
-            .catch((rejectedValueOrSerializedError) => {
-
-                Alert.alert("Failed to log in");
-                setLoading(false);
-            })
-    }
-
-    return (
-        <View style={styles.verifyPhoneOtp}>
-            <Text style={styles.verifySubText}>
-                A One Time Password(OTP) has been sent to your registered phone number.
-                Please input the five(5) digit
-                number below to verify your phone number so you
-                can play exicting games and stand a chance to win lots of prizes
-            </Text>
-            <InputOTP />
-            <AppButton text={loading ? 'Verifying...' : 'Login'} disabled={loading} onPress={goToDashboard} />
-        </View>
-    )
-}
-
 
 const styles = EStyleSheet.create({
 
@@ -253,5 +222,12 @@ const styles = EStyleSheet.create({
     },
     verifyPhoneOtp: {
         paddingHorizontal: normalize(20)
+    },
+    contactUs: {
+        fontSize: '.7rem',
+        fontFamily: 'graphik-medium',
+        color:'#EF2F55',
+        textAlign:'center',
+        marginTop:'1rem'
     }
 });

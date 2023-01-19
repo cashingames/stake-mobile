@@ -83,13 +83,11 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
         crashlytics().recordError(error);
         crashlytics().log('failed to end challenge game');
         setEnding(false);
-        // console.log(rejectedValueOrSerializedError);
         Alert.alert('failed to end game')
       });
   }
 
   const showExitConfirmation = () => {
-    // onEndGame();
     Alert.alert(
       'Exit Game?',
       'You have an ongoing game. Do you want to submit this game ?',
@@ -165,14 +163,12 @@ const NextButton = ({ onPress, ending }) => {
   const isLastQuestion = useSelector(state => state.game.isLastQuestion);
 
   return (
-    // <View >
     <AppButton
       disabled={ending}
       text={isLastQuestion ? 'Finish' : 'Next'}
       onPress={() => dispatch(isLastQuestion ? onPress : nextQuestion())}
       style={styles.nextButton}
     />
-    // {/* </View> */}
   )
 }
 
