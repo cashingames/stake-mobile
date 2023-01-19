@@ -41,7 +41,7 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
     return (
         <ScrollView style={styles.container}>
             <ResultContainer />
-            {/* <TriviaTopLeaders /> */}
+            <TriviaTopLeaders />
             <TriviaParticipants triviaLeaders={triviaLeaders} />
         </ScrollView>
     )
@@ -55,6 +55,38 @@ const ResultContainer = () => {
                 width={normalize(170)}
                 height={normalize(170)}
             />
+        </View>
+    )
+}
+
+const TriviaTopLeaders = ()=>{
+    return (
+        <View style={styles.triviaTopLeadersContainer}>
+            
+            <View style={[styles.triviaTopLeadersRow, { marginVertical: 8 }]}>
+                <Text style={styles.triviaTopLeadersH1}>Grand Prize</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.triviaTopLeadersH1}>N5,000</Text>
+                    <Image source={require("../../../assets/images/icons/trophy.png")} style={styles.triviaTopLeadersTrophy} />
+                </View>
+            </View>
+
+            <View style={styles.triviaTopLeadersRow}>
+                <Text style={styles.triviaTopLeadersH2}>2nd Place</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.triviaTopLeadersH2}>N3,000</Text>
+                    <Image source={require("../../../assets/images/icons/conqueror.png")} style={styles.triviaTopLeadersCon} />
+                </View>
+            </View>
+
+            <View style={styles.triviaTopLeadersRow}>
+                <Text style={styles.triviaTopLeadersH2}>3rd Place</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.triviaTopLeadersH2}>N3,000</Text>
+                    <Image source={require("../../../assets/images/icons/conqueror.png")} style={styles.triviaTopLeadersCon} />
+                </View>
+            </View>
+
         </View>
     )
 }
@@ -418,5 +450,36 @@ const styles = EStyleSheet.create({
         fontSize: '1rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
+    },
+    triviaTopLeadersContainer: {
+        backgroundColor: 'rgba(69, 30, 182, 1)',
+        marginHorizontal: '5%',
+        padding: 20,
+        borderRadius: 15,
+        marginVertical: '3%'
+    },
+    triviaTopLeadersRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: 3
+    },
+    triviaTopLeadersH1: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '700'
+    },
+    triviaTopLeadersH2: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: '500'
+    },
+    triviaTopLeadersTrophy: {
+        width: 35,
+        height: 35,
+    },
+    triviaTopLeadersCon: {
+        width: 20,
+        height: 20,
+        marginLeft: 16
     }
 });
