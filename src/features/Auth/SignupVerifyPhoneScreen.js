@@ -13,6 +13,8 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { createIconSetFromFontello } from '@expo/vector-icons';
 import { saveToken } from '../../utils/ApiHelper';
 import { calculateTimeRemaining } from '../../utils/utils';
+import analytics from '@react-native-firebase/analytics';
+
 
 const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -72,7 +74,15 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
             token: token
         }))
             .then(unwrapResult)
-            .then(response => {
+            .then(async response => {
+                await analytics().logEvent("verified_phone_number", {
+                    'id': params.username,
+                    'phone_number': params.phone_number,
+                })
+                await analytics().logEvent("verified", {
+                    'id': params.username,
+                    'phone_number': params.phone_number,
+                })
                 setLoading(false);
             })
             .catch((rejectedValueOrSerializedError) => {
