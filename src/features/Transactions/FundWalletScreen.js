@@ -105,7 +105,7 @@ export default function FundWalletScreen() {
           activityIndicatorColor="green"
           onCancel={(e) => {
             setShowPayment(false);
-            alert("Failed...");
+            Alert.alert("Failed...");
           }}
           onSuccess={transactionCompleted}
           autoStart={true}

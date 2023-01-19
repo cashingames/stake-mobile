@@ -361,7 +361,7 @@ const appendAxiosAuthHeader = function (token) {
 async function registerForPushNotificationsAsync() {
 	let deviceToken;
 	if (!Device.isDevice) {
-		alert('Must use physical device for Push Notifications')
+		Alert.alert('Must use physical device for Push Notifications')
 		return;
 	}
 	const { status: existingStatus } = await Notifications.getPermissionsAsync();

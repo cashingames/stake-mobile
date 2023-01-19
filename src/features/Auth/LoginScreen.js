@@ -13,8 +13,6 @@ import Input from '../../shared/Input';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { saveToken } from '../../utils/ApiHelper';
-import InputOTP from '../../shared/InputOTP';
 import AppleSignUp from '../../shared/AppleSignUp';
 import { loginUser } from './AuthSlice';
 
@@ -146,50 +144,11 @@ const RenderCreateAccount = () => {
             <Text style={styles.signInText}>or</Text>
             <View style={styles.google}>
                 <SocialSignUp googleText="Sign in" />
-                {Platform.OS === 'ios' &&
-                    <AppleSignUp />
-                }
+                {Platform.OS === 'ios' && <AppleSignUp /> }
             </View>
         </View>
     )
 }
-
-const VerifyOTP = ({ onClose }) => {
-    const [loading, setLoading] = useState(false);
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
-
-    const goToDashboard = () => {
-        setLoading(true);
-        dispatch(verifyUser({ email: params.email }))
-            .then(unwrapResult)
-            .then(response => {
-                // console.log("email verification response", response);
-                saveToken(response.data)
-                setLoading(false);
-                navigation.navigate('AppRouter')
-            })
-            .catch((rejectedValueOrSerializedError) => {
-
-                Alert.alert("Failed to log in");
-                setLoading(false);
-            })
-    }
-
-    return (
-        <View style={styles.verifyPhoneOtp}>
-            <Text style={styles.verifySubText}>
-                A One Time Password(OTP) has been sent to your registered phone number.
-                Please input the five(5) digit
-                number below to verify your phone number so you
-                can play exicting games and stand a chance to win lots of prizes
-            </Text>
-            <InputOTP />
-            <AppButton text={loading ? 'Verifying...' : 'Login'} disabled={loading} onPress={goToDashboard} />
-        </View>
-    )
-}
-
 
 const styles = EStyleSheet.create({
 
