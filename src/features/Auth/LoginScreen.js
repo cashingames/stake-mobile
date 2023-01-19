@@ -53,10 +53,14 @@ export default function LoginScreen({ navigation }) {
 
     }
 
-    const processLoginError = (err) => {
+    const processLoginError = async (err) => {
         const errors = err.errors;
 
         if (err.message == 'Account not verified') {
+            await analytics().logEvent("unverified_user", {
+                'username' : errors.username,
+                'phone_number': errors.phone_number
+            })
             navigation.navigate('SignupVerifyPhone', {
                 phone_number: errors.phoneNumber,
                 username: errors.username, next_resend_minutes: 1
