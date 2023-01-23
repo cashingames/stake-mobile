@@ -188,7 +188,7 @@ const initialState = {
     maximumChallengeStakeAmount: 0,
     minimumChallengeStakeAmount: 0,
     minimumWalletFundableAmount: 0,
-    minimumBoostScore:null,
+    minimumBoostScore:0,
     periodBeforeChallengeStakingExpiry: ''
 }
 
