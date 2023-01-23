@@ -188,6 +188,7 @@ const initialState = {
     maximumChallengeStakeAmount: 0,
     minimumChallengeStakeAmount: 0,
     minimumWalletFundableAmount: 0,
+    minimumBoostScore:null,
     periodBeforeChallengeStakingExpiry: ''
 }
 
@@ -226,7 +227,8 @@ export const CommonSlice = createSlice({
                 state.maximumChallengeStakeAmount = data.maximumChallengeStakeAmount;
                 state.minimumChallengeStakeAmount = data.minimumChallengeStakeAmount;
                 state.minimumWalletFundableAmount = data.minimumWalletFundableAmount;
-                state.periodBeforeChallengeStakingExpiry = data.periodBeforeChallengeStakingExpiry
+                state.periodBeforeChallengeStakingExpiry = data.periodBeforeChallengeStakingExpiry;
+                state.minimumBoostScore = data.minimumBoostScore;
             })
             .addCase(getBankData.fulfilled, (state, action) => {
                 state.banks = action.payload.data;
