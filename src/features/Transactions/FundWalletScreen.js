@@ -26,7 +26,7 @@ export default function FundWalletScreen() {
   const [amount, setAmount] = useState("");
   const [showPayment, setShowPayment] = React.useState(false);
   const minimumWalletFundableAmount = useSelector(state => state.common.minimumWalletFundableAmount);
-
+console.log(minimumWalletFundableAmount)
   const transactionCompleted = async (res) => {
     // verifyFunding(res.reference); for local testing
     await analytics().logEvent('wallet_funding_successfully', {
@@ -48,7 +48,7 @@ export default function FundWalletScreen() {
     const cleanedAmount =
       amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
     if (cleanedAmount < minimumWalletFundableAmount) {
-      Alert.alert("Amount cannot be less than 100 naira");
+      Alert.alert(`Amount cannot be less than ${minimumWalletFundableAmount} naira`);
       return false;
     }
     setShowPayment(true);
