@@ -15,7 +15,7 @@ const Boostspopup = ({ setModalVisible, modalVisible }) => {
     const user = useSelector(state => state.auth.user);
 
     const goToStore = async () => {
-        analytics().logEvent('buy_now_button_on_boostpopup_clicked', {
+        await analytics().logEvent('buy_now_button_on_boostpopup_clicked', {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email

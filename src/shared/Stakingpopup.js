@@ -4,17 +4,26 @@ import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { setGameMode } from '../features/Games/GameSlice';
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
+import analytics from '@react-native-firebase/analytics';
+
 
 
 const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const gameModeSelected = gameModes.find(mode => mode.name === 'STAKING')
-    const playStaking = () => {
+    const user = useSelector(state => state.auth.user);
+
+    const playStaking = async () => {
         setModalVisible(!modalVisible)
         dispatch(setGameMode(gameModeSelected));
+          await analytics().logEvent('stake_cash_now_button_on_clicked', {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        });    
         navigation.navigate('SelectGameCategory')    
     }
     return (

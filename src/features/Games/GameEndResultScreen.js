@@ -51,7 +51,6 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	const onHomeButtonClick = () => {
-		console.log("showing staking pop", !withStaking)
 		navigation.navigate('Home', { showStakingAdvert: !withStaking})
 	}
 	useFocusEffect(
