@@ -158,6 +158,7 @@ export const isFeatureEnabled = async (feature, features = {}) => {
 
 const initialState = {
     initialLoading: true,
+    isTourActive: false,
     boosts: [],
     achievements: [],
     gameTypes: [],
@@ -207,7 +208,10 @@ export const CommonSlice = createSlice({
     reducers: {
         initialLoadingComplete: (state) => {
             state.initialLoading = false;
-        }
+        },
+        toggleAppTour: (state, payload) => {
+            state.isTourActive = payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -279,6 +283,6 @@ export const CommonSlice = createSlice({
     },
 });
 
-export const { initialLoadingComplete } = CommonSlice.actions
+export const { initialLoadingComplete, toggleAppTour } = CommonSlice.actions
 
 export default CommonSlice.reducer

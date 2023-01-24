@@ -15,6 +15,9 @@ import Toast from 'react-native-toast-message';
 import store from './src/store';
 import AppRouter from './src/AppRouter';
 import messaging from '@react-native-firebase/messaging';
+import {
+  TourGuideProvider, // Main provider
+} from 'rn-tourguide'
 
 
 let { height, width } = Dimensions.get('window');
@@ -127,7 +130,9 @@ function App() {
         linking={linking} fallback={<Text>Loading...</Text>}
       >
         <SafeAreaProvider>
-          <AppRouter />
+          <TourGuideProvider>
+            <AppRouter />
+          </TourGuideProvider>
         </SafeAreaProvider>
         <Toast/>
       </NavigationContainer>

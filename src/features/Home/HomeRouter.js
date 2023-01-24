@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useNavigation } from '@react-navigation/core';
@@ -15,6 +15,13 @@ import { isTrue } from '../../utils/stringUtl';
 import analytics from '@react-native-firebase/analytics';
 
 import AppButton from '../../shared/AppButton';
+import { toggleAppTour } from '../CommonSlice';
+import {
+    TourGuideZone, // Main wrapper of highlight component
+    TourGuideZoneByPosition, // Component to use mask on overlay (ie, position absolute)
+    useTourGuideController, // hook to start, etc.
+  } from 'rn-tourguide'
+// import { AppTourStep, useAppTour, AppTourProvider, AppTour, useEvent } from '@nghinv/react-native-app-tour';
 // import LottieAnimations from '../../shared/LottieAnimations';
 // import HowToWin from '../HowToWin/HowToWin';
 
@@ -125,12 +132,31 @@ function CustomDrawerContent(props) {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const isTourActive = useSelector(state => state.common.isTourActive);
+
+    const {
+        canStart, // a boolean indicate if you can start tour guide
+        start: tourStart, // a function to start the tourguide
+        stop: tourStop, // a function  to stopping it
+        eventEmitter, // an object for listening some events
+    } = useTourGuideController()
 
     const user = useSelector(state => state.auth.user)
 
     const onLogout = () => {
         dispatch(logoutUser());
     }
+
+    useEffect(()=>{
+        if(isTourActive){
+            // AppTour.start();
+            tourStart()
+        }else{
+            // console.log(AppTourStep)
+            // AppTour.start();
+            // AppTour.stop();
+        }
+    }, [isTourActive])
 
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
@@ -142,23 +168,29 @@ function CustomDrawerContent(props) {
                     />
                     <Text style={drawStyles.userTitle}> {user.fullName}</Text>
                     <Text style={drawStyles.userName}> @{user.username}</Text>
-                    <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
+                    <TourGuideZone zone={1} text={
+                        <Text>User Profile</Text>
+                    } shape='rectangle_and_keep' isTourGuide={true} >
+                        <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
+                    </TourGuideZone>
 
                 </View>
 
 
                 <View style={drawStyles.menu}>
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Live Trivia</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('LiveTrivias')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
+                    <TourGuideZone zone={2} text='A react-native-copilot remastered!'>
+                        <DrawerItem
+                            label={() =>
+                                <View style={drawStyles.item}>
+                                    <Text style={drawStyles.itemLabel}>Live Trivia</Text>
+                                    <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                </View>}
+                            onPress={() => navigation.navigate('LiveTrivias')}
+                            activeTintColor='#EF2F55'
+                            style={drawStyles.label}
+                            labelContainerStyle
+                        />
+                    </TourGuideZone>
                     <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
@@ -204,6 +236,17 @@ function CustomDrawerContent(props) {
                                 <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                             </View>}
                         onPress={() => navigation.navigate('Help')}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Need a Tour</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={() => dispatch(toggleAppTour(true))}
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
