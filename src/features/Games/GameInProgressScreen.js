@@ -41,6 +41,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     const isStaking =  useSelector(state => state.game.amountStaked);
     const user = useSelector(state => state.auth.user);
     const isEnded = useSelector(state => state.game.isEnded);
+    const isStaking = useSelector(state => state.game.amountStaked);
 
     const openBottomSheet = () => {
         refRBSheet.current.open()
@@ -103,6 +104,14 @@ export default function GameInProgressScreen({ navigation, route }) {
                     navigation.navigate('TriviaEndResult', {
                         triviaId: params.triviaId,
                     })
+                } else if(isStaking){
+                    crashlytics().log('User completed staking game');
+                    await analytics().logEvent('staking_game_completed', {
+                        'id': user.username,
+                        'phone_number': user.phoneNumber,
+                        'email': user.email
+                    });
+                    navigation.navigate('GameEndResult');
                 } else {
                     navigation.navigate('GameEndResult');
                 }
