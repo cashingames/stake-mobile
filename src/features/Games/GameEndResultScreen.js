@@ -11,6 +11,7 @@ import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { getUser } from '../Auth/AuthSlice';
 import analytics from '@react-native-firebase/analytics';
 import StakeWinnings from '../../shared/StakeWinnings';
+import Boostspopup from '../../shared/BoostPopUp';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -19,10 +20,12 @@ export default function GameEndResultScreen({ navigation }) {
 	const pointsGained = useSelector(state => state.game.pointsGained);
 	const amountWon = useSelector(state => state.game.amountWon);
 	const withStaking = useSelector(state => state.game.withStaking);
-
+	const minimumBoostScore = useSelector(state => state.common.minimumBoostScore)
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
 	const [showText, setShowText] = useState(true);
+	const [modalVisible, setModalVisible] = useState(false);
+
 
 
 	const refRBSheet = useRef();
@@ -95,6 +98,15 @@ export default function GameEndResultScreen({ navigation }) {
 		return () => clearInterval(interval);
 	}, []);
 
+	useEffect(() => {
+		if(pointsGained <= minimumBoostScore){
+		  setModalVisible(true)
+		}else{
+			setModalVisible(false)
+		}
+	  }, [pointsGained])
+	
+
 	return (
 
 		<ScrollView style={styles.container}>
@@ -114,7 +126,7 @@ export default function GameEndResultScreen({ navigation }) {
 					onPress={onPlayButtonClick}
 					disabled={loading}
 				/>
-
+				<Boostspopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
 			</View>
 			<UniversalBottomSheet
 				refBottomSheet={refRBSheet}
