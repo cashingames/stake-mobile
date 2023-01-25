@@ -17,16 +17,16 @@ import analytics from '@react-native-firebase/analytics';
 import AppButton from '../../shared/AppButton';
 import { toggleAppTour } from '../CommonSlice';
 import {
-    TourGuideZone, // Main wrapper of highlight component
-    TourGuideZoneByPosition, // Component to use mask on overlay (ie, position absolute)
     useTourGuideController, // hook to start, etc.
-  } from 'rn-tourguide'
+} from 'rn-tourguide'
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 // import { AppTourStep, useAppTour, AppTourProvider, AppTour, useEvent } from '@nghinv/react-native-app-tour';
 // import LottieAnimations from '../../shared/LottieAnimations';
 // import HowToWin from '../HowToWin/HowToWin';
 
 
 const HomeStack = createDrawerNavigator();
+const Walkthroughable = walkthroughable(Text);
 
 const HomeRouter = () => {
     const loading = useSelector(state => state.common.initialLoading);
@@ -139,7 +139,9 @@ function CustomDrawerContent(props) {
         start: tourStart, // a function to start the tourguide
         stop: tourStop, // a function  to stopping it
         eventEmitter, // an object for listening some events
-    } = useTourGuideController()
+        getCurrentStep,
+        TourGuideZone
+    } = useTourGuideController('results')
 
     const user = useSelector(state => state.auth.user)
 
@@ -147,132 +149,187 @@ function CustomDrawerContent(props) {
         dispatch(logoutUser());
     }
 
+    const handleTourStop = ()=>{
+        console.log("tour stopped, going to next screen to continue")
+        navigation.navigate("Leaderboard")
+    }
+
+    const handleTourChange = ()=>{
+        console.log(getCurrentStep())
+    }
+
+    useEffect(() => {
+        // eventEmitter.on('stop', handleTourStop)
+        // eventEmitter.on('stepChange', handleTourChange)
+    
+        return () => {
+        //   eventEmitter.off('stop', handleTourStop)
+        }
+    }, [])
+
     useEffect(()=>{
         if(isTourActive){
-            // AppTour.start();
-            tourStart()
-        }else{
+            tourStart(1)
+
+            eventEmitter.on('stop', handleTourStop)
+            // eventEmitter.on('stepChange', handleTourChange)
+    
+            return () => {
+              eventEmitter.off('stop', handleTourStop)
+            }
+        }else{tourKey='2'
             // console.log(AppTourStep)
             // AppTour.start();
             // AppTour.stop();
         }
-    }, [isTourActive])
+    }, [isTourActive, canStart])
 
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
-            <ScrollView>
-                <View style={drawStyles.sideHeader}>
-                    <Image
-                        style={drawStyles.avatar}
-                        source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
-                    />
-                    <Text style={drawStyles.userTitle}> {user.fullName}</Text>
-                    <Text style={drawStyles.userName}> @{user.username}</Text>
-                    <TourGuideZone zone={1} text={
-                        <Text>User Profile</Text>
-                    } shape='rectangle_and_keep' isTourGuide={true} >
-                        <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
-                    </TourGuideZone>
+                <ScrollView>
+                    <View style={drawStyles.sideHeader}>
+                        <Image
+                            style={drawStyles.avatar}
+                            source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+                        />
+                        <Text style={drawStyles.userTitle}> {user.fullName}</Text>
+                        <Text style={drawStyles.userName}> @{user.username}</Text>
+                        <TourGuideZone zone={1} text={
+                            <View>
+                                <Text style={drawStyles.tourTitle} >User Profile</Text>
+                                <Text>Edit your profile and update your bank details</Text>
+                            </View>
+                        } shape='rectangle_and_keep'  >
+                            <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
+                        </TourGuideZone>
 
-                </View>
+                    </View>
 
 
-                <View style={drawStyles.menu}>
-                    <TourGuideZone zone={2} text='A react-native-copilot remastered!'>
+                    <View style={drawStyles.menu}>
+                        <TourGuideZone zone={2} text={
+                            <View>
+                                <Text style={drawStyles.tourTitle} >Live Trivia</Text>
+                                <Text>Show how fast and skilled you are by competing with lots of users and standing a chance of winning great cash prizes</Text>
+                            </View>
+                        } shape='rectangle_and_keep' >
+                            <DrawerItem
+                                label={() =>
+                                    <View style={drawStyles.item}>
+                                        <Text style={drawStyles.itemLabel}>Live Trivia</Text>
+                                        <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                    </View>}
+                                onPress={() => navigation.navigate('LiveTrivias')}
+                                activeTintColor='#EF2F55'
+                                style={drawStyles.label}
+                                labelContainerStyle
+                            />
+                        </TourGuideZone>
+
+                        <TourGuideZone zone={3} text={
+                            <View>
+                                <Text style={drawStyles.tourTitle} >Challenges</Text>
+                                <Text>Challenge a friend to a duel and also stand a chance of winning cash prizes</Text>
+                            </View>
+                        } shape='rectangle_and_keep' >
+                            <DrawerItem
+                                label={() =>
+                                    <View style={drawStyles.item}>
+                                        <Text style={drawStyles.itemLabel}>My Challenges</Text>
+                                        <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                    </View>}
+                                onPress={() => navigation.navigate('MyChallenges')}
+                                activeTintColor='#EF2F55'
+                                style={drawStyles.label}
+                                labelContainerStyle
+                            />
+                        </TourGuideZone>
+                        {Platform.OS === 'ios' ?
+                            <></>
+                            :
+                            <DrawerItem
+                                label={() =>
+                                    <View style={drawStyles.item}>
+                                        <Text style={drawStyles.itemLabel}>Store</Text>
+                                        <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                    </View>}
+                                onPress={() => navigation.navigate('GameStore')}
+                                activeTintColor='#EF2F55'
+                                style={drawStyles.label}
+                                labelContainerStyle
+                            />
+                        }
+
                         <DrawerItem
                             label={() =>
                                 <View style={drawStyles.item}>
-                                    <Text style={drawStyles.itemLabel}>Live Trivia</Text>
+                                    <Text style={drawStyles.itemLabel}>Leaderboards</Text>
                                     <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                                 </View>}
-                            onPress={() => navigation.navigate('LiveTrivias')}
+                            onPress={() => navigation.navigate('Leaderboard')}
                             activeTintColor='#EF2F55'
                             style={drawStyles.label}
                             labelContainerStyle
                         />
-                    </TourGuideZone>
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>My Challenges</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('MyChallenges')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-                    {Platform.OS === 'ios' ?
-                        <></>
-                        :
+                        
+                        <TourGuideZone zone={4} text={
+                            <View>
+                                <Text style={drawStyles.tourTitle} >Get Help</Text>
+                                <Text>Need help?
+                                    Contact us by sending us your questions and feedback or read through our FAQ</Text>
+                            </View>
+                        } shape='rectangle_and_keep' >
+                            <DrawerItem
+                                label={() =>
+                                    <View style={drawStyles.item}>
+                                        <Text style={drawStyles.itemLabel}>Get Help</Text>
+                                        <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                    </View>}
+                                onPress={() => navigation.navigate('Help')}
+                                activeTintColor='#EF2F55'
+                                style={drawStyles.label}
+                                labelContainerStyle
+                            />
+                        </TourGuideZone>
                         <DrawerItem
                             label={() =>
                                 <View style={drawStyles.item}>
-                                    <Text style={drawStyles.itemLabel}>Store</Text>
+                                    <Text style={drawStyles.itemLabel}>Need a Tour</Text>
                                     <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                                 </View>}
-                            onPress={() => navigation.navigate('GameStore')}
+                            onPress={() => dispatch(toggleAppTour(true))}
                             activeTintColor='#EF2F55'
                             style={drawStyles.label}
                             labelContainerStyle
                         />
-                    }
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Leaderboards</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('Leaderboard')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
+                        
+                        <TourGuideZone zone={5} text={
+                            <View>
+                                <Text style={drawStyles.tourTitle} >Invite Friends </Text>
+                                <Text>Refer your friends and get bonuses for each friend referred and also stand a chance of winning cash prizes</Text>
+                            </View>
+                        } shape='rectangle_and_keep' >
+                            <DrawerItem
+                                label={() =>
+                                    <View style={drawStyles.item}>
+                                        <Text style={drawStyles.itemLabel}>Invite Friends</Text>
+                                        <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                    </View>}
+                                onPress={() => navigation.navigate('Invite')}
+                                activeTintColor='#EF2F55'
+                                style={drawStyles.label}
+                                labelContainerStyle
+                            />
+                        </TourGuideZone>
 
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Get Help</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('Help')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Need a Tour</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => dispatch(toggleAppTour(true))}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Invite Friends</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('Invite')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-
+                    </View>
+                </ScrollView>
+                <View style={drawStyles.logoutContainer}>
+                    <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
+                    <Pressable onPress={onLogout}>
+                        <Text style={styles.logoutText}>Logout</Text>
+                    </Pressable>
                 </View>
-            </ScrollView>
-            <View style={drawStyles.logoutContainer}>
-                <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
-                <Pressable onPress={onLogout}>
-                    <Text style={styles.logoutText}>Logout</Text>
-                </Pressable>
-            </View>
-
-
         </DrawerContentScrollView>
     );
 }
@@ -430,6 +487,12 @@ const drawStyles = EStyleSheet.create({
     },
     notificationCount: {
         flexDirection: 'row'
+    },
+    tourTitle: {
+        color: '#EF2F55',
+        fontWeight: '600',
+        fontSize: 22,
+        marginBottom: 10
     }
 });
 

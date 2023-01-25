@@ -130,7 +130,7 @@ function App() {
         linking={linking} fallback={<Text>Loading...</Text>}
       >
         <SafeAreaProvider>
-          <TourGuideProvider>
+          <TourGuideProvider preventOutsideInteraction>
             <AppRouter />
           </TourGuideProvider>
         </SafeAreaProvider>

@@ -12,7 +12,7 @@ import analytics from '@react-native-firebase/analytics';
 
 
 
-const SelectGameMode = () => {
+const SelectGameMode = ({TourGuideZone}) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const gameModes = useSelector(state => state.common.gameModes);
@@ -38,11 +38,18 @@ const SelectGameMode = () => {
             <View style={styles.subcategories}>
                 <SwiperFlatList>
                     {games.map((gameMode, i) =>
-                        <AvailableMode
-                            key={i}
-                            gameMode={gameMode}
-                            onPress={() => onSelectGameMode(gameMode)}
-                        />
+                        <TourGuideZone zone={6 + (i + 1)} text={
+                            <View>
+                                <Text style={styles.tourTitle} >{gameMode.name}</Text>
+                                <Text>{gameMode.description}</Text>
+                            </View>
+                        } shape='rectangle_and_keep' isTourGuide={true}>
+                            <AvailableMode
+                                key={i}
+                                gameMode={gameMode}
+                                onPress={() => onSelectGameMode(gameMode)}
+                            />
+                        </TourGuideZone>
                     )}
                 </SwiperFlatList>
             </View>
@@ -156,4 +163,10 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         marginVertical: normalize(10),
     },
+    tourTitle: {
+        color: '#EF2F55',
+        fontWeight: '600',
+        fontSize: 22,
+        marginBottom: 10
+    }
 })
