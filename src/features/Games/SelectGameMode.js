@@ -12,7 +12,7 @@ import analytics from '@react-native-firebase/analytics';
 
 
 
-const SelectGameMode = ({TourGuideZone}) => {
+const SelectGameMode = ({ TourGuideZone, Walkthroughable, CopilotStep }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const gameModes = useSelector(state => state.common.gameModes);
@@ -38,18 +38,33 @@ const SelectGameMode = ({TourGuideZone}) => {
             <View style={styles.subcategories}>
                 <SwiperFlatList>
                     {games.map((gameMode, i) =>
-                        <TourGuideZone zone={6 + (i + 1)} text={
+                        <CopilotStep text={
                             <View>
                                 <Text style={styles.tourTitle} >{gameMode.name}</Text>
                                 <Text>{gameMode.description}</Text>
                             </View>
-                        } shape='rectangle_and_keep' isTourGuide={true}>
-                            <AvailableMode
-                                key={i}
-                                gameMode={gameMode}
-                                onPress={() => onSelectGameMode(gameMode)}
-                            />
-                        </TourGuideZone>
+                        } order={5 + (i + 1)} name={`Order${5 + (i + 1)}`}>
+                            <Walkthroughable>
+                                <AvailableMode
+                                    key={i}
+                                    gameMode={gameMode}
+                                    onPress={() => onSelectGameMode(gameMode)}
+                                />
+                            </Walkthroughable>
+                        </CopilotStep>
+                        
+                        // <TourGuideZone zone={6 + (i + 1)} text={
+                        //     <View>
+                        //         <Text style={styles.tourTitle} >{gameMode.name}</Text>
+                        //         <Text>{gameMode.description}</Text>
+                        //     </View>
+                        // } shape='rectangle_and_keep' isTourGuide={true}>
+                        //     <AvailableMode
+                        //         key={i}
+                        //         gameMode={gameMode}
+                        //         onPress={() => onSelectGameMode(gameMode)}
+                        //     />
+                        // </TourGuideZone>
                     )}
                 </SwiperFlatList>
             </View>

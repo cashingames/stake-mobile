@@ -29,10 +29,14 @@ import WeeklyTopLeadersHero from '../../shared/WeeklyTopLeadersHero';
 import {
     useTourGuideController, // hook to start, etc.
 } from 'rn-tourguide'
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
+const Walkthroughable = walkthroughable(View)
 
-const HomeScreen = ({route}) => {
+const HomeScreen = (props) => {
+    const CopilotProps = props;
+    const route = props.route;
 
     const dispatch = useDispatch();
 
@@ -123,15 +127,18 @@ const HomeScreen = ({route}) => {
 
     useEffect(()=>{
         setTimeout(()=>{
-            if((isTourActive?.payload || isTourActive) && !loading ){
+            if((isTourActive?.payload || isTourActive) && !loading && (props?.route?.params?.reload) ){
                 // tourStart(7)
                 // setForceRender(!forceRender);
                 // console.log(canStart, 7)
+                
+                console.log('reach11')
+                CopilotProps.start()
 
-                eventEmitter.on('stop', handleTourStop)
+                // eventEmitter.on('stop', handleTourStop)
     
                 return () => {
-                eventEmitter.off('stop', handleTourStop)
+                    // eventEmitter.off('stop', handleTourStop)
                 }
             }else{
                 // console.log(AppTourStep)
@@ -139,7 +146,8 @@ const HomeScreen = ({route}) => {
                 // AppTour.stop();
             }
         }, 1000)
-    }, [isTourActive, canStart, loading])
+    }, [isTourActive, loading, props?.route?.params?.reload])
+    // }, [isTourActive, loading, props])
 
     const handleTourStop = ()=>{
         console.log("tour stopped, going to next screen to continue")
@@ -161,39 +169,9 @@ const HomeScreen = ({route}) => {
                     />
                 }
             >
-                <TourGuideZoneByPosition
-                    zone={10}
-                    top={10}
-                    right={30}
-                    width={30}
-                    height={30}
-                    shape={'circle_and_keep'}
-                    text={
-                        <View>
-                            <Text style={styles.tourTitle} >Wallet</Text>
-                            <Text>Fund your wallet to buy enjoy more games, win points , earn great rewards and withdraw your winnings</Text>
-                        </View>
-                    } 
-                />
-                
-                <TourGuideZoneByPosition
-                    zone={12}
-                    top={10}
-                    right={10}
-                    width={30}
-                    height={30}
-                    shape={'circle_and_keep'}
-                    text={
-                        <View>
-                            <Text style={styles.tourTitle} >Wallet</Text>
-                            <Text>Fund your wallet to buy enjoy more games, win points , earn great rewards and withdraw your winnings</Text>
-                        </View>
-                    } 
-                />
-
                 <UserDetails />
                 <View style={styles.container}>
-                    <SelectGameMode TourGuideZone={TourGuideZone} />
+                    <SelectGameMode Walkthroughable={Walkthroughable} CopilotStep={CopilotStep} TourGuideZone={TourGuideZone} />
                     <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
                         <WeeklyTopLeadersHero gameModes={gameModes} />
                         {/* <GlobalTopLeadersHero /> */}
@@ -206,7 +184,10 @@ const HomeScreen = ({route}) => {
     );
 }
 
-export default HomeScreen;
+export default copilot({
+    animated: true,
+    overlay: 'svg'
+})(HomeScreen);
 
 const UserDetails = () => {
 

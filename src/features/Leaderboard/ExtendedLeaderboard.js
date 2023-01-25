@@ -18,8 +18,19 @@ import LottieAnimations from '../../shared/LottieAnimations';
 import {
     useTourGuideController, // hook to start, etc.
 } from 'rn-tourguide'
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 
-export default function ExtendedLeaderboard({ navigation }) {
+const Walkthroughable = walkthroughable(View)
+
+export default copilot({
+    animated: true,
+    overlay: 'svg'
+})(function ExtendedLeaderboard(props) {
+    const CopilotProps = props;
+    const navigation = props.navigation;
+
+    // console.error(Object.keys(CopilotProps))
+
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
     const leaders = useSelector(state => state.common.globalLeaders)
@@ -42,28 +53,39 @@ export default function ExtendedLeaderboard({ navigation }) {
 
     const handleTourStop = ()=>{
         console.log("tour stopped, going to next screen to continue")
-        navigation.navigate("Home")
+        // console.error(Object.keys(navigation))
+        navigation.navigate("Home", {reload: true})
+    }
+
+    const handleTourChange = (step)=>{
+        console.log(step.name)
     }
 
     useEffect(()=>{
         setTimeout(()=>{
             if(isTourActive?.payload || isTourActive){
-                tourStart(6)
-                setForceRender(!forceRender);
-                console.log(canStart, 6)
+                // tourStart(6)
+                // setForceRender(!forceRender);
+                // console.log(canStart, 6)
 
-                eventEmitter.on('stop', handleTourStop)
-                eventEmitter.on('stepChange', (v)=>{
-                    globalCount.current = globalCount.current + 1;
-                    if(globalCount.current >= 2 ){
-                        navigation.navigate("Home")
-                    }
-                })
+                // eventEmitter.on('stop', handleTourStop)
+                // eventEmitter.on('stepChange', (v)=>{
+                //     globalCount.current = globalCount.current + 1;
+                //     if(globalCount.current >= 2 ){
+                //         navigation.navigate("Home")
+                //     }
+                // })
+
+                CopilotProps.start()
+                CopilotProps.copilotEvents.on('stepChange', handleTourChange)
+                CopilotProps.copilotEvents.on('stop', handleTourStop)
     
                 return () => {
-                eventEmitter.off('stop', handleTourStop)
-                eventEmitter.off('stepChange', ()=>{})
-                globalCount.current = 0;
+                // eventEmitter.off('stop', handleTourStop)
+                // eventEmitter.off('stepChange', ()=>{})
+                // globalCount.current = 0;
+                CopilotProps.copilotEvents.on('stepChange', handleTourChange)
+                CopilotProps.copilotEvents.on('stop', handleTourStop)
                 }
             }else{
                 // console.log(AppTourStep)
@@ -71,7 +93,7 @@ export default function ExtendedLeaderboard({ navigation }) {
                 // AppTour.stop();
             }
         }, 1000)
-    }, [isTourActive, canStart])
+    }, [isTourActive])
 
 
     useEffect(() => {
@@ -118,20 +140,32 @@ export default function ExtendedLeaderboard({ navigation }) {
                 />
             </View>
                 <SwiperFlatList showPagination paginationActiveColor='red' renderAll={true} >
-                    <TourGuideZone zone={6} text={
+                    
+                    <CopilotStep text={
+                            <View>
+                                <Text style={styles.tourTitle} >Global Leaderboard</Text>
+                                <Text>View your position on the leaderboard and continue to play more games to move up the leaderboard</Text>
+                            </View>
+                        } order={1} name="Order1">
+                            <Walkthroughable>
+                                <GlobalLeaderboard leaders={leaders} />
+                            </Walkthroughable>
+                    </CopilotStep>
+
+                    {/* <TourGuideZone zone={6} text={
                         <View>
                             <Text style={styles.tourTitle} >Global Leaderboard</Text>
                             <Text>View your position on the leaderboard and continue to play more games to move up the leaderboard</Text>
                         </View>
                     } shape='rectangle_and_keep' isTourGuide={true}>
                         <GlobalLeaderboard leaders={leaders} />
-                    </TourGuideZone>
+                    </TourGuideZone> */}
                     {categories.map((c, i) => <CategoryLeaderboard key={i} category={c} leaders={categoryLeaders[c]} />)}
                 </SwiperFlatList>
             </ScrollView>
         </View>
     )
-}
+})
 
 
 function GlobalLeaderboard({ leaders }) {
