@@ -8,9 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../shared/LottieAnimations';
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
-import { clearTour, toggleAppTour } from '../features/CommonSlice';
-
-const Walkthroughable = walkthroughable(View)
+import { Walkthroughable } from '../features/Tour/Walkthrouable';
+import { clearTour } from '../features/Tour/TourSlice';
 
 export default copilot({
     animated: true,
@@ -20,7 +19,7 @@ export default copilot({
     const { navigation } = props;
 
     const [refreshing, setRefreshing] = React.useState(false);
-    const isTourActive = useSelector(state => state.common.isTourActive);
+    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
 
     const dispatch = useDispatch()
 

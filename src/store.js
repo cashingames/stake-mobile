@@ -4,6 +4,7 @@ import CommonSlice from './features/CommonSlice'
 import GameSlice from './features/Games/GameSlice'
 import LiveTriviaSlice from './features/LiveTrivia/LiveTriviaSlice'
 import StoreSlice from './features/Store/StoreSlice'
+import TourSlice from './features/Tour/TourSlice'
 
 const store = configureStore({
     reducer: {
@@ -11,7 +12,8 @@ const store = configureStore({
         store: StoreSlice,
         common: CommonSlice,
         game: GameSlice,
-        liveTrivia: LiveTriviaSlice
+        liveTrivia: LiveTriviaSlice,
+        tourSlice: TourSlice
     },
 })
 

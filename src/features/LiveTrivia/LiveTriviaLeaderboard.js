@@ -10,8 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
-
-const Walkthroughable = walkthroughable(View)
+import { Walkthroughable } from '../Tour/Walkthrouable';
 
 const LiveTriviaLeaderBoard = (props) => {
     const CopilotProps = props;
@@ -25,7 +24,7 @@ const LiveTriviaLeaderBoard = (props) => {
     const [loading, setLoading] = useState(true)
 
     const [refreshing, setRefreshing] = useState(false);
-    const isTourActive = useSelector(state => state.common.isTourActive);
+    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
 
 
     useEffect(() => {

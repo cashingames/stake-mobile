@@ -16,16 +16,10 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+import { Walkthroughable } from '../Tour/Walkthrouable';
 
-const Walkthroughable = walkthroughable(View)
 
-export default copilot({
-    animated: true,
-    overlay: 'svg',
-    labels: {
-        finish: 'Next'
-    }
-})(function ExtendedLeaderboard(props) {
+function ExtendedLeaderboard(props) {
     const CopilotProps = props;
     const navigation = props.navigation;
 
@@ -36,7 +30,7 @@ export default copilot({
     const categoryLeaders = useSelector(state => state.common.categoryLeaders)
     const [loading, setLoading] = useState(true);
 
-    const isTourActive = useSelector(state => state.common.isTourActive);
+    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
     const [forceRender, setForceRender] = useState(true);
     const globalCount = useRef(0);
 
@@ -129,7 +123,7 @@ export default copilot({
             </ScrollView>
         </View>
     )
-})
+}
 
 
 function GlobalLeaderboard({ leaders }) {
@@ -142,6 +136,14 @@ function GlobalLeaderboard({ leaders }) {
 
     )
 }
+
+export default copilot({
+    animated: true,
+    overlay: 'svg',
+    labels: {
+        finish: 'Next'
+    }
+})(ExtendedLeaderboard);
 
 const styles = EStyleSheet.create({
     container: {

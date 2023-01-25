@@ -15,18 +15,15 @@ import { isTrue } from '../../utils/stringUtl';
 import analytics from '@react-native-firebase/analytics';
 
 import AppButton from '../../shared/AppButton';
-import { toggleAppTour } from '../CommonSlice';
-import {
-    useTourGuideController, // hook to start, etc.
-} from 'rn-tourguide'
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+import { Walkthroughable } from '../Tour/Walkthrouable';
+import { toggleAppTour } from '../Tour/TourSlice';
 // import { AppTourStep, useAppTour, AppTourProvider, AppTour, useEvent } from '@nghinv/react-native-app-tour';
 // import LottieAnimations from '../../shared/LottieAnimations';
 // import HowToWin from '../HowToWin/HowToWin';
 
 
 const HomeStack = createDrawerNavigator();
-const Walkthroughable = walkthroughable(View)
 
 const HomeRouter = (CopilotProps) => {
     // console.error(CopilotProps)
@@ -134,7 +131,7 @@ function CustomDrawerContent(props) {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const isTourActive = useSelector(state => state.common.isTourActive);
+    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
 
     const user = useSelector(state => state.auth.user)
 

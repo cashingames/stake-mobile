@@ -27,9 +27,9 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import Stakingpopup from '../../shared/Stakingpopup';
 import WeeklyTopLeadersHero from '../../shared/WeeklyTopLeadersHero';
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+import { Walkthroughable } from '../Tour/Walkthrouable';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
-const Walkthroughable = walkthroughable(View)
 
 const HomeScreen = (props) => {
     const CopilotProps = props;
@@ -47,7 +47,7 @@ const HomeScreen = (props) => {
     const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
 
-    const isTourActive = useSelector(state => state.common.isTourActive);
+    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
     const [forceRender, setForceRender] = useState(true);
 
     const onRefresh = React.useCallback(() => {
