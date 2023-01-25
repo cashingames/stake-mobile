@@ -212,6 +212,9 @@ export const CommonSlice = createSlice({
         toggleAppTour: (state, payload) => {
             state.isTourActive = payload;
         },
+        clearTour: (state, payload) => {
+            state.isTourActive = false;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -283,6 +286,6 @@ export const CommonSlice = createSlice({
     },
 });
 
-export const { initialLoadingComplete, toggleAppTour } = CommonSlice.actions
+export const { initialLoadingComplete, toggleAppTour, clearTour } = CommonSlice.actions
 
 export default CommonSlice.reducer

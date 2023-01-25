@@ -15,21 +15,19 @@ import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
-import {
-    useTourGuideController, // hook to start, etc.
-} from 'rn-tourguide'
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 
 const Walkthroughable = walkthroughable(View)
 
 export default copilot({
     animated: true,
-    overlay: 'svg'
+    overlay: 'svg',
+    labels: {
+        finish: 'Next'
+    }
 })(function ExtendedLeaderboard(props) {
     const CopilotProps = props;
     const navigation = props.navigation;
-
-    // console.error(Object.keys(CopilotProps))
 
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
@@ -41,15 +39,6 @@ export default copilot({
     const isTourActive = useSelector(state => state.common.isTourActive);
     const [forceRender, setForceRender] = useState(true);
     const globalCount = useRef(0);
-
-    const {
-        canStart, // a boolean indicate if you can start tour guide
-        start: tourStart, // a function to start the tourguide
-        stop: tourStop, // a function  to stopping it
-        eventEmitter, // an object for listening some events
-        TourGuideZone,
-        getCurrentStep
-    } = useTourGuideController()
 
     const handleTourStop = ()=>{
         console.log("tour stopped, going to next screen to continue")
@@ -64,33 +53,17 @@ export default copilot({
     useEffect(()=>{
         setTimeout(()=>{
             if(isTourActive?.payload || isTourActive){
-                // tourStart(6)
-                // setForceRender(!forceRender);
-                // console.log(canStart, 6)
-
-                // eventEmitter.on('stop', handleTourStop)
-                // eventEmitter.on('stepChange', (v)=>{
-                //     globalCount.current = globalCount.current + 1;
-                //     if(globalCount.current >= 2 ){
-                //         navigation.navigate("Home")
-                //     }
-                // })
-
+                
                 CopilotProps.start()
                 CopilotProps.copilotEvents.on('stepChange', handleTourChange)
                 CopilotProps.copilotEvents.on('stop', handleTourStop)
     
                 return () => {
-                // eventEmitter.off('stop', handleTourStop)
-                // eventEmitter.off('stepChange', ()=>{})
-                // globalCount.current = 0;
-                CopilotProps.copilotEvents.on('stepChange', handleTourChange)
-                CopilotProps.copilotEvents.on('stop', handleTourStop)
+                CopilotProps.copilotEvents.off('stepChange', handleTourChange)
+                CopilotProps.copilotEvents.off('stop', handleTourStop)
                 }
             }else{
-                // console.log(AppTourStep)
-                // AppTour.start();
-                // AppTour.stop();
+                
             }
         }, 1000)
     }, [isTourActive])
@@ -151,15 +124,6 @@ export default copilot({
                                 <GlobalLeaderboard leaders={leaders} />
                             </Walkthroughable>
                     </CopilotStep>
-
-                    {/* <TourGuideZone zone={6} text={
-                        <View>
-                            <Text style={styles.tourTitle} >Global Leaderboard</Text>
-                            <Text>View your position on the leaderboard and continue to play more games to move up the leaderboard</Text>
-                        </View>
-                    } shape='rectangle_and_keep' isTourGuide={true}>
-                        <GlobalLeaderboard leaders={leaders} />
-                    </TourGuideZone> */}
                     {categories.map((c, i) => <CategoryLeaderboard key={i} category={c} leaders={categoryLeaders[c]} />)}
                 </SwiperFlatList>
             </ScrollView>

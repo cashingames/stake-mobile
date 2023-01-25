@@ -12,7 +12,7 @@ import analytics from '@react-native-firebase/analytics';
 
 
 
-const SelectGameMode = ({ TourGuideZone, Walkthroughable, CopilotStep }) => {
+const SelectGameMode = ({ Walkthroughable, CopilotStep }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const gameModes = useSelector(state => state.common.gameModes);
@@ -53,18 +53,6 @@ const SelectGameMode = ({ TourGuideZone, Walkthroughable, CopilotStep }) => {
                             </Walkthroughable>
                         </CopilotStep>
                         
-                        // <TourGuideZone zone={6 + (i + 1)} text={
-                        //     <View>
-                        //         <Text style={styles.tourTitle} >{gameMode.name}</Text>
-                        //         <Text>{gameMode.description}</Text>
-                        //     </View>
-                        // } shape='rectangle_and_keep' isTourGuide={true}>
-                        //     <AvailableMode
-                        //         key={i}
-                        //         gameMode={gameMode}
-                        //         onPress={() => onSelectGameMode(gameMode)}
-                        //     />
-                        // </TourGuideZone>
                     )}
                 </SwiperFlatList>
             </View>

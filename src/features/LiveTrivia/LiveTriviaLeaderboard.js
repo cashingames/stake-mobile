@@ -9,9 +9,13 @@ import { isTrue } from '../../utils/stringUtl';
 import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 
+const Walkthroughable = walkthroughable(View)
 
-const LiveTriviaLeaderBoard = ({ navigation, route }) => {
+const LiveTriviaLeaderBoard = (props) => {
+    const CopilotProps = props;
+    const { navigation, route } = props
     useApplyHeaderWorkaround(navigation.setOptions);
     const params = route.params;
     const dispatch = useDispatch();
@@ -19,6 +23,10 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
     // console.log(triviaLeaders);
     const [loading, setLoading] = useState(true)
+
+    const [refreshing, setRefreshing] = useState(false);
+    const isTourActive = useSelector(state => state.common.isTourActive);
+
 
     useEffect(() => {
         StatusBar.setTranslucent(true)
@@ -32,6 +40,37 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
         )).then(() => setLoading(false));
     }, [])
 
+    // tour
+    useEffect(()=>{
+        setTimeout(()=>{
+            if((isTourActive?.payload || isTourActive) && (!loading) ){
+                // tourStart(7)
+                // setForceRender(!forceRender);
+                // console.log(canStart, 7)
+                
+                console.log('reach11')
+                CopilotProps.start()
+                CopilotProps.copilotEvents.on('stop', handleTourStop)
+
+                // eventEmitter.on('stop', handleTourStop)
+    
+                return () => {
+                    // eventEmitter.off('stop', handleTourStop)
+                    CopilotProps.copilotEvents.off('stop', handleTourStop)
+                }
+            }else{
+                // console.log(AppTourStep)
+                // AppTour.start();
+                // AppTour.stop();
+            }
+        }, 1000)
+    }, [isTourActive, loading])
+
+    const handleTourStop = ()=>{
+        console.log("tour stopped, going to next screen to continue....")
+        navigation.navigate("Invite")
+    }
+
 
 
     if (loading) {
@@ -40,8 +79,18 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <ResultContainer />
-            <TriviaTopLeaders />
+            <CopilotStep text={
+                <View>
+                    <Text style={styles.tourTitle} >Prize Pool</Text>
+                    <Text>Win cash prizes when you appear as the top three on the weekly leaderboard</Text>
+                </View>
+            } order={1} name={`LeaderBoard1`}>
+                <Walkthroughable>
+                    <ResultContainer />
+                    <TriviaTopLeaders />
+                </Walkthroughable>
+            </CopilotStep>
+            {/* <TriviaTopLeaders /> */}
             <TriviaParticipants triviaLeaders={triviaLeaders} />
         </ScrollView>
     )
@@ -219,7 +268,13 @@ const TriviaTopLeader = ({ player, position }) => {
     )
 }
 
-export default LiveTriviaLeaderBoard;
+export default copilot({
+    animated: true,
+    overlay: 'svg',
+    labels: {
+        finish: 'Next'
+    }
+})(LiveTriviaLeaderBoard);
 
 const styles = EStyleSheet.create({
     container: {
@@ -481,5 +536,11 @@ const styles = EStyleSheet.create({
         width: 20,
         height: 20,
         marginLeft: 16
+    },
+    tourTitle: {
+        color: '#EF2F55',
+        fontWeight: '600',
+        fontSize: 22,
+        marginBottom: 10
     }
 });

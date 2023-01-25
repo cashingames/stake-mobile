@@ -136,15 +136,6 @@ function CustomDrawerContent(props) {
     const dispatch = useDispatch();
     const isTourActive = useSelector(state => state.common.isTourActive);
 
-    const {
-        canStart, // a boolean indicate if you can start tour guide
-        start: tourStart, // a function to start the tourguide
-        stop: tourStop, // a function  to stopping it
-        eventEmitter, // an object for listening some events
-        getCurrentStep,
-        TourGuideZone
-    } = useTourGuideController('results')
-
     const user = useSelector(state => state.auth.user)
 
     const onLogout = () => {
@@ -160,34 +151,18 @@ function CustomDrawerContent(props) {
         console.log(step.name)
     }
 
-    useEffect(() => {
-        // eventEmitter.on('stop', handleTourStop)
-        // eventEmitter.on('stepChange', handleTourChange)
-    
-        return () => {
-        //   eventEmitter.off('stop', handleTourStop)
-        }
-    }, [])
-
     useEffect(()=>{
         if(isTourActive){
             CopilotProps.start()
             CopilotProps.copilotEvents.on('stepChange', handleTourChange)
             CopilotProps.copilotEvents.on('stop', handleTourStop)
-            // tourStart(1)
-
-            // eventEmitter.on('stop', handleTourStop)
-            // eventEmitter.on('stepChange', handleTourChange)
     
             return () => {
-            //   eventEmitter.off('stop', handleTourStop)
             CopilotProps.copilotEvents.off('stepChange', handleTourChange)
             CopilotProps.copilotEvents.off('stop', handleTourStop)
             }
         }else{
-            // console.log(AppTourStep)
-            // AppTour.start();
-            // AppTour.stop();
+            
         }
     }, [isTourActive])
 
@@ -211,15 +186,7 @@ function CustomDrawerContent(props) {
                                 <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
                             </Walkthroughable>
                         </CopilotStep>
-                        {/* <TourGuideZone zone={1} text={
-                            <View>
-                                <Text style={drawStyles.tourTitle} >User Profile</Text>
-                                <Text>Edit your profile and update your bank details</Text>
-                            </View>
-                        } shape='rectangle_and_keep'  >
-                            <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
-                        </TourGuideZone> */}
-
+                        
                     </View>
 
 
@@ -245,25 +212,6 @@ function CustomDrawerContent(props) {
                             </Walkthroughable>
                         </CopilotStep>
                         
-                        {/* <TourGuideZone zone={2} text={
-                            <View>
-                                <Text style={drawStyles.tourTitle} >Live Trivia</Text>
-                                <Text>Show how fast and skilled you are by competing with lots of users and standing a chance of winning great cash prizes</Text>
-                            </View>
-                        } shape='rectangle_and_keep' >
-                            <DrawerItem
-                                label={() =>
-                                    <View style={drawStyles.item}>
-                                        <Text style={drawStyles.itemLabel}>Live Trivia</Text>
-                                        <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                                    </View>}
-                                onPress={() => navigation.navigate('LiveTrivias')}
-                                activeTintColor='#EF2F55'
-                                style={drawStyles.label}
-                                labelContainerStyle
-                            />
-                        </TourGuideZone> */}
-                        
                         <CopilotStep text={
                             <View>
                                 <Text style={drawStyles.tourTitle} >Challenges</Text>
@@ -285,24 +233,6 @@ function CustomDrawerContent(props) {
                             </Walkthroughable>
                         </CopilotStep>
 
-                        {/* <TourGuideZone zone={3} text={
-                            <View>
-                                <Text style={drawStyles.tourTitle} >Challenges</Text>
-                                <Text>Challenge a friend to a duel and also stand a chance of winning cash prizes</Text>
-                            </View>
-                        } shape='rectangle_and_keep' >
-                            <DrawerItem
-                                label={() =>
-                                    <View style={drawStyles.item}>
-                                        <Text style={drawStyles.itemLabel}>My Challenges</Text>
-                                        <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                                    </View>}
-                                onPress={() => navigation.navigate('MyChallenges')}
-                                activeTintColor='#EF2F55'
-                                style={drawStyles.label}
-                                labelContainerStyle
-                            />
-                        </TourGuideZone> */}
                         {Platform.OS === 'ios' ?
                             <></>
                             :
@@ -353,25 +283,6 @@ function CustomDrawerContent(props) {
                             </Walkthroughable>
                         </CopilotStep>
                         
-                        {/* <TourGuideZone zone={4} text={
-                            <View>
-                                <Text style={drawStyles.tourTitle} >Get Help</Text>
-                                <Text>Need help?
-                                    Contact us by sending us your questions and feedback or read through our FAQ</Text>
-                            </View>
-                        } shape='rectangle_and_keep' >
-                            <DrawerItem
-                                label={() =>
-                                    <View style={drawStyles.item}>
-                                        <Text style={drawStyles.itemLabel}>Get Help</Text>
-                                        <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                                    </View>}
-                                onPress={() => navigation.navigate('Help')}
-                                activeTintColor='#EF2F55'
-                                style={drawStyles.label}
-                                labelContainerStyle
-                            />
-                        </TourGuideZone> */}
                         <DrawerItem
                             label={() =>
                                 <View style={drawStyles.item}>
@@ -409,25 +320,6 @@ function CustomDrawerContent(props) {
                             </Walkthroughable>
                         </CopilotStep>
                         
-                        {/* <TourGuideZone zone={5} text={
-                            <View>
-                                <Text style={drawStyles.tourTitle} >Invite Friends </Text>
-                                <Text>Refer your friends and get bonuses for each friend referred and also stand a chance of winning cash prizes</Text>
-                            </View>
-                        } shape='rectangle_and_keep' >
-                            <DrawerItem
-                                label={() =>
-                                    <View style={drawStyles.item}>
-                                        <Text style={drawStyles.itemLabel}>Invite Friends</Text>
-                                        <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                                    </View>}
-                                onPress={() => navigation.navigate('Invite')}
-                                activeTintColor='#EF2F55'
-                                style={drawStyles.label}
-                                labelContainerStyle
-                            />
-                        </TourGuideZone> */}
-
                     </View>
                 </ScrollView>
                 <View style={drawStyles.logoutContainer}>
@@ -605,5 +497,8 @@ const drawStyles = EStyleSheet.create({
 
 export default copilot({
     animated: true,
-    overlay: 'svg'
+    overlay: 'svg',
+    labels: {
+        finish: 'Next'
+    }
 })(HomeRouter)

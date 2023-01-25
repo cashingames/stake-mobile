@@ -4,13 +4,66 @@ import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../shared/LottieAnimations';
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+import { clearTour, toggleAppTour } from '../features/CommonSlice';
 
+const Walkthroughable = walkthroughable(View)
 
-export default function InviteFriendsScreen({ navigation }) {
+export default copilot({
+    animated: true,
+    overlay: 'svg'
+})(function InviteFriendsScreen(props) {
+    const CopilotProps = props;
+    const { navigation } = props;
+
+    const [refreshing, setRefreshing] = React.useState(false);
+    const isTourActive = useSelector(state => state.common.isTourActive);
+
+    const dispatch = useDispatch()
+
     useApplyHeaderWorkaround(navigation.setOptions);
+
+    // tour
+    React.useEffect(()=>{
+        setTimeout(()=>{
+            if((isTourActive?.payload || isTourActive) ){
+                // tourStart(7)
+                // setForceRender(!forceRender);
+                // console.log(canStart, 7)
+                
+                console.log('reach11')
+                CopilotProps.start()
+                CopilotProps.copilotEvents.on('stop', handleTourStop)
+
+                // eventEmitter.on('stop', handleTourStop)
+    
+                return () => {
+                    // eventEmitter.off('stop', handleTourStop)
+                    CopilotProps.copilotEvents.off('stop', handleTourStop)
+                }
+            }else{
+                // console.log(AppTourStep)
+                // AppTour.start();
+                // AppTour.stop();
+            }
+        }, 1000)
+    }, [isTourActive])
+
+    const handleTourStop = ()=>{
+        console.log("tour stopped, going to next screen to continue....")
+        
+        // end tour
+        try{
+            dispatch(clearTour())
+            navigation.popToTop()
+            navigation.navigatetoString()("AppRouter")
+        }catch(e){
+            navigation.navigate("AppRouter")
+        }
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -21,11 +74,23 @@ export default function InviteFriendsScreen({ navigation }) {
             />
             <Heading />
             <Instructions />
-            <InviteLink />
+
+            <CopilotStep text={
+                <View>
+                    <Text style={styles.tourTitle} >Invite Friends</Text>
+                    <Text>Refer your friends and get bonuses for each friend referred and also stand a chance of winning cash prizes</Text>
+                </View>
+            } order={1} name={`Invite1`}>
+                <Walkthroughable>
+                    <InviteLink />
+                </Walkthroughable>
+            </CopilotStep>
+
+            
         </ScrollView>
 
     );
-}
+})
 
 const Heading = () => {
     return (
@@ -161,5 +226,11 @@ const styles = EStyleSheet.create({
     icon: {
         marginLeft: normalize(10),
         alignItems: 'center'
+    },
+    tourTitle: {
+        color: '#EF2F55',
+        fontWeight: '600',
+        fontSize: 22,
+        marginBottom: 10
     }
 });
