@@ -38,6 +38,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
     const isPlayingTrivia = useSelector(state => state.game.isPlayingTrivia);
+    const isStaking =  useSelector(state => state.game.amountStaked);
     const user = useSelector(state => state.auth.user);
     const isEnded = useSelector(state => state.game.isEnded);
 
@@ -82,6 +83,14 @@ export default function GameInProgressScreen({ navigation, route }) {
                     message: "Game session " + gameSessionToken + " chosen options for " + user.username,
                     data: chosenOptions
                 }))
+                if(isStaking){
+                    crashlytics().log('User completed staking game');
+                    await analytics().logEvent('staking_game_completed', {
+                        'id': user.username,
+                        'phone_number': user.phoneNumber,
+                        'email': user.email
+                    });
+                }
                 setEnding(false);
                 if (isPlayingTrivia) {
                     dispatch(setHasPlayedTrivia(true))
@@ -94,6 +103,14 @@ export default function GameInProgressScreen({ navigation, route }) {
                     navigation.navigate('TriviaEndResult', {
                         triviaId: params.triviaId,
                     })
+                } else if(isStaking){
+                    crashlytics().log('User completed staking game');
+                    await analytics().logEvent('staking_game_completed', {
+                        'id': user.username,
+                        'phone_number': user.phoneNumber,
+                        'email': user.email
+                    });
+                    navigation.navigate('GameEndResult');
                 } else {
                     navigation.navigate('GameEndResult');
                 }

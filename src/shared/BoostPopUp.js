@@ -1,30 +1,26 @@
 import * as React from 'react';
-import { Platform, Pressable, Text, View, Modal, Image } from 'react-native';
+import { Platform, Pressable, Text, View, Modal, Alert } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { setGameMode } from '../features/Games/GameSlice';
+import { Image } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from 'react-redux';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import analytics from '@react-native-firebase/analytics';
 
 
-
-const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
+const Boostspopup = ({ setModalVisible, modalVisible }) => {
     const navigation = useNavigation();
-    const dispatch = useDispatch();
-    const gameModeSelected = gameModes.find(mode => mode.name === 'STAKING')
     const user = useSelector(state => state.auth.user);
 
-    const playStaking = async () => {
-        setModalVisible(!modalVisible)
-        dispatch(setGameMode(gameModeSelected));
-          await analytics().logEvent('stake_cash_now_button_on_clicked', {
+    const goToStore = async () => {
+        await analytics().logEvent('buy_now_button_on_boostpopup_clicked', {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email
-        });    
-        navigation.navigate('SelectGameCategory')    
+        });
+        navigation.navigate('GameStore')
     }
     return (
         <View style={styles.onView}>
@@ -33,14 +29,17 @@ const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
+                    // Alert.alert("Modal has been closed.");
                     setModalVisible(!modalVisible);
                 }}
             >
                 <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
+                    <LinearGradient
+                        colors={['#151C2F', '#792592']}
+                        style={styles.modalView}>
                         <View style={styles.container}>
                             <Pressable
-                                style={[styles.button, styles.buttonClose]}
+                                style={styles.buttonClose}
                                 onPress={() => setModalVisible(!modalVisible)}
                             >
                                 <Ionicons name="close" size={10} color="#fff" />
@@ -50,31 +49,29 @@ const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
                                     source={require("../../assets/images/tag.png")}
                                 />
                             </View>
-                            <Text style={styles.modalTopText}>Winner Alert</Text>
+                            <Text style={styles.modalTopText}>Power Ups</Text>
                             <View style={styles.resultContainer}>
                                 <Image
                                     style={styles.hat}
-                                    source={require("../../assets/images/coin-hat.png")}
+                                    source={require("../../assets/images/boost-popup.png")}
                                 />
                             </View>
                         </View>
                         <View style={styles.modalItems}>
-                            <Text style={styles.infoText}>A fellow Cashingamer just cashed out, stake cash now 🤑. and stand a chance to win big</Text>
-                            <Pressable style={styles.stake} onPress={playStaking}>
-                                <Text style={styles.stakeText}>
-                                    Stake cash now
-                                </Text>
+                            <Text style={styles.infoText}>With time freeze, you get to pause the game for 15seconds to allow you remember  the correct option And skip allows you jump a question and replace it with another</Text>
+                            <Pressable style={styles.boost} onPress={goToStore}>
+                                <Text style={styles.boostText}>Buy now</Text>
                             </Pressable>
                         </View>
 
-                    </View>
+                    </LinearGradient>
 
                 </View>
             </Modal>
         </View>
     )
 }
-export default Stakingpopup;
+export default Boostspopup;
 const styles = EStyleSheet.create({
     contentContainer: {
         display: 'flex',
@@ -101,7 +98,7 @@ const styles = EStyleSheet.create({
     },
     modalView: {
         margin: 20,
-        backgroundColor: '#66142E',
+        backgroundim: '#66142E',
         borderRadius: 20,
         shadowColor: "#000",
         shadowOffset: {
@@ -117,6 +114,7 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(18),
     },
     buttonClose: {
+        display: 'flex',
         marginLeft: 'auto',
         marginBottom: normalize(2),
         backgroundColor: '#FAC502',
@@ -124,11 +122,15 @@ const styles = EStyleSheet.create({
         width: '1rem',
         height: '1rem',
         alignItems: 'center',
-        justifyContent:'center'
+        justifyContent: 'center',
+        textAlignVertical: 'center'
     },
     closeStyle: {
         fontSize: '0.7rem',
         color: '#FFFF',
+        alignItems: "center",
+        justifyContent: 'center',
+        // padding:1,
         fontFamily: 'graphik-bold',
     },
     modalItems: {
@@ -145,7 +147,7 @@ const styles = EStyleSheet.create({
     infoText: {
         textAlign: 'center',
         width: '15rem',
-        fontSize:'.8rem',
+        fontSize: '.8rem',
         fontFamily: 'graphik-medium',
     },
     resultContainer: {
@@ -153,8 +155,7 @@ const styles = EStyleSheet.create({
     },
     hat: {
         width: '11rem',
-        height: '6.rem',
-        marginTop: '1rem'
+        height: '9.5rem',
     },
     modalItem: {
         flexDirection: 'column',
@@ -162,15 +163,16 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(10)
 
     },
-    stake: {
+    boost: {
         backgroundColor: '#EF2F55',
         padding: '.3rem',
         borderRadius: 10,
         borderColor: '#66142E',
         borderWidth: 1,
-        top:normalize(12),
+        paddingHorizontal: '1.5rem',
+        top: normalize(12),
     },
-    stakeText: {
+    boostText: {
         fontSize: '0.65rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
