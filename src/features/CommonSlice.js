@@ -208,7 +208,7 @@ export const CommonSlice = createSlice({
     reducers: {
         initialLoadingComplete: (state) => {
             state.initialLoading = false;
-        }
+        },
     },
     extraReducers: (builder) => {
         builder

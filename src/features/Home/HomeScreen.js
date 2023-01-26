@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Text, View, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
@@ -26,10 +26,15 @@ import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import Stakingpopup from '../../shared/Stakingpopup';
 import WeeklyTopLeadersHero from '../../shared/WeeklyTopLeadersHero';
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+import { Walkthroughable } from '../Tour/Walkthrouable';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
-const HomeScreen = ({route}) => {
+const HomeScreen = (props) => {
+    const CopilotProps = props;
+    const route = props.route;
+    const navigation = useNavigation();
 
     const dispatch = useDispatch();
 
@@ -41,6 +46,9 @@ const HomeScreen = ({route}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
+
+    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
+    const [forceRender, setForceRender] = useState(true);
 
     const onRefresh = React.useCallback(() => {
         // console.info('refreshing')
@@ -106,6 +114,30 @@ const HomeScreen = ({route}) => {
         }, [])
     );
 
+    useEffect(()=>{
+        setTimeout(()=>{
+            if((isTourActive?.payload || isTourActive) && !loading && (props?.route?.params?.reload) ){
+                
+                console.log('reach11')
+                CopilotProps.start()
+                CopilotProps.copilotEvents.on('stop', handleTourStop)
+    
+                return () => {
+                    CopilotProps.copilotEvents.off('stop', handleTourStop)
+                }
+            }else{
+                
+            }
+        }, 1000)
+    }, [isTourActive, loading, props?.route?.params?.reload])
+
+    const handleTourStop = ()=>{
+        console.log("tour stopped, going to next screen to continue....")
+        navigation.navigate("LiveTriviaLeaderboard", {
+            triviaId: 0
+        })
+    }
+
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
     }
@@ -123,7 +155,7 @@ const HomeScreen = ({route}) => {
             >
                 <UserDetails />
                 <View style={styles.container}>
-                    <SelectGameMode />
+                    <SelectGameMode Walkthroughable={Walkthroughable} CopilotStep={CopilotStep} />
                     <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
                         <WeeklyTopLeadersHero gameModes={gameModes} />
                         {/* <GlobalTopLeadersHero /> */}
@@ -136,7 +168,13 @@ const HomeScreen = ({route}) => {
     );
 }
 
-export default HomeScreen;
+export default copilot({
+    animated: true,
+    overlay: 'svg',
+    labels: {
+        finish: 'Next'
+    }
+})(HomeScreen);
 
 const UserDetails = () => {
 
