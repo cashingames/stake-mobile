@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, ScrollView, Share, Alert, Pressable } from 'react-native';
+import { Text, View, ScrollView, Share, Alert, Pressable, Platform } from 'react-native';
 import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
@@ -10,6 +10,7 @@ import LottieAnimations from '../shared/LottieAnimations';
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import { Walkthroughable } from '../features/Tour/Walkthrouable';
 import { clearTour } from '../features/Tour/TourSlice';
+import analytics from '@react-native-firebase/analytics';
 
 export default copilot({
     animated: true,
@@ -115,12 +116,17 @@ const InviteLink = () => {
     const user = useSelector(state => state.auth.user);
 
     const referralUrl = (user.referralCode)
+    const referralMsg = `Play exciting games with me on Cashingames and stand a chance to earn great rewards! Create an account with my referral code - ${referralUrl}`
 
     const onShare = async () => {
         try {
             await Share.share({
-                message: referralUrl,
+                message: referralMsg,
             });
+            await analytics().logEvent("share_referral", {
+                'id': user.username,
+            })
+
         } catch (error) {
             Alert.alert("Notice", error.message);
         }
