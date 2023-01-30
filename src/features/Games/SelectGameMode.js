@@ -38,7 +38,7 @@ const SelectGameMode = ({ Walkthroughable, CopilotStep }) => {
             <View style={styles.subcategories}>
                 <SwiperFlatList>
                     {games.map((gameMode, i) =>
-                        <CopilotStep text={
+                        <CopilotStep key={i} text={
                             <View>
                                 <Text style={styles.tourTitle} >{gameMode.name}</Text>
                                 <Text>{gameMode.description}</Text>

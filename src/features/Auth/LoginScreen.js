@@ -15,6 +15,7 @@ import analytics from '@react-native-firebase/analytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import AppleSignUp from '../../shared/AppleSignUp';
 import { loginUser } from './AuthSlice';
+import Login from '../../shared/FacebookLogin';
 
 export default function LoginScreen({ navigation }) {
 
@@ -148,6 +149,7 @@ const RenderCreateAccount = () => {
             <Text style={styles.signInText}>or</Text>
             <View style={styles.google}>
                 <SocialSignUp googleText="Sign in" />
+                <Login />
                 {Platform.OS === 'ios' && <AppleSignUp /> }
             </View>
         </View>
