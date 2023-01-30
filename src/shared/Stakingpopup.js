@@ -19,7 +19,7 @@ const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
     const playStaking = async () => {
         setModalVisible(!modalVisible)
         dispatch(setGameMode(gameModeSelected));
-          await analytics().logEvent('stake_cash_now_button_on_clicked', {
+          await analytics().logEvent('stake_cash_now_button_clicked', {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email
