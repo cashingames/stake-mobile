@@ -9,9 +9,12 @@ import { isTrue } from '../../utils/stringUtl';
 import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+import { Walkthroughable } from '../Tour/Walkthrouable';
 
-
-const LiveTriviaLeaderBoard = ({ navigation, route }) => {
+const LiveTriviaLeaderBoard = (props) => {
+    const CopilotProps = props;
+    const { navigation, route } = props
     useApplyHeaderWorkaround(navigation.setOptions);
     const params = route.params;
     const dispatch = useDispatch();
@@ -19,6 +22,10 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
     const triviaLeaders = useSelector(state => state.game.triviaLeaders)
     // console.log(triviaLeaders);
     const [loading, setLoading] = useState(true)
+
+    const [refreshing, setRefreshing] = useState(false);
+    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
+
 
     useEffect(() => {
         StatusBar.setTranslucent(true)
@@ -32,6 +39,37 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
         )).then(() => setLoading(false));
     }, [])
 
+    // tour
+    useEffect(()=>{
+        setTimeout(()=>{
+            if((isTourActive?.payload || isTourActive) && (!loading) ){
+                // tourStart(7)
+                // setForceRender(!forceRender);
+                // console.log(canStart, 7)
+                
+                console.log('reach11')
+                CopilotProps.start()
+                CopilotProps.copilotEvents.on('stop', handleTourStop)
+
+                // eventEmitter.on('stop', handleTourStop)
+    
+                return () => {
+                    // eventEmitter.off('stop', handleTourStop)
+                    CopilotProps.copilotEvents.off('stop', handleTourStop)
+                }
+            }else{
+                // console.log(AppTourStep)
+                // AppTour.start();
+                // AppTour.stop();
+            }
+        }, 1000)
+    }, [isTourActive, loading])
+
+    const handleTourStop = ()=>{
+        console.log("tour stopped, going to next screen to continue....")
+        navigation.navigate("Invite")
+    }
+
 
 
     if (loading) {
@@ -40,7 +78,17 @@ const LiveTriviaLeaderBoard = ({ navigation, route }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <ResultContainer />
+            <CopilotStep text={
+                <View>
+                    <Text style={styles.tourTitle} >Prize Pool</Text>
+                    <Text>Win cash prizes when you appear as the top three on the weekly leaderboard</Text>
+                </View>
+            } order={1} name={`LeaderBoard1`}>
+                <Walkthroughable>
+                    <ResultContainer />
+                    <TriviaTopLeaders />
+                </Walkthroughable>
+            </CopilotStep>
             {/* <TriviaTopLeaders /> */}
             <TriviaParticipants triviaLeaders={triviaLeaders} />
         </ScrollView>
@@ -55,6 +103,38 @@ const ResultContainer = () => {
                 width={normalize(170)}
                 height={normalize(170)}
             />
+        </View>
+    )
+}
+
+const TriviaTopLeaders = ()=>{
+    return (
+        <View style={styles.triviaTopLeadersContainer}>
+            
+            <View style={[styles.triviaTopLeadersRow, { marginVertical: 8 }]}>
+                <Text style={styles.triviaTopLeadersH1}>Grand Prize</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.triviaTopLeadersH1}>N5,000</Text>
+                    <Image source={require("../../../assets/images/icons/trophy.png")} style={styles.triviaTopLeadersTrophy} />
+                </View>
+            </View>
+
+            <View style={styles.triviaTopLeadersRow}>
+                <Text style={styles.triviaTopLeadersH2}>2nd Place</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.triviaTopLeadersH2}>N3,000</Text>
+                    <Image source={require("../../../assets/images/icons/conqueror.png")} style={styles.triviaTopLeadersCon} />
+                </View>
+            </View>
+
+            <View style={styles.triviaTopLeadersRow}>
+                <Text style={styles.triviaTopLeadersH2}>3rd Place</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.triviaTopLeadersH2}>N3,000</Text>
+                    <Image source={require("../../../assets/images/icons/conqueror.png")} style={styles.triviaTopLeadersCon} />
+                </View>
+            </View>
+
         </View>
     )
 }
@@ -187,7 +267,13 @@ const TriviaTopLeader = ({ player, position }) => {
     )
 }
 
-export default LiveTriviaLeaderBoard;
+export default copilot({
+    animated: true,
+    overlay: 'svg',
+    labels: {
+        finish: 'Next'
+    }
+})(LiveTriviaLeaderBoard);
 
 const styles = EStyleSheet.create({
     container: {
@@ -418,5 +504,42 @@ const styles = EStyleSheet.create({
         fontSize: '1rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
+    },
+    triviaTopLeadersContainer: {
+        backgroundColor: 'rgba(69, 30, 182, 1)',
+        marginHorizontal: '5%',
+        padding: 20,
+        borderRadius: 15,
+        marginVertical: '3%'
+    },
+    triviaTopLeadersRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: 3
+    },
+    triviaTopLeadersH1: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '700'
+    },
+    triviaTopLeadersH2: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: '500'
+    },
+    triviaTopLeadersTrophy: {
+        width: 35,
+        height: 35,
+    },
+    triviaTopLeadersCon: {
+        width: 20,
+        height: 20,
+        marginLeft: 16
+    },
+    tourTitle: {
+        color: '#EF2F55',
+        fontWeight: '600',
+        fontSize: 22,
+        marginBottom: 10
     }
 });

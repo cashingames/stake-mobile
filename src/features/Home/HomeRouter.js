@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useNavigation } from '@react-navigation/core';
@@ -15,13 +15,18 @@ import { isTrue } from '../../utils/stringUtl';
 import analytics from '@react-native-firebase/analytics';
 
 import AppButton from '../../shared/AppButton';
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+import { Walkthroughable } from '../Tour/Walkthrouable';
+import { toggleAppTour } from '../Tour/TourSlice';
+// import { AppTourStep, useAppTour, AppTourProvider, AppTour, useEvent } from '@nghinv/react-native-app-tour';
 // import LottieAnimations from '../../shared/LottieAnimations';
 // import HowToWin from '../HowToWin/HowToWin';
 
 
 const HomeStack = createDrawerNavigator();
 
-const HomeRouter = () => {
+const HomeRouter = (CopilotProps) => {
+    // console.error(CopilotProps)
     const loading = useSelector(state => state.common.initialLoading);
 
     const AppMainHeaderOptions = () => {
@@ -51,7 +56,7 @@ const HomeRouter = () => {
     return (
         <HomeStack.Navigator
             initialRouteName="Home"
-            drawerContent={(props) => <CustomDrawerContent {...props} />}
+            drawerContent={(props) => <CustomDrawerContent {...props} CopilotProps={CopilotProps} />}
             screenOptions={AppMainHeaderOptions}>
             <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
             <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
@@ -122,9 +127,11 @@ const RightButtons = () => {
 }
 
 function CustomDrawerContent(props) {
+    const CopilotProps = props.CopilotProps;
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
 
     const user = useSelector(state => state.auth.user)
 
@@ -132,104 +139,192 @@ function CustomDrawerContent(props) {
         dispatch(logoutUser());
     }
 
+    const handleTourStop = ()=>{
+        console.log("stopping")
+        navigation.navigate("Leaderboard")
+    }
+
+    const handleTourChange = (step)=>{
+        console.log(step.name)
+    }
+
+    useEffect(()=>{
+        if(isTourActive){
+            CopilotProps.start()
+            CopilotProps.copilotEvents.on('stepChange', handleTourChange)
+            CopilotProps.copilotEvents.on('stop', handleTourStop)
+    
+            return () => {
+            CopilotProps.copilotEvents.off('stepChange', handleTourChange)
+            CopilotProps.copilotEvents.off('stop', handleTourStop)
+            }
+        }else{
+            
+        }
+    }, [isTourActive])
+
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
-            <ScrollView>
-                <View style={drawStyles.sideHeader}>
-                    <Image
-                        style={drawStyles.avatar}
-                        source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
-                    />
-                    <Text style={drawStyles.userTitle}> {user.fullName}</Text>
-                    <Text style={drawStyles.userName}> @{user.username}</Text>
-                    <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
+                <ScrollView>
+                    <View style={drawStyles.sideHeader}>
+                        <Image
+                            style={drawStyles.avatar}
+                            source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+                        />
+                        <Text style={drawStyles.userTitle}> {user.fullName}</Text>
+                        <Text style={drawStyles.userName}> @{user.username}</Text>
+                        <CopilotStep text={
+                            <View>
+                                <Text style={drawStyles.tourTitle} >User Profile</Text>
+                                <Text>Edit your profile and update your bank details</Text>
+                            </View>
+                        } order={1} name="Order1">
+                            <Walkthroughable>
+                                <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
+                            </Walkthroughable>
+                        </CopilotStep>
+                        
+                    </View>
 
-                </View>
 
+                    <View style={drawStyles.menu}>
+                        <CopilotStep text={
+                            <View>
+                                <Text style={drawStyles.tourTitle} >Live Trivia</Text>
+                                <Text>Show how fast and skilled you are by competing with lots of users and standing a chance of winning great cash prizes</Text>
+                            </View>
+                        } order={2} name="Order2">
+                            <Walkthroughable>
+                                <DrawerItem
+                                    label={() =>
+                                        <View style={drawStyles.item}>
+                                            <Text style={drawStyles.itemLabel}>Live Trivia</Text>
+                                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                        </View>}
+                                    onPress={() => navigation.navigate('LiveTrivias')}
+                                    activeTintColor='#EF2F55'
+                                    style={drawStyles.label}
+                                    labelContainerStyle
+                                />
+                            </Walkthroughable>
+                        </CopilotStep>
+                        
+                        <CopilotStep text={
+                            <View>
+                                <Text style={drawStyles.tourTitle} >Challenges</Text>
+                                <Text>Challenge a friend to a duel and also stand a chance of winning cash prizes</Text>
+                            </View>
+                        } order={3} name="Order3">
+                            <Walkthroughable>
+                                <DrawerItem
+                                    label={() =>
+                                        <View style={drawStyles.item}>
+                                            <Text style={drawStyles.itemLabel}>My Challenges</Text>
+                                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                        </View>}
+                                    onPress={() => navigation.navigate('MyChallenges')}
+                                    activeTintColor='#EF2F55'
+                                    style={drawStyles.label}
+                                    labelContainerStyle
+                                />
+                            </Walkthroughable>
+                        </CopilotStep>
 
-                <View style={drawStyles.menu}>
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Live Trivia</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('LiveTrivias')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>My Challenges</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('MyChallenges')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-                    {Platform.OS === 'ios' ?
-                        <></>
-                        :
+                        {Platform.OS === 'ios' ?
+                            <></>
+                            :
+                            <DrawerItem
+                                label={() =>
+                                    <View style={drawStyles.item}>
+                                        <Text style={drawStyles.itemLabel}>Store</Text>
+                                        <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                    </View>}
+                                onPress={() => navigation.navigate('GameStore')}
+                                activeTintColor='#EF2F55'
+                                style={drawStyles.label}
+                                labelContainerStyle
+                            />
+                        }
+
                         <DrawerItem
                             label={() =>
                                 <View style={drawStyles.item}>
-                                    <Text style={drawStyles.itemLabel}>Store</Text>
+                                    <Text style={drawStyles.itemLabel}>Leaderboards</Text>
                                     <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                                 </View>}
-                            onPress={() => navigation.navigate('GameStore')}
+                            onPress={() => navigation.navigate('Leaderboard')}
                             activeTintColor='#EF2F55'
                             style={drawStyles.label}
                             labelContainerStyle
                         />
-                    }
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Leaderboards</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('Leaderboard')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Get Help</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('Help')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Invite Friends</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('Invite')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-
+                        
+                        <CopilotStep text={
+                            <View>
+                                <Text style={drawStyles.tourTitle} >Get Help</Text>
+                                <Text>Need help?
+                                    Contact us by sending us your questions and feedback or read through our FAQ</Text>
+                            </View>
+                        } order={4} name="Order4">
+                            <Walkthroughable>
+                                <DrawerItem
+                                    label={() =>
+                                        <View style={drawStyles.item}>
+                                            <Text style={drawStyles.itemLabel}>Get Help</Text>
+                                            <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                        </View>}
+                                    onPress={() => navigation.navigate('Help')}
+                                    activeTintColor='#EF2F55'
+                                    style={drawStyles.label}
+                                    labelContainerStyle
+                                />
+                            </Walkthroughable>
+                        </CopilotStep>
+                        
+                        <DrawerItem
+                            label={() =>
+                                <View style={drawStyles.item}>
+                                    <Text style={drawStyles.itemLabel}>Need a Tour</Text>
+                                    <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                </View>}
+                            onPress={() => {
+                                // CopilotProps.start()
+                                dispatch(toggleAppTour(true))
+                            }}
+                            activeTintColor='#EF2F55'
+                            style={drawStyles.label}
+                            labelContainerStyle
+                        />
+                        
+                        <CopilotStep text={
+                            <View>
+                                <Text style={drawStyles.tourTitle} >Invite Friends </Text>
+                                <Text>Refer your friends and get bonuses for each friend referred and also stand a chance of winning cash prizes</Text>
+                            </View>
+                        } order={5} name="Order5">
+                            <Walkthroughable>
+                        
+                                <DrawerItem
+                                        label={() =>
+                                            <View style={drawStyles.item}>
+                                                <Text style={drawStyles.itemLabel}>Invite Friends</Text>
+                                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                                            </View>}
+                                        onPress={() => navigation.navigate('Invite')}
+                                        activeTintColor='#EF2F55'
+                                        style={drawStyles.label}
+                                        labelContainerStyle
+                                    />
+                            </Walkthroughable>
+                        </CopilotStep>
+                        
+                    </View>
+                </ScrollView>
+                <View style={drawStyles.logoutContainer}>
+                    <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
+                    <Pressable onPress={onLogout}>
+                        <Text style={styles.logoutText}>Logout</Text>
+                    </Pressable>
                 </View>
-            </ScrollView>
-            <View style={drawStyles.logoutContainer}>
-                <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
-                <Pressable onPress={onLogout}>
-                    <Text style={styles.logoutText}>Logout</Text>
-                </Pressable>
-            </View>
-
-
         </DrawerContentScrollView>
     );
 }
@@ -387,8 +482,20 @@ const drawStyles = EStyleSheet.create({
     },
     notificationCount: {
         flexDirection: 'row'
+    },
+    tourTitle: {
+        color: '#EF2F55',
+        fontWeight: '600',
+        fontSize: 22,
+        marginBottom: 10
     }
 });
 
 
-export default HomeRouter
+export default copilot({
+    animated: true,
+    overlay: 'svg',
+    labels: {
+        finish: 'Next'
+    }
+})(HomeRouter)

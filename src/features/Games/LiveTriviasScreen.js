@@ -16,44 +16,48 @@ const LiveTriviasScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const [loading, setLoading] = useState(true)
-    const [pageNumber, setPageNumber] = useState()
-    const [loadingMore, setLoadingMore] = useState(false)
-    const loadMoreLiveTrivias = useSelector(state => state.common.loadMoreLiveTrivias);
+    // const [pageNumber, setPageNumber] = useState()
+    // const [loadingMore, setLoadingMore] = useState(false)
+    // const loadMoreLiveTrivias = useSelector(state => state.common.loadMoreLiveTrivias);
 
 
     const trivia = useSelector(state => state.common.trivias)
 
-    useEffect(()=>{
-        setPageNumber(getPageNo());
-    }, [])
-
     useEffect(() => {
-        if(!pageNumber){
-            return;
-        }
-        if(!loadMoreLiveTrivias){
-            setLoadingMore(false)
-            setLoading(false)
-            return;
-        }
-        setLoadingMore(true)
-        dispatch(fetchRecentLiveTrivia(pageNumber))
-            .then(() => {
-                console.log("fetching page ", pageNumber)
-                setLoading(false)
-                setLoadingMore(false)
-            });
-    }, [pageNumber, loadMoreLiveTrivias]);
+        dispatch(fetchRecentLiveTrivia()).then(() => { setLoading(false) });
+    }, []);
 
-    const loadMoreItems = () => {
-        console.log("loading more")
-        if(!loadMoreLiveTrivias)
-            return;
-        //check if length of transactions has changed
-        setPageNumber(getPageNo())
-    }
+    // useEffect(()=>{
+    //     setPageNumber(getPageNo());
+    // }, [])
 
-    const getPageNo = () => parseInt(trivia.length/10) + 1;
+    // useEffect(() => {
+    //     if(!pageNumber){
+    //         return;
+    //     }
+    //     if(!loadMoreLiveTrivias){
+    //         setLoadingMore(false)
+    //         setLoading(false)
+    //         return;
+    //     }
+    //     setLoadingMore(true)
+    //     dispatch(fetchRecentLiveTrivia(pageNumber))
+    //         .then(() => {
+    //             console.log("fetching page ", pageNumber)
+    //             setLoading(false)
+    //             setLoadingMore(false)
+    //         });
+    // }, [pageNumber, loadMoreLiveTrivias]);
+
+    // const loadMoreItems = () => {
+    //     console.log("loading more")
+    //     if(!loadMoreLiveTrivias)
+    //         return;
+    //     //check if length of transactions has changed
+    //     setPageNumber(getPageNo())
+    // }
+
+    // const getPageNo = () => parseInt(trivia.length/10) + 1;
 
 
 
@@ -69,29 +73,23 @@ const LiveTriviasScreen = ({ navigation }) => {
         }, [])
     );
 
-    const triviaCardContainer = ({ item }) => {
-        return (
-            <View style={styles.cardContainer}>
-                <LiveTriviaCard trivia={item} />
-            </View>
-        )
-    }
+   
 
-    const renderLoader = () => {
-        return (
-            <>
-                {loadingMore ?
-                    <PageLoading
-                        backgroundColor='#072169'
-                        spinnerColor="#FFFF"
-                    />
-                    :
-                    <></>
-                }
+    // const renderLoader = () => {
+    //     return (
+    //         <>
+    //             {loadingMore ?
+    //                 <PageLoading
+    //                     backgroundColor='#072169'
+    //                     spinnerColor="#FFFF"
+    //                 />
+    //                 :
+    //                 <></>
+    //             }
 
-            </>
-        )
-    }
+    //         </>
+    //     )
+    // }
 
     if (loading) {
         return <PageLoading
@@ -105,26 +103,26 @@ const LiveTriviasScreen = ({ navigation }) => {
         // <View style={styles.boards}>
         //     {trivia.map((trivia, i) => <TriviaCardContainer key={i} trivia={trivia} />)}
         // </View>
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
 
             {trivia.length > 0 ?
                 <View style={styles.boards}>
-                    <FlatList
-                        data={trivia}
-                        renderItem={triviaCardContainer}
-                        keyExtractor={item => item.id}
-                        ListFooterComponent={renderLoader}
-                        onEndReached={loadMoreItems}
-                        onEndReachedThreshold={0.2}
-
-                    />
+                    {trivia.map((trivia, i) => <TriviaCardContainer key={i} trivia={trivia} />)}
                 </View>
+
                 :
                 <Text style={styles.noLiveTrivia}>No recent live trivia</Text>
             }
 
+        </ScrollView>
+    )
+}
+
+const TriviaCardContainer = ({ trivia }) => {
+    return (
+        <View style={styles.cardContainer}>
+            <LiveTriviaCard trivia={trivia} />
         </View>
-        // </ScrollView>
     )
 }
 
