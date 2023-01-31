@@ -6,6 +6,11 @@ import Dashboard from './screens/dashboard';
 import Notification from './screens/notification';
 import Drawer from './screens/drawer';
 import Challenge from './screens/challenge';
+import Store from './screens/store';
+import GlobalLeaderboard from './screens/globalLeaderboard';
+import PrizePool from './screens/prizePool';
+import PopupPrizePool from './screens/popupPrizePool';
+import Invite from './screens/invite';
 
 const { width } = Dimensions.get('window');
 
@@ -32,6 +37,11 @@ export default function TourIndex() {
                     <Notification activeScreen={activeScreen} id={1} width={width} goToNext={()=> goToNext()} />
                     <Drawer activeScreen={activeScreen} id={2} width={width} goToNext={()=> goToNext()}  />
                     <Challenge activeScreen={activeScreen} id={3} width={width} goToNext={()=> goToNext()}  />
+                    <Store activeScreen={activeScreen} id={4} width={width} goToNext={()=> goToNext()}  />
+                    <GlobalLeaderboard activeScreen={activeScreen} id={5} width={width} goToNext={()=> goToNext()}  />                    
+                    <PrizePool activeScreen={activeScreen} id={6} width={width} goToNext={()=> goToNext()}  />                    
+                    <PopupPrizePool activeScreen={activeScreen} id={7} width={width} goToNext={()=> goToNext()}  />                    
+                    <Invite activeScreen={activeScreen} id={8} width={width} goToNext={()=> goToNext()}  />                    
             </SwiperFlatList>
         </View>
     )

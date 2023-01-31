@@ -9,7 +9,7 @@ import { Walkthroughable } from '../../Tour/Walkthrouable';
 
 const window = Dimensions.get("window")
 
-function Challenge(props) {
+function Store(props) {
     const CopilotProps = props;
     useEffect(()=>{
       if(props.id === props.activeScreen){
@@ -37,22 +37,22 @@ function Challenge(props) {
 
     return (
       <View style={styles.container}>
-        <MiniHead title={"Scores"} />
+        <MiniHead bg={"white"} title={"Stores"} />
 
         <CopilotStep text={
                       <View>
-                          <Text style={styles.tourTitle} >Challenge</Text>
+                          <Text style={styles.tourTitle} >Store</Text>
                           <Text>
-                          Show your friends how skilled you are by challenging them to a duel
+                            Buy lives and boosts to help you score higher
                           </Text>
                       </View>
                   } order={5} name={`Order${5}`}>
                     <Walkthroughable>
-                      <View style={{ position: 'absolute', width: '70%', left: '14%', height: 300, top: '40%' }} />
+                        <View style={{ position: 'absolute', width: '80%', left: '14%', height: 300, top: '40%' }} />
                     </Walkthroughable>
         </CopilotStep>
           
-        <Image style={{ flex: 1, width: '100%' }} source={require("../../../../assets/images/challenge_icon.png")} />
+        <Image style={{ flex: 1, width: '100%' }} source={require("../../../../assets/images/store_image.png")} />
       </View>
     )
 }
@@ -78,4 +78,4 @@ export default copilot({
       skip: ' ',
   },
   arrowColor: 'rgba(0, 0, 0, 0)',
-})(Challenge);
+})(Store);

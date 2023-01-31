@@ -9,7 +9,7 @@ import { Walkthroughable } from '../../Tour/Walkthrouable';
 
 const window = Dimensions.get("window")
 
-function Challenge(props) {
+function Invite(props) {
     const CopilotProps = props;
     useEffect(()=>{
       if(props.id === props.activeScreen){
@@ -37,22 +37,22 @@ function Challenge(props) {
 
     return (
       <View style={styles.container}>
-        <MiniHead title={"Scores"} />
+        <MiniHead bg={"white"} title={"Invite Friends"} />
 
         <CopilotStep text={
                       <View>
-                          <Text style={styles.tourTitle} >Challenge</Text>
+                          <Text style={styles.tourTitle} >Invite Friends</Text>
                           <Text>
-                          Show your friends how skilled you are by challenging them to a duel
+                            Refer your friends and get bonuses for each friend referred and also stand a chance of winning cash prizes
                           </Text>
                       </View>
                   } order={5} name={`Order${5}`}>
                     <Walkthroughable>
-                      <View style={{ position: 'absolute', width: '70%', left: '14%', height: 300, top: '40%' }} />
+                        <View style={{ position: 'absolute', width: '80%', left: '14%', height: 300, top: '40%' }} />
                     </Walkthroughable>
         </CopilotStep>
           
-        <Image style={{ flex: 1, width: '100%' }} source={require("../../../../assets/images/challenge_icon.png")} />
+        <Image style={{ flex: 1, width: '100%' }} source={require("../../../../assets/images/invite_friends.png")} />
       </View>
     )
 }
@@ -78,4 +78,4 @@ export default copilot({
       skip: ' ',
   },
   arrowColor: 'rgba(0, 0, 0, 0)',
-})(Challenge);
+})(Invite);

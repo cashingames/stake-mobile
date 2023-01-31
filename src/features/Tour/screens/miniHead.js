@@ -3,9 +3,11 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 
-export default function MiniHead({title}) {
+export default function MiniHead({title, bg = 'rgba(250, 197, 2, 1)'}) {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {
+            backgroundColor: bg
+        }]}>
             <Ionicons name="arrow-back-outline" size={24} color="black" />
             <Text style={styles.title}>{title}</Text>
         </View>
