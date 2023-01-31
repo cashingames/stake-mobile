@@ -11,11 +11,12 @@ import GlobalLeaderboard from './screens/globalLeaderboard';
 import PrizePool from './screens/prizePool';
 import PopupPrizePool from './screens/popupPrizePool';
 import Invite from './screens/invite';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
 export default function TourIndex() {
-
+    const navigation = useNavigation();
     const [activeScreen, setActiveScreen] = useState(0)
     const scrollRef = useRef();
 
@@ -25,6 +26,15 @@ export default function TourIndex() {
             index: activeScreen + 1
         });
         setActiveScreen(activeScreen + 1);
+    }
+
+    const finishTour = ()=>{
+        try{
+            navigation.popToTop()
+            navigation.navigate("AppRouter")
+        }catch(e){
+            navigation.navigate("AppRouter")
+        }
     }
     return (
         <View style={styles.container}>
@@ -41,7 +51,7 @@ export default function TourIndex() {
                     <GlobalLeaderboard activeScreen={activeScreen} id={5} width={width} goToNext={()=> goToNext()}  />                    
                     <PrizePool activeScreen={activeScreen} id={6} width={width} goToNext={()=> goToNext()}  />                    
                     <PopupPrizePool activeScreen={activeScreen} id={7} width={width} goToNext={()=> goToNext()}  />                    
-                    <Invite activeScreen={activeScreen} id={8} width={width} goToNext={()=> goToNext()}  />                    
+                    <Invite activeScreen={activeScreen} id={8} width={width} goToNext={()=> finishTour()}  />                    
             </SwiperFlatList>
         </View>
     )

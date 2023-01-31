@@ -74,7 +74,7 @@ export default copilot({
   animated: true,
   overlay: 'svg',
   labels: {
-      finish: 'Next',
+      finish: 'Finish',
       skip: ' ',
   },
   arrowColor: 'rgba(0, 0, 0, 0)',

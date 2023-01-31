@@ -59,7 +59,7 @@ export default copilot({
         try{
             dispatch(clearTour())
             navigation.popToTop()
-            navigation.navigatetoString()("AppRouter")
+            navigation.navigate("AppRouter")
         }catch(e){
             navigation.navigate("AppRouter")
         }
