@@ -211,6 +211,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.87rem'
     },
     google: {
+        alignItems:'center',
         marginVertical: normalize(10)
     },
     verifySubText: {
