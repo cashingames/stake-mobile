@@ -288,7 +288,8 @@ function CustomDrawerContent(props) {
                                 </View>}
                             onPress={() => {
                                 // CopilotProps.start()
-                                dispatch(toggleAppTour(true))
+                                // dispatch(toggleAppTour(true))
+                                navigation.navigate("AppTour")
                             }}
                             activeTintColor='#EF2F55'
                             style={drawStyles.label}
