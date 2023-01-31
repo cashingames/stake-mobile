@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, ScrollView, Share, Alert, Pressable } from 'react-native';
+import { Text, View, ScrollView, Share, Alert, Pressable, Platform } from 'react-native';
 import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
