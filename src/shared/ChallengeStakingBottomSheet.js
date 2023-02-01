@@ -1,17 +1,26 @@
 
 import React, { useRef } from "react";
-import { Image, Platform, Text, View } from "react-native";
+import { Alert, Image, Platform, Text, View } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/native';
 import normalize from "../utils/normalize";
 import AppButton from "./AppButton";
 import UniversalBottomSheet from "./UniversalBottomSheet";
 import ChallengeInviteSuccessText from "./ChallengeInviteSuccessText";
+import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { sendFriendInvite } from "../features/Games/GameSlice";
+import { useState } from "react";
+import analytics from '@react-native-firebase/analytics';
 
 
-const ChallengeStakingBottomSheet = ({ stakeCash, sendInvite}) => {
+const ChallengeStakingBottomSheet = ({ stakeCash}) => {
     const navigation = useNavigation();
     const refRBSheet = useRef();
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user)
+    const selectedOpponent = useSelector(state => state.game.selectedFriend);
+    const activeCategory = useSelector(state => state.game.gameCategory);
 
     const closeBottomSheet = () => {
         refRBSheet.current.close()
@@ -19,10 +28,27 @@ const ChallengeStakingBottomSheet = ({ stakeCash, sendInvite}) => {
     const openBottomSheet = () => {
         refRBSheet.current.open()
     }
-    const proceedWithoutStaking = () => {
-        sendInvite()
-        openBottomSheet()
+
+    const sendWithoutStaking = () => {
+        dispatch(sendFriendInvite({
+            opponentId: selectedOpponent.id,
+            categoryId: activeCategory.id
+        }
+        ))
+            .then(unwrapResult)
+            .then(async result => {
+                await analytics().logEvent("challenge_invite_sent_without_staking", {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
+                })
+                openBottomSheet()
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                Alert.alert(rejectedValueOrSerializedError.message)
+            });
     }
+
     return (
         <View style={styles.stakeOption}>
             <View style={styles.avatarContainer}>
@@ -36,7 +62,7 @@ const ChallengeStakingBottomSheet = ({ stakeCash, sendInvite}) => {
             </View>
             <View style={styles.selectButtons}>
                 <AppButton text='Stake Cash' onPress={stakeCash} style={styles.stakeButton} />
-                <AppButton text='Play for Free' onPress={proceedWithoutStaking} style={styles.proceedButton} textStyle={styles.proceedText} />
+                <AppButton text='Play for Free' onPress={sendWithoutStaking} style={styles.proceedButton} textStyle={styles.proceedText} />
             </View>
             <UniversalBottomSheet
                 refBottomSheet={refRBSheet}
