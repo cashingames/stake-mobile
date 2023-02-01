@@ -16,8 +16,9 @@ import Boostspopup from '../../shared/BoostPopUp';
 
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
-	const user = useSelector(state => state.auth.user);
-	const pointsGained = useSelector(state => state.game.pointsGained);
+	const user = useSelector(state => state.auth.user.hasActivePlan);
+	const hasActivePlan = useSelector(state => state.auth.user);
+ 	const pointsGained = useSelector(state => state.game.pointsGained);
 	const amountWon = useSelector(state => state.game.amountWon);
 	const withStaking = useSelector(state => state.game.withStaking);
 	const minimumBoostScore = useSelector(state => state.common.minimumBoostScore)
@@ -25,7 +26,6 @@ export default function GameEndResultScreen({ navigation }) {
 	const [loading, setLoading] = useState(false);
 	const [showText, setShowText] = useState(true);
 	const [modalVisible, setModalVisible] = useState(false);
-
 
 
 	const refRBSheet = useRef();
@@ -45,12 +45,26 @@ export default function GameEndResultScreen({ navigation }) {
 			'phone_number': user.phoneNumber,
 			'email': user.email
 		});
+		if(!hasActivePlan){
+			analytics().logEvent('game_exhausted', {
+				'id': user.username,
+				'phone_number': user.phoneNumber,
+				'email': user.email
+			});
+		}
 		navigation.navigate("GameInstructions")
 		setLoading(false);
 		
 	}
 
 	const onHomeButtonClick = () => {
+		if(!hasActivePlan){
+			analytics().logEvent('game_exhausted', {
+				'id': user.username,
+				'phone_number': user.phoneNumber,
+				'email': user.email
+			});
+		}
 		navigation.navigate('Home', { showStakingAdvert: !withStaking})
 	}
 	useFocusEffect(
