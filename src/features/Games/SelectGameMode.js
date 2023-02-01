@@ -62,7 +62,7 @@ const SelectGameMode = () => {
     )
 }
 
-const AvailableMode = ({ gameMode, onPress, isSelected }) => {
+export const AvailableMode = ({ gameMode, onPress, isSelected }) => {
     return (
         <Animated.View style={[styles.card, { backgroundColor: gameMode.bgColor }]} entering={BounceInRight.duration(2000)}>
             <Pressable

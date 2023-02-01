@@ -29,43 +29,45 @@ const InviteFriendsScreen = () => {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     // tour
-    // React.useEffect(() => {
-    //     setTimeout(() => {
-    //         if ((isTourActive?.payload || isTourActive)) {
-    //             // tourStart(7)
-    //             // setForceRender(!forceRender);
-    //             // console.log(canStart, 7)
 
-    //             console.log('reach11')
-    //             CopilotProps.start()
-    //             CopilotProps.copilotEvents.on('stop', handleTourStop)
+    React.useEffect(()=>{
+        setTimeout(()=>{
+            if((isTourActive?.payload || isTourActive) ){
+                // tourStart(7)
+                // setForceRender(!forceRender);
+                // console.log(canStart, 7)
+                
+                console.log('reach11')
+                CopilotProps.start()
+                CopilotProps.copilotEvents.on('stop', handleTourStop)
 
-    //             // eventEmitter.on('stop', handleTourStop)
+                // eventEmitter.on('stop', handleTourStop)
+    
+                return () => {
+                    // eventEmitter.off('stop', handleTourStop)
+                    CopilotProps.copilotEvents.off('stop', handleTourStop)
+                }
+            }else{
+                // console.log(AppTourStep)
+                // AppTour.start();
+                // AppTour.stop();
+            }
+        }, 1000)
+    }, [isTourActive])
 
-    //             return () => {
-    //                 // eventEmitter.off('stop', handleTourStop)
-    //                 CopilotProps.copilotEvents.off('stop', handleTourStop)
-    //             }
-    //         } else {
-    //             // console.log(AppTourStep)
-    //             // AppTour.start();
-    //             // AppTour.stop();
-    //         }
-    //     }, 1000)
-    // }, [isTourActive])
+    const handleTourStop = ()=>{
+        console.log("tour stopped, going to next screen to continue....")
+        
+        // end tour
+        try{
+            dispatch(clearTour())
+            navigation.popToTop()
+            navigation.navigate("AppRouter")
+        }catch(e){
+            navigation.navigate("AppRouter")
+        }
+    }
 
-    // const handleTourStop = () => {
-    //     console.log("tour stopped, going to next screen to continue....")
-
-    //     // end tour
-    //     try {
-    //         dispatch(clearTour())
-    //         navigation.popToTop()
-    //         navigation.navigatetoString()("AppRouter")
-    //     } catch (e) {
-    //         navigation.navigate("AppRouter")
-    //     }
-    // }
 
     return (
         <ScrollView style={styles.container}>
