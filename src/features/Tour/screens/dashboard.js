@@ -10,29 +10,33 @@ import Animated, {
 } from 'react-native-reanimated';
 import normalize, {
     responsiveHeight, responsiveScreenWidth, responsiveWidth
-} from '../../utils/normalize';
-import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
-import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
-import PageLoading from '../../shared/PageLoading';
-import { getUser } from '../Auth/AuthSlice';
-import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../CommonSlice';
-import UserItems from '../../shared/UserItems';
-import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
+} from '../../../utils/normalize';
+import { isTrue, formatCurrency, formatNumber } from '../../../utils/stringUtl';
+import LiveTriviaCard from '../../LiveTrivia/LiveTriviaCard';
+import PageLoading from '../../../shared/PageLoading';
+import { getUser } from '../../Auth/AuthSlice';
+import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../../CommonSlice';
+import UserItems from '../../../shared/UserItems';
+import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../../utils/utils';
 import crashlytics from '@react-native-firebase/crashlytics';
-import LottieAnimations from '../../shared/LottieAnimations';
-import SelectGameMode from '../Games/SelectGameMode';
-import ChallengeWeeklyTopLeaders from '../Leaderboard/ChallengeWeeklyTopLeaders';
-import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
+import LottieAnimations from '../../../shared/LottieAnimations';
+import SelectGameMode, { AvailableMode } from '../../Games/SelectGameMode';
+import ChallengeWeeklyTopLeaders from '../../Leaderboard/ChallengeWeeklyTopLeaders';
+import { getLiveTriviaStatus } from '../../LiveTrivia/LiveTriviaSlice';
 import SwiperFlatList from 'react-native-swiper-flatlist';
-import Stakingpopup from '../../shared/Stakingpopup';
-import WeeklyTopLeadersHero from '../../shared/WeeklyTopLeadersHero';
-// import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
-import { Walkthroughable } from '../Tour/Walkthrouable';
+import Stakingpopup from '../../../shared/Stakingpopup';
+import WeeklyTopLeadersHero from '../../../shared/WeeklyTopLeadersHero';
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+import { Walkthroughable } from '../../Tour/Walkthrouable';
+import { Dimensions } from 'react-native';
+import { Pressable } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
+const window = Dimensions.get("window")
 
 const HomeScreen = (props) => {
-    // const CopilotProps = props;
+    const CopilotProps = props;
     const route = props.route;
     const navigation = useNavigation();
 
@@ -42,12 +46,12 @@ const HomeScreen = (props) => {
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
     const challengeLeaders = useSelector(state => state.game.challengeLeaders);
-    const showStakingAdvert = route.params?.showStakingAdvert ?? false;
+    const showStakingAdvert = false;
     const [modalVisible, setModalVisible] = useState(false);
     const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
 
-    // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
+    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
     const [forceRender, setForceRender] = useState(true);
 
     const onRefresh = React.useCallback(() => {
@@ -94,10 +98,10 @@ const HomeScreen = (props) => {
                 return;
             }
 
-            notifyOfPublishedUpdates();
+            // notifyOfPublishedUpdates();
 
             if (minVersionForce) {
-                notifyOfStoreUpdates(minVersionCode, minVersionForce);
+                // notifyOfStoreUpdates(minVersionCode, minVersionForce);
             }
 
         }, [loading])
@@ -114,37 +118,36 @@ const HomeScreen = (props) => {
         }, [])
     );
 
-    // useEffect(()=>{
-    //     setTimeout(()=>{
-    //         if((isTourActive?.payload || isTourActive) && !loading && (props?.route?.params?.reload) ){
-                
-    //             console.log('reach11')
-    //             CopilotProps.start()
-    //             CopilotProps.copilotEvents.on('stop', handleTourStop)
-    
-    //             return () => {
-    //                 CopilotProps.copilotEvents.off('stop', handleTourStop)
-    //             }
-    //         }else{
-                
-    //         }
-    //     }, 1000)
-    // }, [isTourActive, loading, props?.route?.params?.reload])
+    useEffect(()=>{
+        setTimeout(()=>{
+            
+            
+            // console.log('reach11')
+            CopilotProps.start()
+            CopilotProps.copilotEvents.on('stop', handleTourStop)
 
-    // const handleTourStop = ()=>{
-    //     console.log("tour stopped, going to next screen to continue....")
-    //     navigation.navigate("LiveTriviaLeaderboard", {
-    //         triviaId: 0
-    //     })
-    // }
+            return () => {
+                CopilotProps.copilotEvents.off('stop', handleTourStop)
+            }
+            
+        }, 1200)
+    }, [])
 
-    if (loading) {
-        return <PageLoading spinnerColor="#0000ff" />
+    const handleTourStop = ()=>{
+        // console.warn(Object.keys(CopilotProps))
+        CopilotProps.goToNext()
+        // navigation.navigate("LiveTriviaLeaderboard", {
+        //     triviaId: 0
+        // })
     }
+
+    const user = useSelector(state => state.auth.user)
+
+    const games = [...gameModes].sort((a, b) => a.id - b.id);
 
     return (
         <View style={styles.headContainer}>
-            <ScrollView contentContainerStyle={styles.scrollView}
+            <ScrollView contentContainerStyle={[styles.scrollView, {width: window.width}]}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
@@ -153,15 +156,92 @@ const HomeScreen = (props) => {
                     />
                 }
             >
+              {/* head */}
+              <View style={{ padding: 12, flexDirection: 'row', justifyContent: 'space-between', paddingTop: 40, backgroundColor: 'rgba(250, 197, 2, 1)', alignItems: 'center' }}>
+
+                <Ionicons name="menu-sharp" size={24} color="black" />
+
+                <Text style={{ fontSize: 18, fontWeight: '600' }}>Home</Text>
+                
+                <View style={styles.headerIcons}>
+
+                  <Pressable style={[styles.headerIconContainer, true ? styles.activeHeaderIcon : {}]}>
+                      <Ionicons name='home-outline' size={26} />
+                      <Text style={styles.headerIconText}>Home</Text>
+                  </Pressable>
+
+                  <CopilotStep text={
+                      <View>
+                          <Text style={styles.tourTitle} >Wallet</Text>
+                          <Text>
+                            Fund your wallet to buy enjoy more games, win points , earn great rewards and withdraw your winnings
+                          </Text>
+                      </View>
+                  } order={4} name={`Order${4}`}>
+                    <Walkthroughable>
+                      < Pressable style={[styles.headerIconContainer, false ? styles.activeHeaderIcon : {}]}>
+                          <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, false ? styles.activeHeaderIcon : {}]} />
+                          <Text style={styles.headerIconText}>Wallet</Text>
+                      </Pressable>
+                    </Walkthroughable>
+                  </CopilotStep>
+
+                  <Pressable style={[styles.headerIconContainerNot, false ? styles.activeHeaderIcon : {}]}>
+                      <View style={styles.notificationContainer}>
+                          <Ionicons name='notifications-outline' size={26} style={[styles.headerIcon, false ? styles.activeHeaderIcon : {}]} />
+                          {user.unreadNotificationsCount !== 0 &&
+                              <View style={styles.numberContainer}>
+                                  <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
+                              </View>
+                          }
+
+                      </View>
+                  </Pressable>
+                </View >
+              </View>
+              {/* head stop */}
                 <UserDetails />
-                <View style={styles.container}>
-                    <SelectGameMode  />
-                    {/* <SelectGameMode Walkthroughable={Walkthroughable} CopilotStep={CopilotStep} /> */}
-                    <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
-                        <WeeklyTopLeadersHero gameModes={gameModes} />
-                        {/* <GlobalTopLeadersHero /> */}
-                        <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
-                    </SwiperFlatList>
+                <View style={[styles.container]}>
+                    <View>
+                    <Text style={{ 
+                      fontSize: 14,
+                      color: '#151C2F',
+                      fontFamily: 'graphik-medium',
+                      marginVertical: normalize(10),
+                     }}>Select game mode</Text>
+                    <View style={styles.subcategories}>
+                        <View style={{ flexDirection: 'row' }}>
+                            {games.map((gameMode, i) =>
+                                <CopilotStep key={i} text={
+                                    <View>
+                                        <Text style={styles.tourTitle} >{gameMode.name}</Text>
+                                        <Text>
+                                          {(i == 0) && 'Play single mode and climb up the leaderboard to win lots of cash prizes' }
+                                          {(i == 1) && 'Bet on your knowledge and stand a chance of doubling the amount staked and also increasing your points on the leaderbleaderboard ' }
+                                          {(i == 2) && 'Show your skills to your friends by challenging them to a duel' }
+                                        </Text>
+                                    </View>
+                                } order={0 + (i + 1)} name={`Order${0 + (i + 1)}`}>
+                                    <Walkthroughable>
+                                        <AvailableMode
+                                            key={i}
+                                            gameMode={gameMode}
+                                            // onPress={() => onSelectGameMode(gameMode)}
+                                        />
+                                    </Walkthroughable>
+                                </CopilotStep>
+                                
+                            )}
+                        </View>
+                      </View>
+                    </View>
+
+                    <View style={{ flexDirection: 'row' }} contentContainerStyle={styles.leaderboardContainer}>
+                          <WeeklyTopLeadersHero gameModes={gameModes} />
+                          {/* <GlobalTopLeadersHero /> */}
+                          <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
+                    </View>
+
                 </View>
                 <Stakingpopup setModalVisible={setModalVisible} modalVisible={modalVisible} gameModes={gameModes} />
             </ScrollView>
@@ -169,14 +249,14 @@ const HomeScreen = (props) => {
     );
 }
 
-// export default copilot({
-//     animated: true,
-//     overlay: 'svg',
-//     labels: {
-//         finish: 'Next'
-//     }
-// })(HomeScreen);
-export default HomeScreen;
+export default copilot({
+    animated: true,
+    overlay: 'svg',
+    labels: {
+        finish: 'Next',
+        skip: ' '
+    }
+})(HomeScreen);
 
 const UserDetails = () => {
 
@@ -216,7 +296,7 @@ const UserWallet = ({ balance }) => {
         <Animated.View entering={BounceInRight.duration(2000)} style={styles.wallet}>
 
             <LottieAnimations
-                animationView={require('../../../assets/wallet.json')}
+                animationView={require('../../../../assets/wallet.json')}
                 width={normalize(55)}
                 height={normalize(60)}
             />
@@ -242,7 +322,7 @@ const UserPoints = ({ points, todaysPoints }) => {
         <Animated.View entering={BounceInUp.duration(2000)} style={styles.points}>
             <Animated.Image
                 style={[styles.trophy, animatedStyle]}
-                source={require('../../../assets/images/point-trophy.png')}
+                source={require('../../../../assets/images/point-trophy.png')}
             />
             <View style={styles.pointsNumber}>
                 <Text style={styles.userPoint}>{formatNumber(todaysPoints)}</Text>
@@ -283,6 +363,32 @@ const LiveTriviaBanner = () => {
 const styles = EStyleSheet.create({
     headContainer: {
         backgroundColor: '#FAC502',
+        width: window.width,
+        flex: 1
+    },
+    headerIcons: {
+      flexDirection: 'row',
+    },
+    headerIconContainer: {
+        opacity: 0.5,
+        alignItems: 'center',
+        marginLeft: '1.3rem',
+    },
+    headerIconContainerNot: {
+        opacity: 0.5,
+        alignItems: 'center',
+        marginLeft: '1.3rem',
+        marginTop: '.5rem'
+    },
+    headerIconText: {
+        fontSize: '0.5rem',
+        fontFamily: 'graphik-medium',
+    },
+    activeHeaderIcon: {
+        opacity: 1
+    },
+    notificationContainer: {
+        flexDirection: 'row',
     },
     scrollView: {
         paddingBottom: normalize(30),
@@ -291,6 +397,7 @@ const styles = EStyleSheet.create({
     },
     container: {
         flex: 1,
+        width: window.width,
         paddingHorizontal: '1.2rem',
         backgroundColor: '#FFFF',
     },
@@ -468,6 +575,11 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-bold',
         textTransform: 'uppercase',
         marginBottom: normalize(5),
-
+    },
+    tourTitle: {
+      color: '#EF2F55',
+      fontWeight: '600',
+      fontSize: 22,
+      marginBottom: 10
     }
 });
