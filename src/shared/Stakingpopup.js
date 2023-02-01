@@ -19,12 +19,12 @@ const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
     const playStaking = async () => {
         setModalVisible(!modalVisible)
         dispatch(setGameMode(gameModeSelected));
-          await analytics().logEvent('stake_cash_now_button_clicked', {
+        await analytics().logEvent('stake_cash_now_button_clicked', {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email
-        });    
-        navigation.navigate('SelectGameCategory')    
+        });
+        navigation.navigate('SelectGameCategory')
     }
     return (
         <View style={styles.onView}>
@@ -102,15 +102,15 @@ const styles = EStyleSheet.create({
     modalView: {
         margin: 20,
         backgroundColor: '#66142E',
-        borderRadius: 20,
+        borderRadius: 10,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 2
+            height: 4,
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
+        elevation: 9,
     },
     container: {
         paddingHorizontal: normalize(25),
@@ -124,7 +124,7 @@ const styles = EStyleSheet.create({
         width: '1rem',
         height: '1rem',
         alignItems: 'center',
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     closeStyle: {
         fontSize: '0.7rem',
@@ -136,16 +136,22 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#FAC502',
-        borderBottomEndRadius: 20,
-        borderBottomStartRadius: 20,
+        borderBottomEndRadius: 10,
+        borderBottomStartRadius: 10,
         paddingTop: '.65rem',
-        // paddingBottom: '1.2rem',
-
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
+        elevation: 9,
     },
     infoText: {
         textAlign: 'center',
         width: '15rem',
-        fontSize:'.8rem',
+        fontSize: '.8rem',
         fontFamily: 'graphik-medium',
     },
     resultContainer: {
@@ -168,7 +174,15 @@ const styles = EStyleSheet.create({
         borderRadius: 10,
         borderColor: '#66142E',
         borderWidth: 1,
-        top:normalize(12),
+        top: normalize(12),
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
+        elevation: 9,
     },
     stakeText: {
         fontSize: '0.65rem',

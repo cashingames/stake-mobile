@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Text, View, Image, Pressable, ScrollView } from 'react-native';
+import { Text, View, Image, Pressable, ScrollView, Platform } from 'react-native';
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
