@@ -26,13 +26,13 @@ import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import Stakingpopup from '../../shared/Stakingpopup';
 import WeeklyTopLeadersHero from '../../shared/WeeklyTopLeadersHero';
-import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+// import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import { Walkthroughable } from '../Tour/Walkthrouable';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
 const HomeScreen = (props) => {
-    const CopilotProps = props;
+    // const CopilotProps = props;
     const route = props.route;
     const navigation = useNavigation();
 
@@ -47,7 +47,7 @@ const HomeScreen = (props) => {
     const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
 
-    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
+    // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
     const [forceRender, setForceRender] = useState(true);
 
     const onRefresh = React.useCallback(() => {
@@ -114,29 +114,29 @@ const HomeScreen = (props) => {
         }, [])
     );
 
-    useEffect(()=>{
-        setTimeout(()=>{
-            if((isTourActive?.payload || isTourActive) && !loading && (props?.route?.params?.reload) ){
+    // useEffect(()=>{
+    //     setTimeout(()=>{
+    //         if((isTourActive?.payload || isTourActive) && !loading && (props?.route?.params?.reload) ){
                 
-                console.log('reach11')
-                CopilotProps.start()
-                CopilotProps.copilotEvents.on('stop', handleTourStop)
+    //             console.log('reach11')
+    //             CopilotProps.start()
+    //             CopilotProps.copilotEvents.on('stop', handleTourStop)
     
-                return () => {
-                    CopilotProps.copilotEvents.off('stop', handleTourStop)
-                }
-            }else{
+    //             return () => {
+    //                 CopilotProps.copilotEvents.off('stop', handleTourStop)
+    //             }
+    //         }else{
                 
-            }
-        }, 1000)
-    }, [isTourActive, loading, props?.route?.params?.reload])
+    //         }
+    //     }, 1000)
+    // }, [isTourActive, loading, props?.route?.params?.reload])
 
-    const handleTourStop = ()=>{
-        console.log("tour stopped, going to next screen to continue....")
-        navigation.navigate("LiveTriviaLeaderboard", {
-            triviaId: 0
-        })
-    }
+    // const handleTourStop = ()=>{
+    //     console.log("tour stopped, going to next screen to continue....")
+    //     navigation.navigate("LiveTriviaLeaderboard", {
+    //         triviaId: 0
+    //     })
+    // }
 
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
@@ -155,7 +155,8 @@ const HomeScreen = (props) => {
             >
                 <UserDetails />
                 <View style={styles.container}>
-                    <SelectGameMode Walkthroughable={Walkthroughable} CopilotStep={CopilotStep} />
+                    <SelectGameMode  />
+                    {/* <SelectGameMode Walkthroughable={Walkthroughable} CopilotStep={CopilotStep} /> */}
                     <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
                         <WeeklyTopLeadersHero gameModes={gameModes} />
                         {/* <GlobalTopLeadersHero /> */}
@@ -168,13 +169,14 @@ const HomeScreen = (props) => {
     );
 }
 
-export default copilot({
-    animated: true,
-    overlay: 'svg',
-    labels: {
-        finish: 'Next'
-    }
-})(HomeScreen);
+// export default copilot({
+//     animated: true,
+//     overlay: 'svg',
+//     labels: {
+//         finish: 'Next'
+//     }
+// })(HomeScreen);
+export default HomeScreen;
 
 const UserDetails = () => {
 
