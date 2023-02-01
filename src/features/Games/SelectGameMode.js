@@ -12,7 +12,9 @@ import analytics from '@react-native-firebase/analytics';
 
 
 
-const SelectGameMode = ({ Walkthroughable, CopilotStep }) => {
+// const SelectGameMode = ({ Walkthroughable, CopilotStep }) => {
+const SelectGameMode = () => {
+
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const gameModes = useSelector(state => state.common.gameModes);
@@ -38,21 +40,21 @@ const SelectGameMode = ({ Walkthroughable, CopilotStep }) => {
             <View style={styles.subcategories}>
                 <SwiperFlatList>
                     {games.map((gameMode, i) =>
-                        <CopilotStep key={i} text={
-                            <View>
-                                <Text style={styles.tourTitle} >{gameMode.name}</Text>
-                                <Text>{gameMode.description}</Text>
-                            </View>
-                        } order={5 + (i + 1)} name={`Order${5 + (i + 1)}`}>
-                            <Walkthroughable>
+                        // <CopilotStep key={i} text={
+                        //     <View>
+                        //         <Text style={styles.tourTitle} >{gameMode.name}</Text>
+                        //         <Text>{gameMode.description}</Text>
+                        //     </View>
+                        // } order={5 + (i + 1)} name={`Order${5 + (i + 1)}`}>
+                        //     <Walkthroughable>
                                 <AvailableMode
                                     key={i}
                                     gameMode={gameMode}
                                     onPress={() => onSelectGameMode(gameMode)}
                                 />
-                            </Walkthroughable>
-                        </CopilotStep>
-                        
+                        //     </Walkthroughable>
+                        // </CopilotStep>
+
                     )}
                 </SwiperFlatList>
             </View>

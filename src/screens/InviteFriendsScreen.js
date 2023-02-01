@@ -7,16 +7,18 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
 import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../shared/LottieAnimations';
-import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+// import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import { Walkthroughable } from '../features/Tour/Walkthrouable';
 import { clearTour } from '../features/Tour/TourSlice';
 import analytics from '@react-native-firebase/analytics';
 
-export default copilot({
-    animated: true,
-    overlay: 'svg'
-})(function InviteFriendsScreen(props) {
-    const CopilotProps = props;
+// export default copilot({
+//     animated: true,
+//     overlay: 'svg'
+// })(function InviteFriendsScreen(props) {
+// const CopilotProps = props;
+const InviteFriendsScreen = () => {
+
     const { navigation } = props;
 
     const [refreshing, setRefreshing] = React.useState(false);
@@ -27,43 +29,43 @@ export default copilot({
     useApplyHeaderWorkaround(navigation.setOptions);
 
     // tour
-    React.useEffect(()=>{
-        setTimeout(()=>{
-            if((isTourActive?.payload || isTourActive) ){
-                // tourStart(7)
-                // setForceRender(!forceRender);
-                // console.log(canStart, 7)
-                
-                console.log('reach11')
-                CopilotProps.start()
-                CopilotProps.copilotEvents.on('stop', handleTourStop)
+    // React.useEffect(() => {
+    //     setTimeout(() => {
+    //         if ((isTourActive?.payload || isTourActive)) {
+    //             // tourStart(7)
+    //             // setForceRender(!forceRender);
+    //             // console.log(canStart, 7)
 
-                // eventEmitter.on('stop', handleTourStop)
-    
-                return () => {
-                    // eventEmitter.off('stop', handleTourStop)
-                    CopilotProps.copilotEvents.off('stop', handleTourStop)
-                }
-            }else{
-                // console.log(AppTourStep)
-                // AppTour.start();
-                // AppTour.stop();
-            }
-        }, 1000)
-    }, [isTourActive])
+    //             console.log('reach11')
+    //             CopilotProps.start()
+    //             CopilotProps.copilotEvents.on('stop', handleTourStop)
 
-    const handleTourStop = ()=>{
-        console.log("tour stopped, going to next screen to continue....")
-        
-        // end tour
-        try{
-            dispatch(clearTour())
-            navigation.popToTop()
-            navigation.navigatetoString()("AppRouter")
-        }catch(e){
-            navigation.navigate("AppRouter")
-        }
-    }
+    //             // eventEmitter.on('stop', handleTourStop)
+
+    //             return () => {
+    //                 // eventEmitter.off('stop', handleTourStop)
+    //                 CopilotProps.copilotEvents.off('stop', handleTourStop)
+    //             }
+    //         } else {
+    //             // console.log(AppTourStep)
+    //             // AppTour.start();
+    //             // AppTour.stop();
+    //         }
+    //     }, 1000)
+    // }, [isTourActive])
+
+    // const handleTourStop = () => {
+    //     console.log("tour stopped, going to next screen to continue....")
+
+    //     // end tour
+    //     try {
+    //         dispatch(clearTour())
+    //         navigation.popToTop()
+    //         navigation.navigatetoString()("AppRouter")
+    //     } catch (e) {
+    //         navigation.navigate("AppRouter")
+    //     }
+    // }
 
     return (
         <ScrollView style={styles.container}>
@@ -74,23 +76,23 @@ export default copilot({
             />
             <Heading />
             <Instructions />
-
+{/* 
             <CopilotStep text={
                 <View>
                     <Text style={styles.tourTitle} >Invite Friends</Text>
                     <Text>Refer your friends and get bonuses for each friend referred and also stand a chance of winning cash prizes</Text>
                 </View>
             } order={1} name={`Invite1`}>
-                <Walkthroughable>
+                <Walkthroughable> */}
                     <InviteLink />
-                </Walkthroughable>
-            </CopilotStep>
+                {/* </Walkthroughable>
+            </CopilotStep> */}
 
-            
+
         </ScrollView>
 
     );
-})
+}
 
 const Heading = () => {
     return (
@@ -160,7 +162,7 @@ const ShareLink = ({ iconName, text, onPress }) => {
         </Pressable>
     )
 }
-
+export default InviteFriendsScreen;
 
 const styles = EStyleSheet.create({
     container: {
