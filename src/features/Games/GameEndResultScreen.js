@@ -16,8 +16,8 @@ import Boostspopup from '../../shared/BoostPopUp';
 
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
-	const user = useSelector(state => state.auth.user.hasActivePlan);
-	const hasActivePlan = useSelector(state => state.auth.user);
+	const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
+	const user = useSelector(state => state.auth.user);
  	const pointsGained = useSelector(state => state.game.pointsGained);
 	const amountWon = useSelector(state => state.game.amountWon);
 	const withStaking = useSelector(state => state.game.withStaking);
