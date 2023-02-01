@@ -15,12 +15,12 @@ import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
-import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
-import { Walkthroughable } from '../Tour/Walkthrouable';
+// import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+// import { Walkthroughable } from '../Tour/Walkthrouable';
 
 
 function ExtendedLeaderboard(props) {
-    const CopilotProps = props;
+    // const CopilotProps = props;
     const navigation = props.navigation;
 
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -30,37 +30,37 @@ function ExtendedLeaderboard(props) {
     const categoryLeaders = useSelector(state => state.common.categoryLeaders)
     const [loading, setLoading] = useState(true);
 
-    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
+    // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
     const [forceRender, setForceRender] = useState(true);
     const globalCount = useRef(0);
 
-    const handleTourStop = ()=>{
-        console.log("tour stopped, going to next screen to continue")
-        // console.error(Object.keys(navigation))
-        navigation.navigate("Home", {reload: true})
-    }
+    // const handleTourStop = ()=>{
+    //     console.log("tour stopped, going to next screen to continue")
+    //     // console.error(Object.keys(navigation))
+    //     navigation.navigate("Home", {reload: true})
+    // }
 
-    const handleTourChange = (step)=>{
-        console.log(step.name)
-    }
+    // const handleTourChange = (step)=>{
+    //     console.log(step.name)
+    // }
 
-    useEffect(()=>{
-        setTimeout(()=>{
-            if(isTourActive?.payload || isTourActive){
+    // useEffect(()=>{
+    //     setTimeout(()=>{
+    //         if(isTourActive?.payload || isTourActive){
                 
-                CopilotProps.start()
-                CopilotProps.copilotEvents.on('stepChange', handleTourChange)
-                CopilotProps.copilotEvents.on('stop', handleTourStop)
+    //             CopilotProps.start()
+    //             CopilotProps.copilotEvents.on('stepChange', handleTourChange)
+    //             CopilotProps.copilotEvents.on('stop', handleTourStop)
     
-                return () => {
-                CopilotProps.copilotEvents.off('stepChange', handleTourChange)
-                CopilotProps.copilotEvents.off('stop', handleTourStop)
-                }
-            }else{
+    //             return () => {
+    //             CopilotProps.copilotEvents.off('stepChange', handleTourChange)
+    //             CopilotProps.copilotEvents.off('stop', handleTourStop)
+    //             }
+    //         }else{
                 
-            }
-        }, 1000)
-    }, [isTourActive])
+    //         }
+    //     }, 1000)
+    // }, [isTourActive])
 
 
     useEffect(() => {
@@ -108,16 +108,16 @@ function ExtendedLeaderboard(props) {
             </View>
                 <SwiperFlatList showPagination paginationActiveColor='red' renderAll={true} >
                     
-                    <CopilotStep text={
+                    {/* <CopilotStep text={
                             <View>
                                 <Text style={styles.tourTitle} >Global Leaderboard</Text>
                                 <Text>View your position on the leaderboard and continue to play more games to move up the leaderboard</Text>
                             </View>
                         } order={1} name="Order1">
-                            <Walkthroughable>
+                            <Walkthroughable> */}
                                 <GlobalLeaderboard leaders={leaders} />
-                            </Walkthroughable>
-                    </CopilotStep>
+                            {/* </Walkthroughable>
+                    </CopilotStep> */}
                     {categories.map((c, i) => <CategoryLeaderboard key={i} category={c} leaders={categoryLeaders[c]} />)}
                 </SwiperFlatList>
             </ScrollView>
@@ -137,13 +137,14 @@ function GlobalLeaderboard({ leaders }) {
     )
 }
 
-export default copilot({
-    animated: true,
-    overlay: 'svg',
-    labels: {
-        finish: 'Next'
-    }
-})(ExtendedLeaderboard);
+// export default copilot({
+//     animated: true,
+//     overlay: 'svg',
+//     labels: {
+//         finish: 'Next'
+//     }
+// })(ExtendedLeaderboard);
+export default ExtendedLeaderboard;
 
 const styles = EStyleSheet.create({
     container: {

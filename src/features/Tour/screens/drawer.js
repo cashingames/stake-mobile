@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerItem } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 
 const { width } = Dimensions.get('window');
 

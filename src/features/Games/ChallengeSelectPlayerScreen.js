@@ -56,12 +56,12 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         ))
             .then(unwrapResult)
             .then(async result => {
-                openBottomSheet()
                 await analytics().logEvent("challenge_invite_sent_without_staking", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email
                 })
+                openBottomSheet()
             })
             .catch((rejectedValueOrSerializedError) => {
                 setSending(true)
@@ -70,27 +70,6 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         setSending(false)
     }
 
-    const sendWithoutStaking = () => {
-        setSending(false)
-        dispatch(sendFriendInvite({
-            opponentId: selectedOpponent.id,
-            categoryId: activeCategory.id
-        }
-        ))
-            .then(unwrapResult)
-            .then(async result => {
-                await analytics().logEvent("challenge_invite_sent_without_staking", {
-                    'id': user.username,
-                    'phone_number': user.phoneNumber,
-                    'email': user.email
-                })
-            })
-            .catch((rejectedValueOrSerializedError) => {
-                setSending(true)
-                Alert.alert(rejectedValueOrSerializedError.message)
-            });
-        setSending(false)
-    }
 
     const initiateChallengeStaking = async () => {
         setSending(false)
@@ -104,7 +83,6 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
     useEffect(() => {
         dispatch(fetchUserFriends()).then(() => setLoading(false));
-
         return () => (
             dispatch(unselectFriend())
         )
@@ -206,7 +184,8 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                         height={445}
                         subComponent={<ChallengeStakingBottomSheet
                             stakeCash={stakeCash}
-                            sendInvite={sendWithoutStaking}
+                        // selectedOpponent={selectedOpponent.id}
+                        // activeCategory={activeCategory.id}
                         />}
                     />
                     :

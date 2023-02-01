@@ -1,6 +1,6 @@
 const env = process.env.APP_VARIANT;
 const isDevelopment = env === 'development' || env === 'local' || false;
-const version = "1.2.78"; //Update for every build and publish
+const version = "1.2.79"; //Update for every build and publish
 
 export default {
   name: getAppName(),
@@ -71,6 +71,18 @@ export default {
         "ios": {
           "useFrameworks": "static"
         }
+      }
+    ],
+    [
+      "react-native-fbsdk-next",
+      {
+        "appID": "401438355501146",
+        "clientToken": "9762cebc572b557561423a9d6b1d9000",
+        "displayName": "Cashingames",
+        "advertiserIDCollectionEnabled": false,
+        "autoLogAppEventsEnabled": false,
+        "isAutoInitEnabled": true,
+        "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
       }
     ]
   ],

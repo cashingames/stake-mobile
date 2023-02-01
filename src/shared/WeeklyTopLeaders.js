@@ -284,7 +284,8 @@ const styles = EStyleSheet.create({
         color:'#fff',
         fontSize:'0.65rem',
         fontFamily: 'graphik-medium',
-        fontStyle:'italic'
+        fontStyle:'italic',
+        textAlign:'center'
     }
 
 });
