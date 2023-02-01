@@ -8,9 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../shared/LottieAnimations';
 // import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
-import { Walkthroughable } from '../features/Tour/Walkthrouable';
+// import { Walkthroughable } from '../features/Tour/Walkthrouable';
 import { clearTour } from '../features/Tour/TourSlice';
 import analytics from '@react-native-firebase/analytics';
+import { useNavigation } from '@react-navigation/core';
 
 // export default copilot({
 //     animated: true,
@@ -19,7 +20,7 @@ import analytics from '@react-native-firebase/analytics';
 // const CopilotProps = props;
 const InviteFriendsScreen = () => {
 
-    const { navigation } = props;
+    const navigation = useNavigation()
 
     const [refreshing, setRefreshing] = React.useState(false);
     const isTourActive = useSelector(state => state.tourSlice.isTourActive);
@@ -30,30 +31,30 @@ const InviteFriendsScreen = () => {
 
     // tour
 
-    React.useEffect(()=>{
-        setTimeout(()=>{
-            if((isTourActive?.payload || isTourActive) ){
-                // tourStart(7)
-                // setForceRender(!forceRender);
-                // console.log(canStart, 7)
+    // React.useEffect(()=>{
+    //     setTimeout(()=>{
+    //         if((isTourActive?.payload || isTourActive) ){
+    //             // tourStart(7)
+    //             // setForceRender(!forceRender);
+    //             // console.log(canStart, 7)
                 
-                console.log('reach11')
-                CopilotProps.start()
-                CopilotProps.copilotEvents.on('stop', handleTourStop)
+    //             console.log('reach11')
+    //             CopilotProps.start()
+    //             CopilotProps.copilotEvents.on('stop', handleTourStop)
 
-                // eventEmitter.on('stop', handleTourStop)
+    //             // eventEmitter.on('stop', handleTourStop)
     
-                return () => {
-                    // eventEmitter.off('stop', handleTourStop)
-                    CopilotProps.copilotEvents.off('stop', handleTourStop)
-                }
-            }else{
-                // console.log(AppTourStep)
-                // AppTour.start();
-                // AppTour.stop();
-            }
-        }, 1000)
-    }, [isTourActive])
+    //             return () => {
+    //                 // eventEmitter.off('stop', handleTourStop)
+    //                 CopilotProps.copilotEvents.off('stop', handleTourStop)
+    //             }
+    //         }else{
+    //             // console.log(AppTourStep)
+    //             // AppTour.start();
+    //             // AppTour.stop();
+    //         }
+    //     }, 1000)
+    // }, [isTourActive])
 
     const handleTourStop = ()=>{
         console.log("tour stopped, going to next screen to continue....")
