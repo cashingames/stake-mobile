@@ -16,6 +16,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import AppleSignUp from '../../shared/AppleSignUp';
 import { loginUser } from './AuthSlice';
 import Login from '../../shared/FacebookLogin';
+import { triggerTour } from '../Tour/Index';
 
 export default function LoginScreen({ navigation }) {
 
@@ -43,6 +44,9 @@ export default function LoginScreen({ navigation }) {
 
         dispatch(loginUser({ email, password })).unwrap().then((response) => {
             console.info("login response 1", response);
+            if(response?.isFirstTime || false){
+                triggerTour(navigation)
+            }
         }).catch((err) => {
             processLoginError(err)
         }).finally(() => {

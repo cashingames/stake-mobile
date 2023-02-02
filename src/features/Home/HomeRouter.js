@@ -284,7 +284,7 @@ function CustomDrawerContent(props) {
                     {/* </Walkthroughable>
                         </CopilotStep> */}
 
-                    {/* <DrawerItem
+                    <DrawerItem
                             label={() =>
                                 <View style={drawStyles.item}>
                                     <Text style={drawStyles.itemLabel}>Need a Tour</Text>
@@ -298,7 +298,7 @@ function CustomDrawerContent(props) {
                             activeTintColor='#EF2F55'
                             style={drawStyles.label}
                             labelContainerStyle
-                        /> */}
+                        />
 
                     {/* <CopilotStep text={
                             <View>

@@ -14,6 +14,7 @@ import { createIconSetFromFontello } from '@expo/vector-icons';
 import { saveToken } from '../../utils/ApiHelper';
 import { calculateTimeRemaining } from '../../utils/utils';
 import analytics from '@react-native-firebase/analytics';
+import { triggerTour } from '../Tour/Index';
 
 
 const SignupVerifyPhoneScreen = ({ navigation, route }) => {
@@ -84,6 +85,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                     'phone_number': params.phone_number,
                 })
                 setLoading(false);
+                triggerTour(navigation)
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError)

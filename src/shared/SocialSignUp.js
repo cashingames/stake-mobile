@@ -18,6 +18,7 @@ import UniversalBottomSheet from './UniversalBottomSheet';
 import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/AuthSlice';
 import PageLoading from './PageLoading';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
+import { triggerTour } from '../features/Tour/Index';
 
 
 
@@ -75,6 +76,7 @@ export default function SocialSignUp({ googleText }) {
             referrer
         })).then(unwrapResult)
             .then((originalPromiseResult) => {
+                triggerTour(navigation)
                 console.log(originalPromiseResult, 'hitting');
                 saveToken(originalPromiseResult.data.token)
                 closeBottomSheet()

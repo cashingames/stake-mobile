@@ -15,7 +15,6 @@ import { DrawerItem } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 
-
 const { width } = Dimensions.get('window');
 
 function Drawer(CopilotProps) {
