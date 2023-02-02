@@ -252,12 +252,12 @@ const HomeScreen = (props) => {
 }
 
 export default copilot({
-    tooltipComponent: defaultToolTip,
+    // tooltipComponent: defaultToolTip,
     animated: true,
     overlay: 'svg',
     labels: {
         finish: 'Next',
-        skip: ''
+        skip: ' '
     }
 })(HomeScreen);
 

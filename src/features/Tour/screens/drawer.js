@@ -344,5 +344,5 @@ export default copilot({
       finish: 'Next',
       skip: ' '
   },
-  tooltipComponent: defaultToolTip
+//   tooltipComponent: defaultToolTip
 })(Drawer);

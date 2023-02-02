@@ -82,5 +82,5 @@ export default copilot({
       skip: ' ',
   },
   arrowColor: 'rgba(0, 0, 0, 0)',
-  tooltipComponent: defaultToolTip
+  // tooltipComponent: defaultToolTip
 })(PopupPrizePool);
