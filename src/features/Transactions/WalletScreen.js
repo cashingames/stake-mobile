@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions, Alert, Image, RefreshControl } from 'react-native';
+import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions, Alert, Image, RefreshControl, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';

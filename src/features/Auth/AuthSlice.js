@@ -62,7 +62,7 @@ export const logoutUser = createAsyncThunk(
 export const deleteUserAccount = createAsyncThunk(
     'auth/deleteUserAccount',
     async (data, thunkAPI) => {
-        const response = await axios.post('v3/account/delete', data)
+        const response = await axios.delete('v3/account/delete', data)
 
         return response.data
     }

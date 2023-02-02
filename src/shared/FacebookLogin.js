@@ -9,6 +9,7 @@ import { AccessToken, GraphRequest, GraphRequestManager, LoginManager, Profile }
 import { useDispatch } from 'react-redux';
 import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/AuthSlice';
 import { saveToken } from '../utils/ApiHelper';
+import analytics from '@react-native-firebase/analytics';
 import normalize from '../utils/normalize';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import UniversalBottomSheet from './UniversalBottomSheet';
@@ -61,7 +62,6 @@ const Login = ({ text }) => {
   }
 
   const registerUserWithFacebook = () => {
-    console.log('here')
     setSaving(true);
     dispatch(registerWithSocialLink({
       email,
@@ -104,7 +104,7 @@ const Login = ({ text }) => {
           firstName: userProfile.first_name,
           lastName: userProfile.last_name,
           email: userProfile.email
-        })).then(unwrapResult)
+        })).then(unwrapResult)          
         .then((originalPromiseResult) => {
           console.log(originalPromiseResult)
           if (originalPromiseResult.data.isFirstTime) {
@@ -121,6 +121,10 @@ const Login = ({ text }) => {
           setLoading(false)
           // navigation.navigate('AppRouter')
         })
+        await analytics().logEvent('signin_with_facebook', {
+          'id': userProfile.first_name,
+          'email': userProfile.email
+      })
 
     } catch (error) {
       logout()
@@ -191,12 +195,11 @@ const FacebookButton = ({ onPress, text, loading }) => {
     <Pressable onPress={onPress} style={styles.fbButton}>
       <Text style={styles.fbText}>{text} with Facebook</Text>
       <View style={styles.fbIcon}>
+        {loading ? <ActivityIndicator size="small" color='#ffff' />
+        :
         <FontAwesome5 name="facebook-f" size={13} color='#fff' />
+      }
       </View>
-      <View style={styles.errorCase}>
-        {loading && <ActivityIndicator size="small" color='#ffff' />}
-      </View>
-
     </Pressable>
   )
 }
