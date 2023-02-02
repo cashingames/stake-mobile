@@ -318,7 +318,10 @@ const drawStyles = EStyleSheet.create({
       fontWeight: '600',
       fontSize: 22,
       marginBottom: 10
-  }
+  },
+  tourDesc: {
+    width: window.width * 0.7
+}
 });
 
 const styles = StyleSheet.create({
