@@ -86,6 +86,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                     'phone_number': params.phone_number,
                 })
                 setLoading(false);
+                triggerTour(navigation)
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError)

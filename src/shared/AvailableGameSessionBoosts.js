@@ -7,12 +7,15 @@ import normalize from "../utils/normalize";
 import { formatNumber } from '../utils/stringUtl';
 import { bombOptions, boostReleased, consumeBoost, pauseGame, skipQuestion } from "../features/Games/GameSlice";
 import { reduceBoostCount } from "../features/Auth/AuthSlice";
+import { unwrapResult } from '@reduxjs/toolkit';
+import analytics from '@react-native-firebase/analytics';
+
 
 
 const AvailableGameSessionBoosts = () => {
     const dispatch = useDispatch();
     const boosts = useSelector(state => state.auth.user.boosts);
-    // console.log(boosts)
+    const user = useSelector(state => state.auth.user)
     const displayedOptions = useSelector(state => state.game.displayedOptions);
     const gameMode = useSelector(state => state.game.gameMode);
     const [showText, setShowText] = useState(true);
@@ -38,7 +41,11 @@ const AvailableGameSessionBoosts = () => {
     }, []);
 
     const boostApplied = (data) => {
-        dispatch(consumeBoost(data));
+        dispatch(consumeBoost(data))
+         analytics().logEvent('boost_consumed', {
+                'id': user.username,
+                'boostName': data.name
+            })
         dispatch(reduceBoostCount(data.id))
         const name = data.name.toUpperCase();
         if (name === 'TIME FREEZE') {

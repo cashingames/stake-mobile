@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import normalize from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 
-export default function FundWalletCompleted({ navigation }) {
-
+export default function FundWalletCompleted() {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -15,7 +15,7 @@ export default function FundWalletCompleted({ navigation }) {
     );
 }
 const TransactionSuccessful = () => {
-
+    const navigation = useNavigation()
     return (
         <View style={styles.success}>
             <Text style={styles.successTitle}>Successful!</Text>

@@ -88,7 +88,7 @@ const styles = EStyleSheet.create({
         fontSize: '.6rem',
         color: '#FFFF',
         fontFamily: 'graphik-regular',
-        textDecoration: 'underline'
+        textDecoration: 'underline',
     },
     centeredView: {
         flex: 1,
@@ -98,20 +98,22 @@ const styles = EStyleSheet.create({
     },
     modalView: {
         margin: 20,
-        backgroundim: '#66142E',
-        borderRadius: 20,
+        borderRadius: 10,
+        shadowColor: "black",
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 2
+            height: 4,
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46, 
+        elevation: 9,
     },
     container: {
         paddingHorizontal: normalize(25),
         paddingVertical: normalize(18),
+        background: '#66142E',
+
     },
     buttonClose: {
         display: 'flex',
@@ -138,11 +140,17 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#FAC502',
-        borderBottomEndRadius: 20,
-        borderBottomStartRadius: 20,
-        paddingTop: '.65rem',
-        // paddingBottom: '1.2rem',
-
+        borderBottomEndRadius: 10,
+        borderBottomStartRadius: 10,
+        paddingTop: '.65rem',  
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,   
+        elevation: 9,
     },
     infoText: {
         textAlign: 'center',
@@ -171,6 +179,14 @@ const styles = EStyleSheet.create({
         borderWidth: 1,
         paddingHorizontal: '1.5rem',
         top: normalize(12),
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
+        elevation: 9,
     },
     boostText: {
         fontSize: '0.65rem',

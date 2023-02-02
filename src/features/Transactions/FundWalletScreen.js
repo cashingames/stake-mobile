@@ -26,7 +26,7 @@ export default function FundWalletScreen() {
   const [amount, setAmount] = useState("");
   const [showPayment, setShowPayment] = React.useState(false);
   const minimumWalletFundableAmount = useSelector(state => state.common.minimumWalletFundableAmount);
-console.log(minimumWalletFundableAmount)
+  
   const transactionCompleted = async (res) => {
     // verifyFunding(res.reference); for local testing
     await analytics().logEvent('wallet_funding_successfully', {
