@@ -78,7 +78,7 @@ const handleTourStop = ()=>{
             <CopilotStep text={
                 <View>
                     <Text style={drawStyles.tourTitle} >Live Trivia</Text>
-                    <Text>Show how fast and skilled you are by competing with lots of users and standing a chance of winning great cash prizes</Text>
+                    <Text style={drawStyles.tourDesc}>Show how fast and skilled you are by competing with lots of users and standing a chance of winning great cash prizes</Text>
                 </View>
             } order={2} name="Order2">
                 <Walkthroughable>
@@ -99,7 +99,7 @@ const handleTourStop = ()=>{
             <CopilotStep text={
                 <View>
                     <Text style={drawStyles.tourTitle} >Challenges</Text>
-                    <Text>Challenge a friend to a duel and also stand a chance of winning cash prizes</Text>
+                    <Text style={drawStyles.tourDesc}>Challenge a friend to a duel and also stand a chance of winning cash prizes</Text>
                 </View>
             } order={3} name="Order3">
                 <Walkthroughable>
@@ -148,7 +148,7 @@ const handleTourStop = ()=>{
             <CopilotStep text={
                 <View>
                     <Text style={drawStyles.tourTitle} >Get Help</Text>
-                    <Text>Need help?
+                    <Text style={drawStyles.tourDesc}>Need help?
                         Contact us by sending us your questions and feedback or read through our FAQ</Text>
                 </View>
             } order={4} name="Order4">
@@ -186,7 +186,7 @@ const handleTourStop = ()=>{
             <CopilotStep text={
                 <View>
                     <Text style={drawStyles.tourTitle} >Invite Friends </Text>
-                    <Text>Refer your friends and get bonuses for each friend referred and also stand a chance of winning cash prizes</Text>
+                    <Text style={drawStyles.tourDesc}>Refer your friends and get bonuses for each friend referred and also stand a chance of winning cash prizes</Text>
                 </View>
             } order={5} name="Order5">
                 <Walkthroughable>
