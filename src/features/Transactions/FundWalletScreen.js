@@ -32,7 +32,9 @@ export default function FundWalletScreen() {
     await analytics().logEvent('wallet_funding_successfully', {
       'id': user.username,
       'phone_number': user.phoneNumber,
-      'email': user.email
+      'email': user.email,
+      'currency': 'NGN',
+      'amount_funded': amount
     });
     dispatch(getUser());
     setShowPayment(false);

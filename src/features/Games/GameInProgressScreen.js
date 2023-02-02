@@ -88,7 +88,9 @@ export default function GameInProgressScreen({ navigation, route }) {
                     await analytics().logEvent('staking_game_completed', {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
-                        'email': user.email
+                        'email': user.email,
+                        'amount_staked': isStaking,
+                        'currency': 'NGN'
                     });
                 }
                 setEnding(false);
