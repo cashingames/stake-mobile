@@ -39,7 +39,7 @@ export default function ({ navigation }) {
     );
 }
 
-const GamePlans = ({user}) => {
+const GamePlans = ({ user }) => {
     const plans = useSelector(state => state.common.plans);
 
     return (
@@ -62,7 +62,10 @@ const GamePlanCard = ({ plan, user }) => {
         await analytics().logEvent('initiate_game_plan_purchase', {
             'id': user.username,
             'phone_number': user.phoneNumber,
-            'email': user.email
+            'email': user.email,
+            'item_name': plan.name,
+            'price': plan.price,
+            'currency': 'NGN'
         })
         refRBSheet.current.open()
     }
@@ -127,7 +130,10 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
                 await analytics().logEvent('game_plan_purchased_successfully', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
-                    'email': user.email
+                    'email': user.email,
+                    'item_name': plan.name,
+                    'price': plan.price,
+                    'currency': 'NGN'
                 })
             })
             .then(result => {
@@ -142,7 +148,8 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
                 await analytics().logEvent('game_plan_purchased_failed', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
-                    'email': user.email
+                    'email': user.email,
+                    'item_name': plan.name,
                 })
                 navigation.navigate("GameStoreItemsPurchaseFailed")
             });
@@ -186,7 +193,10 @@ const BoostCard = ({ boost, user }) => {
         await analytics().logEvent('initiate_boost_purchase', {
             'id': user.username,
             'phone_number': user.phoneNumber,
-            'email': user.email
+            'email': user.email,
+            'item_name': boost.name,
+            'price': boost.price,
+            'currency': 'NGN'
         })
 
         refRBSheet.current.open()
@@ -256,7 +266,10 @@ const BuyBoost = ({ boost, onClose, user }) => {
                 await analytics().logEvent('boost_purchased_successfully', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
-                    'email': user.email
+                    'email': user.email,
+                    'item_name': boost.name,
+                    'price': boost.price,
+                    'currency': 'NGN'
                 })
             })
             .then(result => {
