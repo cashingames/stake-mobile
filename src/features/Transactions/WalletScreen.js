@@ -49,7 +49,9 @@ export default function WalletScreen() {
                 await analytics().logEvent('winnings_withdrawn_successfully', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
-                    'email': user.email
+                    'email': user.email,
+                    'amount_withdrawn': user.withdrawableBalance,
+                    'currency': 'NGN'
                 });
                 openBottomSheet();
                 setWithdraw(false)
