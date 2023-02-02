@@ -8,6 +8,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { AccessToken, GraphRequest, GraphRequestManager, LoginManager, Profile } from 'react-native-fbsdk-next';
 import { useDispatch } from 'react-redux';
 import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/AuthSlice';
+import { triggerTour } from '../features/Tour/Index';
 import { saveToken } from '../utils/ApiHelper';
 import normalize from '../utils/normalize';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
@@ -72,6 +73,7 @@ const Login = ({ text }) => {
       referrer
     })).then(unwrapResult)
       .then((originalPromiseResult) => {
+        triggerTour(navigation)
         console.log(originalPromiseResult, 'hitting');
         saveToken(originalPromiseResult.data.token)
         closeBottomSheet()

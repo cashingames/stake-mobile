@@ -1,4 +1,4 @@
-import { View, Text, Dimensions } from 'react-native'
+import { View, Text, Dimensions, Alert } from 'react-native'
 import React, { useRef, useState } from 'react'
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { StyleSheet } from 'react-native';
@@ -61,3 +61,22 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'white' },
   child: { width, justifyContent: 'center' },
 });
+
+export const triggerTour = (navigation)=>{
+    console.log("reached1111")
+    setTimeout(()=>{
+        Alert.alert("Need a Tour ?", "", [
+            {
+                text: "I'm Good",
+                style: 'cancel'
+            },
+            {
+                text: "Sure",
+                style: "default",
+                onPress: ()=>{
+                    navigation.navigate("AppTour")
+                }
+            }
+        ])
+    }, 4000)
+}
