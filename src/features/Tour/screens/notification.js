@@ -14,7 +14,9 @@ import { getUserNotifications, markNotificationRead } from "../../CommonSlice";
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import MiniHead from "./miniHead";
 import { Walkthroughable } from '../../Tour/Walkthrouable';
+import { defaultToolTip } from "../Index";
 
+const window = Dimensions.get("window")
 
 const Notifications = (props) => {
     const CopilotProps = props;
@@ -107,7 +109,7 @@ const Notifications = (props) => {
                 <CopilotStep text={
                       <View>
                           <Text style={styles.tourTitle} >Notifications</Text>
-                          <Text>
+                          <Text style={styles.tourDesc}>
                             View notifications on challenges and other exciting news
                           </Text>
                       </View>
@@ -237,7 +239,8 @@ export default copilot({
     labels: {
         finish: 'Next',
         skip: ' '
-    }
+    },
+    tooltipComponent: defaultToolTip
 })(Notifications);
 
 const styles = EStyleSheet.create({
@@ -371,5 +374,8 @@ const styles = EStyleSheet.create({
         fontWeight: '600',
         fontSize: 22,
         marginBottom: 10
-      }
+    },
+    tourDesc: {
+        width: window.width * 0.7
+    }
 })

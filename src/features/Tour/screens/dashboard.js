@@ -31,6 +31,7 @@ import { Walkthroughable } from '../../Tour/Walkthrouable';
 import { Dimensions } from 'react-native';
 import { Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { defaultToolTip } from '../Index';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 const window = Dimensions.get("window")
@@ -134,6 +135,7 @@ const HomeScreen = (props) => {
     }, [])
 
     const handleTourStop = ()=>{
+        // console.info(e)
         // console.warn(Object.keys(CopilotProps))
         CopilotProps.goToNext()
         // navigation.navigate("LiveTriviaLeaderboard", {
@@ -173,7 +175,7 @@ const HomeScreen = (props) => {
                   <CopilotStep text={
                       <View>
                           <Text style={styles.tourTitle} >Wallet</Text>
-                          <Text>
+                          <Text style={styles.tourDesc}>
                             Fund your wallet to buy enjoy more games, win points , earn great rewards and withdraw your winnings
                           </Text>
                       </View>
@@ -215,7 +217,7 @@ const HomeScreen = (props) => {
                                 <CopilotStep key={i} text={
                                     <View>
                                         <Text style={styles.tourTitle} >{gameMode.name}</Text>
-                                        <Text>
+                                        <Text style={styles.tourDesc}>
                                           {(i == 0) && 'Play single mode and climb up the leaderboard to win lots of cash prizes' }
                                           {(i == 1) && 'Bet on your knowledge and stand a chance of doubling the amount staked and also increasing your points on the leaderbleaderboard ' }
                                           {(i == 2) && 'Show your skills to your friends by challenging them to a duel' }
@@ -250,11 +252,12 @@ const HomeScreen = (props) => {
 }
 
 export default copilot({
+    tooltipComponent: defaultToolTip,
     animated: true,
     overlay: 'svg',
     labels: {
         finish: 'Next',
-        skip: ' '
+        skip: ''
     }
 })(HomeScreen);
 
@@ -581,5 +584,8 @@ const styles = EStyleSheet.create({
       fontWeight: '600',
       fontSize: 22,
       marginBottom: 10
+    },
+    tourDesc: {
+        width: window.width * 0.7
     }
 });

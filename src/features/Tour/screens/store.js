@@ -6,6 +6,7 @@ import { Dimensions } from 'react-native'
 import { Image } from 'react-native'
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import { Walkthroughable } from '../../Tour/Walkthrouable';
+import { defaultToolTip } from '../Index'
 
 const window = Dimensions.get("window")
 
@@ -37,12 +38,12 @@ function Store(props) {
 
     return (
       <View style={styles.container}>
-        <MiniHead bg={"white"} title={"Stores"} />
+        <MiniHead bg={"white"} title={"Store"} />
 
         <CopilotStep text={
                       <View>
                           <Text style={styles.tourTitle} >Store</Text>
-                          <Text>
+                          <Text style={styles.tourDesc}>
                             Buy lives and boosts to help you score higher
                           </Text>
                       </View>
@@ -67,6 +68,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 22,
     marginBottom: 10
+  },
+  tourDesc: {
+    width: window.width * 0.7
   }
 })
 
@@ -78,4 +82,5 @@ export default copilot({
       skip: ' ',
   },
   arrowColor: 'rgba(0, 0, 0, 0)',
+  tooltipComponent: defaultToolTip
 })(Store);

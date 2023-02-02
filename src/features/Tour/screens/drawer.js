@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { DrawerItem } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import { defaultToolTip } from '../Index';
 
 const { width } = Dimensions.get('window');
 
@@ -62,7 +63,7 @@ const handleTourStop = ()=>{
               <CopilotStep text={
                   <View>
                       <Text style={drawStyles.tourTitle} >User Profile</Text>
-                      <Text>Edit your profile and update your bank details</Text>
+                      <Text style={drawStyles.tourDesc}>Edit your profile and update your bank details</Text>
                   </View>
               } order={1} name="Order1">
                   <Walkthroughable>
@@ -330,6 +331,9 @@ const styles = StyleSheet.create({
       flex: 1,
       width: width * 0.8,
       backgroundColor: 'white'
+    },
+    tourDesc: {
+        width: window.width * 0.7
     }
 })
 
@@ -339,5 +343,6 @@ export default copilot({
   labels: {
       finish: 'Next',
       skip: ' '
-  }
+  },
+  tooltipComponent: defaultToolTip
 })(Drawer);
