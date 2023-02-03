@@ -60,12 +60,13 @@ const GamePlanCard = ({ plan, user }) => {
     const refRBSheet = useRef();
     const buyGamePlan = async () => {
         await analytics().logEvent('initiate_game_plan_purchase', {
-            'id': user.username,
+            'item_id': user.username,
+            'item_name': plan.name,
+            'item_price': plan.price,
+            'item_category_name':'game plan',
+            'currency': 'NGN',
             'phone_number': user.phoneNumber,
             'email': user.email,
-            'item_name': plan.name,
-            'price': plan.price,
-            'currency': 'NGN'
         })
         refRBSheet.current.open()
     }
@@ -128,12 +129,13 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
             .then(unwrapResult)
             .then(async () => {
                 await analytics().logEvent('game_plan_purchased_successfully', {
-                    'id': user.username,
-                    'phone_number': user.phoneNumber,
-                    'email': user.email,
+                    'item_id': user.username,
                     'item_name': plan.name,
                     'price': plan.price,
-                    'currency': 'NGN'
+                    'item_category_name':'game plan',
+                    'currency': 'NGN',
+                    'phone_number': user.phoneNumber,
+                    'email': user.email,
                 })
             })
             .then(result => {
@@ -191,12 +193,13 @@ const BoostCard = ({ boost, user }) => {
     const refRBSheet = useRef();
     const buyBoost = async () => {
         await analytics().logEvent('initiate_boost_purchase', {
-            'id': user.username,
+            'item_id': user.username,
+            'item_name': boost.name,
+            'item_price': boost.currency_value,
+            'item_category_name': 'Boost',
+            'currency': 'NGN',
             'phone_number': user.phoneNumber,
             'email': user.email,
-            'item_name': boost.name,
-            'price': boost.price,
-            'currency': 'NGN'
         })
 
         refRBSheet.current.open()
@@ -264,12 +267,13 @@ const BuyBoost = ({ boost, onClose, user }) => {
             .then(unwrapResult)
             .then(async () => {
                 await analytics().logEvent('boost_purchased_successfully', {
-                    'id': user.username,
+                    'item_id': user.username,
+                    'item_name': boost.name,
+                    'item_price': boost.currency_value,
+                    'item_category_name': 'Boost',
+                    'currency': 'NGN',
                     'phone_number': user.phoneNumber,
                     'email': user.email,
-                    'item_name': boost.name,
-                    'price': boost.price,
-                    'currency': 'NGN'
                 })
             })
             .then(result => {
