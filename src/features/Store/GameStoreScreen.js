@@ -41,7 +41,6 @@ export default function ({ navigation }) {
 
 const GamePlans = ({ user }) => {
     const plans = useSelector(state => state.common.plans);
-
     return (
         <View style={styles.storeItems}>
             <Text style={styles.title}>Buy Games</Text>
@@ -62,8 +61,7 @@ const GamePlanCard = ({ plan, user }) => {
         await analytics().logEvent('initiate_plan_purchase', {
             'item_id': user.username,
             'item_name': plan.name,
-            'items': plan,
-            'value': plan.price,
+            'value':formatCurrency(plan.price),
             'item_category':'game plan',
             'currency': 'NGN',
             'phone_number': user.phoneNumber,
@@ -132,8 +130,7 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
                 await analytics().logEvent('plan_purchased', {
                     'item_id': user.username,
                     'item_name': plan.name,
-                    'items': plan,
-                    'value': plan.price,
+                    'value': formatCurrency(plan.price),
                     'item_category':'game plan',
                     'currency': 'NGN',
                     'phone_number': user.phoneNumber,
@@ -197,8 +194,7 @@ const BoostCard = ({ boost, user }) => {
         await analytics().logEvent('initiate_boost_purchase', {
             'item_id': user.username,
             'item_name': boost.name,
-            'items': boost,
-            'value': boost.currency_value,
+            'value': formatCurrency(boost.currency_value),
             'item_category': 'Boost',
             'currency': 'NGN',
             'phone_number': user.phoneNumber,
@@ -272,8 +268,7 @@ const BuyBoost = ({ boost, onClose, user }) => {
                 await analytics().logEvent('boost_purchased', {
                     'item_id': user.username,
                     'item_name': boost.name,
-                    'items': boost,
-                    'value': boost.currency_value,
+                    'value': formatCurrency(boost.currency_value),
                     'item_category': 'Boost',
                     'currency': 'NGN',
                     'phone_number': user.phoneNumber,
