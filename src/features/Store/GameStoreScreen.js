@@ -59,7 +59,7 @@ const GamePlans = ({ user }) => {
 const GamePlanCard = ({ plan, user }) => {
     const refRBSheet = useRef();
     const buyGamePlan = async () => {
-        await analytics().logEvent('initiate_game_plan_purchase', {
+        await analytics().logEvent('initiate_plan_purchase', {
             'item_id': user.username,
             'item_name': plan.name,
             'items': plan,
@@ -129,7 +129,7 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
         dispatch(buyPlanFromWallet(plan.id))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('game_plan_purchased_successfully', {
+                await analytics().logEvent('plan_purchased', {
                     'item_id': user.username,
                     'item_name': plan.name,
                     'items': plan,
@@ -269,7 +269,7 @@ const BuyBoost = ({ boost, onClose, user }) => {
         dispatch(buyBoostFromWallet(boost.id))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('boost_purchased_successfully', {
+                await analytics().logEvent('boost_purchased', {
                     'item_id': user.username,
                     'item_name': boost.name,
                     'items': boost,
@@ -285,7 +285,6 @@ const BuyBoost = ({ boost, onClose, user }) => {
                 onClose()
                 navigation.navigate("GameBoostPurchaseSuccessful")
             })
-
             .catch(async rejectedValueOrSerializedError => {
                 setLoading(false);
                 // Alert.alert("Notice", "Operation could not be completed, please try again");
