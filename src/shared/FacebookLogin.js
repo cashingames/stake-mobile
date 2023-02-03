@@ -117,8 +117,6 @@ const Login = ({ text }) => {
             openBottomSheet()
             return
           }
-
-          console.log(originalPromiseResult);
           saveToken(originalPromiseResult.data.token)
           setLoading(false)
           // navigation.navigate('AppRouter')
