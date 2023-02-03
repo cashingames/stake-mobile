@@ -38,7 +38,7 @@ function PopupPrizePool(props) {
 
     return (
       <View style={styles.container}>
-        <MiniHead bg={"rgba(112, 31, 136, 1)"} title={"Global Leaderboard"} />
+        <MiniHead bg={"rgba(112, 31, 136, 1)"} title={"Leaderboard"} />
 
         <CopilotStep text={
                       <View>

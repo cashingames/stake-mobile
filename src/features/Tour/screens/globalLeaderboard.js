@@ -38,7 +38,7 @@ function GlobalLeaderBoard(props) {
 
     return (
       <View style={styles.container}>
-        <MiniHead bg={"white"} title={"Global Leaderboard"} />
+        <MiniHead bg={"white"} title={"Leaderboard"} />
 
         <CopilotStep text={
                       <View>

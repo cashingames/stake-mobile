@@ -219,7 +219,7 @@ const HomeScreen = (props) => {
                                         <Text style={styles.tourTitle} >{gameMode.name}</Text>
                                         <Text style={styles.tourDesc}>
                                           {(i == 0) && 'Play single mode and climb up the leaderboard to win lots of cash prizes' }
-                                          {(i == 1) && 'Bet on your knowledge and stand a chance of doubling the amount staked and also increasing your points on the leaderbleaderboard ' }
+                                          {(i == 1) && 'Bet on your knowledge and stand a chance of doubling the amount staked and also increasing your points on the leaderboard ' }
                                           {(i == 2) && 'Show your skills to your friends by challenging them to a duel' }
                                         </Text>
                                     </View>
