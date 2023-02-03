@@ -17,6 +17,7 @@ import Constants from 'expo-constants';
 import { defaultToolTip } from '../Index';
 
 const { width } = Dimensions.get('window');
+const window = Dimensions.get('window');
 
 function Drawer(CopilotProps) {
   const props = CopilotProps;
