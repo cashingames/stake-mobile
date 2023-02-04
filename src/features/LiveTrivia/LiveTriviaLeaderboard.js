@@ -140,25 +140,27 @@ const TriviaTopLeaders = ({params})=>{
             switch (element.prizeType) {
                 case "MONEY_TO_BANK":
                     prize = "N"
+                    prize = `${prize} ${formatNumber(element.eachPrize)}`;
                     break;
 
                 case "MONEY_TO_WALLET":
                     prize = "N"
+                    prize = `${prize} ${formatNumber(element.eachPrize)}`;
                     break;
 
                 case "PHYSICAL_ITEM":
                     prize = "its"
+                    prize = `${(element.eachPrize)}`;
                     break;
 
                 case "POINTS":
                     prize = "pts"
+                    prize = `${(element.eachPrize)}`;
                     break;
             
                 default:
                     break;
             }
-
-            prize = `${prize} ${formatNumber(element.eachPrize)}`;
 
             temp.push({
                 prize,
