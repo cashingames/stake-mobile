@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, Image, ScrollView, StatusBar } from 'react-native';
+import { Text, View, Image, ScrollView, StatusBar, ActivityIndicator } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector, useDispatch } from 'react-redux';
 import PageLoading from '../../shared/PageLoading';
 import { getLiveTriviaLeaders } from '../Games/GameSlice';
-import { isTrue } from '../../utils/stringUtl';
+import { formatNumber, isTrue } from '../../utils/stringUtl';
 import { Ionicons } from '@expo/vector-icons';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
@@ -86,7 +86,7 @@ const LiveTriviaLeaderBoard = (props) => {
             } order={1} name={`LeaderBoard1`}>
                 <Walkthroughable> */}
                     <ResultContainer />
-                    <TriviaTopLeaders />
+                    <TriviaTopLeaders params={props.route.params} />
                 {/* </Walkthroughable>
             </CopilotStep> */}
             {/* <TriviaTopLeaders /> */}
@@ -107,34 +107,119 @@ const ResultContainer = () => {
     )
 }
 
-const TriviaTopLeaders = ()=>{
+const TriviaTopLeaders = ({params})=>{
+    const {trivia: {prizePool}} = params;
+
+    const [isComputing, setIsComputing] = useState(true)
+    const [prizeData, setPrizeData] = useState([])
+
+    const computePrizePool = ()=>{
+        let temp = [];
+        let tempPool = prizePool || [];
+
+        // sort pool
+
+        // throwing error and no time to debug, using traditional sorting for now
+        // tempPool2 = (tempPool || []).sort( (a, b) => (parseInt(b.rankFrom) - parseInt(a.rankFrom)) );
+        // console.log((tempPool || []).sort( (a, b) => {return (parseInt(b.rankFrom) - parseInt(a.rankFrom))} ));
+
+        for(let i = 1 ; i < tempPool.length ; i++){
+            for(let j = i ; j > 0 ; j--){
+                let l1 = tempPool[j];
+                let l2 = tempPool[j - 1];
+                if(l2.rankFrom < l1.rankFrom){
+                    tempPool[j] = l2;
+                    tempPool[j - 1] = l1;
+                }
+            }
+        }
+
+        // extract text into new pool
+        for(let i = 0 ; i < tempPool.length ; i++){
+            let element = tempPool[i];
+            let text = (element.rankFrom == element.rankTo) ? element.rankFrom: `${element.rankFrom} - ${element.rankTo}` ;
+            let prize = "N";
+            switch (element.prizeType) {
+                case "MONEY_TO_BANK":
+                    prize = "N"
+                    break;
+
+                case "MONEY_TO_WALLET":
+                    prize = "N"
+                    break;
+
+                case "PHYSICAL_ITEM":
+                    prize = "its"
+                    break;
+
+                case "POINTS":
+                    prize = "pts"
+                    break;
+            
+                default:
+                    break;
+            }
+
+            prize = `${prize} ${formatNumber(element.eachPrize)}`;
+
+            temp.push({
+                prize,
+                text
+            })
+        }
+        
+        setPrizeData(temp)
+        setIsComputing(false)
+    }
+
+    useEffect(()=>{
+        computePrizePool()
+    }, [])
+
+    if(isComputing){
+        return (
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator />
+        </View>)
+    }
+
+    if(prizePool == undefined){
+        return null;
+    }
+    if((prizeData || []).length == 0){
+        return null;
+    }
+    
     return (
         <View style={styles.triviaTopLeadersContainer}>
             
             <View style={[styles.triviaTopLeadersRow, { marginVertical: 8 }]}>
                 <Text style={styles.triviaTopLeadersH1}>Grand Prize</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={styles.triviaTopLeadersH1}>N5,000</Text>
+                    <Text style={styles.triviaTopLeadersH1}>{prizeData[0].prize}</Text>
                     <Image source={require("../../../assets/images/icons/trophy.png")} style={styles.triviaTopLeadersTrophy} />
                 </View>
             </View>
 
-            <View style={styles.triviaTopLeadersRow}>
-                <Text style={styles.triviaTopLeadersH2}>2nd Place</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={styles.triviaTopLeadersH2}>N3,000</Text>
-                    <Image source={require("../../../assets/images/icons/conqueror.png")} style={styles.triviaTopLeadersCon} />
-                </View>
-            </View>
+            {
+                ((prizeData || []).map((item, index)=>{
 
-            <View style={styles.triviaTopLeadersRow}>
-                <Text style={styles.triviaTopLeadersH2}>3rd Place</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={styles.triviaTopLeadersH2}>N3,000</Text>
-                    <Image source={require("../../../assets/images/icons/conqueror.png")} style={styles.triviaTopLeadersCon} />
-                </View>
-            </View>
+                    if(index == 0) return <></>;
 
+                    return (
+                        <View style={styles.triviaTopLeadersRow}>
+                            <Text style={styles.triviaTopLeadersH2}>{
+                                (item.text == 2) ? "2nd" : ( (item.text == 3) ? "3rd" : `${item.text}th` )
+                            } Place</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={styles.triviaTopLeadersH2}>{item?.prize || ""}</Text>
+                                <Image source={require("../../../assets/images/icons/conqueror.png")} style={styles.triviaTopLeadersCon} />
+                            </View>
+                        </View>
+                    )
+                }))
+            }
+            
         </View>
     )
 }
