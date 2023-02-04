@@ -150,7 +150,7 @@ const LiveTriviaCard = ({ trivia }) => {
                 'phone_number': user.phoneNumber,
                 'email': user.email
             })
-            navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id })
+            navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id, prizePool: trivia.prizePool })
 
         }
         else if (trivia.playerStatus === "CANPLAY" && trivia.status !== "EXPIRED") {
@@ -246,7 +246,7 @@ const LiveTriviaCard = ({ trivia }) => {
                     <View style={styles.triviaTop}>
                         <View style={styles.triviaLeft}>
                             <Text style={styles.triviaTopText}>{trivia.title}</Text>
-                            <Text style={styles.triviaTitle}>{trivia.prizeDisplayText}</Text>
+                            <Text style={styles.triviaTitle}>{ trivia?.description || trivia.prizeDisplayText}</Text>
                             {trivia.status === "EXPIRED" ?
                                 <Text style={styles.triviaAdText}>{trivia.startAt}</Text>
                                 :
