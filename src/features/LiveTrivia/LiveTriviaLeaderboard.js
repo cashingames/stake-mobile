@@ -108,7 +108,7 @@ const ResultContainer = () => {
 }
 
 const TriviaTopLeaders = ({params})=>{
-    const {trivia: {prizePool}} = params;
+    const {prizePool} = params;
 
     const [isComputing, setIsComputing] = useState(true)
     const [prizeData, setPrizeData] = useState([])
@@ -117,12 +117,10 @@ const TriviaTopLeaders = ({params})=>{
         let temp = [];
         let tempPool = prizePool || [];
 
+        // TODO
+        // * optimize sort algorithm
+        
         // sort pool
-
-        // throwing error and no time to debug, using traditional sorting for now
-        // tempPool2 = (tempPool || []).sort( (a, b) => (parseInt(b.rankFrom) - parseInt(a.rankFrom)) );
-        // console.log((tempPool || []).sort( (a, b) => {return (parseInt(b.rankFrom) - parseInt(a.rankFrom))} ));
-
         for(let i = 1 ; i < tempPool.length ; i++){
             for(let j = i ; j > 0 ; j--){
                 let l1 = tempPool[j];
