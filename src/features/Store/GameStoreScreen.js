@@ -41,7 +41,6 @@ export default function ({ navigation }) {
 
 const GamePlans = ({ user }) => {
     const plans = useSelector(state => state.common.plans);
-
     return (
         <View style={styles.storeItems}>
             <Text style={styles.title}>Buy Games</Text>
@@ -59,13 +58,14 @@ const GamePlans = ({ user }) => {
 const GamePlanCard = ({ plan, user }) => {
     const refRBSheet = useRef();
     const buyGamePlan = async () => {
-        await analytics().logEvent('initiate_game_plan_purchase', {
-            'id': user.username,
+        await analytics().logEvent('initiate_plan_purchase', {
+            'item_id': user.username,
+            'item_name': plan.name,
+            'value':formatCurrency(plan.price),
+            'item_category':'game plan',
+            'currency': 'NGN',
             'phone_number': user.phoneNumber,
             'email': user.email,
-            'item_name': plan.name,
-            'price': plan.price,
-            'currency': 'NGN'
         })
         refRBSheet.current.open()
     }
@@ -127,13 +127,14 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
         dispatch(buyPlanFromWallet(plan.id))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('game_plan_purchased_successfully', {
-                    'id': user.username,
+                await analytics().logEvent('plan_purchased', {
+                    'item_id': user.username,
+                    'item_name': plan.name,
+                    'value': formatCurrency(plan.price),
+                    'item_category':'game plan',
+                    'currency': 'NGN',
                     'phone_number': user.phoneNumber,
                     'email': user.email,
-                    'item_name': plan.name,
-                    'price': plan.price,
-                    'currency': 'NGN'
                 })
             })
             .then(result => {
@@ -191,12 +192,13 @@ const BoostCard = ({ boost, user }) => {
     const refRBSheet = useRef();
     const buyBoost = async () => {
         await analytics().logEvent('initiate_boost_purchase', {
-            'id': user.username,
+            'item_id': user.username,
+            'item_name': boost.name,
+            'value': formatCurrency(boost.currency_value),
+            'item_category': 'Boost',
+            'currency': 'NGN',
             'phone_number': user.phoneNumber,
             'email': user.email,
-            'item_name': boost.name,
-            'price': boost.price,
-            'currency': 'NGN'
         })
 
         refRBSheet.current.open()
@@ -263,13 +265,14 @@ const BuyBoost = ({ boost, onClose, user }) => {
         dispatch(buyBoostFromWallet(boost.id))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('boost_purchased_successfully', {
-                    'id': user.username,
+                await analytics().logEvent('boost_purchased', {
+                    'item_id': user.username,
+                    'item_name': boost.name,
+                    'value': formatCurrency(boost.currency_value),
+                    'item_category': 'Boost',
+                    'currency': 'NGN',
                     'phone_number': user.phoneNumber,
                     'email': user.email,
-                    'item_name': boost.name,
-                    'price': boost.price,
-                    'currency': 'NGN'
                 })
             })
             .then(result => {
@@ -277,7 +280,6 @@ const BuyBoost = ({ boost, onClose, user }) => {
                 onClose()
                 navigation.navigate("GameBoostPurchaseSuccessful")
             })
-
             .catch(async rejectedValueOrSerializedError => {
                 setLoading(false);
                 // Alert.alert("Notice", "Operation could not be completed, please try again");

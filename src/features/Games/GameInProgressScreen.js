@@ -5,9 +5,6 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import crashlytics from '@react-native-firebase/crashlytics';
-
-
-
 import {
     endGame, nextQuestion, setHasPlayedTrivia
 } from "./GameSlice";
