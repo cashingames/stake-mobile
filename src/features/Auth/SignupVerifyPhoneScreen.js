@@ -41,6 +41,14 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     const token = `${otp1}${otp2}${otp3}${otp4}${otp5}`
     const params = route.params;
 
+    // const startTour = async () => {
+    //     await analytics().logEvent("start_tour", {
+    //         'id': params.username,
+    //         'phone_number': params.phone_number,
+    //     })
+    //     navigation.navigate("AppTour")
+    // }
+
     useEffect(() => {
         const onComplete = () => {
             clearInterval(countDown);

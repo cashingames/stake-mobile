@@ -12,7 +12,9 @@ import PrizePool from './screens/prizePool';
 import PopupPrizePool from './screens/popupPrizePool';
 import Invite from './screens/invite';
 import { useNavigation } from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
 import { BackHandler } from 'react-native';
+import { useSelector } from 'react-redux';
 
 const { width } = Dimensions.get('window');
 export const STEP_NUMBER_RADIUS = 14;
@@ -87,6 +89,8 @@ export const defaultToolTip = ({
 export default function TourIndex() {
     const navigation = useNavigation();
     const [activeScreen, setActiveScreen] = useState(0)
+    const user = useSelector(state => state.auth.user)
+
     const scrollRef = useRef();
 
     const goToNext = ()=>{
@@ -97,13 +101,17 @@ export default function TourIndex() {
         setActiveScreen(activeScreen + 1);
     }
 
-    const finishTour = ()=>{
+    const finishTour = async () =>{
         try{
             navigation.popToTop()
             navigation.reset({
                 index: 0,
                 routes: [{name: 'AppRouter'}],
               })
+              await analytics().logEvent('tour_ended', {
+                'id': user.username,
+                'email': user.email
+            })
             navigation.navigate("AppRouter")
         }catch(e){
             navigation.reset({
@@ -172,7 +180,7 @@ const styles = StyleSheet.create({
 });
 
 export const triggerTour = (navigation)=>{
-    console.log("reached1111")
+  const user = useSelector(state => state.auth.user)
     setTimeout(()=>{
         Alert.alert("Need a Tour ?", "", [
             {
@@ -182,7 +190,11 @@ export const triggerTour = (navigation)=>{
             {
                 text: "Sure",
                 style: "default",
-                onPress: ()=>{
+                onPress: async () => {
+                  await analytics().logEvent('tour_started', {
+                    'id': user.username,
+                    'email': user.email
+                })
                     navigation.navigate("AppTour")
                 }
             }

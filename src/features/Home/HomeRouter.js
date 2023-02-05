@@ -290,9 +290,12 @@ function CustomDrawerContent(props) {
                                     <Text style={drawStyles.itemLabel}>Need a Tour</Text>
                                     <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                                 </View>}
-                            onPress={() => {
-                                // CopilotProps.start()
-                                // dispatch(toggleAppTour(true))
+                            onPress={async () => {
+                                await analytics().logEvent('tour_started', {
+                                    'id': user.username,
+                                    'email': user.email
+                                })
+                          
                                 navigation.navigate("AppTour")
                             }}
                             activeTintColor='#EF2F55'
