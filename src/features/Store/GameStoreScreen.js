@@ -59,13 +59,14 @@ const GamePlanCard = ({ plan, user }) => {
     const refRBSheet = useRef();
     const buyGamePlan = async () => {
         await analytics().logEvent('initiate_plan_purchase', {
-            'item_id': user.username,
-            'item_name': plan.name,
-            'value':formatCurrency(plan.price),
-            'item_category':'game plan',
+            'transaction_id': user.username,
             'currency': 'NGN',
-            'phone_number': user.phoneNumber,
-            'email': user.email,
+            'value': formatCurrency(plan.price),
+            'items': [{
+                'item_id': user.username,
+                'item_name': plan.name,
+                'item_category': 'game plan',
+            }]
         })
         refRBSheet.current.open()
     }
@@ -116,6 +117,14 @@ const PlanCardDetails = ({ plan }) => {
 const BuyGamePlan = ({ plan, onClose, user }) => {
     const [loading, setLoading] = useState(false);
     const userBalance = useSelector(state => state.auth.user.walletBalance);
+    const newUser = useSelector(state => state.auth.user.joinedOn);
+    const newUserDate = newUser.slice(0, 10);
+
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+    let formattedDate = `${year}-${month}-${day}`;
 
     const canPay = Number(userBalance) >= Number(plan.price);
 
@@ -127,15 +136,29 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
         dispatch(buyPlanFromWallet(plan.id))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('plan_purchased', {
-                    'item_id': user.username,
-                    'item_name': plan.name,
-                    'value': formatCurrency(plan.price),
-                    'item_category':'game plan',
-                    'currency': 'NGN',
-                    'phone_number': user.phoneNumber,
-                    'email': user.email,
-                })
+                if (formattedDate !== newUserDate) {
+                    await analytics().logEvent('purchase', {
+                        'transaction_id': user.username,
+                        'currency': 'NGN',
+                        'value': formatCurrency(plan.price),
+                        'items': [{
+                            'item_id': user.username,
+                            'item_name': plan.name,
+                            'item_category': 'game plan',
+                        }]
+                    })
+                } else {
+                    await analytics().logEvent('new_user_plan_purchased', {
+                        'transaction_id': user.username,
+                        'currency': 'NGN',
+                        'value': formatCurrency(plan.price),
+                        'items': [{
+                            'item_id': user.username,
+                            'item_name': plan.name,
+                            'item_category': 'game plan',
+                        }]
+                    })
+                }
             })
             .then(result => {
                 // console.log(result);
@@ -192,13 +215,14 @@ const BoostCard = ({ boost, user }) => {
     const refRBSheet = useRef();
     const buyBoost = async () => {
         await analytics().logEvent('initiate_boost_purchase', {
-            'item_id': user.username,
-            'item_name': boost.name,
-            'value': formatCurrency(boost.currency_value),
-            'item_category': 'Boost',
+            'transaction_id': user.username,
             'currency': 'NGN',
-            'phone_number': user.phoneNumber,
-            'email': user.email,
+            'value': formatCurrency(boost.currency_value),
+            'items': [{
+                'item_id': user.username,
+                'item_name': boost.name,
+                'item_category': 'game boost',
+            }]
         })
 
         refRBSheet.current.open()
@@ -254,6 +278,14 @@ const BoostCardDetails = ({ boost }) => {
 const BuyBoost = ({ boost, onClose, user }) => {
     const [loading, setLoading] = useState(false);
     const userBalance = useSelector(state => state.auth.user.walletBalance);
+    const newUser = useSelector(state => state.auth.user.joinedOn);
+    const newUserDate = newUser.slice(0, 10);
+
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+    let day = date.getDate().toString().padStart(2, '0');
+    let formattedDate = `${year}-${month}-${day}`;
 
     const canPay = Number(userBalance) >= Number(boost.currency_value);
 
@@ -265,15 +297,29 @@ const BuyBoost = ({ boost, onClose, user }) => {
         dispatch(buyBoostFromWallet(boost.id))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('boost_purchased', {
-                    'item_id': user.username,
-                    'item_name': boost.name,
-                    'value': formatCurrency(boost.currency_value),
-                    'item_category': 'Boost',
-                    'currency': 'NGN',
-                    'phone_number': user.phoneNumber,
-                    'email': user.email,
-                })
+                if (formattedDate !== newUserDate) {
+                    await analytics().logEvent('purchase', {
+                        'transaction_id': user.username,
+                        'currency': 'NGN',
+                        'value': formatCurrency(boost.currency_value),
+                        'items': [{
+                            'item_id': user.username,
+                            'item_name': boost.name,
+                            'item_category': 'game boost',
+                        }]
+                    })
+                } else {
+                    await analytics().logEvent('new_user_boost_purchased', {
+                        'transaction_id': user.username,
+                        'currency': 'NGN',
+                        'value': formatCurrency(boost.currency_value),
+                        'items': [{
+                            'item_id': user.username,
+                            'item_name': boost.name,
+                            'item_category': 'game boost',
+                        }]
+                    })
+                }
             })
             .then(result => {
                 dispatch(getUser())
