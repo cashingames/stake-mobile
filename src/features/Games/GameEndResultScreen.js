@@ -25,38 +25,31 @@ export default function GameEndResultScreen({ navigation }) {
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
 	const [showText, setShowText] = useState(true);
+	const [lastRunDate, setLastRunDate] = useState();
 	const [modalVisible, setModalVisible] = useState(false);
 	const activePlan = useSelector(state => state.auth.user.activePlans);
 	const bonusGame = activePlan?.find((item) => item.name === 'Bonus Games')
 	const newUser = useSelector(state => state.auth.user.joinedOn);
 	const newUserDate = newUser.slice(0, 10);
+	let formattedDate = new Date().toISOString().split('T')[0];
 
-	let date = new Date();
-	let year = date.getFullYear();
-	let month = (date.getMonth() + 1).toString().padStart(2, '0');
-	let day = date.getDate().toString().padStart(2, '0');
-	let formattedDate = `${year}-${month}-${day}`;
-
-	const checkAndRun = async () => {
-		let lastRunDate = await AsyncStorage.getItem('lastRunDate');
-
+	const checkAndRun = () => {
 		const currentDate = new Date().toLocaleDateString();
-
 		if (lastRunDate !== currentDate) {
-			if (formattedDate !== newUserDate && bonusGame && bonusGame.game_count === 0) {
-				analytics().logEvent('free_game_exhausted', {
-					'id': user.username,
-					'phone_number': user.phoneNumber,
-					'email': user.email
-				});
-			} else {
+			if (formattedDate === newUserDate && bonusGame && bonusGame.game_count === 0) {
 				analytics().logEvent('new_user_FG_exhausted', {
 					'id': user.username,
 					'phone_number': user.phoneNumber,
 					'email': user.email
 				});
+			} else {
+				analytics().logEvent('free_game_exhausted', {
+					'id': user.username,
+					'phone_number': user.phoneNumber,
+					'email': user.email
+				});
 			}
-			await AsyncStorage.setItem('lastRunDate', currentDate);
+			setLastRunDate(currentDate);
 		}
 	};
 
@@ -84,7 +77,7 @@ export default function GameEndResultScreen({ navigation }) {
 				'email': user.email
 			});
 		};
-		await checkAndRun()
+		checkAndRun()
 		navigation.navigate("GameInstructions")
 		setLoading(false);
 
@@ -98,7 +91,7 @@ export default function GameEndResultScreen({ navigation }) {
 				'email': user.email
 			});
 		};
-		await checkAndRun()
+		checkAndRun()
 		navigation.navigate('Home', { showStakingAdvert: !withStaking })
 	}
 	useFocusEffect(

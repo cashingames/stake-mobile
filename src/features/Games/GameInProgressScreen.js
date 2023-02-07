@@ -40,12 +40,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     const isEnded = useSelector(state => state.game.isEnded);
     const newUser = useSelector(state => state.auth.user.joinedOn);
     const newUserDate = newUser.slice(0, 10);
-
-    let date = new Date();
-    let year = date.getFullYear();
-    let month = (date.getMonth() + 1).toString().padStart(2, '0');
-    let day = date.getDate().toString().padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`;
+    let formattedDate = new Date().toISOString().split('T')[0];
 
     const openBottomSheet = () => {
         refRBSheet.current.open()

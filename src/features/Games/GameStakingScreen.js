@@ -25,8 +25,7 @@ const GameStakingScreen = ({ navigation }) => {
     const gameStakes = useSelector(state => state.game.gameStakes);
     const maximumExhibitionStakeAmount  = useSelector(state => state.common.maximumExhibitionStakeAmount );
     const minimumExhibitionStakeAmount  = useSelector(state => state.common.minimumExhibitionStakeAmount );
-
-    const [amount, setAmount] = useState();
+    const [amount, setAmount] = useState(500);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const refRBSheet = useRef();
@@ -49,7 +48,7 @@ const GameStakingScreen = ({ navigation }) => {
         if(Number.parseFloat(maximumExhibitionStakeAmount) > Number.parseFloat(user.walletBalance)){
             setAmount(user.walletBalance)
         }else{
-            setAmount(Number.parseFloat(maximumExhibitionStakeAmount))
+            setAmount(maximumExhibitionStakeAmount)
         }
     }, [maximumExhibitionStakeAmount, user.walletBalance])
 
