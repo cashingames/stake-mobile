@@ -35,9 +35,12 @@ export default function GameInProgressScreen({ navigation, route }) {
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
     const isPlayingTrivia = useSelector(state => state.game.isPlayingTrivia);
-    const isStaking =  useSelector(state => state.game.amountStaked);
+    const isStaking = useSelector(state => state.game.amountStaked);
     const user = useSelector(state => state.auth.user);
     const isEnded = useSelector(state => state.game.isEnded);
+    const newUser = useSelector(state => state.auth.user.joinedOn);
+    const newUserDate = newUser.slice(0, 10);
+    let formattedDate = new Date().toISOString().split('T')[0];
 
     const openBottomSheet = () => {
         refRBSheet.current.open()
@@ -71,25 +74,31 @@ export default function GameInProgressScreen({ navigation, route }) {
             .then(unwrapResult)
             .then(async () => {
                 crashlytics().log('User completed exhibition game');
+                if(formattedDate !== newUserDate && !isStaking && !isPlayingTrivia){
                 await analytics().logEvent('exhibition_game_completed', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email
                 });
+            };
+                if(formattedDate === newUserDate && !isStaking && !isPlayingTrivia){
+                    await analytics().logEvent('new_user_exhibition', {
+                        'id': user.username,
+                        'phone_number': user.phoneNumber,
+                        'email': user.email
+                    });
+                };
+                if(formattedDate === newUserDate && isStaking){
+                    await analytics().logEvent('new_user_staking_complete', {
+                        'id': user.username,
+                        'phone_number': user.phoneNumber,
+                        'email': user.email
+                    });
+                };
                 dispatch(logActionToServer({
                     message: "Game session " + gameSessionToken + " chosen options for " + user.username,
                     data: chosenOptions
                 }))
-                if(isStaking){
-                    crashlytics().log('User completed staking game');
-                    await analytics().logEvent('staking_game_completed', {
-                        'id': user.username,
-                        'phone_number': user.phoneNumber,
-                        'email': user.email,
-                        'amount_staked': isStaking,
-                        'currency': 'NGN'
-                    });
-                }
                 setEnding(false);
                 if (isPlayingTrivia) {
                     dispatch(setHasPlayedTrivia(true))
@@ -102,7 +111,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                     navigation.navigate('TriviaEndResult', {
                         triviaId: params.triviaId,
                     })
-                } else if(isStaking){
+                } else if (formattedDate !== newUserDate && isStaking) {
                     crashlytics().log('User completed staking game');
                     await analytics().logEvent('staking_game_completed', {
                         'id': user.username,
@@ -115,7 +124,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                 }
 
             })
-            .catch((error,rejectedValueOrSerializedError) => {
+            .catch((error, rejectedValueOrSerializedError) => {
                 crashlytics().recordError(error);
                 crashlytics().log('failed to end exhibition game');
                 setEnding(false);

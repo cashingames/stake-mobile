@@ -35,8 +35,16 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
   const consumedBoosts = useSelector(state => state.game.consumedBoosts);
   const isEnded = useSelector(state => state.game.isEnded);
   const user = useSelector(state => state.auth.user);
-
   const [ending, setEnding] = useState(false);
+  const newUser = useSelector(state => state.auth.user.joinedOn);
+  const newUserDate = newUser.slice(0, 10);
+
+  let date = new Date();
+  let year = date.getFullYear();
+  let month = (date.getMonth() + 1).toString().padStart(2, '0');
+  let day = date.getDate().toString().padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
+
 
   const openBottomSheet = () => {
     refRBSheet.current.open()
@@ -68,9 +76,15 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
       .then(unwrapResult)
       .then(async () => {
         crashlytics().log('User completed challenge game');
-        await analytics().logEvent('challenge_completed', {
-          'action': 'complete'
-        });
+        if (formattedDate !== newUserDate) {
+          await analytics().logEvent('challenge_completed', {
+            'action': 'complete'
+          });
+        } else {
+          await analytics().logEvent('new_user_challenge_completed', {
+            'action': 'complete'
+          });
+        }
         dispatch(logActionToServer({
           message: "Challenge Game session " + gameSessionToken + " chosen options for " + user.username,
           data: chosenOptions
@@ -80,7 +94,7 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
 
       })
       .catch((rejectedValueOrSerializedError) => {
-        crashlytics().recordError(error);
+        crashlytics().recordError();
         crashlytics().log('failed to end challenge game');
         setEnding(false);
         Alert.alert('failed to end game')

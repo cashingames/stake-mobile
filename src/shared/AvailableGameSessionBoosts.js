@@ -42,11 +42,11 @@ const AvailableGameSessionBoosts = () => {
 
     const boostApplied = (data) => {
         dispatch(consumeBoost(data))
-         analytics().logEvent('boost_consumed', {
-                'id': user.username,
-                'boostName': data.name
-            })
         dispatch(reduceBoostCount(data.id))
+        analytics().logEvent('boost_consumed', {
+            'id': user.username,
+            'boostName': data.name
+        })
         const name = data.name.toUpperCase();
         if (name === 'TIME FREEZE') {
             dispatch(pauseGame(true));

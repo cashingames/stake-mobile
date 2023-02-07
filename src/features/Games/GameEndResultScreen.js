@@ -12,21 +12,46 @@ import { getUser } from '../Auth/AuthSlice';
 import analytics from '@react-native-firebase/analytics';
 import StakeWinnings from '../../shared/StakeWinnings';
 import Boostspopup from '../../shared/BoostPopUp';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
-	const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
 	const user = useSelector(state => state.auth.user);
- 	const pointsGained = useSelector(state => state.game.pointsGained);
+	const pointsGained = useSelector(state => state.game.pointsGained);
 	const amountWon = useSelector(state => state.game.amountWon);
 	const withStaking = useSelector(state => state.game.withStaking);
 	const minimumBoostScore = useSelector(state => state.common.minimumBoostScore)
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
 	const [showText, setShowText] = useState(true);
+	const [lastRunDate, setLastRunDate] = useState();
 	const [modalVisible, setModalVisible] = useState(false);
+	const activePlan = useSelector(state => state.auth.user.activePlans);
+	const bonusGame = activePlan?.find((item) => item.name === 'Bonus Games')
+	const newUser = useSelector(state => state.auth.user.joinedOn);
+	const newUserDate = newUser.slice(0, 10);
+	let formattedDate = new Date().toISOString().split('T')[0];
 
+	const checkAndRun = () => {
+		const currentDate = new Date().toLocaleDateString();
+		if (lastRunDate !== currentDate) {
+			if (formattedDate === newUserDate && bonusGame && bonusGame.game_count === 0) {
+				analytics().logEvent('new_user_FG_exhausted', {
+					'id': user.username,
+					'phone_number': user.phoneNumber,
+					'email': user.email
+				});
+			} else {
+				analytics().logEvent('free_game_exhausted', {
+					'id': user.username,
+					'phone_number': user.phoneNumber,
+					'email': user.email
+				});
+			}
+			setLastRunDate(currentDate);
+		}
+	};
 
 	const refRBSheet = useRef();
 
@@ -38,34 +63,36 @@ export default function GameEndResultScreen({ navigation }) {
 		refRBSheet.current.close()
 	}
 
-	const onPlayButtonClick = () => {
+	const onPlayButtonClick = async () => {
 		setLoading(true);
 		analytics().logEvent('exhibition_play_again_clicked', {
 			'id': user.username,
 			'phone_number': user.phoneNumber,
 			'email': user.email
 		});
-		if(!hasActivePlan){
-			analytics().logEvent('game_exhausted', {
+		if (bonusGame && bonusGame.game_count === 2) {
+			analytics().logEvent('two_free_games_left', {
 				'id': user.username,
 				'phone_number': user.phoneNumber,
 				'email': user.email
 			});
-		}
+		};
+		checkAndRun()
 		navigation.navigate("GameInstructions")
 		setLoading(false);
-		
+
 	}
 
-	const onHomeButtonClick = () => {
-		if(!hasActivePlan){
-			analytics().logEvent('game_exhausted', {
+	const onHomeButtonClick = async () => {
+		if (bonusGame && bonusGame.game_count === 2) {
+			analytics().logEvent('two_free_games_left', {
 				'id': user.username,
 				'phone_number': user.phoneNumber,
 				'email': user.email
 			});
-		}
-		navigation.navigate('Home', { showStakingAdvert: !withStaking})
+		};
+		checkAndRun()
+		navigation.navigate('Home', { showStakingAdvert: !withStaking })
 	}
 	useFocusEffect(
 		React.useCallback(() => {
@@ -112,13 +139,13 @@ export default function GameEndResultScreen({ navigation }) {
 	}, []);
 
 	useEffect(() => {
-		if(pointsGained <= minimumBoostScore){
-		  setModalVisible(true)
-		}else{
+		if (pointsGained <= minimumBoostScore) {
+			setModalVisible(true)
+		} else {
 			setModalVisible(false)
 		}
-	  }, [pointsGained])
-	
+	}, [pointsGained])
+
 
 	return (
 
