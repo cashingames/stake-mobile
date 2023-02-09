@@ -185,7 +185,7 @@ function getPaystackKey() {
 function getApiUrl() {
   switch (env) {
     case "local":
-      return 'http://192.168.1.147:8000/api';
+      return 'http://172.20.10.3:8000/api';
     case "development":
     case "preview":
       return 'https://stg-api.cashingames.com/api';

@@ -111,11 +111,21 @@ const TriviaTopLeaders = ({params})=>{
     const {prizePool} = params;
 
     const [isComputing, setIsComputing] = useState(true)
+    const [isNull, setIsNull] = useState(false)
     const [prizeData, setPrizeData] = useState([])
 
     const computePrizePool = ()=>{
         let temp = [];
         let tempPool = prizePool || [];
+
+        // check if all prize type is null
+        const _isNUll = tempPool.every(_val => (_val.prizeType == null));
+        console.log(_isNUll)
+        if(_isNUll){
+            setIsNull(true)
+            setIsComputing(false)
+            return 
+        }
 
         // TODO
         // * optimize sort algorithm
@@ -187,6 +197,10 @@ const TriviaTopLeaders = ({params})=>{
         return null;
     }
     if((prizeData || []).length == 0){
+        return null;
+    }
+
+    if(isNull){
         return null;
     }
     
