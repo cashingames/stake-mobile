@@ -41,7 +41,6 @@ export default function ({ navigation }) {
 
 const GamePlans = ({ user }) => {
     const plans = useSelector(state => state.common.plans);
-
     return (
         <View style={styles.storeItems}>
             <Text style={styles.title}>Buy Games</Text>
@@ -59,13 +58,14 @@ const GamePlans = ({ user }) => {
 const GamePlanCard = ({ plan, user }) => {
     const refRBSheet = useRef();
     const buyGamePlan = async () => {
-        await analytics().logEvent('initiate_game_plan_purchase', {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email,
+        await analytics().logEvent('initiate_plan_purchase', {
+            'transaction_id': user.username,
+            'currency': 'NGN',
+            'value': plan.price,
+            'item_id': user.username,
             'item_name': plan.name,
-            'price': plan.price,
-            'currency': 'NGN'
+            'item_category': 'ecommerce',
+            'price': plan.price
         })
         refRBSheet.current.open()
     }
@@ -116,6 +116,9 @@ const PlanCardDetails = ({ plan }) => {
 const BuyGamePlan = ({ plan, onClose, user }) => {
     const [loading, setLoading] = useState(false);
     const userBalance = useSelector(state => state.auth.user.walletBalance);
+    const newUser = useSelector(state => state.auth.user.joinedOn);
+    const newUserDate = newUser.slice(0, 10);
+    let formattedDate = new Date().toISOString().split('T')[0];
 
     const canPay = Number(userBalance) >= Number(plan.price);
 
@@ -127,14 +130,27 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
         dispatch(buyPlanFromWallet(plan.id))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('game_plan_purchased_successfully', {
-                    'id': user.username,
-                    'phone_number': user.phoneNumber,
-                    'email': user.email,
-                    'item_name': plan.name,
-                    'price': plan.price,
-                    'currency': 'NGN'
-                })
+                if (formattedDate === newUserDate) {
+                    await analytics().logEvent('new_user_plan_purchased', {
+                        'transaction_id': user.username,
+                        'currency': 'NGN',
+                        'value': plan.price,
+                        'item_id': user.username,
+                        'item_name': plan.name,
+                        'item_category': 'ecommerce',
+                        'price': plan.price
+                    })
+                } else {
+                    await analytics().logEvent('plan_purchase', {
+                        'transaction_id': user.username,
+                        'currency': 'NGN',
+                        'value': plan.price,
+                        'item_id': user.username,
+                        'item_name': plan.name,
+                        'item_category': 'ecommerce',
+                        'price': plan.price
+                    })
+                }
             })
             .then(result => {
                 // console.log(result);
@@ -191,12 +207,13 @@ const BoostCard = ({ boost, user }) => {
     const refRBSheet = useRef();
     const buyBoost = async () => {
         await analytics().logEvent('initiate_boost_purchase', {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email,
+            'transaction_id': user.username,
+            'currency': 'NGN',
+            'value': boost.currency_value,
+            'item_id': user.username,
             'item_name': boost.name,
-            'price': boost.price,
-            'currency': 'NGN'
+            'item_category': 'ecommerce',
+            'price': boost.currency_value
         })
 
         refRBSheet.current.open()
@@ -252,7 +269,9 @@ const BoostCardDetails = ({ boost }) => {
 const BuyBoost = ({ boost, onClose, user }) => {
     const [loading, setLoading] = useState(false);
     const userBalance = useSelector(state => state.auth.user.walletBalance);
-
+    const newUser = useSelector(state => state.auth.user.joinedOn);
+    const newUserDate = newUser.slice(0, 10);
+    let formattedDate = new Date().toISOString().split('T')[0];
     const canPay = Number(userBalance) >= Number(boost.currency_value);
 
     const navigation = useNavigation();
@@ -263,21 +282,33 @@ const BuyBoost = ({ boost, onClose, user }) => {
         dispatch(buyBoostFromWallet(boost.id))
             .then(unwrapResult)
             .then(async () => {
-                await analytics().logEvent('boost_purchased_successfully', {
-                    'id': user.username,
-                    'phone_number': user.phoneNumber,
-                    'email': user.email,
-                    'item_name': boost.name,
-                    'price': boost.price,
-                    'currency': 'NGN'
-                })
+                if (formattedDate === newUserDate) {
+                    await analytics().logEvent('new_user_boost_purchased', {
+                        'transaction_id': user.username,
+                        'currency': 'NGN',
+                        'value': boost.currency_value,
+                        'item_id': user.username,
+                        'item_name': boost.name,
+                        'item_category': 'ecommerce',
+                        'price': boost.currency_value
+                    })
+                } else {
+                    await analytics().logEvent('boost_purchase', {
+                        'transaction_id': user.username,
+                        'currency': 'NGN',
+                        'value': boost.currency_value,
+                        'item_id': user.username,
+                        'item_name': boost.name,
+                        'item_category': 'ecommerce',
+                        'price': boost.currency_value
+                    })
+                }
             })
             .then(result => {
                 dispatch(getUser())
                 onClose()
                 navigation.navigate("GameBoostPurchaseSuccessful")
             })
-
             .catch(async rejectedValueOrSerializedError => {
                 setLoading(false);
                 // Alert.alert("Notice", "Operation could not be completed, please try again");

@@ -111,11 +111,21 @@ const TriviaTopLeaders = ({params})=>{
     const {prizePool} = params;
 
     const [isComputing, setIsComputing] = useState(true)
+    const [isNull, setIsNull] = useState(false)
     const [prizeData, setPrizeData] = useState([])
 
     const computePrizePool = ()=>{
         let temp = [];
         let tempPool = prizePool || [];
+
+        // check if all prize type is null
+        const _isNUll = tempPool.every(_val => (_val.prizeType == null));
+        console.log(_isNUll)
+        if(_isNUll){
+            setIsNull(true)
+            setIsComputing(false)
+            return 
+        }
 
         // TODO
         // * optimize sort algorithm
@@ -140,25 +150,27 @@ const TriviaTopLeaders = ({params})=>{
             switch (element.prizeType) {
                 case "MONEY_TO_BANK":
                     prize = "N"
+                    prize = `${prize} ${formatNumber(element.eachPrize)}`;
                     break;
 
                 case "MONEY_TO_WALLET":
                     prize = "N"
+                    prize = `${prize} ${formatNumber(element.eachPrize)}`;
                     break;
 
                 case "PHYSICAL_ITEM":
                     prize = "its"
+                    prize = `${(element.eachPrize)}`;
                     break;
 
                 case "POINTS":
                     prize = "pts"
+                    prize = `${(element.eachPrize)}`;
                     break;
             
                 default:
                     break;
             }
-
-            prize = `${prize} ${formatNumber(element.eachPrize)}`;
 
             temp.push({
                 prize,
@@ -185,6 +197,10 @@ const TriviaTopLeaders = ({params})=>{
         return null;
     }
     if((prizeData || []).length == 0){
+        return null;
+    }
+
+    if(isNull){
         return null;
     }
     
