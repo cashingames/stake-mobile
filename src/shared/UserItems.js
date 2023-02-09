@@ -36,7 +36,7 @@ const UserItems = ({ showBuy }) => {
     // listener to trigger review for google play store
     useEffect(()=>{
         (async()=>{
-            const isReviewed = await PopGoogleReviewLogic(sumOfPlans)
+            const isReviewed = await PopGoogleReviewLogic(sumOfPlans, user.email)
         })()
     }, [sumOfPlans])
 

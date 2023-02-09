@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GOOGLE_REVIEW = "APP::GOOGLE_REVIEW"
 
-export const PopGoogleReviewLogic = async (gameCount)=>{
+export const PopGoogleReviewLogic = async (gameCount, email)=>{
     // check if feature is available on device
     if( !(InAppReview.isAvailable()) ) return false;
 
@@ -15,7 +15,7 @@ export const PopGoogleReviewLogic = async (gameCount)=>{
     if( parseInt(gameCount) !== 0 ) return false;
 
     // check if pop up has been displayed before
-    const hasReviewed = await GetStampReview()
+    const hasReviewed = await GetStampReview(email)
     if(hasReviewed) return false;
 
     // show review :: return true on android
@@ -23,19 +23,19 @@ export const PopGoogleReviewLogic = async (gameCount)=>{
 
     if(isReviewed){
         // store state 
-        await StampReview()
+        await StampReview(email)
 
         return true;
     }else{
         // ios only:: ignore for now
-        await StampReview()
+        await StampReview(email)
 
         return false;
     }
 }
 
-const GetStampReview = async ()=>{
-    const reviewed = await AsyncStorage.getItem(GOOGLE_REVIEW);
+const GetStampReview = async (email)=>{
+    const reviewed = await AsyncStorage.getItem(`${GOOGLE_REVIEW}:${email}`);
 
     if(reviewed == null){
         return false;
@@ -46,8 +46,8 @@ const GetStampReview = async ()=>{
 
 }
 
-const StampReview = async ()=>{
-    await AsyncStorage.setItem(GOOGLE_REVIEW, JSON.stringify({
+const StampReview = async (email)=>{
+    await AsyncStorage.setItem(`${GOOGLE_REVIEW}:${email}`, JSON.stringify({
         hasReview: true,
         date: (new Date()).getTime()
     }))
