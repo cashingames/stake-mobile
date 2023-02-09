@@ -14,7 +14,6 @@ export default function SignupProfileScreen({ navigation }) {
     const dispatch = useDispatch();
 
     const userCredentials = useSelector(state => state.auth.createAccount);
-    // console.log(userCredentials, 'bbbbb')
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -65,19 +64,24 @@ export default function SignupProfileScreen({ navigation }) {
 
     useEffect(() => {
         const nameRule = /\d/;
-        const usernameRule = /\s/;
+        const usernameRule = /^[a-zA-Z][a-zA-Z0-9]+$/;
         const validFirstName = !nameRule.test(firstName)
         const validLastName = !nameRule.test(lastName)
         const validUsername = !usernameRule.test(username)
         setFnameErr(!validFirstName);
         setLnameErr(!validLastName);
-        setUnameErr(!validUsername);
+        if(username){
+            const validUsername = !usernameRule.test(username)
+            setUnameErr(validUsername);
+        }else{
+            setUnameErr('')
+        }
 
         const invalid = fNameErr || firstName === "" || lNameErr || lastName === ""
-            || uNameErr || username === ""
+            || uNameErr || username === "" || username.length < 5
         setCanSend(!invalid);
 
-    }, [firstName, lastName, username])
+    }, [firstName, lastName, username,lNameErr,fNameErr,uNameErr])
 
 
     return (
@@ -111,9 +115,10 @@ export default function SignupProfileScreen({ navigation }) {
 
                 <Input
                     label='Username'
+                    type='text'
                     placeholder="johnDoe"
                     value={username}
-                    error={uNameErr && "Username can't have space or can't be empty"}
+                    error={uNameErr && "Username is invalid. It must start with an alphabet and have more than 2 characters"}
                     onChangeText={setUsername}
                 />
 
