@@ -86,7 +86,7 @@ const LiveTriviaLeaderBoard = (props) => {
             } order={1} name={`LeaderBoard1`}>
                 <Walkthroughable> */}
                     <ResultContainer />
-                    <TriviaTopLeaders params={props.route.params} />
+                    <LiveTriviaPrizes prizePool={props.route.params.prizePool} />
                 {/* </Walkthroughable>
             </CopilotStep> */}
             {/* <TriviaTopLeaders /> */}
@@ -107,100 +107,71 @@ const ResultContainer = () => {
     )
 }
 
-const TriviaTopLeaders = ({params})=>{
-    const {prizePool} = params;
+const LiveTriviaPrizes = ({prizePool = []})=>{
+    
+    let prizeData = [];
 
-    const [isComputing, setIsComputing] = useState(true)
-    const [isNull, setIsNull] = useState(false)
-    const [prizeData, setPrizeData] = useState([])
-
-    const computePrizePool = ()=>{
-        let temp = [];
-        let tempPool = prizePool || [];
-
-        // check if all prize type is null
-        const _isNUll = tempPool.every(_val => (_val.prizeType == null));
-        console.log(_isNUll)
-        if(_isNUll){
-            setIsNull(true)
-            setIsComputing(false)
-            return 
-        }
-
-        // TODO
-        // * optimize sort algorithm
-        
-        // sort pool
-        for(let i = 1 ; i < tempPool.length ; i++){
-            for(let j = i ; j > 0 ; j--){
-                let l1 = tempPool[j];
-                let l2 = tempPool[j - 1];
-                if(l2.rankFrom < l1.rankFrom){
-                    tempPool[j] = l2;
-                    tempPool[j - 1] = l1;
-                }
-            }
-        }
-
-        // extract text into new pool
-        for(let i = 0 ; i < tempPool.length ; i++){
-            let element = tempPool[i];
-            let text = (element.rankFrom == element.rankTo) ? element.rankFrom: `${element.rankFrom} - ${element.rankTo}` ;
-            let prize = "N";
-            switch (element.prizeType) {
-                case "MONEY_TO_BANK":
-                    prize = "N"
-                    prize = `${prize} ${formatNumber(element.eachPrize)}`;
-                    break;
-
-                case "MONEY_TO_WALLET":
-                    prize = "N"
-                    prize = `${prize} ${formatNumber(element.eachPrize)}`;
-                    break;
-
-                case "PHYSICAL_ITEM":
-                    prize = "its"
-                    prize = `${(element.eachPrize)}`;
-                    break;
-
-                case "POINTS":
-                    prize = "pts"
-                    prize = `${(element.eachPrize)}`;
-                    break;
-            
-                default:
-                    break;
-            }
-
-            temp.push({
-                prize,
-                text
-            })
-        }
-        
-        setPrizeData(temp)
-        setIsComputing(false)
+    // check if all prize type is null
+    const _isNUll = prizePool.every(_val => (_val.prizeType == null));
+    if(_isNUll){
+        return null;
     }
 
-    useEffect(()=>{
-        computePrizePool()
-    }, [])
-
-    if(isComputing){
-        return (
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator />
-        </View>)
+    // TODO
+    // * optimize sort algorithm
+    // sort pool
+    for(let i = 1 ; i < prizePool.length ; i++){
+        for(let j = i ; j > 0 ; j--){
+            let l1 = prizePool[j];
+            let l2 = prizePool[j - 1];
+            if(l2.rankFrom < l1.rankFrom){
+                prizePool[j] = l2;
+                prizePool[j - 1] = l1;
+            }
+        }
     }
+
+    // extract text into new pool
+    for(let i = 0 ; i < prizePool.length ; i++){
+        let element = prizePool[i];
+        let text = (element.rankFrom == element.rankTo) ? element.rankFrom: `${element.rankFrom} - ${element.rankTo}` ;
+        let prize = "N";
+        switch (element.prizeType) {
+            case "MONEY_TO_BANK":
+                prize = "N"
+                prize = `${prize} ${formatNumber(element.eachPrize)}`;
+                break;
+
+            case "MONEY_TO_WALLET":
+                prize = "N"
+                prize = `${prize} ${formatNumber(element.eachPrize)}`;
+                break;
+
+            case "PHYSICAL_ITEM":
+                prize = "its"
+                prize = `${(element.eachPrize)}`;
+                break;
+
+            case "POINTS":
+                prize = "pts"
+                prize = `${(element.eachPrize)}`;
+                break;
+        
+            default:
+                break;
+        }
+
+        prizeData.push({
+            prize,
+            text
+        })
+    }
+        
 
     if(prizePool == undefined){
         return null;
     }
     if((prizeData || []).length == 0){
-        return null;
-    }
-
-    if(isNull){
         return null;
     }
     
