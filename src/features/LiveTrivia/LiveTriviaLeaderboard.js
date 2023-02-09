@@ -109,7 +109,6 @@ const ResultContainer = () => {
 
 const LiveTriviaPrizes = ({prizePool = []})=>{
     
-    // const [prizeData, setPrizeData] = useState([])
     let prizeData = [];
 
     // check if all prize type is null
