@@ -119,7 +119,8 @@ const TriviaTopLeaders = ({params})=>{
         let tempPool = prizePool || [];
 
         // check if all prize type is null
-        const _isNUll = [].every(_val => (_val.prizeType == null));
+        const _isNUll = tempPool.every(_val => (_val.prizeType == null));
+        console.log(_isNUll)
         if(_isNUll){
             setIsNull(true)
             setIsComputing(false)
