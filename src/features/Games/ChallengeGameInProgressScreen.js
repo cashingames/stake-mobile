@@ -76,12 +76,12 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
       .then(unwrapResult)
       .then(async () => {
         crashlytics().log('User completed challenge game');
-        if (formattedDate !== newUserDate) {
-          await analytics().logEvent('challenge_completed', {
+        if (formattedDate === newUserDate) {
+          await analytics().logEvent('new_user_challenge_completed', {
             'action': 'complete'
           });
         } else {
-          await analytics().logEvent('new_user_challenge_completed', {
+          await analytics().logEvent('challenge_completed', {
             'action': 'complete'
           });
         }

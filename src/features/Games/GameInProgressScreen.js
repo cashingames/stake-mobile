@@ -82,14 +82,14 @@ export default function GameInProgressScreen({ navigation, route }) {
                 });
             };
                 if(formattedDate === newUserDate && !isStaking && !isPlayingTrivia){
-                    await analytics().logEvent('new_user_exhibition', {
+                    await analytics().logEvent('new_user_exhibition_completed', {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
                         'email': user.email
                     });
                 };
                 if(formattedDate === newUserDate && isStaking){
-                    await analytics().logEvent('new_user_staking_complete', {
+                    await analytics().logEvent('new_user_staking_completed', {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
                         'email': user.email

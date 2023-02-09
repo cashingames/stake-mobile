@@ -146,7 +146,6 @@ export default function GameEndResultScreen({ navigation }) {
 		}
 	}, [pointsGained])
 
-
 	return (
 
 		<ScrollView style={styles.container}>
@@ -166,8 +165,8 @@ export default function GameEndResultScreen({ navigation }) {
 					onPress={onPlayButtonClick}
 					disabled={loading}
 				/>
-				<Boostspopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
 			</View>
+			<Boostspopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
 			<UniversalBottomSheet
 				refBottomSheet={refRBSheet}
 				height={Platform.OS === 'ios' ? 400 : 350}
@@ -321,7 +320,7 @@ const styles = EStyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginBottom: normalize(50)
+		marginBottom: normalize(50),
 	},
 	buttonText: {
 		textAlign: 'center',

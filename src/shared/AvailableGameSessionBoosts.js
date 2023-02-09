@@ -43,7 +43,7 @@ const AvailableGameSessionBoosts = () => {
     const boostApplied = (data) => {
         dispatch(consumeBoost(data))
         dispatch(reduceBoostCount(data.id))
-        analytics().logEvent('boost_consumed', {
+        analytics().logEvent('boost_used', {
             'id': user.username,
             'boostName': data.name
         })

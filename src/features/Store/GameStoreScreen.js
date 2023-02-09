@@ -61,12 +61,11 @@ const GamePlanCard = ({ plan, user }) => {
         await analytics().logEvent('initiate_plan_purchase', {
             'transaction_id': user.username,
             'currency': 'NGN',
-            'value': formatCurrency(plan.price),
-            'items': [{
-                'item_id': user.username,
-                'item_name': plan.name,
-                'item_category': 'game plan',
-            }]
+            'value': plan.price,
+            'item_id': user.username,
+            'item_name': plan.name,
+            'item_category': 'ecommerce',
+            'price': plan.price
         })
         refRBSheet.current.open()
     }
@@ -131,27 +130,25 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
         dispatch(buyPlanFromWallet(plan.id))
             .then(unwrapResult)
             .then(async () => {
-                if (formattedDate !== newUserDate) {
+                if (formattedDate === newUserDate) {
                     await analytics().logEvent('new_user_plan_purchased', {
                         'transaction_id': user.username,
                         'currency': 'NGN',
-                        'value': formatCurrency(plan.price),
-                        'items': [{
-                            'item_id': user.username,
-                            'item_name': plan.name,
-                            'item_category': 'game plan',
-                        }]
+                        'value': plan.price,
+                        'item_id': user.username,
+                        'item_name': plan.name,
+                        'item_category': 'ecommerce',
+                        'price': plan.price
                     })
                 } else {
-                    await analytics().logEvent('purchase', {
+                    await analytics().logEvent('plan_purchase', {
                         'transaction_id': user.username,
                         'currency': 'NGN',
-                        'value': formatCurrency(plan.price),
-                        'items': [{
-                            'item_id': user.username,
-                            'item_name': plan.name,
-                            'item_category': 'game plan',
-                        }]
+                        'value': plan.price,
+                        'item_id': user.username,
+                        'item_name': plan.name,
+                        'item_category': 'ecommerce',
+                        'price': plan.price
                     })
                 }
             })
@@ -212,12 +209,11 @@ const BoostCard = ({ boost, user }) => {
         await analytics().logEvent('initiate_boost_purchase', {
             'transaction_id': user.username,
             'currency': 'NGN',
-            'value': formatCurrency(boost.currency_value),
-            'items': [{
-                'item_id': user.username,
-                'item_name': boost.name,
-                'item_category': 'game boost',
-            }]
+            'value': boost.currency_value,
+            'item_id': user.username,
+            'item_name': boost.name,
+            'item_category': 'ecommerce',
+            'price': boost.currency_value
         })
 
         refRBSheet.current.open()
@@ -290,23 +286,21 @@ const BuyBoost = ({ boost, onClose, user }) => {
                     await analytics().logEvent('new_user_boost_purchased', {
                         'transaction_id': user.username,
                         'currency': 'NGN',
-                        'value': formatCurrency(boost.currency_value),
-                        'items': [{
-                            'item_id': user.username,
-                            'item_name': boost.name,
-                            'item_category': 'game boost',
-                        }]
+                        'value': boost.currency_value,
+                        'item_id': user.username,
+                        'item_name': boost.name,
+                        'item_category': 'ecommerce',
+                        'price': boost.currency_value
                     })
                 } else {
-                    await analytics().logEvent('purchase', {
+                    await analytics().logEvent('boost_purchase', {
                         'transaction_id': user.username,
                         'currency': 'NGN',
-                        'value': formatCurrency(boost.currency_value),
-                        'items': [{
-                            'item_id': user.username,
-                            'item_name': boost.name,
-                            'item_category': 'game boost',
-                        }]
+                        'value': boost.currency_value,
+                        'item_id': user.username,
+                        'item_name': boost.name,
+                        'item_category': 'ecommerce',
+                        'price': boost.currency_value
                     })
                 }
             })
