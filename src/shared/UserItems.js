@@ -8,6 +8,7 @@ import { formatNumber } from '../utils/stringUtl';
 import normalize from "../utils/normalize";
 import Animated, { BounceInLeft } from "react-native-reanimated";
 import analytics from '@react-native-firebase/analytics';
+import { PopGoogleReviewLogic } from "./GoogleReview";
 
 
 const UserItems = ({ showBuy }) => {
@@ -31,6 +32,13 @@ const UserItems = ({ showBuy }) => {
         setBboostsString(boostResult?.length > 0 ? boostResult : "You have no boosts");
 
     }, [boosts, plans]);
+
+    // listener to trigger review for google play store
+    useEffect(()=>{
+        (async()=>{
+            const isReviewed = await PopGoogleReviewLogic(sumOfPlans)
+        })()
+    }, [sumOfPlans])
 
 
     const buyMore = async () => {
