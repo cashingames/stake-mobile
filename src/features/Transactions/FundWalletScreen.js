@@ -30,11 +30,12 @@ export default function FundWalletScreen() {
   const transactionCompleted = async (res) => {
     // verifyFunding(res.reference); for local testing
     await analytics().logEvent('wallet_funding_successfully', {
-      'id': user.username,
-      'phone_number': user.phoneNumber,
-      'email': user.email,
+      'product_id': user.username,
+      'item_name': 'Wallet Funding',
       'currency': 'NGN',
-      'amount_funded': amount
+      'value': formatCurrency(amount),
+      'phone_number': user.phoneNumber,
+      'email': user.email
     });
     dispatch(getUser());
     setShowPayment(false);
@@ -43,7 +44,10 @@ export default function FundWalletScreen() {
 
   const startPayment = async () => {
     await analytics().logEvent('funding_wallet_initiated', {
-      'id': user.username,
+      'product_id': user.username,
+      'item_name': 'Wallet Funding',
+      'currency': 'NGN',
+      'value': formatCurrency(amount),
       'phone_number': user.phoneNumber,
       'email': user.email
     });
