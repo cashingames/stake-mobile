@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import { Button, Pressable, View, Image, Platform, ActivityIndicator } from 'react-native';
+import { Button, Pressable, View, Image, Platform, ActivityIndicator, Alert } from 'react-native';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -130,9 +130,6 @@ export default function SocialSignUp({ googleText }) {
                             setloading(false)
                             // navigation.navigate('AppRouter')
                         })
-                        .catch((rejectedValueOrSerializedError) => {
-                            // console.log(rejectedValueOrSerializedError)
-                        })
                 })
         }
     }, [response]);
@@ -174,6 +171,7 @@ export default function SocialSignUp({ googleText }) {
                     onChangReferrer={onChangReferrer}
                     canSave={canSave}
                     saving={saving}
+                    setUsernameError={setUsernameError}
                 />}
             />
         </>
