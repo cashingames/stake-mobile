@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { unwrapResult } from '@reduxjs/toolkit';
 import React, { useState, useEffect } from 'react';
 import { useRef } from 'react';
-import { ActivityIndicator, Pressable, View, Platform, Image, Text } from 'react-native';
+import { ActivityIndicator, Pressable, View, Platform, Image, Text, Alert } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { AccessToken, GraphRequest, GraphRequestManager, LoginManager, Profile } from 'react-native-fbsdk-next';
 import { useDispatch } from 'react-redux';
@@ -184,6 +184,7 @@ const Login = ({ text }) => {
           onChangReferrer={onChangReferrer}
           canSave={canSave}
           saving={saving}
+          setUsernameError={setUsernameError}
         />}
       />
     </>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import normalize from "../utils/normalize";
@@ -12,8 +13,19 @@ const FirstTimeUserDetails = ({ onPress,
     phoneNumberErr, onChangePhoneNumber,
     onChangeUserName, usernameErr,
     onChangReferrer,
-    canSave, saving
+    canSave, saving,setUsernameError
 }) => {
+
+    useEffect(() => {
+        const usernameRule = /^[a-zA-Z][a-zA-Z0-9]+$/;
+        if(username){
+            const validUsername = !usernameRule.test(username)
+            setUsernameError(validUsername);
+        }else{
+            setUsernameError('')
+        }
+    }, [ username, usernameErr, setUsernameError])
+
     return (
         <View style={styles.inputContainer}>
             <Text style={styles.inputText}>Please input your details</Text>
@@ -22,7 +34,7 @@ const FirstTimeUserDetails = ({ onPress,
                     label='Username'
                     placeholder="John"
                     value={username}
-                    error={usernameErr && '*username must not be empty'}
+                    error={usernameErr && '*Username is invalid. It must start with an alphabet and have more than 2 characters'}
                     onChangeText={text => onChangeUserName(text)}
                 />
 

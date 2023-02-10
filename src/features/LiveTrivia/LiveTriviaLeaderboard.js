@@ -39,39 +39,6 @@ const LiveTriviaLeaderBoard = (props) => {
         )).then(() => setLoading(false));
     }, [])
 
-    // tour
-    // useEffect(()=>{
-    //     setTimeout(()=>{
-    //         if((isTourActive?.payload || isTourActive) && (!loading) ){
-    //             // tourStart(7)
-    //             // setForceRender(!forceRender);
-    //             // console.log(canStart, 7)
-                
-    //             console.log('reach11')
-    //             CopilotProps.start()
-    //             CopilotProps.copilotEvents.on('stop', handleTourStop)
-
-    //             // eventEmitter.on('stop', handleTourStop)
-    
-    //             return () => {
-    //                 // eventEmitter.off('stop', handleTourStop)
-    //                 CopilotProps.copilotEvents.off('stop', handleTourStop)
-    //             }
-    //         }else{
-    //             // console.log(AppTourStep)
-    //             // AppTour.start();
-    //             // AppTour.stop();
-    //         }
-    //     }, 1000)
-    // }, [isTourActive, loading])
-
-    // const handleTourStop = ()=>{
-    //     console.log("tour stopped, going to next screen to continue....")
-    //     navigation.navigate("Invite")
-    // }
-
-
-
     if (loading) {
         return <PageLoading backgroundColor='#072169' spinnerColor="#FFFF" />
     }
@@ -86,7 +53,7 @@ const LiveTriviaLeaderBoard = (props) => {
             } order={1} name={`LeaderBoard1`}>
                 <Walkthroughable> */}
                     <ResultContainer />
-                    <LiveTriviaPrizes prizePool={props.route.params.prizePool} />
+                    <LiveTriviaPrizes prizePool={props.route.params.prizePool} prizeType={props.route.params.prizeType}  />
                 {/* </Walkthroughable>
             </CopilotStep> */}
             {/* <TriviaTopLeaders /> */}
@@ -107,12 +74,13 @@ const ResultContainer = () => {
     )
 }
 
-const LiveTriviaPrizes = ({prizePool = []})=>{
+const LiveTriviaPrizes = ({prizePool = [], prizeType})=>{
     
     let prizeData = [];
 
     // check if all prize type is null
-    const _isNUll = prizePool.every(_val => (_val.prizeType == null));
+    // const _isNUll = prizePool.every(_val => (_val.prizeType == null));
+    const _isNUll = (prizeType == null);
     if(_isNUll){
         return null;
     }
@@ -136,7 +104,7 @@ const LiveTriviaPrizes = ({prizePool = []})=>{
         let element = prizePool[i];
         let text = (element.rankFrom == element.rankTo) ? element.rankFrom: `${element.rankFrom} - ${element.rankTo}` ;
         let prize = "N";
-        switch (element.prizeType) {
+        switch (prizeType) {
             case "MONEY_TO_BANK":
                 prize = "N"
                 prize = `${prize} ${formatNumber(element.eachPrize)}`;
