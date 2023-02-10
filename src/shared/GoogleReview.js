@@ -6,6 +6,7 @@ const GOOGLE_REVIEW = "APP::GOOGLE_REVIEW"
 
 export const PopGoogleReviewLogic = async (gameCount, email)=>{
     // check if feature is available on device
+    console.log(InAppReview.isAvailable(), "isAvailableForInAppReview")
     if( !(InAppReview.isAvailable()) ) return false;
 
     // check if platform is android
