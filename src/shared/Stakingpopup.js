@@ -174,7 +174,7 @@ const styles = EStyleSheet.create({
         borderRadius: 10,
         borderColor: '#66142E',
         borderWidth: 1,
-        top: normalize(12),
+        top: Platform.OS === 'ios' ? 0 : normalize(12),
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
