@@ -37,6 +37,7 @@ const UserItems = ({ showBuy }) => {
     useEffect(()=>{
         (async()=>{
             // commented out, so GA rating wont pop-up yet
+            // this is the trigger
             // const isReviewed = await PopGoogleReviewLogic(sumOfPlans, user.email)
         })()
     }, [sumOfPlans])
