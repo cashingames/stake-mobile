@@ -180,7 +180,7 @@ const styles = EStyleSheet.create({
         borderColor: '#66142E',
         borderWidth: 1,
         paddingHorizontal: '1.5rem',
-        top: normalize(12),
+        top: Platform.OS === 'ios' ? 0 : normalize(12),
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
