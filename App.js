@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Dimensions, PixelRatio, Text } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
@@ -11,6 +11,9 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 import Toast from 'react-native-toast-message';
+
+import { requestTrackingPermissionsAsync, getTrackingPermissionsAsync } from 'expo-tracking-transparency';
+
 
 import store from './src/store';
 import AppRouter from './src/AppRouter';
@@ -76,6 +79,15 @@ const linking = {
 
 
 function App() {
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await requestTrackingPermissionsAsync();
+      if (status === 'granted') {
+        console.log('Yay! I have user permission to track data');
+      }
+    })();
+  }, []);
 
   const routeNameRef = useRef();
   const navigationRef = useNavigationContainerRef();
