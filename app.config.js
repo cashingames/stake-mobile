@@ -79,16 +79,6 @@ export default {
         "appID": "401438355501146",
         "clientToken": "9762cebc572b557561423a9d6b1d9000",
         "displayName": "Cashingames",
-        "advertiserIDCollectionEnabled": false,
-        "autoLogAppEventsEnabled": false,
-        "isAutoInitEnabled": true,
-        "iosUserTrackingPermission": "This identifier will be used to deliver personalized ads to you."
-      }
-    ],
-    [
-      "expo-tracking-transparency",
-      {
-        "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
       }
     ]
   ],

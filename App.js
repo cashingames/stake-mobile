@@ -12,7 +12,8 @@ import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 import Toast from 'react-native-toast-message';
 
-import { requestTrackingPermissionsAsync, getTrackingPermissionsAsync } from 'expo-tracking-transparency';
+import { Settings } from 'react-native-fbsdk-next';
+// import { requestTrackingPermissionsAsync, getTrackingPermissionsAsync } from 'expo-tracking-transparency';
 
 
 import store from './src/store';
@@ -81,12 +82,14 @@ const linking = {
 function App() {
 
   useEffect(() => {
-    (async () => {
-      const { status } = await requestTrackingPermissionsAsync();
-      if (status === 'granted') {
-        console.log('Yay! I have user permission to track data');
-      }
-    })();
+    Settings.initializeSDK();
+    
+  //   (async () => {
+  //     const { status } = await requestTrackingPermissionsAsync();
+  //     if (status === 'granted') {
+  //       console.log('Yay! I have user permission to track data');
+  //     }
+  //   })();
   }, []);
 
   const routeNameRef = useRef();
