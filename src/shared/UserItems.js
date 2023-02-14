@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
