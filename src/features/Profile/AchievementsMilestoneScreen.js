@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { LinearGradient } from 'expo-linear-gradient';
-import AppButton from '../../shared/AppButton';
 
 
 
@@ -16,10 +15,11 @@ export default function AchievementsMilestoneScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const achievements = useSelector(state => state.common.achievements);
-    const user = useSelector(state => state.auth.user);
+    // const user = useSelector(state => state.auth.user);
 
-    const nextLevel = achievements.find(item => item.point_milestone > user.points);
-    const nextLevelProgress = user.points / nextLevel.point_milestone;
+    const nextLevel = achievements.find(item => item.point_milestone > 100);
+    const nextLevelProgress = 60 / 60;
+    const nextLevelProgress2 = 10 / 60;
 
     return (
         <LinearGradient
@@ -32,29 +32,29 @@ export default function AchievementsMilestoneScreen({ navigation }) {
         >
             <ScrollView >
                 <View style={styles.content}>
-                    <MilestoneStatus milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
-                        pointsProgress={`${formatNumber(user.points)}/${formatNumber(nextLevel.point_milestone)}`}
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
                         milestoneName={`${nextLevel.title}`}
                         progress={nextLevelProgress}
+                        points={100}
                     />
-                    <MilestoneStatus milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
-                        pointsProgress={`${formatNumber(user.points)}/${formatNumber(nextLevel.point_milestone)}`}
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
                         milestoneName={`${nextLevel.title}`}
-                        progress={nextLevelProgress}
+                        progress={nextLevelProgress2}
+                        points={10}
                     />
-                    {/* <View style={styles.cards}>
-                    {achievements.map((achievement, i) => <AchievementCard key={i} userPoint={user.points} achievement={achievement} />)}
-                </View> */}
                 </View>
             </ScrollView>
         </LinearGradient>
     );
 }
 
-const MilestoneStatus = ({ milestoneIcon, pointsProgress, milestoneName, progress }) => {
-
+const Badges = ({ milestoneIcon, points, progress }) => {
+    const disabled = points === 100
     return (
-        <View style={styles.status}>
+        <>
+        <View style={[styles.status, { opacity: disabled? 0.4 : 1}, {backgroundColor: disabled ? '#D9D9D9' : '' } ]}>
             <Image
                 source={milestoneIcon}
                 style={styles.milestoneIcon}
@@ -67,47 +67,18 @@ const MilestoneStatus = ({ milestoneIcon, pointsProgress, milestoneName, progres
                 <LinearProgress
                     color='#EF2F55'
                     value={progress}
-                    // trackColor='#F0BACB'
+                    trackColor='#F0BACB'
                     variant="determinate"
                     style={styles.progressBar}
                 />
                 <Pressable style={styles.btn}>
-                    <Text style={styles.reward}>Get 60pts</Text>
+                    <Text style={styles.reward}>{disabled ? 'Earned' : 'Get 60pts'}</Text>
                 </Pressable>
             </View>
         </View>
+        </>
     )
 }
-
-const AchievementCard = ({ achievement, userPoint, }) => {
-
-    const disabled = userPoint < achievement.point_milestone;
-
-
-    return (
-        <View style={styles.cardContainer}>
-            <View
-                style={[styles.card, { opacity: disabled ? 0.5 : 1 }, { backgroundColor: disabled ? '#C4C4C4' : '#FFFF' }]} disabled={disabled}>
-                <Image
-                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${achievement.medal}` }}
-                    style={styles.icon}
-                />
-                <Text style={styles.name}>{achievement.title}</Text>
-                <Text style={styles.point}>{formatNumber(achievement.point_milestone)}</Text>
-
-                {disabled ?
-                    <Image
-                        source={require('../../../assets/images/padlock.png')}
-                        style={styles.padlock}
-                    />
-                    :
-                    <Text style={styles.unlocked}>Unlocked</Text>
-                }
-            </View>
-        </View>
-    )
-}
-
 
 
 const styles = EStyleSheet.create({
@@ -168,7 +139,7 @@ const styles = EStyleSheet.create({
     },
     progressBar: {
         width: 66,
-        height: 8,
+        height: 10,
         borderRadius: 16
     },
     btn: {
