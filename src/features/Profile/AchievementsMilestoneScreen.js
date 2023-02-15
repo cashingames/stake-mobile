@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
@@ -7,6 +7,8 @@ import { LinearProgress } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import { LinearGradient } from 'expo-linear-gradient';
+import AppButton from '../../shared/AppButton';
 
 
 
@@ -20,18 +22,32 @@ export default function AchievementsMilestoneScreen({ navigation }) {
     const nextLevelProgress = user.points / nextLevel.point_milestone;
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.content}>
-                <MilestoneStatus milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
-                    pointsProgress={`${formatNumber(user.points)}/${formatNumber(nextLevel.point_milestone)}`}
-                    milestoneName={`${nextLevel.title}`}
-                    progress={nextLevelProgress}
-                />
-                <View style={styles.cards}>
+        <LinearGradient
+            colors={['rgb(255, 254, 250)', 'rgb(255, 251, 237)',
+                'rgb(250, 197, 2)',
+            ]}
+            start={[0.5, 0]}
+            end={[0.5, 1]}
+            style={styles.container}
+        >
+            <ScrollView >
+                <View style={styles.content}>
+                    <MilestoneStatus milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(user.points)}/${formatNumber(nextLevel.point_milestone)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress}
+                    />
+                    <MilestoneStatus milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(user.points)}/${formatNumber(nextLevel.point_milestone)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress}
+                    />
+                    {/* <View style={styles.cards}>
                     {achievements.map((achievement, i) => <AchievementCard key={i} userPoint={user.points} achievement={achievement} />)}
+                </View> */}
                 </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </LinearGradient>
     );
 }
 
@@ -39,20 +55,26 @@ const MilestoneStatus = ({ milestoneIcon, pointsProgress, milestoneName, progres
 
     return (
         <View style={styles.status}>
-            <View>
-                <LinearProgress 
-                color='#EF2F55'
-                value = {progress}
-                trackColor='#F0BACB'
-                variant= "determinate"
-                style= {styles.progressBar}
-                 />
-                <Text style={styles.statusText}>{pointsProgress} points to Unlock {milestoneName}</Text>
-            </View>
             <Image
                 source={milestoneIcon}
                 style={styles.milestoneIcon}
             />
+            <View style={styles.details}>
+                <Text style={styles.detailsTitle}>Good Starter</Text>
+                <Text style={styles.detailsDesc}>Exhaust all 5 daily free games at a go</Text>
+            </View>
+            <View>
+                <LinearProgress
+                    color='#EF2F55'
+                    value={progress}
+                    // trackColor='#F0BACB'
+                    variant="determinate"
+                    style={styles.progressBar}
+                />
+                <Pressable style={styles.btn}>
+                    <Text style={styles.reward}>Get 60pts</Text>
+                </Pressable>
+            </View>
         </View>
     )
 }
@@ -90,7 +112,7 @@ const AchievementCard = ({ achievement, userPoint, }) => {
 
 const styles = EStyleSheet.create({
     container: {
-        backgroundColor: '#F2F5FF',
+        flex: 1
     },
     content: {
         marginHorizontal: normalize(18),
@@ -103,31 +125,19 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#FFFF',
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: '#D9D9D9',
         paddingVertical: normalize(14),
         paddingHorizontal: normalize(10),
-        borderRadius: 11
-    },
-    cards: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        marginVertical: normalize(35)
-    },
-    cardContainer: {
-        flexDirection: 'column',
-        alignItems: 'center'
-    },
-    card: {
-        alignItems: 'center',
-        width: responsiveScreenWidth(41),
-        marginBottom: normalize(20),
-        height: responsiveScreenHeight(30),
         borderRadius: 11,
-        borderWidth: 1,
-        backgroundColor: '#FFFF',
-        borderColor: '#E0E0E0',
+        marginVertical: normalize(14),
+    },
+    detailsTitle: {
+        fontSize: '1rem',
+        fontFamily: 'graphik-medium',
+        textAlign: 'center',
+        lineHeight: '2rem'
     },
     statusText: {
         fontSize: '0.69rem',
@@ -136,28 +146,16 @@ const styles = EStyleSheet.create({
         color: 'black',
         opacity: 0.6
     },
-    icon: {
-        width: normalize(70),
-        height: normalize(70),
-        marginTop: normalize(20),
-    },
-    name: {
+    detailsDesc: {
         fontSize: '0.69rem',
-        marginVertical: normalize(10),
-        fontFamily: 'graphik-medium',
-        color: '#EB5757',
-    },
-    point: {
-        borderTopWidth: 1,
-        borderTopColor: '#828282',
-        fontSize: '0.76rem',
-        marginVertical: normalize(10),
-        fontFamily: 'graphik-medium',
-        color: '#151C2F',
+        fontFamily: 'graphik-regular',
+        textAlign: 'center',
+        width: '11rem',
+        lineHeight: '1rem'
     },
     milestoneIcon: {
-        width: normalize(40),
-        height: normalize(40),
+        width: normalize(60),
+        height: normalize(60),
     },
     unlocked: {
         fontSize: '0.69rem',
@@ -169,8 +167,22 @@ const styles = EStyleSheet.create({
         height: normalize(35)
     },
     progressBar: {
-        width: 124,
-        height:8,
+        width: 66,
+        height: 8,
         borderRadius: 16
+    },
+    btn: {
+        height: 22,
+        width: 66,
+        backgroundColor: '#752A00',
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: '0.4rem'
+    },
+    reward: {
+        color: '#fff',
+        fontSize: '0.69rem',
+        fontFamily: 'graphik-regular',
     }
 });

@@ -32,7 +32,7 @@ export default function GameEndResultScreen({ navigation }) {
 	const newUser = useSelector(state => state.auth.user.joinedOn);
 	const newUserDate = newUser.slice(0, 10);
 	let formattedDate = new Date().toISOString().split('T')[0];
-
+console.log(user)
 	const checkAndRun = () => {
 		const currentDate = new Date().toLocaleDateString();
 		if (lastRunDate !== currentDate) {
