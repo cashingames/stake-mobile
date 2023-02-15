@@ -84,7 +84,6 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
         }))
             .then(unwrapResult)
             .then(async response => {
-                triggerTour(navigation)
                 await analytics().logEvent("verified_phone_number", {
                     'id': params.username,
                     'phone_number': params.phone_number,
