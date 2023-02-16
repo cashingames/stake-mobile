@@ -116,12 +116,6 @@ export const getGameStakes = createAsyncThunk(
     }
 )
 
-export const canStake = async (data) => {
-    return axios.post('v3/game/can-stake-in-game', data);
-
-}
-
-
 
 //This is to store the currently ongoing active game
 let initialState = {
