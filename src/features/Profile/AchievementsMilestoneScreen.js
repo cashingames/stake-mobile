@@ -44,6 +44,96 @@ export default function AchievementsMilestoneScreen({ navigation }) {
                         progress={nextLevelProgress2}
                         points={10}
                     />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={100}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
                 </View>
             </ScrollView>
         </LinearGradient>
