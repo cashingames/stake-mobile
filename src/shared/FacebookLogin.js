@@ -108,7 +108,6 @@ const Login = ({ text }) => {
           email: userProfile.email
         })).then(unwrapResult)          
         .then((originalPromiseResult) => {
-          console.log(originalPromiseResult)
           if (originalPromiseResult.data.isFirstTime) {
             setEmail(originalPromiseResult.data.email)
             setFirstName(originalPromiseResult.data.firstName)
@@ -121,12 +120,15 @@ const Login = ({ text }) => {
           setLoading(false)
           // navigation.navigate('AppRouter')
         })
+        .catch((error) => {
+          Alert.alert('Network error. Please, try again later.')
+          setLoading(false)
+        })
         await analytics().logEvent('signin_with_facebook', {
           'id': userProfile.first_name,
           'email': userProfile.email
       })
-
-    } catch (error) {
+    } catch(error) {
       logout()
       setLoginError(true)
       setLoading(false)

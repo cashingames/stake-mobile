@@ -51,6 +51,10 @@ export const registerWithSocialLink = createAsyncThunk(
     }
 )
 
+export const googleSignUp = async (data) => {
+    return axios.post('/auth/social-login/create-account', data)
+}
+
 export const logoutUser = createAsyncThunk(
     'auth/logoutUser',
     async (data, thunkAPI) => {
