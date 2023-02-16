@@ -1,8 +1,10 @@
 import React, { useRef, useState } from "react";
-import { Text, View, ScrollView, Alert, Platform } from 'react-native';
+import { Base64 } from "js-base64";
+import { Text, View, ScrollView, Alert, Platform , Linking} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
+import Constants from 'expo-constants';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { startGame, setIsPlayingTrivia, startChallengeGame } from "./GameSlice";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
@@ -23,6 +25,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 export default function GameInstructionsScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
 
+  const token = useSelector(state => state.auth.token);
   const gameMode = useSelector(state => state.game.gameMode);
   const user = useSelector(state => state.auth.user);
   const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
@@ -35,12 +38,21 @@ export default function GameInstructionsScreen({ navigation }) {
   const refRBSheet = useRef();
 
   const gotoStaking = async () => {
-    await analytics().logEvent('initiate_exhibition_staking', {
+    await analytics().logEvent('navigating_to_staking_platform', {
       'id': user.username,
       'phone_number': user.phoneNumber,
       'email': user.email
     })
-    navigation.navigate("GameStaking")
+    handleStakingNavigation(`${Constants.manifest.extra.stakingAppUrl}/${Base64.encode(token)}`);
+  }
+
+  const handleStakingNavigation = async (url) => {
+    const isValidUrl = await Linking.canOpenURL(url);
+    if (isValidUrl) {
+      await Linking.openURL(url);
+    } else {
+      console.log(`This url is not valid: ${url}`);
+    }
   }
 
   const openBottomSheet = async () => {
