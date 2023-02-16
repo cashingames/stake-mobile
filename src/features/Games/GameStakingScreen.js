@@ -7,7 +7,7 @@ import normalize from "../../utils/normalize";
 import { useNavigation } from '@react-navigation/native';
 import Input from "../../shared/Input";
 import AppButton from "../../shared/AppButton";
-import { canStake, getGameStakes, setIsPlayingTrivia, startGame } from "./GameSlice";
+import { getGameStakes, setAmountStaked, setIsPlayingTrivia, startGame } from "./GameSlice";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import { getUser } from "../Auth/AuthSlice";
 import { logActionToServer } from "../CommonSlice";
@@ -23,8 +23,8 @@ const GameStakingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
-    const maximumExhibitionStakeAmount  = useSelector(state => state.common.maximumExhibitionStakeAmount );
-    const minimumExhibitionStakeAmount  = useSelector(state => state.common.minimumExhibitionStakeAmount );
+    const maximumExhibitionStakeAmount = useSelector(state => state.common.maximumExhibitionStakeAmount);
+    const minimumExhibitionStakeAmount = useSelector(state => state.common.minimumExhibitionStakeAmount);
     const [amount, setAmount] = useState(500);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
@@ -45,23 +45,23 @@ const GameStakingScreen = ({ navigation }) => {
     }, [])
 
     useEffect(() => {
-        if(Number.parseFloat(maximumExhibitionStakeAmount) > Number.parseFloat(user.walletBalance)){
+        if (Number.parseFloat(maximumExhibitionStakeAmount) > Number.parseFloat(user.walletBalance)) {
             setAmount(user.walletBalance)
-        }else{
+        } else {
             setAmount(maximumExhibitionStakeAmount)
         }
     }, [maximumExhibitionStakeAmount, user.walletBalance])
 
-    const startGame = async () => {
+    const validate = async () => {
         setLoading(true);
-        if (Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount )) {
-            Alert.alert(`Minimum stake amount is ${minimumExhibitionStakeAmount } naira`);
+        if (Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount)) {
+            Alert.alert(`Minimum stake amount is ${minimumExhibitionStakeAmount} naira`);
             setLoading(false);
             return false;
         }
 
-        if (Number.parseFloat(amount) > Number.parseFloat(maximumExhibitionStakeAmount )) {
-            Alert.alert(`Maximum stake amount is ${maximumExhibitionStakeAmount } naira`);
+        if (Number.parseFloat(amount) > Number.parseFloat(maximumExhibitionStakeAmount)) {
+            Alert.alert(`Maximum stake amount is ${maximumExhibitionStakeAmount} naira`);
             setLoading(false);
             return false;
         }
@@ -75,33 +75,29 @@ const GameStakingScreen = ({ navigation }) => {
             setLoading(false);
             return
         }
-
-
-        canStake({ staking_amount: amount })
-            .then(async response => {
-                await analytics().logEvent('exhibition_staking_initiated', {
-                    'id': user.username,
-                    'phone_number': user.phoneNumber,
-                    'email': user.email
-                });
-                openBottomSheet();
-                setLoading(false);
-            },
-
-                err => {
-                    if (!err || !err.response || err.response === undefined) {
-                        Alert.alert("Your Network is Offline.");
-                        setLoading(false);
-                    }
-                    else if (err.response.status === 400) {
-                        Alert.alert(err.response.data.message);
-                        setLoading(false);
-
-                    }
-                }
-            )
+        return true
     }
 
+    const proceed = (amount) => {
+        dispatch(setAmountStaked(amount))
+        if(Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount) || Number.parseFloat(amount) > Number.parseFloat(maximumExhibitionStakeAmount)){
+            closeBottomSheet()
+        }else{
+            openBottomSheet()
+        }
+    }
+
+    const submit = () => {
+        if (validate()) {
+            analytics().logEvent('exhibition_staking_initiated', {
+                'id': user.username,
+                'phone_number': user.phoneNumber,
+                'email': user.email
+            });
+            proceed(amount);
+            setLoading(false);
+        }
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -119,7 +115,7 @@ const GameStakingScreen = ({ navigation }) => {
                 />
             </View>
             <View style={styles.buttonContainer}>
-                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={startGame} disabled={loading} />
+                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={submit} disabled={loading} />
             </View>
             <View style={styles.stakeContainer}>
                 <Text style={styles.stakeHeading}>Predictions Table</Text>
@@ -137,10 +133,10 @@ const GameStakingScreen = ({ navigation }) => {
                     refBottomSheet={refRBSheet}
                     height={620}
                     subComponent={
-                    <LowWalletBalance 
-                    onClose={closeBottomSheet}
-                    errorDescription="You do not have enough balance to stake this amount"
-                     />}
+                        <LowWalletBalance
+                            onClose={closeBottomSheet}
+                            errorDescription="You do not have enough balance to stake this amount"
+                        />}
                 />
                 :
                 <UniversalBottomSheet
