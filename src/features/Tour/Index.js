@@ -185,13 +185,19 @@ export const triggerTour = (navigation)=>{
         Alert.alert("Need a Tour ?", "", [
             {
                 text: "I'm Good",
-                style: 'cancel'
+                style: 'cancel',
+                onPress: async () => {
+                  await analytics().logEvent('new_user_tour_ended', {
+                    'id': user.username,
+                    'email': user.email
+                })
+              }
             },
             {
                 text: "Sure",
                 style: "default",
                 onPress: async () => {
-                  await analytics().logEvent('tour_started', {
+                  await analytics().logEvent('new_user_tour_started', {
                     'id': user.username,
                     'email': user.email
                 })
