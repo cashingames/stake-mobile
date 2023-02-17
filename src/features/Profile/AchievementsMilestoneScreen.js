@@ -144,7 +144,7 @@ const Badges = ({ milestoneIcon, points, progress }) => {
     const disabled = points === 100
     return (
         <>
-        <View style={[styles.status, { opacity: disabled? 0.4 : 1} ]}>
+        <View style={[styles.status, { opacity: disabled? 0.4 : 1}]}>
             <Image
                 source={milestoneIcon}
                 style={styles.milestoneIcon}

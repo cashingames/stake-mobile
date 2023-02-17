@@ -15,7 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import Constants from "expo-constants";
 import normalize from '../utils/normalize';
 import UniversalBottomSheet from './UniversalBottomSheet';
-import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/AuthSlice';
+import { googleSignUp, loginWithSocialLink } from '../features/Auth/AuthSlice';
 import PageLoading from './PageLoading';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import { triggerTour } from '../features/Tour/Index';
@@ -67,21 +67,29 @@ export default function SocialSignUp({ googleText }) {
     const registerUserWithGoogle = () => {
         console.log('here')
         setSaving(true);
-        dispatch(registerWithSocialLink({
+        googleSignUp({
             email,
             firstName,
             lastName,
             phone_number,
             username,
             referrer
-        })).then(unwrapResult)
-            .then((originalPromiseResult) => {
+        }).then((response) => {
                 triggerTour(navigation)
-                console.log(originalPromiseResult, 'hitting');
-                saveToken(originalPromiseResult.data.token)
+                saveToken(response.data.data)
                 closeBottomSheet()
                 navigation.navigate('AppRouter')
                 setSaving(false)
+            })
+            .catch((error) => {
+                const errors = error.response && error.response.data && error.response.data.errors;
+                const firstError = Object.values(errors)[0][0]
+                Alert.alert(firstError)
+                setReferrer('')
+                setUsername('')
+                setPhoneNumber('')
+                setSaving(false)
+                closeBottomSheet()
             })
     }
 
@@ -124,11 +132,14 @@ export default function SocialSignUp({ googleText }) {
                                 openBottomSheet()
                                 return
                             }
-
                             console.log(originalPromiseResult);
                             saveToken(originalPromiseResult.data.token)
                             setloading(false)
                             // navigation.navigate('AppRouter')
+                        })
+                        .catch((error)=> {
+                            Alert.alert('Network error. Please, try again later.')
+                            setloading(false)
                         })
                 })
         }
