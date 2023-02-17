@@ -45,7 +45,7 @@ const HomeScreen = (props) => {
     const challengeLeaders = useSelector(state => state.game.challengeLeaders);
     const showStakingAdvert = route.params?.showStakingAdvert ?? false;
     const [modalVisible, setModalVisible] = useState(false);
-    const [achievementPopup, setAchievementPopup] = useState(true)
+    const [achievementPopup, setAchievementPopup] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
 
