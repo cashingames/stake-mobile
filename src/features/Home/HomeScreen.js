@@ -28,6 +28,7 @@ import Stakingpopup from '../../shared/Stakingpopup';
 import WeeklyTopLeadersHero from '../../shared/WeeklyTopLeadersHero';
 // import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import { Walkthroughable } from '../Tour/Walkthrouable';
+import AchievementPopup from '../../shared/AchievementPopup';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -44,6 +45,7 @@ const HomeScreen = (props) => {
     const challengeLeaders = useSelector(state => state.game.challengeLeaders);
     const showStakingAdvert = route.params?.showStakingAdvert ?? false;
     const [modalVisible, setModalVisible] = useState(false);
+    const [achievementPopup, setAchievementPopup] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
 
@@ -164,6 +166,7 @@ const HomeScreen = (props) => {
                     </SwiperFlatList>
                 </View>
                 <Stakingpopup setModalVisible={setModalVisible} modalVisible={modalVisible} gameModes={gameModes} />
+                <AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup}/>
             </ScrollView>
         </View>
     );

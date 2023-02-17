@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, Image, ScrollView } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
@@ -7,6 +7,7 @@ import { LinearProgress } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 import { formatNumber } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 
@@ -14,83 +15,165 @@ export default function AchievementsMilestoneScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const achievements = useSelector(state => state.common.achievements);
-    const user = useSelector(state => state.auth.user);
+    // const user = useSelector(state => state.auth.user);
 
-    const nextLevel = achievements.find(item => item.point_milestone > user.points);
-    const nextLevelProgress = user.points / nextLevel.point_milestone;
+    const nextLevel = achievements.find(item => item.point_milestone > 100);
+    const nextLevelProgress = 60 / 60;
+    const nextLevelProgress2 = 10 / 60;
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.content}>
-                <MilestoneStatus milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
-                    pointsProgress={`${formatNumber(user.points)}/${formatNumber(nextLevel.point_milestone)}`}
-                    milestoneName={`${nextLevel.title}`}
-                    progress={nextLevelProgress}
-                />
-                <View style={styles.cards}>
-                    {achievements.map((achievement, i) => <AchievementCard key={i} userPoint={user.points} achievement={achievement} />)}
+        <LinearGradient
+            colors={['rgb(255, 254, 250)', 'rgb(255, 251, 237)',
+                'rgb(250, 197, 2)',
+            ]}
+            start={[0.5, 0]}
+            end={[0.5, 1]}
+            style={styles.container}
+        >
+            <ScrollView >
+                <View style={styles.content}>
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress}
+                        points={100}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={100}
+                    />
+                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                        pointsProgress={`${formatNumber(10)}/${formatNumber(60)}`}
+                        milestoneName={`${nextLevel.title}`}
+                        progress={nextLevelProgress2}
+                        points={10}
+                    />
                 </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </LinearGradient>
     );
 }
 
-const MilestoneStatus = ({ milestoneIcon, pointsProgress, milestoneName, progress }) => {
-
+const Badges = ({ milestoneIcon, points, progress }) => {
+    const disabled = points === 100
     return (
-        <View style={styles.status}>
-            <View>
-                <LinearProgress 
-                color='#EF2F55'
-                value = {progress}
-                trackColor='#F0BACB'
-                variant= "determinate"
-                style= {styles.progressBar}
-                 />
-                <Text style={styles.statusText}>{pointsProgress} points to Unlock {milestoneName}</Text>
-            </View>
+        <>
+        <View style={[styles.status, { opacity: disabled? 0.4 : 1} ]}>
             <Image
                 source={milestoneIcon}
                 style={styles.milestoneIcon}
             />
-        </View>
-    )
-}
-
-const AchievementCard = ({ achievement, userPoint, }) => {
-
-    const disabled = userPoint < achievement.point_milestone;
-
-
-    return (
-        <View style={styles.cardContainer}>
-            <View
-                style={[styles.card, { opacity: disabled ? 0.5 : 1 }, { backgroundColor: disabled ? '#C4C4C4' : '#FFFF' }]} disabled={disabled}>
-                <Image
-                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${achievement.medal}` }}
-                    style={styles.icon}
+            <View style={styles.details}>
+                <Text style={styles.detailsTitle}>Good Starter</Text>
+                <Text style={styles.detailsDesc}>Exhaust all 5 daily free games at a go</Text>
+            </View>
+            <View>
+                <LinearProgress
+                    color='#EF2F55'
+                    value={progress}
+                    trackColor='#F0BACB'
+                    variant="determinate"
+                    style={styles.progressBar}
                 />
-                <Text style={styles.name}>{achievement.title}</Text>
-                <Text style={styles.point}>{formatNumber(achievement.point_milestone)}</Text>
-
-                {disabled ?
-                    <Image
-                        source={require('../../../assets/images/padlock.png')}
-                        style={styles.padlock}
-                    />
-                    :
-                    <Text style={styles.unlocked}>Unlocked</Text>
-                }
+                <Pressable style={styles.btn}>
+                    <Text style={styles.reward}>{disabled ? 'Earned' : 'Get 60pts'}</Text>
+                </Pressable>
             </View>
         </View>
+        </>
     )
 }
-
 
 
 const styles = EStyleSheet.create({
     container: {
-        backgroundColor: '#F2F5FF',
+        flex: 1
     },
     content: {
         marginHorizontal: normalize(18),
@@ -103,31 +186,19 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#FFFF',
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: '#D9D9D9',
         paddingVertical: normalize(14),
         paddingHorizontal: normalize(10),
-        borderRadius: 11
-    },
-    cards: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        marginVertical: normalize(35)
-    },
-    cardContainer: {
-        flexDirection: 'column',
-        alignItems: 'center'
-    },
-    card: {
-        alignItems: 'center',
-        width: responsiveScreenWidth(41),
-        marginBottom: normalize(20),
-        height: responsiveScreenHeight(30),
         borderRadius: 11,
-        borderWidth: 1,
-        backgroundColor: '#FFFF',
-        borderColor: '#E0E0E0',
+        marginVertical: normalize(14),
+    },
+    detailsTitle: {
+        fontSize: '1rem',
+        fontFamily: 'graphik-medium',
+        textAlign: 'center',
+        lineHeight: '2rem'
     },
     statusText: {
         fontSize: '0.69rem',
@@ -136,28 +207,16 @@ const styles = EStyleSheet.create({
         color: 'black',
         opacity: 0.6
     },
-    icon: {
-        width: normalize(70),
-        height: normalize(70),
-        marginTop: normalize(20),
-    },
-    name: {
+    detailsDesc: {
         fontSize: '0.69rem',
-        marginVertical: normalize(10),
-        fontFamily: 'graphik-medium',
-        color: '#EB5757',
-    },
-    point: {
-        borderTopWidth: 1,
-        borderTopColor: '#828282',
-        fontSize: '0.76rem',
-        marginVertical: normalize(10),
-        fontFamily: 'graphik-medium',
-        color: '#151C2F',
+        fontFamily: 'graphik-regular',
+        textAlign: 'center',
+        width: '11rem',
+        lineHeight: '1rem'
     },
     milestoneIcon: {
-        width: normalize(40),
-        height: normalize(40),
+        width: normalize(60),
+        height: normalize(60),
     },
     unlocked: {
         fontSize: '0.69rem',
@@ -169,8 +228,22 @@ const styles = EStyleSheet.create({
         height: normalize(35)
     },
     progressBar: {
-        width: 124,
-        height:8,
+        width: 66,
+        height: 10,
         borderRadius: 16
+    },
+    btn: {
+        height: 22,
+        width: 66,
+        backgroundColor: '#752A00',
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: '0.4rem'
+    },
+    reward: {
+        color: '#fff',
+        fontSize: '0.69rem',
+        fontFamily: 'graphik-regular',
     }
 });
