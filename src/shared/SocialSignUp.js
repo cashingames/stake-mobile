@@ -3,7 +3,7 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { Button, Pressable, View, Image, Platform, ActivityIndicator, Alert } from 'react-native';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { Text } from 'react-native';
@@ -15,7 +15,8 @@ import { useNavigation } from '@react-navigation/native';
 import Constants from "expo-constants";
 import normalize from '../utils/normalize';
 import UniversalBottomSheet from './UniversalBottomSheet';
-import { googleSignUp, loginWithSocialLink } from '../features/Auth/AuthSlice';
+import { googleSignUp, loginWithSocialLink, setToken } from '../features/Auth/AuthSlice';
+import analytics from '@react-native-firebase/analytics';
 import PageLoading from './PageLoading';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import { triggerTour } from '../features/Tour/Index';
@@ -28,6 +29,7 @@ export default function SocialSignUp({ googleText }) {
     const navigation = useNavigation();
     const refRBSheet = useRef();
     const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user)
     const [phone_number, setPhoneNumber] = useState('');
     const [username, setUsername] = useState('');
     const [referrer, setReferrer] = useState('');
@@ -75,9 +77,10 @@ export default function SocialSignUp({ googleText }) {
             username,
             referrer
         }).then((response) => {
-                triggerTour(navigation)
                 saveToken(response.data.data)
+                dispatch(setToken(response.data.data))
                 closeBottomSheet()
+                triggerTour(navigation)
                 navigation.navigate('AppRouter')
                 setSaving(false)
             })
@@ -134,6 +137,11 @@ export default function SocialSignUp({ googleText }) {
                             }
                             console.log(originalPromiseResult);
                             saveToken(originalPromiseResult.data.token)
+                            analytics().logEvent('signin_with_Google', {
+                                'id': userDetails.given_name,
+                                'email': userDetails.email,
+                                'username': user.username
+                            })
                             setloading(false)
                             // navigation.navigate('AppRouter')
                         })

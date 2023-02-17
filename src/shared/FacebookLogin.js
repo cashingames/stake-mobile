@@ -6,7 +6,7 @@ import { useRef } from 'react';
 import { ActivityIndicator, Pressable, View, Platform, Image, Text, Alert } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { AccessToken, GraphRequest, GraphRequestManager, LoginManager, Profile } from 'react-native-fbsdk-next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/AuthSlice';
 import { triggerTour } from '../features/Tour/Index';
 import { saveToken } from '../utils/ApiHelper';
@@ -19,6 +19,7 @@ import UniversalBottomSheet from './UniversalBottomSheet';
 const Login = ({ text }) => {
   const navigation = useNavigation();
   const refRBSheet = useRef();
+  const user = useSelector(state => state.auth.user);
   const [phone_number, setPhoneNumber] = useState('');
   const [username, setUsername] = useState('');
   const [referrer, setReferrer] = useState('');
@@ -126,7 +127,8 @@ const Login = ({ text }) => {
         })
         await analytics().logEvent('signin_with_facebook', {
           'id': userProfile.first_name,
-          'email': userProfile.email
+          'email': userProfile.email,
+          'username': user.username
       })
     } catch(error) {
       logout()

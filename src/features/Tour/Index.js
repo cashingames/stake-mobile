@@ -180,16 +180,14 @@ const styles = StyleSheet.create({
 });
 
 export const triggerTour = (navigation)=>{
-  const user = useSelector(state => state.auth.user)
     setTimeout(()=>{
         Alert.alert("Need a Tour ?", "", [
             {
                 text: "I'm Good",
                 style: 'cancel',
                 onPress: async () => {
-                  await analytics().logEvent('new_user_tour_ended', {
-                    'id': user.username,
-                    'email': user.email
+                  await analytics().logEvent('new_user_tour_skipped', {
+                    'action': 'new user tour skipped' 
                 })
               }
             },
@@ -198,8 +196,7 @@ export const triggerTour = (navigation)=>{
                 style: "default",
                 onPress: async () => {
                   await analytics().logEvent('new_user_tour_started', {
-                    'id': user.username,
-                    'email': user.email
+                    'action': 'new user tour started'                   
                 })
                     navigation.navigate("AppTour")
                 }
