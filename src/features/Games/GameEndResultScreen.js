@@ -34,7 +34,7 @@ export default function GameEndResultScreen({ navigation }) {
 	const newUserDate = newUser.slice(0, 10);
 	let formattedDate = new Date().toISOString().split('T')[0];
 
-	const checkAndRun = () => {
+	const logFreeGamesExhausted = () => {
 		const currentDate = new Date().toLocaleDateString();
 		if (lastRunDate !== currentDate) {
 			if (formattedDate === newUserDate && bonusGame && bonusGame.game_count === 0) {
@@ -43,7 +43,8 @@ export default function GameEndResultScreen({ navigation }) {
 					'phone_number': user.phoneNumber,
 					'email': user.email
 				});
-			} else {
+			}
+			if(formattedDate !== newUserDate && bonusGame && bonusGame.game_count === 0) {
 				analytics().logEvent('free_game_exhausted', {
 					'id': user.username,
 					'phone_number': user.phoneNumber,
@@ -78,7 +79,7 @@ export default function GameEndResultScreen({ navigation }) {
 				'email': user.email
 			});
 		};
-		checkAndRun()
+		logFreeGamesExhausted()
 		navigation.navigate("GameInstructions")
 		setLoading(false);
 
@@ -92,7 +93,7 @@ export default function GameEndResultScreen({ navigation }) {
 				'email': user.email
 			});
 		};
-		checkAndRun()
+		logFreeGamesExhausted()
 		navigation.navigate('Home', { showStakingAdvert: !withStaking })
 	}
 	useFocusEffect(

@@ -95,6 +95,14 @@ export default function GameInProgressScreen({ navigation, route }) {
                         'email': user.email
                     });
                 };
+                if (formattedDate !== newUserDate && isStaking) {
+                    crashlytics().log('User completed staking game');
+                    await analytics().logEvent('staking_game_completed', {
+                        'id': user.username,
+                        'phone_number': user.phoneNumber,
+                        'email': user.email
+                    });
+                }
                 dispatch(logActionToServer({
                     message: "Game session " + gameSessionToken + " chosen options for " + user.username,
                     data: chosenOptions
@@ -111,18 +119,8 @@ export default function GameInProgressScreen({ navigation, route }) {
                     navigation.navigate('TriviaEndResult', {
                         triviaId: params.triviaId,
                     })
-                } else if (formattedDate !== newUserDate && isStaking) {
-                    crashlytics().log('User completed staking game');
-                    await analytics().logEvent('staking_game_completed', {
-                        'id': user.username,
-                        'phone_number': user.phoneNumber,
-                        'email': user.email
-                    });
-                    navigation.navigate('GameEndResult');
-                } else {
-                    navigation.navigate('GameEndResult');
                 }
-
+                    navigation.navigate('GameEndResult');
             })
             .catch((error, rejectedValueOrSerializedError) => {
                 crashlytics().recordError(error);
