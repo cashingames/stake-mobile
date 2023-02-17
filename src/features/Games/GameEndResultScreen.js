@@ -12,7 +12,7 @@ import { getUser } from '../Auth/AuthSlice';
 import analytics from '@react-native-firebase/analytics';
 import StakeWinnings from '../../shared/StakeWinnings';
 import Boostspopup from '../../shared/BoostPopUp';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PopGoogleReviewLogic } from '../../shared/GoogleReview';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -27,7 +27,8 @@ export default function GameEndResultScreen({ navigation }) {
 	const [showText, setShowText] = useState(true);
 	const [lastRunDate, setLastRunDate] = useState();
 	const [modalVisible, setModalVisible] = useState(false);
-	const activePlan = useSelector(state => state.auth.user.activePlans);
+	const [sumOfPlans, setSumOfPlans] = useState(0);
+	const activePlan = useSelector(state => state.auth.user.activePlans ?? []);
 	const bonusGame = activePlan?.find((item) => item.name === 'Bonus Games')
 	const newUser = useSelector(state => state.auth.user.joinedOn);
 	const newUserDate = newUser.slice(0, 10);
@@ -146,8 +147,20 @@ export default function GameEndResultScreen({ navigation }) {
 		}
 	}, [pointsGained])
 
-	return (
+	useEffect(() => {
+        const reducer = (accumulator, curr) => accumulator + curr;
+        var x = activePlan && activePlan.filter(a => a.name === "Bonus Games")
+		var y = x.map(b => b.game_count).reduce(reducer, 0)
+        setSumOfPlans(y ?? 0);
+    }, [ activePlan]);
 
+	useEffect(()=>{
+        (async()=>{
+            // this is the trigger
+            const isReviewed = await PopGoogleReviewLogic(sumOfPlans, user.email)
+        })()
+    }, [sumOfPlans])
+	return (
 		<ScrollView style={styles.container}>
 			<GameEndClockAnimation />
 			<UserName userName={user.firstName} />
