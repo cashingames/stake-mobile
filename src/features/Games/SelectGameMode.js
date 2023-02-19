@@ -1,5 +1,6 @@
+import { Base64 } from "js-base64";
 import React from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Image, Pressable, Text, View, Linking } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -12,6 +13,7 @@ import analytics from '@react-native-firebase/analytics';
 
 
 
+
 // const SelectGameMode = ({ Walkthroughable, CopilotStep }) => {
 const SelectGameMode = () => {
 
@@ -19,7 +21,8 @@ const SelectGameMode = () => {
     const dispatch = useDispatch();
     const gameModes = useSelector(state => state.common.gameModes);
     const user = useSelector(state => state.auth.user)
-
+    const token = useSelector(state => state.auth.token)
+   
     const games = [...gameModes].sort((a, b) => a.id - b.id);
 
 
@@ -34,6 +37,28 @@ const SelectGameMode = () => {
         navigation.navigate('SelectGameCategory')
     };
 
+
+    const goToStakingApp = async (mode) => {
+        dispatch(setGameMode(mode));
+        await analytics().logEvent("navigating_to_staking_platform", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+            'gamemode': mode.displayName,
+        })
+        handleStakingNavigation(`${Constants.manifest.extra.stakingAppUrl}/${Base64.encode(token)}`);
+    };
+
+    const handleStakingNavigation = async (url) => {
+        const isValidUrl = await Linking.canOpenURL(url);
+        if (isValidUrl) {
+            await Linking.openURL(url);
+        } else {
+            console.log(`This url is not valid: ${url}`);
+        }
+    }
+
+
     return (
         <View>
             <Text style={styles.title}>Select game mode</Text>
@@ -47,11 +72,11 @@ const SelectGameMode = () => {
                         //     </View>
                         // } order={5 + (i + 1)} name={`Order${5 + (i + 1)}`}>
                         //     <Walkthroughable>
-                                <AvailableMode
-                                    key={i}
-                                    gameMode={gameMode}
-                                    onPress={() => onSelectGameMode(gameMode)}
-                                />
+                        <AvailableMode
+                            key={i}
+                            gameMode={gameMode}
+                            onPress={() => { gameMode.name === "STAKING" ? goToStakingApp(gameMode) : onSelectGameMode(gameMode) }}
+                        />
                         //     </Walkthroughable>
                         // </CopilotStep>
 

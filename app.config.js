@@ -1,12 +1,12 @@
 const env = process.env.APP_VARIANT;
 const isDevelopment = env === 'development' || env === 'local' || false;
-const version = "1.2.80"; //Update for every build and publish
+const version = "1.2.81"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
   version: version,
-  runtimeVersion: "2.80", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "2.81", //All apps using the same runtime will get the published updates. Generally update for every new build
   icon: "./assets/images/adaptive-icon2.png",
   jsEngine: "hermes",
   scheme: "cashingames",
@@ -91,6 +91,7 @@ export default {
     gaTrackingID: getGATrackingID(),
     paystackKey: getPaystackKey(),
     apiBaseUrl: getApiUrl(),
+    stakingAppUrl: getStakingAppUrl(),
     appDomain: getDomain(),
     assetBaseUrl: getAssetsBaseUrl(),
     eas: {
@@ -187,6 +188,18 @@ function getApiUrl() {
       return 'https://stg-api.cashingames.com/api';
     default:
       return 'https://api.cashingames.com/api';
+  }
+}
+
+function getStakingAppUrl() {
+  switch (env) {
+    case "local":
+      return 'http://192.168.42.202:3000/authenticate';
+    case "development":
+    case "preview":
+      return 'https://stake-stg.cashingames.com/authenticate';
+    default:
+      return 'https://stake.cashingames.com/authenticate';
   }
 }
 
