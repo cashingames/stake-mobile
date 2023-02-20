@@ -274,6 +274,24 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                 <View>
                     <View style={styles.display}>
                         <Text style={styles.unicode}>{'\u0034'}</Text>
+                        <Text style={styles.title}>Rules Of Game</Text>
+                    </View>
+                    <Text style={styles.paragraph}>
+                       4.1 Cashingames will not be held responsible for any poor gaming experience caused by user’s poor or unstable network connection. We therefore recommend that users ensure that their network connection is strong enough for optimal gaming experience. Users are also advised to turn on the game mode feature on their phones to block phone calls so as to wholly enjoy the game.
+                    </Text>
+                    <Text style={styles.paragraph}>
+                       4.2 Users are only allowed to earn a maximum of N100,000 weekly on Cashingames. Once this limit is reached, additional earnings made will be withheld from the user.
+                    </Text>
+                    <Text style={styles.paragraph}>
+                        4.3 In a case where there are contests, winners are to expect their prizes within 3-5 working days. Users are advised to only send in complaints when this stated deadline has passed.
+                    </Text>
+                    <Text style={styles.paragraph}>
+                        4.4 For any questions on the above, please contact Cashingames support team: hello@cashingames.com.
+                    </Text>
+                </View>
+                <View>
+                    <View style={styles.display}>
+                        <Text style={styles.unicode}>{'\u0035'}</Text>
                         <Text style={styles.title}>Our Intellectual Property</Text>
                     </View>
                     <Text style={styles.paragraph}>
@@ -296,7 +314,7 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                 </View>
                 <View>
                     <View style={styles.display}>
-                        <Text style={styles.unicode}>{'\u0035'}</Text>
+                        <Text style={styles.unicode}>{'\u0036'}</Text>
                         <Text style={styles.title}>Our Intellectual Property Protection</Text>
                     </View>
                     <Text style={styles.paragraph}>
@@ -308,7 +326,7 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                 </View>
                 <View>
                     <View style={styles.display}>
-                        <Text style={styles.unicode}>{'\u0036'}</Text>
+                        <Text style={styles.unicode}>{'\u0037'}</Text>
                         <Text style={styles.title}>Disclaimers and Limitations of Liability</Text>
                     </View>
                     <Text style={styles.paragraph}>
@@ -337,7 +355,7 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                 </View>
                 <View>
                     <View style={styles.display}>
-                        <Text style={styles.unicode}>{'\u0037'}</Text>
+                        <Text style={styles.unicode}>{'\u0038'}</Text>
                         <Text style={styles.title}>Indemnity</Text>
                     </View>
                     <Text style={styles.paragraph}>
@@ -355,11 +373,11 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                 </View>
                 <View>
                     <View style={styles.display}>
-                        <Text style={styles.unicode}>{'\u0038'}</Text>
+                        <Text style={styles.unicode}>{'\u0039'}</Text>
                         <Text style={styles.title}>General Terms</Text>
                     </View>
                     <Text style={styles.paragraph}>
-                        8.1 Governing Law and Dispute Resolution
+                        9.1 Governing Law and Dispute Resolution
                     </Text>
                     <Text style={styles.paragraph}>
                         These Terms will be governed by the laws of the Federal Republic of Nigeria. All claims arising
@@ -367,7 +385,7 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                         Nigeria.
                     </Text>
                     <Text style={styles.paragraph}>
-                        8.2 Term and Termination:
+                        9.2 Term and Termination:
                     </Text>
                     <Text style={styles.paragraph}>
                         These Terms will remain in full force and effect while you use the Services. You may terminate
@@ -376,7 +394,7 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                         the Terms terminate, including, without limitation, your license to use the Services.
                     </Text>
                     <Text style={styles.paragraph}>
-                        8.3 Changes to the Services:
+                        9.3 Changes to the Services:
                     </Text>
                     <Text style={styles.paragraph}>
                         We reserve the right, at any time and in our sole discretion, to amend, modify, suspend, or
@@ -384,7 +402,7 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                         or loss of information
                     </Text>
                     <Text style={styles.paragraph}>
-                        8.4 Modification of Terms:
+                        9.4 Modification of Terms:
                     </Text>
                     <Text style={styles.paragraph}>
                         From time to time, and in our sole discretion, we may revise these Terms. If the revision, in
@@ -394,7 +412,7 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                         by the revised Terms.
                     </Text>
                     <Text style={styles.paragraph}>
-                        8.5 Assignment:
+                        9.5 Assignment:
                     </Text>
                     <Text style={styles.paragraph}>
                         You may not assign any of your rights under these Terms, and any such attempt will be void.
@@ -402,7 +420,7 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                         of any business associated with the Services
                     </Text>
                     <Text style={styles.paragraph}>
-                        8.6 Notice:
+                        9.6 Notice:
                     </Text>
                     <Text style={styles.paragraph}>
                         By entering into and accepting these Terms, you agree and consent to receive electronically
@@ -417,13 +435,13 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                         access to the Services, terminate any and all agreements with you.
                     </Text>
                     <Text style={styles.paragraph}>
-                        8.7 Waiver:
+                        9.7 Waiver:
                     </Text>
                     <Text style={styles.paragraph}>
                         Our failure to enforce a provision is not a waiver of its right to do so later.
                     </Text>
                     <Text style={styles.paragraph}>
-                        8.8 Severability:
+                        9.8 Severability:
                     </Text>
                     <Text style={styles.paragraph}>
                         If a provision is found invalid or unenforceable, the remaining provisions of the Terms will
@@ -431,7 +449,7 @@ const TermsAndConditionsScreen = ({ navigation }) => {
                         as possible
                     </Text>
                     <Text style={styles.paragraph}>
-                        8.9 Entire Agreement:
+                        9.9 Entire Agreement:
                     </Text>
                     <Text style={styles.paragraph}>
                         These Terms, as well as the incorporated Privacy Policy and any additional Service Terms
