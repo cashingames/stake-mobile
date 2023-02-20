@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Platform, Pressable, Text, View, Modal, Image } from 'react-native';
+import { Base64 } from "js-base64";
+import Constants from 'expo-constants';
+import { Platform, Pressable, Text, View, Modal, Image , Linking } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { setGameMode } from '../features/Games/GameSlice';
-import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import analytics from '@react-native-firebase/analytics';
@@ -11,10 +12,10 @@ import analytics from '@react-native-firebase/analytics';
 
 
 const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
-    const navigation = useNavigation();
     const dispatch = useDispatch();
     const gameModeSelected = gameModes.find(mode => mode.name === 'STAKING')
     const user = useSelector(state => state.auth.user);
+    const token = useSelector(state => state.auth.token);
 
     const playStaking = async () => {
         setModalVisible(!modalVisible)
@@ -24,8 +25,18 @@ const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
             'phone_number': user.phoneNumber,
             'email': user.email
         });
-        navigation.navigate('SelectGameCategory')
+        handleStakingNavigation(`${Constants.manifest.extra.stakingAppUrl}/${Base64.encode(token)}`);
     }
+
+    const handleStakingNavigation = async (url) => {
+        const isValidUrl = await Linking.canOpenURL(url);
+        if (isValidUrl) {
+            await Linking.openURL(url);
+        } else {
+            console.log(`This url is not valid: ${url}`);
+        }
+    }
+
     return (
         <View style={styles.onView}>
             <Modal
