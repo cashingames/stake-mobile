@@ -27,7 +27,8 @@ const GameTopicProgress = ({ onComplete, ending }) => {
 
                     {!isEnded &&
                         <CountdownCircleTimer
-                            isPlaying
+                            // isPlaying
+                            isPlaying={!isGamePaused && !ending}
                             duration={gameDuration}
                             colors={['#fff', '#F7B801', '#A30000']}
                             colorsTime={[gameDuration/2, gameDuration/4, 0]}
