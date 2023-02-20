@@ -60,7 +60,7 @@ function WeeklyTopLeaders({ leaders, firstDay, lastDay, gameModes }) {
                     <Text style={styles.modalDateText}>{firstDay} - {lastDay}</Text>
                     <PrizePoolTitle setModalVisible={setModalVisible} modalVisible={modalVisible} onPress={viewPrizePool}  />
                 </View>
-                <Text style={styles.modalText}>Earn at least 1200 points to win Prizes!</Text>
+                <Text style={styles.modalText}>Earn at least 1000 points to win Prizes!</Text>
                 <View style={styles.content}>
                     <MonthlyLeader
                         podPosition={require('../../assets/images/month-pod3.png')}

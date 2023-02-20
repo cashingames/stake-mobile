@@ -10,12 +10,6 @@ import LottieAnimations from './LottieAnimations';
 
 const TopLeadersModal = ({setModalVisible, modalVisible}) => {
 
-    const today = new Date();
-    const startDate = new Date(today.setDate(today.getDate() - today.getDay()));
-    const endDate = new Date(today.setDate(today.getDate() - today.getDay() + 6));
-
-    const firstDay = startDate.toDateString()
-    const lastDay = endDate.toDateString()
 
 
     return (
@@ -36,8 +30,8 @@ const TopLeadersModal = ({setModalVisible, modalVisible}) => {
                     >
                         <Text style={styles.closeStyle}>Close x</Text>
                     </Pressable>
-                    <Text style={styles.modalTopText}>Weekly Prize Pool</Text>
-                    <Text style={styles.modalDateText}>{firstDay} - {lastDay}</Text>
+                    <Text style={styles.modalTopText}>Daily Prize Pool</Text>
+                    <Text style={styles.modalDateText}>You can only win twice a week!</Text>
                     <View style={styles.resultContainer}>
                         <LottieAnimations
                             animationView={require('../../assets/leaderboard.json')}
@@ -48,17 +42,17 @@ const TopLeadersModal = ({setModalVisible, modalVisible}) => {
                     <View style={styles.modalItems}>
                         <View style={styles.modalWinnerItem}>
                             <Text style={styles.winnerItemText}>Grand Prize</Text>
-                            <Text style={styles.winnerItemText}>&#8358;{formatCurrency(50000)}</Text>
+                            <Text style={styles.winnerItemText}>&#8358;{formatCurrency(10000)}</Text>
 
                         </View>
                         <View style={styles.modalItem}>
                             <Text style={styles.itemText}>2nd Prize</Text>
-                            <Text style={styles.itemText}>&#8358;{formatCurrency(30000)}</Text>
+                            <Text style={styles.itemText}>&#8358;{formatCurrency(5000)}</Text>
 
                         </View>
                         <View style={styles.modalItem}>
                             <Text style={styles.itemText}>3rd Prize</Text>
-                            <Text style={styles.itemText}>&#8358;{formatCurrency(20000)}</Text>
+                            <Text style={styles.itemText}>&#8358;{formatCurrency(3000)}</Text>
 
                         </View>
                     </View>
