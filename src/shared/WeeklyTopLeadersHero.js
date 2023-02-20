@@ -9,16 +9,15 @@ import { getWeeklyLeadersByDate } from '../features/CommonSlice';
 import analytics from '@react-native-firebase/analytics';
 
 
-export default function WeeklyTopLeadersHero({gameModes}) {
+export default function WeeklyTopLeadersHero({ gameModes }) {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const leaders = useSelector(state => state.common.weeklyLeaderboard.leaderboard)
     const user = useSelector(state => state.auth.user)
 
     const today = new Date();
-    const startDate = new Date().setHours(5,0,0,0)
-
-    const endDate = new Date().setHours(21,59,59,999);
+    const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 5, 0, 0);
+    const endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 21, 59, 0);
 
     useFocusEffect(
         React.useCallback(() => {

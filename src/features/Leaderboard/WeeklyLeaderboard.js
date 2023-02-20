@@ -26,9 +26,9 @@ export default function WeeklyLeaderboard({ navigation }) {
 
 
     const today = new Date();
-    const startDate = new Date(today.setDate(today.getDate() - today.getDay()));
-
-    const endDate = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+    const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 5, 0, 0);
+    const endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 21, 59, 0);
+    
 
     const viewPrizePool = async () => {
         await analytics().logEvent("weekly_leaderboard_prize_pool_clicked", {
