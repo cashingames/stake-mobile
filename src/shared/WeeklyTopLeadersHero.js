@@ -16,13 +16,9 @@ export default function WeeklyTopLeadersHero({gameModes}) {
     const user = useSelector(state => state.auth.user)
 
     const today = new Date();
-    const startDate = new Date(today.setDate(today.getDate() - today.getDay()));
+    const startDate = new Date().setHours(5,0,0,0)
 
-    const endDate = new Date(today.setDate(today.getDate() - today.getDay() + 6));
-   
-    const firstDayString = startDate.toDateString()
-    const lastDayString = endDate.toDateString()
-
+    const endDate = new Date().setHours(21,59,59,999);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -45,10 +41,10 @@ export default function WeeklyTopLeadersHero({gameModes}) {
     return (
         <View style={styles.leaderboard}>
             <View style={styles.leaderboardHeader}>
-                <Text style={styles.title}>Top Players for the week</Text>
+                <Text style={styles.title}>Top Players for the day</Text>
                 <Text style={styles.extendedText} onPress={viewLeaderboard}>View More</Text>
             </View>
-            <WeeklyTopLeaders leaders={leaders} firstDay={firstDayString} lastDay={lastDayString} gameModes={gameModes} />
+            <WeeklyTopLeaders leaders={leaders} firstDay='5:00am' lastDay='10:00pm' gameModes={gameModes} />
         </View>
     )
 }
