@@ -11,7 +11,9 @@ import analytics from '@react-native-firebase/analytics';
 
 const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
     const navigation = useNavigation();
+    const [achievement, setAchievement] = React.useState({});
     const user = useSelector(state => state.auth.user);
+    const achievementBadges = useSelector(state => state.achievementSlice)
 
     const goToStore = async () => {
         await analytics().logEvent('buy_now_button_on_boostpopup_clicked', {
@@ -21,6 +23,20 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
         });
         navigation.navigate('GameStore')
     }
+
+    // listen for changes and prompt alert
+    React.useEffect(()=>{
+        // code to check
+        // console.log('reached')
+        if((achievementBadges.mine).length != 0){
+            const newAchievement = (achievementBadges.mine).find(val => ( (val.is_claimed == "1") && (val.is_rewarded == "1") && (val.is_notified == "0") ) );
+            if(newAchievement != undefined){
+                setAchievement(newAchievement);
+                setAchievementPopup(true);
+            }
+
+        }
+    }, [achievementBadges])
     return (
         <View style={styles.onView}>
             <Modal
@@ -40,7 +56,7 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
                             >
                                 <Text style={styles.closeModal}> close x </Text>
                             </Pressable>
-                            <Text style={styles.achievementTitle}>Good Start</Text>
+                            <Text style={styles.achievementTitle}>{achievement?.title || ""}</Text>
                             <View style={styles.imageContainer}>
                                 <Image
                                     style={styles.image}
@@ -48,7 +64,7 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
                                 />
                             </View>
                             <Text style={styles.congratulatoryText}>
-                                Congratulations, you have Unlocked an achievement badge and earned N50. Unlock more badges and win other exciting rewards
+                                {achievement?.description || ""}
                             </Text>
                         </View>
                     </View>
