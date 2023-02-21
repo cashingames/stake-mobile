@@ -54,6 +54,7 @@ export default function AchievementsMilestoneScreen({ navigation }) {
                                         let count = _item.count;
                                         if(count != undefined){
                                             // already achieving
+                                            if(_item.is_claimed == "1") return 1;
                                             return (count / total);
                                         }else{
                                             return 0;
