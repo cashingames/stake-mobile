@@ -54,6 +54,7 @@ export default function AchievementsMilestoneScreen({ navigation }) {
                                         let count = _item.count;
                                         if(count != undefined){
                                             // already achieving
+                                            if(_item.is_claimed == "1") return 1;
                                             return (count / total);
                                         }else{
                                             return 0;
@@ -78,6 +79,7 @@ const Badges = ({ milestoneIcon, progress, title, description, reward = 'Get 60p
             <Image
                 source={milestoneIcon}
                 style={styles.milestoneIcon}
+                resizeMode="contain"
             />
             <View style={styles.details}>
                 <Text style={styles.detailsTitle}>{title}</Text>
@@ -118,6 +120,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'transparent',
         borderWidth: 1,
+        height:80,
         borderColor: '#D9D9D9',
         paddingVertical: normalize(14),
         paddingHorizontal: normalize(10),
@@ -128,7 +131,8 @@ const styles = EStyleSheet.create({
         fontSize: '1rem',
         fontFamily: 'graphik-medium',
         textAlign: 'center',
-        lineHeight: '2rem'
+        marginBottom: '0.5rem',
+        textTransform: 'capitalize'
     },
     statusText: {
         fontSize: '0.69rem',
@@ -142,11 +146,12 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         textAlign: 'center',
         width: '11rem',
+        marginBottom:'0.5rem',
         lineHeight: '1rem'
     },
     milestoneIcon: {
-        width: normalize(60),
-        height: normalize(60),
+        width: 45,
+        height: 45,
     },
     unlocked: {
         fontSize: '0.69rem',

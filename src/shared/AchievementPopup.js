@@ -37,6 +37,7 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
 
         }
     }, [achievementBadges])
+
     return (
         <View style={styles.onView}>
             <Modal
@@ -60,11 +61,12 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
                             <View style={styles.imageContainer}>
                                 <Image
                                     style={styles.image}
-                                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${achievement?.medal || achievement?.logoUrl}` }}
+                                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${achievement?.quality_image || achievement?.medal || achievement?.logoUrl}` }}
                                 />
                             </View>
                             <Text style={styles.congratulatoryText}>
-                                {achievement?.description || ""}
+                            Congratulations, you have Unlocked an  achievement badge and earned  {(achievement.rewardType === "POINTS") ? "" : "N"}{achievement.reward}{(achievement.rewardType === "POINTS") ? "pts" : ""}. Unlock more badges and win other exciting rewards
+                                
                             </Text>
                         </View>
                     </View>
