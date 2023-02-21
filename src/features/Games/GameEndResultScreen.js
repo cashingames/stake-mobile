@@ -13,6 +13,7 @@ import analytics from '@react-native-firebase/analytics';
 import StakeWinnings from '../../shared/StakeWinnings';
 import Boostspopup from '../../shared/BoostPopUp';
 import { PopGoogleReviewLogic } from '../../shared/GoogleReview';
+import { getAchievements } from '../Profile/AchievementSlice';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -161,6 +162,13 @@ export default function GameEndResultScreen({ navigation }) {
             const isReviewed = await PopGoogleReviewLogic(sumOfPlans, user.email)
         })()
     }, [sumOfPlans])
+
+	// update achievement after game session
+	useEffect(()=>{
+        // update recent in background
+        dispatch(getAchievements());
+    }, [])
+
 	return (
 		<ScrollView style={styles.container}>
 			<GameEndClockAnimation />

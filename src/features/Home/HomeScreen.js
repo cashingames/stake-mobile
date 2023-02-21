@@ -29,6 +29,7 @@ import WeeklyTopLeadersHero from '../../shared/WeeklyTopLeadersHero';
 // import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import { Walkthroughable } from '../Tour/Walkthrouable';
 import AchievementPopup from '../../shared/AchievementPopup';
+import { getAchievements } from '../Profile/AchievementSlice';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -201,6 +202,9 @@ const UserDetails = () => {
         React.useCallback(() => {
             // console.info('UserDetails focus effect')
             dispatch(getUser());
+
+            // get achievements badges
+            dispatch(getAchievements());
         }, [])
     );
 
