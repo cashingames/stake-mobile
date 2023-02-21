@@ -3,6 +3,7 @@ import { Platform, Pressable, Text, View, Modal, Alert } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Image } from 'react-native';
+import Constants from 'expo-constants';
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
@@ -27,7 +28,6 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
     // listen for changes and prompt alert
     React.useEffect(()=>{
         // code to check
-        // console.log('reached')
         if((achievementBadges.mine).length != 0){
             const newAchievement = (achievementBadges.mine).find(val => ( (val.is_claimed == "1") && (val.is_rewarded == "1") && (val.is_notified == "0") ) );
             if(newAchievement != undefined){
@@ -60,7 +60,7 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
                             <View style={styles.imageContainer}>
                                 <Image
                                     style={styles.image}
-                                    source={require("../../assets/images/achievement.png")}
+                                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${achievement?.medal || achievement?.logoUrl}` }}
                                 />
                             </View>
                             <Text style={styles.congratulatoryText}>

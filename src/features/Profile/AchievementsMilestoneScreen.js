@@ -24,18 +24,12 @@ export default function AchievementsMilestoneScreen({ navigation }) {
         dispatch(getAchievements());
     }, [])
 
-    const nextLevel = achievements.find(item => item.point_milestone > 100);
-
     const combinedList = (achievementBadges?.all || []).map(_item =>{
         const achieved = (achievementBadges?.mine || []).find(val => val.id === _item.id);
-        
         if(achieved == undefined) return _item;
-
         return achieved;
 
     });
-
-    // console.log(combinedList.length)
 
     return (
         <LinearGradient
@@ -48,21 +42,10 @@ export default function AchievementsMilestoneScreen({ navigation }) {
         >
             <ScrollView >
                 <View style={styles.content}>
-                    {/* <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
-                        title={`${nextLevel.title}`}
-                        description={`${nextLevel.title}`}
-                        progress={1}
-                    />
-                    <Badges milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
-                        title={`${nextLevel.title}`}
-                        description={`${nextLevel.title}`}
-                        progress={0.5}
-                    /> */}
-
                     {
                         combinedList.map((_item, key) =>{
                             return (
-                                <Badges key={key} milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${nextLevel.medal}` }}
+                                <Badges key={key} milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${_item?.medal || _item?.logoUrl}` }}
                                     title={`${_item?.title || ""}`}
                                     description={`${_item?.description || ""}`}
                                     reward={`${_item.reward} ${_item.reward_type === 'POINTS' ? 'pts' : 'NGN'}`}
