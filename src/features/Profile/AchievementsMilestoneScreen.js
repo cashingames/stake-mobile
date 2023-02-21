@@ -83,7 +83,7 @@ const Badges = ({ milestoneIcon, progress, title, description, reward = 'Get 60p
             />
             <View style={styles.details}>
                 <Text style={styles.detailsTitle}>{title}</Text>
-                <Text style={styles.detailsDesc}>{description}</Text>
+                <Text style={styles.detailsDesc}>{description.charAt(0).toUpperCase() + description.slice(1).toLowerCase()}</Text>
             </View>
             <View>
                 <LinearProgress
@@ -147,7 +147,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         width: '11rem',
         marginBottom:'0.5rem',
-        lineHeight: '1rem'
+        lineHeight: '1rem',
     },
     milestoneIcon: {
         width: 45,
