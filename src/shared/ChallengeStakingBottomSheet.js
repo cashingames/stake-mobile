@@ -21,6 +21,7 @@ const ChallengeStakingBottomSheet = ({ stakeCash}) => {
     const user = useSelector(state => state.auth.user)
     const selectedOpponent = useSelector(state => state.game.selectedFriend);
     const activeCategory = useSelector(state => state.game.gameCategory);
+    const [disableClick, setDisableClick] = useState(false);
 
     const closeBottomSheet = () => {
         refRBSheet.current.close()
@@ -30,6 +31,7 @@ const ChallengeStakingBottomSheet = ({ stakeCash}) => {
     }
 
     const sendWithoutStaking = () => {
+        setDisableClick(true)
         dispatch(sendFriendInvite({
             opponentId: selectedOpponent.id,
             categoryId: activeCategory.id
@@ -42,10 +44,12 @@ const ChallengeStakingBottomSheet = ({ stakeCash}) => {
                     'phone_number': user.phoneNumber,
                     'email': user.email
                 })
+                setDisableClick(false)
                 openBottomSheet()
             })
             .catch((rejectedValueOrSerializedError) => {
-                Alert.alert(rejectedValueOrSerializedError.message)
+                Alert.alert(rejectedValueOrSerializedError.message);
+                setDisableClick(false)
             });
     }
 
@@ -62,7 +66,7 @@ const ChallengeStakingBottomSheet = ({ stakeCash}) => {
             </View>
             <View style={styles.selectButtons}>
                 <AppButton text='Stake Cash' onPress={stakeCash} style={styles.stakeButton} />
-                <AppButton text='Play for Free' onPress={sendWithoutStaking} style={styles.proceedButton} textStyle={styles.proceedText} />
+                <AppButton disabled={disableClick} text={disableClick ? 'Loading...' : 'Play for Free'} onPress={sendWithoutStaking} style={styles.proceedButton} textStyle={styles.proceedText} />
             </View>
             <UniversalBottomSheet
                 refBottomSheet={refRBSheet}
