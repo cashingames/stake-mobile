@@ -105,7 +105,8 @@ const styles = EStyleSheet.create({
     closeModal: {
         display: 'flex',
         marginLeft: 'auto',
-        marginBottom: normalize(2),
+        marginTop: normalize(8),
+        marginBottom: normalize(22),
         color: '#fff',
         fontSize: '0.69rem',
         fontFamily: 'graphik-regular'
