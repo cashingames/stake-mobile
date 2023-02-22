@@ -119,7 +119,8 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         textShadowOffset: { width: 4, height: 4 },
         textShadowRadius: 4,
-        textShadowColor: 'rgba(255, 255, 255, 0.25)'
+        textShadowColor: 'rgba(255, 255, 255, 0.25)',
+        textTransform: 'uppercase'
     },
 
     imageContainer: {
