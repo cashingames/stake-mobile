@@ -24,12 +24,26 @@ export default function AchievementsMilestoneScreen({ navigation }) {
         dispatch(getAchievements());
     }, [])
 
-    const combinedList = (achievementBadges?.all || []).map(_item =>{
+    let combinedList = (achievementBadges?.all || []).map(_item =>{
         const achieved = (achievementBadges?.mine || []).find(val => val.id === _item.id);
         if(achieved == undefined) return _item;
         return achieved;
-
     });
+
+    // sort
+    // let sortedCombinedList = [];
+    for (let i = 0; i < combinedList.length; i++) {
+        for (let k = i; k > 0 ; k--) {
+            const temp1 = combinedList[k - 1];
+            const temp2 = combinedList[k];
+            if(temp1.id > temp2.id){
+                combinedList[k - 1] = temp2;
+                combinedList[k] = temp1;
+            }
+        }    
+    }
+
+
 
     return (
         <LinearGradient
