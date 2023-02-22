@@ -1,17 +1,14 @@
 import * as React from 'react';
-import { Platform, Pressable, Text, View, Modal, Alert } from 'react-native';
+import { Pressable, Text, View, Modal, Alert } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Image } from 'react-native';
 import Constants from 'expo-constants';
-import { useNavigation } from "@react-navigation/native";
 import { useSelector } from 'react-redux';
-import { Ionicons } from '@expo/vector-icons';
 import analytics from '@react-native-firebase/analytics';
 
 
 const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
-    const navigation = useNavigation();
     const [achievement, setAchievement] = React.useState({});
     const user = useSelector(state => state.auth.user);
     const achievementBadges = useSelector(state => state.achievementSlice)
@@ -24,7 +21,7 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
             if(newAchievement != undefined){
                 setAchievement(newAchievement);
                 setAchievementPopup(true)
-                analytics().logEvent('achievement_unlocked', {
+                analytics().logEvent(`${newAchievement.title.replace(/\s/g, '_').toLowerCase()}_badge`, {
                     'achievement_title': newAchievement.title,
                     'user_id': user.username,
                 })
