@@ -16,15 +16,6 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
     const user = useSelector(state => state.auth.user);
     const achievementBadges = useSelector(state => state.achievementSlice)
 
-    const goToStore = async () => {
-        await analytics().logEvent('buy_now_button_on_boostpopup_clicked', {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email
-        });
-        navigation.navigate('GameStore')
-    }
-
     // listen for changes and prompt alert
     React.useEffect(()=>{
         // code to check
@@ -32,9 +23,12 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
             const newAchievement = (achievementBadges.mine).find(val => ( (val.is_claimed == "1") && (val.is_rewarded == "1") && (val.is_notified == "0") ) );
             if(newAchievement != undefined){
                 setAchievement(newAchievement);
-                setAchievementPopup(true);
+                setAchievementPopup(true)
+                analytics().logEvent('achievement_unlocked', {
+                    'achievement_title': newAchievement.title,
+                    'user_id': user.username,
+                })
             }
-
         }
     }, [achievementBadges])
 
