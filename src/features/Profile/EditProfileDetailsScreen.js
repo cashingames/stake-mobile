@@ -72,6 +72,8 @@ export default function EditProfileDetailsScreen({ navigation }) {
             firstName,
             lastName,
             // phoneNumber,
+            username,
+            email,
             dateOfBirth,
             gender
         }))
