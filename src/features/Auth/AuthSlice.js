@@ -159,7 +159,8 @@ export const getChallengeScores = createAsyncThunk(
 export const verifyDeviceToken = createAsyncThunk(
     'auth/verifyDeviceToken',
     async (token, thunkAPI) => {
-        const response = await axios.post('v3/fcm/subscriptions', { token });
+        console.log(token)
+        const response = await axios.post('v3/fcm/subscriptions', { token, device_token: token });
         return response.data;
     }
 )
