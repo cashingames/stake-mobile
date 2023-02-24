@@ -20,6 +20,7 @@ import analytics from '@react-native-firebase/analytics';
 import PageLoading from './PageLoading';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import { triggerTour } from '../features/Tour/Index';
+import { triggerNotifierForReferral } from './Notification';
 
 
 
@@ -77,10 +78,11 @@ export default function SocialSignUp({ googleText }) {
             username,
             referrer
         }).then((response) => {
+                triggerTour(navigation)
+                triggerNotifierForReferral()
                 saveToken(response.data.data)
                 dispatch(setToken(response.data.data))
                 closeBottomSheet()
-                triggerTour(navigation)
                 navigation.navigate('AppRouter')
                 setSaving(false)
             })

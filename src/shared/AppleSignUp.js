@@ -8,6 +8,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import UniversalBottomSheet from './UniversalBottomSheet';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import { triggerTour } from '../features/Tour/Index';
+import { triggerNotifierForReferral } from './Notification';
 
 const AppleSignUp = () => {
     const navigation = useNavigation();
@@ -68,6 +69,7 @@ const AppleSignUp = () => {
                 // console.log(originalPromiseResult);
                 saveToken(originalPromiseResult.data.token)
                 triggerTour(navigation)
+                triggerNotifierForReferral()
                 navigation.navigate('AppRouter')
             })
     }
