@@ -14,6 +14,7 @@ import analytics from '@react-native-firebase/analytics';
 import normalize from '../utils/normalize';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import UniversalBottomSheet from './UniversalBottomSheet';
+import { triggerNotifierForReferral } from './Notification';
 
 
 const Login = ({ text }) => {
@@ -75,6 +76,7 @@ const Login = ({ text }) => {
     })).then(unwrapResult)
       .then((originalPromiseResult) => {
         triggerTour(navigation)
+        triggerNotifierForReferral()
         console.log(originalPromiseResult, 'hitting');
         saveToken(originalPromiseResult.data.token)
         closeBottomSheet()

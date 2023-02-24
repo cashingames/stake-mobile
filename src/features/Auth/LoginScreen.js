@@ -17,6 +17,7 @@ import AppleSignUp from '../../shared/AppleSignUp';
 import { loginUser } from './AuthSlice';
 import Login from '../../shared/FacebookLogin';
 import { triggerTour } from '../Tour/Index';
+import { triggerNotifierForReferral } from '../../shared/Notification';
 
 export default function LoginScreen({ navigation }) {
 
@@ -46,6 +47,7 @@ export default function LoginScreen({ navigation }) {
             console.info("login response 1", response);
             if(response?.isFirstTime || false){
                 triggerTour(navigation)
+                triggerNotifierForReferral()
             }
         }).catch((err) => {
             processLoginError(err)

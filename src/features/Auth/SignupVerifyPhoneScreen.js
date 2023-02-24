@@ -15,6 +15,7 @@ import { saveToken } from '../../utils/ApiHelper';
 import { calculateTimeRemaining } from '../../utils/utils';
 import analytics from '@react-native-firebase/analytics';
 import { triggerTour } from '../Tour/Index';
+import { triggerNotifierForReferral } from '../../shared/Notification';
 
 
 const SignupVerifyPhoneScreen = ({ navigation, route }) => {
@@ -94,6 +95,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                 })
                 setLoading(false);
                 triggerTour(navigation)
+                triggerNotifierForReferral()
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError)
