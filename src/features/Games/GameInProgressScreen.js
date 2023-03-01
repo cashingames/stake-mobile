@@ -119,10 +119,9 @@ export default function GameInProgressScreen({ navigation, route }) {
                     navigation.navigate('TriviaEndResult', {
                         triviaId: params.triviaId,
                     })
+                }else{
+                    navigation.navigate('GameEndResult');
                 }
-            
-                navigation.navigate('GameEndResult');
-                
             })
             .catch((error, rejectedValueOrSerializedError) => {
                 crashlytics().recordError(error);
