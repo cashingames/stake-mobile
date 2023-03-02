@@ -163,7 +163,7 @@ const HomeScreen = (props) => {
                     <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
                         <WeeklyTopLeadersHero gameModes={gameModes} />
                         {/* <GlobalTopLeadersHero /> */}
-                        <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
+                        {/* <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} /> */}
                     </SwiperFlatList>
                 </View>
                 <Stakingpopup setModalVisible={setModalVisible} modalVisible={modalVisible} gameModes={gameModes} />

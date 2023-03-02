@@ -65,21 +65,19 @@ const SelectGameMode = () => {
             <View style={styles.subcategories}>
                 <SwiperFlatList>
                     {games.map((gameMode, i) =>
-                        // <CopilotStep key={i} text={
-                        //     <View>
-                        //         <Text style={styles.tourTitle} >{gameMode.name}</Text>
-                        //         <Text>{gameMode.description}</Text>
-                        //     </View>
-                        // } order={5 + (i + 1)} name={`Order${5 + (i + 1)}`}>
-                        //     <Walkthroughable>
-                        <AvailableMode
-                            key={i}
-                            gameMode={gameMode}
-                            onPress={() => { gameMode.name === "STAKING" ? goToStakingApp(gameMode) : onSelectGameMode(gameMode) }}
-                        />
-                        //     </Walkthroughable>
-                        // </CopilotStep>
+                        {
+                            if(gameMode.name === "STAKING"){
+                                return null;
+                            }
 
+                            return (
+                                <AvailableMode
+                                    key={i}
+                                    gameMode={gameMode}
+                                    onPress={() => { gameMode.name === "STAKING" ? goToStakingApp(gameMode) : onSelectGameMode(gameMode) }}
+                                />
+                            )
+                        }
                     )}
                 </SwiperFlatList>
             </View>

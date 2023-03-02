@@ -110,10 +110,10 @@ const RightButtons = () => {
                 <Ionicons name='home-outline' size={26} />
                 <Text style={styles.headerIconText}>Home</Text>
             </Pressable>
-            < Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={viewWallet}>
+            {/* < Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={viewWallet}>
                 <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
-            </Pressable>
+            </Pressable> */}
 
             <Pressable style={[styles.headerIconContainerNot, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={viewNotifications}>
                 <View style={styles.notificationContainer}>

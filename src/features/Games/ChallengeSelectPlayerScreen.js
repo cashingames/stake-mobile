@@ -181,7 +181,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
                 {isChallengeStakingFeatureEnabled ?
                     <UniversalBottomSheet
                         refBottomSheet={refRBSheet}
-                        height={445}
+                        height={285}
                         subComponent={<ChallengeStakingBottomSheet
                             stakeCash={stakeCash}
                         // selectedOpponent={selectedOpponent.id}

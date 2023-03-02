@@ -1,5 +1,5 @@
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Alert, Image, Platform, Text, View } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/native';
@@ -53,6 +53,10 @@ const ChallengeStakingBottomSheet = ({ stakeCash}) => {
             });
     }
 
+    useEffect(()=>{
+        sendWithoutStaking()
+    }, [selectedOpponent, refRBSheet])
+
     return (
         <View style={styles.stakeOption}>
             <View style={styles.avatarContainer}>
@@ -61,12 +65,12 @@ const ChallengeStakingBottomSheet = ({ stakeCash}) => {
                     source={require("../../assets/images/thinking-face.png")}
                 />
             </View>
-            <View style={styles.stakeContainer}>
+            {/* <View style={styles.stakeContainer}>
                 <Text style={styles.stakeText}>Double your winnings by staking an amount for this challenge</Text>
-            </View>
+            </View> */}
             <View style={styles.selectButtons}>
-                <AppButton text='Stake Cash' onPress={stakeCash} style={styles.stakeButton} />
-                <AppButton disabled={disableClick} text={disableClick ? 'Loading...' : 'Play for Free'} onPress={sendWithoutStaking} style={styles.proceedButton} textStyle={styles.proceedText} />
+                {/* <AppButton text='Stake Cash' onPress={stakeCash} style={styles.stakeButton} /> */}
+                <AppButton disabled={disableClick} text={disableClick ? 'Loading...' : 'Play for Free'} onPress={sendWithoutStaking} style={[styles.proceedButton, {width: '100%'}]} textStyle={styles.proceedText} />
             </View>
             <UniversalBottomSheet
                 refBottomSheet={refRBSheet}
