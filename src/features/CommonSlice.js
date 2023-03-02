@@ -1,4 +1,5 @@
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios';
 
@@ -33,6 +34,16 @@ export const getGlobalLeadersByDate = createAsyncThunk(
         return response.data
     }
 )
+
+export const loadSoundPrefernce = async (dispatch, setSound) => {
+    const preference = await AsyncStorage.getItem('key')
+    if(preference !== null){
+        console.log(preference,'pref')
+        dispatch(setSound(preference === 'true'))
+    }else{
+        dispatch(setSound(true))
+    }
+}
 
 export const getCategoryLeaders = createAsyncThunk(
     'common/categoryLeaders/get',
@@ -165,6 +176,8 @@ const initialState = {
     gameCategories: [],
     plans: [],
     banks: [],
+    toogleSound: true,
+    isSoundLoaded:false,
     categoryLeaders: [],
     globalLeaders: [],
     weeklyLeaderboard: {
@@ -209,6 +222,13 @@ export const CommonSlice = createSlice({
         initialLoadingComplete: (state) => {
             state.initialLoading = false;
         },
+        setToogleSound: (state) => {
+            state.toogleSound = !state.toogleSound
+        },
+        setSound :(state, action) => {
+            state.toogleSound = action.payload
+            state.isSoundLoaded = true
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -282,6 +302,6 @@ export const CommonSlice = createSlice({
     },
 });
 
-export const { initialLoadingComplete } = CommonSlice.actions
+export const { initialLoadingComplete, setToogleSound, setSound } = CommonSlice.actions
 
 export default CommonSlice.reducer

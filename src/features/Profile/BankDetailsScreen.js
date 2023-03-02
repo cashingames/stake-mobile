@@ -10,6 +10,7 @@ import normalize from '../../utils/normalize';
 import { useDispatch, useSelector } from 'react-redux';
 import AppButton from '../../shared/AppButton';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import useSound from '../../utils/useSound';
 
 export default function BankDetailsScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -26,6 +27,8 @@ export default function BankDetailsScreen({ navigation }) {
     const [accountNumberErr, setAccountNumberError] = useState(false);
     const [accountNameErr, setAccountNameError] = useState(false);
     const [bankName, setBankName] = useState(user.bankName ?? '');
+    const { playSound } =  useSound(require('../../../assets/sounds/updated.mp3'))
+
 
     const onChangeAccountNumber = (text) => {
         text.length > 0 && text.length < 10 ? setAccountNumberError(true) : setAccountNumberError(false);
@@ -62,6 +65,7 @@ export default function BankDetailsScreen({ navigation }) {
             .then(unwrapResult)
             .then(result => {
                 dispatch(getUser())
+                playSound()
                 Alert.alert('Bank details updated successfully')
                 navigation.navigate("UserProfile")
             })

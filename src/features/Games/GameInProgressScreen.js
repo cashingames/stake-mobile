@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Text, View, Image, ScrollView, ImageBackground, Alert, StatusBar, BackHandler } from 'react-native';
 import normalize from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -21,6 +21,7 @@ import UserAvailableBoosts from "../../shared/UserAvailableBoosts";
 import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import analytics from '@react-native-firebase/analytics';
+// import useSound from "../../utils/useSound";
 
 
 
@@ -41,7 +42,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     const newUser = useSelector(state => state.auth.user.joinedOn);
     const newUserDate = newUser.slice(0, 10);
     let formattedDate = new Date().toISOString().split('T')[0];
-
+    // const { playSound } =  useSound(require('../../../assets/sounds/game-started.mp3'))
     const openBottomSheet = () => {
         refRBSheet.current.open()
     }
@@ -177,6 +178,9 @@ export default function GameInProgressScreen({ navigation, route }) {
         return null;
     }
 
+    // useEffect(() => {
+    //     playSound()
+    // }, [])
     return (
         // <View>
         //     <Text>me</Text>

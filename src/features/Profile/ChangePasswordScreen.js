@@ -11,6 +11,7 @@ import { changePassword, deleteUserAccount, logoutUser } from '../Auth/AuthSlice
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import DeleteAccount from '../../shared/DeleteAccount';
+import useSound from '../../utils/useSound';
 
 
 export default function ChangePasswordScreen({ navigation }) {
@@ -23,6 +24,8 @@ export default function ChangePasswordScreen({ navigation }) {
     const [new_password, setNewPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
     const [new_password_confirmation, setConfirmPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
     const [passErr, setPassError] = useState(false);
+    const { playSound } =  useSound(require('../../../assets/sounds/updated.mp3'))
+
 
     const refRBSheet = useRef();
 
@@ -69,6 +72,7 @@ export default function ChangePasswordScreen({ navigation }) {
             .then(result => {
                 // console.log(result);
                 // dispatch(getUser())
+                playSound()
                 Alert.alert('Password changed successfully')
                 navigation.navigate("Home")
             })

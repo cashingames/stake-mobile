@@ -10,6 +10,7 @@ import Constants from 'expo-constants';
 import normalize from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/core';
 import analytics from '@react-native-firebase/analytics';
+import useSound from "../../utils/useSound";
 
 
 
@@ -22,12 +23,12 @@ const SelectGameMode = () => {
     const gameModes = useSelector(state => state.common.gameModes);
     const user = useSelector(state => state.auth.user)
     const token = useSelector(state => state.auth.token)
-   
+    const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
     const games = [...gameModes].sort((a, b) => a.id - b.id);
 
 
     const onSelectGameMode = async (mode) => {
-        dispatch(setGameMode(mode));
+        playSound()
         await analytics().logEvent("game_mode_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,

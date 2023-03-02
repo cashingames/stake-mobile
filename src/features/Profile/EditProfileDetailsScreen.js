@@ -14,6 +14,7 @@ import normalize from '../../utils/normalize';
 import { isTrue } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import useSound from '../../utils/useSound';
 
 export default function EditProfileDetailsScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -38,6 +39,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [show, setShow] = useState(false);
     const [countryCode, setCountryCode] = useState(user.countryCode);
+    const { playSound } =  useSound(require('../../../assets/sounds/updated.mp3'))
 
     const onChangeDateOfBirth = (event, selectedDate) => {
         const currentDate = selectedDate || dateOfBirth;
@@ -80,6 +82,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
             .then(unwrapResult)
             .then(result => {
                 dispatch(getUser())
+                playSound()
                 Alert.alert('Personal details updated successfully')
                 navigation.navigate("UserProfile")
             })

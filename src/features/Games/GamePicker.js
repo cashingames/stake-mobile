@@ -13,6 +13,7 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { randomEnteringAnimation } from '../../utils/utils';
 import GameCategoryCard from './GameCategoryCard';
 import GameSubcategoryCard from './GameSubcategoryCard';
+import useSound from '../../utils/useSound';
 
 
 export default ({ title, initialShowPlayButton = true ,activeSubcategory}) => {
@@ -23,13 +24,16 @@ export default ({ title, initialShowPlayButton = true ,activeSubcategory}) => {
     const [activeCategory, setActiveCategory] = useState();
     const activeGame = useSelector(state => state.game.gameType);
     const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
+    const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
 
     const onCategorySelected = (category) => {
+        playSound()
         setActiveCategory(category);
         dispatch(setGameCategory(undefined));
     }
 
     const onSubCategorySelected = (subcategory) => {
+        playSound()
         dispatch(setGameCategory(subcategory));
     }
 
