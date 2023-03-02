@@ -35,6 +35,10 @@ export const loginUser = createAsyncThunk(
     }
 )
 
+// export const loginUser = async (data) => {
+//     return axios.post(`auth/login`, data);
+// }
+
 export const loginWithSocialLink = createAsyncThunk(
     'auth/loginWithSocialLink',
     async (data, thunkAPI) => {

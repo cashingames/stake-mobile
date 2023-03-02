@@ -8,7 +8,7 @@ import Input from '../../shared/Input';
 import { CheckBox } from 'react-native-elements'
 import AuthTitle from '../../shared/AuthTitle';
 import { useDispatch } from 'react-redux';
-import { saveCreatedUserCredentials } from './AuthSlice';
+import { registerUser, saveCreatedUserCredentials } from './AuthSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import SocialSignUp from '../../shared/SocialSignUp';
 import { Ionicons } from "@expo/vector-icons";
@@ -20,7 +20,6 @@ import analytics from '@react-native-firebase/analytics';
 
 const SignupScreen = () => {
     const navigation = useNavigation();
-    const dispatch = useDispatch();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -30,9 +29,12 @@ const SignupScreen = () => {
     const [passErr, setPassError] = useState(false);
     const [emailErr, setEmailError] = useState(false);
     const [phoneErr, setPhoneError] = useState(false);
+    const [error, setError] = useState('')
     const [checked, setChecked] = useState(false);
     const [show, setShow] = useState(false);
     const [countryCode, setCountryCode] = useState('+234');
+    const [referrer, setReferrer] = useState('');
+
 
     const contactUs = async () => {
         await analytics().logEvent("clicked_contact_us_from_login")
@@ -50,23 +52,59 @@ const SignupScreen = () => {
         setPassword(text)
     }
     const onChangePhone = (text) => {
-        text.length > 0 && text.length < 4 ? setPhoneError(true) : setPhoneError(false);
+        text.length > 0 && text.length < 10 ? setPhoneError(true) : setPhoneError(false);
         setPhone(text)
     }
-    const onChangeConfirmPassword = (text) => {
-        setPasswordConfirmation(text)
-    }
+    // const onChangeConfirmPassword = (text) => {
+    //     setPasswordConfirmation(text)
+    // }
+
+    // const onNext = () => {
+    //     //save this information in store
+    //     dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone, country_code: countryCode }));
+    //     navigation.navigate("SignupProfile")
+    // }
 
     const onNext = () => {
-        //save this information in store
-        dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone, country_code: countryCode }));
-        navigation.navigate("SignupProfile")
+        setLoading(true);
+        //dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone, country_code: countryCode }))
+        registerUser({
+            email, password,
+            password_confirmation: password,
+            phone_number: phone,
+            country_code: countryCode,
+            referrer: referrer,
+        }).then(response => {
+            analytics().logEvent('registration_unverified', {
+                'email': email,
+                'phone_number': phone
+            });
+            navigation.navigate('SignupVerifyPhone', {
+                phone_number: phone,
+                next_resend_minutes: response.data.data.next_resend_minutes
+            })
+
+        }, err => {
+            if (!err || !err.response || err.response === undefined) {
+                setError("Your Network is Offline.");
+            }
+            else if (err.response.status === 500) {
+                setError("Service not currently available. Please contact support");
+            }
+            else {
+                const errors =
+                    err.response && err.response.data && err.response.data.errors;
+                const firstError = Object.values(errors, {})[0];
+                setError(firstError[0])
+            }
+            setLoading(false);
+        });
     }
 
     useEffect(() => {
-        const invalid = passErr || emailErr || phoneErr || !checked || password_confirmation !== password;
+        const invalid = passErr || emailErr || phoneErr || !checked;
         setCanSend(!invalid);
-    }, [emailErr, phoneErr, passErr, password_confirmation, password, checked])
+    }, [emailErr, phoneErr, passErr, checked])
 
     return (
         <ScrollView style={styles.container}>
@@ -85,12 +123,15 @@ const SignupScreen = () => {
                 <Text style={styles.signInText}>or</Text>
             </View>
             <View style={styles.inputContainer}>
+                {error.length > 0 &&
+                    <Text>{error}</Text>
+                }
                 <Input
                     label='Email'
                     placeholder="johndoe@example.com"
                     value={email}
                     type="email"
-                    error={emailErr && '*email is not valid'}
+                    error={emailErr && '*invalid email address'}
                     onChangeText={text => onChangeEmail(text)}
                 />
                 <>
@@ -112,7 +153,7 @@ const SignupScreen = () => {
                             onChangeText={text => onChangePhone(text)}
                             error={phoneErr && '*input a valid phone number'}
                             type="phone"
-                            maxLength={12}
+                            maxLength={11}
                             keyboardType='numeric'
 
                         />
@@ -142,13 +183,10 @@ const SignupScreen = () => {
                     error={passErr && '*password must not be less than 8 digits'}
                     onChangeText={text => { onChangePassword(text) }}
                 />
-                <Input
-                    type="password"
-                    label='Password'
-                    value={password_confirmation}
-                    placeholder="Confirm password"
-                    error={password_confirmation !== password && '*password confirmation must match password'}
-                    onChangeText={text => { onChangeConfirmPassword(text) }}
+             <Input
+                    label='Referral Code (optional)'
+                    value={referrer}
+                    onChangeText={setReferrer}
                 />
             </View>
 
@@ -291,8 +329,8 @@ const styles = EStyleSheet.create({
     contactUs: {
         fontSize: '.7rem',
         fontFamily: 'graphik-medium',
-        color:'#EF2F55',
-        textAlign:'center',
+        color: '#EF2F55',
+        textAlign: 'center',
         // marginTop:'.2rem'
     }
 });
