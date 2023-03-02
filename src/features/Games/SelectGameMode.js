@@ -119,7 +119,8 @@ const styles = EStyleSheet.create({
         // flexWrap: 'wrap',
     },
     card: {
-        width: normalize(130),
+        width: normalize(163.5),
+        // width: normalize(130),
         // padding: normalize(15),
         // paddingBottom: 0,
         borderRadius: normalize(7),

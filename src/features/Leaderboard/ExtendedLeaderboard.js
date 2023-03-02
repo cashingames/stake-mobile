@@ -30,38 +30,8 @@ function ExtendedLeaderboard(props) {
     const categoryLeaders = useSelector(state => state.common.categoryLeaders)
     const [loading, setLoading] = useState(true);
 
-    // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
     const [forceRender, setForceRender] = useState(true);
     const globalCount = useRef(0);
-
-    // const handleTourStop = ()=>{
-    //     console.log("tour stopped, going to next screen to continue")
-    //     // console.error(Object.keys(navigation))
-    //     navigation.navigate("Home", {reload: true})
-    // }
-
-    // const handleTourChange = (step)=>{
-    //     console.log(step.name)
-    // }
-
-    // useEffect(()=>{
-    //     setTimeout(()=>{
-    //         if(isTourActive?.payload || isTourActive){
-                
-    //             CopilotProps.start()
-    //             CopilotProps.copilotEvents.on('stepChange', handleTourChange)
-    //             CopilotProps.copilotEvents.on('stop', handleTourStop)
-    
-    //             return () => {
-    //             CopilotProps.copilotEvents.off('stepChange', handleTourChange)
-    //             CopilotProps.copilotEvents.off('stop', handleTourStop)
-    //             }
-    //         }else{
-                
-    //         }
-    //     }, 1000)
-    // }, [isTourActive])
-
 
     useEffect(() => {
         dispatch(getGlobalLeaders());
@@ -94,7 +64,6 @@ function ExtendedLeaderboard(props) {
 
     const categories = Object.keys(categoryLeaders);
 
-    // listen for tour
     return (
         <View style={styles.container}>
             
@@ -107,17 +76,7 @@ function ExtendedLeaderboard(props) {
                 />
             </View>
                 <SwiperFlatList showPagination paginationActiveColor='red' renderAll={true} >
-                    
-                    {/* <CopilotStep text={
-                            <View>
-                                <Text style={styles.tourTitle} >Global Leaderboard</Text>
-                                <Text>View your position on the leaderboard and continue to play more games to move up the leaderboard</Text>
-                            </View>
-                        } order={1} name="Order1">
-                            <Walkthroughable> */}
-                                <GlobalLeaderboard leaders={leaders} />
-                            {/* </Walkthroughable>
-                    </CopilotStep> */}
+                    <GlobalLeaderboard leaders={leaders} />
                     {categories.map((c, i) => <CategoryLeaderboard key={i} category={c} leaders={categoryLeaders[c]} />)}
                 </SwiperFlatList>
             </ScrollView>

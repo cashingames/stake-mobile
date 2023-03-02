@@ -44,7 +44,7 @@ function Store(props) {
                       <View>
                           <Text style={styles.tourTitle} >Store</Text>
                           <Text style={styles.tourDesc}>
-                            Buy lives and boosts to help you score higher
+                            Get lives and boosts to help you score higher
                           </Text>
                       </View>
                   } order={5} name={`Order${5}`}>

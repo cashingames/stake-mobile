@@ -67,7 +67,7 @@ const UserItems = ({ showBuy }) => {
                     <Text style={[styles.commonRow, boosts?.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
                 </View>
             </View>
-            {showBuy && <Text onPress={buyMore} style={styles.buyMore}>Buy more</Text>}
+            {showBuy && <Text onPress={buyMore} style={styles.buyMore}>Get more</Text>}
         </Animated.View>
     )
 }
