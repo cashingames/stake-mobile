@@ -98,13 +98,16 @@ const styles = EStyleSheet.create({
     avatar: {
         width: responsiveScreenWidth(11),
         height: responsiveScreenWidth(11),
-        borderRadius: 50
+        borderRadius: 50,
+        // backgroundColor:'#072169',
+        borderWidth: 1,
+        borderColor: '#072169',
     },
     name: {
         color: '#000000',
         fontSize: '0.7rem',
         fontFamily: 'graphik-medium',
-        marginLeft: normalize(5),
+        marginLeft: normalize(9),
         width: responsiveScreenWidth(21)
     },
     amount: {

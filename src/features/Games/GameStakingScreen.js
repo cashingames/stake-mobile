@@ -80,9 +80,9 @@ const GameStakingScreen = ({ navigation }) => {
 
     const proceed = (amount) => {
         dispatch(setAmountStaked(amount))
-        if(Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount) || Number.parseFloat(amount) > Number.parseFloat(maximumExhibitionStakeAmount)){
+        if (Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount) || Number.parseFloat(amount) > Number.parseFloat(maximumExhibitionStakeAmount)) {
             closeBottomSheet()
-        }else{
+        } else {
             openBottomSheet()
         }
     }
@@ -118,11 +118,11 @@ const GameStakingScreen = ({ navigation }) => {
                 <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={submit} disabled={loading} />
             </View>
             <View style={styles.stakeContainer}>
-                <Text style={styles.stakeHeading}>Predictions Table</Text>
+                <Text style={styles.stakeHeading}>HOW TO WIN</Text>
                 <View style={styles.stakeHeaders}>
-                    <Text style={styles.stakeHead}>WINNINGS</Text>
-                    <Text style={styles.stakeScore}>SCORE</Text>
+                    <Text style={styles.stakeScore}>OUTCOME</Text>
                     <Text style={styles.stakeHead}>ODDS</Text>
+                    <Text style={styles.stakePay}>PAYOUT</Text>
                 </View>
                 {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
                     amount={amount} />)}
@@ -246,7 +246,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         fontFamily: "graphik-medium",
         fontSize: "1rem",
-        color: "#EF2F55",
+        color: "#fab700",
         marginVertical: '1rem',
     },
     stakeHeaders: {
@@ -254,11 +254,22 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         marginVertical: normalize(10),
     },
-    stakeScoreDigit: {
+    stakeScore: {
         fontFamily: "graphik-medium",
-        fontSize: ".7rem",
-        color: "#333333",
-        marginLeft: '.3rem',
-        opacity: 0.7
+        fontSize: "1rem",
+        color: "#006ac6",
+        // marginLeft: '.3rem',
+    },
+    stakeHead: {
+        fontFamily: "graphik-medium",
+        fontSize: "1rem",
+        color: "#006ac6",
+        marginRight: '1rem',
+    },
+    stakePay: {
+        fontFamily: "graphik-medium",
+        fontSize: "1rem",
+        color: "#006ac6",
+        marginRight: '1rem',
     },
 })

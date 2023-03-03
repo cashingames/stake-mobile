@@ -355,7 +355,7 @@ const UserWalletBalance = () => {
 const styles = EStyleSheet.create({
 
     container: {
-        backgroundColor: '#F2F5FF',
+        backgroundColor: '#FFFF',
         paddingVertical: normalize(20),
         paddingHorizontal: normalize(20),
     },

@@ -22,10 +22,10 @@ export default function GameEndResultScreen({ navigation }) {
 	const pointsGained = useSelector(state => state.game.pointsGained);
 	const amountWon = useSelector(state => state.game.amountWon);
 	const withStaking = useSelector(state => state.game.withStaking);
+	const correctCount = useSelector(state => state.game.correctCount);
 	const minimumBoostScore = useSelector(state => state.common.minimumBoostScore)
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
-	const [showText, setShowText] = useState(true);
 	const [lastRunDate, setLastRunDate] = useState();
 	const [modalVisible, setModalVisible] = useState(false);
 	const [sumOfPlans, setSumOfPlans] = useState(0);
@@ -45,7 +45,7 @@ export default function GameEndResultScreen({ navigation }) {
 					'email': user.email
 				});
 			}
-			if(formattedDate !== newUserDate && bonusGame && bonusGame.game_count === 0) {
+			if (formattedDate !== newUserDate && bonusGame && bonusGame.game_count === 0) {
 				analytics().logEvent('free_game_exhausted', {
 					'id': user.username,
 					'phone_number': user.phoneNumber,
@@ -57,10 +57,6 @@ export default function GameEndResultScreen({ navigation }) {
 	};
 
 	const refRBSheet = useRef();
-
-	const openBottomSheet = () => {
-		refRBSheet.current.open()
-	}
 
 	const closeBottomSheet = () => {
 		refRBSheet.current.close()
@@ -134,14 +130,6 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	useEffect(() => {
-		// Change the state every second or the time given by User.
-		const interval = setInterval(() => {
-			setShowText((showText) => !showText);
-		}, 1000);
-		return () => clearInterval(interval);
-	}, []);
-
-	useEffect(() => {
 		if (pointsGained <= minimumBoostScore) {
 			setModalVisible(true)
 		} else {
@@ -150,34 +138,40 @@ export default function GameEndResultScreen({ navigation }) {
 	}, [pointsGained])
 
 	useEffect(() => {
-        const reducer = (accumulator, curr) => accumulator + curr;
-        var x = activePlan && activePlan.filter(a => a.name === "Bonus Games")
+		const reducer = (accumulator, curr) => accumulator + curr;
+		var x = activePlan && activePlan.filter(a => a.name === "Bonus Games")
 		var y = x.map(b => b.game_count).reduce(reducer, 0)
-        setSumOfPlans(y ?? 0);
-    }, [ activePlan]);
+		setSumOfPlans(y ?? 0);
+	}, [activePlan]);
 
-	useEffect(()=>{
-        (async()=>{
-            // this is the trigger
-            const isReviewed = await PopGoogleReviewLogic(sumOfPlans, user.email)
-        })()
-    }, [sumOfPlans])
+	useEffect(() => {
+		(async () => {
+			// this is the trigger
+			const isReviewed = await PopGoogleReviewLogic(sumOfPlans, user.email)
+		})()
+	}, [sumOfPlans])
 
 	// update achievement after game session
-	useEffect(()=>{
-        // update recent in background
-        dispatch(getAchievements());
-    }, [])
+	useEffect(() => {
+		// update recent in background
+		dispatch(getAchievements());
+	}, [])
 
 	return (
 		<ScrollView style={styles.container}>
-			<GameEndClockAnimation />
+			<View style={styles.trophy}>
+			<Image
+				source={require('../../../assets/images/point-trophy.png')}
+			/>
+			</View>
 			<UserName userName={user.firstName} />
-			<UserResultInfo pointsGained={pointsGained} />
 			{withStaking &&
-				<Winnings showText={showText} amountWon={amountWon} onPress={reviewStaking} />
+				<Winnings amountWon={amountWon} onPress={reviewStaking} />
 			}
-			<SeeRank />
+			<View style={styles.correctContainer}>
+				<Text style={styles.correctPoint}>{correctCount}</Text>
+				<Text style={styles.correctText}>Correct answers</Text>
+			</View>
 			<FinalScore pointsGained={pointsGained} />
 			<View style={styles.gameButtons}>
 				<GameButton buttonText='Return to Home'
@@ -199,38 +193,10 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 }
 
-
-const UserResultInfo = ({ pointsGained }) => {
-	return (
-		<View style={styles.infoContainer}>
-			<Text style={styles.info}>you scored {pointsGained} points, Play more games to climb up the leaderboard and stand a chance to earn cash prizes every week!</Text>
-		</View>
-	)
-}
-
-const SeeRank = () => {
-	const navigation = useNavigation();
-
-	return (
-		<Pressable
-			onPress={() => navigation.navigate('Leaderboard')}
-			style={styles.goToLeaderboard}
-		>
-			<View style={styles.seeRank}>
-				<Image
-					source={require('../../../assets/images/leaderboard.png')}
-				/>
-				<Text style={styles.seeRankText}>Check the leaderboard to see your rank</Text>
-			</View>
-		</Pressable>
-
-	)
-}
-
-const Winnings = ({ showText, amountWon, onPress }) => {
+const Winnings = ({ amountWon, onPress }) => {
 	return (
 		<View style={styles.winningsContainer}>
-			<StakeWinnings showText={showText} amountWon={amountWon} />
+			<StakeWinnings amountWon={amountWon} />
 			<Pressable onPress={onPress}>
 				<Text style={styles.reviewStake}>Review Stake</Text>
 			</Pressable>
@@ -241,8 +207,8 @@ const Winnings = ({ showText, amountWon, onPress }) => {
 const FinalScore = ({ pointsGained }) => {
 	return (
 		<View style={styles.finalScore}>
-			<Text style={styles.finalScoreText}>Your final score point is</Text>
-			<Text style={styles.point}>{pointsGained}</Text>
+			<Text style={styles.finalScoreText}>Points earned</Text>
+			<Text style={styles.point}>{pointsGained} pts</Text>
 		</View>
 	)
 }
@@ -260,8 +226,9 @@ const styles = EStyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#9C3DB8',
-		paddingVertical: normalize(40),
+		paddingTop: responsiveScreenWidth(25),
 		paddingHorizontal: normalize(18),
+		paddingBottom: normalize(20),
 		display: 'flex',
 	},
 	image: {
@@ -306,23 +273,24 @@ const styles = EStyleSheet.create({
 	},
 	finalScore: {
 		display: 'flex',
-		flexDirection: 'row',
+		flexDirection: 'column',
 		alignItems: 'center',
-		justifyContent: 'space-between',
+		justifyContent: 'center',
 		backgroundColor: '#F9E821',
 		borderRadius: 16,
 		marginBottom: responsiveScreenWidth(12),
-		padding: Platform.OS === 'ios' ? normalize(15) : normalize(10),
+		padding: Platform.OS === 'ios' ? normalize(25) : normalize(20),
 	},
 	finalScoreText: {
 		color: '#9236AD',
 		fontFamily: 'graphik-medium',
-		fontSize: '0.75rem',
+		fontSize: '1.3rem',
 	},
 	point: {
 		color: '#9236AD',
 		fontFamily: 'graphik-bold',
-		fontSize: '4rem',
+		fontSize: '1.3rem',
+		marginTop: '1rem'
 	},
 	gameButton: {
 		borderColor: '#FFFF',
@@ -365,5 +333,28 @@ const styles = EStyleSheet.create({
 		textDecorationLine: 'underline',
 		// lineHeight: '1.5rem'
 	},
-
+	correctContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		marginTop: '1rem',
+		marginBottom: '2rem'
+	},
+	correctPoint: {
+		textAlign: 'center',
+		color: '#FFFF',
+		fontFamily: 'graphik-medium',
+		fontSize: '1.4rem',
+	},
+	correctText: {
+		textAlign: 'center',
+		color: '#FFFF',
+		fontFamily: 'graphik-medium',
+		fontSize: '1.4rem',
+		marginTop: '.8rem'
+	},
+	trophy: {
+		alignItems: 'center',
+		justifyContent: 'center'
+	}
 });
