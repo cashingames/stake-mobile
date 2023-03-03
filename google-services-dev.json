@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:679565973250:android:68d2bc7672c0b0b567541b",
+        "mobilesdk_app_id": "1:679565973250:android:93303d9921b8bed367541b",
         "android_client_info": {
-          "package_name": "com.cashingames.dev"
+          "package_name": "com.cashingames.gamearkdev"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "679565973250-303psgm3ckr217v3ka92ejv25n45s7b8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cashingames.dev",
-            "certificate_hash": "cf1eb90e599125997c67f858ad62fd9c7610afe8"
-          }
-        },
         {
           "client_id": "679565973250-v5n2dtoabiqt9dsfua3r0qnajf456ou6.apps.googleusercontent.com",
           "client_type": 3
@@ -39,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "679565973250-dnck4176gaqbo0lrm39b0553ahp9cmf8.apps.googleusercontent.com",
+              "client_id": "679565973250-1p2dbdlkjm5rd3d7a4rd9n70vdk71kud.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.cashinga.dev"
+                "bundle_id": "com.cashinga.gamearkdev"
               }
             }
           ]

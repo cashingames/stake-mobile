@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>679565973250-dnck4176gaqbo0lrm39b0553ahp9cmf8.apps.googleusercontent.com</string>
+	<string>679565973250-1p2dbdlkjm5rd3d7a4rd9n70vdk71kud.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.679565973250-dnck4176gaqbo0lrm39b0553ahp9cmf8</string>
+	<string>com.googleusercontent.apps.679565973250-1p2dbdlkjm5rd3d7a4rd9n70vdk71kud</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>679565973250-303psgm3ckr217v3ka92ejv25n45s7b8.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBC3DUffW7FlaBCWEigcBx-qoyO5M9d4AY</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.cashinga.dev</string>
+	<string>com.cashinga.gamearkdev</string>
 	<key>PROJECT_ID</key>
 	<string>gameark-dev-75b15</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:679565973250:ios:ce381b5ba1dec22867541b</string>
+	<string>1:679565973250:ios:0ca4f23d2c3c113b67541b</string>
 </dict>
 </plist>

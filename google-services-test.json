@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:311405879136:android:122407a2fe7a5f227fc805",
+        "mobilesdk_app_id": "1:311405879136:android:f63f9fb40c01f3027fc805",
         "android_client_info": {
-          "package_name": "com.cashingames.test"
+          "package_name": "com.cashingames.gamearktest"
         }
       },
       "oauth_client": [
