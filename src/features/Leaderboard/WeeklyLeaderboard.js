@@ -80,7 +80,7 @@ export default function WeeklyLeaderboard({ navigation }) {
             >
                 <ScrollView>
                     <View style={styles.prizeHeaderContainer}>
-                    <PrizePoolTitle setModalVisible={setModalVisible} modalVisible={modalVisible} onPress={viewPrizePool}  />
+                    {/* <PrizePoolTitle setModalVisible={setModalVisible} modalVisible={modalVisible} onPress={viewPrizePool}  /> */}
                     </View>
                     <WeeklyGlobalLeaderboard leaders={leaders} userRank={userRank} />
                 </ScrollView>

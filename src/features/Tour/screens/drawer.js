@@ -184,7 +184,7 @@ const handleTourStop = ()=>{
                 labelContainerStyle
             />
             
-            <CopilotStep text={
+            {/* <CopilotStep text={
                 <View>
                     <Text style={drawStyles.tourTitle} >Invite Friends </Text>
                     <Text style={drawStyles.tourDesc}>Refer your friends and get bonuses for each friend referred and also stand a chance of winning cash prizes</Text>
@@ -204,7 +204,7 @@ const handleTourStop = ()=>{
                             labelContainerStyle
                         />
                 </Walkthroughable>
-            </CopilotStep>
+            </CopilotStep> */}
             
         </View>
 

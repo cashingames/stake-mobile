@@ -176,7 +176,7 @@ const HomeScreen = (props) => {
                       <View>
                           <Text style={styles.tourTitle} >Wallet</Text>
                           <Text style={styles.tourDesc}>
-                            Fund your wallet to buy enjoy more games, win points , earn great rewards and withdraw your winnings
+                            Fund your wallet to enjoy more games, win points , earn great rewards and withdraw your winnings
                           </Text>
                       </View>
                   } order={4} name={`Order${4}`}>

@@ -50,7 +50,8 @@ export default function WeeklyTopLeadersHero({ gameModes }) {
 
 const styles = EStyleSheet.create({
     leaderboard: {
-        marginRight: normalize(15)
+        width: normalize(320),
+        marginRight: normalize(20)
     },
     leaderboardHeader: {
         display: 'flex',
