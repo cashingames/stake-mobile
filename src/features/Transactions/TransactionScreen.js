@@ -112,7 +112,7 @@ export default function TransactionScreen({ navigation }) {
                         source={require('../../../assets/images/cart-icon1.png')}
                     />
                     <Text style={styles.noTransaction}>
-                        No available transaction. Buy boost , buy game plan and fund your wallet to see transactions
+                        No available transaction. get boost , get game plan and fund your wallet to see transactions
                     </Text>
                 </View>
             }

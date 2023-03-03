@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { Text, View, ScrollView, StatusBar, Platform, RefreshControl, Pressable } from 'react-native';
+import { Text, View, ScrollView, Image, StatusBar, Platform, RefreshControl, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, {
@@ -31,8 +31,6 @@ import AchievementPopup from '../../shared/AchievementPopup';
 import { getAchievements } from '../Profile/AchievementSlice';
 import useSound from '../../utils/useSound';
 import { Button } from 'react-native-elements';
-
-
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -179,7 +177,7 @@ const HomeScreen = (props) => {
                     <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
                         <WeeklyTopLeadersHero gameModes={gameModes} />
                         {/* <GlobalTopLeadersHero /> */}
-                        <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} />
+                        {/* <ChallengeWeeklyTopLeaders challengeLeaders={challengeLeaders} /> */}
                     </SwiperFlatList>
                 </View>
                 <Stakingpopup setModalVisible={setModalVisible} modalVisible={modalVisible} gameModes={gameModes} />
@@ -227,6 +225,7 @@ const UserDetails = () => {
     return (
         <View style={styles.userDetails}>
             <UserWallet balance={user.walletBalance ?? 0} />
+            {/* <View style={{ marginVertical: 20 }} /> */}
             <LiveTriviaBanner />
             <UserPoints points={user.points ?? 0} todaysPoints={user.todaysPoints ?? 0} />
             <UserItems showBuy={Platform.OS === 'ios' ? false : true} />
@@ -239,11 +238,13 @@ const UserWallet = ({ balance }) => {
         <Animated.View entering={BounceInRight.duration(2000)} style={styles.wallet}>
 
             <LottieAnimations
-                animationView={require('../../../assets/wallet.json')}
-                width={normalize(55)}
-                height={normalize(60)}
+                animationView={require('../../../assets/coin.json')}
+                width={normalize(30)}
+                height={normalize(35)}
             />
-            <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
+            <Text style={{ padding: 7, marginVertical: 12, marginBottom: 15 }} />
+            {/* <Image source={require('../../../assets/images/coin.png')} style={{ width: normalize(30), height: normalize(35), padding: 7, marginVertical: 8, marginRight: 5 }} /> */}
+            <Text style={styles.walletText}>{formatCurrency(balance)}</Text>
         </Animated.View>
     );
 }
@@ -319,7 +320,7 @@ const styles = EStyleSheet.create({
     },
     leaderboardContainer: {
         flexDirection: 'row',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
     },
     userDetails: {
         backgroundColor: '#072169',

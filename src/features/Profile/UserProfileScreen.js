@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, Image, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,14 +18,22 @@ import { randomEnteringAnimation } from '../../utils/utils';
 export default function UserProfileScreen({ navigation }) {
 
     useApplyHeaderWorkaround(navigation.setOptions);
+    const dispatch = useDispatch();
+
+    const onLogout = () => {
+        dispatch(logoutUser());
+    }
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <View style={styles.content}>
-                    <UserAvatar />
-                    <ProfileTabs />
+            <ScrollView style={{flex: 1}}>
+                <View style={[styles.content, {flex: 1}]}>
+                    <View>
+                        <UserAvatar />
+                        <ProfileTabs />
+                    </View>
                 </View>
+                <Footer onLogout={onLogout} />
             </ScrollView>
         </SafeAreaView>
     );
@@ -101,7 +109,8 @@ const ProfileTabs = () => {
             <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ChangePassword')} />
             <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('AchievementsMilestone')} />
             <ProfileTab tabName='Stats' onPress={() => navigation.navigate('UserStats')} />
-            <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} />
+            <ProfileTab tabName='Invite Friends' onPress={() => navigation.navigate('Invite')} />
+            {/* <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} /> */}
             {/* <Pressable onPress={onLogout}>
                 <Text style={styles.logoutText}>Logout</Text>
             </Pressable> */}
@@ -118,6 +127,17 @@ const ProfileTab = ({ tabName, onPress }) => {
                 <Ionicons name="chevron-forward-outline" size={20} color="#524D4D" />
             </Pressable >
         </Animated.View>
+    )
+}
+
+const Footer = ({onLogout}) =>{
+    return (
+        <View style={styles.logoutContainer}>
+            <Text style={styles.appVersion}>App version: {Constants.manifest.version}</Text>
+            <Pressable onPress={onLogout}>
+                <Text style={styles.logoutText}>Logout</Text>
+            </Pressable>
+        </View>
     )
 }
 
@@ -167,6 +187,29 @@ const styles = EStyleSheet.create({
     },
     profileTabs: {
         paddingVertical: normalize(25)
-    }
+    },
+    logoutContainer: {
+        backgroundColor: '#FFFF',
+        marginBottom: 22,
+        // flex: 1,
+        // justifyContent: 'flex-end'
+    },
+    appVersion: {
+        color: '#000000',
+        fontSize: '0.8rem',
+        lineHeight: '0.7rem',
+        fontFamily: 'graphik-regular',
+        opacity: 0.7,
+        marginVertical: 10,
+        textAlign: 'center',
+    },
+    logoutText: {
+        color: '#EF2F5F',
+        textAlign: 'center',
+        fontSize: '0.75rem',
+        fontFamily: 'graphik-medium',
+        paddingVertical: responsiveScreenHeight(1),
+
+    },
 
 });
