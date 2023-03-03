@@ -122,9 +122,9 @@ function getSlug() {
 function getAppIdentifier() {
   let identifier = "gameark";
   if (isDevelopment) {
-    identifier = "dev";
+    identifier = "gamearkdev";
   } else if (env === "preview") {
-    identifier = "test";
+    identifier = "gamearktest";
   }
 
   return `com.cashingames.${identifier}`;
@@ -133,9 +133,9 @@ function getAppIdentifier() {
 function getIosIdentifier() {
   let identifier = "gameark";
   if (isDevelopment) {
-    identifier = "dev";
+    identifier = "gamearkdev";
   } else if (env === "preview") {
-    identifier = "test";
+    identifier = "gamearktest";
   }
 
   return `com.cashinga.${identifier}`;
