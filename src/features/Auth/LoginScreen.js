@@ -199,12 +199,12 @@ const RenderCreateAccount = () => {
                     <Text style={styles.linkText}> Create one</Text>
                 </Pressable>
             </View>
-            <Text style={styles.signInText}>or</Text>
+            {/* <Text style={styles.signInText}>or</Text>
             <View style={styles.google}>
                 <SocialSignUp googleText="Sign in" />
                 <Login text="Sign in" />
                 {Platform.OS === 'ios' && <AppleSignUp />}
-            </View>
+            </View> */}
         </View>
     )
 }

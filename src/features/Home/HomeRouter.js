@@ -273,6 +273,17 @@ function CustomDrawerContent(props) {
                     <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Invite Friends</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={() => navigation.navigate('Invite')}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
                                 <Text style={drawStyles.itemLabel}>Get Help</Text>
                                 <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                             </View>}
@@ -311,17 +322,7 @@ function CustomDrawerContent(props) {
                         } order={5} name="Order5">
                             <Walkthroughable> */}
 
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Invite Friends</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('Invite')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
+
                     {/* </Walkthroughable>
                         </CopilotStep> */}
 
