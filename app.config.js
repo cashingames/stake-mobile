@@ -107,11 +107,11 @@ function getAndriodVersionCode() {
 
 function getAppName() {
   if (isDevelopment) {
-    return "Game Ark Dev";
+    return "Gameark Dev";
   } else if (env === "preview") {
-    return "Game Ark Test";
+    return "Gameark Test";
   } else {
-    return "Game Ark";
+    return "Gameark";
   }
 }
 
