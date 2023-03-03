@@ -27,14 +27,14 @@ export default ({ title, initialShowPlayButton = true ,activeSubcategory}) => {
     const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
 
     const onCategorySelected = (category) => {
-        playSound()
         setActiveCategory(category);
         dispatch(setGameCategory(undefined));
+        playSound()
     }
 
     const onSubCategorySelected = (subcategory) => {
-        playSound()
         dispatch(setGameCategory(subcategory));
+        playSound()
     }
 
 

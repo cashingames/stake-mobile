@@ -5,15 +5,19 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import { questionAnswered } from "../features/Games/GameSlice";
 import normalize from "../utils/normalize";
+import useSound from "../utils/useSound";
 import GameOption from "./GameOption";
 
 const GameQuestions = () => {
     const dispatch = useDispatch();
     const displayedQuestion = useSelector(state => state.game.displayedQuestion);
     const displayedOptions = useSelector(state => state.game.displayedOptions);
+    const { playSound } =  useSound(require('../../assets/sounds/button-clicked1.mp3'))
+
 
     const optionSelected = (option) => {
         dispatch(questionAnswered(option));
+        playSound()
     }
 
     return (

@@ -30,8 +30,9 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     }
 
     const onPlayButtonClick = () => {
-        playSound()
         onSelectGameMode();
+        playSound()
+
     }
 
     const onSelectGameMode = () => {

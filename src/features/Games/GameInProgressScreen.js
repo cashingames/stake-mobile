@@ -21,7 +21,7 @@ import UserAvailableBoosts from "../../shared/UserAvailableBoosts";
 import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import analytics from '@react-native-firebase/analytics';
-// import useSound from "../../utils/useSound";
+import useSound from "../../utils/useSound";
 
 
 
@@ -42,7 +42,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     const newUser = useSelector(state => state.auth.user.joinedOn);
     const newUserDate = newUser.slice(0, 10);
     let formattedDate = new Date().toISOString().split('T')[0];
-    // const { playSound } =  useSound(require('../../../assets/sounds/game-started.mp3'))
+    const { playSound } = useSound(require('../../../assets/sounds/game-started.mp3'))
     const openBottomSheet = () => {
         refRBSheet.current.open()
     }
@@ -52,6 +52,9 @@ export default function GameInProgressScreen({ navigation, route }) {
     }
 
     const [ending, setEnding] = useState(false);
+    useEffect(() => {
+        playSound()
+    }, [])
 
     const onEndGame = (confirm = false) => {
 
@@ -75,21 +78,21 @@ export default function GameInProgressScreen({ navigation, route }) {
             .then(unwrapResult)
             .then(async () => {
                 crashlytics().log('User completed exhibition game');
-                if(formattedDate !== newUserDate && !isStaking && !isPlayingTrivia){
-                await analytics().logEvent('exhibition_game_completed', {
-                    'id': user.username,
-                    'phone_number': user.phoneNumber,
-                    'email': user.email
-                });
-            };
-                if(formattedDate === newUserDate && !isStaking && !isPlayingTrivia){
+                if (formattedDate !== newUserDate && !isStaking && !isPlayingTrivia) {
+                    await analytics().logEvent('exhibition_game_completed', {
+                        'id': user.username,
+                        'phone_number': user.phoneNumber,
+                        'email': user.email
+                    });
+                };
+                if (formattedDate === newUserDate && !isStaking && !isPlayingTrivia) {
                     await analytics().logEvent('new_user_exhibition_completed', {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
                         'email': user.email
                     });
                 };
-                if(formattedDate === newUserDate && isStaking){
+                if (formattedDate === newUserDate && isStaking) {
                     await analytics().logEvent('new_user_staking_completed', {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
@@ -120,7 +123,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                     navigation.navigate('TriviaEndResult', {
                         triviaId: params.triviaId,
                     })
-                }else{
+                } else {
                     navigation.navigate('GameEndResult');
                 }
             })
@@ -178,9 +181,6 @@ export default function GameInProgressScreen({ navigation, route }) {
         return null;
     }
 
-    // useEffect(() => {
-    //     playSound()
-    // }, [])
     return (
         // <View>
         //     <Text>me</Text>
@@ -211,10 +211,12 @@ const GameProgressAndBoosts = ({ onComplete, ending }) => {
 }
 
 const NextButton = ({ onPress, ending }) => {
+    const { playSound } = useSound(require('../../../assets/sounds/button-clicked2.wav'))
     const dispatch = useDispatch()
     const isLastQuestion = useSelector(state => state.game.isLastQuestion);
     const pressNext = () => {
         dispatch(isLastQuestion ? onPress : nextQuestion())
+        playSound()
     }
 
     return (

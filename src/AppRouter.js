@@ -76,6 +76,7 @@ import ContactUs from './features/Support/ContactUs';
 import AuthContactUs from './features/Support/AuthContactUs';
 import TourIndex from './features/Tour/Index';
 import Settings from './features/Support/Settings';
+import useSound from './utils/useSound';
 
 const AppStack = createNativeStackNavigator();
 
@@ -84,6 +85,7 @@ function AppRouter() {
 	const dispatch = useDispatch();
 
 	const [loading, setLoading] = useState(true);
+	const { playSound } =  useSound(require('../assets/sounds/pop-up.wav'))
 
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
@@ -127,7 +129,7 @@ function AppRouter() {
 
 				}
 			})
-
+			playSound()
 		});
 
 		messaging().onNotificationOpenedApp(async remoteMessage => {
