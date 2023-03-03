@@ -1,42 +1,48 @@
 {
   "project_info": {
-    "project_number": "520726557605",
-    "firebase_url": "https://cashingames-8730a-default-rtdb.firebaseio.com",
-    "project_id": "cashingames-8730a",
-    "storage_bucket": "cashingames-8730a.appspot.com"
+    "project_number": "300193059462",
+    "project_id": "gameark-prod",
+    "storage_bucket": "gameark-prod.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:520726557605:android:51b5c8f6983f84221aee4c",
+        "mobilesdk_app_id": "1:300193059462:android:721dfe452a426a4d323707",
         "android_client_info": {
-          "package_name": "com.cashingames.cashingames"
+          "package_name": "com.cashingames.gameark"
         }
       },
       "oauth_client": [
         {
-          "client_id": "520726557605-ckaa4jojbac8mgpir7ta7cnngqmuodm0.apps.googleusercontent.com",
+          "client_id": "300193059462-2ggl088n45irfm7tv76pefv9d6luih0f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cashingames.gameark",
+            "certificate_hash": "d990d9a75536f2304fb90dfa94b5e3e55feb78b6"
+          }
+        },
+        {
+          "client_id": "300193059462-847psqhn8f19ph76p7s0t1gus8gtm5lo.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDLhEg4lOUH8RGOV4TVoRp6d9W5CzQd9Fo"
+          "current_key": "AIzaSyB19ZlVxOzSuvOU7pfI0xl1L21d3ZRJJmQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "520726557605-ckaa4jojbac8mgpir7ta7cnngqmuodm0.apps.googleusercontent.com",
+              "client_id": "300193059462-847psqhn8f19ph76p7s0t1gus8gtm5lo.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "520726557605-4g7m3uvoloe2tltqo5tdk8n6nafp5g0l.apps.googleusercontent.com",
+              "client_id": "300193059462-okf0uiotuhpjqavuoqsnstad14apfi4r.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.cashinga.cashingames",
-                "app_store_id": "6443878628"
+                "bundle_id": "com.cashinga.gameark"
               }
             }
           ]

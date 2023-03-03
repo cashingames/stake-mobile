@@ -1,45 +1,45 @@
 {
   "project_info": {
-    "project_number": "952052901654",
-    "project_id": "cashingames-dev",
-    "storage_bucket": "cashingames-dev.appspot.com"
+    "project_number": "679565973250",
+    "project_id": "gameark-dev-75b15",
+    "storage_bucket": "gameark-dev-75b15.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:952052901654:android:267c853b8ad61e7a379237",
+        "mobilesdk_app_id": "1:679565973250:android:68d2bc7672c0b0b567541b",
         "android_client_info": {
           "package_name": "com.cashingames.dev"
         }
       },
       "oauth_client": [
         {
-          "client_id": "952052901654-c0ti6hu2cag57lqknotln3spdv3nh4od.apps.googleusercontent.com",
+          "client_id": "679565973250-303psgm3ckr217v3ka92ejv25n45s7b8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.cashingames.dev",
-            "certificate_hash": "536be03394aff65f56c9cca0fc9748d489495266"
+            "certificate_hash": "cf1eb90e599125997c67f858ad62fd9c7610afe8"
           }
         },
         {
-          "client_id": "952052901654-v72ae8c5k2ushjg3arm2e2pjjv26pb0f.apps.googleusercontent.com",
+          "client_id": "679565973250-v5n2dtoabiqt9dsfua3r0qnajf456ou6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDtHJfzbYr4ZJL6hxDM9j0fnwxqvncRdO8"
+          "current_key": "AIzaSyCf4us5a6VUhhqmXlQ9ek5HNJ145wpPCoI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "952052901654-v72ae8c5k2ushjg3arm2e2pjjv26pb0f.apps.googleusercontent.com",
+              "client_id": "679565973250-v5n2dtoabiqt9dsfua3r0qnajf456ou6.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "952052901654-et90d8a7dg59o4hi2r8go5jgtilinb0l.apps.googleusercontent.com",
+              "client_id": "679565973250-dnck4176gaqbo0lrm39b0553ahp9cmf8.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.cashinga.dev"

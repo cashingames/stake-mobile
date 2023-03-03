@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>283687151805-lq9lvlant4obs1cpg8jhcmluai0lgida.apps.googleusercontent.com</string>
+	<string>311405879136-ijig8oej0ft3mtrneijn7n2saau6p13o.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.283687151805-lq9lvlant4obs1cpg8jhcmluai0lgida</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>283687151805-v41n03pk61mb9tk84od4cgv9dmudnv82.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.311405879136-ijig8oej0ft3mtrneijn7n2saau6p13o</string>
 	<key>API_KEY</key>
-	<string>AIzaSyB6TuORFXqMpS6b1-0R_-g6qjshro3IZCE</string>
+	<string>AIzaSyAJz_yyuKmCTbuAaepAAOqG_vXyVbyn0Wc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>283687151805</string>
+	<string>311405879136</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.cashinga.test</string>
 	<key>PROJECT_ID</key>
-	<string>cashingames-test</string>
+	<string>gameark-test</string>
 	<key>STORAGE_BUCKET</key>
-	<string>cashingames-test.appspot.com</string>
+	<string>gameark-test.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:283687151805:ios:203c070048d4abdfd3afd4</string>
+	<string>1:311405879136:ios:dffff1149773e6347fc805</string>
 </dict>
 </plist>
