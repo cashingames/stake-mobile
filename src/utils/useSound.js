@@ -39,7 +39,7 @@ export default function useSound(soundName) {
       : undefined;
   }, [sound]);
 
-  const handleToogle = () => {
+  const handleToggle = () => {
     if(sound){
       sound.unloadAsync();
     }
@@ -48,7 +48,7 @@ export default function useSound(soundName) {
 
   }
 
-  return { playSound, handleToogle, toogle };
+  return { playSound, handleToggle, toogle };
 }
 
 

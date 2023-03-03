@@ -12,10 +12,10 @@ const Settings = () => {
     const navigation = useNavigation();
     useApplyHeaderWorkaround(navigation.setOptions);
 
-    const { toogle, handleToogle } = useSound(require('../../../assets/sounds/dashboard.mp3'));
+    const { toogle, handleToggle } = useSound(require('../../../assets/sounds/dashboard.mp3'));
 
     const handleToggleSwitch = () => {
-      handleToogle();
+      handleToggle();
     };
     return (
       <View style={styles.container}>
