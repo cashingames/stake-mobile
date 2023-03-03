@@ -1,15 +1,15 @@
 const env = process.env.APP_VARIANT;
 const isDevelopment = env === 'development' || env === 'local' || false;
-const version = "1.2.81"; //Update for every build and publish
+const version = "1.1.11"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
   version: version,
-  runtimeVersion: "2.81", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "1.11", //All apps using the same runtime will get the published updates. Generally update for every new build
   icon: "./assets/images/adaptive-icon2.png",
   jsEngine: "hermes",
-  scheme: "cashingames",
+  scheme: "gameark",
   splash: {
     image: "./assets/images/splash2.png",
     resizeMode: "contain",
@@ -43,7 +43,7 @@ export default {
           {
             "scheme": "https",
             "host": "cashingames.com",
-            "path": "/cashingames"
+            "path": "/gameark"
           }
         ],
         "category": [
@@ -107,20 +107,20 @@ function getAndriodVersionCode() {
 
 function getAppName() {
   if (isDevelopment) {
-    return "Cashingames Dev";
+    return "Game Ark Dev";
   } else if (env === "preview") {
-    return "Cashingames Test";
+    return "Game Ark Test";
   } else {
-    return "Cashingames";
+    return "Game Ark";
   }
 }
 
 function getSlug() {
-  return "cashingames";
+  return "game-ark";
 }
 
 function getAppIdentifier() {
-  let identifier = "cashingames";
+  let identifier = "gameark";
   if (isDevelopment) {
     identifier = "dev";
   } else if (env === "preview") {
@@ -131,7 +131,7 @@ function getAppIdentifier() {
 }
 
 function getIosIdentifier() {
-  let identifier = "cashingames";
+  let identifier = "gameark";
   if (isDevelopment) {
     identifier = "dev";
   } else if (env === "preview") {
@@ -244,5 +244,5 @@ function getGoogleIosClientId() {
 }
 
 function getEasProjectId() {
-  return "0e946637-631c-4661-a1ca-5f28b92a1e12";
+  return "52e97a03-c16a-4967-a536-1b53e1cd7b8c";
 }
