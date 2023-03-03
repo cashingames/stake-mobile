@@ -19,8 +19,7 @@ import ExhibitionUserAvailableBoosts from "../../shared/ExhibitionUserAvailableB
 import LottieAnimations from "../../shared/LottieAnimations";
 import NoGame from "../../shared/NoGame";
 import crashlytics from '@react-native-firebase/crashlytics';
-
-
+import useSound from "../../utils/useSound";
 
 export default function GameInstructionsScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
@@ -36,6 +35,7 @@ export default function GameInstructionsScreen({ navigation }) {
 
   const isStakingEntryMode = () => gameMode.name === "STAKING";
   const refRBSheet = useRef();
+  const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
 
   const gotoStaking = async () => {
     await analytics().logEvent('navigating_to_staking_platform', {
@@ -61,6 +61,7 @@ export default function GameInstructionsScreen({ navigation }) {
       'phone_number': user.phoneNumber,
       'email': user.email
     })
+    playSound()
     refRBSheet.current.open()
   }
 

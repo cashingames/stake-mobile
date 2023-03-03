@@ -14,6 +14,7 @@ import StakeWinnings from '../../shared/StakeWinnings';
 import Boostspopup from '../../shared/BoostPopUp';
 import { PopGoogleReviewLogic } from '../../shared/GoogleReview';
 import { getAchievements } from '../Profile/AchievementSlice';
+import useSound from '../../utils/useSound';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -34,6 +35,8 @@ export default function GameEndResultScreen({ navigation }) {
 	const newUser = useSelector(state => state.auth.user.joinedOn);
 	const newUserDate = newUser.slice(0, 10);
 	let formattedDate = new Date().toISOString().split('T')[0];
+	const { playSound } =  useSound(require('../../../assets/sounds/game-completed2.wav'))
+	const popupSound =  useSound(require('../../../assets/sounds/pop-up.wav'))
 
 	const logFreeGamesExhausted = () => {
 		const currentDate = new Date().toLocaleDateString();
@@ -144,6 +147,7 @@ export default function GameEndResultScreen({ navigation }) {
 	useEffect(() => {
 		if (pointsGained <= minimumBoostScore) {
 			setModalVisible(true)
+			popupSound.playSound()
 		} else {
 			setModalVisible(false)
 		}
@@ -168,6 +172,10 @@ export default function GameEndResultScreen({ navigation }) {
         // update recent in background
         dispatch(getAchievements());
     }, [])
+
+	useEffect(() => {
+		playSound()
+	},[])
 
 	return (
 		<ScrollView style={styles.container}>

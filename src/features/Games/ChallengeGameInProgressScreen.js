@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View, ScrollView, ImageBackground, Alert, StatusBar, BackHandler } from 'react-native';
 import normalize from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -21,6 +21,7 @@ import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
+import useSound from "../../utils/useSound";
 
 
 export default function ChallengeGameInProgressScreen({ navigation }) {
@@ -38,6 +39,8 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
   const [ending, setEnding] = useState(false);
   const newUser = useSelector(state => state.auth.user.joinedOn);
   const newUserDate = newUser.slice(0, 10);
+  const { playSound } = useSound(require('../../../assets/sounds/game-started.mp3'))
+
 
   let date = new Date();
   let year = date.getFullYear();
@@ -46,6 +49,9 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
   const formattedDate = `${year}-${month}-${day}`;
 
 
+  useEffect(() => {
+    playSound()
+}, [])
   const openBottomSheet = () => {
     refRBSheet.current.open()
   }
@@ -173,14 +179,19 @@ const GameProgressAndBoosts = ({ onComplete, ending }) => {
 }
 
 const NextButton = ({ onPress, ending }) => {
+  const { playSound } = useSound(require('../../../assets/sounds/button-clicked2.wav'))
   const dispatch = useDispatch()
   const isLastQuestion = useSelector(state => state.game.isLastQuestion);
+  const pressNext = () => {
+    dispatch(isLastQuestion ? onPress : nextQuestion())
+    playSound()
+}
 
   return (
     <AppButton
       disabled={ending}
       text={isLastQuestion ? 'Finish' : 'Next'}
-      onPress={() => dispatch(isLastQuestion ? onPress : nextQuestion())}
+      onPress={pressNext}
       style={styles.nextButton}
     />
   )

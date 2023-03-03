@@ -9,6 +9,7 @@ import { bombOptions, boostReleased, consumeBoost, pauseGame, skipQuestion } fro
 import { reduceBoostCount } from "../features/Auth/AuthSlice";
 import { unwrapResult } from '@reduxjs/toolkit';
 import analytics from '@react-native-firebase/analytics';
+import useSound from '../utils/useSound';
 
 
 
@@ -19,6 +20,10 @@ const AvailableGameSessionBoosts = () => {
     const displayedOptions = useSelector(state => state.game.displayedOptions);
     const gameMode = useSelector(state => state.game.gameMode);
     const [showText, setShowText] = useState(true);
+
+    const freeze =  useSound(require('../../assets/sounds/sound.wav'))
+    const skip =  useSound(require('../../assets/sounds/achievement-unlocked2.wav'))
+
 
 
     const boostsToDisplay = () => {
@@ -50,6 +55,7 @@ const AvailableGameSessionBoosts = () => {
         const name = data.name.toUpperCase();
         if (name === 'TIME FREEZE') {
             dispatch(pauseGame(true));
+            freeze.playSound()
             setTimeout(() => {
                 dispatch(pauseGame(false))
                 dispatch(boostReleased())
@@ -57,6 +63,7 @@ const AvailableGameSessionBoosts = () => {
         }
         if (name === 'SKIP') {
             dispatch(skipQuestion());
+            skip.playSound()
             dispatch(boostReleased());
         }
         if (name === "BOMB") {

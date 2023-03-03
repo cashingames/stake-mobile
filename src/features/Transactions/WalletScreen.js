@@ -13,6 +13,7 @@ import analytics from '@react-native-firebase/analytics';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { withdrawWinnings } from '../CommonSlice';
+import useSound from '../../utils/useSound';
 
 const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -23,7 +24,8 @@ export default function WalletScreen() {
     const user = useSelector(state => state.auth.user)
     const [withdraw, setWithdraw] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
-
+    const success =  useSound(require('../../../assets/sounds/updated.mp3'))
+    const failed = useSound(require('../../../assets/sounds/failed.mp3'))
 
     const refRBSheet = useRef();
 
@@ -53,11 +55,13 @@ export default function WalletScreen() {
                     'value': user.withdrawableBalance,
                     'currency': 'NGN'
                 });
+                success.playSound()
                 openBottomSheet();
                 setWithdraw(false)
                 dispatch(getUser())
             },
                 err => {
+                    failed.playSound()
                     if (!err || !err.response || err.response === undefined) {
                         Alert.alert("Your Network is Offline.");
                         setWithdraw(false)

@@ -19,6 +19,7 @@ const HelpPages = () => {
             <View style={styles.profileTabs}>
                 <HelpTab tabName='Contact Us' onPress={() => navigation.navigate('ContactUs')} />
                 <HelpTab tabName='FAQ' onPress={() => navigation.navigate('Support')} />
+                <HelpTab tabName='Settings' onPress={() => navigation.navigate('Settings')} />
             </View>
         </ScrollView>
     )

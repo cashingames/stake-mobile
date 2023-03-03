@@ -6,12 +6,15 @@ import { Image } from 'react-native';
 import Constants from 'expo-constants';
 import { useSelector } from 'react-redux';
 import analytics from '@react-native-firebase/analytics';
+import useSound from '../utils/useSound';
 
 
 const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
     const [achievement, setAchievement] = React.useState({});
     const user = useSelector(state => state.auth.user);
     const achievementBadges = useSelector(state => state.achievementSlice)
+    const { playSound } =  useSound(require('../../assets/sounds/achievement-unlocked1.wav'))
+
 
     // listen for changes and prompt alert
     React.useEffect(()=>{

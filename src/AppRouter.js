@@ -58,7 +58,7 @@ import SignupVerifyEmailScreen from './features/Auth/SignupVerifyEmailScreen';
 import EmailVerifiedScreen from './features/Auth/EmailVerifiedScreen';
 import ChallengeNotPendingScreen from './features/Games/ChallengeNotPendingScreen';
 import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import routeDecider from './utils/notificationRouteDecider';
@@ -75,6 +75,8 @@ import HelpPages from './features/Support/HelpPages';
 import ContactUs from './features/Support/ContactUs';
 import AuthContactUs from './features/Support/AuthContactUs';
 import TourIndex from './features/Tour/Index';
+import Settings from './features/Support/Settings';
+import useSound from './utils/useSound';
 
 const AppStack = createNativeStackNavigator();
 
@@ -83,6 +85,7 @@ function AppRouter() {
 	const dispatch = useDispatch();
 
 	const [loading, setLoading] = useState(true);
+	const { playSound } =  useSound(require('../assets/sounds/pop-up.wav'))
 
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
@@ -126,7 +129,7 @@ function AppRouter() {
 
 				}
 			})
-
+			playSound()
 		});
 
 		messaging().onNotificationOpenedApp(async remoteMessage => {
@@ -310,6 +313,7 @@ function AppRouter() {
 			<AppStack.Screen name="Help" component={HelpPages} options={{ title: 'Support' }} />
 			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Help' }} />
 			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
+			<AppStack.Screen name="Settings" component={Settings} options={{ title: 'Settings' }} />
 			<AppStack.Screen name="ContactUs" component={ContactUs} options={{ title: 'Contact Us' }} />
 			<AppStack.Screen name="EmailVerified" component={EmailVerifiedScreen} options={{ headerShown: false }} />
 			<AppStack.Screen name="ChallengeNotPending" component={ChallengeNotPendingScreen} options={{ headerShown: false }} />

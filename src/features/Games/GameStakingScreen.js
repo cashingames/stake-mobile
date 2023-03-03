@@ -17,6 +17,7 @@ import ExhibitionUserAvailableBoosts from "../../shared/ExhibitionUserAvailableB
 import StakingPredictionsTable from "../../shared/StakingPredictionsTable";
 import LowWalletBalance from "../../shared/LowWalletBalance";
 import UserWalletBalance from "../../shared/UserWalletBalance";
+import useSound from "../../utils/useSound";
 
 
 const GameStakingScreen = ({ navigation }) => {
@@ -29,6 +30,8 @@ const GameStakingScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const refRBSheet = useRef();
+    const { playSound } = useSound(require('../../../assets/sounds/failed.mp3'))
+
 
     const openBottomSheet = async () => {
         refRBSheet.current.open()
@@ -56,12 +59,14 @@ const GameStakingScreen = ({ navigation }) => {
         setLoading(true);
         if (Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount)) {
             Alert.alert(`Minimum stake amount is ${minimumExhibitionStakeAmount} naira`);
+            playSound()
             setLoading(false);
             return false;
         }
 
         if (Number.parseFloat(amount) > Number.parseFloat(maximumExhibitionStakeAmount)) {
             Alert.alert(`Maximum stake amount is ${maximumExhibitionStakeAmount} naira`);
+            playSound()
             setLoading(false);
             return false;
         }
@@ -71,6 +76,7 @@ const GameStakingScreen = ({ navigation }) => {
                 'phone_number': user.phoneNumber,
                 'email': user.email
             });
+            playSound()
             openBottomSheet();
             setLoading(false);
             return

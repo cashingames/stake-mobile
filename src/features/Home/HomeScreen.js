@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { Text, View, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
+import { Text, View, ScrollView, Image, StatusBar, Platform, RefreshControl, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, {
@@ -15,7 +15,7 @@ import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import LiveTriviaCard from '../LiveTrivia/LiveTriviaCard';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
-import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../CommonSlice';
+import { fetchFeatureFlags, getCommonData, initialLoadingComplete, loadSoundPrefernce, setSound } from '../CommonSlice';
 import UserItems from '../../shared/UserItems';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -27,10 +27,10 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import Stakingpopup from '../../shared/Stakingpopup';
 import WeeklyTopLeadersHero from '../../shared/WeeklyTopLeadersHero';
 // import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
-import { Walkthroughable } from '../Tour/Walkthrouable';
 import AchievementPopup from '../../shared/AchievementPopup';
 import { getAchievements } from '../Profile/AchievementSlice';
-import { Image } from 'react-native';
+import useSound from '../../utils/useSound';
+import { Button } from 'react-native-elements';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -41,6 +41,7 @@ const HomeScreen = (props) => {
 
     const dispatch = useDispatch();
 
+
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
@@ -50,10 +51,17 @@ const HomeScreen = (props) => {
     const [achievementPopup, setAchievementPopup] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
+    const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
 
     // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
     const [forceRender, setForceRender] = useState(true);
-
+    
+    const { playSound } =  useSound(require('../../../assets/sounds/dashboard.mp3'))
+    useEffect(()=>{
+       if(isSoundLoaded){
+            playSound()
+       }
+    }, [isSoundLoaded])
     const onRefresh = React.useCallback(() => {
         // console.info('refreshing')
         setRefreshing(true);
@@ -70,6 +78,7 @@ const HomeScreen = (props) => {
         Promise.all([_2, _3]).then(() => {
             dispatch(initialLoadingComplete());
         });
+        loadSoundPrefernce(dispatch, setSound)
 
     }, []);
 
@@ -119,6 +128,9 @@ const HomeScreen = (props) => {
     );
 
     // useEffect(()=>{
+    //     playSound()
+    // },[])
+    // useEffect(()=>{
     //     setTimeout(()=>{
     //         if((isTourActive?.payload || isTourActive) && !loading && (props?.route?.params?.reload) ){
                 
@@ -159,6 +171,7 @@ const HomeScreen = (props) => {
             >
                 <UserDetails />
                 <View style={styles.container}>
+                
                     <SelectGameMode  />
                     {/* <SelectGameMode Walkthroughable={Walkthroughable} CopilotStep={CopilotStep} /> */}
                     <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>

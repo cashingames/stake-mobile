@@ -11,13 +11,15 @@ import { isTrue } from '../../utils/stringUtl';
 import { useSelector } from 'react-redux';
 import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
+import { Platform } from 'react-native';
+import useSound from '../../utils/useSound';
 
 const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const activeSubcategory = useSelector(state => state.game.gameCategory);
     const gameMode = useSelector(state => state.game.gameMode);
     const refRBSheet = useRef();
-
+    const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
 
     // const openBottomSheet = () => {
     //     refRBSheet.current.open()
@@ -29,6 +31,8 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
 
     const onPlayButtonClick = () => {
         onSelectGameMode();
+        playSound()
+
     }
 
     const onSelectGameMode = () => {

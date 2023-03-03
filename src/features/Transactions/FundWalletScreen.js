@@ -15,6 +15,7 @@ import { formatCurrency } from "../../utils/stringUtl";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { Paystack } from "react-native-paystack-webview";
 import analytics from '@react-native-firebase/analytics';
+import useSound from "../../utils/useSound";
 
 
 export default function FundWalletScreen() {
@@ -26,6 +27,8 @@ export default function FundWalletScreen() {
   const [amount, setAmount] = useState("");
   const [showPayment, setShowPayment] = React.useState(false);
   const minimumWalletFundableAmount = useSelector(state => state.common.minimumWalletFundableAmount);
+  const { playSound } =  useSound(require('../../../assets/sounds/updated.mp3'))
+
   
   const transactionCompleted = async (res) => {
     // verifyFunding(res.reference); for local testing
@@ -38,6 +41,7 @@ export default function FundWalletScreen() {
       'email': user.email
     });
     dispatch(getUser());
+    playSound()
     setShowPayment(false);
     navigation.navigate("Wallet");
   };
