@@ -43,9 +43,9 @@ const GamePlans = ({ user }) => {
     const plans = useSelector(state => state.common.plans);
     return (
         <View style={styles.storeItems}>
-            <Text style={styles.title}>Buy Games</Text>
+            <Text style={styles.title}>Get Games</Text>
             <Text style={styles.storeItemsDescription}>
-                You can only play 5 free games daily, Buy Games to enjoy
+                You can only play 5 free games daily, Get Games to enjoy
                 playing without interruptons
             </Text>
             <View style={styles.storeCards}>
@@ -174,7 +174,7 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
     return (
         <View style={styles.buyBoost}>
             <View style={styles.buyItemHeader}>
-                <Text style={styles.buyItemTitle}>Buy Game</Text>
+                <Text style={styles.buyItemTitle}>Get Game</Text>
                 <Ionicons name="close-outline" size={20} color="#292D32" onPress={onClose} />
             </View>
             <View style={styles.buyItemCard}>
@@ -191,10 +191,10 @@ const GameBoosts = (user) => {
     const boosts = useSelector(state => state.common.boosts);
     return (
         <View style={styles.storeItems}>
-            <Text style={styles.title}>Buy Boosts</Text>
+            <Text style={styles.title}>Get Boosts</Text>
             <Text style={styles.storeItemsDescription}>
                 Boost gives you super powers when you’re playing quizes.
-                Buy boosts to let you win more games
+                Get boosts to let you win more games
             </Text>
             <View style={styles.storeCards}>
                 {boosts.map((boost, i) => <BoostCard key={i} boost={boost} user={user} />)}

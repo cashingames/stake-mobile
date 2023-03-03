@@ -311,7 +311,7 @@ function CustomDrawerContent(props) {
                         } order={5} name="Order5">
                             <Walkthroughable> */}
 
-                    <DrawerItem
+                    {/* <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
                                 <Text style={drawStyles.itemLabel}>Invite Friends</Text>
@@ -321,18 +321,18 @@ function CustomDrawerContent(props) {
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
-                    />
+                    /> */}
                     {/* </Walkthroughable>
                         </CopilotStep> */}
 
                 </View>
             </ScrollView>
-            <View style={drawStyles.logoutContainer}>
+            {/* <View style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
                 <Pressable onPress={onLogout}>
                     <Text style={styles.logoutText}>Logout</Text>
                 </Pressable>
-            </View>
+            </View> */}
         </DrawerContentScrollView>
     );
 }
