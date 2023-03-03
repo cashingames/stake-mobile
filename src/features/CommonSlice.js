@@ -137,6 +137,14 @@ export const sendUserFeedback = createAsyncThunk(
     }
 )
 
+export const getStakeWinners = createAsyncThunk(
+    'common/getStakeWinners',
+    async (data, thunkAPI) => {
+        const response = await axios.get('v3/stakers/sessions/recent')
+        return response.data;
+    }
+)
+
 export const fetchFeatureFlags = createAsyncThunk(
     'common/fetchFeatureFlags',
     async () => {
@@ -189,7 +197,8 @@ const initialState = {
     minimumChallengeStakeAmount: 0,
     minimumWalletFundableAmount: 0,
     minimumBoostScore:0,
-    periodBeforeChallengeStakingExpiry: ''
+    periodBeforeChallengeStakingExpiry: '',
+    stakeWinners:[]
 }
 
 const stakingGameMode =
@@ -271,6 +280,9 @@ export const CommonSlice = createSlice({
             })
             .addCase(getUserNotifications.fulfilled, (state, action) => {
                 state.userNotifications = action.payload.data.data;
+            })
+            .addCase(getStakeWinners.fulfilled, (state, action) => {
+                state.stakeWinners = action.payload;
             })
             .addCase(fetchUserTransactions.fulfilled, (state, action) => {
                 state.loadMoreTransactions = action.payload.length >= 10;

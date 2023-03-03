@@ -33,7 +33,7 @@ export default function ({ navigation }) {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <UserItems />
-            <GamePlans user={user} />
+            {/* <GamePlans user={user} /> */}
             <GameBoosts user={user} />
         </ScrollView>
     );

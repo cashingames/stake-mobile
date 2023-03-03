@@ -19,7 +19,7 @@ export default function (props) {
     const shouldUseEditableStyle = editable === undefined || editable === true;
 
     return (
-        <>
+        <View style={styles.inputHeader}>
             <Text style={styles.inputLabel} >{label}</Text>
             <View style={styles.inputContainer}>
                 <TextInput
@@ -40,11 +40,15 @@ export default function (props) {
                 {error && <Text style={styles.error} >{error}</Text>}
             </View>
 
-        </>
+        </View>
     );
 }
 
 const styles = EStyleSheet.create({
+    inputHeader:{
+        display: 'flex',
+        flexDirection: 'column',
+    },
     inputLabel: {
         fontFamily: 'graphik-medium',
         color: '#000000B2',

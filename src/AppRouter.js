@@ -75,6 +75,7 @@ import HelpPages from './features/Support/HelpPages';
 import ContactUs from './features/Support/ContactUs';
 import AuthContactUs from './features/Support/AuthContactUs';
 import TourIndex from './features/Tour/Index';
+import EmailVerificationScreen from './features/Auth/EmailVerificationScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -262,6 +263,7 @@ function AppRouter() {
 						<AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ title: 'Stats' }} />
 						<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ title: 'Achievements' }} />
 						<AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
+						<AppStack.Screen name="EmailVerification" component={EmailVerificationScreen} options={{ title: 'Email Verification' }} />
 
 
 						{/** store */}
@@ -351,6 +353,8 @@ const setupAxios = async function () {
 }
 
 const appendAxiosAuthHeader = function (token) {
+	axios.defaults.headers.common['x-brand-id'] = 2; //@TODO Change to 1
+
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {

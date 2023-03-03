@@ -8,13 +8,13 @@ import Input from '../../shared/Input';
 import { CheckBox } from 'react-native-elements'
 import AuthTitle from '../../shared/AuthTitle';
 import { useDispatch } from 'react-redux';
-import { registerUser, saveCreatedUserCredentials } from './AuthSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import SocialSignUp from '../../shared/SocialSignUp';
 import { Ionicons } from "@expo/vector-icons";
 import { CountryPicker } from "react-native-country-codes-picker";
 import AppleSignUp from '../../shared/AppleSignUp';
 import analytics from '@react-native-firebase/analytics';
+import { registerUser } from './AuthSlice';
 
 
 
@@ -24,16 +24,16 @@ const SignupScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
-    const [password_confirmation, setPasswordConfirmation] = useState('');
     const [canSend, setCanSend] = useState(true);
     const [passErr, setPassError] = useState(false);
     const [emailErr, setEmailError] = useState(false);
     const [phoneErr, setPhoneError] = useState(false);
-    const [error, setError] = useState('')
+    const [allError, setAllError] = useState('')
     const [checked, setChecked] = useState(false);
     const [show, setShow] = useState(false);
     const [countryCode, setCountryCode] = useState('+234');
     const [referrer, setReferrer] = useState('');
+    const [loading, setLoading] = useState(false);
 
 
     const contactUs = async () => {
@@ -55,19 +55,10 @@ const SignupScreen = () => {
         text.length > 0 && text.length < 10 ? setPhoneError(true) : setPhoneError(false);
         setPhone(text)
     }
-    // const onChangeConfirmPassword = (text) => {
-    //     setPasswordConfirmation(text)
-    // }
 
-    // const onNext = () => {
-    //     //save this information in store
-    //     dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone, country_code: countryCode }));
-    //     navigation.navigate("SignupProfile")
-    // }
-
-    const onNext = () => {
+    const onSend = () => {
+        console.log('next')
         setLoading(true);
-        //dispatch(saveCreatedUserCredentials({ email, password, password_confirmation: password, phone_number: phone, country_code: countryCode }))
         registerUser({
             email, password,
             password_confirmation: password,
@@ -75,30 +66,26 @@ const SignupScreen = () => {
             country_code: countryCode,
             referrer: referrer,
         }).then(response => {
-            analytics().logEvent('registration_unverified', {
-                'email': email,
-                'phone_number': phone
-            });
+            console.log(response)
             navigation.navigate('SignupVerifyPhone', {
                 phone_number: phone,
                 next_resend_minutes: response.data.data.next_resend_minutes
             })
-
         }, err => {
             if (!err || !err.response || err.response === undefined) {
-                setError("Your Network is Offline.");
+                setAllError("Your Network is Offline.");
             }
             else if (err.response.status === 500) {
-                setError("Service not currently available. Please contact support");
+                setAllError("Service not currently available. Please contact support");
             }
             else {
                 const errors =
                     err.response && err.response.data && err.response.data.errors;
                 const firstError = Object.values(errors, {})[0];
-                setError(firstError[0])
+                setAllError(firstError[0])
             }
             setLoading(false);
-        });
+        })
     }
 
     useEffect(() => {
@@ -112,7 +99,7 @@ const SignupScreen = () => {
             <View style={styles.headerBox}>
                 <AuthTitle text='Create an account' />
             </View>
-            <View style={styles.signIn}>
+            {/* <View style={styles.signIn}>
                 <Text style={styles.signInText}>Use your social link</Text>
                 <View style={styles.google}>
                     <SocialSignUp googleText="Sign up" />
@@ -121,10 +108,10 @@ const SignupScreen = () => {
                     }
                 </View>
                 <Text style={styles.signInText}>or</Text>
-            </View>
+            </View> */}
             <View style={styles.inputContainer}>
-                {error.length > 0 &&
-                    <Text>{error}</Text>
+                {allError.length > 0 &&
+                    <Text>{allError}</Text>
                 }
                 <Input
                     label='Email'
@@ -183,7 +170,7 @@ const SignupScreen = () => {
                     error={passErr && '*password must not be less than 8 digits'}
                     onChangeText={text => { onChangePassword(text) }}
                 />
-             <Input
+                <Input
                     label='Referral Code (optional)'
                     value={referrer}
                     onChangeText={setReferrer}
@@ -201,7 +188,7 @@ const SignupScreen = () => {
                     </Text>
                 }
             />
-            <AppButton text='Continue' onPress={onNext} disabled={!canSend} />
+            <AppButton text='Continue' onPress={onSend} disabled={!canSend || loading} />
             <RenderCreateAccount />
             <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
         </ScrollView>

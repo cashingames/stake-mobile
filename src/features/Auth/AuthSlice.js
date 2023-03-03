@@ -11,7 +11,7 @@ import {
 import { isTrue } from '../../utils/stringUtl';
 
 export const registerUser = async (data) => {
-    return axios.post('auth/register', data);
+    return axios.post(`auth/register`, data);
 }
 
 export const verifyUser = createAsyncThunk(
@@ -80,6 +80,22 @@ export const isLoggedIn = createAsyncThunk(
     'auth/isLoggedIn',
     async (thunkAPI) => {
         return AsyncStorage.getItem("token");
+    }
+)
+
+export const sendEmailOTP = createAsyncThunk(
+    'auth/user/verifyEmail',
+    async (data, thunkAPI) => {
+        const response = await axios.post('v3/stakers/otp/send', data)
+        return response.data
+    }
+)
+
+export const verifyEmailOTP = createAsyncThunk(
+    'auth/user/verifyEmail',
+    async (data, thunkAPI) => {
+        const response = await axios.post('v3/stakers/email/verify', data)
+        return response.data
     }
 )
 

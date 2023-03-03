@@ -199,7 +199,7 @@ function CustomDrawerContent(props) {
                             </View>
                         } order={2} name="Order2">
                             <Walkthroughable> */}
-                    <DrawerItem
+                    {/* <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
                                 <Text style={drawStyles.itemLabel}>Live Trivia</Text>
@@ -209,7 +209,7 @@ function CustomDrawerContent(props) {
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
-                    />
+                    /> */}
                     {/* </Walkthroughable>
                         </CopilotStep> */}
 
@@ -220,7 +220,7 @@ function CustomDrawerContent(props) {
                             </View>
                         } order={3} name="Order3">
                             <Walkthroughable> */}
-                    <DrawerItem
+                    {/* <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
                                 <Text style={drawStyles.itemLabel}>My Challenges</Text>
@@ -230,7 +230,7 @@ function CustomDrawerContent(props) {
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
-                    />
+                    /> */}
                     {/* </Walkthroughable>
                         </CopilotStep> */}
 
@@ -240,7 +240,7 @@ function CustomDrawerContent(props) {
                         <DrawerItem
                             label={() =>
                                 <View style={drawStyles.item}>
-                                    <Text style={drawStyles.itemLabel}>Store</Text>
+                                    <Text style={drawStyles.itemLabel}>Get Boosts</Text>
                                     <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                                 </View>}
                             onPress={() => navigation.navigate('GameStore')}
@@ -249,7 +249,7 @@ function CustomDrawerContent(props) {
                             labelContainerStyle
                         />
                     }
-
+                    {/* 
                     <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
@@ -260,7 +260,7 @@ function CustomDrawerContent(props) {
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
-                    />
+                    /> */}
 
                     {/* <CopilotStep text={
                             <View>
@@ -284,24 +284,24 @@ function CustomDrawerContent(props) {
                     {/* </Walkthroughable>
                         </CopilotStep> */}
 
-                    <DrawerItem
-                            label={() =>
-                                <View style={drawStyles.item}>
-                                    <Text style={drawStyles.itemLabel}>Need a Tour</Text>
-                                    <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                                </View>}
-                            onPress={async () => {
-                                await analytics().logEvent('tour_started', {
-                                    'id': user.username,
-                                    'email': user.email
-                                })
-                          
-                                navigation.navigate("AppTour")
-                            }}
-                            activeTintColor='#EF2F55'
-                            style={drawStyles.label}
-                            labelContainerStyle
-                        />
+                    {/* <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Need a Tour</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={async () => {
+                            await analytics().logEvent('tour_started', {
+                                'id': user.username,
+                                'email': user.email
+                            })
+
+                            navigation.navigate("AppTour")
+                        }}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    /> */}
 
                     {/* <CopilotStep text={
                             <View>
