@@ -47,6 +47,7 @@ const EmailVerificationScreen = ({ navigation, route }) => {
             .then(unwrapResult)
             .then(async response => {
                 Alert.alert('Email successfully verifed!')
+                navigation.navigate('AppRouter')
                 setLoading(false);
             })
             .catch((rejectedValueOrSerializedError) => {

@@ -90,7 +90,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
 
     const onSavePersonalDetails = () => {
         setSaving(true);
-        dispatch(editPersonalDetails({
+        editPersonalDetails({
             firstName,
             lastName,
             // phoneNumber,
@@ -98,26 +98,31 @@ export default function EditProfileDetailsScreen({ navigation }) {
             email,
             dateOfBirth,
             gender
-        }))
-            .then(unwrapResult)
+        })
             .then(result => {
                 dispatch(getUser())
                 Alert.alert('Personal details updated successfully')
-                navigation.navigate("UserProfile")
-            })
-            .catch((rejectedValueOrSerializedError) => {
-                if (rejectedValueOrSerializedError.message === "Request failed with status code 422") {
-                    Alert.alert('The phone number has already been taken')
+                setSaving(false);
+            },
+            err => {
+                if (!err || !err.response || err.response === undefined) {
+                    Alert.alert('Your Network is Offline.')
+                    setSaving(false);
+                }
+                else if (err.response.status === 500) {
+                    Alert.alert('Service not currently available. Please contact support')
+                    setSaving(false);
                 }
                 else {
-                    Alert.alert("Could not update profile, Please try again later.");
+                    const errors =
+                        err.response && err.response.data && err.response.data.errors;
+                    const firstError = Object.values(errors, {})[0];
+                    Alert.alert(firstError[0])
+                    setSaving(false);
                 }
-                console.log(rejectedValueOrSerializedError.message);
-                setSaving(false);
-                // after login eager get commond data for the whole app
-                // console.log("failed");
-                // console.log(rejectedValueOrSerializedError.message);
-            });
+            }
+            )
+           
     }
 
     return (
@@ -133,11 +138,11 @@ export default function EditProfileDetailsScreen({ navigation }) {
                             style={styles.input}
                         />
                         {!isEmailVerified &&
-                        <Text style={styles.unverifyText}>unverified</Text>
+                            <Text style={styles.unverifyText}>unverified</Text>
                         }
                     </View>
                     {!isEmailVerified &&
-                    <Text style={styles.verifyText} onPress={goToVerifyEmailScreen}>Your email is not verified. Please, click to verify your email!</Text>
+                        <Text style={styles.verifyText} onPress={goToVerifyEmailScreen}>Your email is not verified. Please, click to verify your email!</Text>
                     }
                     <Input
                         label='Username'
@@ -246,7 +251,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
             <AppButton
                 text={saving ? 'Saving' : 'Save Changes'}
                 onPress={onSavePersonalDetails}
-                disabled={!canSave}
+                disabled={!canSave || saving}
                 style={styles.saveButton} />
         </View>
     );
@@ -284,7 +289,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
-        
+
     },
     verifyText: {
         fontFamily: 'graphik-medium',
@@ -297,9 +302,9 @@ const styles = EStyleSheet.create({
         color: '#FFF',
         fontSize: '0.65rem',
         marginBottom: normalize(8),
-        backgroundColor:'#EF2F55',
+        backgroundColor: '#EF2F55',
         paddingHorizontal: normalize(8),
-        borderRadius:15,
+        borderRadius: 15,
         paddingVertical: normalize(3),
     },
     detail: {

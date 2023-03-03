@@ -219,6 +219,7 @@ const styles = EStyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         paddingHorizontal: responsiveScreenWidth(4),
+        paddingTop: responsiveScreenWidth(8)
 
     },
     headerBox: {
@@ -233,7 +234,7 @@ const styles = EStyleSheet.create({
         top: normalize(10)
     },
     inputContainer: {
-        marginTop: responsiveScreenWidth(7),
+        marginTop: responsiveScreenWidth(27),
     },
     linkText: {
         color: '#EF2F55',

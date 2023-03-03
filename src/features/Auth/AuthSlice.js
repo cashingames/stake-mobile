@@ -138,13 +138,9 @@ export const changePassword = createAsyncThunk(
     }
 )
 
-export const editPersonalDetails = createAsyncThunk(
-    'auth/user/editPersonalDetails',
-    async (data, thunkAPI) => {
-        const response = await axios.post('v2/profile/me/edit-personal', data)
-        return response.data
-    }
-)
+export const editPersonalDetails = async (data) => {
+    return axios.post(`v2/profile/me/edit-personal`, data);
+}
 export const editBankDetails = createAsyncThunk(
     'auth/user/editBankDetails',
     async (data, thunkAPI) => {
