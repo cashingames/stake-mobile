@@ -31,7 +31,7 @@ export default function ({ navigation }) {
     }, []);
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={styles.container} >
             <UserItems />
             {/* <GamePlans user={user} /> */}
             <GameBoosts user={user} />
@@ -358,6 +358,7 @@ const styles = EStyleSheet.create({
         backgroundColor: '#FFFF',
         paddingVertical: normalize(20),
         paddingHorizontal: normalize(20),
+        flex:1
     },
     storeItems: {
         marginTop: normalize(20),

@@ -65,12 +65,11 @@ const Winner = ({ winner }) => {
 const styles = EStyleSheet.create({
     mainContainer: {
         paddingTop: normalize(18),
-        paddingBottom: normalize(40)
+        paddingBottom: normalize(18)
     },
     headerContainer: {
         display: 'flex',
         alignItems: 'center',
-        marginVertical: normalize(10),
         borderBottomColor: 'rgba(0, 0, 0, 0.1)',
         borderBottomWidth: 1,
         paddingBottom: normalize(10)
@@ -85,10 +84,9 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginVertical: normalize(10),
         borderBottomColor: 'rgba(0, 0, 0, 0.1)',
         borderBottomWidth: 1,
-        paddingBottom: normalize(5)
+        paddingVertical: normalize(15)
     },
     nameContainer: {
         display: 'flex',
@@ -96,8 +94,8 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     avatar: {
-        width: responsiveScreenWidth(11),
-        height: responsiveScreenWidth(11),
+        width: responsiveScreenWidth(10),
+        height: responsiveScreenWidth(10),
         borderRadius: 50,
         // backgroundColor:'#072169',
         borderWidth: 1,

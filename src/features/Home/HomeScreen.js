@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Text, View, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, { BounceInRight } from 'react-native-reanimated';
-import normalize from '../../utils/normalize';
+import normalize, {
+    responsiveHeight, responsiveScreenWidth, responsiveWidth
+} from '../../utils/normalize';
 import { isTrue, formatCurrency } from '../../utils/stringUtl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
@@ -95,25 +97,23 @@ const HomeScreen = () => {
     }
 
     return (
-        <View style={styles.headContainer}>
-            <ScrollView contentContainerStyle={styles.scrollView}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                        tintColor="#000000"
-                    />
-                }
-            >
-                <UserDetails />
-                <View style={styles.container}>
-                    <SelectGameMode />
-                    <WinnersScroller />
-                    <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
-                    </SwiperFlatList>
-                </View>
-            </ScrollView>
-        </View>
+        <ScrollView contentContainerStyle={styles.container} style={styles.mainContainer}
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor="#000000"
+                />
+            }
+        >
+            <UserDetails />
+            <View style={styles.gamesContainer}>
+                <SelectGameMode />
+                <WinnersScroller />
+                <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
+                </SwiperFlatList>
+            </View>
+        </ScrollView>
     );
 }
 export default HomeScreen;
@@ -167,18 +167,19 @@ const UserWallet = ({ balance }) => {
 
 
 const styles = EStyleSheet.create({
-    headContainer: {
-        backgroundColor: '#FAC502',
-        // flex:1
-    },
-    scrollView: {
+    container: {
+        // flex: 1,
         paddingBottom: normalize(30),
         backgroundColor: '#FFFF',
     },
-    container: {
+    mainContainer: {
+        backgroundColor: '#FFF',
         flex: 1,
+    },
+    gamesContainer: {
         paddingHorizontal: '1.2rem',
         backgroundColor: '#FFFF',
+        paddingBottom:'2.5rem'
     },
     leaderboardContainer: {
         flexDirection: 'row',
@@ -199,5 +200,29 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         marginLeft: normalize(2),
         marginTop: normalize(5)
+    },
+
+    games: {
+        paddingTop: normalize(10, "height"),
+    },
+    title: {
+        fontSize: Platform.OS === 'ios' ? '1.4rem' : '1.3rem',
+        lineHeight: '1.3rem',
+        color: '#151C2F',
+        fontFamily: 'graphik-medium',
+        marginTop: responsiveHeight(3),
+    },
+    planInstruction: {
+        color: '#151C2F',
+        fontSize: Platform.OS === 'ios' ? '0.9rem' : '0.8rem',
+        fontFamily: 'graphik-regular',
+        marginTop: responsiveHeight(1),
+        marginBottom: responsiveHeight(2),
+    },
+    lightTitle: {
+        fontSize: '1rem',
+        color: '#151C2F',
+        fontFamily: 'graphik-regular',
+        marginTop: normalize(10),
     },
 });

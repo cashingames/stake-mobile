@@ -48,13 +48,19 @@ const styles = EStyleSheet.create({
         alignItems:'center',
         backgroundColor:'#072169',
         marginVertical:'1rem',
-        paddingVertical:'.8rem',
+        paddingVertical:'.68rem',
         borderRadius: 15,
+        borderWidth: Platform.OS === 'ios' ? normalize(0.5) : 1,
+        borderColor: '#E0E0E0',
+        elevation: 8,
+        shadowColor: '#000',
+        shadowOffset: { width: 0.5, height: 2 },
+        shadowOpacity: 0.6,
         // opacity: 0.65
     },
     playText: {
-        fontSize: '1rem',
-        color: '#FFFF',
+        fontSize: '.9rem',
+        color: 'white',
         fontFamily: 'graphik-medium',
     }
 })

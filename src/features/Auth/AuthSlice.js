@@ -290,6 +290,8 @@ export const AuthSlice = createSlice({
                 state.user = {};
                 state.passwordReset = {};
                 state.createAccount = {};
+
+                console.log("after logging out");
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 console.log("action response X", action.payload.data);
