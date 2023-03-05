@@ -153,7 +153,7 @@ let initialState = {
     gameStakes: [],
     withStaking: false,
     endedWithoutStaking:null,
-    correctCount: null,
+    correctCount: 0,
 }
 
 

@@ -31,9 +31,9 @@ export default function ({ navigation }) {
     }, []);
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={styles.container} >
             <UserItems />
-            <GamePlans user={user} />
+            {/* <GamePlans user={user} /> */}
             <GameBoosts user={user} />
         </ScrollView>
     );
@@ -355,9 +355,10 @@ const UserWalletBalance = () => {
 const styles = EStyleSheet.create({
 
     container: {
-        backgroundColor: '#F2F5FF',
+        backgroundColor: '#FFFF',
         paddingVertical: normalize(20),
         paddingHorizontal: normalize(20),
+        flex:1
     },
     storeItems: {
         marginTop: normalize(20),

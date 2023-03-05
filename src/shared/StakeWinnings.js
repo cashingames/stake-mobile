@@ -1,14 +1,15 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Platform, Text, View } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
+import normalize from "../utils/normalize";
 import { formatCurrency } from "../utils/stringUtl";
 
 
-const StakeWinnings = ({ showText, amountWon }) => {
+const StakeWinnings = ({ amountWon }) => {
     return (
         <View style={styles.winningsAmount}>
             <Text style={styles.winningsText}>You have won</Text>
-            <Text style={[styles.winningsCash, { opacity: showText ? 0 : 1 }]}> &#8358;{formatCurrency(amountWon)}!</Text>
+            <Text style={styles.winningsCash}> &#8358;{formatCurrency(amountWon)}!</Text>
         </View>
     )
 }
@@ -18,7 +19,8 @@ const styles = EStyleSheet.create({
 	winningsAmount: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginBottom: '.6rem'
+		marginBottom: '.6rem',
+		padding: Platform.OS === 'ios' ? normalize(25) : normalize(20),
 	},
 	winningsText: {
 		textAlign: 'center',

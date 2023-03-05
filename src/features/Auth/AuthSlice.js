@@ -11,7 +11,7 @@ import {
 import { isTrue } from '../../utils/stringUtl';
 
 export const registerUser = async (data) => {
-    return axios.post('auth/register', data);
+    return axios.post(`auth/register`, data);
 }
 
 export const verifyUser = createAsyncThunk(
@@ -34,6 +34,10 @@ export const loginUser = createAsyncThunk(
         }
     }
 )
+
+// export const loginUser = async (data) => {
+//     return axios.post(`auth/login`, data);
+// }
 
 export const loginWithSocialLink = createAsyncThunk(
     'auth/loginWithSocialLink',
@@ -79,6 +83,22 @@ export const isLoggedIn = createAsyncThunk(
     }
 )
 
+export const sendEmailOTP = createAsyncThunk(
+    'auth/user/verifyEmail',
+    async (data, thunkAPI) => {
+        const response = await axios.post('v3/stakers/otp/send', data)
+        return response.data
+    }
+)
+
+export const verifyEmailOTP = createAsyncThunk(
+    'auth/user/verifyEmail',
+    async (data, thunkAPI) => {
+        const response = await axios.post('v3/stakers/email/verify', data)
+        return response.data
+    }
+)
+
 export const shouldShowIntro = createAsyncThunk(
     'auth/shouldShowIntro',
     async (thunkAPI) => {
@@ -118,13 +138,9 @@ export const changePassword = createAsyncThunk(
     }
 )
 
-export const editPersonalDetails = createAsyncThunk(
-    'auth/user/editPersonalDetails',
-    async (data, thunkAPI) => {
-        const response = await axios.post('v2/profile/me/edit-personal', data)
-        return response.data
-    }
-)
+export const editPersonalDetails = async (data) => {
+    return axios.post(`v2/profile/me/edit-personal`, data);
+}
 export const editBankDetails = createAsyncThunk(
     'auth/user/editBankDetails',
     async (data, thunkAPI) => {
@@ -274,6 +290,8 @@ export const AuthSlice = createSlice({
                 state.user = {};
                 state.passwordReset = {};
                 state.createAccount = {};
+
+                console.log("after logging out");
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 console.log("action response X", action.payload.data);

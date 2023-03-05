@@ -50,11 +50,11 @@ const ReviewStakeScreen = ({ navigation }) => {
                 <AppButton text="Stake Amount" disabled />
             </View>
             <View style={styles.stakeContainer}>
-                <Text style={styles.stakeHeading}>Predictions Table</Text>
+                <Text style={styles.stakeHeading}>HOW TO WIN</Text>
                 <View style={styles.stakeHeaders}>
-                    <Text style={styles.stakeHead}>WINNINGS</Text>
-                    <Text style={styles.stakeScore}>SCORE</Text>
+                    <Text style={styles.stakeScore}>OUTCOME</Text>
                     <Text style={styles.stakeHead}>ODDS</Text>
+                    <Text style={styles.stakePay}>PAYOUT</Text>
                 </View>
                 {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
                     amount={amountStaked}
@@ -115,160 +115,32 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         fontFamily: "graphik-medium",
         fontSize: "1rem",
-        color: "#EF2F55",
+        color: "#fab700",
         marginVertical: '1rem',
+    },
+ 
+    stakeScore: {
+        fontFamily: "graphik-medium",
+        fontSize: "1rem",
+        color: "#006ac6",
+        // marginLeft: '.3rem',
+    },
+    stakeHead: {
+        fontFamily: "graphik-medium",
+        fontSize: "1rem",
+        color: "#006ac6",
+        marginRight: '1rem',
+    },
+    stakePay: {
+        fontFamily: "graphik-medium",
+        fontSize: "1rem",
+        color: "#006ac6",
+        marginRight: '1rem',
     },
     stakeHeaders: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginVertical: normalize(10),
     },
-    stakeSub: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        borderBottomWidth: 1,
-        borderColor: '#E0E0E0',
-        paddingVertical: normalize(20),
-
-    },
-    stakeIndex: {
-        marginRight: '1rem'
-    },
-    stakeScore: {
-        fontFamily: "graphik-medium",
-        fontSize: ".8rem",
-        color: "#333333",
-    },
-    stakeHead: {
-        fontFamily: "graphik-medium",
-        fontSize: ".8rem",
-        color: "#333333",
-    },
-    stakeOddDigit: {
-        fontFamily: "graphik-medium",
-        fontSize: ".7rem",
-        color: "#FF932F",
-        marginLeft: '.3rem',
-    },
-    stakeScoreDigit: {
-        fontFamily: "graphik-medium",
-        fontSize: ".7rem",
-        color: "#333333",
-        marginLeft: '.3rem',
-        opacity: 0.7
-    },
-    stakeWinnings: {
-        fontFamily: "graphik-medium",
-        fontSize: ".7rem",
-        color: "#333333",
-        width: '5rem',
-    },
-    noGames: {
-        backgroundColor: '#fff',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        paddingVertical: normalize(14),
-        paddingHorizontal: normalize(15),
-    },
-    sadEmoji: {
-        width: normalize(50),
-        height: normalize(50),
-        marginBottom: normalize(20)
-    },
-    needGames: {
-        fontSize: normalize(12),
-        fontFamily: 'graphik-regular',
-        color: '#000',
-        marginTop: normalize(15)
-    },
-    noGamesText: {
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(16),
-        textAlign: 'center',
-        color: '#000',
-        lineHeight: normalize(24)
-    },
-    storeLinks: {
-        alignItems: 'center',
-    },
-    amount: {
-        fontFamily: 'graphik-bold',
-        fontSize: '0.8rem',
-        color: '#FF932F'
-    },
-    title: {
-        fontSize: '0.85rem',
-        fontFamily: 'graphik-medium',
-        color: '#000',
-        lineHeight: 23,
-        marginBottom: normalize(15)
-    },
-    noBoosts: {
-        textAlign: 'center',
-        fontSize: '0.85rem',
-        fontFamily: 'graphik-regular',
-        marginVertical: '1rem'
-    },
-    boostContent: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        borderBottomColor: 'rgba(0, 0, 0, 0.1)',
-        borderBottomWidth: 1,
-        marginBottom: normalize(17)
-    },
-    boostAmount: {
-        display: 'flex',
-        flexDirection: 'row',
-    },
-    availableBoosts: {
-        paddingVertical: normalize(14),
-        paddingHorizontal: normalize(20),
-    },
-    boostDetails: {
-        display: 'flex',
-        alignItems: 'flex-start',
-        marginBottom: normalize(15),
-        justifyContent: 'center'
-    },
-    boostName: {
-        fontSize: '0.69rem',
-        fontFamily: 'graphik-bold',
-        color: '#151C2F',
-        lineHeight: '1.2rem',
-    },
-    boostDescription: {
-        fontSize: '0.69rem',
-        fontFamily: 'graphik-regular',
-        color: '#828282',
-        lineHeight: '1.2rem',
-        width: responsiveScreenWidth(60),
-    },
-    storeLink: {
-        fontSize: '0.69rem',
-        fontFamily: 'graphik-medium',
-        color: '#EF2F55',
-    },
-    needBoost: {
-        fontSize: '0.69rem',
-        fontFamily: 'graphik-regular',
-        color: '#000',
-    },
-    moreBoost: {
-        alignItems: 'center',
-    },
-    startContainer: {
-        marginTop: normalize(50),
-    },
-    proceedButton: {
-        marginVertical: 10,
-    },
-    amountWon: {
-        backgroundColor: '#008000',
-        paddingHorizontal: '.2rem',
-        opacity: 0.6
-    }
 
 })

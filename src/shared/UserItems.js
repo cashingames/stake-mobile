@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, Platform } from 'react-native';
+import { Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import LottieAnimations from '../shared/LottieAnimations';
 import { formatNumber } from '../utils/stringUtl';
 import normalize from "../utils/normalize";
-import Animated, { BounceInLeft } from "react-native-reanimated";
+import Animated, {
+    BounceInLeft,
+    useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming
+} from 'react-native-reanimated';
 import analytics from '@react-native-firebase/analytics';
-import { PopGoogleReviewLogic } from "./GoogleReview";
 
 
 const UserItems = ({ showBuy }) => {
@@ -18,6 +19,18 @@ const UserItems = ({ showBuy }) => {
     var boosts = useSelector(state => state.auth.user.boosts ?? []);
     const [sumOfPlans, setSumOfPlans] = useState(0);
     const [boostsString, setBboostsString] = useState('');
+
+    const rotation = useSharedValue(0);
+    rotation.value = withSequence(
+        withTiming(-10, { duration: 50 }),
+        withRepeat(withTiming(15, { duration: 100 }), 6, true),
+        withTiming(0, { duration: 50 })
+    );
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{ rotateZ: `${rotation.value}deg` }],
+        };
+    });
 
     useEffect(() => {
         const reducer = (accumulator, curr) => accumulator + curr;
@@ -34,8 +47,8 @@ const UserItems = ({ showBuy }) => {
     }, [boosts, plans]);
 
     // listener to trigger review for google play store
-    useEffect(()=>{
-        (async()=>{
+    useEffect(() => {
+        (async () => {
             // commented out, so GA rating wont pop-up yet
             // this is the trigger
             // const isReviewed = await PopGoogleReviewLogic(sumOfPlans, user.email)
@@ -43,74 +56,66 @@ const UserItems = ({ showBuy }) => {
     }, [sumOfPlans])
 
 
-    const buyMore = async () => {
-        await analytics().logEvent("buy_more_clicked_on_home", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email
-        })
-        navigation.navigate('GameStore')
-    }
+    // const buyMore = async () => {
+    //     await analytics().logEvent("buy_more_clicked_on_home", {
+    //         'id': user.username,
+    //         'phone_number': user.phoneNumber,
+    //         'email': user.email
+    //     })
+    //     navigation.navigate('GameStore')
+    // }
 
     return (
         <Animated.View entering={BounceInLeft.duration(2000)} style={styles.container}>
-            <View style={styles.topRow}>
-                <LottieAnimations
-                    animationView={require('../../assets/treasure-chest.json')}
-                    width={normalize(110)}
-                    height={normalize(110)}
-                />
-                <View>
-                    <View style={styles.firstRow}>
-                        <Text style={[styles.commonRow]}>You have {formatNumber(sumOfPlans)} games left</Text>
-                    </View>
-                    <Text style={[styles.commonRow, boosts?.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
-                </View>
+            <Animated.Image
+                style={[styles.trophy, animatedStyle]}
+                source={require('../../assets/images/point-trophy.png')}
+            />
+            <View style={styles.boostContainer}>
+                <Text style={[styles.commonRow, boosts?.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
             </View>
-            {showBuy && <Text onPress={buyMore} style={styles.buyMore}>Buy more</Text>}
+            {/* {showBuy && <Text onPress={buyMore} style={styles.buyMore}>Buy more</Text>} */}
         </Animated.View>
     )
 }
 
 const styles = EStyleSheet.create({
     container: {
-        borderRadius: 15,
-        flexDirection: 'column',
         backgroundColor: '#518EF8',
-        paddingBottom: normalize(8),
-        paddingRight: normalize(24),
+        borderRadius: normalize(10),
+        marginVertical: normalize(10),
+        display: 'flex',
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
+        paddingVertical: normalize(15),
+        paddingRight: normalize(10),
+        paddingLeft: normalize(20),
         alignItems: 'center'
     },
-    topRow: {
-        flexDirection:'row',
-        alignItems:'center',
+    boostContainer: {
+        backgroundColor: '#072169',
+        paddingVertical: normalize(15),
+        paddingHorizontal: normalize(15),
+        borderRadius: 10
     },
     commonRow: {
         color: '#FFFF',
         textAlign: 'center',
         fontFamily: 'graphik-regular',
         fontSize: '0.9rem',
-        width: '100%',
-    },
-    firstRow: {
-        marginBottom: normalize(8),
-        paddingBottom: normalize(8),
-        borderBottomColor: '#B1CEFF',
-        borderBottomWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
-
-    },
-    secondRow: {
-    },
-    emptyRow: {
-        fontStyle: "italic"
     },
     buyMore: {
         color: '#EF2F55',
         fontFamily: 'graphik-medium',
         fontSize: '0.8rem',
         marginTop: normalize(.1),
-        marginLeft:'auto',
-    }
+        marginLeft: 'auto',
+    },
+    trophy: {
+        position: 'relative',
+        zIndex: 2,
+        marginTop: normalize(-25)
+    },
 });
 
 export default UserItems;

@@ -75,6 +75,8 @@ import HelpPages from './features/Support/HelpPages';
 import ContactUs from './features/Support/ContactUs';
 import AuthContactUs from './features/Support/AuthContactUs';
 import TourIndex from './features/Tour/Index';
+import EmailVerificationScreen from './features/Auth/EmailVerificationScreen';
+import GameLoadingScreen from './features/Games/GameLoadingScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -87,6 +89,8 @@ function AppRouter() {
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
 	appendAxiosAuthHeader(token);
+
+	console.log(token);
 
 	//during app restart, check localstorage for these info
 	useEffect(() => {
@@ -207,6 +211,7 @@ function AppRouter() {
 						}} />
 						<AppStack.Screen name="AppTour" component={TourIndex} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
+						<AppStack.Screen name="GameLoading" component={GameLoadingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="LiveTriviaStaking" component={LiveTriviaStakingScreen} options={{ title: 'Game Staking' }} />
 						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
@@ -262,6 +267,7 @@ function AppRouter() {
 						<AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ title: 'Stats' }} />
 						<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ title: 'Achievements' }} />
 						<AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
+						<AppStack.Screen name="EmailVerification" component={EmailVerificationScreen} options={{ title: 'Email Verification' }} />
 
 
 						{/** store */}
@@ -351,6 +357,8 @@ const setupAxios = async function () {
 }
 
 const appendAxiosAuthHeader = function (token) {
+	axios.defaults.headers.common['x-brand-id'] = 2; //@TODO Change to 1
+
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {

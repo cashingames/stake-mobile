@@ -10,15 +10,15 @@ import normalize from "../utils/normalize";
 const StakingPredictionsTable = ({ gameStake, position, amount, containerStyle }) => {
     return (
         <View style={[styles.stakeSub, containerStyle]}>
-            <Text style={styles.stakeWinnings}>&#8358;{formatCurrency(amount * gameStake.odd)}</Text>
             <View style={styles.stakeScoreContainer}>
                 <Ionicons name="checkmark-circle-outline" size={16} color="#333333" />
-                <Text style={styles.stakeScoreDigit}>{gameStake.score}/10</Text>
+                <Text style={styles.stakeScoreDigit}>{gameStake.score}</Text>
             </View>
             <View style={styles.stakeNumber}>
                 <Ionicons name="time-outline" size={16} color="#FF932F" />
                 <Text style={styles.stakeOddDigit}>x{gameStake.odd}</Text>
             </View>
+            <Text style={styles.stakeWinnings}>&#8358;{formatCurrency(amount * gameStake.odd)}</Text>
         </View>
     )
 }
@@ -36,31 +36,35 @@ const styles = EStyleSheet.create({
     },
     stakeOddDigit: {
         fontFamily: "graphik-medium",
-        fontSize: ".7rem",
+        fontSize: ".8rem",
         color: "#FF932F",
         marginLeft: '.3rem',
     },
     stakeScoreDigit: {
         fontFamily: "graphik-medium",
-        fontSize: ".7rem",
+        fontSize: ".8rem",
         color: "#333333",
         marginLeft: '.3rem',
         opacity: 0.7
     },
     stakeWinnings: {
         fontFamily: "graphik-medium",
-        fontSize: ".7rem",
+        fontSize: ".8rem",
         color: "#333333",
-        width: '5rem',
+        width: '4.8rem',
+        alignItems:'flex-start'
     },
     stakeNumber: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: '3rem'
+        width: '3rem',
+        marginLeft:'1rem'
     },
     stakeScoreContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: '3rem'
+        width: '2rem',
+        marginLeft:'1rem'
     },
+
 })

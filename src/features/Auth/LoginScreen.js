@@ -21,7 +21,7 @@ import { triggerNotifierForReferral } from '../../shared/Notification';
 
 export default function LoginScreen({ navigation }) {
 
-    const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'arunajoy2602@gmail.com' : '');
+    const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'gorota764682' : '');
     const [password, setPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -58,12 +58,59 @@ export default function LoginScreen({ navigation }) {
 
     }
 
+    // const onLogin = () => {
+    //     setLoading(true);
+    //     setCanLogin(false);
+    //     setError("");
+    //     loginUser({
+    //         email, password
+    //     }).then( async response => {
+    //         saveToken(response.data.data);
+    //         dispatch(setToken(response.data.data));
+    //         crashlytics().log('login clicked');
+    //         await analytics().logEvent('login_clicked')
+    //     }, err => {
+    //         if (!err || !err.response || err.response === undefined) {
+    //             setError("Your Network is Offline.");
+    //         }
+    //         else if (err.response.status === 500) {
+    //             setError("Service not currently available. Please contact support");
+    //         }
+    //         else {
+
+    //             const errors =
+    //                 err.response && err.response.data && err.response.data.errors;
+
+    //             if (err.response.status === 400 && err.response.data.message === 'Account not verified') {
+    //                 console.log(err)
+    //                 analytics().logEvent('registration_unverified', {
+    //                     'username': errors.username,
+    //                     'phone_number': errors.phone_number,
+    //                     'email': errors.email
+    //                 });
+    //                 console.log('failed')
+    //                 navigate('/verify-phone-number', {
+    //                     state: {
+    //                         phone_number: err.response.data.errors.phoneNumber,
+    //                         username: err.response.data.errors.username,
+    //                         next_resend_minutes: 1
+    //                     }
+    //                 })
+    //             }
+
+    //             const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
+    //             setError(firstError)
+    //         }
+    //         setLoading(false);
+    //     });
+    // }
+
     const processLoginError = async (err) => {
         const errors = err.errors;
 
         if (err.message == 'Account not verified') {
             await analytics().logEvent("unverified_user", {
-                'username' : errors.username,
+                'username': errors.username,
                 'phone_number': errors.phone_number
             })
             navigation.navigate('SignupVerifyPhone', {
@@ -152,12 +199,12 @@ const RenderCreateAccount = () => {
                     <Text style={styles.linkText}> Create one</Text>
                 </Pressable>
             </View>
-            <Text style={styles.signInText}>or</Text>
+            {/* <Text style={styles.signInText}>or</Text>
             <View style={styles.google}>
                 <SocialSignUp googleText="Sign in" />
                 <Login text="Sign in" />
-                {Platform.OS === 'ios' && <AppleSignUp /> }
-            </View>
+                {Platform.OS === 'ios' && <AppleSignUp />}
+            </View> */}
         </View>
     )
 }
@@ -217,7 +264,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.87rem'
     },
     google: {
-        alignItems:'center',
+        alignItems: 'center',
         marginVertical: normalize(10)
     },
     verifySubText: {
@@ -235,8 +282,8 @@ const styles = EStyleSheet.create({
     contactUs: {
         fontSize: '.7rem',
         fontFamily: 'graphik-medium',
-        color:'#EF2F55',
-        textAlign:'center',
-        marginTop:'1rem'
+        color: '#EF2F55',
+        textAlign: 'center',
+        marginTop: '1rem'
     }
 });

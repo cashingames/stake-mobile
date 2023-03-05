@@ -9,7 +9,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Input from '../../shared/Input';
 import { Ionicons } from "@expo/vector-icons";
-import { editPersonalDetails, getUser } from '../Auth/AuthSlice';
+import { editPersonalDetails, getUser, sendEmailOTP } from '../Auth/AuthSlice';
 import normalize from '../../utils/normalize';
 import { isTrue } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
@@ -21,20 +21,24 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user);
-    console.log(user)
+    const isEmailVerified = user.isEmailVerified;
+
+    // console.log(user)
 
     const [saving, setSaving] = useState(false);
     const [email, setEmail] = useState(user.email);
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
-    const [firstName, setFirstName] = useState(user.firstName);
-    const [lastName, setLastName] = useState(user.lastName);
+    const [firstName, setFirstName] = useState(user.firstName ? user.firstName : '');
+    const [lastName, setLastName] = useState(user.lastName ? user.lastName : '');
     const [username, setUsername] = useState(user.username);
+    const [emailError, setEmailError] = useState(false);
+    const [usernameErr, setUsernameErr] = useState(false);
     const [firstNameErr, setFirstNameError] = useState(false);
     const [lastNameErr, setLastNameError] = useState(false);
     const [phoneNumberErr, setPhoneNumberError] = useState(false);
     const [canSave, setCanSave] = useState(false);
     const [dateOfBirth, setDateOfBirth] = useState(isTrue(user.dateOfBirth) ? new Date(Date.parse(user.dateOfBirth)) : new Date(2003, 0, 1));
-    const [gender, setGender] = useState(user.gender);
+    const [gender, setGender] = useState(user.gender ? user.gender : 'male');
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [show, setShow] = useState(false);
     const [countryCode, setCountryCode] = useState(user.countryCode);
@@ -44,6 +48,19 @@ export default function EditProfileDetailsScreen({ navigation }) {
         setDateOfBirth(currentDate);
         setShowDatePicker(false);
     };
+
+    const onChangeEmail = (text) => {
+        const rule = /^\S+@\S+\.\S+$/;
+        setEmailError(!rule.test(text))
+        setEmail(text)
+    }
+
+    const onChangeUsername = (text) => {
+        const usernameRule = /^[a-zA-Z][a-zA-Z0-9]+$/;
+        const invalidUsername = !usernameRule.test(text)
+        setUsernameErr(invalidUsername)
+        setUsername(text)
+    }
 
     const onChangeFirstName = (text) => {
         text.length > 0 && text.length < 3 ? setFirstNameError(true) : setFirstNameError(false);
@@ -60,15 +77,20 @@ export default function EditProfileDetailsScreen({ navigation }) {
         setPhoneNumber(text)
     }
 
+    const goToVerifyEmailScreen = () => {
+        dispatch(sendEmailOTP())
+        navigation.navigate('EmailVerification')
+    }
+
     useEffect(() => {
         const invalid = firstNameErr || firstName === '' || lastNameErr || lastName === '' ||
-            phoneNumber === '' || phoneNumberErr;
+            phoneNumber === '' || phoneNumberErr || email === '' || emailError || username === '' || usernameErr
         setCanSave(!invalid);
-    }, [firstNameErr, firstName, lastNameErr, lastName, phoneNumber, phoneNumberErr])
+    }, [firstNameErr, firstName, lastNameErr, lastName, phoneNumber, phoneNumberErr, email, emailError, username, usernameErr])
 
     const onSavePersonalDetails = () => {
         setSaving(true);
-        dispatch(editPersonalDetails({
+        editPersonalDetails({
             firstName,
             lastName,
             // phoneNumber,
@@ -76,43 +98,57 @@ export default function EditProfileDetailsScreen({ navigation }) {
             email,
             dateOfBirth,
             gender
-        }))
-            .then(unwrapResult)
+        })
             .then(result => {
                 dispatch(getUser())
                 Alert.alert('Personal details updated successfully')
-                navigation.navigate("UserProfile")
-            })
-            .catch((rejectedValueOrSerializedError) => {
-                if (rejectedValueOrSerializedError.message === "Request failed with status code 422") {
-                    Alert.alert('The phone number has already been taken')
+                setSaving(false);
+            },
+            err => {
+                if (!err || !err.response || err.response === undefined) {
+                    Alert.alert('Your Network is Offline.')
+                    setSaving(false);
+                }
+                else if (err.response.status === 500) {
+                    Alert.alert('Service not currently available. Please contact support')
+                    setSaving(false);
                 }
                 else {
-                    Alert.alert("Could not update profile, Please try again later.");
+                    const errors =
+                        err.response && err.response.data && err.response.data.errors;
+                    const firstError = Object.values(errors, {})[0];
+                    Alert.alert(firstError[0])
+                    setSaving(false);
                 }
-                console.log(rejectedValueOrSerializedError.message);
-                setSaving(false);
-                // after login eager get commond data for the whole app
-                // console.log("failed");
-                // console.log(rejectedValueOrSerializedError.message);
-            });
+            }
+            )
+           
     }
 
     return (
         <View style={styles.container}>
             <ScrollView style={styles.contentContainer}>
                 <View style={styles.content}>
+                    <View style={styles.emailContainer}>
+                        <Input
+                            label='Email'
+                            value={email}
+                            onChangeText={text => { onChangeEmail(text) }}
+                            editable={!isEmailVerified ? true : false}
+                            style={styles.input}
+                        />
+                        {!isEmailVerified &&
+                            <Text style={styles.unverifyText}>unverified</Text>
+                        }
+                    </View>
+                    {!isEmailVerified &&
+                        <Text style={styles.verifyText} onPress={goToVerifyEmailScreen}>Your email is not verified. Please, click to verify your email!</Text>
+                    }
                     <Input
                         label='Username'
                         value={username}
-                        onChangeText={setUsername}
-                        editable={false}
-                    />
-                    <Input
-                        label='Email'
-                        value={email}
-                        onChangeText={setEmail}
-                        editable={false}
+                        onChangeText={text => { onChangeUsername(text) }}
+                        error={usernameErr && '*username cannot include space'}
                     />
 
                     <>
@@ -215,7 +251,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
             <AppButton
                 text={saving ? 'Saving' : 'Save Changes'}
                 onPress={onSavePersonalDetails}
-                disabled={!canSave}
+                disabled={!canSave || saving}
                 style={styles.saveButton} />
         </View>
     );
@@ -249,7 +285,28 @@ const styles = EStyleSheet.create({
         color: '#00000080',
         marginRight: 'auto',
     },
+    emailContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
 
+    },
+    verifyText: {
+        fontFamily: 'graphik-medium',
+        color: '#EF2F55',
+        fontSize: '0.76rem',
+        marginBottom: normalize(8)
+    },
+    unverifyText: {
+        fontFamily: 'graphik-medium',
+        color: '#FFF',
+        fontSize: '0.65rem',
+        marginBottom: normalize(8),
+        backgroundColor: '#EF2F55',
+        paddingHorizontal: normalize(8),
+        borderRadius: 15,
+        paddingVertical: normalize(3),
+    },
     detail: {
         marginVertical: normalize(10)
     },
@@ -269,7 +326,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         height: normalize(38),
         alignItems: 'center',
-        marginBottom:'.8rem'
+        marginBottom: '.8rem'
     },
     phoneNumberInput: {
         fontFamily: 'graphik-regular',
@@ -281,7 +338,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         color: '#00000080',
         fontSize: '0.75rem',
-        marginRight:'.2rem'
+        marginRight: '.2rem'
     },
     codeButton: {
         flexDirection: 'row',
