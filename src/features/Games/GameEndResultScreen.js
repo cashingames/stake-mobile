@@ -77,7 +77,7 @@ export default function GameEndResultScreen({ navigation }) {
 			});
 		};
 		logFreeGamesExhausted()
-		navigation.navigate("GameInstructions")
+		navigation.navigate("SelectGameCategory")
 		setLoading(false);
 
 	}
@@ -129,13 +129,13 @@ export default function GameEndResultScreen({ navigation }) {
 		navigation.navigate("ReviewStake")
 	}
 
-	useEffect(() => {
-		if (pointsGained <= minimumBoostScore) {
-			setModalVisible(true)
-		} else {
-			setModalVisible(false)
-		}
-	}, [pointsGained])
+	// useEffect(() => {
+	// 	if (pointsGained <= minimumBoostScore) {
+	// 		setModalVisible(true)
+	// 	} else {
+	// 		setModalVisible(false)
+	// 	}
+	// }, [pointsGained])
 
 	useEffect(() => {
 		const reducer = (accumulator, curr) => accumulator + curr;
