@@ -14,7 +14,6 @@ import { getUserNotifications, markNotificationRead } from "../../CommonSlice";
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import MiniHead from "./miniHead";
 import { Walkthroughable } from '../../Tour/Walkthrouable';
-import { defaultToolTip } from "../Index";
 
 const window = Dimensions.get("window")
 

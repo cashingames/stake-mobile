@@ -135,7 +135,6 @@ function CustomDrawerContent(props) {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
 
     const user = useSelector(state => state.auth.user)
 

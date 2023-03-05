@@ -14,7 +14,6 @@ import { useNavigation } from '@react-navigation/native';
 import { DrawerItem } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import { defaultToolTip } from '../Index';
 
 const { width } = Dimensions.get('window');
 const window = Dimensions.get('window');

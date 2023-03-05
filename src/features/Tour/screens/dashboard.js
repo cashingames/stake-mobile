@@ -31,7 +31,6 @@ import { Walkthroughable } from '../../Tour/Walkthrouable';
 import { Dimensions } from 'react-native';
 import { Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { defaultToolTip } from '../Index';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 const window = Dimensions.get("window")

@@ -23,8 +23,6 @@ const LiveTriviaLeaderBoard = (props) => {
     // console.log(triviaLeaders);
     const [loading, setLoading] = useState(true)
 
-    const [refreshing, setRefreshing] = useState(false);
-    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
 
 
     useEffect(() => {

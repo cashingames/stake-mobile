@@ -6,7 +6,6 @@ import { Dimensions } from 'react-native'
 import { Image } from 'react-native'
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 import { Walkthroughable } from '../../Tour/Walkthrouable';
-import { defaultToolTip } from '../Index'
 
 const window = Dimensions.get("window")
 

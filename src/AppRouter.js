@@ -74,7 +74,6 @@ import WeeklyLeaderboard from './features/Leaderboard/WeeklyLeaderboard';
 import HelpPages from './features/Support/HelpPages';
 import ContactUs from './features/Support/ContactUs';
 import AuthContactUs from './features/Support/AuthContactUs';
-import TourIndex from './features/Tour/Index';
 import EmailVerificationScreen from './features/Auth/EmailVerificationScreen';
 import GameLoadingScreen from './features/Games/GameLoadingScreen';
 
@@ -209,7 +208,6 @@ function AppRouter() {
 							},
 							headerTintColor: '#000000',
 						}} />
-						<AppStack.Screen name="AppTour" component={TourIndex} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
 						<AppStack.Screen name="GameLoading" component={GameLoadingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="LiveTriviaStaking" component={LiveTriviaStakingScreen} options={{ title: 'Game Staking' }} />
