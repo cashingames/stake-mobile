@@ -1,5 +1,5 @@
 
-import React, { useLayoutEffect, useMemo } from 'react';
+import { useLayoutEffect, useMemo } from 'react';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { Platform } from 'react-native';
 

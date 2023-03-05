@@ -9,12 +9,16 @@ import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../shared/LottieAnimations';
 import { clearTour } from '../features/Tour/TourSlice';
 import analytics from '@react-native-firebase/analytics';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/native';
 
 
 const InviteFriendsScreen = () => {
 
-    const navigation = useNavigation()
+    const navigation = useNavigation
+
+    const [refreshing, setRefreshing] = React.useState(false);
+    const isTourActive = useSelector(state => state.tourSlice.isTourActive);
+
     const dispatch = useDispatch()
 
     useApplyHeaderWorkaround(navigation.setOptions);

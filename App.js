@@ -13,7 +13,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import Toast from 'react-native-toast-message';
 
 import { Settings } from 'react-native-fbsdk-next';
-// import { requestTrackingPermissionsAsync, getTrackingPermissionsAsync } from 'expo-tracking-transparency';
 
 
 import store from './src/store';
@@ -80,17 +79,6 @@ const linking = {
 
 function App() {
 
-  useEffect(() => {
-    Settings.initializeSDK();
-    
-  //   (async () => {
-  //     const { status } = await requestTrackingPermissionsAsync();
-  //     if (status === 'granted') {
-  //       console.log('Yay! I have user permission to track data');
-  //     }
-  //   })();
-  }, []);
-
   const routeNameRef = useRef();
   const navigationRef = useNavigationContainerRef();
 
@@ -123,6 +111,10 @@ function App() {
     }
     routeNameRef.current = currentRouteName;
   }
+
+  useEffect(() => {
+    Settings.initializeSDK();
+  }, []);
 
   if (fontsLoaded) {
     SplashScreen.hideAsync();

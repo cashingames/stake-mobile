@@ -10,7 +10,6 @@ import axios from "axios";
 
 import PageLoading from './shared/PageLoading';
 import HomeRouter from './features/Home/HomeRouter';
-import ExtendedLeaderboard from './features/Leaderboard/ExtendedLeaderboard';
 import FundWalletScreen from './features/Transactions/FundWalletScreen';
 import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
 import TransactionScreen from './features/Transactions/TransactionScreen';
@@ -18,9 +17,7 @@ import TermsAndConditionsScreen from './screens/TermsAndConditionsScreen';
 import PrivacyPolicyScreen from './screens/PrivacyPolicyScreen';
 import InviteFriendsScreen from './screens/InviteFriendsScreen';
 import UserProfileScreen from './features/Profile/UserProfileScreen';
-import UserStatsScreen from './features/Profile/UserStatsScreen';
 import ChangePasswordScreen from './features/Profile/ChangePasswordScreen';
-import AchievementsMilestoneScreen from './features/Profile/AchievementsMilestoneScreen';
 import BankDetailsScreen from './features/Profile/BankDetailsScreen';
 import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScreen';
 import SupportQuestionsScreen from './features/Support/SupportQuestionsScreen';
@@ -28,35 +25,16 @@ import SupportAnswerScreen from './features/Support/SupportAnswerScreen';
 
 import { isLoggedIn, logoutUser, verifyDeviceToken } from './features/Auth/AuthSlice';
 import { isTrue } from './utils/stringUtl';
-import GameModeScreen from './features/Games/GameModeScreen';
-import GameInstructionsScreen from './features/Games/GameInstructionsScreen';
 import GameInProgressScreen from './features/Games/GameInProgressScreen';
 import GameEndResultScreen from './features/Games/GameEndResultScreen';
 import LoginScreen from './features/Auth/LoginScreen';
 import SignupScreen from './features/Auth/SignupScreen';
-import SignupProfileScreen from './features/Auth/SignupProfileScreen';
 import ForgotPasswordScreen from './features/Auth/ForgotPasswordScreen';
-import VerifyEmailScreen from './features/Auth/VerifyEmailScreen';
 import ResetPasswordScreen from './features/Auth/ResetPasswordScreen';
 import ResetPasswordSuccessScreen from './features/Auth/ResetPasswordSuccessScreen';
 import GameBoostPurchaseSuccessfulScreen from './features/Store/GameBoostPurchaseSuccessfulScreen';
-import GamePlanPurchaseSuccessfulScreen from './features/Store/GamePlanPurchaseSuccessfulScreen';
 import GameStoreScreen from './features/Store/GameStoreScreen';
 import GameStoreItemsPurchaseFailed from './features/Store/GameStoreItemsPurchaseFailedScreen';
-import LeaderBoardFilter from './features/Leaderboard/LeaderBoardFilter';
-import TriviaInstructionsScreen from './features/Games/TriviaInstructionsScreen';
-import TriviaEndResultScreen from './features/Games/TriviaEndResultScreen';
-import LiveTriviaLeaderBoard from './features/LiveTrivia/LiveTriviaLeaderboard';
-import LiveTriviasScreen from './features/Games/LiveTriviasScreen';
-import ChallengeSelectPlayerScreen from './features/Games/ChallengeSelectPlayerScreen';
-import ChallengeEndGameScreen from './features/Games/ChallengeEndGameScreen';
-import ChallengeGameInProgressScreen from './features/Games/ChallengeGameInProgressScreen';
-import ChallengeGameInstructionsScreen from './features/Games/ChallengeGameInstructionScreen';
-import MyChallengesScreen from './features/Games/MyChallengesScreen';
-import MyChallengesScoreScreen from './features/Games/MyChallengesScoreScreen.js';
-import SignupVerifyEmailScreen from './features/Auth/SignupVerifyEmailScreen';
-import EmailVerifiedScreen from './features/Auth/EmailVerifiedScreen';
-import ChallengeNotPendingScreen from './features/Games/ChallengeNotPendingScreen';
 import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -66,11 +44,8 @@ import analytics from '@react-native-firebase/analytics';
 import GameStakingScreen from './features/Games/GameStakingScreen';
 import NotificationsScreen from './features/Notifications/NotificationsScreen';
 import SignupVerifyPhoneScreen from './features/Auth/SignupVerifyPhoneScreen';
-import LiveTriviaStakingScreen from './features/Games/LiveTriviaStakingScreen';
 import ReviewStakeScreen from './features/Games/ReviewStakeScreen';
-import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
 import LandingPage from './features/LandingPage/LandingPage';
-import WeeklyLeaderboard from './features/Leaderboard/WeeklyLeaderboard';
 import HelpPages from './features/Support/HelpPages';
 import ContactUs from './features/Support/ContactUs';
 import AuthContactUs from './features/Support/AuthContactUs';
@@ -167,34 +142,7 @@ function AppRouter() {
 				(
 					<>
 						<AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
-
-						<AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{
-							title: 'Leaderboards',
-							headerRight: () => <LeaderBoardFilter />,
-							headerStyle: {
-								backgroundColor: '#5d5fef',
-							},
-							headerTintColor: '#FFFF',
-						}} />
-						<AppStack.Screen name="WeeklyLeaderboard" component={WeeklyLeaderboard} options={{
-							title: 'Leaderboard',
-							headerStyle: {
-								backgroundColor: '#701F88',
-							},
-							headerTintColor: '#FFFF',
-						}} />
-						<AppStack.Screen name="LiveTriviaLeaderboard" component={LiveTriviaLeaderBoard}
-							options={{
-								title: 'Leaderboard',
-								headerStyle: {
-									backgroundColor: '#072169',
-								},
-								headerTintColor: '#FFFF',
-							}}
-						/>
-
 						{/* game */}
-						<AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
 						<AppStack.Screen name="SelectGameCategory" component={SelectGameCategoryScreen} options={{
 							title: 'Select Game',
 							headerStyle: {
@@ -202,54 +150,12 @@ function AppRouter() {
 							},
 							headerTintColor: '#FFFF',
 						}} />
-						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{
-							title: 'Game Instructions', headerStyle: {
-								backgroundColor: '#F2F5FF',
-							},
-							headerTintColor: '#000000',
-						}} />
 						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
 						<AppStack.Screen name="GameLoading" component={GameLoadingScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="LiveTriviaStaking" component={LiveTriviaStakingScreen} options={{ title: 'Game Staking' }} />
 						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Challenge - Select a player' }} />
-						<AppStack.Screen name="ChallengeGameInstruction" component={ChallengeGameInstructionsScreen} options={{ title: 'Game Instructions' }} />
-						<AppStack.Screen name="ChallengeGameInProgress" component={ChallengeGameInProgressScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="ChallengeEndGameScreen" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
-						{/* <AppStack.Screen name="AcceptDeclineChallenge" component={AcceptDeclineChallengeScreen} options={{ headerShown: false }} /> */}
-						<AppStack.Screen name="MyChallengesScore" component={MyChallengesScoreScreen} options={{
-							title: 'Scores',
-							headerStyle: {
-								backgroundColor: '#EDDA74',
-							},
-							headerTintColor: '#000000',
-						}} />
-						<AppStack.Screen name="MyChallenges" component={MyChallengesScreen} options={{
-							title: 'My Challenges',
-							headerStyle: {
-								backgroundColor: '#701F88',
-							},
-							headerTintColor: '#FFFF',
-						}} />
-						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{
-							title: 'Challenge Staking',
-							headerStyle: {
-								backgroundColor: '#EDDA74',
-							},
-							headerTintColor: '#000000',
-						}} />
 
-						<AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{ title: 'Game Instructions' }} />
-						<AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="LiveTrivias" component={LiveTriviasScreen} options={{
-							title: 'Live Trivia',
-							headerStyle: {
-								backgroundColor: '#072169',
-							},
-							headerTintColor: '#FFFF',
-						}} />
 
 
 
@@ -262,8 +168,6 @@ function AppRouter() {
 						<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
 						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Edit Details' }} />
 						<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Change Password' }} />
-						<AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ title: 'Stats' }} />
-						<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ title: 'Achievements' }} />
 						<AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
 						<AppStack.Screen name="EmailVerification" component={EmailVerificationScreen} options={{ title: 'Email Verification' }} />
 
@@ -271,7 +175,6 @@ function AppRouter() {
 						{/** store */}
 						<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ title: 'Store', headerShadowVisible: false }} />
 						<AppStack.Screen name="GameBoostPurchaseSuccessful" component={GameBoostPurchaseSuccessfulScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="GamePlanPurchaseSuccessful" component={GamePlanPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
 
 						<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
@@ -295,15 +198,10 @@ function AppRouter() {
 						<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="AuthContact" component={AuthContactUs} options={{ headerShown: false }} />
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
 						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-						<AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
 						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} />
 						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} />
-						<AppStack.Screen name="SignupVerifyEmail" component={SignupVerifyEmailScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupVerifyPhone" component={SignupVerifyPhoneScreen} options={{ headerShown: false }} />
-
-
 					</AppStack.Group >
 				)
 			}
@@ -315,9 +213,6 @@ function AppRouter() {
 			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Help' }} />
 			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
 			<AppStack.Screen name="ContactUs" component={ContactUs} options={{ title: 'Contact Us' }} />
-			<AppStack.Screen name="EmailVerified" component={EmailVerifiedScreen} options={{ headerShown: false }} />
-			<AppStack.Screen name="ChallengeNotPending" component={ChallengeNotPendingScreen} options={{ headerShown: false }} />
-			{/* <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} /> */}
 		</AppStack.Navigator >
 	)
 }
