@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Text, View, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, { BounceInRight } from 'react-native-reanimated';
 import normalize, {
-    responsiveHeight, responsiveScreenWidth, responsiveWidth
+    responsiveHeight
 } from '../../utils/normalize';
 import { isTrue, formatCurrency } from '../../utils/stringUtl';
 import PageLoading from '../../shared/PageLoading';
@@ -17,7 +17,6 @@ import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/util
 import crashlytics from '@react-native-firebase/crashlytics';
 import LottieAnimations from '../../shared/LottieAnimations';
 import SelectGameMode from '../Games/SelectGameMode';
-import { getLiveTriviaStatus } from '../LiveTrivia/LiveTriviaSlice';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import WinnersScroller from '../Leaderboard/WinnersScroller';
 
@@ -36,7 +35,6 @@ const HomeScreen = () => {
         setRefreshing(true);
         dispatch(getUser())
         dispatch(getCommonData())
-        dispatch(getLiveTriviaStatus())
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
@@ -62,13 +60,7 @@ const HomeScreen = () => {
     useFocusEffect(
         React.useCallback(() => {
 
-            if (loading) {
-                return;
-            }
-
-            // console.info('home screen focus effect')
-
-            if (Constants.manifest.extra.isDevelopment) {
+            if (loading || Constants.manifest.extra.isDevelopment) {
                 return;
             }
 
@@ -110,8 +102,7 @@ const HomeScreen = () => {
             <View style={styles.gamesContainer}>
                 <SelectGameMode />
                 <WinnersScroller />
-                <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
-                </SwiperFlatList>
+                <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}></SwiperFlatList>
             </View>
         </ScrollView>
     );
@@ -136,7 +127,6 @@ const UserDetails = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            // console.info('UserDetails focus effect')
             dispatch(getUser());
         }, [])
     );

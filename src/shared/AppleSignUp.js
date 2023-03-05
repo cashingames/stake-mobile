@@ -7,7 +7,6 @@ import { saveToken } from '../utils/ApiHelper';
 import { unwrapResult } from '@reduxjs/toolkit';
 import UniversalBottomSheet from './UniversalBottomSheet';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
-import { triggerTour } from '../features/Tour/Index';
 import { triggerNotifierForReferral } from './Notification';
 
 const AppleSignUp = () => {

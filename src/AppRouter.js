@@ -38,7 +38,6 @@ import GameStoreItemsPurchaseFailed from './features/Store/GameStoreItemsPurchas
 import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Toast from 'react-native-toast-message';
 import routeDecider from './utils/notificationRouteDecider';
 import analytics from '@react-native-firebase/analytics';
 import GameStakingScreen from './features/Games/GameStakingScreen';
@@ -64,7 +63,6 @@ function AppRouter() {
 	const showIntro = useSelector(state => state.auth.showIntro);
 	appendAxiosAuthHeader(token);
 
-	console.log(token);
 
 	//during app restart, check localstorage for these info
 	useEffect(() => {
@@ -82,29 +80,7 @@ function AppRouter() {
 		}
 
 		registerForPushNotificationsAsync().then(deviceToken => {
-			console.info('verify device token')
 			dispatch(verifyDeviceToken(deviceToken))
-		});
-
-		const unsubscribe = messaging().onMessage(async remoteMessage => {
-			await analytics().logEvent('challenge_notification', {
-				'action': 'received'
-			});
-			Toast.show({
-				type: 'info',
-				text1: remoteMessage.data.title,
-				text2: remoteMessage.data.body,
-				autoHide: false,
-				onPress: async () => {
-					Toast.hide();
-					await analytics().logEvent("challenge_notification", {
-						action: "clicked"
-					})
-					routeDecider(remoteMessage, navigation)
-
-				}
-			})
-
 		});
 
 		messaging().onNotificationOpenedApp(async remoteMessage => {
@@ -220,7 +196,6 @@ function AppRouter() {
 export default AppRouter;
 
 const setupAxios = async function () {
-	console.log("here in axios")
 	axios.defaults.baseURL = Constants.manifest.extra.apiBaseUrl;
 	//axios logout on 401
 	axios.interceptors.response.use(
@@ -243,14 +218,14 @@ const setupAxios = async function () {
 		});
 
 	axios.interceptors.request.use(request => {
-		console.log('Starting Request', JSON.stringify(request.url, null, 2))
+		// console.log('Starting Request', JSON.stringify(request.url, null, 2))
 		return request
 	})
 
 }
 
 const appendAxiosAuthHeader = function (token) {
-	axios.defaults.headers.common['x-brand-id'] = 2; //@TODO Change to 1
+	axios.defaults.headers.common['x-brand-id'] = 1; //@TODO Change to 1
 
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;

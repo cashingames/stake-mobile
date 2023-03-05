@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions, Alert, Image, RefreshControl, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
@@ -11,7 +11,6 @@ import { formatCurrency, formatNumber } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
 import analytics from '@react-native-firebase/analytics';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
-import { unwrapResult } from '@reduxjs/toolkit';
 import { withdrawWinnings } from '../CommonSlice';
 
 const wait = (timeout) => {
@@ -97,23 +96,12 @@ export default function WalletScreen() {
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={300}
-                    subComponent={<WithdrawnBalance onClose={closeBottomSheet}
-                    />}
+                    subComponent={<WithdrawnBalance />}
                 />
             </ScrollView>
         </ImageBackground>
     );
 }
-
-
-const UserEarnings = ({ point }) => {
-    return (
-        <View style={styles.earnings}>
-            <Text style={styles.earningText}>Your available point balance</Text>
-            <Text style={styles.earningAmount}>{formatNumber(point)} pts</Text>
-        </View>
-    )
-};
 
 const TransactionLink = () => {
     const navigation = useNavigation();
@@ -153,7 +141,7 @@ const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, 
     )
 }
 
-const WithdrawnBalance = ({ onClose, withdrawableBalance }) => {
+const WithdrawnBalance = () => {
     return (
         <View style={styles.withdrawn}>
             <Image style={styles.emoji}

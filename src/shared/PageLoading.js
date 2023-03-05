@@ -19,8 +19,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         flexDirection: "row",
-        // backgroundColor: '#fff',
-        // "#0000ff"
         padding: 10
     },
 })

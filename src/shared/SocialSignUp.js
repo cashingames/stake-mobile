@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import { Button, Pressable, View, Image, Platform, ActivityIndicator, Alert } from 'react-native';
+import { Pressable, View, Image, Platform, ActivityIndicator, Alert } from 'react-native';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
-import RBSheet from "react-native-raw-bottom-sheet";
 import { Text } from 'react-native';
-import Input from './Input';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import AppButton from './AppButton';
 import { saveToken } from '../utils/ApiHelper';
 import { useNavigation } from '@react-navigation/native';
 import Constants from "expo-constants";
@@ -17,9 +14,7 @@ import normalize from '../utils/normalize';
 import UniversalBottomSheet from './UniversalBottomSheet';
 import { googleSignUp, loginWithSocialLink, setToken } from '../features/Auth/AuthSlice';
 import analytics from '@react-native-firebase/analytics';
-import PageLoading from './PageLoading';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
-import { triggerTour } from '../features/Tour/Index';
 import { triggerNotifierForReferral } from './Notification';
 
 

@@ -4,9 +4,9 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import Animated from 'react-native-reanimated';
 import { randomEnteringAnimation } from '../../utils/utils';
-import { useNavigation } from '@react-navigation/core';
 import normalize from "../../utils/normalize";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
+import { useNavigation } from "@react-navigation/native";
 
 
 const HelpPages = () => {

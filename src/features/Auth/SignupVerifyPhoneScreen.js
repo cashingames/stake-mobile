@@ -1,20 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, ScrollView, BackHandler, TextInput, Pressable, Alert } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { Text, View, ScrollView, TextInput, Alert } from 'react-native';
+import { useDispatch } from 'react-redux';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { useFocusEffect } from '@react-navigation/native';
 import ResendOtp from '../../shared/ResendOtp';
-import { ResendPhoneOtp, setToken, verifyPhoneOtp, verifyUser } from './AuthSlice';
+import { ResendPhoneOtp, verifyPhoneOtp } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { createIconSetFromFontello } from '@expo/vector-icons';
-import { saveToken } from '../../utils/ApiHelper';
 import { calculateTimeRemaining } from '../../utils/utils';
 import analytics from '@react-native-firebase/analytics';
-import { triggerTour } from '../Tour/Index';
 import { triggerNotifierForReferral } from '../../shared/Notification';
 
 
@@ -94,7 +90,6 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                     'phone_number': params.phone_number,
                 })
                 setLoading(false);
-                triggerTour(navigation)
                 triggerNotifierForReferral()
             })
             .catch((rejectedValueOrSerializedError) => {
@@ -103,19 +98,6 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                 setLoading(false);
             })
     }
-
-
-    // useFocusEffect(
-    //     React.useCallback(() => {
-    //         const onBackPress = () => {
-    //             return true;
-    //         };
-    //         BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-    //         return () =>
-    //             BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    //     }, [])
-    // );
 
     return (
         <View style={styles.container}>
@@ -218,8 +200,6 @@ const VerifyEmailText = ({ params }) => {
         </View>
     )
 }
-
-
 
 export default SignupVerifyPhoneScreen;
 
