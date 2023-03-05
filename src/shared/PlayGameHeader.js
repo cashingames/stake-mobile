@@ -7,7 +7,8 @@ const PlayGameHeader = ({ onPress, onPressBoost }) => {
 
     return (
         <View style={styles.header}>
-            <BoostsInfo onPress={onPressBoost} />
+            {/* <BoostsInfo onPress={onPressBoost} /> */}
+            <View></View>
             <Pressable onPress={onPress}>
                 <Text style={styles.headerTitle}>Exit</Text>
             </Pressable>

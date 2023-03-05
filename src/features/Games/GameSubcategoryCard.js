@@ -52,8 +52,8 @@ const styles = EStyleSheet.create({
         shadowOpacity: 0.1,
     },
     cardIconBigger: {
-        width: normalize(30),
-        height: normalize(30),
+        width: normalize(20),
+        height: normalize(20),
         alignSelf: 'center',
     },
     cardContent: {
@@ -61,7 +61,7 @@ const styles = EStyleSheet.create({
         justifyContent: "space-evenly",
     },
     cardTitle: {
-        fontSize: '0.8rem',
+        fontSize: '0.7rem',
         color: '#151C2F',
         fontFamily: 'graphik-medium',
     },

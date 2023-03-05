@@ -69,28 +69,28 @@ export default function GameEndResultScreen({ navigation }) {
 			'phone_number': user.phoneNumber,
 			'email': user.email
 		});
-		if (bonusGame && bonusGame.game_count === 2) {
-			analytics().logEvent('two_free_games_left', {
-				'id': user.username,
-				'phone_number': user.phoneNumber,
-				'email': user.email
-			});
-		};
-		logFreeGamesExhausted()
+		// if (bonusGame && bonusGame.game_count === 2) {
+		// 	analytics().logEvent('two_free_games_left', {
+		// 		'id': user.username,
+		// 		'phone_number': user.phoneNumber,
+		// 		'email': user.email
+		// 	});
+		// };
+		// logFreeGamesExhausted()
 		navigation.navigate("SelectGameCategory")
 		setLoading(false);
 
 	}
 
 	const onHomeButtonClick = async () => {
-		if (bonusGame && bonusGame.game_count === 2) {
-			analytics().logEvent('two_free_games_left', {
-				'id': user.username,
-				'phone_number': user.phoneNumber,
-				'email': user.email
-			});
-		};
-		logFreeGamesExhausted()
+		// if (bonusGame && bonusGame.game_count === 2) {
+		// 	analytics().logEvent('two_free_games_left', {
+		// 		'id': user.username,
+		// 		'phone_number': user.phoneNumber,
+		// 		'email': user.email
+		// 	});
+		// };
+		// logFreeGamesExhausted()
 		navigation.navigate('Home', { showStakingAdvert: !withStaking })
 	}
 	useFocusEffect(

@@ -7,7 +7,7 @@ import normalize from "../utils/normalize";
 
 
 
-const StakingPredictionsTable = ({ gameStake, position, amount, containerStyle }) => {
+const StakingPredictionsTable = ({ gameStake, amount, containerStyle }) => {
     return (
         <View style={[styles.stakeSub, containerStyle]}>
             <View style={styles.stakeScoreContainer}>

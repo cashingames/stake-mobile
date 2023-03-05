@@ -142,5 +142,10 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         marginVertical: normalize(10),
     },
+    amountWon: {
+        backgroundColor: '#008000',
+        paddingHorizontal: '.2rem',
+        opacity: 0.6
+    }
 
 })
