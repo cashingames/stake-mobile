@@ -18,6 +18,7 @@ import { getUser } from '../Auth/AuthSlice';
 import { Alert } from 'react-native';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { ActivityIndicator } from 'react-native';
+import useSound from '../../utils/useSound';
 
 
 
@@ -28,6 +29,7 @@ const LiveTriviaCard = ({ trivia }) => {
     const user = useSelector(state => state.auth.user)
     const [showText, setShowText] = useState(true);
     const [loading, setLoading] = useState(false);
+    const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
 
 
     const initialLoading = useSelector(state => state.common.initialLoading);
@@ -150,6 +152,7 @@ const LiveTriviaCard = ({ trivia }) => {
                 'phone_number': user.phoneNumber,
                 'email': user.email
             })
+            playSound()
             navigation.navigate('LiveTriviaLeaderboard', { triviaId: trivia.id, prizePool: trivia.prizePool, prizeType: trivia.prizeType })
 
         }

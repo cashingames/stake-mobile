@@ -1,13 +1,15 @@
 import React from 'react';
-import {Text, View, Image } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import useSound from '../../utils/useSound';
 
 const GameStoreItemsPurchaseFailed = () => {
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
     const user = useSelector(state => state.auth.user)
     const navigation = useNavigation();
     return (
@@ -21,8 +23,16 @@ const GameStoreItemsPurchaseFailed = () => {
             <Text style={styles.paymentHeader}>Purchase Failed</Text>
             <Text style={styles.message}>Sorry purchase failed please try again</Text>
             <View style={styles.congratsButtons}>
-                <AppButton text={"Store"} onPress={() => navigation.navigate('GameStore')} style={styles.actionButton} />
-                <AppButton text={"Home"} onPress={() => navigation.navigate('Home')} style={styles.actionButton} />
+                <AppButton text={"Store"} onPress={() => {
+                    playSound()
+                    navigation.navigate('GameStore')
+                }}
+                    style={styles.actionButton} />
+                <AppButton text={"Home"} onPress={() => {
+                    playSound()
+                    navigation.navigate('Home')
+                }}
+                    style={styles.actionButton} />
             </View>
         </View>
     )
@@ -41,7 +51,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         marginVertical: normalize(15)
     },
-   failure: {
+    failure: {
         width: normalize(65),
         height: normalize(65),
         marginVertical: normalize(10),

@@ -11,11 +11,13 @@ import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { getUserNotifications, markNotificationRead } from "../CommonSlice";
+import useSound from "../../utils/useSound";
 
 
 const NotificationsScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     
+    const { playSound } =  useSound(require('../../../assets/sounds/game-completed2.wav'))
 
     const notifications = useSelector(state => state.common.userNotifications)
     console.log(notifications)
@@ -31,6 +33,7 @@ const NotificationsScreen = ({ navigation }) => {
             setClicking(false)
             setReadAll(true)
         });
+        playSound()
     }
 
     useFocusEffect(
@@ -104,6 +107,7 @@ const NotificationsScreen = ({ navigation }) => {
 }
 
 const Notification = ({ notification, moment, readAll }) => {
+    const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const [clicked, setClicked] = useState(false)
@@ -114,6 +118,7 @@ const Notification = ({ notification, moment, readAll }) => {
             dispatch(getUser());
             navigation.navigate('MyChallengesScore', { challengeId: notification.data.action_id })
         }
+        playSound()
         dispatch(markNotificationRead(notification.id)).then(() => setClicked(true));
         dispatch(getUser());
     }

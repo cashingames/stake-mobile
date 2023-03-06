@@ -15,6 +15,7 @@ import { isTrue } from '../../utils/stringUtl';
 import analytics from '@react-native-firebase/analytics';
 
 import AppButton from '../../shared/AppButton';
+import useSound from '../../utils/useSound';
 // import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 // import { Walkthroughable } from '../Tour/Walkthrouable';
 // import { toggleAppTour } from '../Tour/TourSlice';
@@ -71,6 +72,7 @@ const HomeRouter = () => {
 }
 
 const RightButtons = () => {
+    const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
     const route = useRoute();
@@ -82,6 +84,7 @@ const RightButtons = () => {
             'phone_number': user.phoneNumber,
             'email': user.email
         })
+        playSound()
         navigation.navigate('Home')
     }
 
@@ -91,6 +94,7 @@ const RightButtons = () => {
             'phone_number': user.phoneNumber,
             'email': user.email
         })
+        playSound()
         navigation.navigate('Wallet')
     }
 
@@ -100,6 +104,7 @@ const RightButtons = () => {
             'phone_number': user.phoneNumber,
             'email': user.email
         })
+        playSound()
         navigation.navigate('Notifications')
     }
 
@@ -135,6 +140,7 @@ function CustomDrawerContent(props) {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
     // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
 
     const user = useSelector(state => state.auth.user)
@@ -184,7 +190,9 @@ function CustomDrawerContent(props) {
                             </View>
                         } order={1} name="Order1">
                             <Walkthroughable> */}
-                    <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
+                    <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => {
+                        playSound()
+                        navigation.navigate('UserProfile')}} />
                     {/* </Walkthroughable>
                         </CopilotStep> */}
 
@@ -205,7 +213,10 @@ function CustomDrawerContent(props) {
                                 <Text style={drawStyles.itemLabel}>Live Trivia</Text>
                                 <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                             </View>}
-                        onPress={() => navigation.navigate('LiveTrivias')}
+                        onPress={() => {
+                            playSound()
+                            navigation.navigate('LiveTrivias')
+                        }}
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
@@ -226,7 +237,10 @@ function CustomDrawerContent(props) {
                                 <Text style={drawStyles.itemLabel}>My Challenges</Text>
                                 <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                             </View>}
-                        onPress={() => navigation.navigate('MyChallenges')}
+                        onPress={() => {
+                            playSound()
+                            navigation.navigate('MyChallenges')
+                        }}
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
@@ -243,7 +257,10 @@ function CustomDrawerContent(props) {
                                     <Text style={drawStyles.itemLabel}>Store</Text>
                                     <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                                 </View>}
-                            onPress={() => navigation.navigate('GameStore')}
+                            onPress={() => {
+                                playSound()
+                                navigation.navigate('GameStore')
+                            }}
                             activeTintColor='#EF2F55'
                             style={drawStyles.label}
                             labelContainerStyle
@@ -256,7 +273,10 @@ function CustomDrawerContent(props) {
                                 <Text style={drawStyles.itemLabel}>Leaderboards</Text>
                                 <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                             </View>}
-                        onPress={() => navigation.navigate('Leaderboard')}
+                        onPress={() => {
+                            playSound()
+                            navigation.navigate('Leaderboard')
+                        }}
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
@@ -276,7 +296,10 @@ function CustomDrawerContent(props) {
                                 <Text style={drawStyles.itemLabel}>Get Help</Text>
                                 <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
                             </View>}
-                        onPress={() => navigation.navigate('Help')}
+                        onPress={() => {
+                            playSound()
+                            navigation.navigate('Help')
+                        }}
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
@@ -285,23 +308,23 @@ function CustomDrawerContent(props) {
                         </CopilotStep> */}
 
                     <DrawerItem
-                            label={() =>
-                                <View style={drawStyles.item}>
-                                    <Text style={drawStyles.itemLabel}>Need a Tour</Text>
-                                    <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                                </View>}
-                            onPress={async () => {
-                                await analytics().logEvent('tour_started', {
-                                    'id': user.username,
-                                    'email': user.email
-                                })
-                          
-                                navigation.navigate("AppTour")
-                            }}
-                            activeTintColor='#EF2F55'
-                            style={drawStyles.label}
-                            labelContainerStyle
-                        />
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Need a Tour</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={async () => {
+                            await analytics().logEvent('tour_started', {
+                                'id': user.username,
+                                'email': user.email
+                            })
+                            playSound()
+                            navigation.navigate("AppTour")
+                        }}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
 
                     {/* <CopilotStep text={
                             <View>

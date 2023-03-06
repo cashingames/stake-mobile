@@ -7,19 +7,30 @@ import { randomEnteringAnimation } from '../../utils/utils';
 import { useNavigation } from '@react-navigation/core';
 import normalize from "../../utils/normalize";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
+import useSound from "../../utils/useSound";
 
 
 const HelpPages = () => {
     const navigation = useNavigation();
     useApplyHeaderWorkaround(navigation.setOptions);
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
 
     return (
         <ScrollView style={styles.container}>
             <View style={styles.profileTabs}>
-                <HelpTab tabName='Contact Us' onPress={() => navigation.navigate('ContactUs')} />
-                <HelpTab tabName='FAQ' onPress={() => navigation.navigate('Support')} />
-                <HelpTab tabName='Settings' onPress={() => navigation.navigate('Settings')} />
+                <HelpTab tabName='Contact Us' onPress={() => {
+                    playSound()
+                    navigation.navigate('ContactUs')
+                }} />
+                <HelpTab tabName='FAQ' onPress={() => {
+                    playSound()
+                    navigation.navigate('Support')
+                }} />
+                <HelpTab tabName='Settings' onPress={() => {
+                    playSound()
+                    navigation.navigate('Settings')
+                }} />
             </View>
         </ScrollView>
     )

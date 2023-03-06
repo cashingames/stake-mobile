@@ -9,6 +9,7 @@ import normalize from "../utils/normalize";
 import Animated, { BounceInLeft } from "react-native-reanimated";
 import analytics from '@react-native-firebase/analytics';
 import { PopGoogleReviewLogic } from "./GoogleReview";
+import useSound from "../utils/useSound";
 
 
 const UserItems = ({ showBuy }) => {
@@ -18,6 +19,7 @@ const UserItems = ({ showBuy }) => {
     var boosts = useSelector(state => state.auth.user.boosts ?? []);
     const [sumOfPlans, setSumOfPlans] = useState(0);
     const [boostsString, setBboostsString] = useState('');
+    const { playSound } =  useSound(require('../../assets/sounds/option-picked.mp3'))
 
     useEffect(() => {
         const reducer = (accumulator, curr) => accumulator + curr;
@@ -49,6 +51,7 @@ const UserItems = ({ showBuy }) => {
             'phone_number': user.phoneNumber,
             'email': user.email
         })
+        playSound()
         navigation.navigate('GameStore')
     }
 
