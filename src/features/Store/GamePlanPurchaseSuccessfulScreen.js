@@ -7,8 +7,10 @@ import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LottieAnimations from '../../shared/LottieAnimations';
+import useSound from '../../utils/useSound';
 
 const GamePlanPurchaseSuccessfulScreen = () => {
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
     const navigation = useNavigation();
     return (
         <View style={styles.topContainer}>
@@ -25,8 +27,16 @@ const GamePlanPurchaseSuccessfulScreen = () => {
 
             </View>
             <View style={styles.congratsButtons}>
-                <AppButton text={"Play a Game"} onPress={() => navigation.navigate('Home')} style={styles.actionButton} />
-                <AppButton text={"Store"} onPress={() => navigation.navigate('GameStore')} style={styles.actionButton} />
+                <AppButton text={"Play a Game"} onPress={() => {
+                    playSound()
+                    navigation.navigate('Home')
+                }}
+                    style={styles.actionButton} />
+                <AppButton text={"Store"} onPress={() => {
+                    playSound()
+                    navigation.navigate('GameStore')
+                }}
+                    style={styles.actionButton} />
             </View>
         </View>
     )

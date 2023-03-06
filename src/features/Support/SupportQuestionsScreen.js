@@ -12,6 +12,7 @@ import Animated, { FlipInXUp, SlideInRight } from 'react-native-reanimated';
 import PageLoading from '../../shared/PageLoading';
 import { logoutUser } from '../Auth/AuthSlice';
 import Constants from 'expo-constants';
+import useSound from '../../utils/useSound';
 
 
 export default function SupportQuestionsScreen({ navigation }) {
@@ -59,13 +60,16 @@ export default function SupportQuestionsScreen({ navigation }) {
 
 const QuestionTab = ({ question, answer }) => {
     const navigation = useNavigation();
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
     return (
         <Pressable
-            onPress={() => navigation.navigate('Answer', {
+            onPress={() => {
+                playSound()
+                navigation.navigate('Answer', {
                 question: JSON.stringify(question),
                 answer: JSON.stringify(answer)
-            })}
+            })}}
             style={styles.tab}>
             <Text style={styles.tabText}>{question}</Text>
             <Ionicons name="chevron-forward-outline" size={20} color="#524D4D" />

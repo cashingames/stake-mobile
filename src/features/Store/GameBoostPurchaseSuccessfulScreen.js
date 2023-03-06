@@ -8,10 +8,12 @@ import { getUser } from '../Auth/AuthSlice';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LottieAnimations from '../../shared/LottieAnimations';
+import useSound from '../../utils/useSound';
 
 const GameBoostPurchaseSuccessfulScreen = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
 
 
     useEffect(() => {
@@ -32,8 +34,16 @@ const GameBoostPurchaseSuccessfulScreen = () => {
                 <Text style={styles.message}>You successfully purchased a boost to continue playing games, climb up the leaderboard and win great prizes</Text>
             </View>
             <View style={styles.congratsButtons}>
-                <AppButton text={"Play a Game"} onPress={() => navigation.navigate('Home')} style={styles.actionButton} />
-                <AppButton text={"Store"} onPress={() => navigation.navigate('GameStore')} style={styles.actionButton} />
+                <AppButton text={"Play a Game"} onPress={() => {
+                    playSound()
+                    navigation.navigate('Home')
+                }}
+                    style={styles.actionButton} />
+                <AppButton text={"Store"} onPress={() => {
+                    playSound
+                    navigation.navigate('GameStore')
+                }}
+                    style={styles.actionButton} />
             </View>
         </View>
     )

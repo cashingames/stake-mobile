@@ -13,6 +13,7 @@ import { getUser, editProfileAvatar, logoutUser } from '../Auth/AuthSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import Animated from 'react-native-reanimated';
 import { randomEnteringAnimation } from '../../utils/utils';
+import useSound from '../../utils/useSound';
 
 
 export default function UserProfileScreen({ navigation }) {
@@ -26,8 +27,8 @@ export default function UserProfileScreen({ navigation }) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView style={{flex: 1}}>
-                <View style={[styles.content, {flex: 1}]}>
+            <ScrollView style={{ flex: 1 }}>
+                <View style={[styles.content, { flex: 1 }]}>
                     <View>
                         <UserAvatar />
                         <ProfileTabs />
@@ -94,6 +95,7 @@ const UserAvatar = () => {
 
 const ProfileTabs = () => {
     const dispatch = useDispatch();
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
     const navigation = useNavigation();
     const features = useSelector(state => state.common.featureFlags);
@@ -105,11 +107,26 @@ const ProfileTabs = () => {
 
     return (
         <View style={styles.profileTabs}>
-            <ProfileTab tabName='Edit Details' onPress={() => navigation.navigate('EditDetails')} />
-            <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ChangePassword')} />
-            <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('AchievementsMilestone')} />
-            <ProfileTab tabName='Stats' onPress={() => navigation.navigate('UserStats')} />
-            <ProfileTab tabName='Invite Friends' onPress={() => navigation.navigate('Invite')} />
+            <ProfileTab tabName='Edit Details' onPress={() => {
+                playSound()
+                navigation.navigate('EditDetails')
+            }} />
+            <ProfileTab tabName='Change Password' onPress={() => {
+                playSound()
+                navigation.navigate('ChangePassword')
+            }} />
+            <ProfileTab tabName='Achievements' onPress={() => {
+                playSound()
+                navigation.navigate('AchievementsMilestone')
+            }} />
+            <ProfileTab tabName='Stats' onPress={() => {
+                playSound()
+                navigation.navigate('UserStats')
+            }} />
+            <ProfileTab tabName='Invite Friends' onPress={() => {
+                playSound()
+                navigation.navigate('Invite')
+            }} />
             {/* <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} /> */}
             {/* <Pressable onPress={onLogout}>
                 <Text style={styles.logoutText}>Logout</Text>
@@ -130,7 +147,7 @@ const ProfileTab = ({ tabName, onPress }) => {
     )
 }
 
-const Footer = ({onLogout}) =>{
+const Footer = ({ onLogout }) => {
     return (
         <View style={styles.logoutContainer}>
             <Text style={styles.appVersion}>App version: {Constants.manifest.version}</Text>
