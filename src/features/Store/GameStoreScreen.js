@@ -17,6 +17,7 @@ import UserItems from "../../shared/UserItems";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { randomEnteringAnimation } from "../../utils/utils";
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
+import useSound from "../../utils/useSound";
 
 
 export default function ({ navigation }) {
@@ -56,6 +57,7 @@ const GamePlans = ({ user }) => {
 }
 
 const GamePlanCard = ({ plan, user }) => {
+    const { playSound } =  useSound(require('../../../assets/sounds/pop-up.wav'))
     const refRBSheet = useRef();
     const buyGamePlan = async () => {
         await analytics().logEvent('initiate_plan_purchase', {
@@ -67,6 +69,7 @@ const GamePlanCard = ({ plan, user }) => {
             'item_category': 'ecommerce',
             'price': plan.price
         })
+        playSound()
         refRBSheet.current.open()
     }
     return (
@@ -121,7 +124,8 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
     let formattedDate = new Date().toISOString().split('T')[0];
 
     const canPay = Number(userBalance) >= Number(plan.price);
-
+    const successfulPurchase =  useSound(require('../../../assets/sounds/updated.mp3'))
+    const failedPurchase =  useSound(require('../../../assets/sounds/failed.mp3'))
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
@@ -156,6 +160,7 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
                 // console.log(result);
                 dispatch(getUser())
                 onClose()
+                successfulPurchase.playSound()
                 navigation.navigate("GamePlanPurchaseSuccessful")
             })
             .catch(async rejectedValueOrSerializedError => {
@@ -167,6 +172,7 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
                     'email': user.email,
                     'item_name': plan.name,
                 })
+                failedPurchase.playSound()
                 navigation.navigate("GameStoreItemsPurchaseFailed")
             });
     }
@@ -204,6 +210,7 @@ const GameBoosts = (user) => {
 }
 
 const BoostCard = ({ boost, user }) => {
+    const { playSound } =  useSound(require('../../../assets/sounds/achievement-unlocked2.wav'))
     const refRBSheet = useRef();
     const buyBoost = async () => {
         await analytics().logEvent('initiate_boost_purchase', {
@@ -215,7 +222,7 @@ const BoostCard = ({ boost, user }) => {
             'item_category': 'ecommerce',
             'price': boost.currency_value
         })
-
+        playSound()
         refRBSheet.current.open()
     }
     return (
@@ -273,7 +280,8 @@ const BuyBoost = ({ boost, onClose, user }) => {
     const newUserDate = newUser.slice(0, 10);
     let formattedDate = new Date().toISOString().split('T')[0];
     const canPay = Number(userBalance) >= Number(boost.currency_value);
-
+    const successfulPurchase =  useSound(require('../../../assets/sounds/updated.mp3'))
+    const failedPurchase =  useSound(require('../../../assets/sounds/failed.mp3'))
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
@@ -307,6 +315,7 @@ const BuyBoost = ({ boost, onClose, user }) => {
             .then(result => {
                 dispatch(getUser())
                 onClose()
+                successfulPurchase.playSound()
                 navigation.navigate("GameBoostPurchaseSuccessful")
             })
             .catch(async rejectedValueOrSerializedError => {
@@ -317,6 +326,7 @@ const BuyBoost = ({ boost, onClose, user }) => {
                     'phone_number': user.phoneNumber,
                     'email': user.email
                 })
+                failedPurchase.playSound()
                 navigation.navigate("GameStoreItemsPurchaseFailed")
             });
     }

@@ -15,6 +15,7 @@ import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { debounce } from 'lodash';
 import analytics from '@react-native-firebase/analytics';
 import ChallengeStakingBottomSheet from '../../shared/ChallengeStakingBottomSheet';
+import useSound from '../../utils/useSound';
 
 
 export default function ChallengeSelectPlayerScreen({ navigation }) {
@@ -34,6 +35,9 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
     const isChallengeStakingFeatureEnabled = features['challenge_game_staking'] !== undefined && features['challenge_game_staking'].enabled;
 
+    const { playSound } =  useSound(require('../../../assets/sounds/button-clicked1.mp3'))
+    const sendInviteSound =  useSound(require('../../../assets/sounds/open.wav'))
+
     const openBottomSheet = () => {
         refRBSheet.current.open()
     }
@@ -49,6 +53,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
     const sendInvite = () => {
         setSending(false)
+        sendInviteSound.playSound()
         dispatch(sendFriendInvite({
             opponentId: selectedOpponent.id,
             categoryId: activeCategory.id
@@ -125,6 +130,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         dispatch(setSelectedFriend(userFriend));
         setSending(true)
         setSearching(false)
+        playSound()
     }
 
     const stakeCash = async () => {

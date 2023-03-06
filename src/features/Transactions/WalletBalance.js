@@ -6,6 +6,7 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { formatCurrency } from '../../utils/stringUtl';
 import { useNavigation } from '@react-navigation/native';
 import AppButton from '../../shared/AppButton';
+import useSound from '../../utils/useSound';
 
 
 
@@ -32,10 +33,15 @@ const WalletBalance = ({ balance }) => {
 };
 
 const FundButton = () => {
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
     const navigation = useNavigation();
     return (
         <View style={styles.buttonContainer}>
-            <AppButton text="Fund Wallet" textStyle={styles.fundButton} onPress={() => navigation.navigate('FundWallet')} style={styles.button} />
+            <AppButton text="Fund Wallet" textStyle={styles.fundButton} onPress={() => {
+                playSound()
+                navigation.navigate('FundWallet')
+            }}
+                style={styles.button} />
         </View>
     )
 };

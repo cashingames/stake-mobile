@@ -27,7 +27,8 @@ export default function FundWalletScreen() {
   const [amount, setAmount] = useState("");
   const [showPayment, setShowPayment] = React.useState(false);
   const minimumWalletFundableAmount = useSelector(state => state.common.minimumWalletFundableAmount);
-  const { playSound } =  useSound(require('../../../assets/sounds/updated.mp3'))
+  const fundingSuccessful =  useSound(require('../../../assets/sounds/updated.mp3'))
+  const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
   
   const transactionCompleted = async (res) => {
@@ -41,7 +42,7 @@ export default function FundWalletScreen() {
       'email': user.email
     });
     dispatch(getUser());
-    playSound()
+    fundingSuccessful.playSound()
     setShowPayment(false);
     navigation.navigate("Wallet");
   };
@@ -55,6 +56,7 @@ export default function FundWalletScreen() {
       'phone_number': user.phoneNumber,
       'email': user.email
     });
+    playSound()
     const cleanedAmount =
       amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
     if (cleanedAmount < minimumWalletFundableAmount) {
