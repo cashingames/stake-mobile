@@ -355,6 +355,7 @@ const setupAxios = async function () {
 }
 
 const appendAxiosAuthHeader = function (token) {
+	axios.defaults.headers.common['x-brand-id'] = 10;
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {

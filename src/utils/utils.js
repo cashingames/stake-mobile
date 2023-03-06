@@ -1,5 +1,5 @@
 import { nativeApplicationVersion } from "expo-application";
-import { Alert, Linking } from "react-native";
+import { Alert, Linking, Platform } from "react-native";
 import {
     BounceInDown, RotateInUpLeft, BounceInLeft, BounceInRight, BounceInUp, SlideInDown, SlideInLeft,
     SlideInRight, SlideInUp, RotateInUpRight, RotateInDownLeft, RotateInDownRight,
