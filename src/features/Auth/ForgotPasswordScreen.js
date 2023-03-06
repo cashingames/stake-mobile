@@ -1,54 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
-import Constants from 'expo-constants';
-
+import { View, Text, ScrollView, TextInput, Pressable } from 'react-native';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
-import Input from '../../shared/Input';
 import { verifyAccount } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { CountryPicker } from "react-native-country-codes-picker";
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import { Ionicons } from '@expo/vector-icons';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function ({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
 
-    const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'oyekunmi@gmail.com' : '');
     const [canSend, setCanSend] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [phone, setPhone] = useState('');
+    const [phoneErr, setPhoneError] = useState(false);
+    const [countryCode, setCountryCode] = useState('+234');
+    const [show, setShow] = useState(false);
 
-    const onChangeEmail = (value) => {
-        setEmail(value)
+    const onChangePhone = (text) => {
+        text.length > 0 && text.length < 10 ? setPhoneError(true) : setPhoneError(false);
+        setPhone(text)
     }
+
 
     const onSend = async () => {
         setLoading(true);
         setCanSend(false);
         setError('');
-
-        dispatch(verifyAccount({ email })).then(unwrapResult)
+        dispatch(verifyAccount({ phone_number: phone, country_code: countryCode }))
+            .then(unwrapResult)
             .then((originalPromiseResult) => {
+                console.log('here before')
                 setLoading(false);
                 setCanSend(true);
                 navigation.navigate("VerifyEmail", {
-                    email:email
+                    phone: phone
                 });
             })
             .catch((rejectedValueOrSerializedError) => {
+                console.log('here error')
                 setLoading(false);
                 setCanSend(true);
-                setError("Please Use Registered Email Address");
+                setError("Phone number does not exist");
             })
 
     }
 
     useEffect(() => {
-        const valid = email.length > 5;
-        setCanSend(valid);
-        setError('');
-    }, [email]);
+        const invalid = phoneErr;
+        setCanSend(!invalid);
+    }, [phoneErr])
 
     return (
         <ScrollView style={styles.container}>
@@ -60,16 +66,49 @@ export default function ({ navigation }) {
                         <Text style={styles.errorBox}>{error}</Text>
                     }
 
-                    <Input
-                        label='Email or username'
-                        placeholder="johndoe or johndoe@example.com"
-                        value={email}
-                        onChangeText={text => onChangeEmail(text)}
+                    <>
+                        <Text style={styles.inputLabel} >Phone number</Text>
+                        <View style={styles.phonePicker}>
+                            <Pressable
+                                onPress={() => setShow(true)}
+                                style={styles.codeButton}
+                            >
+                                <Text style={styles.countryCodeDigit}>
+                                    {countryCode}
+                                </Text>
+                                <Ionicons name="caret-down-outline" size={14} color="#00000080" />
+                            </Pressable>
+                            <TextInput
+                                style={styles.phoneNumberInput}
+                                placeholder="80xxxxxxxx"
+                                value={phone}
+                                onChangeText={text => onChangePhone(text)}
+                                error={phoneErr && '*input a valid phone number'}
+                                type="phone"
+                                maxLength={11}
+                                keyboardType='numeric'
+
+                            />
+                        </View>
+                    </>
+                    <CountryPicker
+                        show={show}
+                        style={{
+                            // Styles for whole modal [View]
+                            modal: {
+                                height: 500,
+                                // backgroundColor: 'red'
+                            },
+                        }}
+                        pickerButtonOnPress={(item) => {
+                            setCountryCode(item.dial_code);
+                            setShow(false);
+                        }}
                     />
 
                 </View>
                 <View style={styles.button}>
-                    <AppButton onPress={() => onSend()} text={loading ? 'Sending...' : 'GET OTP'} disabled={!canSend} />
+                    <AppButton onPress={onSend} text={loading ? 'Sending...' : 'GET OTP'} disabled={!canSend || loading} />
                 </View>
             </View>
         </ScrollView>
@@ -82,12 +121,12 @@ const ForgotPasswordTitle = () => {
             <Text style={styles.headerTextStyle}>
                 Forgot Password
             </Text>
-            <Text style={styles.instructionTextStyle}>Enter your email below to enable us verify  you are whom you say you are</Text>
+            <Text style={styles.instructionTextStyle}>Enter your phone number below to enable us verify you are whom you say you are</Text>
         </>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -144,5 +183,41 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: normalize(10),
-    }
+    },
+    phonePicker: {
+        flexDirection: 'row',
+        height: normalize(38),
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingLeft: normalize(10),
+        paddingRight: normalize(20),
+        borderColor: '#CDD4DF',
+        alignItems: 'center',
+        marginBottom: normalize(15),
+
+    },
+    phoneNumberInput: {
+        fontFamily: 'graphik-regular',
+        color: '#00000080',
+        fontSize: '0.75rem',
+        marginLeft: '.8rem',
+        width: '8rem'
+    },
+    countryCodeDigit: {
+        fontFamily: 'graphik-regular',
+        color: '#00000080',
+        fontSize: '0.75rem',
+    },
+    codeButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderColor: ' rgba(0, 0, 0, 0.1)',
+        borderRightWidth: 1,
+    },
+    inputLabel: {
+        fontFamily: 'graphik-medium',
+        color: '#000000B2',
+        fontSize: '0.76rem',
+        marginBottom: normalize(8)
+    },
 })
