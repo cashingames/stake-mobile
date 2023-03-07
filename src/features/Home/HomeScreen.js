@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import { Text, View, ScrollView, Image, StatusBar, Platform, RefreshControl, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
@@ -51,17 +51,19 @@ const HomeScreen = (props) => {
     const [achievementPopup, setAchievementPopup] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
-    const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
 
     // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
     const [forceRender, setForceRender] = useState(true);
-    
-    const { playSound } =  useSound(require('../../../assets/sounds/dashboard.mp3'))
-    useEffect(()=>{
-       if(isSoundLoaded){
+
+    const isFocused = useIsFocused();
+    const { playSound } = useSound(require('../../../assets/sounds/dashboard.mp3'));
+
+    useEffect(() => {
+        if (isFocused) {
             playSound()
-       }
-    }, [isSoundLoaded])
+        }
+    }, [isFocused]);
+
     const onRefresh = React.useCallback(() => {
         // console.info('refreshing')
         setRefreshing(true);
@@ -90,7 +92,7 @@ const HomeScreen = (props) => {
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }, [minVersionCode]);
 
-    useEffect(()=>{
+    useEffect(() => {
         setModalVisible(showStakingAdvert);
     }, [showStakingAdvert])
 
@@ -126,23 +128,19 @@ const HomeScreen = (props) => {
             }
         }, [])
     );
-
-    // useEffect(()=>{
-    //     playSound()
-    // },[])
     // useEffect(()=>{
     //     setTimeout(()=>{
     //         if((isTourActive?.payload || isTourActive) && !loading && (props?.route?.params?.reload) ){
-                
+
     //             console.log('reach11')
     //             CopilotProps.start()
     //             CopilotProps.copilotEvents.on('stop', handleTourStop)
-    
+
     //             return () => {
     //                 CopilotProps.copilotEvents.off('stop', handleTourStop)
     //             }
     //         }else{
-                
+
     //         }
     //     }, 1000)
     // }, [isTourActive, loading, props?.route?.params?.reload])
@@ -171,8 +169,8 @@ const HomeScreen = (props) => {
             >
                 <UserDetails />
                 <View style={styles.container}>
-                
-                    <SelectGameMode  />
+
+                    <SelectGameMode />
                     {/* <SelectGameMode Walkthroughable={Walkthroughable} CopilotStep={CopilotStep} /> */}
                     <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}>
                         <WeeklyTopLeadersHero gameModes={gameModes} />
@@ -181,7 +179,7 @@ const HomeScreen = (props) => {
                     </SwiperFlatList>
                 </View>
                 <Stakingpopup setModalVisible={setModalVisible} modalVisible={modalVisible} gameModes={gameModes} />
-                <AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup}/>
+                <AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} />
             </ScrollView>
         </View>
     );
@@ -197,7 +195,7 @@ const HomeScreen = (props) => {
 export default HomeScreen;
 
 const UserDetails = () => {
-    
+
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
 
