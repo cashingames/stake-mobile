@@ -121,7 +121,7 @@ const InviteLink = () => {
     const user = useSelector(state => state.auth.user);
 
     const referralUrl = (user.referralCode)
-    const referralMsg = `Play exciting games with me on Cashingames and stand a chance to earn great rewards! Create an account with my referral code - ${referralUrl}`
+    const referralMsg = `Play exciting games with me on Gameark and stand a chance to earn great rewards! Create an account with my referral code - ${referralUrl}`
 
     const onShare = async () => {
         try {
