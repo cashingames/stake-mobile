@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, ScrollView, Pressable, TextInput, Platform } from 'react-native';
+import { Text, View, ScrollView, Pressable, TextInput } from 'react-native';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, Link } from '@react-navigation/native';
@@ -7,12 +7,9 @@ import AuthBanner from '../../shared/AuthBanner';
 import Input from '../../shared/Input';
 import { CheckBox } from 'react-native-elements'
 import AuthTitle from '../../shared/AuthTitle';
-import { useDispatch } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import SocialSignUp from '../../shared/SocialSignUp';
 import { Ionicons } from "@expo/vector-icons";
 import { CountryPicker } from "react-native-country-codes-picker";
-import AppleSignUp from '../../shared/AppleSignUp';
 import analytics from '@react-native-firebase/analytics';
 import { registerUser } from './AuthSlice';
 

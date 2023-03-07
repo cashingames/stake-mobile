@@ -4,16 +4,16 @@ import {
     View,
     Text,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import ResendOtp from '../../shared/ResendOtp';
-import { setUserPasswordResetToken, verifyOtp, verifyAccount } from './AuthSlice';
+import { setUserPasswordResetToken, verifyOtp, verifyAccount, setUserPhone } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { calculateTimeRemaining } from '../../utils/utils';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { TextInput } from 'react-native';
+import { ScrollView } from 'react-native';
 
 export default function VerifyEmailScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -44,6 +44,7 @@ export default function VerifyEmailScreen({ navigation, route }) {
         setActive(false);
         setError('')
         dispatch(setUserPasswordResetToken(token));
+        dispatch(setUserPhone(params.phone));
         dispatch(verifyOtp({ token })).then(unwrapResult)
             .then((originalPromiseResult) => {
                 setActive(true);
@@ -87,26 +88,26 @@ export default function VerifyEmailScreen({ navigation, route }) {
 
     const resend = () => {
         dispatch(verifyAccount({
-            email:params.email
+            phone_number:params.phone
         }))
         setIsCountdownInProgress(true)
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
 
             <Text style={styles.headerTextStyle}>
                 Verify OTP
             </Text>
 
-            <Text style={styles.instructionTextStyle}>Enter the One-time passcode we sent  to the email you provided</Text>
+            <Text style={styles.instructionTextStyle}>Enter the One-time passcode we sent  to the phone number you provided</Text>
             {error.length > 0 &&
                 <Text style={styles.errorBox}>{error}</Text>
             }
             <View style={styles.form}>
                 <TextInput
                     ref={pin1Ref}
-                    keyboardType={'number-pad'}
+                    keyboardType='numeric'
                     maxLength={1}
                     value={otp1}
                     onChangeText={(otp1) => {
@@ -119,7 +120,7 @@ export default function VerifyEmailScreen({ navigation, route }) {
                 />
                 <TextInput
                     ref={pin2Ref}
-                    keyboardType={'number-pad'}
+                    keyboardType='numeric'
                     maxLength={1}
                     onChangeText={(otp2) => {
                         setOtp2(otp2);
@@ -131,7 +132,7 @@ export default function VerifyEmailScreen({ navigation, route }) {
                 />
                 <TextInput
                     ref={pin3Ref}
-                    keyboardType={'number-pad'}
+                    keyboardType='numeric'
                     maxLength={1}
                     onChangeText={(otp3) => {
                         setOtp3(otp3);
@@ -143,7 +144,7 @@ export default function VerifyEmailScreen({ navigation, route }) {
                 />
                 <TextInput
                     ref={pin4Ref}
-                    keyboardType={'number-pad'}
+                    keyboardType='numeric'
                     maxLength={1}
                     onChangeText={(otp4) => {
                         setOtp4(otp4);
@@ -156,7 +157,7 @@ export default function VerifyEmailScreen({ navigation, route }) {
 
                 <TextInput
                     ref={pin5Ref}
-                    keyboardType={'number-pad'}
+                    keyboardType='numeric'
                     maxLength={1}
                     onChangeText={(otp5) => {
                         setOtp5(otp5)
@@ -175,7 +176,7 @@ export default function VerifyEmailScreen({ navigation, route }) {
                 <AppButton onPress={() => nextAction()} text="Continue" disabled={!active} />
             </View>
 
-        </SafeAreaView>
+        </ScrollView>
     )
 }
 
