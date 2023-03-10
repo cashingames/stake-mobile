@@ -221,26 +221,26 @@ function getAssetsBaseUrl() {
 
 function getGoogleAndroidClientId() {
   if (isDevelopment) {
-    return '520726557605-n6htks6ao6ge2thkbevhosc0ipk35odr.apps.googleusercontent.com';
+    return '523361815719-dl9tg9sh0ndmplil4o7rov15eoeosqfg.apps.googleusercontent.com';
   }
 
   if (env === "preview") {
-    return '520726557605-ur6av2djj8oqkhvre58c2fp747p0k41g.apps.googleusercontent.com';
+    return '311405879136-h58qd7sgnho0aghbi2e2epvvhhl6t1a7.apps.googleusercontent.com';
   }
 
-  return '520726557605-pmk80q42pnoteo5gp6j2gan93smdv8o7.apps.googleusercontent.com';
+  return '300193059462-2ggl088n45irfm7tv76pefv9d6luih0f.apps.googleusercontent.com';
 }
 
 function getGoogleIosClientId() {
   if (isDevelopment) {
-    return '520726557605-mls5vke3j0t7lhk5a99em1gsvaml8o2a.apps.googleusercontent.com';
+    return '523361815719-747pq0sqrncgac4ohubgqj9q2cqinbps.apps.googleusercontent.com';
   }
 
   if (env === "preview") {
-    return '520726557605-snc0m31s1m0c059ktoi6gqk01fkvd17g.apps.googleusercontent.com';
+    return '311405879136-l74suuo7et5b3ervpadn73d5osq22em2.apps.googleusercontent.com';
   }
 
-  return '520726557605-vftmv5ipp71bk5ffi286t4fevfnkfjah.apps.googleusercontent.com';
+  return '300193059462-okf0uiotuhpjqavuoqsnstad14apfi4r.apps.googleusercontent.com';
 }
 
 function getEasProjectId() {

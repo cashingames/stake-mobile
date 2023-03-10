@@ -102,7 +102,7 @@ export default function SocialSignUp({ googleText }) {
         // expoClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
         iosClientId: Constants.manifest.extra.googleIosClientId,
         androidClientId: Constants.manifest.extra.googleAndriodClientId,
-        webClientId: '520726557605-ckaa4jojbac8mgpir7ta7cnngqmuodm0.apps.googleusercontent.com',
+        webClientId: '300193059462-847psqhn8f19ph76p7s0t1gus8gtm5lo.apps.googleusercontent.com',
     });
 
 
