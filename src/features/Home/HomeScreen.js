@@ -51,7 +51,7 @@ const HomeScreen = (props) => {
     const [achievementPopup, setAchievementPopup] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
     const [refreshing, setRefreshing] = useState(false);
-
+    const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
     const [forceRender, setForceRender] = useState(true);
 
@@ -59,10 +59,10 @@ const HomeScreen = (props) => {
     const { playSound } = useSound(require('../../../assets/sounds/dashboard.mp3'));
 
     useEffect(() => {
-        if (isFocused) {
+        if (isFocused && isSoundLoaded) {
             playSound()
         }
-    }, [isFocused]);
+    }, [isFocused, isSoundLoaded]);
 
     const onRefresh = React.useCallback(() => {
         // console.info('refreshing')

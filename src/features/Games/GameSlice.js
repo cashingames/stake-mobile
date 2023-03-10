@@ -154,8 +154,11 @@ let initialState = {
     withStaking: false,
     endedWithoutStaking:null,
     correctCount: null,
+    selectedOption: null,
+    correctAnswer: null,
+    submissionResult:null,
+    showCorrectAnswer: null,
 }
-
 
 export const GameSlice = createSlice({
     name: 'game',
@@ -164,6 +167,18 @@ export const GameSlice = createSlice({
         setGameType: (state, action) => {
             state.gameType = action.payload;
             state.gameCategory = null;
+        },
+        setSelectedOption: (state, action) => {
+            state.selectedOption = action.payload;
+        },
+        setCorrectAnswer: (state, action) => {
+            state.correctAnswer = action.payload;
+        },
+        setSubmissionResult: (state, action) => {
+            state.submissionResult = action.payload;
+        },
+        setShowCorrectAnswer: (state, action) => {
+            state.showCorrectAnswer = action.payload;
         },
         setGameCategory: (state, action) => {
             // console.log("seeting")
@@ -334,7 +349,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, setAmountWon, setCorrectCount, setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend, setWithStaking,showStakingPopup
+    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend, setWithStaking,showStakingPopup,setSelectedOption, setCorrectAnswer, setSubmissionResult, setShowCorrectAnswer
 } = GameSlice.actions
 
 

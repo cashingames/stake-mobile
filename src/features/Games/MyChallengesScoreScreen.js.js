@@ -18,6 +18,7 @@ import StakeWinnings from '../../shared/StakeWinnings';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import LowWalletBalance from '../../shared/LowWalletBalance';
 import ChallengeTermsAndConditions from '../../shared/ChallengeTermsAndConditions';
+import useSound from '../../utils/useSound';
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -40,6 +41,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const challengeDetails = useSelector(state => state.game.challengeDetails);
   console.log("challenge details", challengeDetails)
   const refRBSheet = useRef();
+  const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
   const openBottomSheet = async () => {
     refRBSheet.current.open()
@@ -187,6 +189,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
           data: result.data.questions
         }))
         setClicking(false);
+        playSound()
         navigation.navigate("ChallengeGameInProgress")
       })
       .catch((error, rejectedValueOrSerializedError) => {
@@ -211,6 +214,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
         })
       })
       .then(() => setClicking(false))
+      playSound()
     navigation.navigate('Home')
   }
 

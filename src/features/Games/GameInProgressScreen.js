@@ -6,7 +6,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
-    endGame, nextQuestion, setHasPlayedTrivia
+    endGame, nextQuestion, setHasPlayedTrivia, setSelectedOption, setShowCorrectAnswer, setSubmissionResult
 } from "./GameSlice";
 
 import AppButton from "../../shared/AppButton";
@@ -69,6 +69,9 @@ export default function GameInProgressScreen({ navigation, route }) {
             showExitConfirmation()
             return;
         }
+        dispatch(setSelectedOption(null))
+        dispatch(setSubmissionResult())
+        dispatch(setShowCorrectAnswer(false))
 
         dispatch(endGame({
             token: gameSessionToken,
@@ -186,17 +189,16 @@ export default function GameInProgressScreen({ navigation, route }) {
         //     <Text>me</Text>
         // </View>
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
-            <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
+            <View style={styles.container} keyboardShouldPersistTaps='always'>
                 <PlayGameHeader onPress={showExitConfirmation} onPressBoost={openBottomSheet} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
-                <GameQuestions />
+                <GameQuestions onEndGame={onEndGame} ending={ending}/>
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={350}
                     subComponent={<UserAvailableBoosts onClose={closeBottomSheet} />}
                 />
-            </ScrollView>
-            <NextButton onPress={() => onEndGame()} ending={ending} />
+            </View>
         </ImageBackground>
     );
 }
@@ -207,25 +209,6 @@ const GameProgressAndBoosts = ({ onComplete, ending }) => {
             <GameTopicProgress onComplete={onComplete} ending={ending} />
             <AvailableGameSessionBoosts />
         </View>
-    )
-}
-
-const NextButton = ({ onPress, ending }) => {
-    const { playSound } = useSound(require('../../../assets/sounds/button-clicked2.wav'))
-    const dispatch = useDispatch()
-    const isLastQuestion = useSelector(state => state.game.isLastQuestion);
-    const pressNext = () => {
-        dispatch(isLastQuestion ? onPress : nextQuestion())
-        playSound()
-    }
-
-    return (
-        <AppButton
-            disabled={ending}
-            text={isLastQuestion ? 'Finish' : 'Next'}
-            onPress={pressNext}
-            style={styles.nextButton}
-        />
     )
 }
 
