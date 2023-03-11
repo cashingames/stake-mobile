@@ -37,9 +37,9 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
   const challengeId = useSelector(state => state.game.challengeDetails.challenegeId);
   const gameTypeId = useSelector(state => state.game.gameType.id);
   const challengeScores = useSelector(state => state.auth.challengeScores)
-  console.log("challenge scores", challengeScores)
+  // console.log("challenge scores", challengeScores)
   const challengeDetails = useSelector(state => state.game.challengeDetails);
-  console.log("challenge details", challengeDetails)
+  // console.log("challenge details", challengeDetails)
   const refRBSheet = useRef();
   const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
@@ -91,6 +91,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
       setClicking(false);
       return
     }
+    playSound()
     dispatch(acceptDeclineChallengeInivite({
       challenge_id: challengeId,
       status: 1
@@ -202,6 +203,7 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
 
   const declineChallengeInivite = () => {
     setClicking(true)
+    playSound()
     dispatch(acceptDeclineChallengeInivite({
       challenge_id: challengeDetails.challenegeId,
       status: 0
@@ -214,7 +216,6 @@ const MyChallengesScoreScreen = ({ navigation, route }) => {
         })
       })
       .then(() => setClicking(false))
-      playSound()
     navigation.navigate('Home')
   }
 

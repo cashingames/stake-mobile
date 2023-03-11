@@ -192,7 +192,7 @@ export default function GameInProgressScreen({ navigation, route }) {
             <View style={styles.container} keyboardShouldPersistTaps='always'>
                 <PlayGameHeader onPress={showExitConfirmation} onPressBoost={openBottomSheet} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
-                <GameQuestions onEndGame={onEndGame} ending={ending}/>
+                <GameQuestions onEndGame={() => onEndGame()} ending={ending}/>
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={350}

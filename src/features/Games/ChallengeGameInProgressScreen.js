@@ -25,9 +25,7 @@ import useSound from "../../utils/useSound";
 
 
 export default function ChallengeGameInProgressScreen({ navigation }) {
-  useApplyHeaderWorkaround(navigation.setOptions);
-
-
+  useApplyHeaderWorkaround(navigation.setOptions)
   const dispatch = useDispatch();
   const refRBSheet = useRef();
 
@@ -160,7 +158,7 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
       <View style={styles.container} keyboardShouldPersistTaps='always'>
         <PlayGameHeader onPress={showExitConfirmation} onPressBoost={openBottomSheet} />
         <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
-        <GameQuestions onEndGame={onEndGame} ending={ending}/>
+        <GameQuestions onEndGame={() => onEndGame()} ending={ending}/>
         <UniversalBottomSheet
           refBottomSheet={refRBSheet}
           height={350}

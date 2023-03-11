@@ -57,7 +57,7 @@ export const endGame = createAsyncThunk(
 
         //make a network request to the server
         const response = await axios.post('v2/game/end/single-player', data)
-        console.log(response)
+        // console.log(response)
         return response.data;
     }
 )

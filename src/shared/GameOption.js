@@ -1,23 +1,27 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Base64 } from "js-base64";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Pressable, Text } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import normalize from "../utils/normalize";
+import { Base64 } from "js-base64";
 
-const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, submissionResult, submit, selectedOption, showCorrectAnswer}) => {
-    const [showTrue, setShowTrue] = useState()
+
+const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, submit, submissionResult, selectedOption, showCorrectAnswer}) => {
+    const [showTrue, setShowTrue] = useState(null)
     const isWrongOption = isSelected && submissionResult == false;
     const isCorrectOption = isSelected && submissionResult;
     // const showRight = !isSelected && !submissionResult;
-   
 
     useEffect(() => {
         if(selectedOption && showCorrectAnswer){
-            const a  = Base64.decode(is_correct);
-            const showCorrectOption = !isSelected && a == 1
-            setShowTrue(showCorrectOption)
+            try {
+                const a = is_correct ? Base64.decode(is_correct) : null;                
+                const showCorrectOption = !isSelected && a == 1;
+                setShowTrue(showCorrectOption);
+              } catch (error) {
+                console.log("Error decoding base64 string:", error);
+              }
         }else{
             setShowTrue(null)
         }

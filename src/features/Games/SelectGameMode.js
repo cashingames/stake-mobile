@@ -151,8 +151,7 @@ const styles = EStyleSheet.create({
         borderColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: '.5rem'
-        , marginTop: '.75rem'
+        paddingVertical: '.5rem',
     },
     cardActionContainer: {
         borderTopWidth: 1,
