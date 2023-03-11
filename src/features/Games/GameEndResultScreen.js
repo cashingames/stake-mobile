@@ -36,7 +36,7 @@ export default function GameEndResultScreen({ navigation }) {
 	const newUserDate = newUser.slice(0, 10);
 	let formattedDate = new Date().toISOString().split('T')[0];
 	const { playSound } =  useSound(require('../../../assets/sounds/game-completed2.wav'))
-	const popupSound =  useSound(require('../../../assets/sounds/pop-up.wav'))
+	const buttonSound =  useSound(require('../../../assets/sounds/open.wav'))
 
 	const logFreeGamesExhausted = () => {
 		const currentDate = new Date().toLocaleDateString();
@@ -84,6 +84,7 @@ export default function GameEndResultScreen({ navigation }) {
 			});
 		};
 		logFreeGamesExhausted()
+		buttonSound.playSound()
 		navigation.navigate("GameInstructions")
 		setLoading(false);
 
@@ -97,9 +98,11 @@ export default function GameEndResultScreen({ navigation }) {
 				'email': user.email
 			});
 		};
+		buttonSound.playSound()
 		logFreeGamesExhausted()
 		navigation.navigate('Home', { showStakingAdvert: !withStaking })
 	}
+
 	useFocusEffect(
 		React.useCallback(() => {
 			dispatch(getUser())
@@ -147,7 +150,6 @@ export default function GameEndResultScreen({ navigation }) {
 	useEffect(() => {
 		if (pointsGained <= minimumBoostScore) {
 			setModalVisible(true)
-			popupSound.playSound()
 		} else {
 			setModalVisible(false)
 		}
