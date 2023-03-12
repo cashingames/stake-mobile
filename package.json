@@ -85,7 +85,8 @@
     "expo-build-properties": "~0.5.1",
     "expo-dev-client": "^2.1.5",
     "expo-linking": "~4.0.1",
-    "pod-install": "^0.1.32"
+    "pod-install": "^0.1.32",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.4"
   },
   "resolutions": {
     "@expo/config-plugins": "6.0.0"
