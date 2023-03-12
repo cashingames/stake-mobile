@@ -156,7 +156,6 @@ export const fetchFeatureFlags = createAsyncThunk(
 
 export const withdrawWinnings = async (data) => {
     return axios.post('v3/winnings/withdraw', data);
-
 }
 
 export const isFeatureEnabled = async (feature, features = {}) => {

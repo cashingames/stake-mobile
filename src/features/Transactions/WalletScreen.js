@@ -13,12 +13,14 @@ import analytics from '@react-native-firebase/analytics';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { withdrawWinnings } from '../CommonSlice';
 
+
 const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
 export default function WalletScreen() {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
     const user = useSelector(state => state.auth.user)
     const [withdraw, setWithdraw] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
@@ -61,11 +63,18 @@ export default function WalletScreen() {
                         Alert.alert("Your Network is Offline.");
                         setWithdraw(false)
                     }
+                       
+                    else if (err.response.data.errors.verifyEmailNavigation) {
+                        navigation.navigate('EditDetails')
+                        Alert.alert(err.response.data.message);
+                        setWithdraw(false)
+                    }
                     else if (err.response.status === 400) {
                         Alert.alert(err.response.data.message);
                         setWithdraw(false)
 
                     }
+                    console.log(err.response.data.errors.verifyEmailNavigation,'hhhh')
                 }
 
             )
