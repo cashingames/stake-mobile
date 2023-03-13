@@ -7,7 +7,7 @@ import normalize from "../utils/normalize";
 import { Base64 } from "js-base64";
 
 
-const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, submit, submissionResult, selectedOption, showCorrectAnswer}) => {
+const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, submissionResult, selectedOption, showCorrectAnswer}) => {
     const [showTrue, setShowTrue] = useState(null)
     const isWrongOption = isSelected && submissionResult == false;
     const isCorrectOption = isSelected && submissionResult;
@@ -29,7 +29,7 @@ const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, sub
 
     // console.log(isCorrectAnswer)
     return (
-        <Pressable disabled={!submit} style={[styles.answer, isSelected ? styles.selectedOption : {}, 
+        <Pressable  style={[styles.answer, isSelected ? styles.selectedOption : {}, 
             isCorrectOption ? styles.correctOption :{}, 
             isWrongOption ? styles.wrongOption : {},
             // showRight ? styles.answer : {},
