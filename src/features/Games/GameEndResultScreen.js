@@ -148,7 +148,7 @@ export default function GameEndResultScreen({ navigation }) {
 	}, []);
 
 	useEffect(() => {
-		if (pointsGained <= minimumBoostScore) {
+		if ( (pointsGained <= minimumBoostScore) && (Platform.OS === "android") ) {
 			setModalVisible(true)
 		} else {
 			setModalVisible(false)
