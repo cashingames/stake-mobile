@@ -20,14 +20,9 @@ const GameQuestions = ({ onEndGame, ending }) => {
     const showCorrectAnswer = useSelector(state => state.game.showCorrectAnswer);
     const submissionResult = useSelector(state => state.game.submissionResult);
     const isLastQuestion = useSelector(state => state.game.isLastQuestion);
-    const [submit, setSubmit] = useState(true)
     const [timerId, setTimerId] = useState(null);
-
-
-
-    const { playSound } = useSound(require('../../assets/sounds/button-clicked1.mp3'));
+    const { playSound } = useSound(require('../../assets/sounds/button-clicked2.wav'));
     const submitBtnSound = useSound(require('../../assets/sounds/pop-up.wav'));
-    const nextBtnSound = useSound(require('../../assets/sounds/button-clicked2.wav'));
 
     const optionSelected = (option) => {
         try {
@@ -46,11 +41,9 @@ const GameQuestions = ({ onEndGame, ending }) => {
     const pressNext = () => {
         dispatch(nextQuestion())
         dispatch(pauseGame(false))
-        setSubmit(!submit)
         dispatch(setSelectedOption(null))
         dispatch(setSubmissionResult())
         dispatch(setShowCorrectAnswer(false))
-        nextBtnSound.playSound()
     }
 
 
@@ -60,22 +53,28 @@ const GameQuestions = ({ onEndGame, ending }) => {
         } else {
             dispatch(setSubmissionResult(false));
         }
-        console.log('hello world')
-        setSubmit(!submit)
 
         if (selectedOption) {
             dispatch(pauseGame(true))
-            console.log('paused game')
         }
 
         if (isLastQuestion) {
             const id = setTimeout(() => {
                 onEndGame();
-            }, 1000);
+            }, 300);
             setTimerId(id);
         }
         dispatch(setShowCorrectAnswer(true))
         submitBtnSound.playSound()
+
+        let timeoutId;
+           timeoutId = setTimeout(() => {
+            if(isLastQuestion){
+                onEndGame()
+            }else{
+            pressNext();
+            }
+        },1000);
     };
 
     useEffect(() => {
@@ -92,26 +91,25 @@ const GameQuestions = ({ onEndGame, ending }) => {
                     option={option} key={i}
                     onSelected={() => optionSelected(option)}
                     correctAnswer={correctAnswer}
-                    submit={submit}
                     submissionResult={submissionResult}
                     selectedOption={selectedOption}
                     showCorrectAnswer={showCorrectAnswer}
                 />)}
             </View>
             <View style={styles.buttonContainer}>
-                <NextButton onPress={handleSubmission} submit={submit} next={pressNext} ending={ending} selectedOption={selectedOption} isLastQuestion={isLastQuestion} />
+                <NextButton onPress={handleSubmission} ending={ending} selectedOption={selectedOption} isLastQuestion={isLastQuestion} />
             </View>
         </>
     )
 }
 export default GameQuestions;
 
-const NextButton = ({ onPress, ending, submit, next, isLastQuestion }) => {
+const NextButton = ({ onPress, ending, isLastQuestion }) => {
     return (
         <AppButton
             disabled={ending}
-            text={submit ? 'Submit' : (isLastQuestion ? 'Finish' : 'Next')}
-            onPress={submit ? onPress : next}
+            text={isLastQuestion ? 'Finish' : 'Next'}
+            onPress={onPress}
             style={styles.nextButton}
         />
     )
