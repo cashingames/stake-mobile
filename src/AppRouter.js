@@ -104,7 +104,7 @@ function AppRouter() {
 				}
 				routeDecider(remoteMessage, navigation);
 			});
-		return unsubscribe;
+		// return unsubscribe;
 	}, [token]);
 
 

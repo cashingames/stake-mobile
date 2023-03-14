@@ -111,6 +111,8 @@ export default function GameEndResultScreen({ navigation }) {
 
 	useFocusEffect(
 		React.useCallback(() => {
+			if(Platform.OS === "ios")
+			return;
 			StatusBar.setTranslucent(true)
 			StatusBar.setBackgroundColor("transparent")
 			StatusBar.setBarStyle('light-content');

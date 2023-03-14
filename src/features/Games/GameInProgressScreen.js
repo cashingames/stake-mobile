@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import { Text, View, Image, ScrollView, ImageBackground, Alert, StatusBar, BackHandler } from 'react-native';
+import { Text, View, Image, ScrollView, ImageBackground, Alert, StatusBar, BackHandler, Platform } from 'react-native';
 import normalize from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -167,6 +167,8 @@ export default function GameInProgressScreen({ navigation, route }) {
 
     useFocusEffect(
         React.useCallback(() => {
+            if(Platform.OS === "ios")
+            return;
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
             StatusBar.setBarStyle('light-content');

@@ -13,7 +13,6 @@ export default function WinnersScroller() {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
     const stakeWinners = useSelector(state => state.common.stakeWinners);
-    console.log(stakeWinners)
 
     useFocusEffect(
         React.useCallback(() => {

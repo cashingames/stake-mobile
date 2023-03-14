@@ -8,8 +8,9 @@ import { useNavigation } from '@react-navigation/native';
 
 
 const InviteFriendsScreen = () => {
-    useApplyHeaderWorkaround(navigation.setOptions);
     const navigation = useNavigation
+    useApplyHeaderWorkaround(navigation.setOptions);
+
 
     return (
         <ScrollView style={styles.container}>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Text, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { formatNumber } from '../utils/stringUtl';
@@ -9,16 +9,18 @@ import Animated, {
     BounceInLeft,
     useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming
 } from 'react-native-reanimated';
-import analytics from '@react-native-firebase/analytics';
+import { getCommonData } from "../features/CommonSlice";
+import { getUser } from "../features/Auth/AuthSlice";
 
 
-const UserItems = ({ showBuy }) => {
-    const navigation = useNavigation();
-    const user = useSelector(state => state.auth.user)
-    var plans = useSelector(state => state.auth.user.activePlans ?? []);
+const UserItems = () => {
     var boosts = useSelector(state => state.auth.user.boosts ?? []);
-    const [sumOfPlans, setSumOfPlans] = useState(0);
-    const [boostsString, setBboostsString] = useState('');
+
+    let boostsString = ''
+    boosts && boosts.map((boost, i) => {
+        boostsString += `${formatNumber(boost.count)} ${boost.name}${i === boosts.length - 1 ? '' : ','} `
+    });
+
 
     const rotation = useSharedValue(0);
     rotation.value = withSequence(
@@ -32,39 +34,6 @@ const UserItems = ({ showBuy }) => {
         };
     });
 
-    useEffect(() => {
-        const reducer = (accumulator, curr) => accumulator + curr;
-        var x = plans && plans.map(a => a.game_count).reduce(reducer, 0);
-        setSumOfPlans(x ?? 0);
-
-        var boostResult = ''
-        boosts && boosts.map((boost, i) => {
-            boostResult += `${formatNumber(boost.count)} ${boost.name}${i == boosts.length - 1 ? '' : ','} `
-        });
-
-        setBboostsString(boostResult?.length > 0 ? boostResult : "You have no boosts");
-
-    }, [boosts, plans]);
-
-    // listener to trigger review for google play store
-    useEffect(() => {
-        (async () => {
-            // commented out, so GA rating wont pop-up yet
-            // this is the trigger
-            // const isReviewed = await PopGoogleReviewLogic(sumOfPlans, user.email)
-        })()
-    }, [sumOfPlans])
-
-
-    // const buyMore = async () => {
-    //     await analytics().logEvent("buy_more_clicked_on_home", {
-    //         'id': user.username,
-    //         'phone_number': user.phoneNumber,
-    //         'email': user.email
-    //     })
-    //     navigation.navigate('GameStore')
-    // }
-
     return (
         <Animated.View entering={BounceInLeft.duration(2000)} style={styles.container}>
             <Animated.Image
@@ -72,7 +41,9 @@ const UserItems = ({ showBuy }) => {
                 source={require('../../assets/images/point-trophy.png')}
             />
             <View style={styles.boostContainer}>
-                <Text style={[styles.commonRow, boosts?.length > 0 ? styles.secondRow : styles.emptyRow]}>{boostsString}</Text>
+                <Text style={[styles.commonRow, boostsString?.length > 0 ? styles.secondRow : styles.emptyRow]}>
+                    {boostsString?.length > 0? boostsString: 'You have no boosts' }
+                </Text>
             </View>
             {/* {showBuy && <Text onPress={buyMore} style={styles.buyMore}>Buy more</Text>} */}
         </Animated.View>

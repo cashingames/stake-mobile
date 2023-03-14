@@ -28,7 +28,7 @@ const GameStakingScreen = ({ navigation }) => {
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
     const gameTypeId = useSelector(state => state.game.gameType.id);
     const gameMode = useSelector(state => state.game.gameMode);
-    const [amount, setAmount] = useState(500);
+    const [amount, setAmount] = useState('500');
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const refRBSheet = useRef();

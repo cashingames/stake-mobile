@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StatusBar, View } from 'react-native';
+import { Platform, ScrollView, StatusBar, View } from 'react-native';
 import GamePicker from './GamePicker';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -12,6 +12,8 @@ const SelectGameCategoryScreen = ({ navigation }) => {
 
     useFocusEffect(
         React.useCallback(() => {
+            if(Platform.OS === "ios")
+            return;
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
             StatusBar.setBarStyle('light-content');

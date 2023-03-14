@@ -42,6 +42,8 @@ const NotificationsScreen = ({ navigation }) => {
 
     useFocusEffect(
         React.useCallback(() => {
+            if(Platform.OS === "ios")
+            return;
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
             StatusBar.setBarStyle('dark-content');
@@ -189,7 +191,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '.65rem',
         color: '#FFFF',
-        textAlingn: 'center',
+        textAlign: 'center',
         fontStyle: 'italic',
         // opacity: 0.8
     },
@@ -207,7 +209,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '.75rem',
         color: '#000000',
-        textAlingn: 'center',
+        textAlign: 'center',
         lineHeight: '1.1rem',
     },
     clickedText: {
@@ -215,7 +217,7 @@ const styles = EStyleSheet.create({
         fontWeight: '700',
         fontSize: '.75rem',
         color: '#000000',
-        textAlingn: 'center',
+        textAlign: 'center',
         lineHeight: '1.1rem',
         fontStyle: 'italic',
         opacity: 0.7
@@ -233,7 +235,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '1rem',
         color: '#FFFF',
-        textAlingn: 'center',
+        textAlign: 'center',
 
     },
     bellContainer: {
