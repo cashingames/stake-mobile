@@ -53,7 +53,7 @@ const Winner = ({ winner }) => {
                     style={styles.avatar}
                     source={isTrue(winner.avatar) ? { uri: winner.avatar } : require("../../../assets/images/user-icon.png")}
                 />
-                <Text style={styles.name}>{winner.username}</Text>
+                <Text style={styles.name} numberOfLines={1}>{winner.username}</Text>
             </View>
             <Text style={styles.amount}>&#8358;{formatCurrency(winner.amountWon)}</Text>
             <Text style={styles.correct}>{winner.correctCount}/10</Text>
@@ -105,7 +105,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.7rem',
         fontFamily: 'graphik-medium',
         marginLeft: normalize(9),
-        width: responsiveScreenWidth(21)
+        width: responsiveScreenWidth(21),
     },
     amount: {
         color: '#000000',

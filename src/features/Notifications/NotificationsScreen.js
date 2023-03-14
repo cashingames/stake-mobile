@@ -18,7 +18,6 @@ const NotificationsScreen = ({ navigation }) => {
     
 
     const notifications = useSelector(state => state.common.userNotifications)
-    console.log(notifications)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
     const [clicking, setClicking] = useState(false)
