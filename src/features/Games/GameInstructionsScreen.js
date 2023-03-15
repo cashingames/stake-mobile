@@ -82,9 +82,9 @@ export default function GameInstructionsScreen({ navigation }) {
           />
         </View>
         <ExhibitionInstructions />
-        {isStakingFeatureEnabled && gameMode.name !== "STAKING" &&
+        {/* {isStakingFeatureEnabled && gameMode.name !== "STAKING" &&
           <ExhibitionStakeAmount onPress={gotoStaking} />
-        }
+        } */}
         {hasActivePlan ?
           <UniversalBottomSheet
             refBottomSheet={refRBSheet}

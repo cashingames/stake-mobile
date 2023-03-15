@@ -115,10 +115,10 @@ const RightButtons = () => {
                 <Ionicons name='home-outline' size={26} />
                 <Text style={styles.headerIconText}>Home</Text>
             </Pressable>
-            < Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={viewWallet}>
+            {( Platform.OS === "android" && (< Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={viewWallet}>
                 <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
-            </Pressable>
+            </Pressable>))}
 
             <Pressable style={[styles.headerIconContainerNot, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={viewNotifications}>
                 <View style={styles.notificationContainer}>
@@ -307,7 +307,7 @@ function CustomDrawerContent(props) {
                     {/* </Walkthroughable>
                         </CopilotStep> */}
 
-                    <DrawerItem
+                    {/* <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
                                 <Text style={drawStyles.itemLabel}>Need a Tour</Text>
@@ -324,7 +324,7 @@ function CustomDrawerContent(props) {
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
-                    />
+                    /> */}
 
                     {/* <CopilotStep text={
                             <View>

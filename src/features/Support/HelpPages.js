@@ -23,10 +23,10 @@ const HelpPages = () => {
                     playSound()
                     navigation.navigate('ContactUs')
                 }} />
-                <HelpTab tabName='FAQ' onPress={() => {
+                {/* <HelpTab tabName='FAQ' onPress={() => {
                     playSound()
                     navigation.navigate('Support')
-                }} />
+                }} /> */}
                 <HelpTab tabName='Settings' onPress={() => {
                     playSound()
                     navigation.navigate('Settings')

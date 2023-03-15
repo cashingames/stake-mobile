@@ -180,6 +180,8 @@ const styles = StyleSheet.create({
 });
 
 export const triggerTour = (navigation)=>{
+    // removing tour for now
+    return
     setTimeout(()=>{
         Alert.alert("Need a Tour ?", "", [
             {

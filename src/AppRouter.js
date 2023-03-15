@@ -107,7 +107,7 @@ function AppRouter() {
 		}
 
 		registerForPushNotificationsAsync().then(deviceToken => {
-			console.info('verify device token')
+			console.info('verify device token', deviceToken)
 			dispatch(verifyDeviceToken(deviceToken))
 		});
 

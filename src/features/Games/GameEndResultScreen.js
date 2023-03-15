@@ -148,7 +148,7 @@ export default function GameEndResultScreen({ navigation }) {
 	}, []);
 
 	useEffect(() => {
-		if (pointsGained <= minimumBoostScore) {
+		if ( (pointsGained <= minimumBoostScore) && (Platform.OS === "android") ) {
 			setModalVisible(true)
 		} else {
 			setModalVisible(false)
@@ -213,7 +213,7 @@ export default function GameEndResultScreen({ navigation }) {
 const UserResultInfo = ({ pointsGained }) => {
 	return (
 		<View style={styles.infoContainer}>
-			<Text style={styles.info}>you scored {pointsGained} points, Play more games to climb up the leaderboard and stand a chance to earn cash prizes every week!</Text>
+			<Text style={styles.info}>you scored {pointsGained} points, Play more games to climb up the leaderboard</Text>
 		</View>
 	)
 }
