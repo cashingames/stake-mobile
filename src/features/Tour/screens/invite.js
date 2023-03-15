@@ -44,7 +44,7 @@ function Invite(props) {
                       <View>
                           <Text style={styles.tourTitle} >Invite Friends</Text>
                           <Text style={styles.tourDesc}>
-                            Refer your friends and get bonuses for each friend referred and also stand a chance of winning cash prizes
+                            Refer your friends and get bonuses for each friend referred and also stand a chance of winning exciting prizes
                           </Text>
                       </View>
                   } order={5} name={`Order${5}`}>

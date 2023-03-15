@@ -100,7 +100,7 @@ const handleTourStop = ()=>{
             <CopilotStep text={
                 <View>
                     <Text style={drawStyles.tourTitle} >Challenges</Text>
-                    <Text style={drawStyles.tourDesc}>Challenge a friend to a duel and also stand a chance of winning cash prizes</Text>
+                    <Text style={drawStyles.tourDesc}>Challenge a friend to a duel and also stand a chance of winning prizes</Text>
                 </View>
             } order={3} name="Order3">
                 <Walkthroughable>

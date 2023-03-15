@@ -11,11 +11,17 @@ import analytics from '@react-native-firebase/analytics';
 
 
 
-const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
+const Stakingpopup = ({ 
+    setModalVisible,
+    // modalVisible,
+    gameModes }) => {
     const dispatch = useDispatch();
     const gameModeSelected = gameModes.find(mode => mode.name === 'STAKING')
     const user = useSelector(state => state.auth.user);
     const token = useSelector(state => state.auth.token);
+
+    // making staking pop up hidden
+    const modalVisible = false;
 
     const playStaking = async () => {
         setModalVisible(!modalVisible)
