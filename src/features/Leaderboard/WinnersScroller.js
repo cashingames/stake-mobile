@@ -105,7 +105,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.7rem',
         fontFamily: 'graphik-medium',
         marginLeft: normalize(9),
-        width: responsiveScreenWidth(21),
+        width: responsiveScreenWidth(18),
     },
     amount: {
         color: '#000000',
