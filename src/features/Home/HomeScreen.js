@@ -31,6 +31,9 @@ import AchievementPopup from '../../shared/AchievementPopup';
 import { getAchievements } from '../Profile/AchievementSlice';
 import useSound from '../../utils/useSound';
 import { Button } from 'react-native-elements';
+import * as InAppPurchases from 'expo-in-app-purchases';
+import { setItems } from '../InAppPurchaseSlice';
+
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -58,6 +61,23 @@ const HomeScreen = (props) => {
     const isFocused = useIsFocused();
     const { playSound } = useSound(require('../../../assets/sounds/dashboard.mp3'));
 
+    const getStoreItems = async () => {
+
+        const items = Platform.select({
+            android: ['boost_plan_time_freeze'],
+        });
+        // dispatch(setItems([
+        //     'boost_plan_time_freeze',
+        //     ''
+        // ]))
+        const { responseCode, results } = await InAppPurchases.getProductsAsync(items);
+        if (responseCode === InAppPurchases.IAPResponseCode.OK) {
+            console.log(results, 'in-app')
+        } else {
+            console.log('no products')
+        }
+    }
+
     useEffect(() => {
         if (isFocused && isSoundLoaded) {
             playSound()
@@ -81,7 +101,7 @@ const HomeScreen = (props) => {
             dispatch(initialLoadingComplete());
         });
         loadSoundPrefernce(dispatch, setSound)
-
+        getStoreItems()
     }, []);
 
     useEffect(() => {

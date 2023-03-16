@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import AuthSlice from './features/Auth/AuthSlice'
 import CommonSlice from './features/CommonSlice'
 import GameSlice from './features/Games/GameSlice'
+import InAppPurchaseSlice from './features/InAppPurchaseSlice'
 import LiveTriviaSlice from './features/LiveTrivia/LiveTriviaSlice'
 import AchievementSlice from './features/Profile/AchievementSlice'
 import StoreSlice from './features/Store/StoreSlice'
@@ -15,7 +16,8 @@ const store = configureStore({
         game: GameSlice,
         liveTrivia: LiveTriviaSlice,
         tourSlice: TourSlice,
-        achievementSlice: AchievementSlice
+        achievementSlice: AchievementSlice,
+        inAppPurchase: InAppPurchaseSlice
     },
 })
 
