@@ -4,7 +4,6 @@ import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import GameEndClockAnimation from '../../shared/GameEndClockAnimation';
 import UserName from '../../shared/UserName';
 import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
@@ -12,7 +11,7 @@ import { getUser } from '../Auth/AuthSlice';
 import analytics from '@react-native-firebase/analytics';
 import StakeWinnings from '../../shared/StakeWinnings';
 import Boostspopup from '../../shared/BoostPopUp';
-import { PopGoogleReviewLogic } from '../../shared/GoogleReview';
+// import { PopGoogleReviewLogic } from '../../shared/GoogleReview';
 import { getAchievements } from '../Profile/AchievementSlice';
 
 
@@ -23,38 +22,38 @@ export default function GameEndResultScreen({ navigation }) {
 	const amountWon = useSelector(state => state.game.amountWon);
 	const withStaking = useSelector(state => state.game.withStaking);
 	const correctCount = useSelector(state => state.game.correctCount);
-	const minimumBoostScore = useSelector(state => state.common.minimumBoostScore)
+	// const minimumBoostScore = useSelector(state => state.common.minimumBoostScore)
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
-	const [lastRunDate, setLastRunDate] = useState();
+	// const [lastRunDate, setLastRunDate] = useState();
 	const [modalVisible, setModalVisible] = useState(false);
-	const [sumOfPlans, setSumOfPlans] = useState(0);
-	const activePlan = useSelector(state => state.auth.user.activePlans ?? []);
-	const bonusGame = activePlan?.find((item) => item.name === 'Bonus Games')
+	// const [sumOfPlans, setSumOfPlans] = useState(0);
+	// const activePlan = useSelector(state => state.auth.user.activePlans ?? []);
+	// const bonusGame = activePlan?.find((item) => item.name === 'Bonus Games')
 	const newUser = useSelector(state => state.auth.user.joinedOn);
-	const newUserDate = newUser.slice(0, 10);
-	let formattedDate = new Date().toISOString().split('T')[0];
+	// const newUserDate = newUser.slice(0, 10);
+	// let formattedDate = new Date().toISOString().split('T')[0];
 
-	const logFreeGamesExhausted = () => {
-		const currentDate = new Date().toLocaleDateString();
-		if (lastRunDate !== currentDate) {
-			if (formattedDate === newUserDate && bonusGame && bonusGame.game_count === 0) {
-				analytics().logEvent('new_user_FG_exhausted', {
-					'id': user.username,
-					'phone_number': user.phoneNumber,
-					'email': user.email
-				});
-			}
-			if (formattedDate !== newUserDate && bonusGame && bonusGame.game_count === 0) {
-				analytics().logEvent('free_game_exhausted', {
-					'id': user.username,
-					'phone_number': user.phoneNumber,
-					'email': user.email
-				});
-			}
-			setLastRunDate(currentDate);
-		}
-	};
+	// const logFreeGamesExhausted = () => {
+	// 	const currentDate = new Date().toLocaleDateString();
+	// 	if (lastRunDate !== currentDate) {
+	// 		if (formattedDate === newUserDate && bonusGame && bonusGame.game_count === 0) {
+	// 			analytics().logEvent('new_user_FG_exhausted', {
+	// 				'id': user.username,
+	// 				'phone_number': user.phoneNumber,
+	// 				'email': user.email
+	// 			});
+	// 		}
+	// 		if (formattedDate !== newUserDate && bonusGame && bonusGame.game_count === 0) {
+	// 			analytics().logEvent('free_game_exhausted', {
+	// 				'id': user.username,
+	// 				'phone_number': user.phoneNumber,
+	// 				'email': user.email
+	// 			});
+	// 		}
+	// 		setLastRunDate(currentDate);
+	// 	}
+	// };
 
 	const refRBSheet = useRef();
 
@@ -69,29 +68,13 @@ export default function GameEndResultScreen({ navigation }) {
 			'phone_number': user.phoneNumber,
 			'email': user.email
 		});
-		// if (bonusGame && bonusGame.game_count === 2) {
-		// 	analytics().logEvent('two_free_games_left', {
-		// 		'id': user.username,
-		// 		'phone_number': user.phoneNumber,
-		// 		'email': user.email
-		// 	});
-		// };
-		// logFreeGamesExhausted()
 		navigation.navigate("SelectGameCategory")
 		setLoading(false);
 
 	}
 
 	const onHomeButtonClick = async () => {
-		// if (bonusGame && bonusGame.game_count === 2) {
-		// 	analytics().logEvent('two_free_games_left', {
-		// 		'id': user.username,
-		// 		'phone_number': user.phoneNumber,
-		// 		'email': user.email
-		// 	});
-		// };
-		// logFreeGamesExhausted()
-		navigation.navigate('Home', { showStakingAdvert: !withStaking })
+		navigation.navigate('Home')
 	}
 	useFocusEffect(
 		React.useCallback(() => {
@@ -139,19 +122,19 @@ export default function GameEndResultScreen({ navigation }) {
 	// 	}
 	// }, [pointsGained])
 
-	useEffect(() => {
-		const reducer = (accumulator, curr) => accumulator + curr;
-		var x = activePlan && activePlan.filter(a => a.name === "Bonus Games")
-		var y = x.map(b => b.game_count).reduce(reducer, 0)
-		setSumOfPlans(y ?? 0);
-	}, [activePlan]);
+	// useEffect(() => {
+	// 	const reducer = (accumulator, curr) => accumulator + curr;
+	// 	var x = activePlan && activePlan.filter(a => a.name === "Bonus Games")
+	// 	var y = x.map(b => b.game_count).reduce(reducer, 0)
+	// 	setSumOfPlans(y ?? 0);
+	// }, [activePlan]);
 
-	useEffect(() => {
-		(async () => {
-			// this is the trigger
-			const isReviewed = await PopGoogleReviewLogic(sumOfPlans, user.email)
-		})()
-	}, [sumOfPlans])
+	// useEffect(() => {
+	// 	(async () => {
+	// 		// this is the trigger
+	// 		const isReviewed = await PopGoogleReviewLogic(sumOfPlans, user.email)
+	// 	})()
+	// }, [sumOfPlans])
 
 	// update achievement after game session
 	useEffect(() => {
