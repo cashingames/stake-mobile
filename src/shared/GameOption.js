@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Pressable, Text } from "react-native";
+import { Platform, Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import normalize from "../utils/normalize";
 import { Base64 } from "js-base64";
@@ -36,7 +36,12 @@ const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, sub
             showTrue ? styles.correctOption : {}]} 
             onPress={onSelected}>
             <Text style={styles.answerText}>{Base64.decode(title)}</Text>
-            {isCorrectOption || showTrue ? <Text style={styles.checkmark}> <Ionicons name="checkmark-sharp" size={15} color="#6FCF97" /></Text> : <></>}
+            
+            {isCorrectOption || showTrue ? (
+                <View style={styles.checkmark}>
+                    <Ionicons name="checkmark-sharp" size={15} color="#6FCF97" />
+                </View>
+            ) : <></>}
         </Pressable>
     )
 }
@@ -78,7 +83,6 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(2),
         backgroundColor: '#fff',
         borderRadius: 100,
-        overflow: 'hidden',
         width: '1.5rem',
         height: '1.5rem',
         alignItems: 'center',
