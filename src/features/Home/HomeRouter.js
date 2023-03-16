@@ -207,7 +207,7 @@ function CustomDrawerContent(props) {
                             </View>
                         } order={2} name="Order2">
                             <Walkthroughable> */}
-                    <DrawerItem
+                    {/* <DrawerItem
                         label={() =>
                             <View style={drawStyles.item}>
                                 <Text style={drawStyles.itemLabel}>Live Trivia</Text>
@@ -220,7 +220,7 @@ function CustomDrawerContent(props) {
                         activeTintColor='#EF2F55'
                         style={drawStyles.label}
                         labelContainerStyle
-                    />
+                    /> */}
                     {/* </Walkthroughable>
                         </CopilotStep> */}
 

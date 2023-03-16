@@ -43,6 +43,8 @@ const Stakingpopup = ({
         }
     }
 
+    return (<></>)
+
     return (
         <View style={styles.onView}>
             <Modal

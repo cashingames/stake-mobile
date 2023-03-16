@@ -94,7 +94,7 @@ export default function GameInstructionsScreen({ navigation }) {
           :
           <UniversalBottomSheet
             refBottomSheet={refRBSheet}
-            height={Platform.OS === 'ios' ? 500 : 350}
+            height={Platform.OS === 'ios' ? 410 : 240}
             subComponent={<NoGame
               onClose={closeBottomSheet}
               onPress={gotoStaking}
