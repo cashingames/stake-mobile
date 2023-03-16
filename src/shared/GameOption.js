@@ -78,16 +78,12 @@ const styles = EStyleSheet.create({
         borderBottomColor: '#FF4409',
     },
     checkmark: {
-        display: 'flex',
-        marginLeft: 'auto',
-        marginBottom: normalize(2),
         backgroundColor: '#fff',
         borderRadius: 100,
-        width: '1.5rem',
-        height: '1.5rem',
+        width: '1.3rem',
+        height: '1.3rem',
         alignItems: 'center',
         justifyContent: 'center',
-        textAlignVertical: 'center'
     },
 })
 

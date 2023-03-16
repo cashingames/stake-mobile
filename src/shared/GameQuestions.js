@@ -74,7 +74,7 @@ const GameQuestions = ({ onEndGame, ending }) => {
             }else{
             pressNext();
             }
-        },11111000);
+        },400);
     };
 
     useEffect(() => {
@@ -136,11 +136,12 @@ const styles = EStyleSheet.create({
         lineHeight: normalize(26)
     },
     buttonContainer: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        left: 0,
-        display: 'flex'
+        // position: 'absolute',
+        // bottom: 0,
+        // right: 0,
+        // left: 0,
+        // display: 'flex'
+        marginVertical: 20
     }
 
 })
