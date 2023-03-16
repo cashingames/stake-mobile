@@ -59,7 +59,7 @@ export default function AchievementsMilestoneScreen({ navigation }) {
                     {
                         combinedList.map((_item, key) =>{
                             return (
-                                <Badges key={key} milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${_item?.medal || _item?.logoUrl}` }}
+                                <Badges key={key} milestoneIcon={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${_item?.medal || _item?.logoUrl}` }}
                                     title={`${_item?.title || ""}`}
                                     description={`${_item?.description || ""}`}
                                     reward={`${_item.reward} ${_item.reward_type === 'POINTS' ? 'pts' : 'NGN'}`}

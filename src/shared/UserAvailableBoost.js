@@ -11,7 +11,7 @@ const UserAvailableBoost = ({ boost }) => {
         <View style={styles.boostContent}>
             <View style={styles.boostAmount}>
                 <Image
-                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
+                    source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
                     style={styles.boostIcon}
                 />
                 <Text style={styles.amount1}>x{formatNumber(boost.count)}</Text>

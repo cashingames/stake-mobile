@@ -19,9 +19,9 @@ export default function ChangePasswordScreen({ navigation }) {
 
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
-    const [password, setPassword] = useState(Constants.manifest.extra.isStaging ? '123456789' : '');
-    const [new_password, setNewPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
-    const [new_password_confirmation, setConfirmPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
+    const [password, setPassword] = useState(Constants.expoConfig.extra.isStaging ? '123456789' : '');
+    const [new_password, setNewPassword] = useState(Constants.expoConfig.extra.isStaging ? '12345678' : '');
+    const [new_password_confirmation, setConfirmPassword] = useState(Constants.expoConfig.extra.isStaging ? '12345678' : '');
     const [passErr, setPassError] = useState(false);
 
     const refRBSheet = useRef();

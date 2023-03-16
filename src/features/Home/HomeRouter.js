@@ -125,7 +125,7 @@ function CustomDrawerContent(props) {
                 <View style={drawStyles.sideHeader}>
                     <Image
                         style={drawStyles.avatar}
-                        source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+                        source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
                     />
                     <Text style={drawStyles.userTitle}> {user.fullName}</Text>
                     <Text style={drawStyles.userName}> @{user.username}</Text>
@@ -173,7 +173,7 @@ function CustomDrawerContent(props) {
                 </View>
             </ScrollView>
             <View style={drawStyles.logoutContainer}>
-                <Text style={drawStyles.appVersion}>App version: {Constants.manifest.version}</Text>
+                <Text style={drawStyles.appVersion}>App version: {Constants.expoConfig.version}</Text>
             </View>
         </DrawerContentScrollView>
     );

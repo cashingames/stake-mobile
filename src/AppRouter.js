@@ -196,7 +196,8 @@ function AppRouter() {
 export default AppRouter;
 
 const setupAxios = async function () {
-	axios.defaults.baseURL = Constants.manifest.extra.apiBaseUrl;
+	console.log("base url", Constants.expoConfig.extra.apiBaseUrl)
+	axios.defaults.baseURL = Constants.expoConfig.extra.apiBaseUrl;
 	//axios logout on 401
 	axios.interceptors.response.use(
 		response => response,

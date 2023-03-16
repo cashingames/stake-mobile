@@ -95,7 +95,7 @@ const FundWalletComponent = ({ onClose }) => {
                             "mobile_money",
                             "bank_transfer",
                         ]}
-                        paystackKey={Constants.manifest.extra.paystackKey}
+                        paystackKey={Constants.expoConfig.extra.paystackKey}
                         amount={Number.parseFloat(amount)}
                         billingEmail={user.email}
                         activityIndicatorColor="green"

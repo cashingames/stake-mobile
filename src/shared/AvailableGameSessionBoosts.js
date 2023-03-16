@@ -96,7 +96,7 @@ const AvailableBoost = ({ boost, onConsume, showText }) => {
             <View style={styles.boostContainer}>
                 <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
                     <Image
-                        source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
+                        source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
                         style={[styles.boostIcon, { opacity: showText ? 0 : 1 }]}
                     />
                     <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>

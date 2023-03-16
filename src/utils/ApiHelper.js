@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from 'expo-constants';
 
-const baseURL = Constants.manifest.extra.apiBaseUrl;
+const baseURL = Constants.expoConfig.extra.apiBaseUrl;
 
 // Example POST method implementation:
 async function postData(url = '', data = {}) {

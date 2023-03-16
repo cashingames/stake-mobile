@@ -23,7 +23,7 @@ export default ({ subcategory}) => {
 
             <Image
                 style={[styles.cardIconBigger]}
-                source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${subcategory.icon}` }}
+                source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${subcategory.icon}` }}
                 resizeMode='contain'
             />
             <View style={styles.cardContent}>

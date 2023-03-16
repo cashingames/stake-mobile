@@ -14,7 +14,7 @@ export default function ({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
 
-    const [password, setPassword] = useState(Constants.manifest.extra.isStaging ? 'zubby1234' : '');
+    const [password, setPassword] = useState(Constants.expoConfig.extra.isStaging ? 'zubby1234' : '');
     const [canSend, setCanSend] = useState(false);
     const [error, setError] = useState('');
     const [passErr, setPassError] = useState(false);

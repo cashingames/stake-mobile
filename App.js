@@ -144,7 +144,7 @@ function App() {
 export default App;
 
 //Enable hotreload of EStylesheet
-if (Constants.manifest.extra.isDevelopment) {
+if (Constants.expoConfig.extra.isDevelopment) {
   module.hot.accept(() => {
     EStyleSheet.clearCache();
     EStyleSheet.build();

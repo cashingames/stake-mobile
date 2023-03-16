@@ -25,7 +25,7 @@ const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
             'phone_number': user.phoneNumber,
             'email': user.email
         });
-        handleStakingNavigation(`${Constants.manifest.extra.stakingAppUrl}/${Base64.encode(token)}`);
+        handleStakingNavigation(`${Constants.expoConfig.extra.stakingAppUrl}/${Base64.encode(token)}`);
     }
 
     const handleStakingNavigation = async (url) => {

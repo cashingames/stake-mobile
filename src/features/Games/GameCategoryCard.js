@@ -20,7 +20,7 @@ export default ({ category, onSelect, isSelected, activeCategory,activeSubcatego
                     <Text style={styles.cardInstruction}>{formatNumber(category.played)} times played </Text>
                     <Image
                         style={styles.cardIcon}
-                        source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${category.icon}` }}
+                        source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${category.icon}` }}
                     />
                 </View>
             </Pressable>

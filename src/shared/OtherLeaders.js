@@ -30,7 +30,7 @@ function OtherLeader({ leader, position, indexArrow, otherName }) {
                 <Image
                     style={otherLeaderStyles.profilePic}
                     source={isTrue(leader.avatar) ?
-                        { uri: `${Constants.manifest.extra.assetBaseUrl}/${leader.avatar}` } :
+                        { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${leader.avatar}` } :
                         require("../../assets/images/user-icon.png")}
                 />
                 <View style={otherLeaderStyles.username}>

@@ -26,7 +26,7 @@ const BoostCardDetails = ({ boost }) => {
     return (
         <>
             <Image
-                source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
+                source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
                 style={styles.boostIcon}
             />
             <View style={styles.boostDetailsContainer}>

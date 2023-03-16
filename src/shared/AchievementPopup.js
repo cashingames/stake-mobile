@@ -52,7 +52,7 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
                             <View style={styles.imageContainer}>
                                 <Image
                                     style={styles.image}
-                                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${achievement?.quality_image || achievement?.medal || achievement?.logoUrl}` }}
+                                    source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${achievement?.quality_image || achievement?.medal || achievement?.logoUrl}` }}
                                 />
                             </View>
                             <Text style={styles.congratulatoryText}>

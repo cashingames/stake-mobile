@@ -73,7 +73,7 @@ const UserAvatar = () => {
         <View style={styles.userAvatar}>
             <Image
                 style={styles.avatar}
-                source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+                source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
 
             />
             {!loading ?

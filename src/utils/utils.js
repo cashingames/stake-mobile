@@ -53,12 +53,12 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
             style: 'cancel',
         });
     }
-    
+
     const link = Platform.OS === 'ios' ?
         "https://apps.apple.com/us/app/cashingames/id6443878628"
         :
         "https://play.google.com/store/apps/details?id=com.cashingames.cashingames";
-    
+
     config.push({
         text: 'OK',
         onPress: () => Linking.openURL(link),
@@ -73,27 +73,26 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
 
 export const notifyOfPublishedUpdates = async () => {
     try {
-        Updates.checkForUpdateAsync().then(x => {
 
-            if (!x.isAvailable) {
-                return;
-            }
+        const update = await Updates.checkForUpdateAsync();
 
-            Updates.fetchUpdateAsync().then(() => {
-                Alert.alert(
-                    "Updates available",
-                    "Please reload the app to enjoy the new experience we just added to cashingames",
-                    [
-                        {
-                            text: 'Restart',
-                            onPress: async () => {
-                                await Updates.reloadAsync().catch((error) => crashlytics().recordError(error));
-                            },
-                        }
-                    ]
-                );
-            });
-        });
+        if (!update.isAvailable) {
+            return;
+        }
+        await Updates.fetchUpdateAsync();
+        Alert.alert(
+            "Updates available",
+            "Please reload the app to enjoy the new experience we just added to cashingames",
+            [
+                {
+                    text: 'Restart',
+                    onPress: async () => {
+                        await Updates.reloadAsync();
+                    },
+                }
+            ]
+        );
+
     } catch (e) {
         crashlytics().recordError(error);
     }

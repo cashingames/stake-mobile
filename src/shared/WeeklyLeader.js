@@ -12,7 +12,7 @@ function WeeklyLeader({ avatar, podPosition, name, point,styleProp,avatarProp,st
             <View style={styleProp}>
                 <Image
                     style={avatarProp}
-                    source={isTrue(avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
+                    source={isTrue(avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
                 />
                 <Text style={styles.leaderName}>{name}</Text>
                 <View style={styles.leaderPoint}>

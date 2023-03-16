@@ -60,7 +60,7 @@ function CategoryTopLeader({ avatar, name, position, point, topLeaderStyle }) {
         <View style={[styles.topLeader, topLeaderStyle]}>
             <Image
                 style={styles.avatar}
-                source={isTrue(avatar) ? { uri: `${Constants.manifest.extra.apiBaseUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
+                source={isTrue(avatar) ? { uri: `${Constants.expoConfig.extra.apiBaseUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
             />
             <View style={styles.numberContainer}>
                 <Text style={styles.number}>{formatNumber(position)}</Text>

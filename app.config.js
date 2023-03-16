@@ -1,12 +1,12 @@
 const env = process.env.APP_VARIANT;
 const isDevelopment = env === 'development' || env === 'local' || false;
-const version = "1.2.83"; //Update for every build and publish
+const version = "1.2.84"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
   version: version,
-  runtimeVersion: "2.83", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "2.84", //All apps using the same runtime will get the published updates. Generally update for every new build
   icon: "./assets/images/adaptive-icon2.png",
   jsEngine: "hermes",
   scheme: "cashingames",
@@ -19,7 +19,7 @@ export default {
     barStyle: "dark-content"
   },
   updates: {
-    fallbackToCacheTimeout: 0
+    url: "https://u.expo.dev/0e946637-631c-4661-a1ca-5f28b92a1e12"
   },
   assetBundlePatterns: [
     "**/*"
@@ -180,6 +180,8 @@ function getPaystackKey() {
 }
 
 function getApiUrl() {
+
+  console.log("get env", env);
   switch (env) {
     case "local":
       return 'http://172.20.10.3:8000/api';
