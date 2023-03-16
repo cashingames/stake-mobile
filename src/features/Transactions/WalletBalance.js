@@ -25,26 +25,12 @@ const WalletBalance = ({ balance }) => {
                     </View>
                     <Text style={styles.availableAmount}>&#8358;{formatCurrency(balance)}</Text>
                 </View>
-                <FundButton />
             </View>
             <Text style={styles.borderLine}></Text>
         </>
     )
 };
 
-const FundButton = () => {
-    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
-    const navigation = useNavigation();
-    return (
-        <View style={styles.buttonContainer}>
-            <AppButton text="Fund Wallet" textStyle={styles.fundButton} onPress={() => {
-                playSound()
-                navigation.navigate('FundWallet')
-            }}
-                style={styles.button} />
-        </View>
-    )
-};
 
 const styles = EStyleSheet.create({
     balance: {
