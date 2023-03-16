@@ -39,16 +39,16 @@ const NoGame = ({ onClose, onPress }) => {
             {Platform.OS === 'ios' ?
                 <>
                     <AppButton text="Go Home" onPress={goHome} />
-                    <Text style={styles.orText}>or</Text>
-                    <Text style={styles.stakeCashText}>Click on stake cash and stand a chance of winning double of the amount staked</Text>
-                    <AppButton text="Stake Cash"  onPress={onPress} />
+                    {/* <Text style={styles.orText}>or</Text> */}
+                    {/* <Text style={styles.stakeCashText}>Click on stake cash and stand a chance of winning double of the amount staked</Text>
+                    <AppButton text="Stake Cash"  onPress={onPress} /> */}
                 </>
                 :
                 <>
                     <GoToStore onPress={visitStore} />
-                    <Text style={styles.orText}>or</Text>
-                    <Text style={styles.stakeCashText}>Click on stake cash and stand a chance of winning double of the amount staked</Text>
-                    <AppButton text="Stake Cash" style={styles.stakeButton} onPress={onPress} />
+                    {/* <Text style={styles.orText}>or</Text> */}
+                    {/* <Text style={styles.stakeCashText}>Click on stake cash and stand a chance of winning double of the amount staked</Text>
+                    <AppButton text="Stake Cash" style={styles.stakeButton} onPress={onPress} /> */}
                 </>
 
             }
