@@ -5,7 +5,6 @@ import { CountryPicker } from "react-native-country-codes-picker";
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Input from '../../shared/Input';
 import { Ionicons } from "@expo/vector-icons";
@@ -142,7 +141,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         }
                     </View>
                     {!isEmailVerified &&
-                        <Text style={styles.verifyText} onPress={goToVerifyEmailScreen}>Your email is not verified. Please, click to verify your email!</Text>
+                        <Text style={styles.verifyText} onPress={goToVerifyEmailScreen}>Your email is not verified. Please, CLICK to verify your email!</Text>
                     }
                     <Input
                         label='Username'

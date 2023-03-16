@@ -14,7 +14,7 @@ const EmailVerificationScreen = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const [canLogin, setCanLogin] = useState(true);
     const [loading, setLoading] = useState(false);
-    const otpScreenText = 'To verify your account, please input the One Time Password sent to your email.';
+    const otpScreenText = 'To verify your account, please input the One Time code sent to your email.';
 
     const [otp1, setOtp1] = useState('')
     const [otp2, setOtp2] = useState('')
@@ -121,7 +121,7 @@ const EmailVerificationScreen = ({ navigation, route }) => {
                         style={styles.input}
                     />
                 </View>
-                <AppButton text={loading ? 'Verifying...' : 'Login'} disabled={!canLogin || loading} onPress={goToDashboard} />
+                <AppButton text={loading ? 'Verifying...' : 'Proceed'} disabled={!canLogin || loading} onPress={goToDashboard} />
             </ScrollView>
         </View>
 
