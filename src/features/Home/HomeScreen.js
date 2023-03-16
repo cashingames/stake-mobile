@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
-import { Text, View, ScrollView, Image, StatusBar, Platform, RefreshControl, Pressable } from 'react-native';
+import { Text, View, ScrollView, Image, StatusBar, Platform, RefreshControl, Pressable, Alert } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, {
@@ -61,20 +61,21 @@ const HomeScreen = (props) => {
     const isFocused = useIsFocused();
     const { playSound } = useSound(require('../../../assets/sounds/dashboard.mp3'));
 
+    const convertArrayToString = (arr) => {
+        arr = arr.map(_temp => JSON.stringify(_temp));
+        return arr.toString();
+    }
+
     const getStoreItems = async () => {
 
         const items = Platform.select({
             android: ['boost_plan_time_freeze'],
         });
-        // dispatch(setItems([
-        //     'boost_plan_time_freeze',
-        //     ''
-        // ]))
         const { responseCode, results } = await InAppPurchases.getProductsAsync(items);
         if (responseCode === InAppPurchases.IAPResponseCode.OK) {
-            console.log(results, 'in-app')
+            Alert.alert(convertArrayToString(results))
         } else {
-            console.log('no products')
+            Alert.alert('Code not reached')
         }
     }
 
