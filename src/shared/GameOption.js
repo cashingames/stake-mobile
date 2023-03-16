@@ -78,6 +78,7 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(2),
         backgroundColor: '#fff',
         borderRadius: 100,
+        overflow: 'hidden',
         width: '1.5rem',
         height: '1.5rem',
         alignItems: 'center',

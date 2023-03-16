@@ -74,7 +74,7 @@ const GameQuestions = ({ onEndGame, ending }) => {
             }else{
             pressNext();
             }
-        },1000);
+        },11000);
     };
 
     useEffect(() => {
