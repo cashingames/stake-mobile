@@ -90,20 +90,9 @@ export default function WalletScreen() {
             }
             >
                 <WalletBalance balance={user.walletBalance} />
-                <WithdrawableWalletBalance
-                    withdrawableBalance={user.withdrawableBalance}
-                    bookBalance={user.bookBalance}
-                    // onPress={withdrawBalance}
-                    withdraw={withdraw}
-                />
+                
                 <UserEarnings point={user.points} />
                 <TransactionLink />
-                <UniversalBottomSheet
-                    refBottomSheet={refRBSheet}
-                    height={300}
-                    subComponent={<WithdrawnBalance onClose={closeBottomSheet}
-                    />}
-                />
             </ScrollView>
         </ImageBackground>
     );
@@ -129,47 +118,7 @@ const TransactionLink = () => {
     )
 };
 
-const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, withdraw }) => {
-    const features = useSelector(state => state.common.featureFlags);
 
-    const isWithdrawFeatureEnabled = features['withdrawable_wallet'] !== undefined && features['withdrawable_wallet'].enabled === true;
-
-    if (!isWithdrawFeatureEnabled) {
-        return null;
-    }
-    return (
-        <View style={styles.earningsContainer}>
-            <View style={styles.earnings}>
-                <Text style={styles.earningText}>Withdrawable Balance</Text>
-                <Text style={styles.earningAmount}>&#8358;{formatCurrency(withdrawableBalance)}</Text>
-                {/* <AppButton text="Withdraw" textStyle={styles.fundButton}
-                    style={styles.button} onPress={onPress}
-                    disabled={withdraw}
-                /> */}
-            </View>
-            <View style={styles.earnings}>
-                <Text style={styles.earningText}>Pending Winnings</Text>
-                <Text style={styles.earningAmount}>&#8358;{formatCurrency(bookBalance)}</Text>
-                <Text style={styles.earningNote}>Note: Your pending winnings becomes withdrawable after 1hour</Text>
-
-            </View>
-        </View>
-    )
-}
-
-const WithdrawnBalance = ({ onClose, withdrawableBalance }) => {
-    return (
-        <View style={styles.withdrawn}>
-            <Image style={styles.emoji}
-                source={require('../../../assets/images/thumbs_up.png')}
-
-            />
-            <Text style={styles.withdrawSuccessText}>Congratulations,</Text>
-            <Text style={styles.withdrawSuccessText}>Your withdrawal request is being processed to your bank account
-            </Text>
-        </View>
-    )
-}
 
 
 const styles = EStyleSheet.create({
