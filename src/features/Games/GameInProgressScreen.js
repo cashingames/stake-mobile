@@ -22,6 +22,7 @@ import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import analytics from '@react-native-firebase/analytics';
 import useSound from "../../utils/useSound";
+import NextButton from "../../shared/NextButton";
 
 
 
@@ -192,13 +193,14 @@ export default function GameInProgressScreen({ navigation, route }) {
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
                 <PlayGameHeader onPress={showExitConfirmation} onPressBoost={openBottomSheet} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
-                <GameQuestions onEndGame={() => onEndGame()} ending={ending}/>
+                <GameQuestions />
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={350}
                     subComponent={<UserAvailableBoosts onClose={closeBottomSheet} />}
                 />
             </ScrollView>
+            <NextButton ending={ending} onEndGame={() => onEndGame()}/>
         </ImageBackground>
     );
 }
