@@ -33,6 +33,7 @@ import useSound from '../../utils/useSound';
 import { Button } from 'react-native-elements';
 import * as InAppPurchases from 'expo-in-app-purchases';
 import { setItems } from '../InAppPurchaseSlice';
+import axios from 'axios';
 
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
@@ -74,6 +75,24 @@ const HomeScreen = (props) => {
         const { responseCode, results } = await InAppPurchases.getProductsAsync(items);
         if (responseCode === InAppPurchases.IAPResponseCode.OK) {
             Alert.alert(convertArrayToString(results))
+            const fd = new FormData();
+            fd.append('data', convertArrayToString(results));
+            // const data = new URLSearchParams();
+            // for (const pair of fd) {
+            //     data.append(pair[0], pair[1]);
+            // } 
+            try{
+           const fetchItems = await axios({
+                method: "post", 
+                url:"/",
+                baseURL: "http://192.168.222.221:8089",
+                // data: {data: "hello"}
+                data: {data: convertArrayToString(results)}
+            })
+            // console.log(fetchItems)
+        }catch (error) {
+            console.log(error)
+        }
         } else {
             Alert.alert('Code not reached')
         }
