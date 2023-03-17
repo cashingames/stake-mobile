@@ -54,7 +54,7 @@ const NextButton = ({ ending, onEndGame }) => {
             }else{
             pressNext();
             }
-        },400);
+        },1000);
     };
     return (
         <AppButton
