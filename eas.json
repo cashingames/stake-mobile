@@ -33,7 +33,6 @@
       }
     },
     "production": {
-      "releaseChannel": "production",
       "channel": "production",
       "ios": {
         "cocoapods": "1.11.3"
