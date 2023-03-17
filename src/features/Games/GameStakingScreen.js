@@ -112,18 +112,22 @@ const GameStakingScreen = ({ navigation }) => {
                         })
                         // console.log('Action logged to server');
                     })
-                    .catch((e) => {
-                        // console.log('Failed to log to server');
-                    });
                 setLoading(false);
-                // onClose();
                 navigation.navigate("GameInProgress")
             })
-            .catch((rejectedValueOrSerializedError) => {
-                // console.log(rejectedValueOrSerializedError);
-                Alert.alert('The selected category is not available for now, try again later.');
+            .catch((err) => {
+                processStartGameError(err)
+            }).finally(() => {
                 setLoading(false);
             });
+    }
+
+    const processStartGameError = async (err) => {
+        const errors = err.message;
+        Alert.alert(errors)
+
+        const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
+        Alert.alert(firstError)
     }
 
     return (
