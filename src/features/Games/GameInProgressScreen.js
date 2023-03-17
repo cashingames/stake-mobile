@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Text, View, Image, ScrollView, ImageBackground, Alert, StatusBar, BackHandler } from 'react-native';
-import normalize from "../../utils/normalize";
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
@@ -22,6 +22,7 @@ import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import analytics from '@react-native-firebase/analytics';
 import useSound from "../../utils/useSound";
+import NextButton from "../../shared/NextButton";
 
 
 
@@ -189,16 +190,17 @@ export default function GameInProgressScreen({ navigation, route }) {
         //     <Text>me</Text>
         // </View>
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
-            <View style={styles.container} keyboardShouldPersistTaps='always'>
+            <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
                 <PlayGameHeader onPress={showExitConfirmation} onPressBoost={openBottomSheet} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
-                <GameQuestions onEndGame={() => onEndGame()} ending={ending}/>
+                <GameQuestions />
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={350}
                     subComponent={<UserAvailableBoosts onClose={closeBottomSheet} />}
                 />
-            </View>
+            </ScrollView>
+            <NextButton ending={ending} onEndGame={() => onEndGame()}/>
         </ImageBackground>
     );
 }

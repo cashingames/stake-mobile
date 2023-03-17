@@ -22,6 +22,7 @@ import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 import useSound from "../../utils/useSound";
+import NextButton from "../../shared/NextButton";
 
 
 export default function ChallengeGameInProgressScreen({ navigation }) {
@@ -155,16 +156,17 @@ export default function ChallengeGameInProgressScreen({ navigation }) {
 
   return (
     <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
-      <View style={styles.container} keyboardShouldPersistTaps='always'>
+      <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
         <PlayGameHeader onPress={showExitConfirmation} onPressBoost={openBottomSheet} />
         <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
-        <GameQuestions onEndGame={() => onEndGame()} ending={ending}/>
+        <GameQuestions />
         <UniversalBottomSheet
           refBottomSheet={refRBSheet}
           height={350}
           subComponent={<UserAvailableBoosts onClose={closeBottomSheet} />}
         />
-      </View>
+      </ScrollView>
+      <NextButton ending={ending} onEndGame={() => onEndGame()}/>
     </ImageBackground>
   );
 }
