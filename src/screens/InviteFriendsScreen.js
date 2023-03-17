@@ -1,16 +1,20 @@
 import * as React from 'react';
-import { Text, View, ScrollView, Platform } from 'react-native';
+import { Text, View, ScrollView, Share, Alert, Pressable, Platform } from 'react-native';
 import normalize from '../utils/normalize';
+import { Ionicons } from '@expo/vector-icons';
+import * as Clipboard from 'expo-clipboard';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { useSelector } from 'react-redux';
 import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../shared/LottieAnimations';
+import analytics from '@react-native-firebase/analytics';
 import { useNavigation } from '@react-navigation/native';
 
 
 const InviteFriendsScreen = () => {
+
     const navigation = useNavigation
     useApplyHeaderWorkaround(navigation.setOptions);
-
 
     return (
         <ScrollView style={styles.container}>
@@ -21,6 +25,7 @@ const InviteFriendsScreen = () => {
             />
             <Heading />
             <Instructions />
+            <InviteLink />
         </ScrollView>
 
     );
@@ -46,6 +51,55 @@ const Instructions = () => {
     )
 }
 
+const InviteLink = () => {
+    const user = useSelector(state => state.auth.user);
+
+    const referralUrl = (user.referralCode)
+    const referralMsg = `Play exciting games with me on Cashingames and stand a chance to earn great rewards! Create an account with my referral code - ${referralUrl}`
+
+    const onShare = async () => {
+        try {
+            await Share.share({
+                message: referralMsg,
+            });
+            await analytics().logEvent("share_referral", {
+                'id': user.username,
+            })
+
+        } catch (error) {
+            Alert.alert("Notice", error.message);
+        }
+    };
+
+    const copyToClipboard = () => {
+        Clipboard.setStringAsync(referralUrl).then(() => {
+            Alert.alert('Copied to clipboard')
+        });
+    };
+
+    return (
+        <>
+            <Text style={styles.inviteLink}>Your referral code</Text>
+            <View style={styles.linkContainer} >
+                <Text style={styles.link}>{referralUrl}</Text>
+                <View style={styles.shareIcons}>
+                    <ShareLink iconName="md-copy" text='Copy' onPress={copyToClipboard} />
+                    <ShareLink iconName="md-share-social" text='Share' onPress={onShare} />
+                </View>
+            </View>
+        </>
+    )
+}
+const ShareLink = ({ iconName, text, onPress }) => {
+    return (
+        <Pressable onPress={onPress}>
+            <View style={styles.icon}>
+                <Ionicons name={iconName} size={20} color="#EB5757" />
+                <Text style={styles.iconText}>{text}</Text>
+            </View>
+        </Pressable>
+    )
+}
 export default InviteFriendsScreen;
 
 const styles = EStyleSheet.create({
@@ -118,4 +172,10 @@ const styles = EStyleSheet.create({
         marginLeft: normalize(10),
         alignItems: 'center'
     },
+    tourTitle: {
+        color: '#EF2F55',
+        fontWeight: '600',
+        fontSize: 22,
+        marginBottom: 10
+    }
 });
