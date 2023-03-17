@@ -57,40 +57,48 @@ export default function ({ navigation }) {
     }, []);
 
     const itemBought = async (productID) => {
-        const product = getProductFromStoreId(productID)
+        const {product, type} = getProductFromStoreId(productID)
     }
 
     const getProductFromStoreId =  (id) => {
         let product = null;
         let type = null;
         
-            switch(plan.id) {
-                case 2:
-                    productID = 'game_plan_doubleo';
-                    break;
-                case 3:
-                    productID = 'game_plan_dicey_multiples';
-                    break;
-                case 4:
-                    productID = 'game_plan_ultimate';
-                    break;
-                case 7:
-                    productID = 'game_plan_least';
-                    break;
-                case 8:
-                    productID = 'game_plan_mini';
-                    break;
-                case 6:
-                        productID = 'boost_plan_skip';
-                        break;
-                case 8:
-                        productID = 'boost_plan_time_freeze';
-                        break;
-                default:
-                    productID ='game_plan_least';
-            }
+        switch(id) {
+            case 'game_plan_doubleo':
+                product = 2;
+                type = 'plan';
+                break;
+            case 'game_plan_dicey_multiples':
+                product = 3;
+                type = 'plan';
+                break;
+            case 'game_plan_ultimate':
+                product = 4;
+                type = 'plan';
+                break;
+            case 'game_plan_least':
+                product = 7;
+                type = 'plan';
+                break;
+            case 'game_plan_mini':
+                product = 8;
+                type = 'plan';
+                break;
+            case 'boost_plan_skip':
+                product = 6;
+                type = 'boost';
+                break;
+            case 'boost_plan_time_freeze':
+                product = 8;
+                type = 'boost';
+                break;
+            default:
+                product = 8;
+                type = 'boost';
         }
-        return productID
+        
+        return {product, type}
     }
 
     const getProductID =  (plan, type) => {
