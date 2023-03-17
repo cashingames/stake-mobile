@@ -8,7 +8,7 @@ export const InAppPurchases = createSlice({
     name: 'inAppPurchase',
     initialState,
     reducers:{
-        SetItems: (state, action) => {
+        setItems: (state, action) => {
             state.items = action.payload;
         }
     }

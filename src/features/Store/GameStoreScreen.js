@@ -18,6 +18,8 @@ import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { randomEnteringAnimation } from "../../utils/utils";
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import useSound from "../../utils/useSound";
+import * as InAppPurchases from 'expo-in-app-purchases';
+import { Alert } from "react-native";
 
 
 export default function ({ navigation }) {
@@ -25,22 +27,81 @@ export default function ({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const user = useSelector(state => state.auth.user)
+    const storeProducts = useSelector(state => state.inAppPurchase.items);
 
+    InAppPurchases.setPurchaseListener(({ responseCode, results, errorCode }) => {
+        // Purchase was successful
+        if (responseCode === InAppPurchases.IAPResponseCode.OK) {
+          results.forEach(purchase => {
+            if (!purchase.acknowledged) {
+              console.log(`Successfully purchased ${purchase.productId}`);
+              // Process transaction here and unlock content...
+      
+              // Then when you're done
+            //   InAppPurchases.finishTransactionAsync(purchase, true);
+            Alert.alert('successfully purchased product',purchase.productId)
+            }
+          });
+        } else if (responseCode === InAppPurchases.IAPResponseCode.USER_CANCELED) {
+          console.log('User canceled the transaction');
+        } else if (responseCode === InAppPurchases.IAPResponseCode.DEFERRED) {
+          console.log('User does not have permissions to buy but requested parental approval (iOS only)');
+        } else {
+          console.warn(`Something went wrong with the purchase. Received errorCode ${errorCode}`);
+        }
+      });
 
     useEffect(() => {
         dispatch(getUser());
     }, []);
 
+    const purchaeStoreItem = async (plan, type) => {
+        let productID = null;
+        if(type === 'plan'){
+            switch(plan.id) {
+                case 2:
+                    productID = 'game_plan_doubleo';
+                    break;
+                case 3:
+                    productID = 'game_plan_dicey_multiples';
+                    break;
+                case 4:
+                    productID = 'game_plan_ultimate';
+                    break;
+                case 7:
+                    productID = 'game_plan_least';
+                    break;
+                case 8:
+                    productID = 'game_plan_mini';
+                    break;
+                default:
+                    productID ='game_plan_least';
+            }
+        }else{
+            switch(plan.id) {
+                case 6:
+                    productID = 'boost_plan_skip';
+                    break;
+                case 8:
+                    productID = 'boost_plan_time_freeze';
+                    break;
+                default:
+                    productID = 'boost_plan_skip';
+            }
+        }
+        await InAppPurchases.purchaseItemAsync(productID)
+    }
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <UserItems />
-            <GamePlans user={user} />
-            <GameBoosts user={user} />
+            <GamePlans user={user} purchaeStoreItem={purchaeStoreItem} />
+            <GameBoosts user={user} purchaeStoreItem={purchaeStoreItem} />
         </ScrollView>
     );
 }
 
-const GamePlans = ({ user }) => {
+const GamePlans = ({ user, purchaeStoreItem }) => {
     const plans = useSelector(state => state.common.plans);
     return (
         <View style={styles.storeItems}>
@@ -50,13 +111,13 @@ const GamePlans = ({ user }) => {
                 playing without interruptons
             </Text>
             <View style={styles.storeCards}>
-                {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} user={user} />)}
+                {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} user={user} purchaeStoreItem={purchaeStoreItem} />)}
             </View>
         </View>
     )
 }
 
-const GamePlanCard = ({ plan, user }) => {
+const GamePlanCard = ({ plan, user, purchaeStoreItem }) => {
     const { playSound } =  useSound(require('../../../assets/sounds/pop-up.wav'))
     const refRBSheet = useRef();
     const buyGamePlan = async () => {
@@ -69,8 +130,9 @@ const GamePlanCard = ({ plan, user }) => {
             'item_category': 'ecommerce',
             'price': plan.price
         })
+        purchaeStoreItem(plan, 'plan')
         playSound()
-        refRBSheet.current.open()
+        // refRBSheet.current.open()
     }
     return (
         <Pressable activeOpacity={0.8} onPress={buyGamePlan}>
@@ -193,7 +255,7 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
 
 }
 
-const GameBoosts = (user) => {
+const GameBoosts = ({ user, purchaeStoreItem }) => {
     const boosts = useSelector(state => state.common.boosts);
     return (
         <View style={styles.storeItems}>
@@ -203,13 +265,13 @@ const GameBoosts = (user) => {
                 Get boosts to let you win more games
             </Text>
             <View style={styles.storeCards}>
-                {boosts.map((boost, i) => <BoostCard key={i} boost={boost} user={user} />)}
+                {boosts.map((boost, i) => <BoostCard key={i} boost={boost} user={user} purchaeStoreItem={purchaeStoreItem} />)}
             </View>
         </View>
     )
 }
 
-const BoostCard = ({ boost, user }) => {
+const BoostCard = ({ boost, user, purchaeStoreItem }) => {
     const { playSound } =  useSound(require('../../../assets/sounds/achievement-unlocked2.wav'))
     const refRBSheet = useRef();
     const buyBoost = async () => {
@@ -222,8 +284,9 @@ const BoostCard = ({ boost, user }) => {
             'item_category': 'ecommerce',
             'price': boost.currency_value
         })
+        purchaeStoreItem(boost, 'boost')
         playSound()
-        refRBSheet.current.open()
+        // refRBSheet.current.open()
     }
     return (
         <Pressable activeOpacity={0.8} onPress={buyBoost}>

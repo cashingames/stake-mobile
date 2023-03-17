@@ -37,6 +37,15 @@ import axios from 'axios';
 
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
+const PRODUCTS = [
+    {"priceAmountMicros":160000000,"title":"Time Freeze (GameArk)","productId":"boost_plan_time_freeze","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦160.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"Skip (GameArk)","productId":"boost_plan_skip","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦160.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"Ultimate (GameArk)","productId":"game_plan_ultimate","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦160.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"DiceyMultiples (GameArk)","productId":"game_plan_dicey_multiples","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦160.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"Double O (GameArk)","productId":"game_plan_double_o","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦160.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"Least Plan (GameArk)","productId":"game_plan_least","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦160.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"Mini Plan (GameArk)","productId":"game_plan_mini","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦160.00","subscriptionPeriod":"P0D"}
+]
 
 const HomeScreen = (props) => {
     // const CopilotProps = props;
@@ -54,6 +63,7 @@ const HomeScreen = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [achievementPopup, setAchievementPopup] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
+    const items = useSelector(state => state.inAppPurchase.items);
     const [refreshing, setRefreshing] = useState(false);
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
@@ -70,34 +80,34 @@ const HomeScreen = (props) => {
     const getStoreItems = async () => {
 
         const items = Platform.select({
-            android: ['boost_plan_time_freeze'],
+            android: ['boost_plan_time_freeze', 'boost_plan_skip', 'game_plan_ultimate', 'game_plan_dicey_multiples', 'game_plan_doubleo', 'game_plan_least', 'game_plan_mini'],
         });
         const { responseCode, results } = await InAppPurchases.getProductsAsync(items);
         if (responseCode === InAppPurchases.IAPResponseCode.OK) {
-            Alert.alert(convertArrayToString(results))
-            const fd = new FormData();
-            fd.append('data', convertArrayToString(results));
-            // const data = new URLSearchParams();
-            // for (const pair of fd) {
-            //     data.append(pair[0], pair[1]);
-            // } 
-            try{
-           const fetchItems = await axios({
-                method: "post", 
-                url:"/",
-                baseURL: "http://192.168.222.221:8089",
-                // data: {data: "hello"}
-                data: {data: convertArrayToString(results)}
-            })
-            // console.log(fetchItems)
-        }catch (error) {
-            console.log(error)
-        }
+            dispatch(setItems(results.length !== 0 ? results : PRODUCTS))
+
+
+            // Alert.alert(convertArrayToString(results))
+            // const fd = new FormData();
+            // fd.append('data', convertArrayToString(results));
+           
+        //     try{
+        //    const fetchItems = await axios({
+        //         method: "post", 
+        //         url:"/",
+        //         baseURL: "http://192.168.222.221:8089",
+               
+        //         data: {data: convertArrayToString(results)}
+        //     })
+        // }catch (error) {
+        //     console.log(error)
+        // }
         } else {
-            Alert.alert('Code not reached')
+            // Alert.alert('Code not reached')
         }
     }
 
+    // {"priceAmountMicros":160000000,"title":"Time Freeze (GameArk)","productId":"boost_plan_time_freeze","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦160.00","subscriptionPeriod":"P0D"}
     useEffect(() => {
         if (isFocused && isSoundLoaded) {
             playSound()
