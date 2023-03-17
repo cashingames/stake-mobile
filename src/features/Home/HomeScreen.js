@@ -25,8 +25,6 @@ const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 const HomeScreen = () => {
     const dispatch = useDispatch();
 
-    const minVersionCode = useSelector(state => state.common.minVersionCode);
-    const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
     const [refreshing, setRefreshing] = useState(false);
 
@@ -48,34 +46,10 @@ const HomeScreen = () => {
 
     }, []);
 
-    useEffect(() => {
-        if (Constants.expoConfig.extra.isDevelopment) {
-            return;
-        }
-        //whether we are forcing or not, show the first time
-        notifyOfStoreUpdates(minVersionCode, minVersionForce);
-    }, [minVersionCode]);
-
 
     useFocusEffect(
         React.useCallback(() => {
-
-            if (loading || Constants.expoConfig.extra.isDevelopment) {
-                return;
-            }
-
-            notifyOfPublishedUpdates();
-
-            if (minVersionForce) {
-                notifyOfStoreUpdates(minVersionCode, minVersionForce);
-            }
-
-        }, [loading])
-    );
-
-    useFocusEffect(
-        React.useCallback(() => {
-            if(Platform.OS === "ios")
+            if (Platform.OS === "ios")
                 return;
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
@@ -91,22 +65,25 @@ const HomeScreen = () => {
     }
 
     return (
-        <ScrollView contentContainerStyle={styles.container} style={styles.mainContainer}
-            refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    tintColor="#000000"
-                />
-            }
-        >
-            <UserDetails />
-            <View style={styles.gamesContainer}>
-                <SelectGameMode />
-                <WinnersScroller />
-                <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}></SwiperFlatList>
-            </View>
-        </ScrollView>
+        <>
+            <RenderUpdateChecker />
+            <ScrollView contentContainerStyle={styles.container} style={styles.mainContainer}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        tintColor="#000000"
+                    />
+                }
+            >
+                <UserDetails />
+                <View style={styles.gamesContainer}>
+                    <SelectGameMode />
+                    <WinnersScroller />
+                    <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}></SwiperFlatList>
+                </View>
+            </ScrollView>
+        </>
     );
 }
 export default HomeScreen;
@@ -156,6 +133,19 @@ const UserWallet = ({ balance }) => {
 }
 
 
+function RenderUpdateChecker() {
+
+    const minVersionCode = useSelector(state => state.common.minVersionCode);
+    const minVersionForce = useSelector(state => state.common.minVersionForce);
+
+    if (minVersionCode && Constants.expoConfig.extra.isDevelopment !== "true") {
+        notifyOfStoreUpdates(minVersionCode, minVersionForce);
+    }
+
+    notifyOfPublishedUpdates();
+
+    return null;
+}
 
 
 const styles = EStyleSheet.create({
@@ -171,7 +161,7 @@ const styles = EStyleSheet.create({
     gamesContainer: {
         paddingHorizontal: '1.2rem',
         backgroundColor: '#FFFF',
-        paddingBottom:'2.5rem'
+        paddingBottom: '2.5rem'
     },
     leaderboardContainer: {
         flexDirection: 'row',
