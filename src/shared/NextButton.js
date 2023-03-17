@@ -7,12 +7,8 @@ import AppButton from "./AppButton"
 
 const NextButton = ({ ending, onEndGame }) => {
     const dispatch = useDispatch();
-    const displayedQuestion = useSelector(state => state.game.displayedQuestion);
-    const displayedOptions = useSelector(state => state.game.displayedOptions);
     const selectedOption = useSelector(state => state.game.selectedOption);
     const correctAnswer = useSelector(state => state.game.correctAnswer);
-    const showCorrectAnswer = useSelector(state => state.game.showCorrectAnswer);
-    const submissionResult = useSelector(state => state.game.submissionResult);
     const isLastQuestion = useSelector(state => state.game.isLastQuestion);
     const [timerId, setTimerId] = useState(null);
     const submitBtnSound = useSound(require('../../assets/sounds/pop-up.wav'));
