@@ -44,37 +44,37 @@ export default function WalletScreen() {
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
-    const withdrawBalance = () => {
-        setWithdraw(true)
-        withdrawWinnings()
-            .then(async response => {
-                await analytics().logEvent('winnings_withdrawn_successfully', {
-                    'product_id': user.username,
-                    'phone_number': user.phoneNumber,
-                    'email': user.email,
-                    'value': user.withdrawableBalance,
-                    'currency': 'NGN'
-                });
-                success.playSound()
-                openBottomSheet();
-                setWithdraw(false)
-                dispatch(getUser())
-            },
-                err => {
-                    failed.playSound()
-                    if (!err || !err.response || err.response === undefined) {
-                        Alert.alert("Your Network is Offline.");
-                        setWithdraw(false)
-                    }
-                    else if (err.response.status === 400) {
-                        Alert.alert(err.response.data.message);
-                        setWithdraw(false)
+    // const withdrawBalance = () => {
+    //     setWithdraw(true)
+    //     withdrawWinnings()
+    //         .then(async response => {
+    //             await analytics().logEvent('winnings_withdrawn_successfully', {
+    //                 'product_id': user.username,
+    //                 'phone_number': user.phoneNumber,
+    //                 'email': user.email,
+    //                 'value': user.withdrawableBalance,
+    //                 'currency': 'NGN'
+    //             });
+    //             success.playSound()
+    //             openBottomSheet();
+    //             setWithdraw(false)
+    //             dispatch(getUser())
+    //         },
+    //             err => {
+    //                 failed.playSound()
+    //                 if (!err || !err.response || err.response === undefined) {
+    //                     Alert.alert("Your Network is Offline.");
+    //                     setWithdraw(false)
+    //                 }
+    //                 else if (err.response.status === 400) {
+    //                     Alert.alert(err.response.data.message);
+    //                     setWithdraw(false)
 
-                    }
-                }
+    //                 }
+    //             }
 
-            )
-    }
+    //         )
+    // }
 
     return (
         <ImageBackground source={require('../../../assets/images/vector-coin-background.jpg')}
@@ -93,10 +93,10 @@ export default function WalletScreen() {
                 <WithdrawableWalletBalance
                     withdrawableBalance={user.withdrawableBalance}
                     bookBalance={user.bookBalance}
-                    onPress={withdrawBalance}
+                    // onPress={withdrawBalance}
                     withdraw={withdraw}
                 />
-                {/* <UserEarnings point={user.points} /> */}
+                <UserEarnings point={user.points} />
                 <TransactionLink />
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
@@ -142,10 +142,10 @@ const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, 
             <View style={styles.earnings}>
                 <Text style={styles.earningText}>Withdrawable Balance</Text>
                 <Text style={styles.earningAmount}>&#8358;{formatCurrency(withdrawableBalance)}</Text>
-                <AppButton text="Withdraw" textStyle={styles.fundButton}
+                {/* <AppButton text="Withdraw" textStyle={styles.fundButton}
                     style={styles.button} onPress={onPress}
                     disabled={withdraw}
-                />
+                /> */}
             </View>
             <View style={styles.earnings}>
                 <Text style={styles.earningText}>Pending Winnings</Text>
