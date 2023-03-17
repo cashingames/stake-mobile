@@ -5,15 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from 'react-redux';
-import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../shared/LottieAnimations';
 import analytics from '@react-native-firebase/analytics';
-import { useNavigation } from '@react-navigation/native';
+import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 
 
-const InviteFriendsScreen = () => {
-
-    const navigation = useNavigation
+const InviteFriendsScreen = ({navigation}) => {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     return (
@@ -27,6 +24,7 @@ const InviteFriendsScreen = () => {
             <Instructions />
             <InviteLink />
         </ScrollView>
+
 
     );
 }
@@ -90,6 +88,7 @@ const InviteLink = () => {
         </>
     )
 }
+
 const ShareLink = ({ iconName, text, onPress }) => {
     return (
         <Pressable onPress={onPress}>
