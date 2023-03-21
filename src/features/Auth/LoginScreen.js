@@ -18,31 +18,88 @@ import { triggerNotifierForReferral } from '../../shared/Notification';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { StatusBar } from 'react-native';
 import { Image } from 'react-native';
+import AppButton from '../../shared/AppButton';
 
 export default function LoginScreen({ navigation }) {
+    const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'arunajoy2602@gmail.com' : '');
+    const [password, setPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
+    const [canLogin, setCanLogin] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const onChangeEmail = (value) => {
+        setEmail(value)
+    }
+
+    const onChangePassword = (value) => {
+        setPassword(value)
+    }
+
 
     useEffect(() => {
-        StatusBar.setHidden(true)
-        // StatusBar.setNetworkActivityIndicatorVisible(false)
-    }, []);
+        const valid = email.length > 1 && password.length > 7;
+        setCanLogin(valid);
+        setError('');
+    }, [email, password]);
+    // useEffect(() => {
+    //     StatusBar.setHidden(true)
+    //     // StatusBar.setNetworkActivityIndicatorVisible(false)
+    // }, []);
 
     return (
-
         <ImageBackground source={require('../../../assets/images/login-image.png')}
             style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
             resizeMethod="resize">
+                 <ImageBackground source={require('../../../assets/images/trans-image.png')}
+                    style={styles.secondBgImg}
+                    resizeMethod="resize">
             <View style={styles.container}>
                 <View style={styles.logo}>
                     <Image source={require('../../../assets/images/Ga-logo.png')} />
                 </View>
-                <ImageBackground source={require('../../../assets/images/trans-image.png')}
-                    style={styles.secondBgImg}
-                    resizeMethod="resize">
+                <View style={styles.inputSection}>
+                    {error.length > 0 &&
+                        <Text style={styles.errorBox}>{error}</Text>
+                    }
+
+                    <Input
+                        label='Email or username'
+                        placeholder="johndoe or johndoe@example.com"
+                        value={email}
+                        onChangeText={text => onChangeEmail(text)}
+                    />
+
+                    <Input
+                        type="password"
+                        label='Password'
+                        value={password}
+                        placeholder="Enter password"
+                        onChangeText={text => { onChangePassword(text) }}
+                    />
+                    <RenderForgotPassword />
+                    <AppButton text={loading ? 'Signing in...' : 'Sign in'}
+                        //  onPress={() => onLogin()} 
+                        style={styles.loginBtn}
+                        textStyle={styles.loginBtnText}
+                        disabled={!canLogin} />
+                </View>
                     <RenderCreateAccount navigation={navigation} />
+                    </View >
                 </ImageBackground>
-            </View >
         </ImageBackground>
     );
+}
+
+const RenderForgotPassword = () => {
+    const navigation = useNavigation();
+    return (
+        <Text
+            style={styles.forgotPassword}
+            // onPress={() => navigation.navigate('ForgotPassword')}
+        >
+            Forgot Password?
+        </Text>
+    )
 }
 
 
@@ -77,18 +134,26 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingVertical: responsiveScreenWidth(3),
-        // paddingHorizontal: responsiveScreenWidth(3),
-        justifyContent: "space-between"
     },
 
+    inputSection: {
+        marginTop: normalize(40),
+        paddingHorizontal: responsiveScreenWidth(3),
+    },
+
+    forgotPassword: {
+        color: '#F1D818',
+        fontFamily: 'blues-smile',
+        fontSize: '1rem'
+    },
     secondBgImg: {
-        height: responsiveHeight(50)
+        flex:1
     },
-
+   
     signIn: {
         flexDirection: 'column',
         marginTop: responsiveScreenWidth(2),
-        marginTop: 100,
+        // marginTop: 10,
     },
     create: {
         flexDirection: 'row',
@@ -108,6 +173,19 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         marginTop: normalize(45)
     },
+
+    loginBtn: {
+        backgroundColor: '#F1D818',
+        borderBottomColor: '#B58201',
+        borderBottomWidth: 4,
+    },
+
+    loginBtnText: {
+        color:'#2D53A0',
+        fontFamily:'blues-smile',
+        fontSize:'1rem'
+    },
+
     singupLink: {
         color: '#fff',
         fontSize: '1rem',
@@ -116,7 +194,7 @@ const styles = EStyleSheet.create({
     terms: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginTop:20
+        marginTop: 20
     },
     linkText: {
         fontSize: '0.8rem',

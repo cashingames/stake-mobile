@@ -205,7 +205,7 @@ const styles = EStyleSheet.create({
     googleButton: {
         backgroundColor: '#fff',
         flexDirection: 'row',
-        paddingVertical: Platform.OS === 'ios' ? normalize(9) : normalize(9),
+        paddingVertical: normalize(8),
         paddingHorizontal: normalize(12),
         justifyContent: 'center',
         alignItems: 'center',
@@ -226,7 +226,8 @@ const styles = EStyleSheet.create({
     },
     pointsIcon: {
         width: 17,
-        height: 17
+        height: 17,
+        marginTop:3
     },
     googletext: {
         color: '#000',
