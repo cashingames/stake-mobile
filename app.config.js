@@ -1,5 +1,6 @@
 const env = process.env.APP_VARIANT;
 const isDevelopment = env === 'development' || env === 'local' || false;
+
 const version = "1.1.21"; //Update for every build and publish
 
 // Reminder: android is still on 1.1.14 @ 13 march, 2023
