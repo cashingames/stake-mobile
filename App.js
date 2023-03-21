@@ -11,6 +11,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 import Toast from 'react-native-toast-message';
+import * as InAppPurchases from 'expo-in-app-purchases';
 
 import { Settings } from 'react-native-fbsdk-next';
 // import { requestTrackingPermissionsAsync, getTrackingPermissionsAsync } from 'expo-tracking-transparency';
@@ -90,6 +91,14 @@ function App() {
   //     }
   //   })();
   }, []);
+
+  useEffect(() => {
+    const loadInAppPurchase = async () => {
+       await InAppPurchases.connectAsync()
+       console.log('in-app purchase')
+    }
+    loadInAppPurchase()
+  }, [])
 
   const routeNameRef = useRef();
   const navigationRef = useNavigationContainerRef();
