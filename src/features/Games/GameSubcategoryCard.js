@@ -5,18 +5,23 @@ import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/core';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setGameCategory } from './GameSlice';
 
 
-export default ({ subcategory}) => {
+export default ({ subcategory }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
+    const gameMode = useSelector(state => state.game.gameMode);
     const clicked = () => {
         dispatch(setGameCategory(subcategory));
-       navigation.navigate('GameStaking');
-    }
+        if (gameMode.name === "CHALLENGE")
+            navigation.navigate('ChallengeSelectPlayer');
+        else
+            navigation.navigate('GameStaking');
+    };
+
 
     return (
         <Pressable style={styles.card} onPress={clicked} >
@@ -44,8 +49,8 @@ const styles = EStyleSheet.create({
         flexDirection: "row",
         borderWidth: Platform.OS === 'ios' ? normalize(0.5) : 1,
         borderColor: '#E0E0E0',
-        paddingHorizontal:'.8rem',
-        paddingVertical:'.5rem',
+        paddingHorizontal: '.8rem',
+        paddingVertical: '.5rem',
         elevation: 3.5,
         shadowColor: '#000',
         shadowOffset: { width: 0.5, height: 2 },

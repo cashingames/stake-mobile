@@ -13,6 +13,7 @@ import WalletScreen from '../Transactions/WalletScreen';
 import { isTrue } from '../../utils/stringUtl';
 import analytics from '@react-native-firebase/analytics';
 import AppButton from '../../shared/AppButton';
+import { setGameMode, setGameType } from '../Games/GameSlice';
 
 
 const HomeStack = createDrawerNavigator();
@@ -117,7 +118,17 @@ const RightButtons = () => {
 
 function CustomDrawerContent(props) {
     const navigation = useNavigation();
-    const user = useSelector(state => state.auth.user)
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user);
+    const gameMode = useSelector(state => state.common.gameModes[1]);
+    const gameType = useSelector(state => state.common.gameTypes[0]);
+
+    const selectChallengeMode = () => {
+        dispatch(setGameMode(gameMode));
+        dispatch(setGameType(gameType));
+        navigation.navigate('SelectGameCategory')
+
+    }
 
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
@@ -134,7 +145,7 @@ function CustomDrawerContent(props) {
 
 
                 <View style={drawStyles.menu}>
-                    {Platform.OS !== 'ios' && 
+                    {Platform.OS !== 'ios' &&
                         <DrawerItem
                             label={() =>
                                 <View style={drawStyles.item}>
@@ -147,6 +158,18 @@ function CustomDrawerContent(props) {
                             labelContainerStyle
                         />
                     }
+
+                    <DrawerItem
+                        label={() =>
+                            <View style={drawStyles.item}>
+                                <Text style={drawStyles.itemLabel}>Challenge a friend</Text>
+                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+                            </View>}
+                        onPress={selectChallengeMode}
+                        activeTintColor='#EF2F55'
+                        style={drawStyles.label}
+                        labelContainerStyle
+                    />
 
                     <DrawerItem
                         label={() =>
