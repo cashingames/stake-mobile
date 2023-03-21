@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation }) {
 
         dispatch(loginUser({ email, password })).unwrap().then((response) => {
             console.info("login response 1", response);
-            if(response?.isFirstTime || false){
+            if (response?.isFirstTime || false) {
                 triggerTour(navigation)
                 triggerNotifierForReferral()
             }
@@ -86,42 +86,45 @@ export default function LoginScreen({ navigation }) {
 
 
     return (
-        <ScrollView style={styles.container}>
+        <>
+            <RenderUpdateChecker />
+            <ScrollView style={styles.container}>
 
-            <AuthBanner />
+                <AuthBanner />
 
-            <View style={styles.headerBox}>
-                <AuthTitle text='Sign in' />
-            </View>
+                <View style={styles.headerBox}>
+                    <AuthTitle text='Sign in' />
+                </View>
 
-            <View style={styles.inputContainer} >
-                {error.length > 0 &&
-                    <Text style={styles.errorBox}>{error}</Text>
-                }
+                <View style={styles.inputContainer} >
+                    {error.length > 0 &&
+                        <Text style={styles.errorBox}>{error}</Text>
+                    }
 
-                <Input
-                    label='Email or username'
-                    placeholder="johndoe or johndoe@example.com"
-                    value={email}
-                    onChangeText={text => onChangeEmail(text)}
-                />
+                    <Input
+                        label='Email or username'
+                        placeholder="johndoe or johndoe@example.com"
+                        value={email}
+                        onChangeText={text => onChangeEmail(text)}
+                    />
 
-                <Input
-                    type="password"
-                    label='Password'
-                    value={password}
-                    placeholder="Enter password"
-                    onChangeText={text => { onChangePassword(text) }}
-                />
+                    <Input
+                        type="password"
+                        label='Password'
+                        value={password}
+                        placeholder="Enter password"
+                        onChangeText={text => { onChangePassword(text) }}
+                    />
 
-                <RenderForgotPassword />
+                    <RenderForgotPassword />
 
-            </View>
+                </View>
 
-            <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
-            <RenderCreateAccount />
-            <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
-        </ScrollView >
+                <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
+                <RenderCreateAccount />
+                <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
+            </ScrollView >
+        </>
     );
 }
 
@@ -135,6 +138,20 @@ const RenderForgotPassword = () => {
             Forgot Password?
         </Text>
     )
+}
+
+function RenderUpdateChecker() {
+
+    const minVersionCode = useSelector(state => state.common.minVersionCode);
+    const minVersionForce = useSelector(state => state.common.minVersionForce);
+
+    if (minVersionCode && Constants.expoConfig.extra.isDevelopment !== "true") {
+        notifyOfStoreUpdates(minVersionCode, minVersionForce);
+    }
+
+    notifyOfPublishedUpdates();
+
+    return null;
 }
 
 const RenderCreateAccount = () => {

@@ -82,7 +82,7 @@ export default function WalletScreen() {
 
     return (
         <ImageBackground source={require('../../../assets/images/vector-coin-background.jpg')}
-            style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
+            style={{ flex:1 }}
             resizeMethod="resize">
             <ScrollView style={styles.container}
             refreshControl={
