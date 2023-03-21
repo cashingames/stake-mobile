@@ -13,7 +13,7 @@ import AppButton from './AppButton';
 import { saveToken } from '../utils/ApiHelper';
 import { useNavigation } from '@react-navigation/native';
 import Constants from "expo-constants";
-import normalize from '../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import UniversalBottomSheet from './UniversalBottomSheet';
 import { googleSignUp, loginWithSocialLink, setToken } from '../features/Auth/AuthSlice';
 import analytics from '@react-native-firebase/analytics';
@@ -159,12 +159,13 @@ export default function SocialSignUp({ googleText }) {
     const GoogleButton = ({ loading, disabled, onPress, googleText }) => {
         return (
             <Pressable disabled={disabled} onPress={onPress} style={[styles.googleButton, disabled ? styles.disabled : {}]}>
+                 <Image
+                        style={styles.pointsIcon}
+                        source={require('../../assets/images/google.png')}
+                        resizeMode="cover"
+                    />
                 <Text style={styles.googletext}>{googleText} with Google</Text>
                 <View style={styles.googleImage}>
-                    <Image
-                        style={styles.pointsIcon}
-                        source={require('../../assets/images/google_icon.png')}
-                    />
                 </View>
                 {loading && <ActivityIndicator size="small" color='#ffff' />}
             </Pressable>
@@ -202,31 +203,37 @@ export default function SocialSignUp({ googleText }) {
 
 const styles = EStyleSheet.create({
     googleButton: {
-        backgroundColor: '#4299f5',
+        backgroundColor: '#fff',
         flexDirection: 'row',
         paddingVertical: Platform.OS === 'ios' ? normalize(9) : normalize(9),
         paddingHorizontal: normalize(12),
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 5,
+        borderRadius: 20,
+        width: responsiveScreenWidth(70),
+        height: normalize(38),
+        marginVertical: '0.5rem'
+
     },
     inputBoxes: {
         marginTop: '2.5rem'
     },
     googleImage: {
-        backgroundColor: '#FFFF',
-        borderRadius: 100,
+        // backgroundColor: '#FFFF',
+        // borderRadius: 100,
         padding: Platform.OS === 'ios' ? normalize(3) : normalize(5),
-        marginLeft: normalize(5)
+        marginRight: normalize(5)
     },
     pointsIcon: {
-        width: Platform.OS === 'ios' ? '.6rem' : '.65rem',
-        height: Platform.OS === 'ios' ? '.6rem' : '.65rem',
+        width: 17,
+        height: 17
     },
     googletext: {
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        fontSize: '0.7rem'
+        color: '#000',
+        fontFamily: 'graphik-regular',
+        fontSize: '1rem',
+        marginLeft: normalize(5)
+
     },
     inputContainer: {
         paddingHorizontal: normalize(18)

@@ -77,6 +77,8 @@ import AuthContactUs from './features/Support/AuthContactUs';
 import TourIndex from './features/Tour/Index';
 import Settings from './features/Support/Settings';
 import useSound from './utils/useSound';
+import Dashboard from './features/Dashboard';
+import { StatusBar } from 'react-native';
 
 const AppStack = createNativeStackNavigator();
 
@@ -100,6 +102,12 @@ function AppRouter() {
 			setLoading(false);
 		});
 	}, []);
+
+	useEffect(() => {
+        // StatusBar.setHidden(true)
+		StatusBar.setBackgroundColor('transparent')
+		StatusBar.setTranslucent(true)
+    }, []);
 
 	useEffect(() => {
 		if (!isTrue(token)) {
@@ -291,7 +299,7 @@ function AppRouter() {
 						{showIntro &&
 							<AppStack.Screen name="Landing" component={LandingPage} options={{ headerShown: false }} />
 						}
-						<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="Login" component={Dashboard} options={{ headerShown: false }} />
 						<AppStack.Screen name="AuthContact" component={AuthContactUs} options={{ headerShown: false }} />
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />

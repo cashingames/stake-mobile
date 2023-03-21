@@ -11,7 +11,7 @@ import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/Au
 import { triggerTour } from '../features/Tour/Index';
 import { saveToken } from '../utils/ApiHelper';
 import analytics from '@react-native-firebase/analytics';
-import normalize from '../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import UniversalBottomSheet from './UniversalBottomSheet';
 import { triggerNotifierForReferral } from './Notification';
@@ -173,8 +173,8 @@ const Login = ({ text }) => {
 
   return (
     <>
+     {loginError && <Text style={styles.errorText}>Facebook email not verified. Please verify and try again or log in with other options</Text>}
       <FacebookButton onPress={handleLogin} text={text} loading={loading} />
-      {loginError && <Text style={styles.errorText}>Facebook email not verified. Please verify and try again or log in with other options</Text>}
       <UniversalBottomSheet
         refBottomSheet={refRBSheet}
         height={560}
@@ -200,13 +200,13 @@ const Login = ({ text }) => {
 const FacebookButton = ({ onPress, text, loading }) => {
   return (
     <Pressable onPress={onPress} style={styles.fbButton}>
-      <Text style={styles.fbText}>{text} with Facebook</Text>
       <View style={styles.fbIcon}>
         {loading ? <ActivityIndicator size="small" color='#ffff' />
         :
-        <FontAwesome5 name="facebook-f" size={13} color='#fff' />
+        <FontAwesome5 name="facebook" size={22} color='#fff' />
       }
       </View>
+      <Text style={styles.fbText}>{text} with Facebook</Text>
     </Pressable>
   )
 }
@@ -214,13 +214,15 @@ const FacebookButton = ({ onPress, text, loading }) => {
 
 const styles = EStyleSheet.create({
   fbButton: {
-    backgroundColor: '#3b5998',
+    backgroundColor: '#3B5AAC',
     flexDirection: 'row',
     paddingVertical: Platform.OS === 'ios' ? normalize(9) : normalize(9),
     paddingHorizontal: normalize(12),
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 20,
+    width: responsiveScreenWidth(70),
+    height: normalize(38),
     marginVertical: '0.5rem'
   },
   fbIcon: {
@@ -228,13 +230,11 @@ const styles = EStyleSheet.create({
   },
   fbText: {
     color: '#FFFF',
-    fontFamily: 'graphik-medium',
-    fontSize: '0.7rem'
+    fontFamily: 'graphik-regular',
+    fontSize: '1rem',
+    marginLeft: normalize(5)
   },
-  pointsIcon: {
-    width: Platform.OS === 'ios' ? '.6rem' : '.65rem',
-    height: Platform.OS === 'ios' ? '.6rem' : '.65rem',
-  },
+ 
   errorCase : {
     justifyContent:'center'
   },
@@ -242,9 +242,9 @@ const styles = EStyleSheet.create({
   errorText: {
     textAlign: 'center',
     fontSize: '0.7rem',
-    fontFamily: 'graphik-regular',
+    fontFamily: 'graphik-medium',
     lineHeight: '1.4rem',
-    color: '#EF2F55',
+    color: '#fff',
     marginVertical: '0.7rem'
   }
 })

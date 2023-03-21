@@ -9,6 +9,7 @@ import UniversalBottomSheet from './UniversalBottomSheet';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import { triggerTour } from '../features/Tour/Index';
 import { triggerNotifierForReferral } from './Notification';
+import { responsiveScreenWidth } from '../utils/normalize';
 
 const AppleSignUp = () => {
     const navigation = useNavigation();
@@ -117,8 +118,8 @@ const AppleSignUp = () => {
             <AppleAuthentication.AppleAuthenticationButton
                 buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
                 buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-                cornerRadius={5}
-                style={{ width: 200, height: 40, marginTop: 20 }}
+                cornerRadius={20}
+                style={{ width: responsiveScreenWidth(70), height: 38, marginTop: 20 }}
                 onPress={loginWithApple}
             />
             <UniversalBottomSheet

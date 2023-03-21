@@ -13,8 +13,8 @@ export default {
   jsEngine: "hermes",
   scheme: "gameark",
   splash: {
-    image: "./assets/images/splash2.png",
-    resizeMode: "contain",
+    image: "./assets/images/splash-GA.png",
+    resizeMode: "cover",
     backgroundColor: "#ffffff"
   },
   androidStatusBar: {
