@@ -64,6 +64,7 @@ export default {
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
     "expo-notifications",
+    "./plugins/withAndroidNamespace",
     [
       "expo-build-properties",
       {
