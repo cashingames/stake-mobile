@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Pressable, Text, View, ScrollView, Platform } from 'react-native';
+import { Pressable, Text, View, ScrollView, Platform, ImageBackground, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
 
 import SocialSignUp from '../../shared/SocialSignUp';
-import AuthBanner from '../../shared/AuthBanner';
-import AuthTitle from '../../shared/AuthTitle';
-import AppButton from '../../shared/AppButton';
-import normalize, { responsiveScreenWidth } from '../../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenWidth } from '../../utils/normalize';
 import Input from '../../shared/Input';
 import crashlytics from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
@@ -18,16 +15,17 @@ import { loginUser } from './AuthSlice';
 import Login from '../../shared/FacebookLogin';
 import { triggerTour } from '../Tour/Index';
 import { triggerNotifierForReferral } from '../../shared/Notification';
+import { Image } from 'react-native';
+import AppButton from '../../shared/AppButton';
+import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 
 export default function LoginScreen({ navigation }) {
-
     const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'arunajoy2602@gmail.com' : '');
     const [password, setPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const dispatch = useDispatch();
-
+    const dispatch = useDispatch()
     const onChangeEmail = (value) => {
         setEmail(value)
     }
@@ -35,7 +33,6 @@ export default function LoginScreen({ navigation }) {
     const onChangePassword = (value) => {
         setPassword(value)
     }
-
     const onLogin = async () => {
         crashlytics().log('login clicked');
         await analytics().logEvent('login_clicked')
@@ -76,56 +73,47 @@ export default function LoginScreen({ navigation }) {
         setError(firstError)
     }
 
-    const contactUs = async () => {
-        await analytics().logEvent("clicked_contact_us_from_login")
-        navigation.navigate('AuthContact')
-    }
-
-
     useEffect(() => {
         const valid = email.length > 1 && password.length > 7;
         setCanLogin(valid);
         setError('');
     }, [email, password]);
-
+    
 
     return (
-        <ScrollView style={styles.container}>
+        <MixedContainerBackground>
+            <View style={styles.container}>
+                <View style={styles.logo}>
+                    <Image source={require('../../../assets/images/Ga-logo.png')} />
+                </View>
+                <View style={styles.inputSection}>
+                    {error.length > 0 &&
+                        <Text style={styles.errorBox}>{error}</Text>
+                    }
 
-            <AuthBanner />
+                    <Input
+                        label='Email/username'
+                        placeholder="johndoe or johndoe@example.com"
+                        value={email}
+                        onChangeText={text => onChangeEmail(text)}
+                    />
 
-            <View style={styles.headerBox}>
-                <AuthTitle text='Sign in' />
-            </View>
-
-            <View style={styles.inputContainer} >
-                {error.length > 0 &&
-                    <Text style={styles.errorBox}>{error}</Text>
-                }
-
-                <Input
-                    label='Email or username'
-                    placeholder="johndoe or johndoe@example.com"
-                    value={email}
-                    onChangeText={text => onChangeEmail(text)}
-                />
-
-                <Input
-                    type="password"
-                    label='Password'
-                    value={password}
-                    placeholder="Enter password"
-                    onChangeText={text => { onChangePassword(text) }}
-                />
-
-                <RenderForgotPassword />
-
-            </View>
-
-            <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
-            <RenderCreateAccount />
-            <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
-        </ScrollView >
+                    <Input
+                        type="password"
+                        label='Password'
+                        value={password}
+                        placeholder="Enter password"
+                        onChangeText={text => { onChangePassword(text) }}
+                    />
+                    <RenderForgotPassword />
+                    <AppButton text={loading ? 'Signing in...' : 'Sign in'}
+                         onPress={() => onLogin()} 
+                        disabled={!canLogin} />
+                </View>
+                <RenderCreateAccount navigation={navigation} />
+            </View >
+            </MixedContainerBackground>
+          
     );
 }
 
@@ -133,7 +121,7 @@ const RenderForgotPassword = () => {
     const navigation = useNavigation();
     return (
         <Text
-            style={[styles.linkText, styles.textRight]}
+            style={styles.forgotPassword}
             onPress={() => navigation.navigate('ForgotPassword')}
         >
             Forgot Password?
@@ -141,22 +129,28 @@ const RenderForgotPassword = () => {
     )
 }
 
+
 const RenderCreateAccount = () => {
     const navigation = useNavigation();
 
     return (
         <View style={styles.signIn}>
-            <View style={styles.create}>
-                <Text style={styles.signInText}>Don't have an account ?</Text>
+            <View style={styles.google}>
+                <Login text="Sign in" />
+                {Platform.OS === 'ios' && <AppleSignUp />}
+                <SocialSignUp googleText="Sign in" />
                 <Pressable onPress={() => navigation.navigate('Signup')}>
-                    <Text style={styles.linkText}> Create one</Text>
+                    <Text style={styles.singupLink}>Sign up with an Email</Text>
                 </Pressable>
             </View>
-            <Text style={styles.signInText}>or</Text>
-            <View style={styles.google}>
-                <SocialSignUp googleText="Sign in" />
-                <Login text="Sign in" />
-                {Platform.OS === 'ios' && <AppleSignUp /> }
+            <View style={styles.terms}>
+                <Pressable onPress={() => navigation.navigate('Privacy')}>
+                    <Text style={styles.linkText}>Privacy</Text>
+                </Pressable>
+                <Pressable onPress={() => navigation.navigate('Terms')}>
+                    <Text style={styles.linkText}>Terms & Conditions</Text>
+                </Pressable>
+
             </View>
         </View>
     )
@@ -166,14 +160,12 @@ const styles = EStyleSheet.create({
 
     container: {
         flex: 1,
-        paddingHorizontal: responsiveScreenWidth(3),
+        paddingVertical: responsiveScreenWidth(3),
+    },
 
-    },
-    headerBox: {
-        marginTop: responsiveScreenWidth(30),
-    },
-    inputContainer: {
-        marginTop: responsiveScreenWidth(10),
+    inputSection: {
+        marginTop: normalize(40),
+        paddingHorizontal: responsiveScreenWidth(3),
     },
 
     errorBox: {
@@ -183,28 +175,19 @@ const styles = EStyleSheet.create({
         borderRadius: normalize(8),
         textAlign: 'center',
         fontFamily: 'graphik-regular',
-        color: '#EF2F55',
+        color: '#fff',
         fontSize: '0.7rem'
     },
-    textRight: {
-        textAlign: "right"
+    forgotPassword: {
+        color: '#F1D818',
+        fontFamily: 'blues-smile',
+        fontSize: '1rem'
     },
-    linkText: {
-        color: '#EF2F55',
-        fontFamily: 'graphik-medium',
-        // marginLeft: normalize(15),
-        fontSize: '0.87rem'
-    },
-    divider: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
+
     signIn: {
         flexDirection: 'column',
-        // justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: responsiveScreenWidth(2)
+        marginTop: responsiveScreenWidth(2),
+        // marginTop: 10,
     },
     create: {
         flexDirection: 'row',
@@ -217,26 +200,27 @@ const styles = EStyleSheet.create({
         fontSize: '0.87rem'
     },
     google: {
-        alignItems:'center',
+        alignItems: 'center',
         marginVertical: normalize(10)
     },
-    verifySubText: {
-        fontSize: '.9rem',
-        color: '#151C2F',
-        fontFamily: 'graphik-medium',
-        textAlign: 'center',
-        lineHeight: '1.5rem',
-        opacity: 0.6,
-        marginTop: normalize(25)
+    logo: {
+        alignItems: 'center',
+        marginTop: normalize(45)
     },
-    verifyPhoneOtp: {
-        paddingHorizontal: normalize(20)
+
+    singupLink: {
+        color: '#fff',
+        fontSize: '1rem',
+        fontFamily: 'graphik-regular'
     },
-    contactUs: {
-        fontSize: '.7rem',
-        fontFamily: 'graphik-medium',
-        color:'#EF2F55',
-        textAlign:'center',
-        marginTop:'1rem'
+    terms: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: 20
+    },
+    linkText: {
+        fontSize: '0.8rem',
+        color: '#fff',
+        fontFamily: 'graphik-regular'
     }
 });

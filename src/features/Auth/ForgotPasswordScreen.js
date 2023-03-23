@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import Constants from 'expo-constants';
-
 import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import Input from '../../shared/Input';
 import { verifyAccount } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
+import GameArkLogo from '../../shared/GameArkLogo';
 
 export default function ({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -51,8 +52,9 @@ export default function ({ navigation }) {
     }, [email]);
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.content}>
+        <MixedContainerBackground>
+            <View style={styles.container}>
+                <GameArkLogo />
                 <ForgotPasswordTitle />
                 <View style={styles.form}>
 
@@ -61,7 +63,7 @@ export default function ({ navigation }) {
                     }
 
                     <Input
-                        label='Email or username'
+                        label='Email '
                         placeholder="johndoe or johndoe@example.com"
                         value={email}
                         onChangeText={text => onChangeEmail(text)}
@@ -72,7 +74,7 @@ export default function ({ navigation }) {
                     <AppButton onPress={() => onSend()} text={loading ? 'Sending...' : 'GET OTP'} disabled={!canSend} />
                 </View>
             </View>
-        </ScrollView>
+        </MixedContainerBackground>
     );
 }
 
@@ -90,26 +92,25 @@ const ForgotPasswordTitle = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        paddingTop: normalize(30),
+        paddingTop: normalize(10),
         paddingHorizontal: normalize(15),
 
     },
-    content: {
-        justifyContent: 'space-between'
-    },
     headerTextStyle: {
         fontSize: 26,
-        fontFamily: 'graphik-bold',
-        color: 'black',
+        fontFamily: 'blues-smile',
+        color: '#fff',
         paddingTop: normalize(10),
+        textAlign: 'center',
+        marginTop:normalize(40)
     },
     instructionTextStyle: {
-        fontSize: 14,
-        color: 'rgba(0, 0, 0, 0.6)',
-        fontFamily: 'graphik-regular',
+        fontSize: 12,
+        color: '#fff',
+        fontFamily: 'blues-smile',
         lineHeight: 20,
         marginTop: normalize(15),
+        textAlign: 'center'
     },
     errorBox: {
         marginVertical: normalize(20),
@@ -123,7 +124,6 @@ const styles = StyleSheet.create({
     },
     form: {
         marginTop: normalize(30),
-        marginBottom: normalize(60)
     },
     input: {
         height: normalize(40),

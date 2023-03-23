@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 export default function (props) {
-    const { label, type, error, editable, defaultValue } = props;
+    const { label, type, error, editable, defaultValue, style } = props;
 
     const [hidden, setHidden] = useState(type === "password");
 
@@ -23,7 +23,7 @@ export default function (props) {
             <Text style={styles.inputLabel} >{label}</Text>
             <View style={styles.inputContainer}>
                 <TextInput
-                    style={[styles.input, shouldUseEditableStyle ? {} : styles.disabled]}
+                    style={[styles.input, shouldUseEditableStyle ? {} : styles.disabled, style]}
                     {...props}
                     secureTextEntry={hidden}
                 />
@@ -46,10 +46,10 @@ export default function (props) {
 
 const styles = EStyleSheet.create({
     inputLabel: {
-        fontFamily: 'graphik-medium',
-        color: '#000000B2',
-        fontSize:'0.76rem',
-        marginBottom: normalize(8)
+        fontFamily: 'blues-smile',
+        color: '#fff',
+        fontSize:'1rem',
+        marginBottom: normalize(4)
     },
     inputContainer: {
         marginBottom: normalize(15),
@@ -57,23 +57,25 @@ const styles = EStyleSheet.create({
     input: {
         height: normalize(38),
         borderWidth: 1,
-        borderRadius: 10,
+        borderRadius: 20,
         paddingLeft: normalize(10),
         paddingRight: normalize(20),
         borderColor: '#CDD4DF',
-        fontFamily: 'graphik-regular',
+        fontFamily: 'blues-smile',
         color: '#00000080',
-        fontSize: '0.75rem'
+        fontSize: '0.75rem',
+        backgroundColor:"#fff"
+
     },
     passwordIcon: {
         position: 'absolute',
         right: '5%',
-        top: '33%',
+        top: '22%',
         // transform: [{ translateY: normalize(-5) }],
     },
     error: {
         fontFamily: 'graphik-regular',
-        color: '#EF2F55',
+        color: '#fff',
         fontSize: normalize(10)
     },
     disabled: {

@@ -118,6 +118,7 @@ function App() {
     'graphik-bold': require('./assets/fonts/GraphikBold.otf'),
     'graphik-italic': require('./assets/fonts/GraphikRegularItalic.otf'),
     'graphik-medium': require('./assets/fonts/GraphikMedium.otf'),
+    'blues-smile': require('./assets/fonts/Blues-Smile.otf')
   });
 
   const onRouteChange = async () => {
@@ -139,6 +140,7 @@ function App() {
     return null;
   }
 
+  
   return (
     <Provider store={store}>
       <NavigationContainer

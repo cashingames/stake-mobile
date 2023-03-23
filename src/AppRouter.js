@@ -77,6 +77,8 @@ import AuthContactUs from './features/Support/AuthContactUs';
 import TourIndex from './features/Tour/Index';
 import Settings from './features/Support/Settings';
 import useSound from './utils/useSound';
+import Dashboard from './features/Dashboard';
+import { StatusBar } from 'react-native';
 
 const AppStack = createNativeStackNavigator();
 
@@ -100,6 +102,10 @@ function AppRouter() {
 			setLoading(false);
 		});
 	}, []);
+
+	useEffect(() => {
+		StatusBar.setHidden(true)
+    }, []);
 
 	useEffect(() => {
 		if (!isTrue(token)) {
@@ -295,10 +301,10 @@ function AppRouter() {
 						<AppStack.Screen name="AuthContact" component={AuthContactUs} options={{ headerShown: false }} />
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
-						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-						<AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} />
-						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} />
-						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} />
+						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} options={{ headerShown: false }}/>
+						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }}/>
+						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} options={{ headerShown: false }}/>
 						<AppStack.Screen name="SignupVerifyEmail" component={SignupVerifyEmailScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupVerifyPhone" component={SignupVerifyPhoneScreen} options={{ headerShown: false }} />
 
