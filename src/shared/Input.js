@@ -48,8 +48,8 @@ const styles = EStyleSheet.create({
     inputLabel: {
         fontFamily: 'blues-smile',
         color: '#fff',
-        fontSize:'0.76rem',
-        marginBottom: normalize(8)
+        fontSize:'1rem',
+        marginBottom: normalize(4)
     },
     inputContainer: {
         marginBottom: normalize(15),
@@ -70,7 +70,7 @@ const styles = EStyleSheet.create({
     passwordIcon: {
         position: 'absolute',
         right: '5%',
-        top: '33%',
+        top: '22%',
         // transform: [{ translateY: normalize(-5) }],
     },
     error: {

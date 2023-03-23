@@ -32,7 +32,7 @@ const styles = EStyleSheet.create({
     },
     resendText: {
         fontSize: '.9rem',
-        color: '#EF2F55',
+        color: '#fff',
         fontFamily: 'graphik-medium',
         textAlign: 'center',
         textDecorationLine: 'underline',
@@ -44,12 +44,12 @@ const styles = EStyleSheet.create({
     },
     resendTimer: {
         fontSize: '.75rem',
-        color: '#EF2F55',
+        color: '#fff',
         fontFamily: 'graphik-medium',
     },
     statusText: {
         fontSize: '.75rem',
-        color: '#000000',
+        color: '#fff',
         fontFamily: 'graphik-medium',
     }
 })

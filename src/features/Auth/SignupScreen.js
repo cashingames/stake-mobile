@@ -12,6 +12,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import analytics from '@react-native-firebase/analytics';
 import { ImageBackground } from 'react-native';
 import { Dimensions } from 'react-native';
+import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 
 
 
@@ -62,65 +63,59 @@ const SignupScreen = () => {
     }, [emailErr, passErr, password, checked, uNameErr, username])
 
     return (
-        <ImageBackground source={require('../../../assets/images/login-image.png')}
-            style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
-            resizeMethod="resize">
-            <ImageBackground source={require('../../../assets/images/trans-image.png')}
-                style={styles.secondBgImg}
-                resizeMethod="resize">
-                <View style={styles.headerBox}>
-                    <AuthTitle text='Welcome'
-                        style={styles.headerTitle} />
-                </View>
-                <View style={styles.container}>
-                    <View style={styles.inputContainer}>
-                        <Input
-                            label='Enter your email address'
-                            // placeholder="johndoe@example.com"
-                            value={email}
-                            type="email"
-                            error={emailErr && '*email is not valid'}
-                            onChangeText={text => onChangeEmail(text)}
-                        />
-
-                        <Input
-                            label='Username'
-                            value={username}
-                            type="text"
-                            error={uNameErr && 'username is not valid'}
-                            onChangeText={text => onChangeUsername(text)}
-                        />
-
-                        <Input
-                            type="password"
-                            label='Password'
-                            value={password}
-                            error={passErr && '*password must not be less than 8 digits'}
-                            onChangeText={text => { onChangePassword(text) }}
-                        />
-
-                    </View>
-
-                    <CheckBox
-                        containerStyle={styles.agreement}
-                        checked={checked}
-                        iconType="material-community"
-                        checkedIcon="checkbox-marked"
-                        uncheckedIcon="checkbox-blank-outline"
-                        checkedColor="#fff"
-                        uncheckedColor='#fff'
-                        onPress={() => setChecked(!checked)}
-                        title={
-                            <Text style={styles.permission}>I agree to the
-                                <Link style={styles.linkText} to={{ screen: 'Terms' }}> terms & condition </Link>and
-                                <Link style={styles.linkText} to={{ screen: 'Privacy' }}> privacy Policy</Link>
-                            </Text>
-                        }
+        <MixedContainerBackground>
+            <View style={styles.headerBox}>
+                <AuthTitle text='Welcome'
+                    style={styles.headerTitle} />
+            </View>
+            <View style={styles.container}>
+                <View style={styles.inputContainer}>
+                    <Input
+                        label='Enter your email address'
+                        // placeholder="johndoe@example.com"
+                        value={email}
+                        type="email"
+                        error={emailErr && '*email is not valid'}
+                        onChangeText={text => onChangeEmail(text)}
                     />
-                    <AppButton text='Continue' disabled={!canSend} style={styles.submitBtn} textStyle={styles.btnText} />
+
+                    <Input
+                        label='Username'
+                        value={username}
+                        type="text"
+                        error={uNameErr && 'username is not valid'}
+                        onChangeText={text => onChangeUsername(text)}
+                    />
+
+                    <Input
+                        type="password"
+                        label='Password'
+                        value={password}
+                        error={passErr && '*password must not be less than 8 digits'}
+                        onChangeText={text => { onChangePassword(text) }}
+                    />
+
                 </View>
-            </ImageBackground>
-        </ImageBackground>
+
+                <CheckBox
+                    containerStyle={styles.agreement}
+                    checked={checked}
+                    iconType="material-community"
+                    checkedIcon="checkbox-marked"
+                    uncheckedIcon="checkbox-blank-outline"
+                    checkedColor="#fff"
+                    uncheckedColor='#fff'
+                    onPress={() => setChecked(!checked)}
+                    title={
+                        <Text style={styles.permission}>I agree to the
+                            <Link style={styles.linkText} to={{ screen: 'Terms' }}> terms & condition </Link>and
+                            <Link style={styles.linkText} to={{ screen: 'Privacy' }}> privacy Policy</Link>
+                        </Text>
+                    }
+                />
+                <AppButton text='Continue' disabled={!canSend} style={styles.submitBtn} textStyle={styles.btnText} />
+            </View>
+        </MixedContainerBackground>
     );
 }
 
@@ -134,12 +129,6 @@ const styles = EStyleSheet.create({
         paddingHorizontal: responsiveScreenWidth(4),
 
     },
-
-    secondBgImg: {
-        flex: 1,
-        height: responsiveScreenHeight(100)
-    },
-
     headerBox: {
         marginTop: responsiveScreenWidth(13),
         paddingTop: responsiveScreenWidth(3)
@@ -206,7 +195,7 @@ const styles = EStyleSheet.create({
 
     btnText: {
         color: '#2D53A0',
-        fontFamily:'blues-smile'
+        fontFamily: 'blues-smile'
     },
 
     disabled: {

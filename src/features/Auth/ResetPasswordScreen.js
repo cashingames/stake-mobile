@@ -9,6 +9,9 @@ import Input from '../../shared/Input';
 import { resetPassword } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
+import GameArkLogo from '../../shared/GameArkLogo';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function ({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -38,8 +41,8 @@ export default function ({ navigation }) {
             .then((originalPromiseResult) => {
                 setLoading(false);
                 setCanSend(true);
-                Alert.alert('Password reset successful')
-                navigation.navigate('Login');
+                // Alert.alert('Password reset successful')
+                navigation.navigate('ResetPasswordSuccess');
             })
             .catch((rejectedValueOrSerializedError) => {
                 // console.log(rejectedValueOrSerializedError)
@@ -55,11 +58,12 @@ export default function ({ navigation }) {
     }, [passErr]);
 
     return (
+        <MixedContainerBackground>
         <ScrollView style={styles.container}>
             <View style={styles.content}>
+                <GameArkLogo />
                 <ForgotPasswordTitle />
                 <View style={styles.form}>
-
                     {error.length > 0 &&
                         <Text style={styles.errorBox}>{error}</Text>
                     }
@@ -79,6 +83,7 @@ export default function ({ navigation }) {
                 </View>
             </View>
         </ScrollView>
+        </MixedContainerBackground>
     );
 }
 
@@ -93,29 +98,28 @@ const ForgotPasswordTitle = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        paddingTop: normalize(30),
+        // backgroundColor: '#fff',
+        paddingTop: normalize(10),
         paddingHorizontal: normalize(15),
 
     },
-    content: {
-        justifyContent: 'space-between'
-    },
     headerTextStyle: {
-        fontSize: 26,
-        fontFamily: 'graphik-bold',
-        color: 'black',
+        fontSize: '2.2rem',
+        fontFamily: 'blues-smile',
+        color: '#fff',
         paddingTop: normalize(10),
+        textAlign:'center',
+        marginTop:normalize(48)
     },
     instructionTextStyle: {
-        fontSize: 14,
-        color: 'rgba(0, 0, 0, 0.6)',
-        fontFamily: 'graphik-regular',
+        fontSize: '0.8rem',
+        color: '#fff',
+        fontFamily: 'blues-smile',
         lineHeight: 20,
-        marginTop: normalize(15),
+        marginTop: normalize(7),
     },
     errorBox: {
         marginVertical: normalize(20),
@@ -129,7 +133,6 @@ const styles = StyleSheet.create({
     },
     form: {
         marginTop: normalize(30),
-        marginBottom: normalize(60)
     },
     input: {
         height: normalize(40),

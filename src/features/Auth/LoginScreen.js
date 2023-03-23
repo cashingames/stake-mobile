@@ -15,10 +15,9 @@ import { loginUser } from './AuthSlice';
 import Login from '../../shared/FacebookLogin';
 import { triggerTour } from '../Tour/Index';
 import { triggerNotifierForReferral } from '../../shared/Notification';
-import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
-import { StatusBar } from 'react-native';
 import { Image } from 'react-native';
 import AppButton from '../../shared/AppButton';
+import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'arunajoy2602@gmail.com' : '');
@@ -26,7 +25,7 @@ export default function LoginScreen({ navigation }) {
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
+    const dispatch = useDispatch()
     const onChangeEmail = (value) => {
         setEmail(value)
     }
@@ -34,25 +33,55 @@ export default function LoginScreen({ navigation }) {
     const onChangePassword = (value) => {
         setPassword(value)
     }
+    const onLogin = async () => {
+        crashlytics().log('login clicked');
+        await analytics().logEvent('login_clicked')
+        setLoading(true);
+        setCanLogin(false);
+        setError("");
 
+        dispatch(loginUser({ email, password })).unwrap().then((response) => {
+            console.info("login response 1", response);
+            if(response?.isFirstTime || false){
+                triggerTour(navigation)
+                triggerNotifierForReferral()
+            }
+        }).catch((err) => {
+            processLoginError(err)
+        }).finally(() => {
+            setLoading(false);
+            setCanLogin(true);
+        });
+
+    }
+
+    const processLoginError = async (err) => {
+        const errors = err.errors;
+
+        if (err.message == 'Account not verified') {
+            await analytics().logEvent("unverified_user", {
+                'username' : errors.username,
+                'phone_number': errors.phone_number
+            })
+            navigation.navigate('SignupVerifyPhone', {
+                phone_number: errors.phoneNumber,
+                username: errors.username, next_resend_minutes: 1
+            })
+        }
+
+        const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
+        setError(firstError)
+    }
 
     useEffect(() => {
         const valid = email.length > 1 && password.length > 7;
         setCanLogin(valid);
         setError('');
     }, [email, password]);
-    // useEffect(() => {
-    //     StatusBar.setHidden(true)
-    //     // StatusBar.setNetworkActivityIndicatorVisible(false)
-    // }, []);
+    
 
     return (
-        <ImageBackground source={require('../../../assets/images/login-image.png')}
-            style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
-            resizeMethod="resize">
-                 <ImageBackground source={require('../../../assets/images/trans-image.png')}
-                    style={styles.secondBgImg}
-                    resizeMethod="resize">
+        <MixedContainerBackground>
             <View style={styles.container}>
                 <View style={styles.logo}>
                     <Image source={require('../../../assets/images/Ga-logo.png')} />
@@ -63,7 +92,7 @@ export default function LoginScreen({ navigation }) {
                     }
 
                     <Input
-                        label='Email or username'
+                        label='Email/username'
                         placeholder="johndoe or johndoe@example.com"
                         value={email}
                         onChangeText={text => onChangeEmail(text)}
@@ -78,15 +107,13 @@ export default function LoginScreen({ navigation }) {
                     />
                     <RenderForgotPassword />
                     <AppButton text={loading ? 'Signing in...' : 'Sign in'}
-                        //  onPress={() => onLogin()} 
-                        style={styles.loginBtn}
-                        textStyle={styles.loginBtnText}
+                         onPress={() => onLogin()} 
                         disabled={!canLogin} />
                 </View>
-                    <RenderCreateAccount navigation={navigation} />
-                    </View >
-                </ImageBackground>
-        </ImageBackground>
+                <RenderCreateAccount navigation={navigation} />
+            </View >
+            </MixedContainerBackground>
+          
     );
 }
 
@@ -95,7 +122,7 @@ const RenderForgotPassword = () => {
     return (
         <Text
             style={styles.forgotPassword}
-            // onPress={() => navigation.navigate('ForgotPassword')}
+            onPress={() => navigation.navigate('ForgotPassword')}
         >
             Forgot Password?
         </Text>
@@ -141,15 +168,22 @@ const styles = EStyleSheet.create({
         paddingHorizontal: responsiveScreenWidth(3),
     },
 
+    errorBox: {
+        marginVertical: responsiveScreenWidth(5),
+        backgroundColor: '#F442741A',
+        paddingVertical: normalize(6),
+        borderRadius: normalize(8),
+        textAlign: 'center',
+        fontFamily: 'graphik-regular',
+        color: '#fff',
+        fontSize: '0.7rem'
+    },
     forgotPassword: {
         color: '#F1D818',
         fontFamily: 'blues-smile',
         fontSize: '1rem'
     },
-    secondBgImg: {
-        flex:1
-    },
-   
+
     signIn: {
         flexDirection: 'column',
         marginTop: responsiveScreenWidth(2),
@@ -172,18 +206,6 @@ const styles = EStyleSheet.create({
     logo: {
         alignItems: 'center',
         marginTop: normalize(45)
-    },
-
-    loginBtn: {
-        backgroundColor: '#F1D818',
-        borderBottomColor: '#B58201',
-        borderBottomWidth: 4,
-    },
-
-    loginBtnText: {
-        color:'#2D53A0',
-        fontFamily:'blues-smile',
-        fontSize:'1rem'
     },
 
     singupLink: {
