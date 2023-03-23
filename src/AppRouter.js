@@ -51,6 +51,7 @@ import AuthContactUs from './features/Support/AuthContactUs';
 import EmailVerificationScreen from './features/Auth/EmailVerificationScreen';
 import GameLoadingScreen from './features/Games/GameLoadingScreen';
 import ChallengeSelectPlayerScreen from './features/Games/ChallengeSelectPlayerScreen';
+import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -133,6 +134,11 @@ function AppRouter() {
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Select Player' }} />
+						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{ title: 'Play Challenge', 	headerStyle: {
+								backgroundColor: '#EDDA74',
+							},
+							headerTintColor: '#000000', }} />
+
 
 
 

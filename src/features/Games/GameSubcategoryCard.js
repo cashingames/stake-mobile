@@ -17,7 +17,7 @@ export default ({ subcategory }) => {
     const clicked = () => {
         dispatch(setGameCategory(subcategory));
         if (gameMode.name === "CHALLENGE")
-            navigation.navigate('ChallengeSelectPlayer');
+            navigation.navigate('ChallengeStaking');
         else
             navigation.navigate('GameStaking');
     };
