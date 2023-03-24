@@ -200,7 +200,7 @@ const styles = EStyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         marginTop: normalize(10),
-        marginTop: normalize(40)
+        marginTop: normalize(20)
     },
     instructionTextStyle: {
         fontSize: '0.8rem',
@@ -244,7 +244,7 @@ const styles = EStyleSheet.create({
     },
 
     button: {
-        marginTop: normalize(15),
+        // marginTop: normalize(15),
     }
 }
 )

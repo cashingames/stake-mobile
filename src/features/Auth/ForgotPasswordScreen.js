@@ -72,7 +72,7 @@ export default function ({ navigation }) {
 
                 </View>
                 <View style={styles.button}>
-                    <GaButton onPress={() => onSend()} text={loading ? 'Sending...' : 'GET OTP'} disabled={!canSend} />
+                    <GaButton onPress={() => onSend()} text={loading ? 'Sending...' : 'Send Email'} disabled={!canSend} />
                 </View>
             </View>
         </MixedContainerBackground>
@@ -104,7 +104,7 @@ const styles = EStyleSheet.create({
         color: '#fff',
         paddingTop: normalize(10),
         textAlign: 'center',
-        marginTop: normalize(50)
+        marginTop: normalize(40)
     },
     instructionTextStyle: {
         fontSize: 12,

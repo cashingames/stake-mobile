@@ -61,7 +61,7 @@ const styles = EStyleSheet.create({
         paddingLeft: normalize(10),
         paddingRight: normalize(20),
         borderColor: '#CDD4DF',
-        fontFamily: 'blues-smile',
+        fontFamily: 'graphik-regular',
         color: '#00000080',
         fontSize: '0.75rem',
         backgroundColor:"#fff"

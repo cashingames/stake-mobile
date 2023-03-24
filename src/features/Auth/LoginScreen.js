@@ -81,6 +81,7 @@ export default function LoginScreen({ navigation }) {
 
 
     return (
+        <ScrollView>
         <MixedContainerBackground>
             <View style={styles.container}>
                 <View style={styles.logo}>
@@ -111,9 +112,9 @@ export default function LoginScreen({ navigation }) {
                         disabled={!canLogin} />
                 </View>
                 <RenderCreateAccount navigation={navigation} />
-            </View >
+                </View>
         </MixedContainerBackground>
-
+        </ScrollView >
     );
 }
 

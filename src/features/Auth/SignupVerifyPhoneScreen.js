@@ -132,7 +132,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                 <View style={styles.form}>
                     <TextInput
                         ref={pin1Ref}
-                        keyboardType={'number-pad'}
+                        keyboardType={'phone-pad'}
                         maxLength={1}
                         value={otp1}
                         onChangeText={(otp1) => {

@@ -57,22 +57,21 @@ const AppleSignUp = () => {
     const registerUserWithApple = () => {
         setSaving(true);
         dispatch(registerWithSocialLink({
-            email,
-            firstName,
-            lastName,
-            phone_number,
-            username,
-            password,
-            password_confirmation,
-            referrer
+          email,
+          firstName,
+          lastName,
+          phone_number,
+          username,
+          referrer
         })).then(unwrapResult)
-            .then((originalPromiseResult) => {
-                // console.log(originalPromiseResult);
-                saveToken(originalPromiseResult.data.token)
-                triggerTour(navigation)
-                triggerNotifierForReferral()
-                navigation.navigate('AppRouter')
-            })
+          .then((originalPromiseResult) => {
+            triggerTour(navigation)
+            triggerNotifierForReferral()
+            saveToken(originalPromiseResult.data.token)
+            closeBottomSheet()
+            navigation.navigate('AppRouter')
+            setSaving(false)
+          })
     }
 
     const loginWithApple = async () => {

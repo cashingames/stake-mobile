@@ -7,7 +7,6 @@ import { ScrollView } from 'react-native-gesture-handler'
 
 const MixedContainerBackground = ({ children }) => {
     return (
-        <ScrollView>
         <ImageBackground source={require('../../../assets/images/login-image.png')}
             style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
             resizeMethod="resize">
@@ -17,7 +16,6 @@ const MixedContainerBackground = ({ children }) => {
                 {children}
             </ImageBackground>
         </ImageBackground>
-        </ScrollView>
     )
 }
 
