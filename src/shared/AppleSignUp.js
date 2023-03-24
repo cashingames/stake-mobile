@@ -57,21 +57,21 @@ const AppleSignUp = () => {
     const registerUserWithApple = () => {
         setSaving(true);
         dispatch(registerWithSocialLink({
-          email,
-          firstName,
-          lastName,
-          phone_number,
-          username,
-          referrer
+            email,
+            firstName,
+            lastName,
+            phone_number,
+            username,
+            referrer
         })).then(unwrapResult)
-          .then((originalPromiseResult) => {
-            triggerTour(navigation)
-            triggerNotifierForReferral()
-            saveToken(originalPromiseResult.data.token)
-            closeBottomSheet()
-            navigation.navigate('AppRouter')
-            setSaving(false)
-          })
+            .then((originalPromiseResult) => {
+                triggerTour(navigation)
+                triggerNotifierForReferral()
+                saveToken(originalPromiseResult.data.token)
+                closeBottomSheet()
+                navigation.navigate('AppRouter')
+                setSaving(false)
+            })
     }
 
     const loginWithApple = async () => {
@@ -132,9 +132,11 @@ const AppleSignUp = () => {
                     phoneNumberErr={phoneNumberErr}
                     onChangePhoneNumber={onChangePhoneNumber}
                     onChangeUserName={onChangeUserName}
-                    usernameErr={usernameErr} onChangReferrer={onChangReferrer}
+                    usernameErr={usernameErr}
+                    onChangReferrer={onChangReferrer}
                     canSave={canSave}
                     saving={saving}
+                    setUsernameError={setUsernameError}
                     onClose={closeBottomSheet}
                 />}
             />
