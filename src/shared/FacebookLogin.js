@@ -109,7 +109,7 @@ const Login = ({ text }) => {
           firstName: userProfile.first_name,
           lastName: userProfile.last_name,
           email: userProfile.email
-        })).then(unwrapResult)          
+        })).then(unwrapResult)
         .then((originalPromiseResult) => {
           if (originalPromiseResult.data.isFirstTime) {
             setEmail(originalPromiseResult.data.email)
@@ -127,12 +127,12 @@ const Login = ({ text }) => {
           Alert.alert('Network error. Please, try again later.')
           setLoading(false)
         })
-        await analytics().logEvent('signin_with_facebook', {
-          'id': userProfile.first_name,
-          'email': userProfile.email,
-          'username': user.username
+      await analytics().logEvent('signin_with_facebook', {
+        'id': userProfile.first_name,
+        'email': userProfile.email,
+        'username': user.username
       })
-    } catch(error) {
+    } catch (error) {
       logout()
       setLoginError(true)
       setLoading(false)
@@ -173,7 +173,12 @@ const Login = ({ text }) => {
 
   return (
     <>
-     {loginError && <Text style={styles.errorText}>Facebook email not verified. Please verify and try again or log in with other options</Text>}
+       {loginError &&
+        <>
+          <Text style={styles.errorText}>Facebook email not verified.</Text>
+          <Text style={styles.errorText}>Please verify and try again or log in with other options</Text>
+        </>
+       }
       <FacebookButton onPress={handleLogin} text={text} loading={loading} />
       <UniversalBottomSheet
         refBottomSheet={refRBSheet}
@@ -202,9 +207,9 @@ const FacebookButton = ({ onPress, text, loading }) => {
     <Pressable onPress={onPress} style={styles.fbButton}>
       <View style={styles.fbIcon}>
         {loading ? <ActivityIndicator size="small" color='#ffff' />
-        :
-        <FontAwesome5 name="facebook" size={22} color='#fff' />
-      }
+          :
+          <FontAwesome5 name="facebook" size={22} color='#fff' />
+        }
       </View>
       <Text style={styles.fbText}>{text} with Facebook</Text>
     </Pressable>
@@ -234,9 +239,9 @@ const styles = EStyleSheet.create({
     fontSize: '1rem',
     marginLeft: normalize(5)
   },
- 
-  errorCase : {
-    justifyContent:'center'
+
+  errorCase: {
+    justifyContent: 'center'
   },
 
   errorText: {
@@ -245,7 +250,7 @@ const styles = EStyleSheet.create({
     fontFamily: 'graphik-medium',
     lineHeight: '1.4rem',
     color: '#fff',
-    marginVertical: '0.7rem'
+    // marginVertical: '0.7rem'
   }
 })
 export default Login;

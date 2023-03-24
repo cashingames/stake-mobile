@@ -16,8 +16,8 @@ import Login from '../../shared/FacebookLogin';
 import { triggerTour } from '../Tour/Index';
 import { triggerNotifierForReferral } from '../../shared/Notification';
 import { Image } from 'react-native';
-import AppButton from '../../shared/AppButton';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
+import GaButton from '../../shared/GaButton';
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'arunajoy2602@gmail.com' : '');
@@ -42,7 +42,7 @@ export default function LoginScreen({ navigation }) {
 
         dispatch(loginUser({ email, password })).unwrap().then((response) => {
             console.info("login response 1", response);
-            if(response?.isFirstTime || false){
+            if (response?.isFirstTime || false) {
                 triggerTour(navigation)
                 triggerNotifierForReferral()
             }
@@ -60,7 +60,7 @@ export default function LoginScreen({ navigation }) {
 
         if (err.message == 'Account not verified') {
             await analytics().logEvent("unverified_user", {
-                'username' : errors.username,
+                'username': errors.username,
                 'phone_number': errors.phone_number
             })
             navigation.navigate('SignupVerifyPhone', {
@@ -78,7 +78,7 @@ export default function LoginScreen({ navigation }) {
         setCanLogin(valid);
         setError('');
     }, [email, password]);
-    
+
 
     return (
         <MixedContainerBackground>
@@ -87,9 +87,9 @@ export default function LoginScreen({ navigation }) {
                     <Image source={require('../../../assets/images/Ga-logo.png')} />
                 </View>
                 <View style={styles.inputSection}>
-                    {error.length > 0 &&
-                        <Text style={styles.errorBox}>{error}</Text>
-                    }
+                     {error.length > 0 && 
+                    <Text style={styles.errorBox}>{error}</Text>
+                      }
 
                     <Input
                         label='Email/username'
@@ -106,14 +106,14 @@ export default function LoginScreen({ navigation }) {
                         onChangeText={text => { onChangePassword(text) }}
                     />
                     <RenderForgotPassword />
-                    <AppButton text={loading ? 'Signing in...' : 'Sign in'}
-                         onPress={() => onLogin()} 
+                    <GaButton text={loading ? 'Signing in...' : 'Sign in'}
+                        onPress={() => onLogin()}
                         disabled={!canLogin} />
                 </View>
                 <RenderCreateAccount navigation={navigation} />
             </View >
-            </MixedContainerBackground>
-          
+        </MixedContainerBackground>
+
     );
 }
 
@@ -145,7 +145,7 @@ const RenderCreateAccount = () => {
             </View>
             <View style={styles.terms}>
                 <Pressable onPress={() => navigation.navigate('Privacy')}>
-                    <Text style={styles.linkText}>Privacy</Text>
+                    <Text style={styles.linkText}>Privacy Policy</Text>
                 </Pressable>
                 <Pressable onPress={() => navigation.navigate('Terms')}>
                     <Text style={styles.linkText}>Terms & Conditions</Text>
@@ -161,22 +161,22 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingVertical: responsiveScreenWidth(3),
+        paddingHorizontal: responsiveScreenWidth(3)
     },
 
     inputSection: {
-        marginTop: normalize(40),
-        paddingHorizontal: responsiveScreenWidth(3),
+        marginTop: normalize(120),
     },
 
     errorBox: {
-        marginVertical: responsiveScreenWidth(5),
+        marginVertical: responsiveScreenWidth(3),
         backgroundColor: '#F442741A',
         paddingVertical: normalize(6),
         borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'graphik-regular',
-        color: '#fff',
-        fontSize: '0.7rem'
+        fontSize: '0.7rem',
+        fontFamily: 'blues-smile',
+        color: "#fff"
     },
     forgotPassword: {
         color: '#F1D818',

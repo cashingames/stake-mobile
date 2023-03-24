@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 export default function (props) {
-    const { label, type, error, editable, defaultValue, style } = props;
+    const { label, type, error, editable, defaultValue, style, labelStyle } = props;
 
     const [hidden, setHidden] = useState(type === "password");
 
@@ -20,7 +20,7 @@ export default function (props) {
 
     return (
         <>
-            <Text style={styles.inputLabel} >{label}</Text>
+            <Text style={[styles.inputLabel, labelStyle]} >{label}</Text>
             <View style={styles.inputContainer}>
                 <TextInput
                     style={[styles.input, shouldUseEditableStyle ? {} : styles.disabled, style]}
@@ -74,9 +74,10 @@ const styles = EStyleSheet.create({
         // transform: [{ translateY: normalize(-5) }],
     },
     error: {
-        fontFamily: 'graphik-regular',
         color: '#fff',
-        fontSize: normalize(10)
+        fontSize: normalize(10),
+        fontSize: '0.5rem',
+        fontFamily: 'blues-smile',
     },
     disabled: {
         borderColor: '#fff',

@@ -6,8 +6,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
-import AppButton from '../../shared/AppButton';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import ResendOtp from '../../shared/ResendOtp';
 import { setUserPasswordResetToken, verifyOtp, verifyAccount } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -17,6 +16,7 @@ import { TextInput } from 'react-native';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import GameArkLogo from '../../shared/GameArkLogo';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import GaButton from '../../shared/GaButton';
 
 export default function VerifyEmailScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -105,8 +105,8 @@ export default function VerifyEmailScreen({ navigation, route }) {
 
                 <Text style={styles.instructionTextStyle}>Enter the One-time passcode we sent  to the email you provided</Text>
                 {error.length > 0 &&
-                    <Text style={styles.errorBox}>{error}</Text>
-                }
+                    <Text style={styles.errorBox}>heelo {error}</Text>
+                 }
                 <Text style={styles.otpText}>Enter otp</Text>
                 <View style={styles.form}>
                     <TextInput
@@ -177,7 +177,7 @@ export default function VerifyEmailScreen({ navigation, route }) {
                         onPress={resend} />
                 </View>
                 <View style={styles.button}>
-                    <AppButton onPress={() => nextAction()} text="verify otp" disabled={!active} />
+                    <GaButton onPress={() => nextAction()} text="verify otp" disabled={!active} />
                 </View>
 
             </SafeAreaView>
@@ -210,18 +210,18 @@ const styles = EStyleSheet.create({
         marginTop: normalize(7),
     },
     errorBox: {
-        marginVertical: normalize(20),
+        marginVertical: responsiveScreenWidth(3),
         backgroundColor: '#F442741A',
         paddingVertical: normalize(6),
         borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'graphik-regular',
-        color: '#EF2F55',
-        fontSize: normalize(10)
+        fontSize: '0.7rem',
+        fontFamily: 'blues-smile',
+        color: "#fff"
     },
     otpText: {
         color:'#fff',
-        marginTop: normalize(20),
+        marginTop: normalize(10),
         fontFamily: 'blues-smile',
         fontSize:'1.2rem'
     },

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, ScrollView, BackHandler, TextInput, Pressable, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import LottieAnimations from '../../shared/LottieAnimations';
@@ -16,6 +15,7 @@ import { calculateTimeRemaining } from '../../utils/utils';
 import analytics from '@react-native-firebase/analytics';
 import { triggerTour } from '../Tour/Index';
 import { triggerNotifierForReferral } from '../../shared/Notification';
+import GaButton from '../../shared/GaButton';
 
 
 const SignupVerifyPhoneScreen = ({ navigation, route }) => {
@@ -196,7 +196,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                         isCountdownInProgress={isCountdownInProgress}
                         onPress={resendButton} />
                 </View>
-                <AppButton text={loading ? 'Verifying...' : 'Login'} disabled={loading} onPress={goToDashboard} />
+                <GaButton text={loading ? 'Verifying...' : 'Login'} disabled={loading} onPress={goToDashboard} />
             </ScrollView>
         </View>
 

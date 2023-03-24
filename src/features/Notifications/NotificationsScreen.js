@@ -238,7 +238,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '1rem',
         color: '#FFFF',
-        textAlingn: 'center',
+        textAlign: 'center',
 
     },
     bellContainer: {

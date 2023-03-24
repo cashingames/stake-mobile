@@ -3,9 +3,11 @@ import React from 'react'
 import { ImageBackground } from 'react-native'
 import { Dimensions } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const MixedContainerBackground = ({ children }) => {
     return (
+        <ScrollView>
         <ImageBackground source={require('../../../assets/images/login-image.png')}
             style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
             resizeMethod="resize">
@@ -15,6 +17,7 @@ const MixedContainerBackground = ({ children }) => {
                 {children}
             </ImageBackground>
         </ImageBackground>
+        </ScrollView>
     )
 }
 

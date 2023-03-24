@@ -110,12 +110,14 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         value={username}
                         onChangeText={setUsername}
                         editable={false}
+                        labelStyle={styles.inputLabel}
                     />
                     <Input
                         label='Email'
                         value={email}
                         onChangeText={setEmail}
                         editable={false}
+                        labelStyle={styles.inputLabel}
                     />
 
                     <>
@@ -165,12 +167,14 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         value={firstName}
                         onChangeText={text => { onChangeFirstName(text) }}
                         error={firstNameErr && '*first name must not be empty'}
+                        labelStyle={styles.inputLabel}
                     />
                     <Input
                         label='Last name'
                         value={lastName}
                         onChangeText={text => { onChangeLastName(text) }}
                         error={lastNameErr && '*last name must not be empty'}
+                        labelStyle={styles.inputLabel}
                     />
 
 
@@ -181,6 +185,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                                 label='Date of Birth'
                                 value={dateOfBirth.toDateString()}
                                 onPressIn={() => setShowDatePicker(true)}
+                                labelStyle={styles.inputLabel}
                             />
 
                             :
@@ -236,7 +241,7 @@ const styles = EStyleSheet.create({
         paddingTop: normalize(20),
     },
     inputLabel: {
-        fontFamily: 'graphik-medium',
+        fontFamily: 'blues-smile',
         color: '#000000B2',
         fontSize: '0.76rem',
         marginBottom: normalize(8)
@@ -264,6 +269,7 @@ const styles = EStyleSheet.create({
     },
     pickerItem: {
         fontSize: '0.75rem',
+        fontFamily: 'blues-smile'
     },
     saveButton: {
         marginVertical: 10,

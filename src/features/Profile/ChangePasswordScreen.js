@@ -97,6 +97,7 @@ export default function ChangePasswordScreen({ navigation }) {
                         placeholder="Enter password"
                         error={passErr && '*password must not be less than 8 digits'}
                         onChangeText={text => { onChangePassword(text) }}
+                        labelStyle={styles.inputLabel}
                     />
                     <Input
                         type="password"
@@ -105,6 +106,7 @@ export default function ChangePasswordScreen({ navigation }) {
                         placeholder="Enter new password"
                         error={passErr && '*password must not be less than 8 digits'}
                         onChangeText={text => { onChangeNewPassword(text) }}
+                        labelStyle={styles.inputLabel}
                     />
                     <Input
                         type="password"
@@ -113,6 +115,7 @@ export default function ChangePasswordScreen({ navigation }) {
                         placeholder="Confirm new password"
                         error={new_password_confirmation !== new_password && '*password confirmation must match password'}
                         onChangeText={text => { onChangeConfirmPassword(text) }}
+                        labelStyle={styles.inputLabel}
                     />
                 </>
                 <PasswordRequirement />
@@ -185,10 +188,10 @@ const styles = EStyleSheet.create({
         color: '#EF2F55',
     },
     inputLabel: {
-        fontSize: normalize(10),
-        fontFamily: 'graphik-medium',
-        color: 'rgba(0, 0, 0, 0.7)',
-        marginBottom: normalize(5)
+        fontFamily: 'blues-smile',
+        color: '#000000B2',
+        fontSize: '0.76rem',
+        marginBottom: normalize(8)
     },
     input: {
         borderColor: ' rgba(0, 0, 0, 0.1)',

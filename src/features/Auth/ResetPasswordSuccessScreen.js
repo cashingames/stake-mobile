@@ -6,10 +6,9 @@ import {
     Text,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import AppButton from '../../shared/AppButton';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
+import GaButton from '../../shared/GaButton';
 import GameArkLogo from '../../shared/GameArkLogo';
-import LottieAnimations from '../../shared/LottieAnimations';
 import normalize from '../../utils/normalize';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 
@@ -22,7 +21,7 @@ export default ({ navigation }) => {
                 <GameArkLogo />
                 <SuccessText />
                 <View style={styles.button}>
-                    <AppButton onPress={() => navigation.navigate('Login')} text="Continue" />
+                    <GaButton onPress={() => navigation.navigate('Login')} text="Continue" />
                 </View>
                 <View style={styles.imgContainer}>
                     <Image source={require('../../../assets/images/wink-emoji.png')} />

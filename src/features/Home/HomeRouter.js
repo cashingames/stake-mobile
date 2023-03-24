@@ -115,10 +115,10 @@ const RightButtons = () => {
                 <Ionicons name='home-outline' size={26} />
                 <Text style={styles.headerIconText}>Home</Text>
             </Pressable>
-            {( Platform.OS === "android" && (< Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={viewWallet}>
+            {/* {( Platform.OS === "android" && (< Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={viewWallet}>
                 <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
-            </Pressable>))}
+            </Pressable>))} */}
 
             <Pressable style={[styles.headerIconContainerNot, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={viewNotifications}>
                 <View style={styles.notificationContainer}>
@@ -372,8 +372,8 @@ const styles = EStyleSheet.create({
     headerIconContainerNot: {
         opacity: 0.5,
         alignItems: 'center',
-        marginLeft: '1.3rem',
-        marginTop: '.5rem'
+        marginLeft: '0.8rem',
+        marginTop: '.2rem'
     },
     headerIconText: {
         fontSize: '0.5rem',
