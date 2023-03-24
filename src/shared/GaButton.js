@@ -4,7 +4,7 @@ import normalize from "../utils/normalize";
 import EStyleSheet from "react-native-extended-stylesheet";
 
 
-export default function AppButton({ onPress, text, disabled, style, textStyle }) {
+export default function GaButton({ onPress, text, disabled, style, textStyle }) {
     return (
 
         <Pressable
@@ -23,21 +23,25 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         paddingVertical: normalize(15),
         paddingHorizontal: normalize(28),
-        marginVertical: 30,
-        borderRadius: 12,
+        marginVertical: 10,
+        borderRadius: 20,
         elevation: 3,
-        backgroundColor: '#EF2F55'
+        backgroundColor: '#F1D818',
+        borderBottomColor: '#B58201',
+        borderBottomWidth: 4,
     },
     text: {
 
         lineHeight: '1rem',
         letterSpacing: 0.25,
-        color: 'white',
-        fontFamily: 'graphik-medium',
-        fontSize: '0.9rem'
+        color: '#2D53A0',
+        fontFamily: 'blues-smile',
+        fontSize: '1rem'
     },
     disabled: {
-        backgroundColor: '#DFCBCF'
+        backgroundColor: '#DFCBCF',
+        borderBottomWidth: 0,
     }
+
 });
 

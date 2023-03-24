@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, View, Text, ScrollView, Alert } from 'react-native';
 import Constants from 'expo-constants';
-
-import AppButton from '../../shared/AppButton';
 import normalize from '../../utils/normalize';
 import Input from '../../shared/Input';
 import { resetPassword } from './AuthSlice';
@@ -12,6 +10,7 @@ import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import GameArkLogo from '../../shared/GameArkLogo';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import GaButton from '../../shared/GaButton';
 
 export default function ({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -79,7 +78,7 @@ export default function ({ navigation }) {
 
                 </View>
                 <View style={styles.button}>
-                    <AppButton onPress={() => onSend()} text={loading ? 'Sending...' : 'RESET'} disabled={!canSend} />
+                    <GaButton onPress={() => onSend()} text={loading ? 'Sending...' : 'RESET'} disabled={!canSend} />
                 </View>
             </View>
         </ScrollView>

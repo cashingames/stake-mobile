@@ -3,6 +3,7 @@ import React from 'react'
 import { ImageBackground } from 'react-native'
 import { Dimensions } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const MixedContainerBackground = ({ children }) => {
     return (

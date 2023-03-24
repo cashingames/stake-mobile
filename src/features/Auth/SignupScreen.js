@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View } from 'react-native';
-import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, Link } from '@react-navigation/native';
 import Input from '../../shared/Input';
@@ -13,6 +12,7 @@ import analytics from '@react-native-firebase/analytics';
 import { ImageBackground } from 'react-native';
 import { Dimensions } from 'react-native';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
+import GaButton from '../../shared/GaButton';
 
 
 
@@ -113,7 +113,7 @@ const SignupScreen = () => {
                         </Text>
                     }
                 />
-                <AppButton text='Continue' disabled={!canSend} style={styles.submitBtn} textStyle={styles.btnText} />
+                <GaButton text='Continue' disabled={!canSend} />
             </View>
         </MixedContainerBackground>
     );

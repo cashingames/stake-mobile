@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyleSheet, View, Text } from 'react-native';
 import Constants from 'expo-constants';
-import AppButton from '../../shared/AppButton';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import Input from '../../shared/Input';
 import { verifyAccount } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import GameArkLogo from '../../shared/GameArkLogo';
+import GaButton from '../../shared/GaButton';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default function ({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -34,7 +35,7 @@ export default function ({ navigation }) {
                 setLoading(false);
                 setCanSend(true);
                 navigation.navigate("VerifyEmail", {
-                    email:email
+                    email: email
                 });
             })
             .catch((rejectedValueOrSerializedError) => {
@@ -59,8 +60,8 @@ export default function ({ navigation }) {
                 <View style={styles.form}>
 
                     {error.length > 0 &&
-                        <Text style={styles.errorBox}>{error}</Text>
-                    }
+                    <Text style={styles.errorBox}>hello{error}</Text>
+                     } 
 
                     <Input
                         label='Email '
@@ -71,7 +72,7 @@ export default function ({ navigation }) {
 
                 </View>
                 <View style={styles.button}>
-                    <AppButton onPress={() => onSend()} text={loading ? 'Sending...' : 'GET OTP'} disabled={!canSend} />
+                    <GaButton onPress={() => onSend()} text={loading ? 'Sending...' : 'Send Email'} disabled={!canSend} />
                 </View>
             </View>
         </MixedContainerBackground>
@@ -84,12 +85,13 @@ const ForgotPasswordTitle = () => {
             <Text style={styles.headerTextStyle}>
                 Forgot Password
             </Text>
-            <Text style={styles.instructionTextStyle}>Enter your email below to enable us verify  you are whom you say you are</Text>
+            <Text style={styles.instructionTextStyle}>Enter the connected email and we will
+                send an OTP to reset your password</Text>
         </>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingTop: normalize(10),
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         paddingTop: normalize(10),
         textAlign: 'center',
-        marginTop:normalize(40)
+        marginTop: normalize(40)
     },
     instructionTextStyle: {
         fontSize: 12,
@@ -113,17 +115,17 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     errorBox: {
-        marginVertical: normalize(20),
+        marginVertical: responsiveScreenWidth(3),
         backgroundColor: '#F442741A',
         paddingVertical: normalize(6),
         borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'graphik-regular',
-        color: '#EF2F55',
-        fontSize: normalize(10)
+        fontSize: '0.7rem',
+        fontFamily: 'blues-smile',
+        color: "#fff"
     },
     form: {
-        marginTop: normalize(30),
+        marginTop: normalize(20),
     },
     input: {
         height: normalize(40),
