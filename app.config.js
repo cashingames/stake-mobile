@@ -70,7 +70,7 @@ export default {
       {
         "android": {
           "enableProguardInReleaseBuilds": true,
-          "enableDangerousExperimentalLeanBuilds": true,
+          "enableDangerousExperimentalLeanBuilds": true
         },
         "ios": {
           "useFrameworks": "static"
