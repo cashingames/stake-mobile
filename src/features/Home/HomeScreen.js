@@ -28,6 +28,7 @@ const HomeScreen = () => {
     const loading = useSelector(state => state.common.initialLoading);
     const [refreshing, setRefreshing] = useState(false);
 
+    Alert.alert("Hello");
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
