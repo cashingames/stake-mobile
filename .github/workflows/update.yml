@@ -32,4 +32,4 @@ jobs:
         run: yarn install
 
       - name: Publish update
-        run: eas update --branch preview
+        run: cross-env APP_VARIANT=preview eas update --branch preview
