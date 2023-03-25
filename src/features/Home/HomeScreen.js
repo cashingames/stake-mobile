@@ -77,10 +77,12 @@ const HomeScreen = () => {
                 }
             >
                 <UserDetails />
+                <Events />
                 <View style={styles.gamesContainer}>
                     <SelectGameMode />
                     <WinnersScroller />
-                    <SwiperFlatList contentContainerStyle={styles.leaderboardContainer}></SwiperFlatList>
+                    <SwiperFlatList content
+                    ContainerStyle={styles.leaderboardContainer}></SwiperFlatList>
                 </View>
             </ScrollView>
         </>
@@ -145,6 +147,23 @@ function RenderUpdateChecker() {
     notifyOfPublishedUpdates();
 
     return null;
+}
+
+const Events = () => {
+    return (
+        <View>
+            <Text>Events</Text>
+        <ChallengeGameCard />
+        </View>
+    )
+}
+
+const ChallengeGameCard = () => {
+    return (
+        <View>
+            <Text>Challenge a friend</Text>
+        </View>
+    )
 }
 
 

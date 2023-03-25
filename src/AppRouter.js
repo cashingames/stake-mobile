@@ -52,6 +52,8 @@ import EmailVerificationScreen from './features/Auth/EmailVerificationScreen';
 import GameLoadingScreen from './features/Games/GameLoadingScreen';
 import ChallengeSelectPlayerScreen from './features/Games/ChallengeSelectPlayerScreen';
 import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
+import ChallengerMatchingScreen from './features/Games/ChallengerMatchingScreen';
+import ChallengeGameLoadingScreen from './features/Games/ChallengeGameLoadingScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -138,9 +140,8 @@ function AppRouter() {
 								backgroundColor: '#EDDA74',
 							},
 							headerTintColor: '#000000', }} />
-
-
-
+						<AppStack.Screen name="ChallengerMatching" component={ChallengerMatchingScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="ChallengeGameLoading" component={ChallengeGameLoadingScreen} options={{ headerShown: false }} />
 
 
 						{/** wallet */}

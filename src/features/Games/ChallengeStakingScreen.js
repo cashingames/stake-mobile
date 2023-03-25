@@ -27,6 +27,8 @@ const ChallengeStakingScreen = ({ navigation }) => {
             setLoading(false);
             return false;
         }
+        navigation.navigate('ChallengerMatching');
+
     }
 
 

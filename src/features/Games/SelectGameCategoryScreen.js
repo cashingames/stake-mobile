@@ -12,13 +12,17 @@ const SelectGameCategoryScreen = ({ navigation }) => {
 
     useFocusEffect(
         React.useCallback(() => {
-            if(Platform.OS === "ios")
-            return;
-            StatusBar.setTranslucent(true)
-            StatusBar.setBackgroundColor("transparent")
+            if (Platform.OS === "android") {
+                StatusBar.setTranslucent(true)
+                StatusBar.setBackgroundColor("transparent")
+                return;
+            }
             StatusBar.setBarStyle('light-content');
             return () => {
-                StatusBar.setTranslucent(true)
+                if (Platform.OS === "android") {
+                    StatusBar.setTranslucent(true)
+                    return;
+                }
                 StatusBar.setBarStyle('dark-content');
             }
         }, [])
