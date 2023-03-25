@@ -3,7 +3,7 @@ on: push
 
 jobs:
   update:
-    name: EAS Update
+    name: Update test
     runs-on: ubuntu-latest
     steps:
       - name: Check for EXPO_TOKEN
