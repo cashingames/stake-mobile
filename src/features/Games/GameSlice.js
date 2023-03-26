@@ -42,6 +42,17 @@ export const startChallengeGame = createAsyncThunk(
 
 )
 
+export const createRealTimeChallenge = createAsyncThunk(
+    'game/createRealTimeChallenge',
+    async (data, thunkAPI) => {
+        console.log(data, 'this is the challenge data')
+        const response = await axios.post('v3/challenges/create', data)
+        return response.data
+    }
+
+)
+
+
 export const challengeEndGame = createAsyncThunk(
     'game/challengeEndGame',
     async (data, thunkAPI) => {
@@ -316,7 +327,7 @@ export const GameSlice = createSlice({
                 state.questions = action.payload.data.questions;
                 state.displayedQuestion = state.questions[state.currentQuestionPosition]
                 state.displayedOptions = state.displayedQuestion.options
-                state.gameSessionToken = action.payload.data.game.token
+                // state.gameSessionToken = action.payload.data.game.token
                 state.isEnded = false
             })
             .addCase(challengeEndGame.fulfilled, (state, action) => {

@@ -6,12 +6,15 @@ import { isTrue } from "../../utils/stringUtl";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import LottieAnimations from "../../shared/LottieAnimations";
 import { useFocusEffect } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import AppButton from "../../shared/AppButton";
+import firestore from '@react-native-firebase/firestore';
+import { setQuestions } from "./TriviaChallengeStaking/TriviaChallengeGameSlice";
+
 
 
 const ChallengerMatchingScreen = ({ navigation }) => {
@@ -19,7 +22,7 @@ const ChallengerMatchingScreen = ({ navigation }) => {
 
     const user = useSelector(state => state.auth.user);
     const [cancelling, setCancelling] = useState(false);
-    const [matched, setMatched] = useState(false);
+    const dispatch = useDispatch();
 
     const cancelChallenge = () => {
         setCancelling(true);
@@ -40,7 +43,7 @@ const ChallengerMatchingScreen = ({ navigation }) => {
     const abortCancel = () => {
         setCancelling(false);
         console.log("Cancel Pressed");
-        setMatched(true)
+        // setMatched(true)
     }
 
     const proceedWithCancel = () => {
@@ -49,10 +52,22 @@ const ChallengerMatchingScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
-        if (matched) {
-            navigation.navigate('ChallengeGameLoading');
-        }
-    }, [matched])
+
+        const subscriber = firestore()
+            .collection('challenge-sessions')
+            .doc('1120f56ff2214cb3b9b2')
+            .onSnapshot(documentSnapshot => {
+                console.log('User data: ', documentSnapshot.data());
+                if (documentSnapshot.data().status === "MATCHED" || documentSnapshot.data().status === "ONGOING") {
+                    const questions = documentSnapshot.data().questions;
+                    dispatch(setQuestions(questions));
+                    navigation.navigate('ChallengeGameLoading')
+                }
+            });
+
+ 
+        return () => subscriber();
+    }, []);
 
     useFocusEffect(
         React.useCallback(() => {

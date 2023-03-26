@@ -54,6 +54,7 @@ import ChallengeSelectPlayerScreen from './features/Games/ChallengeSelectPlayerS
 import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
 import ChallengerMatchingScreen from './features/Games/ChallengerMatchingScreen';
 import ChallengeGameLoadingScreen from './features/Games/ChallengeGameLoadingScreen';
+import ChallengeGameBoardScreen from './features/Games/ChallengeGameBoardScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -142,7 +143,7 @@ function AppRouter() {
 							headerTintColor: '#000000', }} />
 						<AppStack.Screen name="ChallengerMatching" component={ChallengerMatchingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameLoading" component={ChallengeGameLoadingScreen} options={{ headerShown: false }} />
-
+						<AppStack.Screen name="ChallengeGameBoard" component={ChallengeGameBoardScreen} options={{ headerShown: false }} />
 
 						{/** wallet */}
 						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />

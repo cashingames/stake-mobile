@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Dimensions, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AppButton from '../../shared/AppButton';
 import Input from '../../shared/Input';
 import UserWalletBalance from '../../shared/UserWalletBalance';
@@ -9,13 +9,17 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import Constants from 'expo-constants';
 import { isTrue } from '../../utils/stringUtl';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { startChallengeRequest } from './TriviaChallengeStaking/TriviaChallengeGameSlice';
 
 
 const ChallengeStakingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
-    const user = useSelector(state => state.auth.user)
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user);
     const minimumChallengeStakeAmount = useSelector(state => state.common.minimumChallengeStakeAmount);
-    const [amount, setAmount] = useState(200);
+    const gameCategoryId = useSelector(state => state.game.gameCategory.id);
+    const [amount, setAmount] = useState('200');
     const [loading, setLoading] = useState(false);
 
 
@@ -27,11 +31,21 @@ const ChallengeStakingScreen = ({ navigation }) => {
             setLoading(false);
             return false;
         }
-        navigation.navigate('ChallengerMatching');
-
+        dispatch(startChallengeRequest({
+            category: gameCategoryId,
+            amount: amount
+        })).then(unwrapResult)
+        .then(result => {
+            setLoading(false)
+            // navigation.navigate('ChallengerMatching')
+        })
+        .catch((rejectedValueOrSerializedError) => {
+            console.log('failed')
+            navigation.navigate('ChallengerMatching')
+            setLoading(false)
+        });
     }
-
-
+    
     return (
         <ImageBackground source={require('../../../assets/images/quiz-stage.jpg')}
             style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
