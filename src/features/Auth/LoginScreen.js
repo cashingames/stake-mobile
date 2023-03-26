@@ -87,7 +87,7 @@ export default function LoginScreen({ navigation }) {
 
     return (
         <>
-            <RenderUpdateChecker />
+            {/* <RenderUpdateChecker /> */}
             <ScrollView style={styles.container}>
 
                 <AuthBanner />
@@ -140,19 +140,19 @@ const RenderForgotPassword = () => {
     )
 }
 
-function RenderUpdateChecker() {
+// function RenderUpdateChecker() {
 
-    const minVersionCode = useSelector(state => state.common.minVersionCode);
-    const minVersionForce = useSelector(state => state.common.minVersionForce);
+//     const minVersionCode = useSelector(state => state.common.minVersionCode);
+//     const minVersionForce = useSelector(state => state.common.minVersionForce);
 
-    if (minVersionCode && Constants.expoConfig.extra.isDevelopment !== "true") {
-        notifyOfStoreUpdates(minVersionCode, minVersionForce);
-    }
+//     if (minVersionCode && Constants.expoConfig.extra.isDevelopment !== "true") {
+//         notifyOfStoreUpdates(minVersionCode, minVersionForce);
+//     }
 
-    notifyOfPublishedUpdates();
+//     notifyOfPublishedUpdates();
 
-    return null;
-}
+//     return null;
+// }
 
 const RenderCreateAccount = () => {
     const navigation = useNavigation();
