@@ -28,11 +28,11 @@ const ChallengerMatchingScreen = ({ navigation }) => {
             `Are you sure you want to cancel this challenge?`,
             [
                 {
-                    text: "Wait",
+                    text: "Dismiss",
                     onPress: () => abortCancel(),
                     style: "cancel"
                 },
-                { text: "Cancel", onPress: () => proceedWithCancel() }
+                { text: "Yes, cancel", onPress: () => proceedWithCancel() }
             ]
         );
 
@@ -74,6 +74,9 @@ const ChallengerMatchingScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.message}>
+                Finding an opponent...
+            </Text>
             <View style={styles.animationContainer}>
                 <LottieAnimations
                     animationView={require('../../../assets/hour-glass.json')}
@@ -82,15 +85,15 @@ const ChallengerMatchingScreen = ({ navigation }) => {
                 />
             </View>
             <View style={styles.messageContainer}>
-                <Text style={styles.message}>
+                {/* <Text style={styles.message}>
                     Hey,
-                </Text>
-                <Text style={styles.message}>
-                    Please wait why we match with an opponent
-                </Text>
-                <Text style={styles.matchingText}>
+                </Text> */}
+                {/* <Text style={styles.message}>
+                    Finding an opponent...
+                </Text> */}
+                {/* <Text style={styles.matchingText}>
                     Matching.....
-                </Text>
+                </Text> */}
                 <SelectedPlayers user={user} />
             </View>
             <AppButton text="Cancel" onPress={cancelChallenge} disabled={cancelling} style={styles.stakeButton} />
