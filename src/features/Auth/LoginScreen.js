@@ -17,7 +17,7 @@ import { triggerNotifierForReferral } from '../../shared/Notification';
 
 export default function LoginScreen({ navigation }) {
 
-    const [email, setEmail] = useState(Constants.expoConfig.extra.isStaging ? 'gorota764682' : '');
+    const [email, setEmail] = useState(Constants.expoConfig.extra.isStaging ? 'gorotaZee' : '');
     const [password, setPassword] = useState(Constants.expoConfig.extra.isStaging ? '12345678' : '');
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);

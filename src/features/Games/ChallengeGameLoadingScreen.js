@@ -1,41 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ImageBackground, Text, View, Image, Platform, StatusBar } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from "react-redux";
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../utils/normalize";
 import { isTrue } from "../../utils/stringUtl";
-import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import Constants from 'expo-constants';
 import LottieAnimations from "../../shared/LottieAnimations";
 import { useFocusEffect } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore';
 
-
-
 const ChallengeGameLoadingScreen = ({ navigation }) => {
-    useApplyHeaderWorkaround(navigation.setOptions);
 
     const user = useSelector(state => state.auth.user);
     const boosts = useSelector(state => state.common.boosts);
 
+    setTimeout(() => {
+        navigation.navigate('ChallengeGameBoard');
+    }, 10000);
 
-    useEffect(() => {
-
-        // firestore().collection('challenge-sessions').doc('1120f56ff2214cb3b9b2').get().then(x => {
-        //     console.log(x.data());
-        // })
-
-        // console.log(x); 
-        const subscriber = firestore()
-            .collection('challenge-sessions')
-            .doc('1120f56ff2214cb3b9b2')
-            .onSnapshot(documentSnapshot => {
-                console.log('User data: ', documentSnapshot.data());
-            });
-
-        // Stop listening for updates when no longer required
-        return () => subscriber();
-    }, []);
+    firestore()
+        .collection('challenge-sessions')
+        .doc('1120f56ff2214cb3b9b2')
+        .update({
+            status: "ONGOING",
+        })
+        .then(() => {
+            console.log('status updated!');
+        });
 
 
     useFocusEffect(
