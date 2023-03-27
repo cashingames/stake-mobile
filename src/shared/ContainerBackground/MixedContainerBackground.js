@@ -12,8 +12,13 @@ const MixedContainerBackground = ({ children }) => {
             resizeMethod="resize">
             <ImageBackground source={require('../../../assets/images/trans-image.png')}
                 resizeMethod="resize"
-                style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}>                
+                style={{ 
+                    // width: Dimensions.get("screen").width, height: Dimensions.get("screen").height 
+                    flex:1
+                    }}> 
+                <ScrollView>               
                 {children}
+                </ScrollView>
             </ImageBackground>
         </ImageBackground>
     )
