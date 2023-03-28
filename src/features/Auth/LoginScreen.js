@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Pressable, Text, View, ScrollView, Platform, ImageBackground, Dimensions } from 'react-native';
+import { Pressable, Text, View, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
@@ -81,7 +81,6 @@ export default function LoginScreen({ navigation }) {
 
 
     return (
-        <ScrollView>
         <MixedContainerBackground>
             <View style={styles.container}>
                 <View style={styles.logo}>
@@ -90,7 +89,7 @@ export default function LoginScreen({ navigation }) {
                 <View style={styles.inputSection}>
                      {error.length > 0 && 
                     <Text style={styles.errorBox}>{error}</Text>
-                      }
+                       }
 
                     <Input
                         label='Email/username'
@@ -114,7 +113,6 @@ export default function LoginScreen({ navigation }) {
                 <RenderCreateAccount navigation={navigation} />
                 </View>
         </MixedContainerBackground>
-        </ScrollView >
     );
 }
 
@@ -138,7 +136,8 @@ const RenderCreateAccount = () => {
         <View style={styles.signIn}>
             <View style={styles.google}>
                 <Login text="Sign in" />
-                {Platform.OS === 'ios' && <AppleSignUp />}
+                {Platform.OS === 'ios' && 
+                <AppleSignUp />}
                 <SocialSignUp googleText="Sign in" />
                 <Pressable onPress={() => navigation.navigate('Signup')}>
                     <Text style={styles.singupLink}>Sign up with an Email</Text>
@@ -166,18 +165,18 @@ const styles = EStyleSheet.create({
     },
 
     inputSection: {
-        marginTop: normalize(120),
+        marginTop: Platform.OS === 'ios' ? normalize(80) : normalize(110),
     },
 
     errorBox: {
-        marginVertical: responsiveScreenWidth(3),
         backgroundColor: '#F442741A',
         paddingVertical: normalize(6),
         borderRadius: normalize(8),
         textAlign: 'center',
         fontSize: '0.7rem',
-        fontFamily: 'blues-smile',
-        color: "#fff"
+        fontFamily: 'graphik-medium',
+        lineHeight: '1.4rem',
+        color: '#fff',
     },
     forgotPassword: {
         color: '#F1D818',

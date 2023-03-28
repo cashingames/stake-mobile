@@ -60,8 +60,8 @@ export default function ({ navigation }) {
                 <View style={styles.form}>
 
                     {error.length > 0 &&
-                    <Text style={styles.errorBox}>hello{error}</Text>
-                     } 
+                    <Text style={styles.errorBox}>{error}</Text>
+                     }
 
                     <Input
                         label='Email '
@@ -121,7 +121,7 @@ const styles = EStyleSheet.create({
         borderRadius: normalize(8),
         textAlign: 'center',
         fontSize: '0.7rem',
-        fontFamily: 'blues-smile',
+        fontFamily: 'graphik-medium',
         color: "#fff"
     },
     form: {

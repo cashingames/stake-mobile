@@ -367,12 +367,12 @@ const styles = EStyleSheet.create({
     headerIconContainer: {
         opacity: 0.5,
         alignItems: 'center',
-        marginLeft: '1.3rem',
+        marginRight: '2rem',
     },
     headerIconContainerNot: {
         opacity: 0.5,
         alignItems: 'center',
-        marginLeft: '0.8rem',
+        marginRight: '1rem',
         marginTop: '.2rem'
     },
     headerIconText: {
