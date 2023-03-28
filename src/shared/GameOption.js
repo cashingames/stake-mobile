@@ -7,7 +7,7 @@ import normalize from "../utils/normalize";
 const GameOption = ({ option: { title, isSelected }, onSelected }) => {
     return (
         <Pressable style={[styles.answer, isSelected ? styles.selectedOption : {}]} onPress={onSelected}>
-            <Text style={styles.answerText}>{Base64.decode(title)}</Text>
+            <Text style={styles.answerText}>{title}</Text>
         </Pressable>
     )
 }

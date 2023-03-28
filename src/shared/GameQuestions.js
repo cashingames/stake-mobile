@@ -19,7 +19,7 @@ const GameQuestions = () => {
     return (
         <>
             <View style={styles.gameQuestions}>
-                <Text style={styles.questions}>{Base64.decode(displayedQuestion.label)}</Text>
+                <Text style={styles.questions}>{displayedQuestion.label}</Text>
             </View>
             <View style={styles.options}>
                 {displayedOptions.map((option, i) => <GameOption option={option} key={i} onSelected={() => optionSelected(option)} />)}
