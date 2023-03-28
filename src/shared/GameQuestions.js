@@ -7,7 +7,6 @@ import { questionAnswered, setCorrectAnswer, setSelectedOption, setShowCorrectAn
 import normalize from "../utils/normalize";
 import useSound from "../utils/useSound";
 import GameOption from "./GameOption";
-import { Base64 } from "js-base64";
 
 
 const GameQuestions = () => {
@@ -27,7 +26,7 @@ const GameQuestions = () => {
             }
             dispatch(questionAnswered(option));
             dispatch(setSelectedOption(option));
-            dispatch(setCorrectAnswer(Base64.decode(option.is_correct) == 1))
+            dispatch(setCorrectAnswer(option.is_correct == 1))
             playSound()
         } catch (error) {
             console.log(error)
@@ -41,7 +40,7 @@ const GameQuestions = () => {
     return (
         <>
             <View style={styles.gameQuestions}>
-                <Text style={styles.questions}>{Base64.decode(displayedQuestion.label)}</Text>
+                <Text style={styles.questions}>{displayedQuestion.label}</Text>
             </View>
             <View style={styles.options}>
                 {displayedOptions.map((option, i) => <GameOption

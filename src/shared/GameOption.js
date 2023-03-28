@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import normalize from "../utils/normalize";
-import { Base64 } from "js-base64";
 
 
 const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, submissionResult, selectedOption, showCorrectAnswer}) => {
@@ -16,7 +15,7 @@ const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, sub
     useEffect(() => {
         if(selectedOption && showCorrectAnswer){
             try {
-                const a = is_correct ? Base64.decode(is_correct) : null;                
+                const a = is_correct ? is_correct : null;                
                 const showCorrectOption = !isSelected && a == 1;
                 setShowTrue(showCorrectOption);
               } catch (error) {
@@ -35,7 +34,7 @@ const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, sub
             // showRight ? styles.answer : {},
             showTrue ? styles.correctOption : {}]} 
             onPress={onSelected}>
-            <Text style={styles.answerText}>{Base64.decode(title)}</Text>
+            <Text style={styles.answerText}>{title}</Text>
             
             {isCorrectOption || showTrue ? (
                 <View style={styles.checkmark}>
