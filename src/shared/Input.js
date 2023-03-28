@@ -76,8 +76,8 @@ const styles = EStyleSheet.create({
     error: {
         color: '#fff',
         fontSize: normalize(10),
-        fontSize: '0.5rem',
-        fontFamily: 'blues-smile',
+        fontSize: '0.7rem',
+        fontFamily: 'graphik-medium',
     },
     disabled: {
         borderColor: '#fff',

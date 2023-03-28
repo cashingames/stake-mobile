@@ -82,7 +82,6 @@ export default function LoginScreen({ navigation }) {
 
     return (
         <MixedContainerBackground>
-            <ScrollView style={{paddingBottom: 15}}>
             <View style={styles.container}>
                 <View style={styles.logo}>
                     <Image source={require('../../../assets/images/Ga-logo.png')} />
@@ -113,7 +112,6 @@ export default function LoginScreen({ navigation }) {
                 </View>
                 <RenderCreateAccount navigation={navigation} />
                 </View>
-                </ScrollView>
         </MixedContainerBackground>
     );
 }
@@ -167,11 +165,10 @@ const styles = EStyleSheet.create({
     },
 
     inputSection: {
-        marginTop: Platform.OS === 'ios' ? normalize(100) : normalize(80),
+        marginTop: Platform.OS === 'ios' ? normalize(80) : normalize(110),
     },
 
     errorBox: {
-        marginVertical: responsiveScreenWidth(3),
         backgroundColor: '#F442741A',
         paddingVertical: normalize(6),
         borderRadius: normalize(8),

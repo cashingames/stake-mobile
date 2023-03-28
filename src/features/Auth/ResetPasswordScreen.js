@@ -65,7 +65,7 @@ export default function ({ navigation }) {
                 <View style={styles.form}>
                     {error.length > 0 &&
                         <Text style={styles.errorBox}>{error}</Text>
-                    }
+                     }
 
                     <Input
                         label='Enter new password'
@@ -126,9 +126,9 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(6),
         borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'graphik-regular',
-        color: '#EF2F55',
-        fontSize: normalize(10)
+        fontFamily: 'graphik-medium',
+        color: '#fff',
+        fontSize: '0.7rem'
     },
     form: {
         marginTop: normalize(30),

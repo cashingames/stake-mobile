@@ -105,8 +105,8 @@ export default function VerifyEmailScreen({ navigation, route }) {
 
                 <Text style={styles.instructionTextStyle}>Enter the One-time passcode we sent  to the email you provided</Text>
                 {error.length > 0 &&
-                    <Text style={styles.errorBox}>{error}</Text>
-                 } 
+                    <Text style={styles.errorBox}>invalid otp code{error}</Text>
+                 }
                 <Text style={styles.otpText}>Enter otp</Text>
                 <View style={styles.form}>
                     <TextInput
@@ -210,7 +210,7 @@ const styles = EStyleSheet.create({
         marginTop: normalize(7),
     },
     errorBox: {
-        marginVertical: responsiveScreenWidth(3),
+        // marginVertical: responsiveScreenWidth(3),
         backgroundColor: '#F442741A',
         paddingVertical: normalize(6),
         borderRadius: normalize(8),
