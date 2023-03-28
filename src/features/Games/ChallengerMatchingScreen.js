@@ -13,7 +13,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import AppButton from "../../shared/AppButton";
 import firestore from '@react-native-firebase/firestore';
-import { setQuestions } from "./TriviaChallengeStaking/TriviaChallengeGameSlice";
+import { setChallengeDetails, setOpponentDetails, setQuestions } from "./TriviaChallengeStaking/TriviaChallengeGameSlice";
 
 
 
@@ -22,6 +22,7 @@ const ChallengerMatchingScreen = ({ navigation }) => {
 
     const user = useSelector(state => state.auth.user);
     const [cancelling, setCancelling] = useState(false);
+    const documentId = useSelector(state => state.triviaChallenge.documentId);
     const dispatch = useDispatch();
 
     const cancelChallenge = () => {
@@ -54,13 +55,15 @@ const ChallengerMatchingScreen = ({ navigation }) => {
     useEffect(() => {
 
         const subscriber = firestore()
-            .collection('challenge-sessions')
-            .doc('1120f56ff2214cb3b9b2')
+            .doc('trivia-challenge-requests/zKjRo8xHZ2iCEpKD4njn')
+            // .doc(documentId)
             .onSnapshot(documentSnapshot => {
-                console.log('User data: ', documentSnapshot.data());
-                if (documentSnapshot.data().status === "MATCHED" || documentSnapshot.data().status === "ONGOING") {
+                // console.log('User data: ', documentSnapshot.data());
+                if (documentSnapshot.data().status === "MATCHED") {
                     const questions = documentSnapshot.data().questions;
-                    dispatch(setQuestions(questions));
+                    const challengeDetails = documentSnapshot.data()
+                    // dispatch(setQuestions(questions));
+                    dispatch(setChallengeDetails(challengeDetails))
                     navigation.navigate('ChallengeGameLoading')
                 }
             });

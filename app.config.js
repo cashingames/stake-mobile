@@ -83,6 +83,7 @@ export default {
     ]
   ],
   extra: {
+    env: process.env.APP_VARIANT,
     isDevelopment: isDevelopment,
     isProduction: env === 'production' || false,
     isStaging: isDevelopment || env === "preview",

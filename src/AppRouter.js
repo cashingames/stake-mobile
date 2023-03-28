@@ -55,6 +55,8 @@ import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
 import ChallengerMatchingScreen from './features/Games/ChallengerMatchingScreen';
 import ChallengeGameLoadingScreen from './features/Games/ChallengeGameLoadingScreen';
 import ChallengeGameBoardScreen from './features/Games/ChallengeGameBoardScreen';
+import ChallengeEndGameScreen from './features/Games/TriviaChallengeStaking/ChallengeEndGameScreen';
+import ChallengeGameEndWaitingScreen from './features/Games/TriviaChallengeStaking/ChallengeGameEndWaitingScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -144,6 +146,8 @@ function AppRouter() {
 						<AppStack.Screen name="ChallengerMatching" component={ChallengerMatchingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameLoading" component={ChallengeGameLoadingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameBoard" component={ChallengeGameBoardScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="ChallengeGameEndWaiting" component={ChallengeGameEndWaitingScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="ChallengeEndGame" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
 
 						{/** wallet */}
 						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
@@ -206,8 +210,9 @@ function AppRouter() {
 export default AppRouter;
 
 const setupAxios = async function () {
-	console.log("base url", Constants.expoConfig.extra.apiBaseUrl)
+	axios.defaults.headers.common['x-request-env'] = Constants.expoConfig.extra.env;
 	axios.defaults.baseURL = Constants.expoConfig.extra.apiBaseUrl;
+	console.log('env', Constants.expoConfig.extra.env)
 	//axios logout on 401
 	axios.interceptors.response.use(
 		response => response,
@@ -237,7 +242,6 @@ const setupAxios = async function () {
 
 const appendAxiosAuthHeader = function (token) {
 	axios.defaults.headers.common['x-brand-id'] = 2; //@TODO Change to 1
-
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {

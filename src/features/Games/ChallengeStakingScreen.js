@@ -24,6 +24,8 @@ const ChallengeStakingScreen = ({ navigation }) => {
 
 
     const stakeAmount = async () => {
+        navigation.navigate('ChallengerMatching')
+        return;
         setLoading(true);
 
         if (Number.parseFloat(amount) < Number.parseFloat(minimumChallengeStakeAmount)) {
@@ -37,11 +39,11 @@ const ChallengeStakingScreen = ({ navigation }) => {
         })).then(unwrapResult)
         .then(result => {
             setLoading(false)
-            // navigation.navigate('ChallengerMatching')
+            navigation.navigate('ChallengerMatching')
         })
         .catch((rejectedValueOrSerializedError) => {
             console.log('failed')
-            navigation.navigate('ChallengerMatching')
+            // navigation.navigate('ChallengerMatching')
             setLoading(false)
         });
     }
