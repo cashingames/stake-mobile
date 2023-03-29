@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import { Base64 } from "js-base64";
 import { Text, View, ScrollView, Alert, Platform , Linking} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -43,7 +42,7 @@ export default function GameInstructionsScreen({ navigation }) {
       'phone_number': user.phoneNumber,
       'email': user.email
     })
-    handleStakingNavigation(`${Constants.expoConfig.extra.stakingAppUrl}/${Base64.encode(token)}`);
+    handleStakingNavigation(`${Constants.expoConfig.extra.stakingAppUrl}/${token}`);
   }
 
   const handleStakingNavigation = async (url) => {

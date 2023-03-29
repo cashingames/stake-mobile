@@ -1,4 +1,3 @@
-import { Base64 } from "js-base64";
 import React from "react"
 import { Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
@@ -19,7 +18,7 @@ const GameQuestions = () => {
     return (
         <>
             <View style={styles.gameQuestions}>
-                <Text style={styles.questions}>{Base64.decode(displayedQuestion.label)}</Text>
+                <Text style={styles.questions}>{displayedQuestion.label}</Text>
             </View>
             <View style={styles.options}>
                 {displayedOptions.map((option, i) => <GameOption option={option} key={i} onSelected={() => optionSelected(option)} />)}
