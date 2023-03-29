@@ -1,4 +1,3 @@
-import { Base64 } from "js-base64";
 import React from 'react';
 import { Image, Pressable, Text, View, Linking } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
@@ -48,7 +47,7 @@ const SelectGameMode = () => {
             'email': user.email,
             'gamemode': mode.displayName,
         })
-        handleStakingNavigation(`${Constants.manifest.extra.stakingAppUrl}/${Base64.encode(token)}`);
+        handleStakingNavigation(`${Constants.manifest.extra.stakingAppUrl}/${token}`);
     };
 
     const handleStakingNavigation = async (url) => {

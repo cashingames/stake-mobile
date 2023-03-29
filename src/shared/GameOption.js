@@ -19,7 +19,7 @@ const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, sub
                 const showCorrectOption = !isSelected && a == 1;
                 setShowTrue(showCorrectOption);
               } catch (error) {
-                console.log("Error decoding base64 string:", error);
+                console.log( error);
               }
         }else{
             setShowTrue(null)

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Base64 } from "js-base64";
 import Constants from 'expo-constants';
 import { Platform, Pressable, Text, View, Modal, Image , Linking } from 'react-native';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
@@ -31,7 +30,7 @@ const Stakingpopup = ({
             'phone_number': user.phoneNumber,
             'email': user.email
         });
-        handleStakingNavigation(`${Constants.manifest.extra.stakingAppUrl}/${Base64.encode(token)}`);
+        handleStakingNavigation(`${Constants.manifest.extra.stakingAppUrl}/${token}`);
     }
 
     const handleStakingNavigation = async (url) => {
