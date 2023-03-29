@@ -13,10 +13,12 @@ const ChallengeGameLoadingScreen = ({ navigation }) => {
 
     const user = useSelector(state => state.auth.user);
     const boosts = useSelector(state => state.common.boosts);
+    const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
+    const opponentDetails = challengeDetails.opponent
 
     setTimeout(() => {
         navigation.navigate('ChallengeGameBoard');
-    }, 10000);
+    }, 5000);
 
     firestore()
         .collection('challenge-sessions')
@@ -60,7 +62,7 @@ const ChallengeGameLoadingScreen = ({ navigation }) => {
             <View style={styles.messageContainer}>
                 <Text style={styles.message}>Nice, you have been matched</Text>
                 <Text style={styles.matchingText}>Game board loading....</Text>
-                <SelectedPlayers user={user} />
+                <SelectedPlayers user={user} opponentDetails={opponentDetails} />
             </View>
             <View>
                 <Text style={styles.boostText}>Do you know that you can score higher by using boosts?</Text>
@@ -73,7 +75,7 @@ const ChallengeGameLoadingScreen = ({ navigation }) => {
     )
 }
 
-const SelectedPlayers = ({ user }) => {
+const SelectedPlayers = ({ user, opponentDetails }) => {
     return (
         <>
             <ImageBackground source={require('../../../assets/images/challenge-stage.png')}
@@ -83,7 +85,7 @@ const SelectedPlayers = ({ user }) => {
                 <Image
                     source={require('../../../assets/images/versus.png')}
                 />
-                <SelectedPlayer playerName="Afolabi" playerAvatar={require("../../../assets/images/user-icon.png")} />
+                <SelectedPlayer playerName={opponentDetails.username} playerAvatar={require("../../../assets/images/user-icon.png")} />
             </ImageBackground>
         </>
     )

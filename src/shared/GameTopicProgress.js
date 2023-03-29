@@ -7,6 +7,7 @@ import normalize from "../utils/normalize";
 import AnsweredGameProgress from "./AnsweredGameProgress";
 import LottieAnimations from "./LottieAnimations";
 
+
 const GameTopicProgress = ({ onComplete, ending }) => {
     const countdownKey = useSelector(state => state.game.countdownKey);
     const isGamePaused = useSelector(state => state.game.countdownFrozen);

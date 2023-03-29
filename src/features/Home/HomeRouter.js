@@ -14,6 +14,7 @@ import { isTrue } from '../../utils/stringUtl';
 import analytics from '@react-native-firebase/analytics';
 import AppButton from '../../shared/AppButton';
 import { setGameMode, setGameType } from '../Games/GameSlice';
+import { logoutUser } from '../Auth/AuthSlice';
 
 
 const HomeStack = createDrawerNavigator();
@@ -130,6 +131,10 @@ function CustomDrawerContent(props) {
 
     }
 
+    const onLogout = () => {
+        dispatch(logoutUser());
+    }
+
     return (
         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
             <ScrollView>
@@ -197,6 +202,9 @@ function CustomDrawerContent(props) {
             </ScrollView>
             <View style={drawStyles.logoutContainer}>
                 <Text style={drawStyles.appVersion}>App version: {Constants.expoConfig.version}</Text>
+                <Pressable onPress={onLogout}>
+                    <Text style={styles.logoutText}>Logout</Text>
+                </Pressable>
             </View>
         </DrawerContentScrollView>
     );
