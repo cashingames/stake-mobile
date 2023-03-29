@@ -21,7 +21,6 @@ let initialState = {
     gameDuration: 60,
     countdownKey: 0,
     challengeDetails:{}
-
 }
 
 export const TriviaChallengeStakeGameSlice = createSlice({
@@ -71,6 +70,5 @@ export const TriviaChallengeStakeGameSlice = createSlice({
 })
 
 export const { getNextQuestion, selectedOption, setGameDuration, pauseGame, incrementCountdownResetIndex, setChallengeDetails} = TriviaChallengeStakeGameSlice.actions
-
 
 export default TriviaChallengeStakeGameSlice.reducer

@@ -22,6 +22,7 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
         navigation.navigate('ChallengeEndGame');
     }
 
+
     return (
         <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
@@ -87,6 +88,7 @@ const RenderActionButton = ({endGame}) => {
             onPress={onPress}
             style={styles.nextButton}
         />
+
     )
 }
 export default ChallengeGameBoardScreen;

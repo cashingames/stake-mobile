@@ -16,7 +16,6 @@ const ChallengeGameLoadingScreen = ({ navigation }) => {
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const opponentDetails = challengeDetails.opponent
 
-
     setTimeout(() => {
         navigation.navigate('ChallengeGameBoard');
     }, 5000);

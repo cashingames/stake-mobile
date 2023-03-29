@@ -1,4 +1,3 @@
-import { Base64 } from "js-base64";
 import React from "react";
 import { Pressable, Text } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
@@ -7,7 +6,7 @@ import normalize from "../utils/normalize";
 const GameOption = ({ option: { title, isSelected }, onSelected }) => {
     return (
         <Pressable style={[styles.answer, isSelected ? styles.selectedOption : {}]} onPress={onSelected}>
-            <Text style={styles.answerText}>{Base64.decode(title)}</Text>
+            <Text style={styles.answerText}>{title}</Text>
         </Pressable>
     )
 }

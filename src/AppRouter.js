@@ -148,7 +148,7 @@ function AppRouter() {
 						<AppStack.Screen name="ChallengeGameBoard" component={ChallengeGameBoardScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameEndWaiting" component={ChallengeGameEndWaitingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeEndGame" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
-
+            
 						{/** wallet */}
 						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
 						<AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />

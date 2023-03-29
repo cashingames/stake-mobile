@@ -15,8 +15,6 @@ import AppButton from "../../shared/AppButton";
 import firestore from '@react-native-firebase/firestore';
 import { setChallengeDetails, setOpponentDetails, setQuestions } from "./TriviaChallengeStaking/TriviaChallengeGameSlice";
 
-
-
 const ChallengerMatchingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
 
