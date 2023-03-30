@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios'
 
 export const startChallengeRequest = createAsyncThunk(
@@ -12,23 +12,13 @@ export const startChallengeRequest = createAsyncThunk(
 
 export const submitGameSession = createAsyncThunk(
     'game/submitGameSession',
-    async (thunkAPI) => {
-        const state = thunkAPI.getState().triviaChallengeGame;
-
-        // process selected options and send
+    async (_data, { getState }) => {
+        const state = getState().triviaChallenge;
         const data = {
             challenge_request_id: state.challengeDetails.challenge_request_id,
-            selected_options: state.questions.reduce((filtered, question) => {
-                const option = question.options.find(x => x.active);
-                option && filtered.push({
-                    question_id: option.question_id,
-                    option_id: option.id
-                })
-                return filtered;
-            })
+            selected_options: state.selectedOptions,
         }
-
-        const response = await axios.post('v3/challenges/submit', data)
+        const response = await axios.post('v3/challenges/submit', data);
         return response.data
     }
 )
@@ -38,6 +28,7 @@ let initialState = {
     questions: [],
     documentId: '',
     currentQuestion: {},
+    selectedOptions: [],
     currentQuestionIndex: 0,
     totalQuestions: 0,
     countdownFrozen: false,
@@ -62,6 +53,16 @@ export const TriviaChallengeStakeGameSlice = createSlice({
         },
         selectedOption: (state, action) => {
             state.currentQuestion.options.map(x => x.active = x.id === action.payload.id)
+            const data = {
+                question_id: state.currentQuestion.id,
+                option_id: action.payload.id
+            }
+            const currentIndex = state.selectedOptions.findIndex(x => x.question_id === state.currentQuestion.id);
+            if (currentIndex === -1) {
+                state.selectedOptions.push(data);
+            } else {
+                state.selectedOptions[currentIndex] = data;
+            }
         },
         pauseGame: (state, action) => {
             state.countdownFrozen = action.payload
