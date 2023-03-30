@@ -13,7 +13,7 @@ const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, sub
     // const showRight = !isSelected && !submissionResult;
 
     useEffect(() => {
-        if(selectedOption && showCorrectAnswer){
+        if(showCorrectAnswer){
             try {
                 const a = is_correct ? is_correct : null;                
                 const showCorrectOption = !isSelected && a == 1;
