@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Pressable, ScrollView, StatusBar, View } from 'react-native';
+import { Image, Pressable, ScrollView, StatusBar, View } from 'react-native';
 import GamePicker from './GamePicker';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import LottieAnimations from '../../shared/LottieAnimations';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,6 +13,8 @@ import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { Platform } from 'react-native';
 import useSound from '../../utils/useSound';
+import QuizContainerBackground from '../../shared/ContainerBackground/QuizContainerBackground';
+import TopIcons from '../../shared/TopIcons';
 
 const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -20,6 +22,8 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     const gameMode = useSelector(state => state.game.gameMode);
     const refRBSheet = useRef();
     const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
+
+    console.log(gameMode) 
 
     // const openBottomSheet = () => {
     //     refRBSheet.current.open()
@@ -55,47 +59,30 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     );
 
     return (
+        <QuizContainerBackground>
         <View style={styles.container}>
-            <ScrollView>
-                <View style={styles.animation}>
-                    <LottieAnimations
-                        animationView={require('../../../assets/select-game.json')}
-                        width={normalize(100)}
-                        height={normalize(100)}
-                    />
+        <TopIcons />
+        <View style={styles.logo}>
+                    <Pressable style={styles.icons}>
+                        <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
+                    </Pressable>
+                    <Image style={styles.smallLogo} source={require('../../../assets/images/ga-logo-small.png')} />
                 </View>
-                <View>
-                    <GamePicker title={"Pick a game"} activeSubcategory={activeSubcategory} />
+        <View>
+            <GamePicker title={"Pick a game"} activeSubcategory={activeSubcategory} />
                 </View>
-                <UniversalBottomSheet
-                    refBottomSheet={refRBSheet}
-                    height={Platform.OS === 'ios' ? 400 : 350}
-                    subComponent={<NoGame
-                        onClose={closeBottomSheet}
-                    />}
-                />
-            </ScrollView>
-            <ProceedButton disabled={!isTrue(activeSubcategory)} onPress={onPlayButtonClick} />
         </View>
+        </QuizContainerBackground>
     )
 }
 
-const ProceedButton = ({ onPress, disabled }) => {
-    return (
-        <Pressable onPress={onPress} style={[styles.selectButton, disabled ? styles.disabled : {}]} disabled={disabled} >
-            <Ionicons name='arrow-forward-sharp' size={35} color='#FFFF' />
-        </Pressable>
-    )
-}
-
-export default SelectGameCategoryScreen;
+export default SelectGameCategoryScreen; 
 
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#5d5fef',
-        paddingHorizontal: normalize(18),
-        // justifyContent: 'center'
+        paddingVertical: responsiveScreenWidth(3),
+        paddingHorizontal: responsiveScreenWidth(3),
     },
     animation: {
         alignItems: 'center',

@@ -79,6 +79,8 @@ import Settings from './features/Support/Settings';
 import useSound from './utils/useSound';
 import Dashboard from './features/Dashboard';
 import { StatusBar } from 'react-native';
+import Home from './features/Home/Home';
+import GameScreen from './features/GameScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -87,7 +89,7 @@ function AppRouter() {
 	const dispatch = useDispatch();
 
 	const [loading, setLoading] = useState(true);
-	const { playSound } =  useSound(require('../assets/sounds/pop-up.wav'))
+	const { playSound } = useSound(require('../assets/sounds/pop-up.wav'))
 
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
@@ -105,7 +107,7 @@ function AppRouter() {
 
 	useEffect(() => {
 		StatusBar.setHidden(true)
-    }, []);
+	}, []);
 
 	useEffect(() => {
 		if (!isTrue(token)) {
@@ -172,6 +174,9 @@ function AppRouter() {
 			{isTrue(token) ?
 				(
 					<>
+
+						<AppStack.Screen options={{ headerShown: false }} name="Dashboard" component={Dashboard} />
+						<AppStack.Screen options={{ headerShown: false }} name="Home" component={Home} />
 						<AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
 						<AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{
@@ -200,13 +205,10 @@ function AppRouter() {
 						/>
 
 						{/* game */}
+						<AppStack.Screen options={{ headerShown: false }} name="Games" component={GameScreen} />
 						<AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
 						<AppStack.Screen name="SelectGameCategory" component={SelectGameCategoryScreen} options={{
-							title: 'Select Game',
-							headerStyle: {
-								backgroundColor: '#5d5fef',
-							},
-							headerTintColor: '#FFFF',
+							headerShown: false,
 						}} />
 						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{
 							title: 'Game Instructions', headerStyle: {
@@ -302,9 +304,9 @@ function AppRouter() {
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
 						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} options={{ headerShown: false }}/>
-						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }}/>
-						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} options={{ headerShown: false }}/>
+						<AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupVerifyEmail" component={SignupVerifyEmailScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupVerifyPhone" component={SignupVerifyPhoneScreen} options={{ headerShown: false }} />
 

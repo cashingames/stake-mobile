@@ -7,7 +7,7 @@ import { Image } from 'react-native'
 const GameArkLogo = () => {
     return (
         <View style={styles.logo}>
-            <Image source={require('./../../assets/images/Ga-logo.png')} />
+            <Image  style={styles.image} source={require('./../../assets/images/game-logo.png')} />
         </View>
     )
 }
@@ -17,5 +17,9 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         marginTop: normalize(45)
     },
+    image:{
+        width:240,
+        height:152
+    }
 })
 export default GameArkLogo

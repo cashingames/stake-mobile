@@ -1,9 +1,9 @@
 import { View, Text, ImageBackground, Dimensions } from 'react-native'
 import React from 'react'
 
-const MainContainerBackground = ({children}) => {
+const QuizContainerBackground = ({children}) => {
   return (
-    <ImageBackground source={require('../../../assets/images/login-image.png')}
+    <ImageBackground source={require('../../../assets/images/quiz-background-large.png')}
     style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
     resizeMode="cover">
         {children}
@@ -12,4 +12,4 @@ const MainContainerBackground = ({children}) => {
   )
 }
 
-export default MainContainerBackground
+export default QuizContainerBackground

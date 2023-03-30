@@ -10,7 +10,7 @@ const MixedContainerBackground = ({ children }) => {
         <ImageBackground source={require('../../../assets/images/login-image.png')}
             style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
             resizeMethod="resize">
-            <ImageBackground source={require('../../../assets/images/trans-image.png')}
+            <ImageBackground source={require('../../../assets/images/transparent2.png')}
                 resizeMethod="resize"
                 style={{ 
                     // width: Dimensions.get("screen").width, height: Dimensions.get("screen").height 

@@ -1,53 +1,73 @@
-import { View, Text } from 'react-native'
+import { View, Text, Modal } from 'react-native'
 import React from 'react'
-import { ImageBackground } from 'react-native'
-import { Dimensions } from 'react-native'
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize'
+import { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { Image } from 'react-native'
 import { Pressable } from 'react-native'
-import Animated, { BounceInRight, BounceOutRight, SlideInRight, SlideOutRight } from 'react-native-reanimated'
+import MixedContainerBackground from './ContainerBackground/MixedContainerBackground'
+import GameArkLogo from './GameArkLogo'
+import { useNavigation } from '@react-navigation/core'
+
+const DashboardSettings = ({ showSettings, setShowSettings }) => {
+    const navigation = useNavigation()
+    return (
+        <>
+            <View style={styles.setting}>
+                <Pressable onPress={() => setShowSettings(true)}>
+                    <Image style={styles.settingIcon} source={require('./../../assets/images/setting-icon.png')} />
+                </Pressable>
+                <Pressable onPress={() => navigation.navigate('GameStore')}>
+                    <Image style={styles.storeIcon} source={require('../../assets/images/store-icon.png')} />
+                </Pressable>
+            </View>
+            <IconSettings setShowSettings={setShowSettings} showSettings={showSettings} />
+        </>
+    )
+}
 
 
-{/* <Animated.View style={[styles.card, { backgroundColor: category.bgColor }]} entering={BounceInRight.duration(2000)}> */}
-const DashboardSettings = ({ onPress }) => {
-  return (
-    <Animated.View style={styles.container} entering={SlideInRight.duration(200)}
-    exiting={SlideOutRight.duration(100)}>
-    <ImageBackground source={require('./../../assets/images/trans-image.png')}
-    style={styles.secondBgImg}
-    resizeMethod="resize">
-                 <View style={styles.container}>
-                <View style={styles.logo}>
-                    <Image source={require('./../../assets/images/Ga-logo.png')} />
+const IconSettings = ({ showSettings, setShowSettings }) => {
+    return (
+        <Modal
+            animationType="fade"
+            transparent={false}
+            visible={showSettings}
+            onRequestClose={() => {
+                // Alert.alert("Modal has been closed.");
+                setShowSettings(!showSettings);
+            }}
+        >
+            <MixedContainerBackground>
+                <View style={styles.modalContainer}>
+                    <View style={styles.container}>
+                        <GameArkLogo />
+                        <View style={styles.settingIconsContainter}>
+                            <Pressable style={styles.icons}>
+                                <Image style={styles.imageIcons} source={require('./../../assets/images/sound-1.png')} />
+                            </Pressable>
+                            <Pressable style={styles.icons}>
+                                <Image style={styles.imageIcons} source={require('./../../assets/images/leaderboard-icon.png')} />
+                            </Pressable>
+                            <Pressable style={styles.icons}>
+                                <Image style={styles.imageIcons} source={require('./../../assets/images/profile-icon.png')} />
+                            </Pressable>
+                            <Pressable style={styles.icons}>
+                                <Image style={styles.imageIcons} source={require('./../../assets/images/icon.png')} />
+                            </Pressable>
+                            <Pressable style={styles.icons}>
+                                <Image style={styles.imageIcons} source={require('./../../assets/images/help-icon.png')} />
+                            </Pressable >
+                        </View>
+                        <View style={styles.setting}>
+                            <Pressable onPress={() => setShowSettings(false)}>
+                                <Image style={styles.settingIcon} source={require('./../../assets/images/close-icon.png')} />
+                            </Pressable>
+                        </View>
+                    </View>
                 </View>
-                <View style={styles.welcome}>
-                   <Pressable style={styles.icons}>
-                        <Image source={require('./../../assets/images/sound-icon.png')} />   
-                   </Pressable>
-                   <Pressable style={styles.icons}>
-                        <Image source={require('./../../assets/images/leaderboard-icon.png')} />   
-                   </Pressable>
-                   <Pressable style={styles.icons}>
-                        <Image source={require('./../../assets/images/profile-icon.png')} />   
-                   </Pressable>
-                   <Pressable style={styles.icons}>
-                        <Image source={require('./../../assets/images/sound-icon.png')} />   
-                   </Pressable>
-                   <Pressable style={styles.icons}>
-                        <Image source={require('./../../assets/images/help-icon.png')} />   
-                   </Pressable >
-                </View>
-                <View style={styles.setting}>
-                    <Pressable onPress={onPress}>
-                        <Image source={require('./../../assets/images/close-icon.png')} />
-                    </Pressable>
-                </View>
-            </View >
-            </ImageBackground>
-            </Animated.View>
-
-  )
+            </MixedContainerBackground>
+        </Modal>
+    )
 }
 
 const styles = EStyleSheet.create({
@@ -56,54 +76,42 @@ const styles = EStyleSheet.create({
         paddingVertical: responsiveScreenWidth(3),
     },
 
-    secondBgImg: {
-        height: responsiveScreenHeight(100)
-    },
-
-    logo: {
+    modalContainer: {
         alignItems: 'center',
-        marginTop: normalize(110)
-    },
-
-    welcome: {
-        flexDirection:'row',
         paddingHorizontal: responsiveScreenHeight(3),
-        marginTop: responsiveScreenHeight(35),
+    },
+    settingIconsContainter: {
+        flexDirection: 'row',
         flexWrap: 'wrap',
-        marginTop:responsiveScreenHeight(25)
-    },
-
-    welcomeText: {
-        fontSize: '1.4rem',
-        fontFamily: 'blues-smile',
-        color: '#fff'
-    },
-
-    welcomeBtn: {
-        backgroundColor: '#15397D',
-        height:normalize(38),
-        width:responsiveScreenWidth(50),
-        justifyContent:'center',
-        borderRadius:20
-    },
-
-    welcomeBtnText: {
-        color: "#fff",
-        // lineHeight: '1.3rem',
-        fontSize: '1.4rem',
-        textAlign: 'center',
-        fontFamily: 'blues-smile'
+        marginTop: responsiveScreenHeight(34),
     },
 
     setting: {
-        paddingHorizontal: responsiveScreenHeight(3),
-        marginTop:responsiveScreenHeight(3)
+        width: '100%',
+        marginTop: responsiveScreenHeight(3),
+        paddingHorizontal: responsiveScreenWidth(3),
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
 
     icons: {
-        marginHorizontal: 10,
+        marginRight: 30,
         marginVertical: 10,
+    },
+    imageIcons: {
+        height: 80,
+        width: 80
+    },
+    settingIcon: {
+        width: 50,
+        height: 50
+    },
+    storeIcon: {
+        width: 75.55,
+        height: 50
     }
 })
 
 export default DashboardSettings
+
