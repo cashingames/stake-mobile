@@ -85,7 +85,7 @@ const HomeScreen = () => {
                         ContainerStyle={styles.leaderboardContainer}></SwiperFlatList>
                 </View>
             </ScrollView>
-            <Events />
+            <RenderEvents />
         </>
     );
 }
@@ -135,7 +135,6 @@ const UserWallet = ({ balance }) => {
     );
 }
 
-
 function RenderUpdateChecker() {
 
     const minVersionCode = useSelector(state => state.common.minVersionCode);
@@ -150,7 +149,7 @@ function RenderUpdateChecker() {
     return null;
 }
 
-const Events = () => {
+const RenderEvents = () => {
     const navigation = useNavigation();
 
     return (
@@ -168,8 +167,6 @@ const Events = () => {
         </Pressable>
     )
 }
-
-
 
 const styles = EStyleSheet.create({
     container: {
@@ -234,26 +231,24 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 100,
-        width: responsiveScreenWidth(20),
-        height: responsiveScreenWidth(20),
-        elevation: 5,
-        backgroundColor: '#072169',
+        width: responsiveScreenWidth(15),
+        height: responsiveScreenWidth(15),
+        backgroundColor: '#FAC502',
         position: 'absolute',
-        right: 0,
-        bottom: 50,
+        right: 10,
+        bottom: 10,
         marginVertical: normalize(30),
-        marginHorizontal: normalize(12)
+        marginHorizontal: normalize(12),
+        elevation: 5, // Android
     },
     gameText: {
         fontSize: '.8rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-
     },
     gamepad: {
-        width: responsiveScreenWidth(18),
-        height: responsiveScreenWidth(18),
-        marginTop:'.5rem'
-
+        width: responsiveScreenWidth(10),
+        height: responsiveScreenWidth(10),
+        marginTop: '.5rem'
     }
 });
