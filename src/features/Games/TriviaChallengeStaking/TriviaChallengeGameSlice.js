@@ -27,17 +27,11 @@ export const TriviaChallengeStakeGameSlice = createSlice({
     name: 'triviaChallengeGame',
     initialState,
     reducers: {
-        // setQuestions: (state, action) => {
-        //     state.questions = action.payload; 
-        //     state.totalQuestions = state.questions.length;
-        //     state.currentQuestion = state.questions[state.currentQuestionIndex];
-        // },
         setChallengeDetails: (state, action) => {
             state.challengeDetails = action.payload;
             state.questions = state.challengeDetails.questions;
             state.totalQuestions = state.questions.length;
             state.currentQuestion = state.questions[state.currentQuestionIndex];
-            console.log(state.challengeDetails, 'mumuuuuuu')
         },
         getNextQuestion: (state) => {
             state.currentQuestionIndex += 1;

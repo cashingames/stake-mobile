@@ -24,8 +24,6 @@ const ChallengeStakingScreen = ({ navigation }) => {
 
 
     const stakeAmount = async () => {
-        navigation.navigate('ChallengerMatching')
-        return;
         setLoading(true);
 
         if (Number.parseFloat(amount) < Number.parseFloat(minimumChallengeStakeAmount)) {

@@ -13,14 +13,14 @@ import { useFocusEffect } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import AppButton from "../../shared/AppButton";
 import firestore from '@react-native-firebase/firestore';
-import { setChallengeDetails, setOpponentDetails, setQuestions } from "./TriviaChallengeStaking/TriviaChallengeGameSlice";
+import { setChallengeDetails } from "./TriviaChallengeStaking/TriviaChallengeGameSlice";
 
 const ChallengerMatchingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const user = useSelector(state => state.auth.user);
-    const [cancelling, setCancelling] = useState(false);
     const documentId = useSelector(state => state.triviaChallenge.documentId);
+    const [cancelling, setCancelling] = useState(false);
     const dispatch = useDispatch();
 
     const cancelChallenge = () => {
@@ -53,21 +53,21 @@ const ChallengerMatchingScreen = ({ navigation }) => {
     useEffect(() => {
 
         const subscriber = firestore()
-            .doc('trivia-challenge-requests/zKjRo8xHZ2iCEpKD4njn')
-            // .doc(documentId)
+            // .doc('trivia-challenge-requests/zKjRo8xHZ2iCEpKD4njn')
+            .doc(documentId)
             .onSnapshot(documentSnapshot => {
-                // console.log('User data: ', documentSnapshot.data());
-                if (documentSnapshot.data().status === "MATCHED") {
-                    const questions = documentSnapshot.data().questions;
-                    const challengeDetails = documentSnapshot.data()
-                    // dispatch(setQuestions(questions));
-                    dispatch(setChallengeDetails(challengeDetails))
+                const data = documentSnapshot.data();
+                if (data.status === "MATCHED") {
+                    console.log('matched');
+                    dispatch(setChallengeDetails(data))
                     navigation.navigate('ChallengeGameLoading')
                 }
             });
 
  
-        return () => subscriber();
+        return () => {
+            subscriber();
+        };
     }, []);
 
     useFocusEffect(

@@ -15,14 +15,14 @@ const ChallengeGameLoadingScreen = ({ navigation }) => {
     const boosts = useSelector(state => state.common.boosts);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const opponentDetails = challengeDetails.opponent
+    const documentId = useSelector(state => state.triviaChallenge.documentId);
 
     setTimeout(() => {
         navigation.navigate('ChallengeGameBoard');
     }, 5000);
 
     firestore()
-        .collection('challenge-sessions')
-        .doc('1120f56ff2214cb3b9b2')
+        .doc(documentId)
         .update({
             status: "ONGOING",
         })
