@@ -82,7 +82,7 @@ export const notifyOfPublishedUpdates = async () => {
             Updates.fetchUpdateAsync().then(() => {
                 Alert.alert(
                     "Updates available",
-                    "Please reload the app to enjoy the new experience we just added to cashingames",
+                    "Please reload the app to enjoy the new experience we just added to Gameark",
                     [
                         {
                             text: 'Restart',
@@ -95,7 +95,7 @@ export const notifyOfPublishedUpdates = async () => {
             });
         });
     } catch (e) {
-        crashlytics().recordError(error);
+        crashlytics().recordError(e);
     }
 }
 
