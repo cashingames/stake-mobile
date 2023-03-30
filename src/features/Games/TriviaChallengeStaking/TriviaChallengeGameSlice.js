@@ -3,9 +3,32 @@ import axios from 'axios'
 
 export const startChallengeRequest = createAsyncThunk(
     'game/createRealTimeChallenge',
-    async (data, thunkAPI) => {
+    async (data, _thunkAPI) => {
         const response = await axios.post('v3/challenges/create', data)
         // console.log(response, 'this is the challenge data')
+        return response.data
+    }
+)
+
+export const submitGameSession = createAsyncThunk(
+    'game/submitGameSession',
+    async (thunkAPI) => {
+        const state = thunkAPI.getState().triviaChallengeGame;
+
+        // process selected options and send
+        const data = {
+            challenge_request_id: state.challengeDetails.challenge_request_id,
+            selected_options: state.questions.reduce((filtered, question) => {
+                const option = question.options.find(x => x.active);
+                option && filtered.push({
+                    question_id: option.question_id,
+                    option_id: option.id
+                })
+                return filtered;
+            })
+        }
+
+        const response = await axios.post('v3/challenges/submit', data)
         return response.data
     }
 )
@@ -20,7 +43,7 @@ let initialState = {
     countdownFrozen: false,
     gameDuration: 60,
     countdownKey: 0,
-    challengeDetails:{}
+    challengeDetails: {}
 }
 
 export const TriviaChallengeStakeGameSlice = createSlice({
@@ -63,6 +86,6 @@ export const TriviaChallengeStakeGameSlice = createSlice({
     },
 })
 
-export const { getNextQuestion, selectedOption, setGameDuration, pauseGame, incrementCountdownResetIndex, setChallengeDetails} = TriviaChallengeStakeGameSlice.actions
+export const { getNextQuestion, selectedOption, setGameDuration, pauseGame, incrementCountdownResetIndex, setChallengeDetails } = TriviaChallengeStakeGameSlice.actions
 
 export default TriviaChallengeStakeGameSlice.reducer

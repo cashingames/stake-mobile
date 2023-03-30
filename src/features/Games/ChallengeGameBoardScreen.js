@@ -1,25 +1,32 @@
 import React from "react";
 import { ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import { getNextQuestion, selectedOption, submitGameSession } from "./TriviaChallengeStaking/TriviaChallengeGameSlice";
+import ChallengeGameBoardProgress from "./TriviaChallengeStaking/ChallengeGameBoardProgress";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import PlayGameHeader from "../../shared/PlayGameHeader";
-import { useDispatch, useSelector } from "react-redux";
-import { getNextQuestion, selectedOption } from "./TriviaChallengeStaking/TriviaChallengeGameSlice";
 import AppButton from "../../shared/AppButton";
-import ChallengeGameBoardProgress from "./TriviaChallengeStaking/ChallengeGameBoardProgress";
-import { useNavigation } from "@react-navigation/native";
 
 const ChallengeGameBoardScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
+
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const opponentStatus = challengeDetails.opponent.status
 
-
     const gameEnded = () => {
-        if (opponentStatus === 'ONGOING') {
-            navigation.navigate('ChallengeGameEndWaiting');
-            return
-        }
-        navigation.navigate('ChallengeEndGame');
+
+        dispatch(submitGameSession())
+            .then(unwrapResult)
+            .then(() => {
+                navigation.navigate(
+                    opponentStatus === 'ONGOING' ?
+                        'ChallengeGameEndWaiting' : 'ChallengeEndGame'
+                );
+            });
     }
 
 
@@ -65,7 +72,7 @@ const RenderOption = ({ option, onSelect }) => {
     )
 }
 
-const RenderActionButton = ({endGame}) => {
+const RenderActionButton = ({ endGame }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const totalQuestions = useSelector(state => state.triviaChallenge.totalQuestions);
