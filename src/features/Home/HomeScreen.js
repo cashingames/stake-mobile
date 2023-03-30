@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
-import { Text, View, ScrollView, StatusBar, Platform, RefreshControl } from 'react-native';
+import { Text, View, ScrollView, StatusBar, Platform, RefreshControl, Pressable, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, { BounceInRight } from 'react-native-reanimated';
 import normalize, {
-    responsiveHeight
+    responsiveHeight, responsiveScreenWidth
 } from '../../utils/normalize';
 import { isTrue, formatCurrency } from '../../utils/stringUtl';
 import PageLoading from '../../shared/PageLoading';
@@ -19,6 +19,8 @@ import LottieAnimations from '../../shared/LottieAnimations';
 import SelectGameMode from '../Games/SelectGameMode';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import WinnersScroller from '../Leaderboard/WinnersScroller';
+import { useNavigation } from '@react-navigation/native';
+
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -76,14 +78,14 @@ const HomeScreen = () => {
                 }
             >
                 <UserDetails />
-                <Events />
                 <View style={styles.gamesContainer}>
                     <SelectGameMode />
                     <WinnersScroller />
                     <SwiperFlatList content
-                    ContainerStyle={styles.leaderboardContainer}></SwiperFlatList>
+                        ContainerStyle={styles.leaderboardContainer}></SwiperFlatList>
                 </View>
             </ScrollView>
+            <Events />
         </>
     );
 }
@@ -149,27 +151,30 @@ function RenderUpdateChecker() {
 }
 
 const Events = () => {
+    const navigation = useNavigation();
+
     return (
-        <View>
-            <Text>Events</Text>
-        <ChallengeGameCard />
-        </View>
+        <Pressable style={styles.gameButton}  onPress={() => navigation.navigate('ListofGames')}>
+            {/* <LottieAnimations
+                animationView={require('../../../assets/joystick.json')}
+                width={normalize(60)}
+                height={normalize(60)}
+            /> */}
+            <Image
+                source={require('../../../assets/images/black-gamepad.png')}
+                style={styles.gamepad}
+            />
+            {/* <Text style={styles.gameText}>Games</Text> */}
+        </Pressable>
     )
 }
 
-const ChallengeGameCard = () => {
-    return (
-        <View>
-            <Text>Challenge a friend</Text>
-        </View>
-    )
-}
 
 
 const styles = EStyleSheet.create({
     container: {
         // flex: 1,
-        paddingBottom: normalize(30),
+        paddingBottom: normalize(10),
         backgroundColor: '#FFFF',
     },
     mainContainer: {
@@ -225,4 +230,30 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         marginTop: normalize(10),
     },
+    gameButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 100,
+        width: responsiveScreenWidth(20),
+        height: responsiveScreenWidth(20),
+        elevation: 5,
+        backgroundColor: '#072169',
+        position: 'absolute',
+        right: 0,
+        bottom: 50,
+        marginVertical: normalize(30),
+        marginHorizontal: normalize(12)
+    },
+    gameText: {
+        fontSize: '.8rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+
+    },
+    gamepad: {
+        width: responsiveScreenWidth(18),
+        height: responsiveScreenWidth(18),
+        marginTop:'.5rem'
+
+    }
 });

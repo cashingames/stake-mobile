@@ -64,7 +64,7 @@ const Winner = ({ winner }) => {
 const styles = EStyleSheet.create({
     mainContainer: {
         paddingTop: normalize(18),
-        paddingBottom: normalize(18)
+        // paddingBottom: normalize(8)
     },
     headerContainer: {
         display: 'flex',

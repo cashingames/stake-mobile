@@ -50,13 +50,15 @@ import ContactUs from './features/Support/ContactUs';
 import AuthContactUs from './features/Support/AuthContactUs';
 import EmailVerificationScreen from './features/Auth/EmailVerificationScreen';
 import GameLoadingScreen from './features/Games/GameLoadingScreen';
-import ChallengeSelectPlayerScreen from './features/Games/ChallengeSelectPlayerScreen';
-import ChallengeStakingScreen from './features/Games/ChallengeStakingScreen';
-import ChallengerMatchingScreen from './features/Games/ChallengerMatchingScreen';
-import ChallengeGameLoadingScreen from './features/Games/ChallengeGameLoadingScreen';
-import ChallengeGameBoardScreen from './features/Games/ChallengeGameBoardScreen';
+import ChallengeSelectPlayerScreen from './features/Games/TriviaChallengeStaking/ChallengeSelectPlayerScreen';
+import ChallengeStakingScreen from './features/Games/TriviaChallengeStaking/ChallengeStakingScreen';
+import ChallengeGameLoadingScreen from './features/Games/TriviaChallengeStaking/ChallengeGameLoadingScreen';
 import ChallengeEndGameScreen from './features/Games/TriviaChallengeStaking/ChallengeEndGameScreen';
 import ChallengeGameEndWaitingScreen from './features/Games/TriviaChallengeStaking/ChallengeGameEndWaitingScreen';
+import ChallengeGameBoardScreen from './features/Games/TriviaChallengeStaking/ChallengeGameBoardScreen';
+import ChallengeMatchingScreen from './features/Games/TriviaChallengeStaking/ChallengeMatchingScreen';
+import ListofGamesScreen from './features/Games/ListofGamesScreen';
+
 
 const AppStack = createNativeStackNavigator();
 
@@ -133,22 +135,30 @@ function AppRouter() {
 							},
 							headerTintColor: '#FFFF',
 						}} />
+						<AppStack.Screen name="ListofGames" component={ListofGamesScreen} options={{
+							title: 'Games', headerStyle: {
+								backgroundColor: '#072169',
+							},
+							headerTintColor: '#FFF',
+						}} />
 						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
 						<AppStack.Screen name="GameLoading" component={GameLoadingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Select Player' }} />
-						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{ title: 'Play Challenge', 	headerStyle: {
+						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{
+							title: 'Play Challenge', headerStyle: {
 								backgroundColor: '#EDDA74',
 							},
-							headerTintColor: '#000000', }} />
-						<AppStack.Screen name="ChallengerMatching" component={ChallengerMatchingScreen} options={{ headerShown: false }} />
+							headerTintColor: '#000000',
+						}} />
+						<AppStack.Screen name="ChallengeMatching" component={ChallengeMatchingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameLoading" component={ChallengeGameLoadingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameBoard" component={ChallengeGameBoardScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameEndWaiting" component={ChallengeGameEndWaitingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeEndGame" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
-            
+
 						{/** wallet */}
 						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
 						<AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
