@@ -74,7 +74,7 @@ const SelectedPlayers = ({ user }) => {
         <>
             <ImageBackground source={require('../../../../assets/images/challenge-stage.png')}
                 style={styles.playerImage} imageStyle={{ borderRadius: 20 }} resizeMode="cover">
-                <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
 
                 <Image
                     source={require('../../../../assets/images/versus.png')}

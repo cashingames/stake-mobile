@@ -1,5 +1,5 @@
-import React from "react";
-import { ImageBackground, Text, View, Image, Platform, StatusBar } from "react-native";
+import React, { useCallback } from "react";
+import { ImageBackground, Text, View, Image, Platform, StatusBar, BackHandler } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from "react-redux";
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../../utils/normalize";
@@ -22,8 +22,8 @@ const ChallengeGameLoadingScreen = ({ navigation }) => {
     }, 5000);
 
     firestore()
-        .doc('trivia-challenge-requests/n3gJEjoqHdg3wY2h7QK8')
-        // .doc(documentId)
+        // .doc('trivia-challenge-requests/n3gJEjoqHdg3wY2h7QK8')
+        .doc(documentId)
         .update({
             status: "ONGOING",
         })
@@ -33,20 +33,23 @@ const ChallengeGameLoadingScreen = ({ navigation }) => {
 
 
     useFocusEffect(
-        React.useCallback(() => {
+        useCallback(() => {
             if (Platform.OS === "android") {
                 StatusBar.setTranslucent(true);
                 StatusBar.setBackgroundColor("transparent");
                 return;
             }
             StatusBar.setBarStyle('light-content');
-            return () => {
-                if (Platform.OS === "android") {
-                    StatusBar.setTranslucent(true)
-                    return;
-                }
-                StatusBar.setBarStyle('dark-content');
-            }
+        }, [])
+    );
+    //disable back button
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => true;
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+            return () =>
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
         }, [])
     );
 
@@ -81,7 +84,7 @@ const SelectedPlayers = ({ user, opponentDetails }) => {
         <>
             <ImageBackground source={require('../../../../assets/images/challenge-stage.png')}
                 style={styles.playerImage} imageStyle={{ borderRadius: 20, borderColor: "#FFFF", borderWidth: 1 }} resizeMode="cover">
-                <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
 
                 <Image
                     source={require('../../../../assets/images/versus.png')}

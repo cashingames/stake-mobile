@@ -1,11 +1,12 @@
-import React from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import React, { useCallback } from "react";
+import { BackHandler, Image, Platform, ScrollView, StatusBar, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { formatCurrency, isTrue } from "../../../utils/stringUtl";
 import EStyleSheet from "react-native-extended-stylesheet";
 import Constants from 'expo-constants';
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import AppButton from "../../../shared/AppButton";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 const ChallengeEndGameScreen = ({ navigation }) => {
@@ -17,15 +18,40 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     const goHome = () => {
         navigation.navigate('Home');
-    }
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            if (Platform.OS === "android") {
+                StatusBar.setTranslucent(true);
+                StatusBar.setBackgroundColor("transparent");
+                return;
+            }
+            StatusBar.setBarStyle('light-content');
+        }, [])
+    );
+
+    //disable back button
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => true;
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+            return () =>
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+    );
 
     return (
         <ScrollView style={styles.container}>
-            {userScore > opponentScore ?
+            {userScore > opponentScore &&
                 <Text style={styles.headText}>Congrats {user.username}</Text>
-                :
+            }
+            {userScore < opponentScore &&
                 <Text style={styles.headText}>Sorry {user.username}, you can try again</Text>
-
+            }
+             {userScore === opponentScore &&
+                <Text style={styles.headText}>Draw, you can try again</Text>
             }
             <ChallengePlayers user={user} userScore={userScore} opponentScore={opponentScore} opponent={opponentUsername} />
             {userScore > opponentScore &&
@@ -49,17 +75,23 @@ const WinningAmount = () => {
 const ChallengePlayers = ({ user, userScore, opponentScore, opponentUsername }) => {
     return (
         <View style={styles.playersContainer}>
-            {userScore > opponentScore ?
+            {userScore > opponentScore &&
                 <>
-                    <ChallengeWinner playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                    <ChallengeWinner playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                     <ChallengeLoser playerName={opponentUsername} playerAvatar={require("../../../../assets/images/user-icon.png")} />
                 </>
-                :
+            }
+            {userScore < opponentScore &&
                 <>
                     <ChallengeWinner playerName={opponentUsername} playerAvatar={require("../../../../assets/images/user-icon.png")} />
-                    <ChallengeLoser playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                    <ChallengeLoser playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
-
+            }
+            {userScore === opponentScore &&
+                <>
+                    <ChallengeWinner playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                    <ChallengeLoser playerName={opponentUsername} playerAvatar={require("../../../../assets/images/user-icon.png")} />
+                </>
             }
         </View>
     )
@@ -96,9 +128,29 @@ const FinalScoreBoard = ({ userScore, opponentScore }) => {
         <View style={styles.scoreContainer}>
             <Text style={styles.scoreText}>Final score</Text>
             <View style={styles.scoreCountContainer}>
-                <Text style={styles.winnerScoreCount}>{userScore > opponentScore ? userScore : opponentScore}</Text>
-                <Text style={styles.colon}>:</Text>
-                <Text style={styles.loserScoreCount}>{userScore < opponentScore ? userScore : opponentScore}</Text>
+                {userScore > opponentScore &&
+                    <>
+                        <Text style={styles.winnerScoreCount}>{userScore}</Text>
+                        <Text style={styles.colon}>:</Text>
+                        <Text style={styles.loserScoreCount}>{opponentScore}</Text>
+                    </>
+                }
+                {userScore < opponentScore &&
+                    <>
+                        <Text style={styles.winnerScoreCount}>{opponentScore}</Text>
+                        <Text style={styles.colon}>:</Text>
+                        <Text style={styles.loserScoreCount}>{userScore}</Text>
+                    </>
+                }
+
+                {userScore === opponentScore &&
+                    <>
+                        <Text style={styles.winnerScoreCount}>{userScore}</Text>
+                        <Text style={styles.colon}>:</Text>
+                        <Text style={styles.loserScoreCount}>{opponentScore}</Text>
+                    </>
+                }
+
             </View>
         </View>
     )
@@ -118,7 +170,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         color: '#FFFF',
         textAlign: 'center',
-        lineHeight:'2rem'
+        lineHeight: '2rem'
     },
     winningsContainer: {
         backgroundColor: '#FFF',

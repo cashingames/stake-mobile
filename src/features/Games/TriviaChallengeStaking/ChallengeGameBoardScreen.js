@@ -1,7 +1,7 @@
-import React from "react";
-import { ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
+import React, { useCallback } from "react";
+import { BackHandler, ImageBackground, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit';
 
@@ -15,7 +15,30 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     const dispatch = useDispatch();
 
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
-    const opponentStatus = challengeDetails.opponent.status
+    const opponentStatus = challengeDetails.opponent.status;
+
+
+    useFocusEffect(
+        useCallback(() => {
+            if (Platform.OS === "android") {
+                StatusBar.setTranslucent(true);
+                StatusBar.setBackgroundColor("transparent");
+                return;
+            }
+            StatusBar.setBarStyle('light-content');
+        }, [])
+    );
+
+    //disable back button
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => true;
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+            return () =>
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+    );
 
     const gameEnded = () => {
 

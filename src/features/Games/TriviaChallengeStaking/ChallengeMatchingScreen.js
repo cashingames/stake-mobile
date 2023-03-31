@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Alert, ImageBackground, Platform } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { Alert, BackHandler, ImageBackground, Platform , StatusBar} from "react-native";
 import { Image } from "react-native";
 import { Text, View } from "react-native";
 import { isTrue } from "../../../utils/stringUtl";
@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import LottieAnimations from "../../../shared/LottieAnimations";
 import { useFocusEffect } from "@react-navigation/native";
-import { StatusBar } from "react-native";
 import AppButton from "../../../shared/AppButton";
 import firestore from '@react-native-firebase/firestore';
 import { setChallengeDetails } from "./TriviaChallengeGameSlice";
@@ -51,8 +50,8 @@ const ChallengeMatchingScreen = ({ navigation }) => {
     useEffect(() => {
 
         const subscriber = firestore()
-            .doc('trivia-challenge-requests/n3gJEjoqHdg3wY2h7QK8')
-            // .doc(documentId)
+            // .doc('trivia-challenge-requests/n3gJEjoqHdg3wY2h7QK8')
+            .doc(documentId)
             .onSnapshot(documentSnapshot => {
                 const data = documentSnapshot.data();
                 if (data.status === "MATCHED") {
@@ -69,20 +68,23 @@ const ChallengeMatchingScreen = ({ navigation }) => {
     }, []);
 
     useFocusEffect(
-        React.useCallback(() => {
+        useCallback(() => {
             if (Platform.OS === "android") {
                 StatusBar.setTranslucent(true);
                 StatusBar.setBackgroundColor("transparent");
                 return;
             }
-            StatusBar.setBarStyle('light-content');
-            return () => {
-                if (Platform.OS === "android") {
-                    StatusBar.setTranslucent(true)
-                    return;
-                }
-                StatusBar.setBarStyle('dark-content');
-            }
+            StatusBar.setBarStyle('light-content');       
+        }, [])
+    );
+       //disable back button
+       useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => true;
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+            return () =>
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
         }, [])
     );
 
@@ -113,7 +115,7 @@ const SelectedPlayers = ({ user }) => {
         <>
             <ImageBackground source={require('../../../../assets/images/challenge-stage.png')}
                 style={styles.playerImage} imageStyle={{ borderRadius: 20, borderColor: "#FFFF", borderWidth: 1 }} resizeMode="cover">
-                <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
 
                 <Image
                     source={require('../../../../assets/images/versus.png')}

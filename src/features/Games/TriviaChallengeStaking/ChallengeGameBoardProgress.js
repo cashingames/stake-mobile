@@ -188,7 +188,7 @@ const AvailableBoost = ({ boost, onConsume, showText }) => {
 const PlayersInfo = ({ user, opponentDetails }) => {
     return (
         <View style={styles.playersContainer}>
-            <UserPlayerInfo playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+            <UserPlayerInfo playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
             <Text style={styles.versus}>vs</Text>
             <OpponentPlayerInfo playerName={opponentDetails.username} playerAvatar={require("../../../../assets/images/user-icon.png")} />
         </View>
