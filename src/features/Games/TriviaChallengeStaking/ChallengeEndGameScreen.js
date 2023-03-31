@@ -21,14 +21,8 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     const goHome = () => {
         navigation.navigate('Home');
+        dispatch(clearSession());
     };
-
-    useEffect(() => {
-     
-        return () => {
-            dispatch(clearSession());
-        }
-    })
 
     useFocusEffect(
         useCallback(() => {
@@ -74,10 +68,10 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 }
 
 const WinningAmount = () => {
-    const amountWon = 10000
+    const amount = useSelector(state => state.triviaChallenge.challengeDetails.amount_won);
     return (
         <View style={styles.winningsContainer}>
-            <Text style={styles.winningsText}>You have won <Text style={styles.winningsAmount}> &#8358;{formatCurrency(amountWon)}!</Text></Text>
+            <Text style={styles.winningsText}>You have won <Text style={styles.winningsAmount}> &#8358;{formatCurrency(amount)}!</Text></Text>
         </View>
     )
 }
