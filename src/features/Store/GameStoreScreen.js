@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { unwrapResult } from "@reduxjs/toolkit";
 import EStyleSheet from "react-native-extended-stylesheet";
 import analytics from '@react-native-firebase/analytics';
-import { buyBoostFromWallet, buyPlanFromWallet } from "./StoreSlice";
+import { buyBoostFromWallet, buyItemFromStore, buyPlanFromWallet } from "./StoreSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 import AppButton from "../../shared/AppButton";
@@ -40,7 +40,7 @@ export default function ({ navigation }) {
               // Then when you're done
             //   InAppPurchases.finishTransactionAsync(purchase, true);
             itemBought(purchase.productId)
-            Alert.alert('successfully purchased product',purchase.productId)
+            // Alert.alert('successfully purchased product',purchase.productId)
             }
           });
         } else if (responseCode === InAppPurchases.IAPResponseCode.USER_CANCELED) {
@@ -58,6 +58,31 @@ export default function ({ navigation }) {
 
     const itemBought = async (productID) => {
         const {product, type} = getProductFromStoreId(productID)
+        setLoading(false);
+
+        dispatch(buyItemFromStore({
+            type,
+            item_id: product
+        }))
+            .then(unwrapResult)
+            .then(result => {
+                dispatch(getUser())
+                onClose()
+                successfulPurchase.playSound()
+                navigation.navigate("GameBoostPurchaseSuccessful")
+            })
+            .catch(async rejectedValueOrSerializedError => {
+                setLoading(false);
+                // Alert.alert("Notice", "Operation could not be completed, please try again");
+                await analytics().logEvent('game_plan_purchased_failed', {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email,
+                    'item_name': plan.name,
+                })
+                failedPurchase.playSound()
+                navigation.navigate("GameStoreItemsPurchaseFailed")
+            })
     }
 
     const getProductFromStoreId =  (id) => {
