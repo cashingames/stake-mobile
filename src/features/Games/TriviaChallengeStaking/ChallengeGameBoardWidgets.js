@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { View, Animated, Pressable, Image } from "react-native";
+import React from "react";
+import { View, Animated, Image } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
+import { Text } from "react-native";
+import { useSelector } from "react-redux";
+import Constants from 'expo-constants';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import LottieAnimations from "../../../shared/LottieAnimations";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
-import { formatNumber, isTrue } from "../../../utils/stringUtl";
-import { Text } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { bombOptions, boostReleased, consumeBoost, pauseGame, skipQuestion } from "../GameSlice";
-import { reduceBoostCount } from "../../Auth/AuthSlice";
-import Constants from 'expo-constants';
+import { isTrue } from "../../../utils/stringUtl";
+import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 
-
-
-
-const ChallengeGameBoardProgress = ({onComplete}) => {
+const ChallengeGameBoardWidgets = ({onComplete}) => {
     const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const opponentDetails = challengeDetails.opponent
@@ -23,7 +18,6 @@ const ChallengeGameBoardProgress = ({onComplete}) => {
     return (
         <View style={styles.gameProgressAndBoost}>
             <RenderGameProgress onComplete={onComplete} />
-            {/* <AvailableGameSessionBoosts /> */}
             <PlayersInfo user={user} opponentDetails={opponentDetails} />
         </View>
     )
@@ -93,98 +87,6 @@ const RenderQuestionsCount = () => {
     );
 }
 
-
-const AvailableGameSessionBoosts = () => {
-    const dispatch = useDispatch();
-    const boosts = useSelector(state => state.auth.user.boosts);
-    const user = useSelector(state => state.auth.user)
-    const displayedOptions = useSelector(state => state.game.displayedOptions);
-    const gameMode = useSelector(state => state.game.gameMode);
-    const [showText, setShowText] = useState(true);
-
-
-    const boostsToDisplay = () => {
-        //  bomb is only applicable to multiple choices
-        if (displayedOptions.length === 2) {
-            return boosts.filter(x => x.name.toUpperCase() !== "BOMB");
-        }
-        if (gameMode.name === "CHALLENGE") {
-            return boosts.filter(x => x.name.toUpperCase() !== "SKIP");
-        }
-        return boosts;
-    }
-
-    useEffect(() => {
-        // Change the state every second or the time given by User.
-        const interval = setInterval(() => {
-            setShowText((showText) => !showText);
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
-
-    const boostApplied = (data) => {
-        dispatch(consumeBoost(data))
-        dispatch(reduceBoostCount(data.id))
-        const name = data.name.toUpperCase();
-        if (name === 'TIME FREEZE') {
-            dispatch(pauseGame(true));
-            setTimeout(() => {
-                dispatch(pauseGame(false))
-                dispatch(boostReleased())
-            }, 10000);
-        }
-        if (name === 'SKIP') {
-            dispatch(skipQuestion());
-            dispatch(boostReleased());
-        }
-        if (name === "BOMB") {
-            dispatch(bombOptions());
-            dispatch(boostReleased());
-        }
-    }
-
-    return (
-        <>
-            {boosts?.length > 0 ?
-                <View style={styles.availableBoosts}>
-                    <View style={styles.boostinfo}>
-                        <Text style={styles.title}>BOOST</Text>
-                    </View>
-                    {
-                        boostsToDisplay().map((boost, index) =>
-                            boost.count >= 1 &&
-                            <AvailableBoost boost={boost} key={index} onConsume={boostApplied} showText={showText} />
-                        )
-                    }
-
-                </View>
-                :
-                <></>
-            }
-        </>
-    )
-}
-
-const AvailableBoost = ({ boost, onConsume, showText }) => {
-    const activeBoost = useSelector(state => state.game.activeBoost);
-    const isActive = activeBoost.id === boost.id;
-
-    return (
-        <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
-            <View style={styles.boostContainer}>
-                <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
-                    <Image
-                        source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
-                        style={[styles.boostIcon, { opacity: showText ? 0 : 1 }]}
-                    />
-                    <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
-                </View>
-                <Text style={styles.name}>{boost.name}</Text>
-            </View>
-        </Pressable>
-    )
-}
-
 const PlayersInfo = ({ user, opponentDetails }) => {
     return (
         <View style={styles.playersContainer}>
@@ -206,6 +108,7 @@ const UserPlayerInfo = ({ playerName, playerAvatar }) => {
         </View>
     )
 }
+
 const OpponentPlayerInfo = ({ playerName, playerAvatar }) => {
     return (
         <View style={styles.playerDetails}>
@@ -218,7 +121,7 @@ const OpponentPlayerInfo = ({ playerName, playerAvatar }) => {
     )
 }
 
-export default ChallengeGameBoardProgress;
+export default ChallengeGameBoardWidgets;
 
 const styles = EStyleSheet.create({
     gameProgressAndBoost: {

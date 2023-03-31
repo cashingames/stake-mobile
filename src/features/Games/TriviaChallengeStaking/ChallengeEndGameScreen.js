@@ -14,7 +14,9 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const opponentScore = challengeDetails.opponent.score;
     const userScore = challengeDetails.score;
-    const opponentUsername = challengeDetails.opponent;
+    const opponentUsername = challengeDetails.opponent.username;
+
+    console.log("challenge details", challengeDetails);
 
     const goHome = () => {
         navigation.navigate('Home');
@@ -53,7 +55,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
              {userScore === opponentScore &&
                 <Text style={styles.headText}>Draw, you can try again</Text>
             }
-            <ChallengePlayers user={user} userScore={userScore} opponentScore={opponentScore} opponent={opponentUsername} />
+            <ChallengePlayers user={user} userScore={userScore} opponentScore={opponentScore} opponentUsername={opponentUsername} />
             {userScore > opponentScore &&
                 <WinningAmount />
             }
@@ -73,6 +75,8 @@ const WinningAmount = () => {
 }
 
 const ChallengePlayers = ({ user, userScore, opponentScore, opponentUsername }) => {
+
+    console.log("challenge", )
     return (
         <View style={styles.playersContainer}>
             {userScore > opponentScore &&

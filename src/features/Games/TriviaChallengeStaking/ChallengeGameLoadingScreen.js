@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { ImageBackground, Text, View, Image, Platform, StatusBar, BackHandler } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from "react-redux";
@@ -7,7 +7,6 @@ import { isTrue } from "../../../utils/stringUtl";
 import Constants from 'expo-constants';
 import LottieAnimations from "../../../shared/LottieAnimations";
 import { useFocusEffect } from "@react-navigation/native";
-import firestore from '@react-native-firebase/firestore';
 
 const ChallengeGameLoadingScreen = ({ navigation }) => {
 
@@ -15,22 +14,12 @@ const ChallengeGameLoadingScreen = ({ navigation }) => {
     const boosts = useSelector(state => state.common.boosts);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const opponentDetails = challengeDetails.opponent
-    const documentId = useSelector(state => state.triviaChallenge.documentId);
 
-    setTimeout(() => {
-        navigation.navigate('ChallengeGameBoard');
-    }, 5000);
-
-    firestore()
-        // .doc('trivia-challenge-requests/n3gJEjoqHdg3wY2h7QK8')
-        .doc(documentId)
-        .update({
-            status: "ONGOING",
-        })
-        .then(() => {
-            console.log('status updated!');
-        });
-
+    useEffect(() => {
+        setTimeout(() => {
+            navigation.navigate('ChallengeGameBoard');
+        }, 5000);
+    }, [])
 
     useFocusEffect(
         useCallback(() => {

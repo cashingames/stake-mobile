@@ -1,25 +1,43 @@
 import React, { useCallback, useEffect } from "react";
 import { BackHandler, Image, ImageBackground, Platform, StatusBar, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LottieAnimations from "../../../shared/LottieAnimations";
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import { isTrue } from "../../../utils/stringUtl";
 import Constants from 'expo-constants';
 import { useFocusEffect } from "@react-navigation/native";
+import firestore from '@react-native-firebase/firestore';
+import { setChallengeDetails } from "./TriviaChallengeGameSlice";
 
 
 const ChallengeGameEndWaitingScreen = ({navigation}) => {
     const user = useSelector(state => state.auth.user);
-    const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
-    const opponentStatus = challengeDetails.opponent.status;
-    const opponentDetails = challengeDetails.opponent.status;
+    const opponentDetails = useSelector(state => state.triviaChallenge.challengeDetails.opponent);
+    const documentId = useSelector(state => state.triviaChallenge.documentId);
+
+    const dispatch = useDispatch();
+
+    console.log("oponent details", opponentDetails);
 
     useEffect(() => {
-        if (opponentStatus === 'COMPLETED') {
-            navigation.navigate('ChallengeEndGame');
-        }
-    }, [opponentStatus]);
+
+        const subscriber = firestore()
+            .doc(documentId)
+            .onSnapshot(documentSnapshot => {
+                const data = documentSnapshot.data();
+                if (data.status === "COMPLETED") {
+                    dispatch(setChallengeDetails(data))
+                    navigation.navigate('ChallengeEndGame')
+                }
+            });
+
+ 
+        return () => {
+            subscriber();
+        };
+    }, []);
+    
 
     useFocusEffect(
         useCallback(() => {

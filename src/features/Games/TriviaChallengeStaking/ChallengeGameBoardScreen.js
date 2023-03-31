@@ -1,12 +1,13 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { BackHandler, ImageBackground, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit';
+import firestore from "@react-native-firebase/firestore";
 
-import { getNextQuestion, selectedOption, submitGameSession } from "./TriviaChallengeGameSlice";
-import ChallengeGameBoardProgress from "./ChallengeGameBoardProgress";
+import { getNextQuestion, selectedOption, setChallengeDetails, submitGameSession } from "./TriviaChallengeGameSlice";
+import ChallengeGameBoardWidgets from "./ChallengeGameBoardWidgets";
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import PlayGameHeader from "../../../shared/PlayGameHeader";
 import AppButton from "../../../shared/AppButton";
@@ -14,9 +15,8 @@ import AppButton from "../../../shared/AppButton";
 const ChallengeGameBoardScreen = ({ navigation }) => {
     const dispatch = useDispatch();
 
-    const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
-    const opponentStatus = challengeDetails.opponent.status;
-
+    const documentId = useSelector(state => state.triviaChallenge.documentId);
+    const [submitting, setSubmitting] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
@@ -41,25 +41,40 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     );
 
     const gameEnded = () => {
-
+        setSubmitting(true);
         dispatch(submitGameSession())
             .then(unwrapResult)
-            .then(() => {
+            .then(async () => {
+                setSubmitting(false);
+                const status = await getOpponentStatus();
+                
                 navigation.navigate(
-                    opponentStatus === 'ONGOING' ?
+                    status === 'MATCHED' ?
                         'ChallengeGameEndWaiting' : 'ChallengeEndGame'
                 );
             });
     }
 
+    const getOpponentStatus = async () => {
+        console.log('documentId 2', documentId);
+        const result = await firestore()
+            .doc(documentId)
+            .get();
+
+        const data = result.data();
+        dispatch(setChallengeDetails(data));
+        const status = data.opponent.status;
+        console.log("opponent status", status);
+        return status;
+    }
 
     return (
         <ImageBackground source={require('../../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
                 <PlayGameHeader />
-                <ChallengeGameBoardProgress onComplete={gameEnded} />
+                <ChallengeGameBoardWidgets onComplete={gameEnded} />
                 <RenderQuestion />
-                <RenderActionButton endGame={gameEnded} />
+                <RenderActionButton onEnd={gameEnded} submitting={submitting} />
             </ScrollView>
         </ImageBackground>
 
@@ -95,7 +110,7 @@ const RenderOption = ({ option, onSelect }) => {
     )
 }
 
-const RenderActionButton = ({ endGame }) => {
+const RenderActionButton = ({ onEnd, submitting }) => {
     const dispatch = useDispatch();
     const totalQuestions = useSelector(state => state.triviaChallenge.totalQuestions);
     const currentQuestionIndex = useSelector(state => state.triviaChallenge.currentQuestionIndex);
@@ -104,7 +119,7 @@ const RenderActionButton = ({ endGame }) => {
     const onPress = () => {
 
         if (isLastQuestion) {
-            endGame()
+            onEnd()
         }
         else
             dispatch(getNextQuestion());
@@ -116,6 +131,7 @@ const RenderActionButton = ({ endGame }) => {
             text={isLastQuestion ? 'Finish' : 'Next'}
             onPress={onPress}
             style={styles.nextButton}
+            disabled={submitting}
         />
 
     )
