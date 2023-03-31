@@ -53,6 +53,7 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                 console.log('listening and got updated: ', "got data", documentId, data.status);
                 /**
                  * @TODO fix this bug, something keeps reruning this subscription from game in progress screen
+                 * when opponent info changes
                  */
                 if (data.status === "MATCHED" && data.opponent.status !== "COMPLETED") {
                     dispatch(setChallengeDetails(data))
