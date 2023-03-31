@@ -153,17 +153,11 @@ const RenderEvents = () => {
     const navigation = useNavigation();
 
     return (
-        <Pressable style={styles.gameButton}  onPress={() => navigation.navigate('ListofGames')}>
-            {/* <LottieAnimations
-                animationView={require('../../../assets/joystick.json')}
-                width={normalize(60)}
-                height={normalize(60)}
-            /> */}
+        <Pressable style={styles.gameButton}  onPress={() => navigation.navigate('GamesList')}>
             <Image
                 source={require('../../../assets/images/black-gamepad.png')}
                 style={styles.gamepad}
             />
-            {/* <Text style={styles.gameText}>Games</Text> */}
         </Pressable>
     )
 }

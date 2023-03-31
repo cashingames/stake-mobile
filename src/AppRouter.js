@@ -57,7 +57,7 @@ import ChallengeEndGameScreen from './features/Games/TriviaChallengeStaking/Chal
 import ChallengeGameEndWaitingScreen from './features/Games/TriviaChallengeStaking/ChallengeGameEndWaitingScreen';
 import ChallengeGameBoardScreen from './features/Games/TriviaChallengeStaking/ChallengeGameBoardScreen';
 import ChallengeMatchingScreen from './features/Games/TriviaChallengeStaking/ChallengeMatchingScreen';
-import ListofGamesScreen from './features/Games/ListofGamesScreen';
+import GamesListScreen from './features/Games/GamesListScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -135,7 +135,7 @@ function AppRouter() {
 							},
 							headerTintColor: '#FFFF',
 						}} />
-						<AppStack.Screen name="ListofGames" component={ListofGamesScreen} options={{
+						<AppStack.Screen name="GamesList" component={GamesListScreen} options={{
 							title: 'Games', headerStyle: {
 								backgroundColor: '#072169',
 							},

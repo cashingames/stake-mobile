@@ -1,21 +1,39 @@
 import React from "react";
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import { Image, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from "react-redux";
-import LottieAnimations from "../../shared/LottieAnimations";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
-import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import Constants from 'expo-constants';
 import { isTrue } from "../../utils/stringUtl";
 import { setGameMode, setGameType } from "./GameSlice";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { LinearGradient } from 'expo-linear-gradient';
+import analytics from '@react-native-firebase/analytics';
 
 
 
 
-const ListofGamesScreen = ({ navigation }) => {
-    useApplyHeaderWorkaround(navigation.setOptions);
+
+const GamesListScreen = ({ navigation }) => {
+
+    useFocusEffect(
+        React.useCallback(() => {
+            if (Platform.OS === "android") {
+                StatusBar.setTranslucent(true);
+                StatusBar.setBackgroundColor("transparent");
+                return;
+            }
+            StatusBar.setBarStyle('light-content');
+            return () => {
+                if (Platform.OS === "android") {
+                    StatusBar.setTranslucent(true)
+                    return;
+                }
+                StatusBar.setBarStyle('dark-content');
+            }
+        }, [])
+    );
+
 
     return (
         <LinearGradient
@@ -24,7 +42,7 @@ const ListofGamesScreen = ({ navigation }) => {
             end={[0.5, 1]}
             style={styles.container}
         >
-            <ScrollView >
+            <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.gamesContainer}>
                     <ChallengeCard />
                     <TriviaStakingCard />
@@ -42,18 +60,24 @@ const ChallengeCard = () => {
     const gameMode = useSelector(state => state.common.gameModes[1]);
     const gameType = useSelector(state => state.common.gameTypes[0]);
 
-    const selectChallengeMode = () => {
+    const selectChallengeMode = async () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
+        await analytics().logEvent("game_mode_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+            'gamemode': gameMode.displayName,
+        })
         navigation.navigate('SelectGameCategory')
 
     }
 
     return (
-        <View style={styles.cardContainer}>
+        <Pressable style={styles.cardContainer} onPress={selectChallengeMode}>
             <View style={styles.avatarContainer}>
                 <Image
-                    source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+                    source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
                     style={styles.avatar}
                 />
                 <Image
@@ -69,7 +93,7 @@ const ChallengeCard = () => {
             <Pressable style={styles.button} onPress={selectChallengeMode}>
                 <Text style={styles.playText}>Play now</Text>
             </Pressable>
-        </View>
+        </Pressable>
     )
 }
 
@@ -78,16 +102,24 @@ const TriviaStakingCard = () => {
     const navigation = useNavigation();
     const gameMode = useSelector(state => state.common.gameModes[0]);
     const gameType = useSelector(state => state.common.gameTypes[0]);
+    const user = useSelector(state => state.auth.user)
 
-    const selectChallengeMode = () => {
+
+    const selectTriviaMode = async () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
+        await analytics().logEvent("game_mode_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+            'gamemode': gameMode.displayName,
+        })
         navigation.navigate('SelectGameCategory')
 
     }
 
     return (
-        <View style={styles.triviaContainer}>
+        <Pressable style={styles.triviaContainer} onPress={selectTriviaMode}>
             <View style={styles.avatarContainer}>
                 <Image
                     source={require('../../../assets/images/quiz.png')}
@@ -95,27 +127,38 @@ const TriviaStakingCard = () => {
                 />
             </View>
             <Text style={styles.title}>Trivia Staking</Text>
-            <Pressable style={styles.button} onPress={selectChallengeMode}>
+            <Pressable style={styles.button} onPress={selectTriviaMode}>
                 <Text style={styles.playText}>Play now</Text>
             </Pressable>
-        </View>
+        </Pressable>
     )
 }
 
-export default ListofGamesScreen;
+export default GamesListScreen;
 
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#072169',
-        paddingHorizontal: normalize(18),
-        paddingVertical: normalize(30)
+        // backgroundColor: '#072169',
+        // paddingHorizontal: normalize(18),
+        // paddingVertical: normalize(30),
+
+    },
+    contentContainer: {
+        flex: 1,
+        // backgroundColor: '#072169',
+        // paddingHorizontal: normalize(18),
+        // paddingVertical: normalize(30),
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     gamesContainer: {
         display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between'
+        flexDirection: 'column',
+        // justifyContent:'center',
+        // alignItems:'center',
+        // flexWrap: 'wrap',
+        // justifyContent: 'space-between'
     },
     cardContainer: {
         backgroundColor: '#FAC502',
@@ -124,8 +167,9 @@ const styles = EStyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         borderRadius: 13,
-        width: responsiveScreenWidth(42),
-        justifyContent: 'flex-end'
+        width: responsiveScreenWidth(65),
+        justifyContent: 'flex-end',
+        marginBottom: '1rem'
     },
     triviaContainer: {
         backgroundColor: '#eab676',
@@ -134,7 +178,9 @@ const styles = EStyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         borderRadius: 13,
-        width: responsiveScreenWidth(42)
+        width: responsiveScreenWidth(65),
+        justifyContent: 'flex-end',
+        marginBottom: '1rem'
 
     },
     avatarContainer: {
@@ -144,20 +190,20 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between'
     },
     avatar: {
-        width: responsiveScreenWidth(12),
-        height: responsiveScreenWidth(12),
+        width: responsiveScreenWidth(15),
+        height: responsiveScreenWidth(15),
         borderRadius: 50,
         borderWidth: 2,
         borderColor: "#fff"
     },
     quiz: {
-        width: responsiveScreenWidth(15),
-        height: responsiveScreenWidth(15),
+        width: responsiveScreenWidth(18),
+        height: responsiveScreenWidth(18),
     },
     versus: {
-        width: responsiveScreenWidth(7),
+        width: responsiveScreenWidth(8),
         height: responsiveScreenWidth(10),
-        marginHorizontal: '.5rem'
+        marginHorizontal: '.8rem'
     },
     title: {
         fontSize: '.8rem',

@@ -13,21 +13,9 @@ import analytics from '@react-native-firebase/analytics';
 const SelectGameMode = () => {
 
     const navigation = useNavigation();
-    const dispatch = useDispatch();
-    const user = useSelector(state => state.auth.user)
-    const gameMode = useSelector(state => state.common.gameModes[0]); //to be controller from backend
-    const gameType = useSelector(state => state.common.gameTypes[0]); //to be controlled from backend
 
     const onSelectGameMode = async () => {
-        dispatch(setGameMode(gameMode));
-        dispatch(setGameType(gameType));
-        await analytics().logEvent("game_mode_selected", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email,
-            'gamemode': gameMode.displayName,
-        })
-        navigation.navigate('SelectGameCategory')
+        navigation.navigate('GamesList')
     };
 
 
@@ -37,7 +25,6 @@ const SelectGameMode = () => {
         </Pressable>
     )
 }
-
 
 export default SelectGameMode;
 
