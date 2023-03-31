@@ -128,16 +128,16 @@ export default function SocialSignUp({ googleText }) {
                         email: userDetails.email
                     })).then(unwrapResult)
                         .then((originalPromiseResult) => {
-                            console.log(originalPromiseResult)
-                            if (originalPromiseResult.data.isFirstTime) {
-                                setEmail(originalPromiseResult.data.email)
-                                setFirstName(originalPromiseResult.data.firstName)
-                                setLastName(originalPromiseResult.data.lastName)
-                                setloading(false)
-                                openBottomSheet()
-                                return
-                            }
-                            console.log(originalPromiseResult);
+                            console.log(originalPromiseResult, "originalPromiseResul")
+                            // if (originalPromiseResult.data.isFirstTime ) {
+                            //     setEmail(originalPromiseResult.data.email)
+                            //     setFirstName(originalPromiseResult.data.firstName)
+                            //     setLastName(originalPromiseResult.data.lastName)
+                            //     setloading(false)
+                            //     openBottomSheet()
+                            //     return
+                            // }
+                            // console.log(originalPromiseResult);
                             saveToken(originalPromiseResult.data.token)
                             analytics().logEvent('signin_with_Google', {
                                 'id': userDetails.given_name,

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, Link } from '@react-navigation/native';
 import Input from '../../shared/Input';
 import { CheckBox } from 'react-native-elements'
 import AuthTitle from '../../shared/AuthTitle';
 import { useDispatch } from 'react-redux';
-import { saveCreatedUserCredentials } from './AuthSlice';
+import { registerUser, registerUserThunk, saveCreatedUserCredentials, setToken } from './AuthSlice';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import analytics from '@react-native-firebase/analytics';
 import { ImageBackground } from 'react-native';
@@ -62,6 +62,64 @@ const SignupScreen = () => {
         setCanSend(!invalid);
     }, [emailErr, passErr, password, checked, uNameErr, username])
 
+    const generateNumber = (n = 11)=>{
+        var add = 1, max = 12 - add;   // 12 is the min safe number Math.random() can generate without it starting to pad the end with zeros.   
+        
+        if ( n > max ) {
+                return generateNumber(max) + generateNumber(n - max);
+        }
+        
+        max        = Math.pow(10, n+add);
+        var min    = max/10; // Math.pow(10, n) basically
+        var number = Math.floor( Math.random() * (max - min + 1) ) + min;
+        
+        return ("" + number).substring(add); 
+    }
+
+    const processReg = async ()=>{
+        setCanSend(false);
+
+        try{
+            const _payload = {
+                email,
+                username,
+                password,
+                password_confirmation: password,
+                // phone_number: generateNumber()
+            }
+
+            const res = await registerUser(_payload);
+
+            console.log(res?.data?.data?.token)
+
+            // process login 
+            if(res.data.success){
+                dispatch(setToken(res?.data?.data?.token || ""))
+            }
+    
+        }catch(e){
+            console.log(e.response)
+            Alert.alert("Confirm information provided", e.response.data.message)
+        }
+
+        setCanSend(true);
+
+        // dispatch(registerUserThunk({
+        //     email,
+        //     username,
+        //     password
+        // }))
+        // .unwrap()
+        // .then(response =>{
+        //     console.log(response)
+        // })
+        // .catch(err =>{
+        //     console.log(err)
+        //     setCanSend(true);
+        //     Alert.alert("Confirm information provided")
+        // });
+    }
+
     return (
         <MixedContainerBackground>
             <View style={styles.headerBox}>
@@ -113,7 +171,7 @@ const SignupScreen = () => {
                         </Text>
                     }
                 />
-                <GaButton text='Continue' disabled={!canSend} />
+                <GaButton onPress={()=> processReg()} text='Continue' disabled={!canSend} />
             </View>
         </MixedContainerBackground>
     );

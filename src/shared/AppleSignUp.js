@@ -92,13 +92,13 @@ const AppleSignUp = () => {
 
                 .then((originalPromiseResult) => {
 
-                    if (originalPromiseResult.data.isFirstTime) {
-                        setEmail(originalPromiseResult.data.email)
-                        setFirstName(originalPromiseResult.data.firstName)
-                        setLastName(originalPromiseResult.data.lastName)
-                        openBottomSheet()
-                        return
-                    }
+                    // if (originalPromiseResult.data.isFirstTime) {
+                    //     setEmail(originalPromiseResult.data.email)
+                    //     setFirstName(originalPromiseResult.data.firstName)
+                    //     setLastName(originalPromiseResult.data.lastName)
+                    //     openBottomSheet()
+                    //     return
+                    // }
                     console.log(originalPromiseResult);
                     saveToken(originalPromiseResult.data.token)
                     navigation.navigate('AppRouter')
