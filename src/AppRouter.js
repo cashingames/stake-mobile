@@ -80,7 +80,8 @@ import useSound from './utils/useSound';
 import Dashboard from './features/Dashboard';
 import { StatusBar } from 'react-native';
 import Home from './features/Home/Home';
-import GameScreen from './features/GameScreen';
+import GameScreen from './features/Games/GameScreen';
+import SubCategoryScreen from './features/Games/SubCategoryScreen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -208,6 +209,9 @@ function AppRouter() {
 						<AppStack.Screen options={{ headerShown: false }} name="Games" component={GameScreen} />
 						<AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
 						<AppStack.Screen name="SelectGameCategory" component={SelectGameCategoryScreen} options={{
+							headerShown: false,
+						}} />
+						<AppStack.Screen name="SelectSubCategory" component={SubCategoryScreen} options={{
 							headerShown: false,
 						}} />
 						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{

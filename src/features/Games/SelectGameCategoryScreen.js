@@ -1,37 +1,29 @@
 import React, { useRef, useState } from 'react';
-import { Image, Pressable, ScrollView, StatusBar, View } from 'react-native';
+import { Image, Pressable, StatusBar, Text, View } from 'react-native';
 import GamePicker from './GamePicker';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import LottieAnimations from '../../shared/LottieAnimations';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useFocusEffect } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
 import { isTrue } from '../../utils/stringUtl';
 import { useSelector } from 'react-redux';
 import NoGame from '../../shared/NoGame';
-import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { Platform } from 'react-native';
 import useSound from '../../utils/useSound';
 import QuizContainerBackground from '../../shared/ContainerBackground/QuizContainerBackground';
 import TopIcons from '../../shared/TopIcons';
+import DashboardSettings from '../../shared/DashboardSettings';
+import { ScrollView } from 'react-native';
 
 const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
-    const activeSubcategory = useSelector(state => state.game.gameCategory);
     const gameMode = useSelector(state => state.game.gameMode);
     const refRBSheet = useRef();
-    const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
+    const [showSettings, setShowSettings] = useState(false);
 
-    console.log(gameMode) 
+    // console.log(activeSubcategory)
 
-    // const openBottomSheet = () => {
-    //     refRBSheet.current.open()
-    // }
-
-    const closeBottomSheet = () => {
-        refRBSheet.current.close()
-    }
 
     const onPlayButtonClick = () => {
         onSelectGameMode();
@@ -59,50 +51,66 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     );
 
     return (
-        <QuizContainerBackground>
-        <View style={styles.container}>
-        <TopIcons />
-        <View style={styles.logo}>
-                    <Pressable style={styles.icons}>
-                        <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
-                    </Pressable>
-                    <Image style={styles.smallLogo} source={require('../../../assets/images/ga-logo-small.png')} />
-                </View>
-        <View>
-            <GamePicker title={"Pick a game"} activeSubcategory={activeSubcategory} />
-                </View>
-        </View>
-        </QuizContainerBackground>
+        <ScrollView>
+            <QuizContainerBackground>
+                <ScrollView style={styles.container}>
+                    <TopIcons />
+                    <View style={styles.logo}>
+                        <Pressable style={styles.icons}>
+                            <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
+                        </Pressable>
+                        <Text style={styles.title}>Quiz Game</Text>
+                    </View>
+                    <View style={styles.imgContainer}>
+                        <Image style={styles.quizImage} source={require('../../../assets/images/quiz-large.png')} />
+                    </View>
+                    <View>
+                        <GamePicker title={"Pick a game"} navigation={navigation} />
+                    </View>
+                    <View style={styles.setting}>
+                        <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
+                    </View>               
+                </ScrollView>
+            </QuizContainerBackground>
+        </ScrollView>
+
     )
 }
 
-export default SelectGameCategoryScreen; 
+export default SelectGameCategoryScreen;
 
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingVertical: responsiveScreenWidth(3),
+    },
+    logo: {
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+        marginTop: normalize(40),
         paddingHorizontal: responsiveScreenWidth(3),
     },
-    animation: {
-        alignItems: 'center',
-        // marginBottom: normalize(10)
+    imageIcons: {
+        width: 50,
+        height: 50,
+        marginTop: 10,
     },
-    selectButton: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 100,
-        width: 70,
-        height: 70,
-        elevation: 5,
-        backgroundColor: '#EF2F55',
-        position: 'absolute',
-        right: 0,
-        bottom: 0,
-        margin: normalize(18)
+    title: {
+        color: '#fff',
+        fontFamily: 'blues-smile',
+        fontSize: 64,
+        textAlign: 'center',
+        letterSpacing: 7,
+        flex: 1,
     },
-    disabled: {
-        backgroundColor: '#DFCBCF'
+    imgContainer: {
+        alignItems: 'center'
     },
-
+    quizImage: {
+        width: normalize(167),
+        height: normalize(226)
+    },
+    setting: {
+        marginTop: responsiveScreenHeight(5.5),
+    },
 })

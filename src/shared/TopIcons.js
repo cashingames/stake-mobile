@@ -1,6 +1,7 @@
 import { View, Text, Image, ImageBackground } from 'react-native'
 import React from 'react'
 import EStyleSheet from 'react-native-extended-stylesheet'
+import { responsiveScreenWidth } from '../utils/normalize'
 
 const TopIcons = () => {
     return (
@@ -38,7 +39,8 @@ const styles = EStyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+          paddingHorizontal: responsiveScreenWidth(3),
     },
     iconContainer:{
         flexDirection:'row',

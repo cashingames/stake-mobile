@@ -16,26 +16,28 @@ import GameSubcategoryCard from './GameSubcategoryCard';
 import useSound from '../../utils/useSound';
 
 
-export default ({ title, initialShowPlayButton = true ,activeSubcategory}) => {
-
+export default ({ title, initialShowPlayButton = true ,activeSubcategory, navigation}) => {
     const dispatch = useDispatch();
    
     const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
     const [activeCategory, setActiveCategory] = useState();
     const activeGame = useSelector(state => state.game.gameType);
-    const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
+    // const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
     const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
 
     const onCategorySelected = (category) => {
         setActiveCategory(category);
+        dispatch(setGameType(category));
+        navigation.navigate('SelectSubCategory', {category : category})
         dispatch(setGameCategory(undefined));
         playSound()
     }
 
-    const onSubCategorySelected = (subcategory) => {
-        dispatch(setGameCategory(subcategory));
-        playSound()
-    }
+    // console.log(dispatch(setGameType(activeCategory)))
+    // const onSubCategorySelected = (subcategory) => {
+    //     dispatch(setGameCategory(subcategory));
+    //     playSound()
+    // }
 
 
     useFocusEffect(
@@ -58,34 +60,13 @@ export default ({ title, initialShowPlayButton = true ,activeSubcategory}) => {
             <View style={styles.cards}>
                 {currentGame.categories.map((category, i) => <GameCategoryCard key={i}
                     category={category}
-                    isSelected={activeCategory?.id === category.id}
                     onSelect={onCategorySelected}
                 />
                 )}
             </View>
-            {isTrue(activeCategory) && <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />}
+            {/* {isTrue(activeCategory) && <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />} */}
         </>
 
-    )
-};
-
-const SubCategories = ({ category, onSubCategorySelected, selectedSubcategory }) => {
-
-    return (
-        <Animated.View entering={randomEnteringAnimation()}>
-            <Text style={styles.title}>Choose category</Text>
-            <View style={styles.subcategories}>
-                {/* <SwiperFlatList > */}
-                {category.subcategories.map((subcategory, i) =>
-                    <GameSubcategoryCard
-                        key={i}
-                        game={subcategory}
-                        isSelected={subcategory === selectedSubcategory}
-                        onSelect={onSubCategorySelected} />
-                )}
-                {/* </SwiperFlatList> */}
-            </View>
-        </Animated.View>
     )
 };
 
@@ -184,6 +165,9 @@ const styles = EStyleSheet.create({
     cards: {
         display: 'flex',
         flexDirection: 'column',
+        marginTop:-70,
+        paddingHorizontal:normalize(40),
+        alignItems:'center'
     },
     card: {
         // width: normalize(130),

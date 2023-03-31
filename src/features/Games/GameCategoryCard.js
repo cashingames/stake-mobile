@@ -10,19 +10,14 @@ import Constants from 'expo-constants';
 
 export default ({ category, onSelect, isSelected, activeCategory,activeSubcategory,onSubCategorySelected }) => {
     return (
-        <Animated.View style={[styles.card, { backgroundColor: category.bgColor }]} entering={BounceInRight.duration(2000)}>
+        <Animated.View style={styles.card} entering={BounceInRight.duration(2000)}>
             <Pressable onPress={() => onSelect(category)} >
                 <View style={styles.categoryCardTopRow}>
                     <Text style={styles.cardTitle}>{category.name} Quiz</Text>
-                    <Ionicons name={isSelected ? "md-ellipse-sharp" : "md-ellipse"} size={26} color={isSelected ? "#EF2F55" : "#FFFF"} />
                 </View>
-                <View style={styles.categoryCardTopRow}>
+                {/* <View style={styles.categoryCardTopRow}>
                     <Text style={styles.cardInstruction}>{formatNumber(category.played)} times played </Text>
-                    <Image
-                        style={styles.cardIcon}
-                        source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${category.icon}` }}
-                    />
-                </View>
+                </View> */}
             </Pressable>
         </Animated.View>
     )
@@ -32,22 +27,25 @@ export default ({ category, onSelect, isSelected, activeCategory,activeSubcatego
 const styles = EStyleSheet.create({
 
     card: {
-        // width: normalize(130),
-        padding: normalize(20),
-        borderRadius: normalize(10),
+        width: '100%',
+        height:63,
+        paddingHorizontal: normalize(20),
+        borderRadius: normalize(20),
         marginBottom: normalize(10),
-        // marginRight: normalize(10)
+        backgroundColor: '#15397D',
+        borderBottomColor: '#0D2859',
+        borderBottomWidth: 4,
+        justifyContent:'center'
     },
     cardIcon: {
         width: 40,
-        height: 41.5,
+        height: 15,
         borderRadius: normalize(10)
     },
     cardTitle: {
-        fontSize: '0.87rem',
+        fontSize: '1.5rem',
         color: '#FFFF',
-        fontFamily: 'graphik-bold',
-        lineHeight: normalize(17),
+        fontFamily: 'blues-smile',
         marginVertical: normalize(8),
     },
     cardInstruction: {

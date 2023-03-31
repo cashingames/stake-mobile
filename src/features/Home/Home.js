@@ -44,7 +44,6 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingVertical: responsiveScreenWidth(3),
-        paddingHorizontal: responsiveScreenWidth(3),
     },
 
     logo: {

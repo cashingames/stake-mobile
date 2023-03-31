@@ -1,16 +1,15 @@
 import { View, Text, ImageBackground } from 'react-native'
 import React from 'react'
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize'
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { Image } from 'react-native'
 import { Pressable } from 'react-native'
 import { useState } from 'react'
-import DashboardSettings from '../shared/DashboardSettings'
-import GameArkLogo from '../shared/GameArkLogo'
-import TopIcons from '../shared/TopIcons'
-import MixedContainerBackground from '../shared/ContainerBackground/MixedContainerBackground'
+import DashboardSettings from '../../shared/DashboardSettings'
+import TopIcons from '../../shared/TopIcons'
+import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground'
 import { ScrollView } from 'react-native-gesture-handler'
-import { setGameMode } from './Games/GameSlice'
+import { setGameMode } from './GameSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
 const GameScreen = ({ navigation }) => {
@@ -40,17 +39,17 @@ const GameScreen = ({ navigation }) => {
                 <TopIcons />
                 <View style={styles.logo}>
                     <Pressable style={styles.icons}>
-                        <Image style={styles.imageIcons} source={require('../../assets/images/home.png')} />
+                        <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
                     </Pressable>
-                    <Image style={styles.smallLogo} source={require('../../assets/images/ga-logo-small.png')} />
+                    <Image style={styles.smallLogo} source={require('../../../assets/images/ga-logo-small.png')} />
                 </View>
                 <ScrollView horizontal={true} style={styles.gameContainer}>
-                    <ImageBackground style={styles.gameCard} source={require('../../assets/images/quiz-background.png')}>
+                    <ImageBackground style={styles.gameCard} source={require('../../../assets/images/quiz-background.png')}>
                         <View>
                             <Text style={styles.gameText}>Quiz Game</Text>
                         </View>
                         <View style={{alignItems:'center', justifyContent:'center'}}>
-                        <Image style={styles.cardImage} source={require('../../assets/images/quiz-image.png')} />
+                        <Image style={styles.cardImage} source={require('../../../assets/images/quiz-image.png')} />
                         </View>
                         <View style={styles.cardBtnContainer}>
                             <Pressable style={styles.playBtn} onPress={goToGameCategory}>
@@ -61,13 +60,13 @@ const GameScreen = ({ navigation }) => {
                             </Pressable>
                         </View>
                     </ImageBackground>
-                    <ImageBackground style={styles.gameCard} source={require('../../assets/images/quiz-background.png')}>
+                    <ImageBackground style={styles.gameCard} source={require('../../../assets/images/quiz-background.png')}>
 
                     </ImageBackground>
-                    <ImageBackground style={styles.gameCard} source={require('../../assets/images/quiz-background.png')}>
+                    <ImageBackground style={styles.gameCard} source={require('../../../assets/images/quiz-background.png')}>
 
                     </ImageBackground>
-                    <ImageBackground style={styles.gameCard} source={require('../../assets/images/quiz-background.png')}>
+                    <ImageBackground style={styles.gameCard} source={require('../../../assets/images/quiz-background.png')}>
 
                     </ImageBackground>
                 </ScrollView>
@@ -83,15 +82,15 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingVertical: responsiveScreenWidth(3),
-        paddingHorizontal: responsiveScreenWidth(3),
+        // paddingHorizontal: responsiveScreenWidth(3),
     },
 
     logo: {
-        alignItems: 'center',
+        alignItems: 'flex-start',
         flexDirection: 'row',
-        marginTop: normalize(40)
+        marginTop: normalize(40),
+        paddingHorizontal: responsiveScreenWidth(3),
     },
-
     welcome: {
         alignItems: 'center',
         marginTop: responsiveScreenHeight(35)
@@ -103,7 +102,7 @@ const styles = EStyleSheet.create({
         color: '#fff'
     },
     setting: {
-        // marginTop: responsiveScreenHeight(5.3),
+        marginTop: responsiveScreenHeight(2.3),
     },
     imageIcons: {
         width: 50,
