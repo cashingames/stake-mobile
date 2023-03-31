@@ -38,8 +38,6 @@ const ChallengeMatchingScreen = ({ navigation }) => {
     }
     const abortCancel = () => {
         setCancelling(false);
-        console.log("Cancel Pressed");
-        // setMatched(true)
     }
 
     const proceedWithCancel = () => {
@@ -55,7 +53,6 @@ const ChallengeMatchingScreen = ({ navigation }) => {
             .onSnapshot(documentSnapshot => {
                 const data = documentSnapshot.data();
                 if (data.status === "MATCHED") {
-                    console.log('matched');
                     dispatch(setChallengeDetails(data))
                     navigation.navigate('ChallengeGameLoading')
                 }

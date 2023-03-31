@@ -18,15 +18,16 @@ const ChallengeGameEndWaitingScreen = ({navigation}) => {
 
     const dispatch = useDispatch();
 
-    console.log("oponent details", opponentDetails);
-
     useEffect(() => {
+
+        if(!documentId)
+            return;
 
         const subscriber = firestore()
             .doc(documentId)
             .onSnapshot(documentSnapshot => {
                 const data = documentSnapshot.data();
-                if (data.status === "COMPLETED") {
+                if (data.opponent.status === "COMPLETED") {
                     dispatch(setChallengeDetails(data))
                     navigation.navigate('ChallengeEndGame')
                 }
@@ -36,7 +37,7 @@ const ChallengeGameEndWaitingScreen = ({navigation}) => {
         return () => {
             subscriber();
         };
-    }, []);
+    }, [documentId]);
     
 
     useFocusEffect(

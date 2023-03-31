@@ -1,26 +1,34 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { BackHandler, Image, Platform, ScrollView, StatusBar, Text, View } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { formatCurrency, isTrue } from "../../../utils/stringUtl";
 import EStyleSheet from "react-native-extended-stylesheet";
 import Constants from 'expo-constants';
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import AppButton from "../../../shared/AppButton";
 import { useFocusEffect } from "@react-navigation/native";
+import { clearSession } from "./TriviaChallengeGameSlice";
 
 
 const ChallengeEndGameScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
+
     const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const opponentScore = challengeDetails.opponent.score;
     const userScore = challengeDetails.score;
     const opponentUsername = challengeDetails.opponent.username;
 
-    console.log("challenge details", challengeDetails);
-
     const goHome = () => {
         navigation.navigate('Home');
     };
+
+    useEffect(() => {
+     
+        return () => {
+            dispatch(clearSession());
+        }
+    })
 
     useFocusEffect(
         useCallback(() => {

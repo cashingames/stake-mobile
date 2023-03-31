@@ -45,9 +45,8 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
         dispatch(submitGameSession())
             .then(unwrapResult)
             .then(async () => {
-                setSubmitting(false);
                 const status = await getOpponentStatus();
-                
+                setSubmitting(false);
                 navigation.navigate(
                     status === 'MATCHED' ?
                         'ChallengeGameEndWaiting' : 'ChallengeEndGame'
@@ -56,16 +55,13 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     }
 
     const getOpponentStatus = async () => {
-        console.log('documentId 2', documentId);
         const result = await firestore()
             .doc(documentId)
             .get();
 
         const data = result.data();
         dispatch(setChallengeDetails(data));
-        const status = data.opponent.status;
-        console.log("opponent status", status);
-        return status;
+        return data.opponent.status;
     }
 
     return (

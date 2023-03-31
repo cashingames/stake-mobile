@@ -73,20 +73,26 @@ export const TriviaChallengeStakeGameSlice = createSlice({
         incrementCountdownResetIndex: (state) => {
             state.countdownKey += 1;
         },
+        clearSession: (state) => {
+            console.log("xfgvhbn")
+            state.questions = [];
+            state.documentId = '',
+            state.currentQuestion = {},
+            state.selectedOptions = [],
+            state.currentQuestionIndex = 0,
+            state.countdownFrozen = false,
+            state.challengeDetails = {}
+        }
     },
 
     extraReducers: (builder) => {
         builder
-
             .addCase(startChallengeRequest.fulfilled, (state, action) => {
                 state.documentId = action.payload.data.challenge_request_id;
-                // console.log(state.documentId, 'document id')
             })
-
-
     },
 })
 
-export const { getNextQuestion, selectedOption, setGameDuration, pauseGame, incrementCountdownResetIndex, setChallengeDetails } = TriviaChallengeStakeGameSlice.actions
+export const { getNextQuestion, selectedOption, setGameDuration, pauseGame, incrementCountdownResetIndex, setChallengeDetails, clearSession } = TriviaChallengeStakeGameSlice.actions
 
 export default TriviaChallengeStakeGameSlice.reducer
