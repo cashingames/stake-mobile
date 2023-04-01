@@ -34,6 +34,8 @@ import { Button } from 'react-native-elements';
 import * as InAppPurchases from 'expo-in-app-purchases';
 import { setItems } from '../InAppPurchaseSlice';
 import axios from 'axios';
+import { buyItemFromStore, buyItemFromStoreRaw } from '../Store/StoreSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
@@ -85,26 +87,32 @@ const HomeScreen = (props) => {
         const { responseCode, results } = await InAppPurchases.getProductsAsync(items);
         if (responseCode === InAppPurchases.IAPResponseCode.OK) {
             dispatch(setItems(results.length !== 0 ? results : PRODUCTS))
-
-
-            // Alert.alert(convertArrayToString(results))
-            // const fd = new FormData();
-            // fd.append('data', convertArrayToString(results));
-           
-        //     try{
-        //    const fetchItems = await axios({
-        //         method: "post", 
-        //         url:"/",
-        //         baseURL: "http://192.168.222.221:8089",
-               
-        //         data: {data: convertArrayToString(results)}
-        //     })
-        // }catch (error) {
-        //     console.log(error)
-        // }
         } else {
-            // Alert.alert('Code not reached')
+            
         }
+
+        // to be removed
+        // try{
+        //     const payload = {
+        //         type: "BOOST",
+        //         item_id: 6
+        //     };
+        //     await buyItemFromStoreRaw(payload)
+        // }catch(e){
+        //     console.log(e.request)
+        // }
+
+        // dispatch(buyItemFromStore({
+        //     type: 'boost',
+        //     item_id: 6
+        // }))
+        //     .then(unwrapResult)
+        //     .then(result => {
+        //         console.log(result, 'result')
+        //     })
+        //     .catch(async rejectedValueOrSerializedError => {
+        //         console.log(rejectedValueOrSerializedError)
+        //     })
     }
 
     // {"priceAmountMicros":160000000,"title":"Time Freeze (GameArk)","productId":"boost_plan_time_freeze","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦160.00","subscriptionPeriod":"P0D"}

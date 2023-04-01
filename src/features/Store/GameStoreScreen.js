@@ -78,7 +78,7 @@ export default function ({ navigation }) {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email,
-                    'item_name': plan.name,
+                    'item_name': plan?.name || productID || "",
                 })
                 failedPurchase.playSound()
                 navigation.navigate("GameStoreItemsPurchaseFailed")
@@ -92,35 +92,35 @@ export default function ({ navigation }) {
         switch(id) {
             case 'game_plan_doubleo':
                 product = 2;
-                type = 'plan';
+                type = 'PLAN';
                 break;
             case 'game_plan_dicey_multiples':
                 product = 3;
-                type = 'plan';
+                type = 'PLAN';
                 break;
             case 'game_plan_ultimate':
                 product = 4;
-                type = 'plan';
+                type = 'PLAN';
                 break;
             case 'game_plan_least':
                 product = 7;
-                type = 'plan';
+                type = 'PLAN';
                 break;
             case 'game_plan_mini':
                 product = 8;
-                type = 'plan';
+                type = 'PLAN';
                 break;
             case 'boost_plan_skip':
                 product = 6;
-                type = 'boost';
+                type = 'BOOST';
                 break;
             case 'boost_plan_time_freeze':
                 product = 8;
-                type = 'boost';
+                type = 'BOOST';
                 break;
             default:
                 product = 8;
-                type = 'boost';
+                type = 'BOOST';
         }
         
         return {product, type}
