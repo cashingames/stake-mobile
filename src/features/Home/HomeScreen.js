@@ -5,6 +5,8 @@ import { Text, View, ScrollView, StatusBar, Platform, RefreshControl, Pressable,
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, { BounceInRight } from 'react-native-reanimated';
+import analytics from '@react-native-firebase/analytics';
+import { useNavigation } from '@react-navigation/native';
 import normalize, {
     responsiveHeight, responsiveScreenWidth
 } from '../../utils/normalize';
@@ -19,7 +21,7 @@ import LottieAnimations from '../../shared/LottieAnimations';
 import SelectGameMode from '../Games/SelectGameMode';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import WinnersScroller from '../Leaderboard/WinnersScroller';
-import { useNavigation } from '@react-navigation/native';
+import { setGameMode, setGameType } from '../Games/GameSlice';
 
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
@@ -151,9 +153,36 @@ function RenderUpdateChecker() {
 
 const RenderEvents = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const features = useSelector(state => state.common.featureFlags);
+    const isChallengeFeatureEnabled = features['enable_challenge'] !== undefined && features['enable_challenge'].enabled == true;
+    const gameMode = useSelector(state => state.common.gameModes[0]);
+    const gameType = useSelector(state => state.common.gameTypes[0]);
+    const user = useSelector(state => state.auth.user);
+
+    const selectTriviaMode = async () => {
+        dispatch(setGameMode(gameMode));
+        dispatch(setGameType(gameType));
+        await analytics().logEvent("game_mode_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+            'gamemode': gameMode.displayName,
+        })
+        navigation.navigate('SelectGameCategory')
+
+    }
+
+    const onSelectGameMode = async () => {
+        if (isChallengeFeatureEnabled) {
+            navigation.navigate('GamesList')
+            return;
+        }
+        selectTriviaMode();
+    };
 
     return (
-        <Pressable style={styles.gameButton}  onPress={() => navigation.navigate('GamesList')}>
+        <Pressable style={styles.gameButton}  onPress={onSelectGameMode}>
             <Image
                 source={require('../../../assets/images/black-gamepad.png')}
                 style={styles.gamepad}

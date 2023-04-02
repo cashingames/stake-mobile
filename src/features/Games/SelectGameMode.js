@@ -11,11 +11,32 @@ import analytics from '@react-native-firebase/analytics';
 
 
 const SelectGameMode = () => {
-
+    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const features = useSelector(state => state.common.featureFlags);
+    const isChallengeFeatureEnabled = features['enable_challenge'] !== undefined && features['enable_challenge'].enabled == true;
+    const gameMode = useSelector(state => state.common.gameModes[0]);
+    const gameType = useSelector(state => state.common.gameTypes[0]);
+    const user = useSelector(state => state.auth.user);
 
+    const selectTriviaMode = async () => {
+        dispatch(setGameMode(gameMode));
+        dispatch(setGameType(gameType));
+        await analytics().logEvent("game_mode_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+            'gamemode': gameMode.displayName,
+        })
+        navigation.navigate('SelectGameCategory')
+
+    }
     const onSelectGameMode = async () => {
-        navigation.navigate('GamesList')
+        if (isChallengeFeatureEnabled) {
+            navigation.navigate('GamesList')
+            return;
+        }
+        selectTriviaMode();
     };
 
 
@@ -31,11 +52,11 @@ export default SelectGameMode;
 const styles = EStyleSheet.create({
     playButton: {
         flex: 1,
-        justifyContent:'center',
-        alignItems:'center',
-        backgroundColor:'#072169',
-        marginVertical:'1rem',
-        paddingVertical:'.68rem',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#072169',
+        marginVertical: '1rem',
+        paddingVertical: '.68rem',
         borderRadius: 15,
         borderWidth: Platform.OS === 'ios' ? normalize(0.5) : 1,
         borderColor: '#E0E0E0',
