@@ -17,6 +17,7 @@ const ChallengeGameLoadingScreen = ({ navigation }) => {
 
     useEffect(() => {
         setTimeout(() => {
+            console.log("game loading", "navigating after 5 seconds")
             navigation.navigate('ChallengeGameBoard');
         }, 5000);
     }, [])

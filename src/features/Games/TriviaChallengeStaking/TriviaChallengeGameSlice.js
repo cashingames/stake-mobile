@@ -76,12 +76,12 @@ export const TriviaChallengeStakeGameSlice = createSlice({
         clearSession: (state) => {
             console.log("xfgvhbn")
             state.questions = [];
-            state.documentId = '',
-            state.currentQuestion = {},
-            state.selectedOptions = [],
-            state.currentQuestionIndex = 0,
-            state.countdownFrozen = false,
-            state.challengeDetails = {}
+            state.documentId = '';
+            state.currentQuestion = {};
+            state.selectedOptions = [];
+            state.currentQuestionIndex = 0;
+            state.countdownFrozen = false;
+            state.challengeDetails = {};
         }
     },
 

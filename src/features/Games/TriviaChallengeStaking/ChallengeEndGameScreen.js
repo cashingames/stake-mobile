@@ -17,18 +17,11 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const opponentScore = challengeDetails.opponent.score;
     const userScore = challengeDetails.score;
-    const opponentUsername = challengeDetails.opponent.username;
 
     const goHome = () => {
         navigation.navigate('Home');
+        dispatch(clearSession());
     };
-
-    useEffect(() => {
-     
-        return () => {
-            dispatch(clearSession());
-        }
-    })
 
     useFocusEffect(
         useCallback(() => {
@@ -63,7 +56,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
              {userScore === opponentScore &&
                 <Text style={styles.headText}>Draw, you can try again</Text>
             }
-            <ChallengePlayers user={user} userScore={userScore} opponentScore={opponentScore} opponentUsername={opponentUsername} />
+            <ChallengePlayers user={user} challengeDetails={challengeDetails} />
             {userScore > opponentScore &&
                 <WinningAmount />
             }
@@ -74,35 +67,35 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 }
 
 const WinningAmount = () => {
-    const amountWon = 10000
+    const amount = useSelector(state => state.triviaChallenge.challengeDetails.amount_won);
     return (
         <View style={styles.winningsContainer}>
-            <Text style={styles.winningsText}>You have won <Text style={styles.winningsAmount}> &#8358;{formatCurrency(amountWon)}!</Text></Text>
+            <Text style={styles.winningsText}>You have won <Text style={styles.winningsAmount}> &#8358;{formatCurrency(amount)}!</Text></Text>
         </View>
     )
 }
 
-const ChallengePlayers = ({ user, userScore, opponentScore, opponentUsername }) => {
+const ChallengePlayers = ({ user, challengeDetails }) => {
 
     console.log("challenge", )
     return (
         <View style={styles.playersContainer}>
-            {userScore > opponentScore &&
+            {challengeDetails.score > challengeDetails.opponent.score &&
                 <>
-                    <ChallengeWinner playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                    <ChallengeLoser playerName={opponentUsername} playerAvatar={require("../../../../assets/images/user-icon.png")} />
+                <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={require("../../../../assets/images/user-icon.png")} />
                 </>
             }
-            {userScore < opponentScore &&
+            {challengeDetails.score < challengeDetails.opponent.score &&
                 <>
-                    <ChallengeWinner playerName={opponentUsername} playerAvatar={require("../../../../assets/images/user-icon.png")} />
-                    <ChallengeLoser playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <ChallengeWinner playerName={challengeDetails.opponent.username} playerAvatar={require("../../../../assets/images/user-icon.png")} />
+                <ChallengeLoser playerName={challengeDetails.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
-            {userScore === opponentScore &&
+            {challengeDetails.score === challengeDetails.opponent.score &&
                 <>
-                    <ChallengeWinner playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                    <ChallengeLoser playerName={opponentUsername} playerAvatar={require("../../../../assets/images/user-icon.png")} />
+                <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={require("../../../../assets/images/user-icon.png")} />
                 </>
             }
         </View>

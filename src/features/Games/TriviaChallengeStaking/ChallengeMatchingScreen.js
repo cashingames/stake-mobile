@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Alert, BackHandler, ImageBackground, Platform , StatusBar} from "react-native";
-import { Image } from "react-native";
-import { Text, View } from "react-native";
+import { Alert, BackHandler, ImageBackground, Platform, StatusBar, Image, Text, View } from "react-native";
 import { isTrue } from "../../../utils/stringUtl";
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -52,17 +50,20 @@ const ChallengeMatchingScreen = ({ navigation }) => {
             .doc(documentId)
             .onSnapshot(documentSnapshot => {
                 const data = documentSnapshot.data();
-                if (data.status === "MATCHED") {
+                console.log('listening and got updated: ', "got data", documentId, data.status);
+                /**
+                 * @TODO fix this bug, something keeps reruning this subscription from game in progress screen
+                 * when opponent info changes
+                 */
+                if (data.status === "MATCHED" && data.opponent.status !== "COMPLETED") {
                     dispatch(setChallengeDetails(data))
                     navigation.navigate('ChallengeGameLoading')
                 }
             });
 
  
-        return () => {
-            subscriber();
-        };
-    }, []);
+        return () => subscriber();
+    }, [documentId]);
 
     useFocusEffect(
         useCallback(() => {
