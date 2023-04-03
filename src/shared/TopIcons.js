@@ -1,16 +1,38 @@
 import { View, Text, Image, ImageBackground } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { responsiveScreenWidth } from '../utils/normalize'
+import { useSelector } from 'react-redux'
+import { formatNumber } from '../utils/stringUtl'
 
 const TopIcons = () => {
+    const user = useSelector(state => state.auth.user);
+    var plans = useSelector(state => state.auth.user.activePlans ?? []);
+    var boosts = useSelector(state => state.auth.user.boosts ?? []);
+    const [sumOfPlans, setSumOfPlans] = useState(0);
+    const [boostsString, setBboostsString] = useState('');
+    // const { playSound } =  useSound(require('../../assets/sounds/option-picked.mp3'))
+
+    useEffect(() => {
+        const reducer = (accumulator, curr) => accumulator + curr;
+        var x = plans && plans.map(a => a.game_count).reduce(reducer, 0);
+        setSumOfPlans(x ?? 0);
+
+        var boostResult = ''
+        boosts && boosts.map((boost, i) => {
+            boostResult += `${formatNumber(boost.count)} `
+        });
+
+        setBboostsString(boostResult?.length > 0 ? boostResult : "You have no boosts");
+
+    }, [boosts, plans]);
     return (
         <View style={styles.container}>
             <View style={styles.iconContainer}>
             <ImageBackground style={{zIndex:11}} source={require('./../../assets/images/heart-icon.png')}>
                 <View style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 65}}>
                     <View>
-                        <Text style={styles.gameLives}>16</Text>
+                        <Text style={styles.gameLives}>{sumOfPlans}</Text>
                     </View>
                 </View>
             </ImageBackground>
@@ -20,13 +42,13 @@ const TopIcons = () => {
             </View>
             <View style={styles.iconContainer}>
             <View style={styles.bombText}>
-                <Text style={styles.text}>x55</Text>
+                <Text style={styles.text}>{boostsString}</Text>
             </View>
                 <Image  style={styles.bombIcon} source={require('./../../assets/images/boost-icon.png')} />
             </View>
             <View style={styles.iconContainer}>
             <View style={styles.coinText}>
-                <Text style={styles.text}>200</Text>
+                <Text style={styles.text}>{user.points}</Text>
             </View>
                 <Image style={styles.coinIcon} source={require('./../../assets/images/coin-icon.png')} />
             </View>
@@ -41,6 +63,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
           paddingHorizontal: responsiveScreenWidth(3),
+          zIndex:10
     },
     iconContainer:{
         flexDirection:'row',
@@ -74,7 +97,7 @@ const styles = EStyleSheet.create({
         justifyContent:'center'
     },
     coinText:{
-        width: 60,
+        width: 65,
         height:21,
         borderRadius:7,
         paddingHorizontal:'0.6rem',

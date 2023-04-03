@@ -20,105 +20,123 @@ import GameSubcategoryCard from './GameSubcategoryCard';
 import { setGameCategory, setIsPlayingTrivia, startGame } from './GameSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { logActionToServer } from '../CommonSlice';
+import { useEffect } from 'react';
+import Loader from '../../shared/Loader';
 
 const SubCategoryScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
-    // const params = route.params;
-
-    // const gameCategoryId = useSelector(state => state.game.gameCategory.id);
     const gameTypeId = useSelector(state => state.game.gameType);
     const gameModeId = useSelector(state => state.game.gameMode);
     // const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
     const gameMode = useSelector(state => state.game.gameMode);
-    // console.log(gameTypeId)
-
     const [showSettings, setShowSettings] = useState(false);
+    const [loading, setLoading] = useState(false);
+    
     return (
-            <QuizContainerBackground>
-                <ScrollView style={styles.container}>
-                    <TopIcons />
-                    <View style={styles.logo}>
-                        <Pressable style={styles.icons}>
-                            <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
-                        </Pressable>
-                        <Text style={styles.title}>Quiz Game</Text>
-                    </View>
-                    <Text style={styles.categoryHeading}>Select Category</Text>
-                    <View style={styles.imgContainer}>
-                        <Image style={styles.quizImage} source={require('../../../assets/images/quiz-large.png')} />
-                    </View>
-                    <View>
-                       <SubCategories category={gameTypeId}/>
-                    </View>
-                    <View style={styles.setting}>
-                        <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
-                    </View>               
-                </ScrollView>
-            </QuizContainerBackground>
-
+        <>
+        {loading ? (
+          <Loader />
+        ) : (
+        <QuizContainerBackground>
+            <ScrollView style={styles.container}>
+                <TopIcons />
+                <View style={styles.logo}>
+                    <Pressable style={styles.icons} onPress={() => navigation.navigate('Home')}>
+                        <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
+                    </Pressable>
+                    <Text style={styles.title}>Quiz Game</Text>
+                </View>
+                <Text style={styles.categoryHeading}>Select Category</Text>
+                <View style={styles.imgContainer}>
+                    <Image style={styles.quizImage} source={require('../../../assets/images/quiz-large.png')} />
+                </View>
+                <View>
+                    <SubCategories category={gameTypeId} loading={loading} setLoading={setLoading}/>
+                </View>
+                <View style={styles.setting}>
+                    <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
+                </View>
+            </ScrollView>
+        </QuizContainerBackground>
+    )}
+    </>
     )
 }
 
-
-const SubCategories = ({ category }) => {
+const SubCategories = ({ category, loading, setLoading }) => {
     const dispatch = useDispatch()
     const navigation = useNavigation();
-    const gameCategoryId = useSelector(state => state.game.gameCategory);
-  const gameTypeId = useSelector(state => state.game.gameType.id);
-  const gameModeId = useSelector(state => state.game.gameMode.id);
-//   const gameMode = useSelector(state => state.game.gameMode);
-  const [loading, setLoading] = useState(false);
+    const gameMode = useSelector(state => state.game.gameMode);
+    const gameTypeId = useSelector(state => state.game.gameType.id);
+    const gameModeId = useSelector(state => state.game.gameMode.id);
+    const [categoryId, setCategoryId] = useState('')
+    const user = useSelector(state => state.auth.user);
+
+    const onStartGame = () => {
+        setLoading(true);
+        dispatch(setIsPlayingTrivia(false))
+        dispatch(startGame({
+            category: categoryId,
+            type: gameTypeId,
+            mode: gameModeId
+        }))
+            .then(unwrapResult)
+            .then(async result => {
+                // crashlytics().log('User started exhibition game');
+                // await analytics().logEvent("exhibition_without_staking_game_started", {
+                //   'id': user.username,
+                //   'phone_number': user.phoneNumber,
+                //   'email': user.email
+                // })
+                dispatch(logActionToServer({
+                    message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
+                    data: result.data.questions
+                }))
+                setLoading(false);
+                navigation.navigate("GameInProgress")
+                setCategoryId('')
+            })
+            .catch((error) => {
+
+                console.log(error)
+                // crashlytics().recordError(error);
+                // crashlytics().log('failed to start exhibition game');
+                // setLoading(false);
+            });
+    }
+    
+    useEffect(() => {
+        if(categoryId){
+            if (gameMode.name === "CHALLENGE"){
+            navigation.navigate('ChallengeSelectPlayer');
+            }else{
+            onStartGame()
+            }
+        }
+    }, [categoryId])
 
 
-  const onPressMe = (subcategory) => {
-    setLoading(true);
-    dispatch(setGameCategory(subcategory));
-    dispatch(setIsPlayingTrivia(false))
-    if(gameCategoryId){
-    dispatch(startGame({
-      category: gameCategoryId.id,
-      type: gameTypeId,
-      mode: gameModeId
-    }))
-      .then(unwrapResult)
-      .then(async result => {
-        setLoading(false);
-        onclose();
-        navigation.navigate("GameInProgress")
-        console.log('game')
-      })
-      .catch((error) => {
-    //     crashlytics().recordError(error);
-    //     crashlytics().log('failed to start exhibition game');
-    //     setLoading(false);
-    //   });
-      
-  })
-}
-}
-
-    // const onPressMe = (subcategory) => {
-    //         dispatch(setGameCategory(subcategory));
-    //         console.log(subcategory)
-    // }
-// console.log(category)s
+    const onPressMe = (subcategory) => {
+        dispatch(setGameCategory(subcategory));
+        setCategoryId(subcategory.id)
+    }
 
     return (
-         <Animated.View entering={randomEnteringAnimation()}>
-            <View style={styles.subcategories}>
-                {category.subcategories.map((subcategory, i) =>
-                    <GameSubcategoryCard
-                        key={i}
-                        game={subcategory}
-                        onPress={()=>onPressMe(subcategory)}
-                        loading={loading}
-                        // isSelected={subcategory === selectedSubcategory}
-                        // onSelect={onSubCategorySelected} 
-                        />
-                )}
-            </View>
-        </Animated.View>
-    )
+      
+            <Animated.View entering={randomEnteringAnimation()}>
+              <View style={styles.subcategories}>
+                {category.subcategories.map((subcategory, i) => (
+                  <GameSubcategoryCard
+                    key={i}
+                    game={subcategory}
+                    onPress={() => onPressMe(subcategory)}
+                    loading={loading}
+                  />
+                ))}
+              </View>
+            </Animated.View>
+          )
+      
 };
 
 export default SubCategoryScreen;
@@ -130,7 +148,7 @@ const styles = EStyleSheet.create({
     },
     logo: {
         alignItems: 'flex-start',
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         flexDirection: 'row',
         marginTop: normalize(40),
         paddingHorizontal: responsiveScreenWidth(3),
@@ -147,7 +165,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         letterSpacing: 7,
         flex: 1,
-        marginRight:30,
+        marginRight: 30,
     },
     imgContainer: {
         alignItems: 'center'
@@ -163,18 +181,18 @@ const styles = EStyleSheet.create({
         // left:0
     },
 
-    categoryHeading:{
-        textAlign:'center',
-        fontFamily:'blues-smile',
-        fontSize:'1.5rem',
-        color:'#fff'
+    categoryHeading: {
+        textAlign: 'center',
+        fontFamily: 'blues-smile',
+        fontSize: '1.5rem',
+        color: '#fff'
     },
     subcategories: {
         flex: 1,
-        marginTop:-48,
+        marginTop: -48,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent:'center',
+        justifyContent: 'center',
         paddingHorizontal: responsiveScreenWidth(3),
 
     },

@@ -44,13 +44,15 @@ const styles = EStyleSheet.create({
     card: {
         // flex: 1,
         marginVertical: '.5rem',
-        backgroundColor: '#F8F9FD',
-        borderRadius: normalize(11),
+        backgroundColor: '#15397D',
+        borderRadius: normalize(20),
         alignItems: 'center',
         marginHorizontal: '.2rem',
         flexDirection: "row",
-        borderWidth: Platform.OS === 'ios' ? normalize(0.5) : 1,
-        borderColor: '#E0E0E0',
+        // borderWidth: Platform.OS === 'ios' ? normalize(0.5) : 1,
+        borderBottomColor: '#0A1F45',
+        borderBottomWidth: 4,
+        // borderColor: '#E0E0E0',
         paddingHorizontal:'.8rem',
         paddingVertical:'.5rem',
         elevation: 3.5,
@@ -78,7 +80,7 @@ const styles = EStyleSheet.create({
     },
     cardTitle: {
         fontSize: '0.8rem',
-        color: '#151C2F',
+        color: '#fff',
         fontFamily: 'graphik-medium',
     },
 

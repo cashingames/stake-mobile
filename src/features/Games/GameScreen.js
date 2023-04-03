@@ -11,26 +11,61 @@ import MixedContainerBackground from '../../shared/ContainerBackground/MixedCont
 import { ScrollView } from 'react-native-gesture-handler'
 import { setGameMode } from './GameSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { randomEnteringAnimation } from '../../utils/utils'
+import Animated from 'react-native-reanimated'
+
+
+const gamesType = [
+    {
+        id: 1,
+        gameName: 'quiz game',
+        backgroundImage: require('../../../assets/images/quiz-background.png'),
+        gameImage: require('../../../assets/images/quiz-image.png'),
+        unlocked: true
+    },
+    {
+        id: 2,
+        gameName: 'picture trivia',
+        backgroundImage: require('../../../assets/images/picture-trivia.png'),
+        gameImage: require('../../../assets/images/picture-trivia-icon.png'),
+        unlocked: false
+    },
+    {
+        id: 3,
+        gameName: 'word swap',
+        backgroundImage: require('../../../assets/images/word-snap.png'),
+        gameImage: require('../../../assets/images/wordswap-icon.png'),
+        unlocked: false
+    },
+    {
+        id: 4,
+        gameName: 'picture jumbo',
+        backgroundImage: require('../../../assets/images/picture-jumbo.png'),
+        gameImage: require('../../../assets/images/picturejumbo-icon.png'),
+        unlocked: false
+    },
+]
+
+
 
 const GameScreen = ({ navigation }) => {
     const [showSettings, setShowSettings] = useState(false);
     const dispatch = useDispatch()
-    const gameModes = useSelector(state => state.common.gameModes);
-    const gameModeSelected = gameModes.find(mode => mode.name === 'EXHIBITION')
-
+    // const gameModes = useSelector(state => state.common.gameModes);
+    // const gameModeSelected = gameModes.find(mode => mode.name === 'EXHIBITION')
     const goToGameInstruction = () => {
-        navigation.navigate('AppRouter')
+        navigation.navigate('GameInstructions')
     }
 
     const goToGameCategory = () => {
-        dispatch(setGameMode(gameModeSelected));
-    //     await analytics().logEvent("game_mode_selected", {
-    //         'id': user.username,
-    //         'phone_number': user.phoneNumber,
-    //         'email': user.email,
-    //         'gamemode': mode.displayName,
-    //     })
-    // playSound()
+        // dispatch(setGameMode(gameModeSelected));
+        //     await analytics().logEvent("game_mode_selected", {
+        //         'id': user.username,
+        //         'phone_number': user.phoneNumber,
+        //         'email': user.email,
+        //         'gamemode': mode.displayName,
+        //     })
+        // playSound()
         navigation.navigate('SelectGameCategory')
     }
     return (
@@ -38,37 +73,43 @@ const GameScreen = ({ navigation }) => {
             <View style={styles.container}>
                 <TopIcons />
                 <View style={styles.logo}>
-                    <Pressable style={styles.icons}>
+                    <Pressable style={styles.icons} onPress={() => navigation.navigate('Home')}>
                         <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
                     </Pressable>
                     <Image style={styles.smallLogo} source={require('../../../assets/images/ga-logo-small.png')} />
                 </View>
                 <ScrollView horizontal={true} style={styles.gameContainer}>
-                    <ImageBackground style={styles.gameCard} source={require('../../../assets/images/quiz-background.png')}>
-                        <View>
-                            <Text style={styles.gameText}>Quiz Game</Text>
-                        </View>
-                        <View style={{alignItems:'center', justifyContent:'center'}}>
-                        <Image style={styles.cardImage} source={require('../../../assets/images/quiz-image.png')} />
-                        </View>
-                        <View style={styles.cardBtnContainer}>
-                            <Pressable style={styles.playBtn} onPress={goToGameCategory}>
-                                <Text style={styles.playText}>Play</Text>
-                            </Pressable>
-                            <Pressable style={styles.instructionBtn}>
-                                <Text style={styles.instructionText}>How to play</Text>
-                            </Pressable>
-                        </View>
-                    </ImageBackground>
-                    <ImageBackground style={styles.gameCard} source={require('../../../assets/images/quiz-background.png')}>
-
-                    </ImageBackground>
-                    <ImageBackground style={styles.gameCard} source={require('../../../assets/images/quiz-background.png')}>
-
-                    </ImageBackground>
-                    <ImageBackground style={styles.gameCard} source={require('../../../assets/images/quiz-background.png')}>
-
-                    </ImageBackground>
+                    {gamesType.map((game) => {
+                        const { id, gameName, backgroundImage, gameImage, unlocked } = game;
+                        console.log(backgroundImage)
+                        return (
+                            <Animated.View entering={randomEnteringAnimation().duration(1000)} key={id}>                                 
+                            <ImageBackground style={styles.gameCard} source={backgroundImage}>
+                                {!unlocked && 
+                                    //  <ImageBackground source={require('../../../assets/images/game-cover.png')} >
+                                     <View style={styles.gameCover}>
+                                        <Image style={styles.lockImage} source={require('../../../assets/images/game-lock.png')} />
+                                     </View>
+                                //  </ImageBackground>
+                                }
+                                <View>
+                                    <Text style={styles.gameText}>{gameName}</Text>
+                                </View>
+                                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                    <Image style={styles.cardImage} source={gameImage} />
+                                </View>
+                                <View style={styles.cardBtnContainer}>
+                                    <Pressable style={styles.playBtn} onPress={goToGameCategory}>
+                                        <Text style={styles.playText}>Play</Text>
+                                    </Pressable>
+                                    <Pressable style={styles.instructionBtn} onPress={goToGameInstruction}>
+                                        <Text style={styles.instructionText}>How to play</Text>
+                                    </Pressable>
+                                </View>
+                            </ImageBackground>
+                            </Animated.View>
+                        )
+                    })}
                 </ScrollView>
                 <View style={styles.setting}>
                     <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
@@ -94,6 +135,9 @@ const styles = EStyleSheet.create({
     welcome: {
         alignItems: 'center',
         marginTop: responsiveScreenHeight(35)
+    },
+    games: {
+        flexDirection: 'row'
     },
 
     welcomeText: {
@@ -122,21 +166,36 @@ const styles = EStyleSheet.create({
     gameCard: {
         height: normalize(399),
         width: normalize(192),
-        marginVertical:responsiveScreenHeight(2),
+        marginVertical: responsiveScreenHeight(2),
         marginHorizontal: responsiveScreenWidth(3),
         paddingVertical: responsiveScreenHeight(2),
-        paddingHorizontal:responsiveScreenWidth(5),
+        paddingHorizontal: responsiveScreenWidth(5),
     },
     gameText: {
-        fontSize:'2.5rem',
+        fontSize: '2.5rem',
         fontFamily: 'blues-smile',
         color: '#fff',
-        textAlign:'center'
+        textAlign: 'center'
     },
-    cardImage:{
-        height:191,
-        width:144,
-        marginTop:10
+    gameCover: {
+        flex:1,
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        right: 0,
+        left: 0,
+        top: 0,
+        bottom: 0,
+        backgroundColor:'rgba(0, 0, 0, 0.8)',
+        borderRadius:15,
+        height: normalize(400),
+        width: normalize(195),
+        zIndex: 10
+    },
+    cardImage: {
+        height: 191,
+        width: 144,
+        marginTop: 10
     },
     cardBtnContainer: {
         marginTop: -12
@@ -149,12 +208,12 @@ const styles = EStyleSheet.create({
         borderRadius: 20,
         borderBottomColor: '#0D2859',
         borderBottomWidth: 4,
-        paddingVertical:'0.4rem',
-        marginBottom:5
+        paddingVertical: '0.4rem',
+        marginBottom: 5
     },
     playText: {
         color: '#fff',
-        fontFamily:'blues-smile',
+        fontFamily: 'blues-smile',
         fontSize: '0.9rem'
     },
     instructionBtn: {
@@ -165,12 +224,16 @@ const styles = EStyleSheet.create({
         borderRadius: 20,
         borderBottomColor: '#C5C2C2',
         borderBottomWidth: 4,
-        paddingVertical:'0.4rem'
+        paddingVertical: '0.4rem'
     },
     instructionText: {
         color: '#15397D',
-        fontFamily:'blues-smile',
+        fontFamily: 'blues-smile',
         fontSize: '0.9rem'
+    },
+    lockImage: {
+        height: normalize(92),
+        width: normalize(72),
     }
 
 })

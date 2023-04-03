@@ -202,7 +202,8 @@ const initialState = {
     minimumChallengeStakeAmount: 0,
     minimumWalletFundableAmount: 0,
     minimumBoostScore:0,
-    periodBeforeChallengeStakingExpiry: ''
+    periodBeforeChallengeStakingExpiry: '',
+    modalOpen: false
 }
 
 const stakingGameMode =
@@ -222,6 +223,9 @@ export const CommonSlice = createSlice({
         initialLoadingComplete: (state) => {
             state.initialLoading = false;
         },
+        setModalOpen: (state, action) => {
+            state.modalOpen = action.payload
+        },
         setToogleSound: (state) => {
             state.toogleSound = !state.toogleSound
         },
@@ -238,7 +242,7 @@ export const CommonSlice = createSlice({
                 state.achievements = data.achievements;
                 state.plans = data.plans;
                 state.gameTypes = data.gameTypes;
-                state.gameModes = [...data.gameModes, stakingGameMode];
+                state.gameModes = data.gameModes;
                 state.gameCategories = data.gameCategories;
                 state.minVersionCode = data.minVersionCode;
                 state.minVersionForce = data.minVersionForce;
@@ -302,6 +306,6 @@ export const CommonSlice = createSlice({
     },
 });
 
-export const { initialLoadingComplete, setToogleSound, setSound } = CommonSlice.actions
+export const { initialLoadingComplete, setToogleSound, setSound, setModalOpen } = CommonSlice.actions
 
 export default CommonSlice.reducer

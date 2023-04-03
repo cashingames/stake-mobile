@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, ScrollView, Alert, Pressable, Platform } from 'react-native';
+import { Text, View, ScrollView, Alert, Pressable, Platform, Image } from 'react-native';
 import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import AppButton from '../../shared/AppButton';
 import Input from '../../shared/Input';
 import { changePassword, deleteUserAccount, logoutUser } from '../Auth/AuthSlice';
@@ -12,6 +12,10 @@ import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import DeleteAccount from '../../shared/DeleteAccount';
 import useSound from '../../utils/useSound';
+import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
+import GameArkLogo from '../../shared/GameArkLogo';
+import GaButton from '../../shared/GaButton';
+import { setModalOpen } from '../CommonSlice';
 
 
 export default function ChangePasswordScreen({ navigation }) {
@@ -24,25 +28,25 @@ export default function ChangePasswordScreen({ navigation }) {
     const [new_password, setNewPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
     const [new_password_confirmation, setConfirmPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
     const [passErr, setPassError] = useState(false);
-    const { playSound } =  useSound(require('../../../assets/sounds/updated.mp3'))
+    const { playSound } = useSound(require('../../../assets/sounds/updated.mp3'))
 
 
     const refRBSheet = useRef();
 
-	const openBottomSheet = () => {
-		refRBSheet.current.open()
-	}
+    const openBottomSheet = () => {
+        refRBSheet.current.open()
+    }
 
-	const closeBottomSheet = () => {
-		refRBSheet.current.close()
-	}
+    const closeBottomSheet = () => {
+        refRBSheet.current.close()
+    }
 
 
     const deleteAccount = () => {
         dispatch(deleteUserAccount())
-        .then(() => {
-            dispatch(logoutUser())
-        }) 
+            .then(() => {
+                dispatch(logoutUser())
+            })
     }
 
     const onChangePassword = (text) => {
@@ -87,8 +91,10 @@ export default function ChangePasswordScreen({ navigation }) {
             });
     }
     return (
-        <View style={styles.container}>
-            <ScrollView>
+        <MixedContainerBackground>
+            <GameArkLogo />
+            <Text style={styles.title}>Change Password</Text>
+            <ScrollView style={styles.container}>
                 <>
                     <Input
                         type="password"
@@ -119,25 +125,31 @@ export default function ChangePasswordScreen({ navigation }) {
                     />
                 </>
                 <PasswordRequirement />
-                <Pressable style={styles.deleteContainer} onPress={openBottomSheet}>
-                    <Text style={styles.deleteText}>Delete Account</Text>
-                </Pressable>
                 <UniversalBottomSheet
-				refBottomSheet={refRBSheet}
-				height={Platform.OS === 'ios' ? 300 : 250}
-				subComponent={<DeleteAccount 
-                    onClose={closeBottomSheet} 
-                    onPressYes ={deleteAccount}
+                    refBottomSheet={refRBSheet}
+                    height={Platform.OS === 'ios' ? 300 : 250}
+                    subComponent={<DeleteAccount
+                        onClose={closeBottomSheet}
+                        onPressYes={deleteAccount}
                     />}
-			/>
-            </ScrollView>
-            <AppButton
+                />
+                 <GaButton
                 text={saving ? 'Saving' : 'Change Password'}
                 onPress={onSavePassword}
                 disabled={!canSave}
                 style={styles.saveButton}
             />
-        </View>
+             <Pressable style={styles.deleteContainer} onPress={openBottomSheet}>
+                    <Text style={styles.deleteText}>Delete Account</Text>
+                </Pressable>
+                <Pressable onPress={() => {
+                        navigation.goBack(null)
+                        dispatch(setModalOpen(false))}}>
+                        <Image style={styles.settingIcon} source={require('../../../assets/images/close-icon.png')} />
+                    </Pressable>
+            </ScrollView>
+           
+        </MixedContainerBackground>
     );
 }
 
@@ -156,7 +168,6 @@ const PasswordRequirement = () => {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8F9FD',
         paddingHorizontal: normalize(18),
         paddingVertical: normalize(25),
     },
@@ -189,9 +200,16 @@ const styles = EStyleSheet.create({
     },
     inputLabel: {
         fontFamily: 'blues-smile',
-        color: '#000000B2',
+        color: '#fff',
         fontSize: '0.76rem',
         marginBottom: normalize(8)
+    },
+    title: {
+        textAlign: 'center',
+        color: "#fff",
+        fontFamily: 'blues-smile',
+        fontSize: '2rem',
+        marginVertical: '1rem'
     },
     input: {
         borderColor: ' rgba(0, 0, 0, 0.1)',
@@ -228,26 +246,31 @@ const styles = EStyleSheet.create({
     },
     requirementTitle: {
         fontSize: '0.76rem',
-        fontFamily: 'graphik-medium',
-        color: '#000000',
+        fontFamily: 'blues-smile',
+        color: '#fff',
         marginBottom: normalize(8)
     },
     requirement: {
         fontSize: '0.75rem',
         fontFamily: 'graphik-regular',
-        color: '#000000',
-        opacity: 0.4,
+        color: '#fff',
     },
     deleteContainer: {
-        marginTop: normalize(15)
+        marginTop: normalize(15),
+        alignItems:'flex-end',
     },
     deleteText: {
-        fontSize: '0.75rem',
+        fontSize: '1rem',
         fontFamily: 'graphik-regular',
-        color: '#EF2F55', 
+        color: '#EF2F55',
     },
     saveButton: {
         marginVertical: 10,
-    }
+    },
+    settingIcon: {
+        marginTop:responsiveScreenHeight(10),
+        width: 50,
+        height: 50
+    },
 
 });

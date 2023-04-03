@@ -7,69 +7,54 @@ import { Pressable } from 'react-native'
 import MixedContainerBackground from './ContainerBackground/MixedContainerBackground'
 import GameArkLogo from './GameArkLogo'
 import { useNavigation } from '@react-navigation/core'
+import { useDispatch, useSelector } from 'react-redux'
+import { setModalOpen } from '../features/CommonSlice'
+import { useRef } from 'react'
+import { Animated } from 'react-native'
+import { useEffect } from 'react'
 
 const DashboardSettings = ({ showSettings, setShowSettings }) => {
+    const modalOpen = useSelector(state => state.common.modalOpen)
+    const dispatch = useDispatch()
+    const spinValue = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+      const spin = () => {
+        Animated.timing(spinValue, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }).start(() => {
+          spinValue.setValue(0);
+          spin();
+        });
+      };
+      spin();
+    }, [spinValue]);
+  
+    const spinAnimation = spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '360deg'],
+    });
+  
     const navigation = useNavigation()
     return (
         <>
             <View style={styles.setting}>
-                <Pressable onPress={() => setShowSettings(true)}>
+                {/* <Pressable onPress={() => setShowSettings(true)}> */}
+                <Pressable onPress={() => navigation.navigate('IconSettings')}>
+                <Animated.View style={[styles.circle, { transform: [{ rotate: spinAnimation }] }]}>
                     <Image style={styles.settingIcon} source={require('./../../assets/images/setting-icon.png')} />
+                    </Animated.View>
                 </Pressable>
                 <Pressable onPress={() => navigation.navigate('GameStore')}>
                     <Image style={styles.storeIcon} source={require('../../assets/images/store-icon.png')} />
+                    
                 </Pressable>
             </View>
-            <IconSettings setShowSettings={setShowSettings} showSettings={showSettings} />
         </>
     )
 }
-
-
-const IconSettings = ({ showSettings, setShowSettings }) => {
-    return (
-        <Modal
-            animationType="fade"
-            transparent={false}
-            visible={showSettings}
-            onRequestClose={() => {
-                // Alert.alert("Modal has been closed.");
-                setShowSettings(!showSettings);
-            }}
-        >
-            <MixedContainerBackground>
-                <View style={styles.modalContainer}>
-                    <View style={styles.container}>
-                        <GameArkLogo />
-                        <View style={styles.settingIconsContainter}>
-                            <Pressable style={styles.icons}>
-                                <Image style={styles.imageIcons} source={require('./../../assets/images/sound-1.png')} />
-                            </Pressable>
-                            <Pressable style={styles.icons}>
-                                <Image style={styles.imageIcons} source={require('./../../assets/images/leaderboard-icon.png')} />
-                            </Pressable>
-                            <Pressable style={styles.icons}>
-                                <Image style={styles.imageIcons} source={require('./../../assets/images/profile-icon.png')} />
-                            </Pressable>
-                            <Pressable style={styles.icons}>
-                                <Image style={styles.imageIcons} source={require('./../../assets/images/icon.png')} />
-                            </Pressable>
-                            <Pressable style={styles.icons}>
-                                <Image style={styles.imageIcons} source={require('./../../assets/images/help-icon.png')} />
-                            </Pressable >
-                        </View>
-                        <View style={styles.setting}>
-                            <Pressable onPress={() => setShowSettings(false)}>
-                                <Image style={styles.settingIcon} source={require('./../../assets/images/close-icon.png')} />
-                            </Pressable>
-                        </View>
-                    </View>
-                </View>
-            </MixedContainerBackground>
-        </Modal>
-    )
-}
-
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
@@ -78,12 +63,13 @@ const styles = EStyleSheet.create({
 
     modalContainer: {
         alignItems: 'center',
-        paddingHorizontal: responsiveScreenHeight(3),
     },
     settingIconsContainter: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         marginTop: responsiveScreenHeight(34),
+        paddingHorizontal: responsiveScreenHeight(3),
+
     },
 
     setting: {

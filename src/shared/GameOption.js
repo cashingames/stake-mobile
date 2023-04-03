@@ -13,7 +13,7 @@ const GameOption = ({ option: { title, isSelected, is_correct }, onSelected, sub
     // const showRight = !isSelected && !submissionResult;
 
     useEffect(() => {
-        if(selectedOption && showCorrectAnswer){
+        if(showCorrectAnswer){
             try {
                 const a = is_correct ? is_correct : null;                
                 const showCorrectOption = !isSelected && a == 1;
@@ -55,12 +55,12 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(10),
         padding: normalize(15),
         borderRadius: 16,
-        borderBottomColor: '#C97AE0',
-        borderBottomWidth: 7,
+        borderBottomColor: '#15397D',
+        borderBottomWidth: 4,
     },
     answerText: {
-        color: '#151C2F',
-        fontFamily: 'graphik-medium',
+        color: '#15397D',
+        fontFamily: 'blues-smile',
         fontSize: '0.75rem',
         textAlign: 'left',
     },
@@ -68,13 +68,13 @@ const styles = EStyleSheet.create({
         backgroundColor: '#F5D2FF'
     },
     correctOption: {
-        backgroundColor: 'rgba(111, 207, 151, 0.76)',
-        borderBottomColor: '#6FCF97',
-        borderBottomWidth: 7,
+        backgroundColor: '#FFBC10',
+        borderBottomColor: '#15397D',
+        borderBottomWidth: 4,
     },
     wrongOption: {
-        backgroundColor: 'rgba(255, 68, 9, 0.42)',
-        borderBottomColor: '#FF4409',
+        backgroundColor: '#E7262A',
+        borderBottomColor: '#15397D',
     },
     checkmark: {
         backgroundColor: '#fff',

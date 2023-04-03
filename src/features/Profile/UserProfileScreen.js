@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Text, View, Image, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize, { responsiveScreenHeight } from '../../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
@@ -14,6 +14,9 @@ import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import Animated from 'react-native-reanimated';
 import { randomEnteringAnimation } from '../../utils/utils';
 import useSound from '../../utils/useSound';
+import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
+import GameArkLogo from '../../shared/GameArkLogo';
+import { setModalOpen } from '../CommonSlice';
 
 
 export default function UserProfileScreen({ navigation }) {
@@ -25,18 +28,33 @@ export default function UserProfileScreen({ navigation }) {
         dispatch(logoutUser());
     }
 
+    useFocusEffect(
+        React.useCallback(() => {
+            // console.info('UserDetails focus effect')
+            dispatch(getUser());
+        }, [])
+    );
+
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView style={{ flex: 1 }}>
-                <View style={[styles.content, { flex: 1 }]}>
-                    <View>
-                        <UserAvatar />
-                        <ProfileTabs />
+        <MixedContainerBackground>
+            <SafeAreaView style={styles.container}>
+                <GameArkLogo />
+                <ScrollView style={{ flex: 1 }}>
+                    <View style={[styles.content, { flex: 1 }]}>
+                        <View>
+                            <UserAvatar />
+                            <ProfileTabs />
+                        </View>
                     </View>
-                </View>
-                <Footer onLogout={onLogout} />
-            </ScrollView>
-        </SafeAreaView>
+                    {/* <Footer onLogout={onLogout} /> */}
+                    <Pressable onPress={() => {
+                        navigation.goBack(null)
+                        dispatch(setModalOpen(false))}}>
+                        <Image style={styles.settingIcon} source={require('../../../assets/images/close-icon.png')} />
+                    </Pressable>
+                </ScrollView>
+            </SafeAreaView>
+        </MixedContainerBackground>
     );
 }
 
@@ -80,15 +98,18 @@ const UserAvatar = () => {
 
     return (
         <View style={styles.userAvatar}>
-            <Image
-                style={styles.avatar}
-                source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+            <View style={styles.imageCircle}>
+                <Image
+                    style={styles.avatar}
+                    source={isTrue(user.avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
 
-            />
-            {!loading ?
-                <Pressable style={styles.camera} onPress={pickImage}>
-                    <Ionicons name="camera-sharp" size={26} color="#FFFF" />
-                </Pressable> : <ActivityIndicator size="large" color="#0000ff" />}
+                />
+                {!loading ?
+                    <Pressable style={styles.camera} onPress={pickImage}>
+                        {/* <Ionicons name="camera-sharp" size={26} color="#FFFF" /> */}
+                        <Image style={styles.imageIcon} source={require('../../../assets/images/addImage.png')} />
+                    </Pressable> : <ActivityIndicator size="large" color="#0000ff" />}
+            </View>
         </View>
     )
 }
@@ -106,6 +127,7 @@ const ProfileTabs = () => {
     // }
 
     return (
+
         <View style={styles.profileTabs}>
             <ProfileTab tabName='Edit Details' onPress={() => {
                 playSound()
@@ -127,11 +149,8 @@ const ProfileTabs = () => {
                 playSound()
                 navigation.navigate('Invite')
             }} />
-            {/* <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} /> */}
-            {/* <Pressable onPress={onLogout}>
-                <Text style={styles.logoutText}>Logout</Text>
-            </Pressable> */}
         </View>
+
     )
 }
 
@@ -141,7 +160,6 @@ const ProfileTab = ({ tabName, onPress }) => {
         <Animated.View entering={randomEnteringAnimation().duration(1000)}>
             <Pressable onPress={onPress} style={styles.profileTab}>
                 <Text style={styles.tabText}>{tabName}</Text>
-                <Ionicons name="chevron-forward-outline" size={20} color="#524D4D" />
             </Pressable >
         </Animated.View>
     )
@@ -161,46 +179,57 @@ const Footer = ({ onLogout }) => {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
-        // marginVertical: normalize(20)
+        paddingHorizontal: responsiveScreenWidth(3)
     },
     content: {
-        marginHorizontal: normalize(18),
         paddingVertical: normalize(25),
-        marginBottom: normalize(20)
+        // marginBottom: normalize(20),
+        alignItems: 'center'
 
     },
     userAvatar: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center'
+        flexDirection: 'row',
+        // alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10
+        // width: normalize(150),
+        // height: normalize(150),
     },
     avatar: {
-        width: normalize(100),
-        height: normalize(100),
+        width: normalize(150),
+        height: normalize(150),
         backgroundColor: '#FFFF',
         borderRadius: 100,
-        borderColor: ' rgba(0, 0, 0, 0.1)',
-        borderWidth: 1,
+        borderColor: '#fff',
+        borderWidth: 4,
         marginBottom: normalize(10)
     },
     camera: {
-        backgroundColor: '#EF2F55',
-        borderRadius: 50,
+        // backgroundColor: '#EF2F55',
+        borderRadius: 100,
         padding: normalize(6),
+        position: 'absolute',
+        bottom: 0,
+        right: 10
+    },
+    imageIcon: {
+        height: 50,
+        width: 50
     },
     profileTab: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
-        borderBottomColor: 'rgba(0, 0, 0, 0.1)',
-        borderBottomWidth: 1,
-        paddingVertical: normalize(20)
+        backgroundColor: '#fff',
+        paddingHorizontal: 35,
+        borderRadius: 20,
+        marginVertical: 8,
+        paddingVertical: normalize(10)
     },
     tabText: {
         fontSize: '0.93rem',
-        fontFamily: 'graphik-regular',
-        color: '#151C2F',
+        fontFamily: 'blues-smile',
+        color: '#15397D',
     },
     profileTabs: {
         paddingVertical: normalize(25)
@@ -226,7 +255,10 @@ const styles = EStyleSheet.create({
         fontSize: '0.75rem',
         fontFamily: 'graphik-medium',
         paddingVertical: responsiveScreenHeight(1),
-
+    },
+    settingIcon: {
+        width: 50,
+        height: 50
     },
 
 });

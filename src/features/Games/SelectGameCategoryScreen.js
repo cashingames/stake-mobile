@@ -21,7 +21,9 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     const refRBSheet = useRef();
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
     const [showSettings, setShowSettings] = useState(false);
+    const user = useSelector(state => state.auth.user);
 
+    console.log(user)
     // console.log(activeSubcategory)
 
 
@@ -56,7 +58,7 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
                 <ScrollView style={styles.container}>
                     <TopIcons />
                     <View style={styles.logo}>
-                        <Pressable style={styles.icons}>
+                        <Pressable style={styles.icons} onPress={() => navigation.navigate('Home')}>
                             <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
                         </Pressable>
                         <Text style={styles.title}>Quiz Game</Text>

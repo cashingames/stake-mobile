@@ -82,6 +82,7 @@ import { StatusBar } from 'react-native';
 import Home from './features/Home/Home';
 import GameScreen from './features/Games/GameScreen';
 import SubCategoryScreen from './features/Games/SubCategoryScreen';
+import IconSettings from './features/Support/IconSettings';
 
 const AppStack = createNativeStackNavigator();
 
@@ -214,12 +215,7 @@ function AppRouter() {
 						<AppStack.Screen name="SelectSubCategory" component={SubCategoryScreen} options={{
 							headerShown: false,
 						}} />
-						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{
-							title: 'Game Instructions', headerStyle: {
-								backgroundColor: '#F2F5FF',
-							},
-							headerTintColor: '#000000',
-						}} />
+						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{headerShown: false}}/>
 						<AppStack.Screen name="AppTour" component={TourIndex} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
 						<AppStack.Screen name="LiveTriviaStaking" component={LiveTriviaStakingScreen} options={{ title: 'Game Staking' }} />
@@ -271,11 +267,11 @@ function AppRouter() {
 						<AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
 
 						{/* user profile */}
-						<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
-						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Edit Details' }} />
-						<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Change Password' }} />
+						<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{headerShown: false }} />
+						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ title: 'Stats' }} />
-						<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ title: 'Achievements' }} />
+						<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ headerShown: false}} />
 						<AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
 
 
@@ -284,6 +280,7 @@ function AppRouter() {
 						<AppStack.Screen name="GameBoostPurchaseSuccessful" component={GameBoostPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GamePlanPurchaseSuccessful" component={GamePlanPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
+						<AppStack.Screen name="IconSettings" component={IconSettings} options={{ headerShown: false }} />
 
 						<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
 						<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{

@@ -9,23 +9,52 @@ import { set } from 'lodash'
 import MainContainerBackground from '../shared/ContainerBackground/MainContainerBackground'
 import GameArkLogo from '../shared/GameArkLogo'
 import { useEffect } from 'react'
-import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from './CommonSlice'
-import { useDispatch } from 'react-redux'
+import { fetchFeatureFlags, getCommonData, initialLoadingComplete, loadSoundPrefernce, setSound } from './CommonSlice'
+import { getUser } from './Auth/AuthSlice';
+import { useDispatch, useSelector } from 'react-redux'
+import { useFocusEffect, useIsFocused } from '@react-navigation/native'
+import Loader from '../shared/Loader'
+import useSound from '../utils/useSound'
 
 const Dashboard = ({ navigation }) => {
-    const [showSettings, setShowSettings] = useState(false);
+    const loading = useSelector(state => state.common.initialLoading);
     const dispatch = useDispatch()
+    const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
+
+
+    const isFocused = useIsFocused();
+    const { playSound } = useSound(require('./../../assets/sounds/dashboard.mp3'));
     
+    useEffect(() => {
+        if (isFocused && isSoundLoaded) {
+            playSound()
+        }
+    }, [isFocused, isSoundLoaded]);
     useEffect(() => {
         const _2 = dispatch(getCommonData());
         const _3 = dispatch(fetchFeatureFlags())
+        // const _4 = dispatch(getUser())
 
         Promise.all([_2, _3]).then(() => {
             dispatch(initialLoadingComplete());
         });
-        // loadSoundPrefernce(dispatch, setSound)
+        loadSoundPrefernce(dispatch, setSound)
         // getStoreItems()
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            if (loading) {
+                return;
+            }
+        }, [loading])
+        );
+
+        
+    if (loading) {
+        return <Loader />
+    }
+
     return (
         <MainContainerBackground>
             <View style={styles.container}>
@@ -39,7 +68,9 @@ const Dashboard = ({ navigation }) => {
                     </Pressable>
                 </View>
                 <View style={styles.setting}>
-                    <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
+                    {/* <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} /> */}
+                    <DashboardSettings />
+
                 </View>
             </View >
         </MainContainerBackground>
@@ -50,7 +81,6 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingVertical: responsiveScreenWidth(3),
-        paddingHorizontal: responsiveScreenWidth(3),
     },
 
     logo: {

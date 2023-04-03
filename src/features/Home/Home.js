@@ -10,11 +10,32 @@ import { set } from 'lodash'
 import MainContainerBackground from '../../shared/ContainerBackground/MainContainerBackground'
 import GameArkLogo from '../../shared/GameArkLogo'
 import TopIcons from '../../shared/TopIcons'
+import { useFocusEffect } from '@react-navigation/native'
+import { getUser } from '../Auth/AuthSlice'
+import { getAchievements } from '../Profile/AchievementSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { setGameMode } from '../Games/GameSlice'
 
 const Home = ({ navigation }) => {
     const [showSettings, setShowSettings] = useState(false);
+    const dispatch = useDispatch()
+    const user = useSelector(state => state.auth.user);
+    const gameModes = useSelector(state => state.common.gameModes);
+    // const gameModeSelected = gameModes.find(mode => mode.name === 'EXHIBITION')
+    useFocusEffect(
+        React.useCallback(() => {
+            // console.info('UserDetails focus effect')
+            dispatch(getUser());
 
-    const goToGame = () => {
+            // get achievements badges
+            dispatch(getAchievements());
+
+        }, [])
+    );
+
+
+    const gameModeSelected = (mode) => {
+        dispatch(setGameMode(mode));
         navigation.navigate('Games')
     }
     return (
@@ -25,12 +46,23 @@ const Home = ({ navigation }) => {
                     <GameArkLogo />
                 </View>
                 <View style={styles.welcome}>
-                    <Pressable style={styles.playBtn} onPress={goToGame}>
+                    {gameModes.map((mode, i)=> {
+                        return (
+                            <Pressable 
+                            key={i}
+                            style={styles.playBtn} 
+                            onPress={() => gameModeSelected(mode)}
+                            >
+                        <Text style={styles.welcomeBtnText}>{mode.name === 'EXHIBITION' ? 'Single Player' : 'Multi-Player'}</Text>
+                    </Pressable>
+                        )
+                    })}
+                    {/* <Pressable style={styles.playBtn} onPress={goToGame}>
                         <Text style={styles.welcomeBtnText}>Single Player</Text>
                     </Pressable>
                     <Pressable style={styles.playBtn} onPress={goToGame}>
                         <Text style={styles.welcomeBtnText}>Multi-Player</Text>
-                    </Pressable>
+                    </Pressable> */}
                 </View>
                 <View style={styles.setting}>
                     <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
