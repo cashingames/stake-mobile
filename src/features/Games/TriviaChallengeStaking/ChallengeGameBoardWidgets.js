@@ -11,14 +11,13 @@ import { isTrue } from "../../../utils/stringUtl";
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 
 const ChallengeGameBoardWidgets = ({onComplete}) => {
-    const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const opponentDetails = challengeDetails.opponent
 
     return (
         <View style={styles.gameProgressAndBoost}>
             <RenderGameProgress onComplete={onComplete} />
-            <PlayersInfo user={user} opponentDetails={opponentDetails} />
+            <PlayersInfo opponentDetails={opponentDetails} />
         </View>
     )
 }
