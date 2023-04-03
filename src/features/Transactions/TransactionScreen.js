@@ -13,79 +13,21 @@ export default function TransactionScreen({ navigation }) {
 
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
-    const [loadingMore, setLoadingMore] = useState(false)
     const transactions = useSelector(state => state.common.userTransactions);
-    const [pageNumber, setPageNumber] = useState()
 
-    const loadMoreTransactions = useSelector(state => state.common.loadMoreTransactions);
 
-    useEffect(() => {
-        setPageNumber(getPageNo());
-    }, [])
 
     useEffect(() => {
-        if (!pageNumber) {
-            return;
-        }
-        if (!loadMoreTransactions) {
-            setLoadingMore(false)
-            setLoading(false)
-            return;
-        }
+        setLoading(false)
 
-        setLoadingMore(true)
-        dispatch(fetchUserTransactions(pageNumber))
+        dispatch(fetchUserTransactions())
             .then(() => {
-                console.log("fetching page ", pageNumber)
+                console.log("fetching page ",)
                 setLoading(false)
-                setLoadingMore(false)
             })
-    }, [pageNumber, loadMoreTransactions]);
+    }, []);
 
-    const loadMoreItems = () => {
-        console.log("loading more")
-        if (!loadMoreTransactions)
-            return;
-        //check if length of transactions has changed
-        setPageNumber(getPageNo())
-    }
 
-    const getPageNo = () => parseInt(transactions.length / 10) + 1;
-
-    const fundTransactions = ({ item }) => {
-
-        return (
-            <View style={styles.transactionDetails}>
-                <View style={styles.narationDetails}>
-                    <View style={styles.naration}>
-                        <Text style={styles.narationTitle}>{item.type}</Text>
-                    </View>
-                    <Text style={item.type === "DEBIT" ? styles.transactionAmountWithdraw : styles.transactionAmountReceived}>&#8358;{formatCurrency(item.amount)}</Text>
-                </View>
-                <View style={styles.typeAndDate}>
-                    <Text style={styles.transactionType}>{item.description}</Text>
-                    <Text style={styles.transactionType}>{item.transactionDate}</Text>
-                </View>
-            </View>
-        )
-
-    }
-
-    const renderFooterLoader = () => {
-        return (
-            <>
-                {loadingMore ?
-                    <PageLoading
-                        backgroundColor='#FFFF'
-                        spinnerColor="#000000"
-                    />
-                    :
-                    <></>
-                }
-
-            </>
-        )
-    }
 
     if (loading) {
         return <PageLoading
@@ -97,14 +39,12 @@ export default function TransactionScreen({ navigation }) {
     return (
         <View style={styles.container}>
             {transactions.length > 0 ?
-                <FlatList
-                    data={transactions}
-                    renderItem={fundTransactions}
-                    keyExtractor={item => item.transactionId}
-                    ListFooterComponent={renderFooterLoader}
-                    onEndReached={loadMoreItems}
-                    onEndReachedThreshold={0.2}
-                />
+                <>
+                    {
+                        transactions.map((item, i) => <FundTransactions key={i} item={item}
+                        />)
+                    }
+                </>
                 :
                 <View style={styles.noTransactionContainer}>
                     <Image
@@ -118,6 +58,25 @@ export default function TransactionScreen({ navigation }) {
             }
         </View>
     );
+
+}
+
+const FundTransactions = ({ item }) => {
+
+    return (
+        <View style={styles.transactionDetails}>
+            <View style={styles.narationDetails}>
+                <View style={styles.naration}>
+                    <Text style={styles.narationTitle}>{item.type}</Text>
+                </View>
+                <Text style={item.type === "DEBIT" ? styles.transactionAmountWithdraw : styles.transactionAmountReceived}>&#8358;{formatCurrency(item.amount)}</Text>
+            </View>
+            <View style={styles.typeAndDate}>
+                <Text style={styles.transactionType}>{item.description}</Text>
+                <Text style={styles.transactionType}>{item.transactionDate}</Text>
+            </View>
+        </View>
+    )
 
 }
 
