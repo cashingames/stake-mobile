@@ -90,8 +90,8 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                 <PlayGameHeader onPress={showExitConfirmation} />
                 <ChallengeGameBoardWidgets onComplete={gameEnded} />
                 <RenderQuestion />
-                <RenderActionButton onEnd={gameEnded} submitting={submitting} />
             </ScrollView>
+            <RenderActionButton onEnd={gameEnded} submitting={submitting} />
         </ImageBackground>
 
     )
