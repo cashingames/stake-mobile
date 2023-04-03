@@ -12,7 +12,7 @@
     "build-a": "cross-env APP_VARIANT=preview eas build --platform android --profile preview --clear-cache",
     "build-i": "cross-env APP_VARIANT=preview eas build --platform ios --profile preview --clear-cache",
     "publish": "cross-env APP_VARIANT=preview eas update --branch preview",
-    "build-prod": "eas build --platform all --profile production --clear-cache",
+    "build-prod": "eas build --platform all --profile production --clear-cache --auto-submit",
     "build-prod-a": "eas build --platform android --profile production --clear-cache",
     "build-prod-i": "eas build --platform ios --profile production --clear-cache",
     "publish-prod": "cross-env APP_VARIANT=production eas update --branch production",
