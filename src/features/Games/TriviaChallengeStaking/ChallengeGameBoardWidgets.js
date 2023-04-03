@@ -87,12 +87,12 @@ const RenderQuestionsCount = () => {
     );
 }
 
-const PlayersInfo = ({ user, opponentDetails }) => {
+const PlayersInfo = ({ challengeDetails }) => {
     return (
         <View style={styles.playersContainer}>
-            <UserPlayerInfo playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+            <UserPlayerInfo playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
             <Text style={styles.versus}>vs</Text>
-            <OpponentPlayerInfo playerName={opponentDetails.username} playerAvatar={require("../../../../assets/images/user-icon.png")} />
+            <OpponentPlayerInfo playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
         </View>
     )
 }

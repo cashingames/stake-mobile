@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { BackHandler, ImageBackground, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
+import { Alert, BackHandler, ImageBackground, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useFocusEffect } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
@@ -53,6 +53,26 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                 );
             });
     }
+    const showExitConfirmation = () => {
+        Alert.alert(
+            'Exit Game?',
+            'You have an ongoing game. Do you want to submit this game ?',
+            [
+                {
+                    text: "Continue playing",
+                    style: 'cancel',
+                    onPress: () => setSubmitting(false)
+                },
+                {
+                    text: 'Exit',
+                    onPress: () => {
+                        // console.log("show exit from exit button")
+                        gameEnded();
+                    },
+                },
+            ]
+        );
+    }
 
     const getOpponentStatus = async () => {
         const result = await firestore()
@@ -67,7 +87,7 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     return (
         <ImageBackground source={require('../../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
-                <PlayGameHeader />
+                <PlayGameHeader onPress={showExitConfirmation} />
                 <ChallengeGameBoardWidgets onComplete={gameEnded} />
                 <RenderQuestion />
                 <RenderActionButton onEnd={gameEnded} submitting={submitting} />

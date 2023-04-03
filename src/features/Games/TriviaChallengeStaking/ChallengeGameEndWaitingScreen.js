@@ -12,8 +12,7 @@ import { setChallengeDetails } from "./TriviaChallengeGameSlice";
 
 
 const ChallengeGameEndWaitingScreen = ({navigation}) => {
-    const user = useSelector(state => state.auth.user);
-    const opponentDetails = useSelector(state => state.triviaChallenge.challengeDetails.opponent);
+    const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const documentId = useSelector(state => state.triviaChallenge.documentId);
 
     const dispatch = useDispatch();
@@ -72,24 +71,24 @@ const ChallengeGameEndWaitingScreen = ({navigation}) => {
                     height={normalize(200)}
                 />
             </View>
-            <SelectedPlayers user={user} opponentDetails={opponentDetails} />
+            <SelectedPlayers challengeDetails={challengeDetails} />
             <Text style={styles.message}>Wait for both scores to be calculated</Text>
             <Text style={styles.matchingText}>Calculating....</Text>
         </View>
     )
 }
 
-const SelectedPlayers = ({ user, opponentDetails }) => {
+const SelectedPlayers = ({ challengeDetails }) => {
     return (
         <>
             <ImageBackground source={require('../../../../assets/images/challenge-stage.png')}
                 style={styles.playerImage} imageStyle={{ borderRadius: 20, borderColor: "#FFFF", borderWidth: 1 }} resizeMode="cover">
-                <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <SelectedPlayer playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
 
                 <Image
                     source={require('../../../../assets/images/versus.png')}
                 />
-                <SelectedPlayer playerName={opponentDetails.username} playerAvatar={require("../../../../assets/images/user-icon.png")} />
+                <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
             </ImageBackground>
         </>
     )

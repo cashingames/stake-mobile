@@ -56,7 +56,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
              {userScore === opponentScore &&
                 <Text style={styles.headText}>Draw, you can try again</Text>
             }
-            <ChallengePlayers user={user} challengeDetails={challengeDetails} />
+            <ChallengePlayers challengeDetails={challengeDetails} />
             {userScore > opponentScore &&
                 <WinningAmount />
             }
@@ -75,27 +75,27 @@ const WinningAmount = () => {
     )
 }
 
-const ChallengePlayers = ({ user, challengeDetails }) => {
+const ChallengePlayers = ({ challengeDetails }) => {
 
     console.log("challenge", )
     return (
         <View style={styles.playersContainer}>
             {challengeDetails.score > challengeDetails.opponent.score &&
                 <>
-                <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={require("../../../../assets/images/user-icon.png")} />
+                <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
             {challengeDetails.score < challengeDetails.opponent.score &&
                 <>
-                <ChallengeWinner playerName={challengeDetails.opponent.username} playerAvatar={require("../../../../assets/images/user-icon.png")} />
-                <ChallengeLoser playerName={challengeDetails.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <ChallengeLoser playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
             {challengeDetails.score === challengeDetails.opponent.score &&
                 <>
-                <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={require("../../../../assets/images/user-icon.png")} />
+                <ChallengeLoser playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
         </View>
