@@ -84,7 +84,7 @@ export const fetchRecentLiveTrivia = createAsyncThunk(
 export const fetchUserTransactions = createAsyncThunk(
     'common/fetchUserTransactions',
     async (data, thunkAPI) => {
-        const response = await axios.get(`v2/wallet/me/transactions?page=${data}`)
+        const response = await axios.get(`v2/wallet/me/transactions`)
         return response.data;
     }
 )
@@ -284,8 +284,7 @@ export const CommonSlice = createSlice({
                 state.stakeWinners = action.payload;
             })
             .addCase(fetchUserTransactions.fulfilled, (state, action) => {
-                state.loadMoreTransactions = action.payload.length >= 10;
-                state.userTransactions = state.userTransactions.concat(action.payload);
+                state.userTransactions = action.payload;
             })
             .addCase(fetchFeatureFlags.fulfilled, (state, action) => {
                 state.featureFlags = action.payload.data

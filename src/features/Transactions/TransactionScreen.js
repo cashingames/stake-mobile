@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView, Image, FlatList } from 'react-native';
+import { Text, View, ScrollView, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { formatCurrency, isTrue } from '../../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import PageLoading from '../../shared/PageLoading';
 import { fetchUserTransactions } from '../CommonSlice';
 
 export default function TransactionScreen({ navigation }) {
-    useApplyHeaderWorkaround(navigation.setOptions);
 
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
@@ -19,7 +17,6 @@ export default function TransactionScreen({ navigation }) {
 
     useEffect(() => {
         setLoading(false)
-
         dispatch(fetchUserTransactions())
             .then(() => {
                 console.log("fetching page ",)
@@ -41,7 +38,7 @@ export default function TransactionScreen({ navigation }) {
             {transactions.length > 0 ?
                 <>
                     {
-                        transactions.map((item, i) => <FundTransactions key={i} item={item}
+                        transactions.map((transaction, i) => <FundTransactions key={i} transaction={transaction}
                         />)
                     }
                 </>
@@ -61,19 +58,19 @@ export default function TransactionScreen({ navigation }) {
 
 }
 
-const FundTransactions = ({ item }) => {
+const FundTransactions = ({ transaction }) => {
 
     return (
         <View style={styles.transactionDetails}>
             <View style={styles.narationDetails}>
                 <View style={styles.naration}>
-                    <Text style={styles.narationTitle}>{item.type}</Text>
+                    <Text style={styles.narationTitle}>{transaction.type}</Text>
                 </View>
-                <Text style={item.type === "DEBIT" ? styles.transactionAmountWithdraw : styles.transactionAmountReceived}>&#8358;{formatCurrency(item.amount)}</Text>
+                <Text style={transaction.type === "DEBIT" ? styles.transactionAmountWithdraw : styles.transactionAmountReceived}>&#8358;{formatCurrency(transaction.amount)}</Text>
             </View>
             <View style={styles.typeAndDate}>
-                <Text style={styles.transactionType}>{item.description}</Text>
-                <Text style={styles.transactionType}>{item.transactionDate}</Text>
+                <Text style={styles.transactionType}>{transaction.description}</Text>
+                <Text style={styles.transactionType}>{transaction.transactionDate}</Text>
             </View>
         </View>
     )
