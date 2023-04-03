@@ -19,6 +19,7 @@ export const submitGameSession = createAsyncThunk(
             selected_options: state.selectedOptions,
         }
         const response = await axios.post('v3/challenges/submit', data);
+        console.log(response.data)
         return response.data
     }
 )

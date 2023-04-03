@@ -12,12 +12,11 @@ import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 
 const ChallengeGameBoardWidgets = ({onComplete}) => {
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
-    const opponentDetails = challengeDetails.opponent
 
     return (
         <View style={styles.gameProgressAndBoost}>
             <RenderGameProgress onComplete={onComplete} />
-            <PlayersInfo opponentDetails={opponentDetails} />
+            <PlayersInfo challengeDetails={challengeDetails} />
         </View>
     )
 }
