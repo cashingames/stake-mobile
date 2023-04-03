@@ -36,6 +36,8 @@ export default function ({ navigation }) {
             if (!purchase.acknowledged) {
               console.log(`Successfully purchased ${purchase.productId}`);
               // Process transaction here and unlock content...
+                //   acknowledge payment
+                InAppPurchases.finishTransactionAsync(purchase, true);
       
               // Then when you're done
             //   InAppPurchases.finishTransactionAsync(purchase, true);
