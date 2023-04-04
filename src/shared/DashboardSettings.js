@@ -41,7 +41,6 @@ const DashboardSettings = ({ showSettings, setShowSettings }) => {
     return (
         <>
             <View style={styles.setting}>
-                {/* <Pressable onPress={() => setShowSettings(true)}> */}
                 <Pressable onPress={() => navigation.navigate('IconSettings')}>
                 <Animated.View style={[styles.circle, { transform: [{ rotate: spinAnimation }] }]}>
                     <Image style={styles.settingIcon} source={require('./../../assets/images/setting-icon.png')} />
@@ -56,14 +55,6 @@ const DashboardSettings = ({ showSettings, setShowSettings }) => {
     )
 }
 const styles = EStyleSheet.create({
-    container: {
-        flex: 1,
-        paddingVertical: responsiveScreenWidth(3),
-    },
-
-    modalContainer: {
-        alignItems: 'center',
-    },
     settingIconsContainter: {
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -79,15 +70,6 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
-
-    icons: {
-        marginRight: 30,
-        marginVertical: 10,
-    },
-    imageIcons: {
-        height: 80,
-        width: 80
     },
     settingIcon: {
         width: 50,

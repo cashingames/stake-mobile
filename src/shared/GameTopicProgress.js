@@ -104,7 +104,7 @@ const styles = EStyleSheet.create({
     gameInfo:{
         marginRight:'0.3rem',
         color:'#fff',
-        fontSize:'0.75rem',
+        fontSize:'0.65rem',
         fontFamily:'blues-smile'
     }
 })

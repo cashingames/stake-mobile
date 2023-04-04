@@ -15,10 +15,10 @@ const GameArkLogo = () => {
   
     const shake = () => {
       Animated.sequence([
-        Animated.timing(shakeValue, { toValue: 10, duration: 100, useNativeDriver: true }),
-        Animated.timing(shakeValue, { toValue: -10, duration: 100, useNativeDriver: true }),
-        Animated.timing(shakeValue, { toValue: 10, duration: 100, useNativeDriver: true }),
-        Animated.timing(shakeValue, { toValue: 0, duration: 100, useNativeDriver: true }),
+        Animated.timing(shakeValue, { toValue: 10, duration: 200, useNativeDriver: true }),
+        Animated.timing(shakeValue, { toValue: -10, duration: 200, useNativeDriver: true }),
+        Animated.timing(shakeValue, { toValue: 10, duration: 200, useNativeDriver: true }),
+        Animated.timing(shakeValue, { toValue: 0, duration: 200, useNativeDriver: true }),
       ]).start(({ finished }) => {
         if (finished) {
           shake();

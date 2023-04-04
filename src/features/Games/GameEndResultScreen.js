@@ -180,7 +180,7 @@ export default function GameEndResultScreen({ navigation }) {
 
 			<ScrollView style={styles.container}>
 				<TopIcons />
-				<EndGameData homeNavigation={onHomeButtonClick} playAgain={onPlayButtonClick} pointsGained={pointsGained} />
+				<EndGameData homeNavigation={onHomeButtonClick} playAgain={onPlayButtonClick} pointsGained={pointsGained} minimumBoostScore={minimumBoostScore} />
 				<View style={styles.setting}>
 					<DashboardSettings />
 				</View>
@@ -189,9 +189,10 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 }
 
-const EndGameData = ({homeNavigation, playAgain, pointsGained}) => {
+const EndGameData = ({homeNavigation, playAgain, pointsGained, minimumBoostScore}) => {
 	return (
 		<View style={styles.endImageCase}>
+			{ pointsGained > minimumBoostScore ?
 			<ImageBackground style={styles.endImage} source={require('../../../assets/images/endgame-image.png')}>
 				<Text style={styles.winText}>You win</Text>
 				<View style={styles.starIcons}>
@@ -214,6 +215,31 @@ const EndGameData = ({homeNavigation, playAgain, pointsGained}) => {
 					</Pressable>
 				</View>
 			</ImageBackground>
+			:
+			<ImageBackground style={styles.endImage} source={require('../../../assets/images/lose-endgame.png')}>
+				<Text style={styles.winText}>You Lose!</Text>
+				<View style={styles.starIcons}>
+					<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+					<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+					<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+				</View>
+				<View style={styles.pointsCase}>
+					<Text style={styles.point}>You Scored {pointsGained} Points</Text>
+				</View>
+				<View style={styles.winPoints}>
+					<Text style={styles.pointEarned}>-10</Text>
+				</View>
+				<View style={styles.btnContainer}>
+					<Pressable onPress={homeNavigation}>
+						<Image style={styles.btn} source={require('../../../assets/images/okay.png')} />
+					</Pressable>
+					<Pressable onPress={playAgain}>
+						<Image style={styles.btn} source={require('../../../assets/images/replay.png')} />
+					</Pressable>
+				</View>
+			</ImageBackground>
+
+}
 		</View>
 	)
 }

@@ -46,17 +46,17 @@ const SubCategoryScreen = ({ navigation, route }) => {
                     </Pressable>
                     <Text style={styles.title}>Quiz Game</Text>
                 </View>
-                <Text style={styles.categoryHeading}>Select Category</Text>
+                {/* <Text style={styles.categoryHeading}>Select Category</Text> */}
                 <View style={styles.imgContainer}>
                     <Image style={styles.quizImage} source={require('../../../assets/images/quiz-large.png')} />
                 </View>
                 <View>
                     <SubCategories category={gameTypeId} loading={loading} setLoading={setLoading}/>
                 </View>
-                <View style={styles.setting}>
+            </ScrollView>
+            <View style={styles.setting}>
                     <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
                 </View>
-            </ScrollView>
         </QuizContainerBackground>
     )}
     </>
@@ -156,16 +156,17 @@ const styles = EStyleSheet.create({
     imageIcons: {
         width: 50,
         height: 50,
-        marginTop: 10,
+        marginTop: -10,
     },
     title: {
         color: '#fff',
         fontFamily: 'blues-smile',
-        fontSize: '3.5rem',
+        fontSize: '2.5rem',
         textAlign: 'center',
-        letterSpacing: 7,
+        // letterSpacing: 7,
         flex: 1,
         marginRight: 30,
+        marginBottom:40
     },
     imgContainer: {
         alignItems: 'center'
@@ -175,10 +176,10 @@ const styles = EStyleSheet.create({
         height: normalize(226)
     },
     setting: {
-        // marginTop: responsiveScreenHeight(2),
-        // position:'absolute',
-        // bottom:0,
-        // left:0
+        position: 'absolute',
+        left:0,
+        right: 0,
+        bottom: 140,
     },
 
     categoryHeading: {
@@ -189,7 +190,7 @@ const styles = EStyleSheet.create({
     },
     subcategories: {
         flex: 1,
-        marginTop: -48,
+        marginTop: -10,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',

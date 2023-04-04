@@ -230,7 +230,8 @@ const styles = EStyleSheet.create({
 
     },
     image: {
-        flex: 1
+        flex: 1,
+        height:900
     },
     gameProgressAndBoost: {
         display: 'flex',

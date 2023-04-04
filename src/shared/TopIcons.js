@@ -1,9 +1,11 @@
 import { View, Text, Image, ImageBackground } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { responsiveScreenWidth } from '../utils/normalize'
 import { useSelector } from 'react-redux'
 import { formatNumber } from '../utils/stringUtl'
+import { Animated } from 'react-native'
+import { useRef } from 'react'
 
 const TopIcons = () => {
     const user = useSelector(state => state.auth.user);
@@ -26,6 +28,33 @@ const TopIcons = () => {
         setBboostsString(boostResult?.length > 0 ? boostResult : "You have no boosts");
 
     }, [boosts, plans]);
+
+    const scaleValue = useRef(new Animated.Value(1)).current;
+
+  const zoomAnimation = {
+    transform: [{ scale: scaleValue }],
+  };
+
+  const zoom = useCallback(() => {
+    Animated.sequence([
+      Animated.timing(scaleValue, { toValue: 1.5, duration: 500, useNativeDriver: true }),
+      Animated.timing(scaleValue, { toValue: 1, duration: 500, useNativeDriver: true }),
+    ]).start(() => {
+      scaleValue.setValue(1);
+    });
+  }, [scaleValue]);
+  
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      zoom();
+    }, 1000);
+  
+    return () => clearInterval(intervalId);
+  }, [zoom]);
+
+  useEffect(() => {
+    zoom();
+  }, []);
     return (
         <View style={styles.container}>
             <View style={styles.iconContainer}>
@@ -44,7 +73,9 @@ const TopIcons = () => {
             <View style={styles.bombText}>
                 <Text style={styles.text}>{boostsString}</Text>
             </View>
+            <Animated.View  style={zoomAnimation}>
                 <Image  style={styles.bombIcon} source={require('./../../assets/images/boost-icon.png')} />
+                </Animated.View>
             </View>
             <View style={styles.iconContainer}>
             <View style={styles.coinText}>

@@ -20,7 +20,7 @@ const Loader = () => {
                     justifyContent:'center'
                 }}>
                     <LottieAnimations
-                        animationView={require('../../assets/loader.json')}
+                        animationView={require('../../assets/white-loader.json')}
                         width={normalize(170)}
                         height={normalize(170)}
                     />         

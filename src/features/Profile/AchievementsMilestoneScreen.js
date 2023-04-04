@@ -51,7 +51,7 @@ export default function AchievementsMilestoneScreen({ navigation }) {
         >
             <View style={styles.header}>           
                  <GameArkLogo />
-            <Text style={styles.title}>Change Password</Text>
+            <Text style={styles.title}>Achievements</Text>
             </View>
 
             <ScrollView >
