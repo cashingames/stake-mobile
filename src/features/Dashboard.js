@@ -1,5 +1,6 @@
 import { View, Text } from 'react-native'
 import React from 'react'
+import Constants from 'expo-constants';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { Pressable } from 'react-native'
@@ -15,10 +16,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import Loader from '../shared/Loader'
 import useSound from '../utils/useSound'
+import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../utils/utils'
 
 const Dashboard = ({ navigation }) => {
     const loading = useSelector(state => state.common.initialLoading);
     const dispatch = useDispatch()
+    const minVersionCode = useSelector(state => state.common.minVersionCode);
+    const minVersionForce = useSelector(state => state.common.minVersionForce);
+    const challengeLeaders = useSelector(state => state.game.challengeLeaders);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [achievementPopup, setAchievementPopup] = useState(false)
+    const gameModes = useSelector(state => state.common.gameModes);
+    const items = useSelector(state => state.inAppPurchase.items);
+    const [refreshing, setRefreshing] = useState(false);
+    // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
+    const [forceRender, setForceRender] = useState(true)
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
 
 
@@ -42,6 +54,36 @@ const Dashboard = ({ navigation }) => {
         // getStoreItems()
     }, []);
 
+    useEffect(() => {
+        if (Constants.manifest.extra.isDevelopment) {
+            return;
+        }
+        //whether we are forcing or not, show the first time
+        notifyOfStoreUpdates(minVersionCode, minVersionForce);
+    }, [minVersionCode]);
+
+
+    useFocusEffect(
+        React.useCallback(() => {
+
+            if (loading) {
+                return;
+            }
+
+            // console.info('home screen focus effect')
+
+            if (Constants.manifest.extra.isDevelopment) {
+                return;
+            }
+
+            notifyOfPublishedUpdates();
+
+            if (minVersionForce) {
+                notifyOfStoreUpdates(minVersionCode, minVersionForce);
+            }
+
+        }, [loading])
+    );
     useFocusEffect(
         React.useCallback(() => {
             if (loading) {
