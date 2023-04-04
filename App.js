@@ -24,9 +24,6 @@ import messaging from '@react-native-firebase/messaging';
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();
 const prefix = Linking.createURL("/");
-
-
-
 EStyleSheet.build({
   $rem: getRem()
 });

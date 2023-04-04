@@ -79,6 +79,8 @@ import Settings from './features/Support/Settings';
 import useSound from './utils/useSound';
 import Dashboard from './features/Dashboard';
 import { StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { triggerNotificationForAppInstallation } from './shared/Notification';
 
 const AppStack = createNativeStackNavigator();
 
@@ -103,8 +105,21 @@ function AppRouter() {
 		});
 	}, []);
 
+
+//handling the notification when it's called
+	Notifications.setNotificationHandler({
+		handleNotification: async () => {
+		  return {
+			shouldShowAlert: true,
+			shouldPlaySound: true,
+			shouldSetBadge: true,
+		  };
+		},
+	  });
+
 	useEffect(() => {
-		StatusBar.setHidden(true)
+		StatusBar.setHidden(true);
+		triggerNotificationForAppInstallation();
     }, []);
 
 	useEffect(() => {
@@ -161,6 +176,34 @@ function AppRouter() {
 			});
 		return unsubscribe;
 	}, [token]);
+
+// 	useEffect(() => {
+
+//         // Get the stored Expo push token, or generate a new one if it doesn't exist
+//         let token = await AsyncStorage.getItem('expoPushToken');
+//         if (!token) {
+//           token = await Notifications.getExpoPushTokenAsync();
+//           await AsyncStorage.setItem('expoPushToken', JSON.stringify(token));
+//         } else {
+//           token = JSON.parse(token);
+//         }
+
+//         // Schedule a push notification to the user immediately
+//         await Notifications.scheduleNotificationAsync({
+//           content: {
+//             title: 'Welcome back to MyApp',
+//             body: 'Thanks for using our app!',
+//           },
+//           trigger: null,
+//         });
+//       } catch (error) {
+//         console.error(error);
+//       }
+//     };
+
+//     sendNotification();
+//   }, []);
+	  
 
 
 	if (loading) {
