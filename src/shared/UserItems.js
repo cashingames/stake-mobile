@@ -61,13 +61,14 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(15),
         paddingRight: normalize(10),
         paddingLeft: normalize(20),
-        alignItems: 'center'
+        alignItems: 'center',
     },
     boostContainer: {
         backgroundColor: '#072169',
         paddingVertical: normalize(15),
         paddingHorizontal: normalize(15),
-        borderRadius: 10
+        borderRadius: 10,
+        flexGrow:1
     },
     commonRow: {
         color: '#FFFF',

@@ -44,8 +44,8 @@ const GamesListScreen = ({ navigation }) => {
         >
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.gamesContainer}>
-                    <ChallengeCard />
                     <TriviaStakingCard />
+                    <ChallengeCard />
                 </View>
             </ScrollView>
         </LinearGradient>
@@ -161,7 +161,7 @@ const styles = EStyleSheet.create({
         // justifyContent: 'space-between'
     },
     cardContainer: {
-        backgroundColor: '#FAC502',
+        backgroundColor: '#eab676',
         paddingHorizontal: normalize(10),
         paddingVertical: normalize(18),
         display: 'flex',
@@ -172,7 +172,7 @@ const styles = EStyleSheet.create({
         marginBottom: '1rem'
     },
     triviaContainer: {
-        backgroundColor: '#eab676',
+        backgroundColor: '#FAC502',
         paddingHorizontal: normalize(10),
         paddingVertical: normalize(18),
         display: 'flex',
