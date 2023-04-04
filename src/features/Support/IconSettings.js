@@ -1,6 +1,9 @@
 import { useNavigation } from '@react-navigation/native'
+import { useEffect } from 'react'
+import { useRef } from 'react'
 import { Image } from 'react-native'
 import { Pressable } from 'react-native'
+import { Animated } from 'react-native'
 import { View } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground'
@@ -9,6 +12,26 @@ import { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/norma
 
 const IconSettings = () => {
     const navigation = useNavigation()
+    const spinValue = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+      const spin = () => {
+        Animated.timing(spinValue, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }).start(() => {
+          spinValue.setValue(0);
+          spin();
+        });
+      };
+      spin();
+    }, [spinValue]);
+  
+    const spinAnimation = spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '360deg'],
+    });
     return(
             <MixedContainerBackground>
                     <View style={styles.container}>
@@ -35,9 +58,10 @@ const IconSettings = () => {
                             </Pressable >
                         </View>
                         <View style={styles.setting}>
-                            {/* <Pressable onPress={() => setShowSettings(false)}> */}
                             <Pressable onPress={() => navigation.goBack(null)}>
+                            <Animated.View style={[styles.circle, { transform: [{ rotate: spinAnimation }] }]}>
                                 <Image style={styles.settingIcon} source={require('../../../assets/images/close-icon.png')} />
+                                </Animated.View>
                             </Pressable>
                         </View>
                     </View>
@@ -53,7 +77,7 @@ const styles = EStyleSheet.create({
     settingIconsContainter: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        marginTop: responsiveScreenHeight(34),
+        marginTop: responsiveScreenHeight(25),
         paddingHorizontal: responsiveScreenHeight(3),
 
     },

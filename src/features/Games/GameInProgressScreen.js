@@ -241,7 +241,7 @@ const styles = EStyleSheet.create({
         marginVertical: normalize(18)
     },
     setting: {
-        marginBottom: 10
+        marginBottom: responsiveScreenHeight(5)
     },
     top:{
         marginTop:10

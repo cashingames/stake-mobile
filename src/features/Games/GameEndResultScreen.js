@@ -250,8 +250,8 @@ const styles = EStyleSheet.create({
 	},
 	endImageCase: {
 		alignItems: 'center',
-		paddingTop: 40,
-		marginBottom: responsiveScreenHeight(20)
+		paddingTop: responsiveScreenHeight(3.5),
+		marginBottom: responsiveScreenHeight(15)
 	},
 	endImage: {
 		height: 413,
@@ -268,12 +268,12 @@ const styles = EStyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		width: '100%',
-		marginTop: 10
+		marginTop: responsiveScreenHeight(1.5)
 	},
 	star: {
 		height: 66,
 		width: 64,
-		marginHorizontal: 5
+		marginHorizontal: responsiveScreenWidth(2)
 	},
 	pointsCase: {
 		alignItems: 'center',
@@ -286,7 +286,7 @@ const styles = EStyleSheet.create({
 		textAlign: 'center'
 	},
 	winPoints: {
-		marginVertical: 5.5,
+		marginVertical: responsiveScreenHeight(.60),
 		marginRight: normalize(60)
 		// width:'100%'
 	},
@@ -302,7 +302,7 @@ const styles = EStyleSheet.create({
 	btn: {
 		height:50,
 		width:50,
-		marginHorizontal:10
+		marginHorizontal:responsiveScreenWidth(2)
 	}
 	
 });

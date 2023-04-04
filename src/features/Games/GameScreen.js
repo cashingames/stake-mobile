@@ -12,6 +12,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { setGameMode } from './GameSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { randomEnteringAnimation } from '../../utils/utils'
+import useSound from '../../utils/useSound';
 import Animated from 'react-native-reanimated'
 
 
@@ -51,10 +52,11 @@ const gamesType = [
 const GameScreen = ({ navigation }) => {
     const [showSettings, setShowSettings] = useState(false);
     const dispatch = useDispatch()
-    // const gameModes = useSelector(state => state.common.gameModes);
-    // const gameModeSelected = gameModes.find(mode => mode.name === 'EXHIBITION')
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
+
     const goToGameInstruction = () => {
         navigation.navigate('GameInstructions')
+        playSound()
     }
 
     const goToGameCategory = () => {
@@ -65,10 +67,11 @@ const GameScreen = ({ navigation }) => {
         //         'email': user.email,
         //         'gamemode': mode.displayName,
         //     })
-        // playSound()
+        playSound()
         navigation.navigate('SelectGameCategory')
     }
     return (
+        <ScrollView>
         <MixedContainerBackground>
             <View style={styles.container}>
                 <TopIcons />
@@ -116,6 +119,7 @@ const GameScreen = ({ navigation }) => {
                 </View>
             </View >
         </MixedContainerBackground>
+        </ScrollView>
     )
 }
 
@@ -134,7 +138,7 @@ const styles = EStyleSheet.create({
     },
     welcome: {
         alignItems: 'center',
-        marginTop: responsiveScreenHeight(35)
+        marginTop: responsiveScreenHeight(30)
     },
     games: {
         flexDirection: 'row'
@@ -146,7 +150,7 @@ const styles = EStyleSheet.create({
         color: '#fff'
     },
     setting: {
-        marginTop: responsiveScreenHeight(2.3),
+        // marginTop: responsiveScreenHeight(),
     },
     imageIcons: {
         width: 50,
@@ -160,7 +164,7 @@ const styles = EStyleSheet.create({
     },
 
     gameContainer: {
-        marginTop: 30
+        marginTop: 20
     },
     //game card section to be removed
     gameCard: {

@@ -36,6 +36,7 @@ export default function UserProfileScreen({ navigation }) {
     );
 
     return (
+        <ScrollView>
         <MixedContainerBackground>
             <SafeAreaView style={styles.container}>
                 <GameArkLogo />
@@ -48,13 +49,13 @@ export default function UserProfileScreen({ navigation }) {
                     </View>
                     {/* <Footer onLogout={onLogout} /> */}
                     <Pressable onPress={() => {
-                        navigation.goBack(null)
-                        dispatch(setModalOpen(false))}}>
+                        navigation.goBack(null)}}>
                         <Image style={styles.settingIcon} source={require('../../../assets/images/close-icon.png')} />
                     </Pressable>
                 </ScrollView>
             </SafeAreaView>
         </MixedContainerBackground>
+        </ScrollView>
     );
 }
 
@@ -258,7 +259,7 @@ const styles = EStyleSheet.create({
     },
     settingIcon: {
         width: 50,
-        height: 50
+        height: 50,
     },
 
 });

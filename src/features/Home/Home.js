@@ -15,13 +15,14 @@ import { getUser } from '../Auth/AuthSlice'
 import { getAchievements } from '../Profile/AchievementSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { setGameMode } from '../Games/GameSlice'
+import useSound from '../../utils/useSound'
 
 const Home = ({ navigation }) => {
     const [showSettings, setShowSettings] = useState(false);
     const dispatch = useDispatch()
     const user = useSelector(state => state.auth.user);
     const gameModes = useSelector(state => state.common.gameModes);
-    // const gameModeSelected = gameModes.find(mode => mode.name === 'EXHIBITION')
+    const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
     useFocusEffect(
         React.useCallback(() => {
             // console.info('UserDetails focus effect')
@@ -37,6 +38,7 @@ const Home = ({ navigation }) => {
     const gameModeSelected = (mode) => {
         dispatch(setGameMode(mode));
         navigation.navigate('Games')
+        playSound()
     }
     return (
         <MainContainerBackground>
@@ -57,12 +59,6 @@ const Home = ({ navigation }) => {
                     </Pressable>
                         )
                     })}
-                    {/* <Pressable style={styles.playBtn} onPress={goToGame}>
-                        <Text style={styles.welcomeBtnText}>Single Player</Text>
-                    </Pressable>
-                    <Pressable style={styles.playBtn} onPress={goToGame}>
-                        <Text style={styles.welcomeBtnText}>Multi-Player</Text>
-                    </Pressable> */}
                 </View>
                 <View style={styles.setting}>
                     <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
@@ -84,7 +80,7 @@ const styles = EStyleSheet.create({
 
     welcome: {
         alignItems: 'center',
-        marginTop: responsiveScreenHeight(35)
+        marginTop: responsiveScreenHeight(30)
     },
 
     welcomeText: {
@@ -110,7 +106,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'blues-smile'
     },
     setting: {
-        marginTop: responsiveScreenHeight(5.3),
+        marginTop: responsiveScreenHeight(3),
     },
 
 })

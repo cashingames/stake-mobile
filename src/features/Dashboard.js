@@ -114,7 +114,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'blues-smile'
     },
     setting: {
-        marginTop: responsiveScreenHeight(9),
+        marginTop: responsiveScreenHeight(3),
     },
 
 })

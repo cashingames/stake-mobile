@@ -13,8 +13,7 @@ import { useRef } from 'react'
 import { Animated } from 'react-native'
 import { useEffect } from 'react'
 
-const DashboardSettings = ({ showSettings, setShowSettings }) => {
-    const modalOpen = useSelector(state => state.common.modalOpen)
+const DashboardSettings = () => {
     const dispatch = useDispatch()
     const spinValue = useRef(new Animated.Value(0)).current;
 

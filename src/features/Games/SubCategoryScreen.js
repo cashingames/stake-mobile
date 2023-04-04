@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import NoGame from '../../shared/NoGame';
 import { Platform } from 'react-native';
 import useSound from '../../utils/useSound';
+import analytics from '@react-native-firebase/analytics';
 import QuizContainerBackground from '../../shared/ContainerBackground/QuizContainerBackground';
 import TopIcons from '../../shared/TopIcons';
 import DashboardSettings from '../../shared/DashboardSettings';
@@ -21,6 +22,7 @@ import { setGameCategory, setIsPlayingTrivia, startGame } from './GameSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { logActionToServer } from '../CommonSlice';
 import { useEffect } from 'react';
+import crashlytics from '@react-native-firebase/crashlytics';
 import Loader from '../../shared/Loader';
 
 const SubCategoryScreen = ({ navigation, route }) => {
@@ -82,12 +84,12 @@ const SubCategories = ({ category, loading, setLoading }) => {
         }))
             .then(unwrapResult)
             .then(async result => {
-                // crashlytics().log('User started exhibition game');
-                // await analytics().logEvent("exhibition_without_staking_game_started", {
-                //   'id': user.username,
-                //   'phone_number': user.phoneNumber,
-                //   'email': user.email
-                // })
+                crashlytics().log('User started exhibition game');
+                await analytics().logEvent("exhibition_without_staking_game_started", {
+                  'id': user.username,
+                  'phone_number': user.phoneNumber,
+                  'email': user.email
+                })
                 dispatch(logActionToServer({
                     message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
                     data: result.data.questions
@@ -179,7 +181,7 @@ const styles = EStyleSheet.create({
         position: 'absolute',
         left:0,
         right: 0,
-        bottom: 140,
+        bottom: 180,
     },
 
     categoryHeading: {
@@ -221,15 +223,3 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(15),
     },
 })
-
-
-// crashlytics().log('User started exhibition game');
-        // await analytics().logEvent("exhibition_without_staking_game_started", {
-        //   'id': user.username,
-        //   'phone_number': user.phoneNumber,
-        //   'email': user.email
-        // })
-        // dispatch(logActionToServer({
-        //   message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
-        //   data: result.data.questions
-        // }))

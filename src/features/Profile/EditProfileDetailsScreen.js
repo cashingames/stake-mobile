@@ -171,13 +171,14 @@ export default function EditProfileDetailsScreen({ navigation }) {
                 onPress={onSavePersonalDetails}
                 disabled={!canSave}
                 style={styles.saveButton} />
-            </ScrollView>
-            
                 <Pressable onPress={() => {
                         navigation.goBack(null)
                         dispatch(setModalOpen(false))}}>
                         <Image style={styles.settingIcon} source={require('../../../assets/images/close-icon.png')} />
                     </Pressable>
+            </ScrollView>
+            
+                
         </View>
         </MixedContainerBackground>
     );
