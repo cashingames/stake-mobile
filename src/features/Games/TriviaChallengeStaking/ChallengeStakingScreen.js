@@ -105,6 +105,7 @@ const InputStakeAmount = ({ balance, stakeAmount, loading, amount, setAmount }) 
             <View style={styles.fundContainer}
             >
                 <Input
+                    editable={false}
                     style={styles.fundAmount}
                     value={amount}
                     defaultValue="200"
