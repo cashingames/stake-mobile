@@ -31,6 +31,13 @@ const ChallengeStakingScreen = ({ navigation }) => {
             setLoading(false);
             return false;
         }
+
+        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
+            Alert.alert(`Insufficient balance in your wallet. Please fund your wallet`);
+            setLoading(false);
+            return false;
+        }
+
         dispatch(startChallengeRequest({
             category: gameCategoryId,
             amount: amount
@@ -40,7 +47,9 @@ const ChallengeStakingScreen = ({ navigation }) => {
             navigation.navigate('ChallengeMatching')
         })
         .catch((rejectedValueOrSerializedError) => {
-            console.log('failed')
+            Alert.alert("Something went wrong. Please try again or contact support")
+
+            //handle errors
             // navigation.navigate('ChallengerMatching')
             setLoading(false)
         });
