@@ -14,7 +14,7 @@ import { Animated } from 'react-native'
 import { useEffect } from 'react'
 
 const DashboardSettings = () => {
-    const dispatch = useDispatch()
+   
     const spinValue = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {

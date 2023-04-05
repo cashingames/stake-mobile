@@ -9,10 +9,17 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground'
 import GameArkLogo from '../../shared/GameArkLogo'
 import { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize'
+import useSound from '../../utils/useSound'
 
 const IconSettings = () => {
     const navigation = useNavigation()
     const spinValue = useRef(new Animated.Value(0)).current;
+    const { toogle, handleToggle, stopSound } = useSound('../../../assets/sounds/dashboard.mp3')
+
+    const handleToggleSwitch = () => {
+        handleToggle();
+        stopSound()
+      };
 
     useEffect(() => {
       const spin = () => {
@@ -37,8 +44,10 @@ const IconSettings = () => {
                     <View style={styles.container}>
                         <GameArkLogo />
                         <View style={styles.settingIconsContainter}>
-                            <Pressable style={styles.icons}>
-                                <Image style={styles.imageIcons} source={require('../../../assets/images/sound-1.png')} />
+                            <Pressable style={styles.icons} onPress={handleToggleSwitch}>
+                                {toogle ? <Image style={styles.imageIcons} source={require('../../../assets/images/sound-1.png')} />:
+                                 <Image style={styles.imageIcons} source={require('../../../assets/images/sound-off.png')} />
+                                }
                             </Pressable>
                             <Pressable style={styles.icons}>
                                 <Image style={styles.imageIcons} source={require('../../../assets/images/leaderboard-icon.png')} />

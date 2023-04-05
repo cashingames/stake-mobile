@@ -83,6 +83,7 @@ import Home from './features/Home/Home';
 import GameScreen from './features/Games/GameScreen';
 import SubCategoryScreen from './features/Games/SubCategoryScreen';
 import IconSettings from './features/Support/IconSettings';
+import Loader from './shared/Loader';
 
 const AppStack = createNativeStackNavigator();
 
@@ -168,7 +169,7 @@ function AppRouter() {
 
 
 	if (loading) {
-		return <PageLoading spinnerColor="#0000ff" />
+		return <Loader />
 	}
 
 	return (

@@ -30,7 +30,6 @@ export default function useSound(soundName) {
       return;
     }
   }
-
   useEffect(() => {
     return sound
       ? () => {
@@ -48,7 +47,15 @@ export default function useSound(soundName) {
 
   }
 
-  return { playSound, handleToggle, toogle };
+  function stopSound() {
+    if (sound) {
+      sound.stopAsync();
+      sound.setStatusAsync({ shouldPlay: false });      
+      setSound(null);
+    }
+  }
+
+  return { playSound, handleToggle, toogle, stopSound };
 }
 
 
