@@ -19,7 +19,7 @@ export const triggerNotificationForAppInstallation = async () => {
      Notifications.scheduleNotificationAsync({
         content: {
           title: 'Welcome to Gameark',
-          body: "Welcome to GameArk, where the adventure never ends! Whether you're a seasoned player or new to the gaming world, our game has something for everyone. With exciting quests and endless challenges, get ready to dive into a world of fun and excitement. Join our community today and let's begin the journey together!🎮🌟",
+          body: "Welcome to GameArk, where the adventure never ends! Sign in today to dive in to our world of fun, knowledge and excitement!🎮🌟",
           importance: 'high',
         },
         trigger: null,
