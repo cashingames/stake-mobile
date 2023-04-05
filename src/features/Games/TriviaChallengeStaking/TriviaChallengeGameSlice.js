@@ -33,7 +33,7 @@ let initialState = {
     currentQuestionIndex: 0,
     totalQuestions: 0,
     countdownFrozen: false,
-    gameDuration: 300,
+    gameDuration: 60,
     countdownKey: 0,
     challengeDetails: {}
 }
