@@ -15,8 +15,6 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
-    const opponentScore = challengeDetails.opponent.score;
-    const userScore = challengeDetails.score;
 
     const goHome = () => {
         navigation.navigate('Home');
@@ -47,20 +45,20 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container}>
-            {userScore > opponentScore &&
+            {challengeDetails.score > challengeDetails.opponent.score  &&
                 <Text style={styles.headText}>Congrats {user.username}</Text>
             }
-            {userScore < opponentScore &&
+            {challengeDetails.score < challengeDetails.opponent.score &&
                 <Text style={styles.headText}>Sorry {user.username}, you can try again</Text>
             }
-            {userScore === opponentScore &&
+            {challengeDetails.score === challengeDetails.opponent.score &&
                 <Text style={styles.headText}>Draw, you can try again</Text>
             }
             <ChallengePlayers challengeDetails={challengeDetails} />
-            {userScore > opponentScore &&
+            {challengeDetails.score > challengeDetails.opponent.score &&
                 <WinningAmount />
             }
-            <FinalScoreBoard opponentScore={opponentScore} userScore={userScore} />
+            <FinalScoreBoard challengeDetails={challengeDetails} />
             <AppButton text="Return to Dashboard" onPress={goHome} />
         </ScrollView>
     )
@@ -128,31 +126,31 @@ const ChallengeLoser = ({ playerName, playerAvatar }) => {
     )
 }
 
-const FinalScoreBoard = ({ userScore, opponentScore }) => {
+const FinalScoreBoard = ({ challengeDetails }) => {
     return (
         <View style={styles.scoreContainer}>
             <Text style={styles.scoreText}>Final score</Text>
             <View style={styles.scoreCountContainer}>
-                {userScore > opponentScore &&
+                {challengeDetails.score > challengeDetails.opponent.score &&
                     <>
-                        <Text style={styles.winnerScoreCount}>{userScore}</Text>
+                        <Text style={styles.winnerScoreCount}>{challengeDetails.score}</Text>
                         <Text style={styles.colon}>:</Text>
-                        <Text style={styles.loserScoreCount}>{opponentScore}</Text>
+                        <Text style={styles.loserScoreCount}>{challengeDetails.opponent.score}</Text>
                     </>
                 }
-                {userScore < opponentScore &&
+                {challengeDetails.score  < challengeDetails.opponent.score &&
                     <>
-                        <Text style={styles.winnerScoreCount}>{opponentScore}</Text>
+                        <Text style={styles.winnerScoreCount}>{challengeDetails.opponent.score}</Text>
                         <Text style={styles.colon}>:</Text>
-                        <Text style={styles.loserScoreCount}>{userScore}</Text>
+                        <Text style={styles.loserScoreCount}>{challengeDetails.score}</Text>
                     </>
                 }
 
-                {userScore === opponentScore &&
+                {challengeDetails.score === challengeDetails.opponent.score &&
                     <>
-                        <Text style={styles.winnerScoreCount}>{userScore}</Text>
+                        <Text style={styles.winnerScoreCount}>{challengeDetails.score}</Text>
                         <Text style={styles.colon}>:</Text>
-                        <Text style={styles.loserScoreCount}>{opponentScore}</Text>
+                        <Text style={styles.loserScoreCount}>{challengeDetails.opponent.score}</Text>
                     </>
                 }
 

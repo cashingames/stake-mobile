@@ -16,7 +16,7 @@ export default function TransactionScreen({ navigation }) {
 
 
     useEffect(() => {
-        setLoading(false)
+        setLoading(true)
         dispatch(fetchUserTransactions())
             .then(() => {
                 console.log("fetching page ",)
