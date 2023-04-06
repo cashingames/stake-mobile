@@ -30,8 +30,10 @@ const GameBoostPurchaseSuccessfulScreen = () => {
                         height={normalize(100)}
                     />
                 </View>
-                <Text style={styles.paymentHeader}>Payment Successful</Text>
-                <Text style={styles.message}>You successfully purchased a boost to continue playing games, climb up the leaderboard and win great prizes</Text>
+                <Text style={styles.paymentHeader}>Payment Successful!</Text>
+                <Text style={styles.message}>
+                    Your purchased item has been accrued to your account. Continue to enjoy your gaming experience!
+                </Text>
             </View>
             <View style={styles.congratsButtons}>
                 <AppButton text={"Play a Game"} onPress={() => {
