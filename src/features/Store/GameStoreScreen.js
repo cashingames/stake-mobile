@@ -26,8 +26,12 @@ export default function ({ navigation }) {
     const dispatch = useDispatch();
     useApplyHeaderWorkaround(navigation.setOptions);
 
+    const [loading, setLoading] = useState(false);
     const user = useSelector(state => state.auth.user)
     const storeProducts = useSelector(state => state.inAppPurchase.items);
+
+    const successfulPurchase =  useSound(require('../../../assets/sounds/updated.mp3'))
+    const failedPurchase =  useSound(require('../../../assets/sounds/failed.mp3'))
 
     InAppPurchases.setPurchaseListener(({ responseCode, results, errorCode }) => {
         // Purchase was successful
@@ -58,9 +62,15 @@ export default function ({ navigation }) {
         dispatch(getUser());
     }, []);
 
+    // useEffect(()=>{
+    //     itemBought('game_plan_ultimate')
+    // }, [])
+
     const itemBought = async (productID) => {
+        Alert.alert('init')
         const {product, type} = getProductFromStoreId(productID)
         setLoading(false);
+        Alert.alert('before triggering a call to server')
 
         dispatch(buyItemFromStore({
             type,
@@ -68,14 +78,15 @@ export default function ({ navigation }) {
         }))
             .then(unwrapResult)
             .then(result => {
+                Alert.alert('handshake with server successful')
                 dispatch(getUser())
-                onClose()
+                // onClose()
                 successfulPurchase.playSound()
                 navigation.navigate("GameBoostPurchaseSuccessful")
             })
             .catch(async rejectedValueOrSerializedError => {
                 setLoading(false);
-                // Alert.alert("Notice", "Operation could not be completed, please try again");
+                Alert.alert("Notice", "Operation could not be completed, please try again");
                 await analytics().logEvent('game_plan_purchased_failed', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
