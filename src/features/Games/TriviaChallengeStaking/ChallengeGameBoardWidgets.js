@@ -10,7 +10,7 @@ import { AnimatedCircularProgress } from "react-native-circular-progress";
 import { isTrue } from "../../../utils/stringUtl";
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 
-const ChallengeGameBoardWidgets = ({onComplete}) => {
+const ChallengeGameBoardWidgets = ({ onComplete }) => {
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
 
     return (
@@ -21,7 +21,7 @@ const ChallengeGameBoardWidgets = ({onComplete}) => {
     )
 }
 
-const RenderGameProgress = ({onComplete}) => {
+const RenderGameProgress = ({ onComplete }) => {
     const countdownKey = useSelector(state => state.triviaChallenge.countdownKey);
     const isGamePaused = useSelector(state => state.triviaChallenge.countdownFrozen);
     const gameDuration = useSelector(state => state.triviaChallenge.gameDuration);

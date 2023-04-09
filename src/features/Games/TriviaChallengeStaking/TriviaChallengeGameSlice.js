@@ -13,11 +13,14 @@ export const startChallengeRequest = createAsyncThunk(
 export const submitGameSession = createAsyncThunk(
     'game/submitGameSession',
     async (_data, { getState }) => {
+
         const state = getState().triviaChallenge;
         const data = {
             challenge_request_id: state.challengeDetails.challenge_request_id,
             selected_options: state.selectedOptions,
         }
+        console.log('submitting game session')
+
         const response = await axios.post('v3/challenges/submit', data);
         console.log(response.data)
         return response.data
@@ -35,7 +38,8 @@ let initialState = {
     countdownFrozen: false,
     gameDuration: 60,
     countdownKey: 0,
-    challengeDetails: {}
+    challengeDetails: {},
+    isEnded: false,
 }
 
 export const TriviaChallengeStakeGameSlice = createSlice({
@@ -75,7 +79,7 @@ export const TriviaChallengeStakeGameSlice = createSlice({
             state.countdownKey += 1;
         },
         clearSession: (state) => {
-            console.log("xfgvhbn")
+            console.log("clearing game session")
             state.questions = [];
             state.documentId = '';
             state.currentQuestion = {};
@@ -83,6 +87,10 @@ export const TriviaChallengeStakeGameSlice = createSlice({
             state.currentQuestionIndex = 0;
             state.countdownFrozen = false;
             state.challengeDetails = {};
+            state.isEnded = false;
+        },
+        setIsEnded: (state, action) => {
+            state.isEnded = action.payload;
         }
     },
 
@@ -94,6 +102,6 @@ export const TriviaChallengeStakeGameSlice = createSlice({
     },
 })
 
-export const { getNextQuestion, selectedOption, setGameDuration, pauseGame, incrementCountdownResetIndex, setChallengeDetails, clearSession } = TriviaChallengeStakeGameSlice.actions
+export const { getNextQuestion, selectedOption, setGameDuration, pauseGame, incrementCountdownResetIndex, setChallengeDetails, clearSession, setIsEnded } = TriviaChallengeStakeGameSlice.actions
 
 export default TriviaChallengeStakeGameSlice.reducer

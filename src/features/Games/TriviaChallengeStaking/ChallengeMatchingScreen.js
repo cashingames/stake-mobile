@@ -49,6 +49,10 @@ const ChallengeMatchingScreen = ({ navigation }) => {
             // .doc('trivia-challenge-requests/n3gJEjoqHdg3wY2h7QK8')
             .doc(documentId)
             .onSnapshot(documentSnapshot => {
+                if (!documentSnapshot.exists) {
+                    console.log('listening and got updated: ', "no data");
+                    return;
+                }
                 const data = documentSnapshot.data();
                 console.log('listening and got updated: ', "got data", documentId, data.status);
                 /**
@@ -59,6 +63,8 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                     dispatch(setChallengeDetails(data))
                     navigation.navigate('ChallengeGameLoading')
                 }
+            }, error => {
+                console.log('listening and got updated: ', "error", error);
             });
 
  

@@ -42,15 +42,12 @@ const ChallengeStakingScreen = ({ navigation }) => {
             category: gameCategoryId,
             amount: amount
         })).then(unwrapResult)
-        .then(result => {
-            setLoading(false)
-            navigation.navigate('ChallengeMatching')
+            .then(result => {
+                setLoading(false)
+                navigation.navigate('ChallengeMatching')
         })
         .catch((rejectedValueOrSerializedError) => {
             Alert.alert("Something went wrong. Please try again or contact support")
-
-            //handle errors
-            // navigation.navigate('ChallengerMatching')
             setLoading(false)
         });
     }

@@ -1,8 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
-import { Text, View, Image, ScrollView, ImageBackground, Alert, StatusBar, BackHandler, Platform } from 'react-native';
+import { View, ScrollView, ImageBackground, Alert, StatusBar, BackHandler, Platform } from 'react-native';
 import normalize from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
-import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
@@ -18,7 +17,6 @@ import GameTopicProgress from "../../shared/GameTopicProgress";
 import AvailableGameSessionBoosts from "../../shared/AvailableGameSessionBoosts";
 import GameQuestions from "../../shared/GameQuestions";
 import UserAvailableBoosts from "../../shared/UserAvailableBoosts";
-import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import analytics from '@react-native-firebase/analytics';
 
@@ -55,7 +53,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     const onEndGame = (confirm = false) => {
 
         if (ending) {
-            //doe not delete
+            //do not delete
             // console.log("Trying to end second time. If this happens, please notify Oye")
             return;
         }
@@ -103,10 +101,6 @@ export default function GameInProgressScreen({ navigation, route }) {
                         'email': user.email
                     });
                 }
-                dispatch(logActionToServer({
-                    message: "Game session " + gameSessionToken + " chosen options for " + user.username,
-                    data: chosenOptions
-                }))
                 setEnding(false);
                 if (isPlayingTrivia) {
                     dispatch(setHasPlayedTrivia(true))

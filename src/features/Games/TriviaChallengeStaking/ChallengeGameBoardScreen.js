@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit';
 import firestore from "@react-native-firebase/firestore";
 
-import { getNextQuestion, selectedOption, setChallengeDetails, submitGameSession } from "./TriviaChallengeGameSlice";
+import { getNextQuestion, selectedOption, setChallengeDetails, submitGameSession, setIsEnded } from "./TriviaChallengeGameSlice";
 import ChallengeGameBoardWidgets from "./ChallengeGameBoardWidgets";
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import PlayGameHeader from "../../../shared/PlayGameHeader";
@@ -16,6 +16,7 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     const dispatch = useDispatch();
 
     const documentId = useSelector(state => state.triviaChallenge.documentId);
+    const isEnded = useSelector(state => state.triviaChallenge.isEnded);
     const [submitting, setSubmitting] = useState(false);
 
     useFocusEffect(
@@ -41,7 +42,13 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     );
 
     const gameEnded = () => {
+        if (isEnded) {
+            console.log("game already ended", "timer bug is trying to submit again");
+            return;
+        };
+
         setSubmitting(true);
+        dispatch(setIsEnded(true));
         dispatch(submitGameSession())
             .then(unwrapResult)
             .then(async () => {
