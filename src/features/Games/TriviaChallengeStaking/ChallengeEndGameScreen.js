@@ -15,6 +15,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
+    console.log(challengeDetails.score, challengeDetails.opponent.score, 'ended')
 
     const goHome = () => {
         navigation.navigate('Home');
@@ -44,23 +45,25 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     );
 
     return (
-        <ScrollView style={styles.container}>
-            {challengeDetails.score > challengeDetails.opponent.score  &&
-                <Text style={styles.headText}>Congrats {user.username}</Text>
-            }
-            {challengeDetails.score < challengeDetails.opponent.score &&
-                <Text style={styles.headText}>Sorry {user.username}, you can try again</Text>
-            }
-            {challengeDetails.score === challengeDetails.opponent.score &&
-                <Text style={styles.headText}>Draw, you can try again</Text>
-            }
-            <ChallengePlayers challengeDetails={challengeDetails} />
-            {challengeDetails.score > challengeDetails.opponent.score &&
-                <WinningAmount />
-            }
-            <FinalScoreBoard challengeDetails={challengeDetails} />
-            <AppButton text="Return to Dashboard" onPress={goHome} />
-        </ScrollView>
+        <View style={styles.container}>
+            <ScrollView >
+                {challengeDetails.score > challengeDetails.opponent.score &&
+                    <Text style={styles.headText}>Congrats {user.username}</Text>
+                }
+                {challengeDetails.score < challengeDetails.opponent.score &&
+                    <Text style={styles.headText}>Sorry {user.username}, you can try again</Text>
+                }
+                {challengeDetails.score === challengeDetails.opponent.score &&
+                    <Text style={styles.headText}>Draw, you can try again</Text>
+                }
+                <ChallengePlayers challengeDetails={challengeDetails} />
+                {challengeDetails.score > challengeDetails.opponent.score &&
+                    <WinningAmount />
+                }
+                <FinalScoreBoard challengeDetails={challengeDetails} />
+            </ScrollView>
+            <AppButton text="Return to Dashboard" onPress={goHome} style={styles.button} />
+        </View>
     )
 }
 
@@ -80,20 +83,20 @@ const ChallengePlayers = ({ challengeDetails }) => {
         <View style={styles.playersContainer}>
             {challengeDetails.score > challengeDetails.opponent.score &&
                 <>
-                    <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                    <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                    <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                    <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
             {challengeDetails.score < challengeDetails.opponent.score &&
                 <>
                     <ChallengeWinner playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                    <ChallengeLoser playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                    <ChallengeLoser playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
             {challengeDetails.score === challengeDetails.opponent.score &&
                 <>
                     <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                    <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrlassetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                    <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
         </View>
@@ -138,7 +141,7 @@ const FinalScoreBoard = ({ challengeDetails }) => {
                         <Text style={styles.loserScoreCount}>{challengeDetails.opponent.score}</Text>
                     </>
                 }
-                {challengeDetails.score  < challengeDetails.opponent.score &&
+                {challengeDetails.score < challengeDetails.opponent.score &&
                     <>
                         <Text style={styles.winnerScoreCount}>{challengeDetails.opponent.score}</Text>
                         <Text style={styles.colon}>:</Text>
@@ -165,8 +168,10 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: normalize(18),
-        paddingTop: responsiveScreenWidth(20),
+        paddingTop: normalize(45),
         backgroundColor: '#9C3DB8',
+        paddingBottom: normalize(15),
+
     },
     headText: {
         fontSize: '1.2rem',
@@ -180,7 +185,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: '2rem',
-        marginVertical: '1rem',
+        marginVertical: '.5rem',
         borderRadius: 10
     },
     winningsText: {
@@ -225,7 +230,7 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        marginVertical: '2rem',
+        marginVertical: '1rem',
 
     },
     playerInfoContainer: {
@@ -238,7 +243,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         paddingVertical: '2rem',
         paddingHorizontal: '1rem',
-        marginVertical: '1rem',
+        marginTop: '.3rem',
         borderRadius: 16
 
     },
@@ -272,4 +277,8 @@ const styles = EStyleSheet.create({
         color: '#9236AD',
         textAlign: 'center',
     },
+    button: {
+        marginBottom: 10,
+        marginTop: 0
+    }
 })
