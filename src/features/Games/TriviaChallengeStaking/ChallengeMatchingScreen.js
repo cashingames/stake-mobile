@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Alert, BackHandler, ImageBackground, Platform, StatusBar, Image, Text, View } from "react-native";
+import { Alert, BackHandler, ImageBackground, Platform, StatusBar, Image, Text, View, ScrollView } from "react-native";
 import { isTrue } from "../../../utils/stringUtl";
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from "react-redux";
-import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../../utils/normalize";
 import LottieAnimations from "../../../shared/LottieAnimations";
 import { useFocusEffect } from "@react-navigation/native";
 import AppButton from "../../../shared/AppButton";
@@ -12,11 +12,13 @@ import firestore from '@react-native-firebase/firestore';
 import { setChallengeDetails } from "./TriviaChallengeGameSlice";
 
 const ChallengeMatchingScreen = ({ navigation }) => {
-
+    const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
+    const boosts = useSelector(state => state.common.boosts);
     const documentId = useSelector(state => state.triviaChallenge.documentId);
     const [cancelling, setCancelling] = useState(false);
-    const dispatch = useDispatch();
+    const [dataUpdated, setDataUpdated] = useState(false);
+    const [challengeInfo, setChallengeInfo] = useState([]);
 
     const cancelChallenge = () => {
         setCancelling(true);
@@ -61,13 +63,18 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                  */
                 if (data.status === "MATCHED" && data.opponent.status !== "COMPLETED") {
                     dispatch(setChallengeDetails(data))
-                    navigation.navigate('ChallengeGameLoading')
+                    setChallengeInfo(data)
+                    setDataUpdated(true)
+                    setTimeout(() => {
+                        console.log("game loading", "navigating after 5 seconds")
+                        navigation.navigate('ChallengeGameBoard');
+                    }, 10000);
                 }
             }, error => {
                 console.log('listening and got updated: ', "error", error);
             });
 
- 
+
         return () => subscriber();
     }, [documentId]);
 
@@ -78,11 +85,11 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                 StatusBar.setBackgroundColor("transparent");
                 return;
             }
-            StatusBar.setBarStyle('light-content');       
+            StatusBar.setBarStyle('light-content');
         }, [])
     );
-       //disable back button
-       useFocusEffect(
+    //disable back button
+    useFocusEffect(
         useCallback(() => {
             const onBackPress = () => true;
             BackHandler.addEventListener('hardwareBackPress', onBackPress);
@@ -93,10 +100,18 @@ const ChallengeMatchingScreen = ({ navigation }) => {
     );
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.message}>
-                Finding an opponent...
-            </Text>
+        <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+            {!dataUpdated ?
+                <Text style={styles.message}>
+                    Finding an opponent...
+                </Text>
+                :
+                <>
+                    <Text style={styles.message}>Nice, you have been matched</Text>
+                    <Text style={styles.matchingText}>Game board loading....</Text>
+                </>
+            }
+
             <View style={styles.animationContainer}>
                 <LottieAnimations
                     animationView={require('../../../../assets/hour-glass.json')}
@@ -105,16 +120,25 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                 />
             </View>
             <View style={styles.messageContainer}>
-                <SelectedPlayers user={user} />
+                <SelectedPlayers user={user} challengeDetails={challengeInfo} dataUpdated={dataUpdated} />
             </View>
-            <AppButton text="Cancel" onPress={cancelChallenge} disabled={cancelling} style={styles.stakeButton} />
+            <View>
+                <Text style={styles.boostText}>Do you know that you can score higher by using boosts?</Text>
+                <View style={styles.boostContainer}>
+                    {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
+                </View>
+                <Text style={styles.matchingText}>Boost are available in the store</Text>
+            </View>
+            {!dataUpdated &&
+                <AppButton text="Cancel" onPress={cancelChallenge} disabled={cancelling} style={styles.stakeButton} />
+            }
 
-        </View>
+        </ScrollView>
     )
 }
 
 
-const SelectedPlayers = ({ user }) => {
+const SelectedPlayers = ({ user, dataUpdated, challengeDetails }) => {
     return (
         <>
             <ImageBackground source={require('../../../../assets/images/challenge-stage.png')}
@@ -124,7 +148,11 @@ const SelectedPlayers = ({ user }) => {
                 <Image
                     source={require('../../../../assets/images/versus.png')}
                 />
-                <SelectedPlayer playerName="...." playerAvatar={require("../../../../assets/images/question.png")} />
+                {dataUpdated ?
+                    <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                    :
+                    <SelectedPlayer playerName="...." playerAvatar={require("../../../../assets/images/question.png")} />
+                }
             </ImageBackground>
         </>
     )
@@ -142,14 +170,35 @@ const SelectedPlayer = ({ playerName, playerAvatar }) => {
     )
 }
 
+const BoostCardDetails = ({ boost }) => {
+    return (
+        <View style={styles.boostDetailsHead}>
+            <Image
+                source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
+                style={styles.boostIcon}
+            />
+            <View style={styles.boostDetailsContainer}>
+                <View style={styles.boostNameCount}>
+                    <Text style={styles.storeItemName}>{boost.name}</Text>
+                    <Text style={styles.cardDescription}>{boost.description}</Text>
+                </View>
+            </View>
+        </View>
+    )
+}
+
 export default ChallengeMatchingScreen;
 
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: normalize(18),
-        // paddingTop: normalize(40),
+        paddingTop: normalize(60),
+        paddingBottom: normalize(10),
         backgroundColor: '#301934',
+        // justifyContent: 'center',
+    },
+    content: {
         justifyContent: 'center',
     },
     animationContainer: {
@@ -198,5 +247,46 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         marginBottom: normalize(4),
         lineHeight: '2rem'
-    }
+    },
+    boostText: {
+        fontSize: '.85rem',
+        fontFamily: 'graphik-medium',
+        color: '#FFFF',
+        textAlign: 'center',
+        lineHeight: '1.2rem'
+    },
+    boostIcon: {
+        marginBottom: normalize(5),
+        width: responsiveScreenHeight(4),
+        height: responsiveScreenHeight(4),
+    },
+    boostContainer: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'center'
+    },
+    boostDetailsHead: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: '1rem'
+    },
+    boostDetailsContainer: {
+        flexDirection: 'column',
+    },
+    boostNameCount: {
+        alignItems: 'center',
+    },
+    storeItemName: {
+        fontFamily: 'graphik-medium',
+        fontSize: '0.7rem',
+        color: '#EF2F55',
+    },
+    cardDescription: {
+        fontFamily: 'graphik-medium',
+        fontSize: '0.73rem',
+        color: '#828282',
+        lineHeight: responsiveScreenHeight(2.5),
+        width: responsiveScreenWidth(38),
+        textAlign: 'center'
+    },
 })

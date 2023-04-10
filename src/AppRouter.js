@@ -52,7 +52,6 @@ import EmailVerificationScreen from './features/Auth/EmailVerificationScreen';
 import GameLoadingScreen from './features/Games/GameLoadingScreen';
 import ChallengeSelectPlayerScreen from './features/Games/TriviaChallengeStaking/ChallengeSelectPlayerScreen';
 import ChallengeStakingScreen from './features/Games/TriviaChallengeStaking/ChallengeStakingScreen';
-import ChallengeGameLoadingScreen from './features/Games/TriviaChallengeStaking/ChallengeGameLoadingScreen';
 import ChallengeEndGameScreen from './features/Games/TriviaChallengeStaking/ChallengeEndGameScreen';
 import ChallengeGameEndWaitingScreen from './features/Games/TriviaChallengeStaking/ChallengeGameEndWaitingScreen';
 import ChallengeGameBoardScreen from './features/Games/TriviaChallengeStaking/ChallengeGameBoardScreen';
@@ -154,7 +153,6 @@ function AppRouter() {
 							headerTintColor: '#000000',
 						}} />
 						<AppStack.Screen name="ChallengeMatching" component={ChallengeMatchingScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="ChallengeGameLoading" component={ChallengeGameLoadingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameBoard" component={ChallengeGameBoardScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameEndWaiting" component={ChallengeGameEndWaitingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeEndGame" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
