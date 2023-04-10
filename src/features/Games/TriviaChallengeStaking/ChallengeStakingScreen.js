@@ -11,6 +11,8 @@ import Constants from 'expo-constants';
 import { isTrue } from '../../../utils/stringUtl';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { startChallengeRequest } from './TriviaChallengeGameSlice';
+import analytics from '@react-native-firebase/analytics';
+
 
 
 const ChallengeStakingScreen = ({ navigation }) => {
@@ -23,7 +25,8 @@ const ChallengeStakingScreen = ({ navigation }) => {
     const [amount, setAmount] = useState('200');
     const [loading, setLoading] = useState(false);
 
-    const goToStore = () => {
+    const goToStore = async () => {
+        await analytics().logEvent("trivia_challenge_get_boost_clicked")
         navigation.navigate('GameStore');
     }
 
@@ -47,8 +50,11 @@ const ChallengeStakingScreen = ({ navigation }) => {
             category: gameCategoryId,
             amount: amount
         })).then(unwrapResult)
-            .then(result => {
+            .then (async result => {
                 setLoading(false)
+                await analytics().logEvent("trivia_challenge_stake_now_clicked", {
+                    'amount': amount,
+                })
                 navigation.navigate('ChallengeMatching')
             })
             .catch((rejectedValueOrSerializedError) => {

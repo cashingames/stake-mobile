@@ -63,7 +63,7 @@ const ChallengeGameEndWaitingScreen = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.message}>Weldone, you finshed first</Text>
+            <Text style={styles.message}>Great, you finshed first</Text>
             <View style={styles.animationContainer}>
                 <LottieAnimations
                     animationView={require('../../../../assets/hour-glass.json')}

@@ -22,7 +22,7 @@ const SelectGameMode = () => {
     const selectTriviaMode = async () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
-        await analytics().logEvent("game_mode_selected", {
+        await analytics().logEvent("game_mode_selected_with_playnow", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
@@ -33,6 +33,11 @@ const SelectGameMode = () => {
     }
     const onSelectGameMode = async () => {
         if (isChallengeFeatureEnabled) {
+            await analytics().logEvent("game_entry_with_playnow", {
+                'id': user.username,
+                'phone_number': user.phoneNumber,
+                'email': user.email,
+            })
             navigation.navigate('GamesList')
             return;
         }

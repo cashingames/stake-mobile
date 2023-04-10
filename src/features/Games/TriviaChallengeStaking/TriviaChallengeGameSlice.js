@@ -5,7 +5,7 @@ export const startChallengeRequest = createAsyncThunk(
     'game/createRealTimeChallenge',
     async (data, _thunkAPI) => {
         const response = await axios.post('v3/challenges/create', data)
-        // console.log(response, 'this is the challenge data')
+        console.log(response.data, 'this is the challenge data')
         return response.data
     }
 )
@@ -19,10 +19,10 @@ export const submitGameSession = createAsyncThunk(
             challenge_request_id: state.challengeDetails.challenge_request_id,
             selected_options: state.selectedOptions,
         }
-        console.log('submitting game session')
+        // console.log('submitting game session')
 
         const response = await axios.post('v3/challenges/submit', data);
-        console.log(response.data)
+        // console.log(response.data)
         return response.data
     }
 )

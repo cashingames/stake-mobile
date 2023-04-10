@@ -9,6 +9,7 @@ import LottieAnimations from "../../../shared/LottieAnimations";
 import { useFocusEffect } from "@react-navigation/native";
 import AppButton from "../../../shared/AppButton";
 import firestore from '@react-native-firebase/firestore';
+import analytics from '@react-native-firebase/analytics';
 import { setChallengeDetails } from "./TriviaChallengeGameSlice";
 
 const ChallengeMatchingScreen = ({ navigation }) => {
@@ -62,6 +63,17 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                  * when opponent info changes
                  */
                 if (data.status === "MATCHED" && data.opponent.status !== "COMPLETED") {
+                    analytics().logEvent("trivia_challenge_stake_matched", {
+                        'documentId': documentId,
+                        'opponentName': data.opponent.username,
+                        'username': data.username,
+                    })
+                    analytics().logEvent("trivia_challenge_stake_start_initiated", {
+                        'documentId': documentId,
+                        'opponentName': data.opponent.username,
+                        'username': data.username,
+                    })
+
                     dispatch(setChallengeDetails(data))
                     setChallengeInfo(data)
                     setDataUpdated(true)
@@ -106,7 +118,7 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                     Finding an opponent...
                 </Text>
                 :
-                    <Text style={styles.message}>Nice, you have been matched</Text>
+                <Text style={styles.message}>Nice, you have been matched</Text>
             }
 
             <View style={styles.animationContainer}>

@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Alert, BackHandler, ImageBackground, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useFocusEffect } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit';
 import firestore from "@react-native-firebase/firestore";
-
+import analytics from '@react-native-firebase/analytics';
 import { getNextQuestion, selectedOption, setChallengeDetails, submitGameSession, setIsEnded } from "./TriviaChallengeGameSlice";
 import ChallengeGameBoardWidgets from "./ChallengeGameBoardWidgets";
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
@@ -16,8 +16,17 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     const dispatch = useDispatch();
 
     const documentId = useSelector(state => state.triviaChallenge.documentId);
+    const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const isEnded = useSelector(state => state.triviaChallenge.isEnded);
     const [submitting, setSubmitting] = useState(false);
+
+    useEffect(() => {
+        analytics().logEvent("trivia_challenge_stake_started", {
+            'documentId': documentId,
+            'opponentName': challengeDetails.opponent.username,
+            'username': challengeDetails.username,
+        })
+    }, [])
 
     useFocusEffect(
         useCallback(() => {

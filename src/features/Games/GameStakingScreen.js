@@ -105,7 +105,7 @@ const GameStakingScreen = ({ navigation }) => {
                 }))
                     .then(unwrapResult)
                     .then(async result => {
-                        await analytics().logEvent("start_exhibition_game_with_staking", {
+                        await analytics().logEvent("start_trivia_staking_game", {
                             'id': user.username,
                             'phone_number': user.phoneNumber,
                             'email': user.email

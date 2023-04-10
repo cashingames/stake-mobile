@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect } from "react";
-import { BackHandler, Image, Platform, ScrollView, StatusBar, Text, View } from "react-native";
+import { BackHandler, Image, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { formatCurrency, isTrue } from "../../../utils/stringUtl";
 import EStyleSheet from "react-native-extended-stylesheet";
 import Constants from 'expo-constants';
-import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../../utils/normalize";
 import AppButton from "../../../shared/AppButton";
 import { useFocusEffect } from "@react-navigation/native";
 import { clearSession } from "./TriviaChallengeGameSlice";
+import analytics from '@react-native-firebase/analytics';
+import { useState } from "react";
 
 
 const ChallengeEndGameScreen = ({ navigation }) => {
@@ -15,12 +17,51 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
-    console.log(challengeDetails.score, challengeDetails.opponent.score, 'ended')
+	const [loading, setLoading] = useState(false);
+
+
 
     const goHome = () => {
         navigation.navigate('Home');
         dispatch(clearSession());
     };
+
+
+	const onPlayButtonClick = async () => {
+		setLoading(true);
+        dispatch(clearSession());
+		analytics().logEvent('trivia_challenge_play_again_clicked', {
+			'id': user.username,
+		});
+		navigation.navigate("SelectGameCategory")
+		setLoading(false);
+
+	}
+
+    useEffect(() => {
+        if (challengeDetails.score > challengeDetails.opponent.score) {
+            analytics().logEvent("trivia_challenge_stake_won", {
+                'opponentName': challengeDetails.opponent.username,
+                'username': challengeDetails.username,
+            })
+            return
+        }
+        if (challengeDetails.score < challengeDetails.opponent.score) {
+            analytics().logEvent("trivia_challenge_stake_lost", {
+                'opponentName': challengeDetails.opponent.username,
+                'username': challengeDetails.username,
+            })
+            return
+        }
+        if (challengeDetails.score === challengeDetails.opponent.score) {
+            analytics().logEvent("trivia_challenge_stake_draw", {
+                'opponentName': challengeDetails.opponent.username,
+                'username': challengeDetails.username,
+            })
+            return
+        }
+        return
+    }, [])
 
     useFocusEffect(
         useCallback(() => {
@@ -46,32 +87,47 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView  contentContainerStyle= {styles.content}>
+            <ScrollView contentContainerStyle={styles.content}>
                 {challengeDetails.score > challengeDetails.opponent.score &&
                     <Text style={styles.headText}>Congrats {user.username}</Text>
                 }
                 {challengeDetails.score < challengeDetails.opponent.score &&
-                    <Text style={styles.headText}>Sorry {user.username}, you can try again</Text>
+                    <Text style={styles.headText}>Sorry {user.username}</Text>
                 }
                 {challengeDetails.score === challengeDetails.opponent.score &&
                     <Text style={styles.headText}>Draw, you can try again</Text>
                 }
                 <ChallengePlayers challengeDetails={challengeDetails} />
-                {challengeDetails.score > challengeDetails.opponent.score &&
-                    <WinningAmount />
-                }
+                <WinningAmount challengeDetails={challengeDetails} />
                 <FinalScoreBoard challengeDetails={challengeDetails} />
             </ScrollView>
-            <AppButton text="Return to Dashboard" onPress={goHome} style={styles.button} />
+            {/* <AppButton text="Return to Dashboard" onPress={goHome} style={styles.button} /> */}
+            <View style={styles.gameButtons}>
+				<GameButton buttonText='Return to Home'
+					onPress={goHome}
+				/>
+				<GameButton buttonText={loading ? 'loading...' : 'Play Again'}
+					onPress={onPlayButtonClick}
+					disabled={loading}
+				/>
+			</View>
         </View>
     )
 }
 
-const WinningAmount = () => {
+const WinningAmount = ({ challengeDetails }) => {
     const amount = useSelector(state => state.triviaChallenge.challengeDetails.amount_won);
     return (
         <View style={styles.winningsContainer}>
-            <Text style={styles.winningsText}>You have won <Text style={styles.winningsAmount}> &#8358;{formatCurrency(amount)}!</Text></Text>
+            {challengeDetails.score > challengeDetails.opponent.score &&
+                <Text style={styles.winningsText}>You have won <Text style={styles.winningsAmount}> &#8358;{formatCurrency(amount)}!</Text></Text>
+            }
+            {challengeDetails.score < challengeDetails.opponent.score &&
+                <Text style={styles.winningsText}>You can try again</Text>
+            }
+            {challengeDetails.score === challengeDetails.opponent.score &&
+                <Text style={styles.winningsText}>You have been refunded</Text>
+            }
         </View>
     )
 }
@@ -142,6 +198,13 @@ const FinalScoreBoard = ({ challengeDetails }) => {
     )
 }
 
+const GameButton = ({ buttonText, onPress, disabled }) => {
+	return (
+		<Pressable onPress={onPress} style={[styles.gameButton, disabled ? styles.gameButtonDisabled : {}]} >
+			<Text style={styles.buttonText}>{buttonText}</Text>
+		</Pressable>
+	)
+}
 
 export default ChallengeEndGameScreen;
 const styles = EStyleSheet.create({
@@ -155,7 +218,7 @@ const styles = EStyleSheet.create({
     },
     content: {
         flex: 1,
-        justifyContent:'center'
+        justifyContent: 'center'
 
     },
     headText: {
@@ -265,5 +328,31 @@ const styles = EStyleSheet.create({
     button: {
         marginBottom: 10,
         marginTop: 0
-    }
+    },
+    gameButton: {
+		borderColor: '#FFFF',
+		borderWidth: 1,
+		width: responsiveScreenWidth(35),
+		height: responsiveScreenHeight(6.5),
+		borderRadius: 8,
+		justifyContent: 'center',
+		alignItems: 'center',
+		display: 'flex',
+	},
+	gameButtonDisabled: {
+		backgroundColor: '#DFCBCF'
+	},
+	gameButtons: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		marginBottom: normalize(50),
+	},
+	buttonText: {
+		textAlign: 'center',
+		color: '#FFFF',
+		fontFamily: 'graphik-medium',
+		fontSize: '0.72rem',
+	},
 })

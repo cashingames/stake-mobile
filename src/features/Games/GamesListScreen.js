@@ -63,7 +63,7 @@ const ChallengeCard = () => {
     const selectChallengeMode = async () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
-        await analytics().logEvent("game_mode_selected", {
+        await analytics().logEvent("trivia_challenge_staking_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
@@ -108,7 +108,7 @@ const TriviaStakingCard = () => {
     const selectTriviaMode = async () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
-        await analytics().logEvent("game_mode_selected", {
+        await analytics().logEvent("trivia_staking_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,

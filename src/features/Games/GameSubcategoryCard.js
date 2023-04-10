@@ -7,6 +7,8 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGameCategory } from './GameSlice';
+import analytics from '@react-native-firebase/analytics';
+
 
 
 export default ({ subcategory }) => {
@@ -14,12 +16,23 @@ export default ({ subcategory }) => {
     const dispatch = useDispatch();
 
     const gameMode = useSelector(state => state.game.gameMode);
-    const clicked = () => {
+    const clicked = async () => {
         dispatch(setGameCategory(subcategory));
-        if (gameMode.name === "CHALLENGE")
+
+        if (gameMode.name === "CHALLENGE") {
+            await analytics().logEvent("trivia_challenge_category_selected", {
+                'gamemode': gameMode.displayName,
+                'gameCategory': subcategory.name
+            })
             navigation.navigate('ChallengeStaking');
-        else
+        }
+        else {
+            await analytics().logEvent("trivia_staking_category_selected", {
+                'gamemode': gameMode.displayName,
+                'gameCategory': subcategory.name
+            })
             navigation.navigate('GameStaking');
+        }
     };
 
 
