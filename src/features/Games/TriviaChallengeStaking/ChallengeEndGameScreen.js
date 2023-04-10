@@ -46,7 +46,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView >
+            <ScrollView  contentContainerStyle= {styles.content}>
                 {challengeDetails.score > challengeDetails.opponent.score &&
                     <Text style={styles.headText}>Congrats {user.username}</Text>
                 }
@@ -89,8 +89,8 @@ const ChallengePlayers = ({ challengeDetails }) => {
             }
             {challengeDetails.score < challengeDetails.opponent.score &&
                 <>
-                    <ChallengeWinner playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                     <ChallengeLoser playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                    <ChallengeWinner playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
             {challengeDetails.score === challengeDetails.opponent.score &&
@@ -134,29 +134,9 @@ const FinalScoreBoard = ({ challengeDetails }) => {
         <View style={styles.scoreContainer}>
             <Text style={styles.scoreText}>Final score</Text>
             <View style={styles.scoreCountContainer}>
-                {challengeDetails.score > challengeDetails.opponent.score &&
-                    <>
-                        <Text style={styles.winnerScoreCount}>{challengeDetails.score}</Text>
-                        <Text style={styles.colon}>:</Text>
-                        <Text style={styles.loserScoreCount}>{challengeDetails.opponent.score}</Text>
-                    </>
-                }
-                {challengeDetails.score < challengeDetails.opponent.score &&
-                    <>
-                        <Text style={styles.winnerScoreCount}>{challengeDetails.opponent.score}</Text>
-                        <Text style={styles.colon}>:</Text>
-                        <Text style={styles.loserScoreCount}>{challengeDetails.score}</Text>
-                    </>
-                }
-
-                {challengeDetails.score === challengeDetails.opponent.score &&
-                    <>
-                        <Text style={styles.winnerScoreCount}>{challengeDetails.score}</Text>
-                        <Text style={styles.colon}>:</Text>
-                        <Text style={styles.loserScoreCount}>{challengeDetails.opponent.score}</Text>
-                    </>
-                }
-
+                <Text style={styles.winnerScoreCount}>{challengeDetails.score}</Text>
+                <Text style={styles.colon}>:</Text>
+                <Text style={styles.loserScoreCount}>{challengeDetails.opponent.score}</Text>
             </View>
         </View>
     )
@@ -171,6 +151,11 @@ const styles = EStyleSheet.create({
         paddingTop: normalize(45),
         backgroundColor: '#9C3DB8',
         paddingBottom: normalize(15),
+
+    },
+    content: {
+        flex: 1,
+        justifyContent:'center'
 
     },
     headText: {

@@ -68,7 +68,7 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                     setTimeout(() => {
                         console.log("game loading", "navigating after 5 seconds")
                         navigation.navigate('ChallengeGameBoard');
-                    }, 10000);
+                    }, 5000);
                 }
             }, error => {
                 console.log('listening and got updated: ', "error", error);
@@ -106,28 +106,24 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                     Finding an opponent...
                 </Text>
                 :
-                <>
                     <Text style={styles.message}>Nice, you have been matched</Text>
-                    <Text style={styles.matchingText}>Game board loading....</Text>
-                </>
             }
 
             <View style={styles.animationContainer}>
                 <LottieAnimations
                     animationView={require('../../../../assets/hour-glass.json')}
-                    width={normalize(200)}
-                    height={normalize(200)}
+                    width={normalize(180)}
+                    height={normalize(180)}
                 />
             </View>
             <View style={styles.messageContainer}>
                 <SelectedPlayers user={user} challengeDetails={challengeInfo} dataUpdated={dataUpdated} />
             </View>
             <View>
-                <Text style={styles.boostText}>Do you know that you can score higher by using boosts?</Text>
+                <Text style={styles.boostText}>Score higher by using boosts</Text>
                 <View style={styles.boostContainer}>
                     {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
                 </View>
-                <Text style={styles.matchingText}>Boost are available in the store</Text>
             </View>
             {!dataUpdated &&
                 <AppButton text="Cancel" onPress={cancelChallenge} disabled={cancelling} style={styles.stakeButton} />
@@ -180,7 +176,6 @@ const BoostCardDetails = ({ boost }) => {
             <View style={styles.boostDetailsContainer}>
                 <View style={styles.boostNameCount}>
                     <Text style={styles.storeItemName}>{boost.name}</Text>
-                    <Text style={styles.cardDescription}>{boost.description}</Text>
                 </View>
             </View>
         </View>
@@ -193,13 +188,11 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: normalize(18),
-        paddingTop: normalize(60),
-        paddingBottom: normalize(10),
         backgroundColor: '#301934',
-        // justifyContent: 'center',
     },
     content: {
         justifyContent: 'center',
+        flex: 1,
     },
     animationContainer: {
         display: 'flex',
@@ -209,7 +202,7 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: normalize(40),
+        paddingVertical: normalize(30),
         paddingHorizontal: normalize(20),
         alignItems: 'center',
         borderRadius: 20,
@@ -219,8 +212,8 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     avatar: {
-        width: normalize(65),
-        height: normalize(65),
+        width: normalize(55),
+        height: normalize(55),
         backgroundColor: '#FFFF',
         borderRadius: 50,
     },
@@ -249,7 +242,7 @@ const styles = EStyleSheet.create({
         lineHeight: '2rem'
     },
     boostText: {
-        fontSize: '.85rem',
+        fontSize: '.75rem',
         fontFamily: 'graphik-medium',
         color: '#FFFF',
         textAlign: 'center',
@@ -268,7 +261,8 @@ const styles = EStyleSheet.create({
     boostDetailsHead: {
         flexDirection: 'column',
         alignItems: 'center',
-        marginTop: '1rem'
+        marginTop: '1rem',
+        marginHorizontal: '1rem'
     },
     boostDetailsContainer: {
         flexDirection: 'column',
