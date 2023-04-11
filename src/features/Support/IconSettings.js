@@ -49,12 +49,13 @@ const IconSettings = () => {
                                  <Image style={styles.imageIcons} source={require('../../../assets/images/sound-off.png')} />
                                 }
                             </Pressable>
-                            <Pressable style={styles.icons}>
+                            <Pressable style={styles.icons}
+                            onPress={() => navigation.navigate('Leaderboard')} 
+                            >
                                 <Image style={styles.imageIcons} source={require('../../../assets/images/leaderboard-icon.png')} />
                             </Pressable>
                             <Pressable style={styles.icons}
                                 onPress={() => {
-                                  
                                     navigation.navigate('UserProfile')
                                 }}>
                                 <Image style={styles.imageIcons} source={require('../../../assets/images/profile-icon.png')} />
@@ -62,7 +63,10 @@ const IconSettings = () => {
                             <Pressable style={styles.icons}>
                                 <Image style={styles.imageIcons} source={require('../../../assets/images/icon.png')} />
                             </Pressable>
-                            <Pressable style={styles.icons}>
+                            <Pressable style={styles.icons}
+                                 onPress={() => {
+                                    navigation.navigate('ContactUs')
+                                }}>
                                 <Image style={styles.imageIcons} source={require('../../../assets/images/help-icon.png')} />
                             </Pressable >
                         </View>
@@ -86,7 +90,8 @@ const styles = EStyleSheet.create({
     settingIconsContainter: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        marginTop: responsiveScreenHeight(25),
+        // justifyContent:'center',
+        marginTop: responsiveScreenHeight(30),
         paddingHorizontal: responsiveScreenHeight(3),
 
     },
@@ -105,8 +110,8 @@ const styles = EStyleSheet.create({
         marginVertical: 10,
     },
     imageIcons: {
-        height: 80,
-        width: 80
+        height: 70,
+        width: 70
     },
     settingIcon: {
         width: 50,

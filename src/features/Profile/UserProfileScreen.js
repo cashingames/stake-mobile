@@ -17,6 +17,7 @@ import useSound from '../../utils/useSound';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import GameArkLogo from '../../shared/GameArkLogo';
 import { setModalOpen } from '../CommonSlice';
+import AppHeader from '../../shared/AppHeader';
 
 
 export default function UserProfileScreen({ navigation }) {
@@ -39,19 +40,14 @@ export default function UserProfileScreen({ navigation }) {
         <ScrollView>
         <MixedContainerBackground>
             <SafeAreaView style={styles.container}>
-                <GameArkLogo />
-                <ScrollView style={{ flex: 1 }}>
+                <AppHeader />
+                <ScrollView>
                     <View style={[styles.content, { flex: 1 }]}>
                         <View>
                             <UserAvatar />
                             <ProfileTabs />
                         </View>
                     </View>
-                    {/* <Footer onLogout={onLogout} /> */}
-                    <Pressable onPress={() => {
-                        navigation.goBack(null)}}>
-                        <Image style={styles.settingIcon} source={require('../../../assets/images/close-icon.png')} />
-                    </Pressable>
                 </ScrollView>
             </SafeAreaView>
         </MixedContainerBackground>
@@ -183,18 +179,11 @@ const styles = EStyleSheet.create({
         paddingHorizontal: responsiveScreenWidth(3)
     },
     content: {
-        paddingVertical: normalize(25),
-        // marginBottom: normalize(20),
         alignItems: 'center'
-
     },
     userAvatar: {
         flexDirection: 'row',
-        // alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10
-        // width: normalize(150),
-        // height: normalize(150),
+        justifyContent: 'center',      
     },
     avatar: {
         width: normalize(150),

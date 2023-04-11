@@ -17,15 +17,16 @@ import GameArkLogo from '../../shared/GameArkLogo';
 import GaButton from '../../shared/GaButton';
 import { setModalOpen } from '../CommonSlice';
 import { Image } from 'react-native';
+import AppHeader from '../../shared/AppHeader';
 
 const chooseGender = [
     {
-        id:1,
-        myGender:'Male'
+        id: 1,
+        myGender: 'Male'
     },
     {
-        id:2,
-        myGender:'Female'
+        id: 2,
+        myGender: 'Female'
     }
 ]
 
@@ -42,7 +43,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [usernameErr, setUsernameError] = useState(false);
     const [show, setShow] = useState(false);
-    const { playSound } =  useSound(require('../../../assets/sounds/updated.mp3'))
+    const { playSound } = useSound(require('../../../assets/sounds/updated.mp3'))
 
     const onChangeDateOfBirth = (event, selectedDate) => {
         const currentDate = selectedDate || dateOfBirth;
@@ -56,13 +57,13 @@ export default function EditProfileDetailsScreen({ navigation }) {
     }
     useEffect(() => {
         const usernameRule = /^[a-zA-Z][a-zA-Z0-9]+$/;
-        if(username){
+        if (username) {
             const validUsername = !usernameRule.test(username)
             setUsernameError(validUsername);
-        }else{
+        } else {
             setUsernameError('')
         }
-    }, [ username, usernameErr, setUsernameError])
+    }, [username, usernameErr, setUsernameError])
     useEffect(() => {
         const invalid = username < 3;
         setCanSave(!invalid);
@@ -99,87 +100,79 @@ export default function EditProfileDetailsScreen({ navigation }) {
     }
 
     const selectGender = (myGender) => {
-       setGender(myGender)
+        setGender(myGender)
     }
 
     return (
         <MixedContainerBackground>
-        <View style={styles.container}>
-        <GameArkLogo />
-        <Text style={styles.title}>Edit Details</Text>
-            <ScrollView style={styles.contentContainer}>
-                <View style={styles.content}>
-                    <Input
-                        label='Username'
-                        value={username}
-                        editable={true}
-                        labelStyle={styles.inputLabel}
-                        error={usernameErr && '*Username is invalid. It must start with an alphabet and have more than 2 characters'}
-                        onChangeText={text => onChangeUserName(text)}
-                    />
-                    <Input
-                        label='Email'
-                        value={email}
-                        onChangeText={setEmail}
-                        editable={true}
-                        labelStyle={styles.inputLabel}
-                    />
+            <View style={styles.container}>
+                <AppHeader title="Edit Details" />
+                <ScrollView style={styles.contentContainer}>
+                    <View style={styles.content}>
+                        <Input
+                            label='Username'
+                            value={username}
+                            editable={true}
+                            labelStyle={styles.inputLabel}
+                            error={usernameErr && '*Username is invalid. It must start with an alphabet and have more than 2 characters'}
+                            onChangeText={text => onChangeUserName(text)}
+                        />
+                        <Input
+                            label='Email'
+                            value={email}
+                            onChangeText={setEmail}
+                            editable={true}
+                            labelStyle={styles.inputLabel}
+                        />
 
-                    <View style={styles.detail}>
+                        <View style={styles.detail}>
 
-                        {!showDatePicker ?
-                            <Input
-                                label='Date of Birth'
-                                value={dateOfBirth.toDateString()}
-                                onPressIn={() => setShowDatePicker(true)}
-                                labelStyle={styles.inputLabel}
-                            />
-
-                            :
-                            <>
-                                <Text style={styles.inputLabel}>Date of Birth</Text>
-                                <DateTimePicker
-                                    value={dateOfBirth}
-                                    mode={"date"}
-                                    display="default"
-                                    onChange={onChangeDateOfBirth}
-                                    maximumDate={new Date(2010, 11, 31)}
-                                    style={styles.dateOfBirth}
-                                    textColor='#00000080'
+                            {!showDatePicker ?
+                                <Input
+                                    label='Date of Birth'
+                                    value={dateOfBirth.toDateString()}
+                                    onPressIn={() => setShowDatePicker(true)}
+                                    labelStyle={styles.inputLabel}
                                 />
-                            </>
-                        }
 
-                        {/* <View style={styles.detail}> */}
+                                :
+                                <>
+                                    <Text style={styles.inputLabel}>Date of Birth</Text>
+                                    <DateTimePicker
+                                        value={dateOfBirth}
+                                        mode={"date"}
+                                        display="default"
+                                        onChange={onChangeDateOfBirth}
+                                        maximumDate={new Date(2010, 11, 31)}
+                                        style={styles.dateOfBirth}
+                                        textColor='#00000080'
+                                    />
+                                </>
+                            }
+
+                            {/* <View style={styles.detail}> */}
                             <Text style={styles.inputLabel}>Select Gender</Text>
                             <View style={styles.genderBox}>
-                           {chooseGender.map((item)=>{
-                            const { myGender, id} = item
-                            return(
-                                <Pressable key={id} style={[styles.genderBtn, {backgroundColor: gender === myGender ? 'blue': 'white'}]} 
-                                onPress={()=>selectGender(myGender)}>
-                                    <Text style={[styles.genderText, {color:gender === myGender ? '#fff' : '#15397D'}]}>{myGender}</Text>
-                                </Pressable>
-                            )
-                           })}
+                                {chooseGender.map((item) => {
+                                    const { myGender, id } = item
+                                    return (
+                                        <Pressable key={id} style={[styles.genderBtn, { backgroundColor: gender === myGender ? 'blue' : 'white' }]}
+                                            onPress={() => selectGender(myGender)}>
+                                            <Text style={[styles.genderText, { color: gender === myGender ? '#fff' : '#15397D' }]}>{myGender}</Text>
+                                        </Pressable>
+                                    )
+                                })}
                             </View>
-                        {/* </View> */}
+                            {/* </View> */}
+                        </View>
                     </View>
-                </View>
-                <GaButton
-                text={saving ? 'Saving' : 'Save Changes'}
-                onPress={onSavePersonalDetails}
-                disabled={!canSave}
-                style={styles.saveButton} />
-                <Pressable onPress={() => {
-                        navigation.goBack(null)
-                        dispatch(setModalOpen(false))}}>
-                        <Image style={styles.settingIcon} source={require('../../../assets/images/close-icon.png')} />
-                    </Pressable>
-            </ScrollView>
-            
-                
-        </View>
+                    <GaButton
+                        text={saving ? 'Saving' : 'Save Changes'}
+                        onPress={onSavePersonalDetails}
+                        disabled={!canSave}
+                        style={styles.saveButton} />
+                </ScrollView>
+            </View>
         </MixedContainerBackground>
     );
 }
@@ -211,13 +204,6 @@ const styles = EStyleSheet.create({
         color: '#00000080',
         marginRight: 'auto',
     },
-    title:{
-        textAlign:'center',
-        color:"#fff",
-        fontFamily:'blues-smile',
-        fontSize: '2rem',
-        marginVertical:'1rem'
-    },
     detail: {
         marginVertical: normalize(10)
     },
@@ -238,7 +224,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         height: normalize(38),
         alignItems: 'center',
-        marginBottom:'.8rem'
+        marginBottom: '.8rem'
     },
     codeButton: {
         flexDirection: 'row',
@@ -246,24 +232,24 @@ const styles = EStyleSheet.create({
         borderColor: ' rgba(0, 0, 0, 0.1)',
         borderRightWidth: 1,
     },
-    genderBox:{
-        flexDirection:'row',
-        justifyContent:'space-between'
+    genderBox: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
-    genderBtn:{
-        backgroundColor:'white',
-        width:'45%',
-        paddingHorizontal:'2rem',
-        alignItems:'center',
-        justifyContent:'center',
-        height:38,
-        borderRadius:30
+    genderBtn: {
+        backgroundColor: 'white',
+        width: '45%',
+        paddingHorizontal: '2rem',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 38,
+        borderRadius: 30
     },
-    genderText:{
-        fontFamily:'graphik-medium'
+    genderText: {
+        fontFamily: 'graphik-medium'
     },
     settingIcon: {
-        marginTop:responsiveScreenHeight(10),
+        marginTop: responsiveScreenHeight(10),
         width: 50,
         height: 50
     },

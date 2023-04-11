@@ -183,12 +183,7 @@ function AppRouter() {
 						<AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 
 						<AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{
-							title: 'Leaderboards',
-							headerRight: () => <LeaderBoardFilter />,
-							headerStyle: {
-								backgroundColor: '#5d5fef',
-							},
-							headerTintColor: '#FFFF',
+							headerShown: false
 						}} />
 						<AppStack.Screen name="WeeklyLeaderboard" component={WeeklyLeaderboard} options={{
 							title: 'Leaderboard',
@@ -324,7 +319,7 @@ function AppRouter() {
 			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Help' }} />
 			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
 			<AppStack.Screen name="Settings" component={Settings} options={{ title: 'Settings' }} />
-			<AppStack.Screen name="ContactUs" component={ContactUs} options={{ title: 'Contact Us' }} />
+			<AppStack.Screen name="ContactUs" component={ContactUs} options={{ headerShown: false }} />
 			<AppStack.Screen name="EmailVerified" component={EmailVerifiedScreen} options={{ headerShown: false }} />
 			<AppStack.Screen name="ChallengeNotPending" component={ChallengeNotPendingScreen} options={{ headerShown: false }} />
 			{/* <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} /> */}

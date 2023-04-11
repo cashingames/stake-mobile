@@ -25,6 +25,7 @@ import useSound from "../../utils/useSound";
 import NextButton from "../../shared/NextButton";
 import TopIcons from "../../shared/TopIcons";
 import DashboardSettings from "../../shared/DashboardSettings";
+import GameSettings from "../../shared/GameSettings";
 
 
 
@@ -34,7 +35,6 @@ export default function GameInProgressScreen({ navigation, route }) {
     const dispatch = useDispatch();
     const refRBSheet = useRef();
     const params = route.params;
-    const [showSettings, setShowSettings] = useState(false);
     const gameSessionToken = useSelector(state => state.game.gameSessionToken);
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
@@ -204,7 +204,7 @@ export default function GameInProgressScreen({ navigation, route }) {
             </ScrollView>
             <NextButton ending={ending} onEndGame={() => onEndGame()} />
             <View style={styles.setting}>
-                <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
+                <GameSettings onPress={() => showExitConfirmation()}/>
             </View>
         </ImageBackground>
     );

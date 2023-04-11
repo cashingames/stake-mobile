@@ -9,9 +9,9 @@ import { useEffect } from 'react'
 const GameArkLogo = () => {
     const shakeValue = useRef(new Animated.Value(0)).current;
 
-    useEffect(() => {
-      shake();
-    }, []);
+    // useEffect(() => {
+    //   shake();
+    // }, []);
   
     const shake = () => {
       Animated.sequence([
@@ -41,11 +41,11 @@ const GameArkLogo = () => {
 const styles = EStyleSheet.create({
     logo: {
         alignItems: 'center',
-        marginTop: normalize(45)
+        marginTop: normalize(30)
     },
     image:{
-        width:240,
-        height:152
+        width:200,
+        height:127
     }
 })
 export default GameArkLogo

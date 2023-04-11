@@ -16,6 +16,7 @@ import MixedContainerBackground from '../../shared/ContainerBackground/MixedCont
 import GameArkLogo from '../../shared/GameArkLogo';
 import GaButton from '../../shared/GaButton';
 import { setModalOpen } from '../CommonSlice';
+import AppHeader from '../../shared/AppHeader';
 
 
 export default function ChangePasswordScreen({ navigation }) {
@@ -92,8 +93,7 @@ export default function ChangePasswordScreen({ navigation }) {
     }
     return (
         <MixedContainerBackground>
-            <GameArkLogo />
-            <Text style={styles.title}>Change Password</Text>
+           <AppHeader title="Change Password" />
             <ScrollView style={styles.container}>
                 <>
                     <Input
@@ -142,11 +142,6 @@ export default function ChangePasswordScreen({ navigation }) {
              <Pressable style={styles.deleteContainer} onPress={openBottomSheet}>
                     <Text style={styles.deleteText}>Delete Account</Text>
                 </Pressable>
-                <Pressable onPress={() => {
-                        navigation.goBack(null)
-                        dispatch(setModalOpen(false))}}>
-                        <Image style={styles.settingIcon} source={require('../../../assets/images/close-icon.png')} />
-                    </Pressable>
             </ScrollView>
            
         </MixedContainerBackground>
@@ -203,13 +198,6 @@ const styles = EStyleSheet.create({
         color: '#fff',
         fontSize: '0.76rem',
         marginBottom: normalize(8)
-    },
-    title: {
-        textAlign: 'center',
-        color: "#fff",
-        fontFamily: 'blues-smile',
-        fontSize: '2rem',
-        marginVertical: '1rem'
     },
     input: {
         borderColor: ' rgba(0, 0, 0, 0.1)',

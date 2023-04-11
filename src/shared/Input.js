@@ -64,8 +64,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         color: '#00000080',
         fontSize: '0.75rem',
-        backgroundColor:"#fff"
-
+        backgroundColor:"#fff",
     },
     passwordIcon: {
         position: 'absolute',
@@ -81,7 +80,7 @@ const styles = EStyleSheet.create({
     },
     disabled: {
         borderColor: '#fff',
-        paddingLeft: 0,
+        paddingLeft: 5,
         // borderColor: '#ede4e4',
     },
 });

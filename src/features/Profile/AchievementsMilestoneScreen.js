@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { getAchievements } from './AchievementSlice';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import GameArkLogo from '../../shared/GameArkLogo';
+import AppHeader from '../../shared/AppHeader';
 
 
 
@@ -50,8 +51,7 @@ export default function AchievementsMilestoneScreen({ navigation }) {
             style={styles.container}
         >
             <View style={styles.header}>           
-                 <GameArkLogo />
-            <Text style={styles.title}>Achievements</Text>
+                <AppHeader title="Achievements" />
             </View>
 
             <ScrollView >
@@ -198,12 +198,5 @@ const styles = EStyleSheet.create({
         color: '#fff',
         fontSize: '0.69rem',
         fontFamily: 'graphik-regular',
-    },
-    title: {
-        textAlign: 'center',
-        color: "#fff",
-        fontFamily: 'blues-smile',
-        fontSize: '2rem',
-        marginVertical: '1rem'
     },
 });

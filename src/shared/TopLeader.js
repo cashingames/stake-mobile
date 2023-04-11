@@ -1,26 +1,28 @@
 import * as React from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, Platform } from 'react-native';
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { isTrue } from '../utils/stringUtl';
 
-function TopLeader({ avatar, podPosition, name, point }) {
+function TopLeader({ avatar, name, point, style, imageStyle, position, positionStyle }) {
     return (
-        <View style={styles.position}>
+        <View style={style}>
+            {position === 1 &&
             <Image
-                style={styles.avatar}
+                style={styles.crown}
+                source={require("../../assets/images/leader-crown.png")}
+            />}
+            <Image
+                style={imageStyle}
                 source={isTrue(avatar) ? { uri: `${Constants.manifest.extra.assetBaseUrl}/${avatar}` } : require("../../assets/images/user-icon.png")}
             />
-            <Text style={styles.leaderName}>{name}</Text>
-            <Image
-                style={styles.icon}
-                source={podPosition}
-            />
-            <View style={styles.leaderPoint}>
-                <Text style={styles.point}>{point}</Text>
+            <View style={[styles.positionContainer, positionStyle]}>
+                <Text style={styles.positionText}>{position}</Text>
             </View>
+            <Text style={styles.leaderName}>{name}</Text>
+                <Text style={styles.point}>{point}</Text>
         </View>
     );
 }
@@ -48,16 +50,35 @@ const styles = EStyleSheet.create({
     },
     point: {
         color: '#FFFF',
-        fontSize: '0.55rem',
+        fontSize: '0.85rem',
         fontFamily: 'graphik-regular',
     },
     leaderName: {
-        color: '#535761',
-        fontSize: '0.65rem',
+        color: '#fff',
+        fontSize: '0.9rem',
         fontFamily: 'graphik-medium',
         width: responsiveScreenWidth(22),
         textAlign: 'center',
-        marginTop: Platform.OS === 'ios' ? normalize(4) : normalize(2),
-
+        marginVertical: Platform.OS === 'ios' ? normalize(4) : normalize(15),
+    },
+    crown:{
+        height:24,
+        width:33,
+        marginTop:-90,
+        marginBottom:5
+    },
+    positionContainer: {
+        height:16,
+        width:17,
+        alignItems:'center',
+        justifyContent: 'center',
+        marginTop:-10,
+        transform: [{ rotate: '45deg' }],
+    },
+    positionText: {
+        color:'#fff',
+        fontSize:'0.65rem',
+        transform: [{ rotate: '-45deg' }],
+        fontFamily:'graphik-medium'
     }
 });

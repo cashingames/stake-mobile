@@ -13,7 +13,7 @@ import { useRef } from 'react'
 import { Animated } from 'react-native'
 import { useEffect } from 'react'
 
-const DashboardSettings = () => {
+const GameSettings = ({onPress}) => {
    const dispatch = useDispatch()
     useEffect(() => {
         dispatch(getGlobalLeaders());
@@ -47,6 +47,10 @@ const DashboardSettings = () => {
                 <Animated.View style={[styles.circle, { transform: [{ rotate: spinAnimation }] }]}>
                     <Image style={styles.settingIcon} source={require('./../../assets/images/setting-icon.png')} />
                     </Animated.View>
+                </Pressable>
+                <Pressable onPress={onPress}>
+                    <Image style={styles.settingIcon} source={require('../../assets/images/close-icon.png')} />
+                    
                 </Pressable>
                 <Pressable onPress={() => navigation.navigate('GameStore')}>
                     <Image style={styles.storeIcon} source={require('../../assets/images/store-icon.png')} />
@@ -83,5 +87,5 @@ const styles = EStyleSheet.create({
     }
 })
 
-export default DashboardSettings
+export default GameSettings
 
