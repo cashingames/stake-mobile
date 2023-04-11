@@ -57,7 +57,7 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
     const link = Platform.OS === 'ios' ?
         "https://apps.apple.com/us/app/cashingames/id6443878628"
         :
-        "https://play.google.com/store/apps/details?id=com.cashingames.cashingames";
+        "https://play.google.com/store/apps/details?id=com.cashingames.gameark";
     
     config.push({
         text: 'OK',
@@ -66,7 +66,7 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
 
     Alert.alert(
         "Updates available",
-        "Please update your app now to access new ways of winning more money",
+        "Please update your app to unlock new exciting features!",
         config
     );
 }

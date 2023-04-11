@@ -111,14 +111,14 @@ const Login = ({ text }) => {
           email: userProfile.email
         })).then(unwrapResult)
         .then((originalPromiseResult) => {
-          if (originalPromiseResult.data.isFirstTime) {
-            setEmail(originalPromiseResult.data.email)
-            setFirstName(originalPromiseResult.data.firstName)
-            setLastName(originalPromiseResult.data.lastName)
-            setLoading(false)
-            openBottomSheet()
-            return
-          }
+          // if (originalPromiseResult.data.isFirstTime) {
+          //   setEmail(originalPromiseResult.data.email)
+          //   setFirstName(originalPromiseResult.data.firstName)
+          //   setLastName(originalPromiseResult.data.lastName)
+          //   setLoading(false)
+          //   openBottomSheet()
+          //   return
+          // }
           saveToken(originalPromiseResult.data.token)
           setLoading(false)
           // navigation.navigate('AppRouter')

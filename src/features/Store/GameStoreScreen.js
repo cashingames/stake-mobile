@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { unwrapResult } from "@reduxjs/toolkit";
 import EStyleSheet from "react-native-extended-stylesheet";
 import analytics from '@react-native-firebase/analytics';
-import { buyBoostFromWallet, buyPlanFromWallet } from "./StoreSlice";
+import { buyBoostFromWallet, buyItemFromStore, buyPlanFromWallet } from "./StoreSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 import AppButton from "../../shared/AppButton";
@@ -26,8 +26,12 @@ export default function ({ navigation }) {
     const dispatch = useDispatch();
     useApplyHeaderWorkaround(navigation.setOptions);
 
+    const [loading, setLoading] = useState(false);
     const user = useSelector(state => state.auth.user)
     const storeProducts = useSelector(state => state.inAppPurchase.items);
+
+    const successfulPurchase =  useSound(require('../../../assets/sounds/updated.mp3'))
+    const failedPurchase =  useSound(require('../../../assets/sounds/failed.mp3'))
 
     InAppPurchases.setPurchaseListener(({ responseCode, results, errorCode }) => {
         // Purchase was successful
@@ -36,11 +40,13 @@ export default function ({ navigation }) {
             if (!purchase.acknowledged) {
               console.log(`Successfully purchased ${purchase.productId}`);
               // Process transaction here and unlock content...
+                //   acknowledge payment
+                InAppPurchases.finishTransactionAsync(purchase, true);
       
               // Then when you're done
             //   InAppPurchases.finishTransactionAsync(purchase, true);
             itemBought(purchase.productId)
-            Alert.alert('successfully purchased product',purchase.productId)
+            // Alert.alert('successfully purchased product',purchase.productId)
             }
           });
         } else if (responseCode === InAppPurchases.IAPResponseCode.USER_CANCELED) {
@@ -56,8 +62,40 @@ export default function ({ navigation }) {
         dispatch(getUser());
     }, []);
 
+    // useEffect(()=>{
+    //     itemBought('game_plan_ultimate')
+    // }, [])
+
     const itemBought = async (productID) => {
+        Alert.alert('init')
         const {product, type} = getProductFromStoreId(productID)
+        setLoading(false);
+        Alert.alert('before triggering a call to server')
+
+        dispatch(buyItemFromStore({
+            type,
+            item_id: product
+        }))
+            .then(unwrapResult)
+            .then(result => {
+                Alert.alert('handshake with server successful')
+                dispatch(getUser())
+                // onClose()
+                successfulPurchase.playSound()
+                navigation.navigate("GameBoostPurchaseSuccessful")
+            })
+            .catch(async rejectedValueOrSerializedError => {
+                setLoading(false);
+                Alert.alert("Notice", "Operation could not be completed, please try again");
+                await analytics().logEvent('game_plan_purchased_failed', {
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email,
+                    'item_name': plan?.name || productID || "",
+                })
+                failedPurchase.playSound()
+                navigation.navigate("GameStoreItemsPurchaseFailed")
+            })
     }
 
     const getProductFromStoreId =  (id) => {
@@ -67,35 +105,35 @@ export default function ({ navigation }) {
         switch(id) {
             case 'game_plan_doubleo':
                 product = 2;
-                type = 'plan';
+                type = 'PLAN';
                 break;
             case 'game_plan_dicey_multiples':
                 product = 3;
-                type = 'plan';
+                type = 'PLAN';
                 break;
             case 'game_plan_ultimate':
                 product = 4;
-                type = 'plan';
+                type = 'PLAN';
                 break;
             case 'game_plan_least':
                 product = 7;
-                type = 'plan';
+                type = 'PLAN';
                 break;
             case 'game_plan_mini':
                 product = 8;
-                type = 'plan';
+                type = 'PLAN';
                 break;
             case 'boost_plan_skip':
                 product = 6;
-                type = 'boost';
+                type = 'BOOST';
                 break;
             case 'boost_plan_time_freeze':
                 product = 8;
-                type = 'boost';
+                type = 'BOOST';
                 break;
             default:
                 product = 8;
-                type = 'boost';
+                type = 'BOOST';
         }
         
         return {product, type}

@@ -27,10 +27,6 @@ const HelpPages = () => {
                     playSound()
                     navigation.navigate('Support')
                 }} /> */}
-                <HelpTab tabName='Settings' onPress={() => {
-                    playSound()
-                    navigation.navigate('Settings')
-                }} />
             </View>
         </ScrollView>
     )

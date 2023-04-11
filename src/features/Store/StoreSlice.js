@@ -33,6 +33,19 @@ export const buyPlanFromWallet = createAsyncThunk(
     }
 )
 
+export const buyItemFromStore = createAsyncThunk(
+    'store/inapp/buyItemFromStore',
+    async (payload, thunkAPI) => {
+        const response = await axios.post(`v3/purchased/item`, payload)
+        return response.data;
+    }
+)
+
+export const buyItemFromStoreRaw = async (payload) => {
+    const response = await axios.post(`v3/purchased/item`, payload)
+    return response.data;
+}
+
 export const StoreSlice = createSlice({
     name: 'store',
     initialState,
