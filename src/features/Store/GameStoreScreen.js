@@ -127,6 +127,10 @@ export default function ({ navigation }) {
                 product = 6;
                 type = 'BOOST';
                 break;
+            case 'boost_plan_bomb':
+                product = 7;
+                type = 'BOOST';
+                break;
             case 'boost_plan_time_freeze':
                 product = 8;
                 type = 'BOOST';
@@ -165,6 +169,9 @@ export default function ({ navigation }) {
             switch(plan.id) {
                 case 6:
                     productID = 'boost_plan_skip';
+                    break;
+                case 7:
+                    productID = 'boost_plan_bomb';
                     break;
                 case 8:
                     productID = 'boost_plan_time_freeze';
