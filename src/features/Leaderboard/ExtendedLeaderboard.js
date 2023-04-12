@@ -19,6 +19,7 @@ import MixedContainerBackground from '../../shared/ContainerBackground/MixedCont
 import { Pressable } from 'react-native';
 import Loader from '../../shared/Loader';
 import LottieAnimations from '../../shared/LottieAnimations';
+import TopIcons from '../../shared/TopIcons';
 
 
 function ExtendedLeaderboard(props) {
@@ -70,8 +71,10 @@ function ExtendedLeaderboard(props) {
     }
     return (
         <MixedContainerBackground>
-        <AppHeader title="Leaderboard" />
             <View style={styles.container}>
+                <TopIcons />
+                <AppHeader title="Leaderboard" />
+
                 <ScrollView stickyHeaderIndices={[0]}>
                     <View style={styles.leaderContainer}>
                         <View style={styles.leaderboardBtn}>
@@ -88,16 +91,16 @@ function ExtendedLeaderboard(props) {
                         </View>
                     </View>
                     {loading ?
-                    <View style={styles.loader}>
-                        <LottieAnimations
-                        animationView={require('../../../assets/white-loader.json')}
-                        width={normalize(100)}
-                        height={normalize(100)}
-                    />  
-                    </View>
+                        <View style={styles.loader}>
+                            <LottieAnimations
+                                animationView={require('../../../assets/white-loader.json')}
+                                width={normalize(100)}
+                                height={normalize(100)}
+                            />
+                        </View>
                         :
                         <>
-                            <GlobalLeaderboard leaders={category?? []} />
+                            <GlobalLeaderboard leaders={category ?? []} />
                         </>
 
                     }
@@ -123,6 +126,8 @@ export default ExtendedLeaderboard;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
+        paddingVertical: responsiveScreenHeight(2)
+
     },
     animation: {
         alignItems: 'center'
@@ -130,7 +135,7 @@ const styles = EStyleSheet.create({
     global: {
         // paddingHorizontal: normalize(15),
         marginTop: normalize(40),
-        borderRadius:12,
+        borderRadius: 12,
     },
     leaderContainer: {
         alignItems: 'center',
@@ -156,9 +161,9 @@ const styles = EStyleSheet.create({
         color: '#fff',
         textAlign: 'center'
     },
-    loader:{
-        alignItems:'center',
-        justifyContent:'center',
-        flex:1
+    loader: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1
     }
 });

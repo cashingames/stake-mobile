@@ -11,31 +11,30 @@ const AppHeader = ({ title }) => {
     const navigation = useNavigation()
     return (
         <>
-            <View style={styles.header}>
-                <GameArkLogo />
-                <Text style={styles.title}>{title}</Text>
-            </View>
-            <Pressable
+        {/* <View style={styles.btnContainer}> */}
+         <Pressable
             style={styles.closeBtn} 
             onPress={() => navigation.goBack(null)}>
                 <Image style={styles.closeIcon} source={require('../../assets/images/close-icon.png')} />
             </Pressable>
+            {/* </View> */}
+            <View style={styles.header}>
+                <GameArkLogo />
+                <Text style={styles.title}>{title}</Text>
+            </View>
         </>
     )
 }
 
 const styles = EStyleSheet.create({
     header: {
-        flex: 1,
-        position: 'relative',
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: responsiveScreenHeight(1)
     },
     closeBtn:{
-        position: 'absolute',
-        right: responsiveScreenWidth(5),
-        top: responsiveScreenHeight(4),
+        alignItems: 'flex-end',
+        marginBottom: -50,
+        padding:responsiveScreenWidth(2),
+        zIndex: 10
     },
     closeIcon: {
         width: 50,

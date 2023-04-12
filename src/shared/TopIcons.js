@@ -13,6 +13,7 @@ const TopIcons = () => {
     var boosts = useSelector(state => state.auth.user.boosts ?? []);
     const [sumOfPlans, setSumOfPlans] = useState(0);
     const [boostsString, setBboostsString] = useState('');
+    console.log(boosts)
     // const { playSound } =  useSound(require('../../assets/sounds/option-picked.mp3'))
 
     useEffect(() => {
@@ -31,57 +32,57 @@ const TopIcons = () => {
 
     const scaleValue = useRef(new Animated.Value(1)).current;
 
-  const zoomAnimation = {
-    transform: [{ scale: scaleValue }],
-  };
+    const zoomAnimation = {
+        transform: [{ scale: scaleValue }],
+    };
 
-  const zoom = useCallback(() => {
-    Animated.sequence([
-      Animated.timing(scaleValue, { toValue: 1.5, duration: 500, useNativeDriver: true }),
-      Animated.timing(scaleValue, { toValue: 1, duration: 500, useNativeDriver: true }),
-    ]).start(() => {
-      scaleValue.setValue(1);
-    });
-  }, [scaleValue]);
-  
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      zoom();
-    }, 1000);
-  
-    return () => clearInterval(intervalId);
-  }, [zoom]);
+    const zoom = useCallback(() => {
+        Animated.sequence([
+            Animated.timing(scaleValue, { toValue: 1.5, duration: 500, useNativeDriver: true }),
+            Animated.timing(scaleValue, { toValue: 1, duration: 500, useNativeDriver: true }),
+        ]).start(() => {
+            scaleValue.setValue(1);
+        });
+    }, [scaleValue]);
 
-  useEffect(() => {
-    zoom();
-  }, []);
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            zoom();
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [zoom]);
+
+    useEffect(() => {
+        zoom();
+    }, []);
     return (
         <View style={styles.container}>
             <View style={styles.iconContainer}>
-            <ImageBackground style={{zIndex:11}} source={require('./../../assets/images/heart-icon.png')}>
-                <View style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 65}}>
-                    <View>
-                        <Text style={styles.gameLives}>{sumOfPlans}</Text>
+                <ImageBackground style={{ zIndex: 11 }} source={require('./../../assets/images/heart-icon.png')}>
+                    <View style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 65 }}>
+                        <View>
+                            <Text style={styles.gameLives}>{sumOfPlans}</Text>
+                        </View>
                     </View>
+                </ImageBackground>
+                <View style={styles.liveText}>
+                    <Text style={styles.text}>Lives</Text>
                 </View>
-            </ImageBackground>
-            <View style={styles.liveText}>
-                <Text style={styles.text}>Lives</Text>
-            </View>
             </View>
             <View style={styles.iconContainer}>
-            <View style={styles.bombText}>
-                <Text style={styles.text}>{boostsString}</Text>
-            </View>
-            <Animated.View  style={zoomAnimation}>
-                <Image  style={styles.bombIcon} source={require('./../../assets/images/boost-icon.png')} />
+                <Animated.View style={zoomAnimation}>
+                    <Image style={styles.bombIcon} source={require('./../../assets/images/boost-icon.png')} />
                 </Animated.View>
+                <View style={styles.bombText}>
+                    <Text style={styles.text}>{boostsString}</Text>
+                </View>
             </View>
             <View style={styles.iconContainer}>
-            <View style={styles.coinText}>
-                <Text style={styles.text}>{user.points}</Text>
-            </View>
                 <Image style={styles.coinIcon} source={require('./../../assets/images/coin-icon.png')} />
+                <View style={styles.coinText}>
+                    <Text style={styles.text}>{user.points}</Text>
+                </View>
             </View>
         </View>
     )
@@ -93,63 +94,60 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-          paddingHorizontal: responsiveScreenWidth(3),
-          zIndex:10
+        paddingHorizontal: responsiveScreenWidth(3),
+        zIndex: 10
     },
-    iconContainer:{
-        flexDirection:'row',
-        alignItems:'flex-end',
+    iconContainer: {
+        // flexDirection:'row',
+        alignItems: 'center',
     },
     liveText: {
-        width:83,
-        height:21,
-        borderRadius:7,
-        paddingLeft:'2rem',
+        width: 83,
+        height: 21,
+        borderRadius: 7,
+        paddingLeft: '2rem',
         backgroundColor: '#102058',
-        marginLeft:-30,
-        marginBottom:'0.3rem',
-        justifyContent:'center'
+        marginTop: '0.3rem',
+        justifyContent: 'center'
     },
     gameLives: {
-        color:'#fff',
+        color: '#fff',
         fontSize: '1.4rem',
         fontFamily: 'blues-smile',
         marginTop: '.6rem',
-        marginLeft:'0.2rem'
+        marginLeft: '0.2rem'
     },
     bombText: {
-        width:55,
-        height:21,
-        borderRadius:7,
-        paddingHorizontal:'0.6rem',
+        width: 55,
+        height: 21,
+        borderRadius: 7,
+        paddingHorizontal: '0.6rem',
         backgroundColor: '#102058',
-        marginRight:-20,
-        marginBottom:'0.3rem',
-        justifyContent:'center'
+        marginTop: '0.3rem',
+        justifyContent: 'center'
     },
-    coinText:{
+    coinText: {
         width: 65,
-        height:21,
-        borderRadius:7,
-        paddingHorizontal:'0.6rem',
+        height: 21,
+        borderRadius: 7,
+        paddingHorizontal: '0.6rem',
         backgroundColor: '#102058',
-        marginRight:-15,
-        marginBottom:'0.3rem',
-        alignItems:'center',
-        justifyContent:'center'
+        marginTop: '0.3rem',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     text: {
-        color:'#FFD600',
+        color: '#FFD600',
         fontSize: '.9rem',
-        fontFamily:'blues-smile'
+        fontFamily: 'blues-smile'
     },
-    bombIcon:{
-        height:53,
-        width:41
+    bombIcon: {
+        height: 53,
+        width: 41
     },
     coinIcon: {
-        height:41,
-        width:47
+        height: 41,
+        width: 47
     }
 })
 export default TopIcons

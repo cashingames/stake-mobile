@@ -309,7 +309,7 @@ function AppRouter() {
 						<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{headerShown: false }} />
 						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ title: 'Stats' }} />
+						<AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ headerShown: false}} />
 						<AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
 

@@ -4,7 +4,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
-import normalize, { responsiveScreenHeight } from '../../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import AppButton from '../../shared/AppButton';
 import Input from '../../shared/Input';
 import { changePassword, deleteUserAccount, logoutUser } from '../Auth/AuthSlice';
@@ -17,6 +17,7 @@ import GameArkLogo from '../../shared/GameArkLogo';
 import GaButton from '../../shared/GaButton';
 import { setModalOpen } from '../CommonSlice';
 import AppHeader from '../../shared/AppHeader';
+import TopIcons from '../../shared/TopIcons';
 
 
 export default function ChangePasswordScreen({ navigation }) {
@@ -93,9 +94,10 @@ export default function ChangePasswordScreen({ navigation }) {
     }
     return (
         <MixedContainerBackground>
-           <AppHeader title="Change Password" />
             <ScrollView style={styles.container}>
-                <>
+                <TopIcons />
+                <AppHeader title="Change Password" />
+                <View style={styles.content}>
                     <Input
                         type="password"
                         label='Old Password'
@@ -123,7 +125,6 @@ export default function ChangePasswordScreen({ navigation }) {
                         onChangeText={text => { onChangeConfirmPassword(text) }}
                         labelStyle={styles.inputLabel}
                     />
-                </>
                 <PasswordRequirement />
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
@@ -142,6 +143,7 @@ export default function ChangePasswordScreen({ navigation }) {
              <Pressable style={styles.deleteContainer} onPress={openBottomSheet}>
                     <Text style={styles.deleteText}>Delete Account</Text>
                 </Pressable>
+                </View>
             </ScrollView>
            
         </MixedContainerBackground>
@@ -163,8 +165,10 @@ const PasswordRequirement = () => {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: normalize(18),
         paddingVertical: normalize(25),
+    },
+    content:{
+        paddingHorizontal: responsiveScreenWidth(3)
     },
     header: {
         display: 'flex',

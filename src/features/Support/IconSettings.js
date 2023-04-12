@@ -8,7 +8,7 @@ import { View } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground'
 import GameArkLogo from '../../shared/GameArkLogo'
-import { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize'
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize'
 import useSound from '../../utils/useSound'
 
 const IconSettings = () => {
@@ -85,12 +85,12 @@ const IconSettings = () => {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: normalize(30),
         paddingVertical: responsiveScreenWidth(3),
     },
     settingIconsContainter: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        // justifyContent:'center',
         marginTop: responsiveScreenHeight(30),
         paddingHorizontal: responsiveScreenHeight(3),
 

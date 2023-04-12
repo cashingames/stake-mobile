@@ -7,7 +7,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Input from '../../shared/Input';
 import { editPersonalDetails, getUser } from '../Auth/AuthSlice';
-import normalize, { responsiveScreenHeight } from '../../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { isTrue } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
@@ -18,6 +18,7 @@ import GaButton from '../../shared/GaButton';
 import { setModalOpen } from '../CommonSlice';
 import { Image } from 'react-native';
 import AppHeader from '../../shared/AppHeader';
+import TopIcons from '../../shared/TopIcons';
 
 const chooseGender = [
     {
@@ -106,6 +107,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
     return (
         <MixedContainerBackground>
             <View style={styles.container}>
+                <TopIcons />
                 <AppHeader title="Edit Details" />
                 <ScrollView style={styles.contentContainer}>
                     <View style={styles.content}>
@@ -181,11 +183,10 @@ export default function EditProfileDetailsScreen({ navigation }) {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: normalize(18),
-        paddingBottom: normalize(20),
+        paddingVertical: responsiveScreenHeight(2)
     },
     contentContainer: {
-        paddingTop: normalize(20),
+        paddingHorizontal: responsiveScreenWidth(3)
     },
     inputLabel: {
         fontFamily: 'blues-smile',

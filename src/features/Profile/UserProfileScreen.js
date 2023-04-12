@@ -18,6 +18,7 @@ import MixedContainerBackground from '../../shared/ContainerBackground/MixedCont
 import GameArkLogo from '../../shared/GameArkLogo';
 import { setModalOpen } from '../CommonSlice';
 import AppHeader from '../../shared/AppHeader';
+import TopIcons from '../../shared/TopIcons';
 
 
 export default function UserProfileScreen({ navigation }) {
@@ -37,9 +38,9 @@ export default function UserProfileScreen({ navigation }) {
     );
 
     return (
-        <ScrollView>
         <MixedContainerBackground>
             <SafeAreaView style={styles.container}>
+            <TopIcons />
                 <AppHeader />
                 <ScrollView>
                     <View style={[styles.content, { flex: 1 }]}>
@@ -51,7 +52,6 @@ export default function UserProfileScreen({ navigation }) {
                 </ScrollView>
             </SafeAreaView>
         </MixedContainerBackground>
-        </ScrollView>
     );
 }
 
@@ -176,7 +176,7 @@ const Footer = ({ onLogout }) => {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: responsiveScreenWidth(3)
+        paddingVertical: responsiveScreenHeight(2)
     },
     content: {
         alignItems: 'center'

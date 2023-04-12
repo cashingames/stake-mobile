@@ -127,7 +127,7 @@ const styles = EStyleSheet.create({
 
     logo: {
         alignItems: 'center',
-        marginTop: normalize(50)
+        marginTop: normalize(80)
     },
 
     welcome: {

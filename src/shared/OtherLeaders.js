@@ -51,7 +51,7 @@ function OtherLeader({ leader, position, indexArrow, otherName }) {
             </View>
             <View style={otherLeaderStyles.position}>
                 <View style={otherLeaderStyles.rank}>
-                    <Text style={otherLeaderStyles.rankText}>{position}4</Text>
+                    <Text style={otherLeaderStyles.rankText}>{position}</Text>
                 </View>
                 {/* <Image
                     style={otherLeaderStyles.arrow}
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         marginTop: responsiveScreenWidth(3),
         borderTopRightRadius: 40,
         borderTopLeftRadius: 40,
-        height: 300,
+        height: 200,
     },
 });
 
