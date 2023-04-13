@@ -251,7 +251,7 @@ const styles = EStyleSheet.create({
 	endImageCase: {
 		alignItems: 'center',
 		paddingTop: responsiveScreenHeight(3.5),
-		marginBottom: responsiveScreenHeight(15)
+		marginVertical: responsiveScreenHeight(8),     
 	},
 	endImage: {
 		height: 413,

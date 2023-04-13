@@ -110,7 +110,6 @@ const Dashboard = ({ navigation }) => {
                     </Pressable>
                 </View>
                 <View style={styles.setting}>
-                    {/* <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} /> */}
                     <DashboardSettings />
 
                 </View>

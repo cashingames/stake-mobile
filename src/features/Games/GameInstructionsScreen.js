@@ -11,15 +11,21 @@ import QuizContainerBackground from "../../shared/ContainerBackground/QuizContai
 export default function GameInstructionsScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
   const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
+  const activePlans = useSelector(state => state.auth.user.hasActivePlan);
+
   const goToGame = () => {
-    navigation.navigate('SelectGameCategory')
+    if (!activePlans) {
+      navigation.navigate('NoGame')
+    } else {
+      navigation.navigate('SelectGameCategory')
+    }
   }
 
   return (
     <>
       <View style={styles.logo}>
         <View style={styles.imageContainer}>
-        <Image style={styles.smallLogo} source={require('../../../assets/images/ga-logo-small.png')} />
+          <Image style={styles.smallLogo} source={require('../../../assets/images/ga-logo-small.png')} />
         </View>
         <Pressable style={styles.icons} onPress={() => navigation.goBack(null)}>
           <Image style={styles.imageIcons} source={require('../../../assets/images/close-icon.png')} />
@@ -27,20 +33,20 @@ export default function GameInstructionsScreen({ navigation }) {
       </View>
       <QuizContainerBackground>
 
-      <View style={styles.container}>
-        <ScrollView>
-          <Text style={styles.title}>Game Instructions</Text>
-          <ExhibitionInstructions />
-          <View style={styles.btnContainer}>
-          <AppButton
-            text='Proceed to play'
-            onPress={goToGame}
-            style={styles.proceedBtn}
-            textStyle={styles.btnText}
-          />
-          </View>
-        </ScrollView>
-      </View>
+        <View style={styles.container}>
+          <ScrollView>
+            <Text style={styles.title}>Game Instructions</Text>
+            <ExhibitionInstructions />
+            <View style={styles.btnContainer}>
+              <AppButton
+                text='Proceed to play'
+                onPress={goToGame}
+                style={styles.proceedBtn}
+                textStyle={styles.btnText}
+              />
+            </View>
+          </ScrollView>
+        </View>
       </QuizContainerBackground>
     </>
   );
@@ -78,7 +84,7 @@ const styles = EStyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F2F5FF',
-    opacity:0.8,
+    opacity: 0.8,
     paddingHorizontal: normalize(18),
     paddingTop: normalize(20),
     paddingBottom: normalize(5)
@@ -89,12 +95,12 @@ const styles = EStyleSheet.create({
     paddingRight: responsiveScreenWidth(4),
     paddingVertical: responsiveScreenHeight(3),
     backgroundColor: '#15397D',
-    justifyContent:'space-between'
+    justifyContent: 'space-between'
   },
-  imageContainer:{
+  imageContainer: {
     // backgroundColor:'white',
-    flex:1,
-    alignItems:'flex-end'
+    flex: 1,
+    alignItems: 'flex-end'
   },
   imageIcons: {
     width: 50,
@@ -111,11 +117,11 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     marginBottom: normalize(15)
   },
-  title:{
-    textAlign:'center',
-    fontSize:'1rem',
+  title: {
+    textAlign: 'center',
+    fontSize: '1rem',
     fontFamily: 'blues-smile',
-    color:'#15397D'
+    color: '#15397D'
   },
   instructionHeader: {
     fontSize: '0.9rem',
@@ -140,20 +146,20 @@ const styles = EStyleSheet.create({
     textAlign: 'justify',
     width: responsiveScreenWidth(80)
   },
-  btnContainer:{
-    alignItems:'center'
+  btnContainer: {
+    alignItems: 'center'
   },
-  proceedBtn:{
-    backgroundColor:'#15397D',
+  proceedBtn: {
+    backgroundColor: '#15397D',
     // paddingVertical:'1rem',
-    paddingHorizontal:'4rem',
-    justifyContent:'center',
-    borderRadius:20,
+    paddingHorizontal: '4rem',
+    justifyContent: 'center',
+    borderRadius: 20,
     // height:normalize(54)
   },
-  btnText:{
-    fontFamily:'blues-smile',
-    fontSize:'.7rem',
+  btnText: {
+    fontFamily: 'blues-smile',
+    fontSize: '.7rem',
   }
 
 });

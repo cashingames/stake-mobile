@@ -86,6 +86,7 @@ import IconSettings from './features/Support/IconSettings';
 import Loader from './shared/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { triggerNotificationForAppInstallation } from './shared/Notification';
+import NoGame from './shared/NoGame';
 
 const AppStack = createNativeStackNavigator();
 
@@ -315,11 +316,12 @@ function AppRouter() {
 
 
 						{/** store */}
-						<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ title: 'Store', headerShadowVisible: false }} />
+						<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ headerShown: false  }} />
 						<AppStack.Screen name="GameBoostPurchaseSuccessful" component={GameBoostPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GamePlanPurchaseSuccessful" component={GamePlanPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
 						<AppStack.Screen name="IconSettings" component={IconSettings} options={{ headerShown: false }} />
+						<AppStack.Screen name="NoGame" component={NoGame} options={{ headerShown: false }} />
 
 						<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
 						<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{

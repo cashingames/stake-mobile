@@ -50,8 +50,8 @@ const gamesType = [
 
 
 const GameScreen = ({ navigation }) => {
-    const [showSettings, setShowSettings] = useState(false);
     const dispatch = useDispatch()
+    const activePlans = useSelector(state => state.auth.user.hasActivePlan);
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
     const goToGameInstruction = () => {
@@ -60,15 +60,13 @@ const GameScreen = ({ navigation }) => {
     }
 
     const goToGameCategory = () => {
-        // dispatch(setGameMode(gameModeSelected));
-        //     await analytics().logEvent("game_mode_selected", {
-        //         'id': user.username,
-        //         'phone_number': user.phoneNumber,
-        //         'email': user.email,
-        //         'gamemode': mode.displayName,
-        //     })
+        if(!activePlans){
+            navigation.navigate('NoGame')
+        }else{
+            navigation.navigate('SelectGameCategory')
+        }
         playSound()
-        navigation.navigate('SelectGameCategory')
+      
     }
     return (
         <ScrollView>
@@ -115,7 +113,7 @@ const GameScreen = ({ navigation }) => {
                     })}
                 </ScrollView>
                 <View style={styles.setting}>
-                    <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
+                    <DashboardSettings />
                 </View>
             </View >
         </MixedContainerBackground>

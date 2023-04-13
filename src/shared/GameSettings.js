@@ -66,7 +66,6 @@ const styles = EStyleSheet.create({
         flexWrap: 'wrap',
         marginTop: responsiveScreenHeight(34),
         paddingHorizontal: responsiveScreenHeight(3),
-
     },
 
     setting: {

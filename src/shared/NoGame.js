@@ -1,109 +1,147 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, Platform } from 'react-native';
-import normalize, { responsiveScreenWidth } from '../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import GoToStore from './GoToStore';
 import AppButton from './AppButton';
+import MixedContainerBackground from './ContainerBackground/MixedContainerBackground';
+import TopIcons from './TopIcons';
+import { ImageBackground } from 'react-native';
+import { Pressable } from 'react-native';
+import GameSettings from './GameSettings';
+import useSound from '../utils/useSound';
 
-const NoGame = ({ onClose, onPress }) => {
-    const navigation = useNavigation();
-    const visitStore = () => {
-        onClose();
-        navigation.navigate('GameStore')
-    }
+const NoGame = () => {
+	const navigation = useNavigation();
+	const visitStore = () => {
+		navigation.navigate('GameStore')
+	}
 
-    const goHome = () => {
-        onClose();
-        navigation.navigate('Home')
-    }
+	const { playSound } = useSound(require('../../assets/sounds/loss.wav'))
+	
+	useEffect(() => {
+		playSound()
+	}, [])
 
-    return (
-        <View style={styles.noGames}>
-            <Image style={styles.sadEmoji}
-                source={require('../../assets/images/sad-face-emoji.png')}
+	return (
+		<MixedContainerBackground>
+			<View style={styles.noGames}>
+				<TopIcons />
+				<View style={styles.endImageCase}>
+					<ImageBackground style={styles.endImage} source={require('../../assets/images/no-game.png')}>
+						<Text style={styles.titleText}>Out of lives</Text>
+						<View style={styles.livesCase}>
+							<Text style={styles.liveText}>Buy extra lives now or play again tomorrow!</Text>
+						</View>
+						<View style={styles.heartCase}>
+							<ImageBackground style={styles.heart} source={require('../../assets/images/heart-icon.png')}>
+								<Text style={styles.heartText}>+15</Text>
+							</ImageBackground>
+						</View>
 
-            />
-            <Text style={styles.noGamesText}>Sorry,</Text>
-            {Platform.OS === 'ios' ?
-                <Text style={styles.noGamesText}>You have exhausted your free games</Text>
-                :
-                <Text style={styles.noGamesText}>You have exhausted your games</Text>
-            }
-            {Platform.OS === 'ios' ?
-                <Text style={styles.noGamesText}>Please come back tomorrow and you will be rewarded with free games</Text>
-                :
-                <></>
-            }
-
-            {Platform.OS === 'ios' ?
-                <>
-                    <AppButton text="Go Home" onPress={goHome} />
-                    {/* <Text style={styles.orText}>or</Text> */}
-                    {/* <Text style={styles.stakeCashText}>Click on stake cash and stand a chance of winning double of the amount staked</Text>
-                    <AppButton text="Stake Cash"  onPress={onPress} /> */}
-                </>
-                :
-                <>
-                    <GoToStore onPress={visitStore} />
-                    {/* <Text style={styles.orText}>or</Text> */}
-                    {/* <Text style={styles.stakeCashText}>Click on stake cash and stand a chance of winning double of the amount staked</Text>
-                    <AppButton text="Stake Cash" style={styles.stakeButton} onPress={onPress} /> */}
-                </>
-
-            }
-        </View>
-    )
+						<View style={styles.livesPriceCase}>
+							<Text style={styles.priceText}>N1000</Text>
+						</View>
+						<View style={styles.storeLink}>
+						<ImageBackground  source={require('../../assets/images/button-case.png')} >
+							<Pressable style={styles.btn}
+								onPress={visitStore}
+							>
+								<Text style={styles.btnText}>Buy</Text>
+							</Pressable>
+						</ImageBackground>
+						</View>
+					</ImageBackground>	
+				</View>
+				<GameSettings onPress={() => navigation.goBack(null)} />
+			</View>
+		</MixedContainerBackground>
+	)
 }
 
 export default NoGame;
 
 const styles = EStyleSheet.create({
-    noGames: {
-        backgroundColor: '#fff',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: normalize(14),
-        paddingHorizontal: normalize(25),
-    },
-    sadEmoji: {
-        width: normalize(50),
-        height: normalize(50),
-        marginBottom: normalize(20)
-    },
-    needGames: {
-        fontSize: normalize(12),
-        fontFamily: 'graphik-regular',
-        color: '#000',
-        marginTop: normalize(15)
-    },
-    noGamesText: {
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(14.5),
-        // width: normalize(130),
-        textAlign: 'center',
-        color: '#000',
-        lineHeight: normalize(24)
-    },
-    stakeCashText: {
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(14.5),
-        // width: normalize(130),
-        textAlign: 'center',
-        color: '#000',
-        lineHeight: normalize(22)
-    },
-    orText: {
-        fontFamily: 'graphik-regular',
-        fontSize: normalize(14),
-        // width: normalize(130),
-        textAlign: 'center',
-        color: '#000',
-    },
-    stakeButton: {
-        paddingVertical: normalize(12),
-        paddingHorizontal: responsiveScreenWidth(30)
-    }
+	noGames: {
+		flex: 1,
+		height: '100%',
+		paddingVertical: responsiveScreenHeight(2)
+	},
+	endImageCase: {
+		alignItems: 'center',
+		paddingTop: responsiveScreenHeight(3.5),
+		marginVertical: responsiveScreenHeight(8),
+	},
+	endImage: {
+		height: 413,
+		width: 300,
+		alignItems: 'center',
+
+	},
+	titleText: {
+		color: '#fff',
+		fontFamily: 'blues-smile',
+		fontSize: '1.5rem',
+		marginVertical: '2.4rem'
+	},
+	heart: {
+		width: 143,
+		height: 109,
+		marginTop: normalize(10),
+		alignItems:'center',
+		justifyContent:'center'
+	},
+	heartCase: {
+		alignItems: 'center',
+		width: 178
+	},
+	heartText:{
+		color: '#fff',
+		fontFamily: 'blues-smile',
+		fontSize: '2rem',
+		marginTop: normalize(20)
+	},
+	point: {
+		color: '#fff',
+		fontFamily: 'blues-smile',
+		fontSize: '2rem',
+		textAlign: 'center'
+	},
+	livesCase: {
+		marginVertical: responsiveScreenHeight(.60),
+		paddingHorizontal: responsiveScreenWidth(4),
+		alignItems: 'center'
+	},
+	liveText: {
+		color: '#fff',
+		fontFamily: 'blues-smile',
+		fontSize: '.8rem',
+		textAlign: 'center'
+	},
+	livesPriceCase: {
+		flexDirection: 'row',
+		marginVertical: normalize(20)
+	},
+	priceText: {
+		color: '#FFD839',
+		fontFamily: 'blues-smile',
+		fontSize: '1.8rem',
+		textAlign: 'center'
+	},
+	storeLink:{
+		alignItems:'center'
+	},
+	btn:{
+		height:53,
+		width:89,
+		alignItems:'center',
+		justifyContent:'center'
+	},
+	btnText: {
+		color:'#A92101',
+		fontFamily: 'blues-smile',
+		fontSize:'1.4rem'
+	}
+
 })
