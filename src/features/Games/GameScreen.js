@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { randomEnteringAnimation } from '../../utils/utils'
 import useSound from '../../utils/useSound';
 import Animated from 'react-native-reanimated'
+import GameScreenHeader from '../../shared/GameScreenHeader'
 
 
 const gamesType = [
@@ -75,12 +76,7 @@ console.log(user)
         <MixedContainerBackground>
             <View style={styles.container}>
                 <TopIcons />
-                <View style={styles.logo}>
-                    <Pressable style={styles.icons} onPress={() => navigation.navigate('Home')}>
-                        <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
-                    </Pressable>
-                    <Image style={styles.smallLogo} source={require('../../../assets/images/ga-logo-small.png')} />
-                </View>
+                <GameScreenHeader />
                 <ScrollView horizontal={true} style={styles.gameContainer}>
                     {gamesType.map((game) => {
                         const { id, gameName, backgroundImage, gameImage, unlocked } = game;
@@ -176,7 +172,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: responsiveScreenWidth(5),
     },
     gameText: {
-        fontSize: '2.5rem',
+        fontSize: '2.2rem',
         fontFamily: 'blues-smile',
         color: '#fff',
         textAlign: 'center'

@@ -16,6 +16,7 @@ import { getAchievements } from '../Profile/AchievementSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { setGameMode } from '../Games/GameSlice'
 import useSound from '../../utils/useSound'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const Home = ({ navigation }) => {
     const [showSettings, setShowSettings] = useState(false);
@@ -41,6 +42,7 @@ const Home = ({ navigation }) => {
         playSound()
     }
     return (
+        <ScrollView>
         <MainContainerBackground>
             <View style={styles.container}>
                 <TopIcons />
@@ -65,6 +67,7 @@ const Home = ({ navigation }) => {
                 </View>
             </View >
         </MainContainerBackground>
+        </ScrollView>
     )
 }
 
@@ -76,6 +79,7 @@ const styles = EStyleSheet.create({
 
     logo: {
         alignItems: 'center',
+        marginTop:normalize(20)
     },
 
     welcome: {
@@ -106,7 +110,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'blues-smile'
     },
     setting: {
-        marginTop: responsiveScreenHeight(3),
+        marginTop: responsiveScreenHeight(10),
     },
 
 })

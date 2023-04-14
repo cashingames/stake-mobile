@@ -55,7 +55,7 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     return (
             <QuizContainerBackground>
                 <ScrollView style={styles.container}>
-                    <TopIcons />
+                        <TopIcons />
                     <View style={styles.logo}>
                         <Pressable style={styles.icons} onPress={() => navigation.navigate('Home')}>
                             <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />

@@ -3,7 +3,9 @@ import React, { useCallback, useEffect, useState } from 'react'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { responsiveScreenWidth } from '../utils/normalize'
 import { useSelector } from 'react-redux'
-import { formatNumber } from '../utils/stringUtl'
+import { formatNumber, isTrue } from '../utils/stringUtl'
+import { Feather } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 import { Animated } from 'react-native'
 import { useRef } from 'react'
 
@@ -12,23 +14,17 @@ const TopIcons = () => {
     var plans = useSelector(state => state.auth.user.activePlans ?? []);
     var boosts = useSelector(state => state.auth.user.boosts ?? []);
     const [sumOfPlans, setSumOfPlans] = useState(0);
-    const [boostsString, setBboostsString] = useState('');
-    console.log(boosts)
-    // const { playSound } =  useSound(require('../../assets/sounds/option-picked.mp3'))
 
+    const skip = boosts.find(item => item.name === 'Skip') ?? []
+    const freeze = boosts.find(item => item.name === 'Time Freeze') ?? []
+    const bomb = boosts.find(item => item.name === 'Bomb') ?? []
+
+    // const { playSound } =  useSound(require('../../assets/sounds/option-picked.mp3'))
     useEffect(() => {
         const reducer = (accumulator, curr) => accumulator + curr;
         var x = plans && plans.map(a => a.game_count).reduce(reducer, 0);
         setSumOfPlans(x ?? 0);
-
-        var boostResult = ''
-        boosts && boosts.map((boost, i) => {
-            boostResult += `${formatNumber(boost.count)} `
-        });
-
-        setBboostsString(boostResult?.length > 0 ? boostResult : "You have no boosts");
-
-    }, [boosts, plans]);
+    }, [plans]);
 
     const scaleValue = useRef(new Animated.Value(1)).current;
 
@@ -59,32 +55,61 @@ const TopIcons = () => {
     return (
         <View style={styles.container}>
             <View style={styles.iconContainer}>
-                <ImageBackground style={{ zIndex: 11 }} source={require('./../../assets/images/heart-icon.png')}>
-                    <View style={{ alignItems: 'center', justifyContent: 'center', height: 50, width: 65 }}>
-                        <View>
-                            <Text style={styles.gameLives}>{sumOfPlans}</Text>
-                        </View>
+                <Image style={styles.heartIcon} source={require('./../../assets/images/heart-icon.png')} />
+                <View style={styles.iconBox}>
+                    <View style={styles.iconText}>
+                        <Text style={styles.text}>{sumOfPlans}</Text>
                     </View>
-                </ImageBackground>
-                <View style={styles.liveText}>
-                    <Text style={styles.text}>Lives</Text>
-                </View>
-            </View>
-            <View style={styles.iconContainer}>
-                <Animated.View style={zoomAnimation}>
-                    <Image style={styles.bombIcon} source={require('./../../assets/images/boost-icon.png')} />
-                </Animated.View>
-                <View style={styles.bombText}>
-                    <Text style={styles.text}>{boostsString}</Text>
+                   <IconDetails />
                 </View>
             </View>
             <View style={styles.iconContainer}>
                 <Image style={styles.coinIcon} source={require('./../../assets/images/coin-icon.png')} />
-                <View style={styles.coinText}>
-                    <Text style={styles.text}>{user.points}</Text>
+                <View style={styles.iconBox}>
+                    <View style={styles.iconText}>
+                        <Text style={styles.text}>{user.points}</Text>
+                    </View>
+                   <IconDetails />
                 </View>
             </View>
+            <View style={styles.iconContainer}>
+                <Image style={styles.timeFreeze} source={require('./../../assets/images/time-freeze.png')} />
+                <View style={styles.iconBox}>
+                    <View style={styles.iconText}>
+                        <Text style={styles.text}>{freeze.count ?? 0}</Text>
+                    </View>
+                   <IconDetails />
+                </View>
+            </View>
+            <View style={styles.iconContainer}>
+                <Image style={styles.coinIcon} source={require('./../../assets/images/skip.png')} />
+                <View style={styles.iconBox}>
+                    <View style={styles.iconText}>
+                        <Text style={styles.text}>{skip.count ?? 0}</Text>
+                    </View>
+                   <IconDetails />
+                </View>
+            </View>
+            <View style={styles.iconContainer}>
+                <Image style={styles.coinIcon} source={require('./../../assets/images/bomb.png')} />
+                <View style={styles.iconBox}>
+                    <View style={styles.iconText}>
+                        <Text style={styles.text}>{bomb.count ?? 0}</Text>
+                    </View>
+                   <IconDetails />
+                </View>
+            </View>
+
         </View>
+    )
+}
+
+const IconDetails = () => {
+    return(
+        <View style={styles.plusCase}>
+        {/* <Text style={styles.plus}>+</Text> */}
+        <Feather name="plus" size={18} color="#fff" />
+    </View>
     )
 }
 
@@ -95,20 +120,16 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: responsiveScreenWidth(3),
-        zIndex: 10
+        zIndex: 10,
+        marginBottom: 10
     },
     iconContainer: {
         // flexDirection:'row',
         alignItems: 'center',
     },
-    liveText: {
-        width: 83,
-        height: 21,
-        borderRadius: 7,
-        paddingLeft: '2rem',
-        backgroundColor: '#102058',
-        marginTop: '0.3rem',
-        justifyContent: 'center'
+    heartIcon: {
+        height: 37,
+        width: 48
     },
     gameLives: {
         color: '#fff',
@@ -117,37 +138,50 @@ const styles = EStyleSheet.create({
         marginTop: '.6rem',
         marginLeft: '0.2rem'
     },
-    bombText: {
-        width: 55,
-        height: 21,
-        borderRadius: 7,
-        paddingHorizontal: '0.6rem',
-        backgroundColor: '#102058',
-        marginTop: '0.3rem',
-        justifyContent: 'center'
-    },
-    coinText: {
-        width: 65,
-        height: 21,
-        borderRadius: 7,
-        paddingHorizontal: '0.6rem',
-        backgroundColor: '#102058',
-        marginTop: '0.3rem',
+    iconBox:{
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+    },
+    iconText: {
+        height: 18,
+        borderTopLeftRadius: 4,
+        borderBottomLeftRadius: 4,
+        paddingHorizontal: '0.6rem',
+        justifyContent:'center',
+        backgroundColor: '#102058',
+        marginTop: '0.3rem',
     },
     text: {
         color: '#FFD600',
         fontSize: '.9rem',
-        fontFamily: 'blues-smile'
+        fontFamily: 'blues-smile',
+        alignItems: 'center',
+
     },
     bombIcon: {
-        height: 53,
+        height: 37,
         width: 41
     },
     coinIcon: {
-        height: 41,
-        width: 47
+        height: 37,
+        width: 39
+    },
+    timeFreeze: {
+        height: 44,
+        width: 54,
+    },
+    plusCase: {
+        height: 18,
+        width: 18,
+        backgroundColor: '#E0004B',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 2,
+        marginTop: '0.3rem',
+    },
+    plus:{
+        color:'#fff',
+        fontSize:'1rem'
     }
 })
 export default TopIcons

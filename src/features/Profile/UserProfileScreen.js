@@ -142,10 +142,6 @@ const ProfileTabs = () => {
                 playSound()
                 navigation.navigate('UserStats')
             }} />
-            <ProfileTab tabName='Invite Friends' onPress={() => {
-                playSound()
-                navigation.navigate('Invite')
-            }} />
         </View>
 
     )

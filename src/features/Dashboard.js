@@ -17,6 +17,7 @@ import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import Loader from '../shared/Loader'
 import useSound from '../utils/useSound'
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../utils/utils'
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Dashboard = ({ navigation }) => {
     const loading = useSelector(state => state.common.initialLoading);
@@ -98,6 +99,7 @@ const Dashboard = ({ navigation }) => {
     }
 
     return (
+        <ScrollView>
         <MainContainerBackground>
             <View style={styles.container}>
                 <View style={styles.logo}>
@@ -115,6 +117,7 @@ const Dashboard = ({ navigation }) => {
                 </View>
             </View >
         </MainContainerBackground>
+        </ScrollView>
     )
 }
 
@@ -155,7 +158,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'blues-smile'
     },
     setting: {
-        marginTop: responsiveScreenHeight(3),
+        marginTop: responsiveScreenHeight(10),
     },
 
 })
