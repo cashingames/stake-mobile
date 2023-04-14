@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { BackHandler, Image, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { formatCurrency, isTrue } from "../../../utils/stringUtl";
+import { formatCurrency, formatNumber, isTrue } from "../../../utils/stringUtl";
 import EStyleSheet from "react-native-extended-stylesheet";
 import Constants from 'expo-constants';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../../utils/normalize";
@@ -17,7 +17,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
-	const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
 
 
@@ -27,33 +27,33 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     };
 
 
-	const onPlayButtonClick = async () => {
-		setLoading(true);
+    const onPlayButtonClick = async () => {
+        setLoading(true);
         dispatch(clearSession());
-		analytics().logEvent('trivia_challenge_play_again_clicked', {
-			'id': user.username,
-		});
-		navigation.navigate("SelectGameCategory")
-		setLoading(false);
+        analytics().logEvent('trivia_challenge_play_again_clicked', {
+            'id': user.username,
+        });
+        navigation.navigate("SelectGameCategory")
+        setLoading(false);
 
-	}
+    }
 
     useEffect(() => {
-        if (challengeDetails.score > challengeDetails.opponent.score) {
+        if (formatNumber(challengeDetails.score) > formatNumber(challengeDetails.opponent.score)) {
             analytics().logEvent("trivia_challenge_stake_won", {
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
             })
             return
         }
-        if (challengeDetails.score < challengeDetails.opponent.score) {
+        if (formatNumber(challengeDetails.score) < formatNumber(challengeDetails.opponent.score)) {
             analytics().logEvent("trivia_challenge_stake_lost", {
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
             })
             return
         }
-        if (challengeDetails.score === challengeDetails.opponent.score) {
+        if (formatNumber(challengeDetails.score) === formatNumber(challengeDetails.opponent.score)) {
             analytics().logEvent("trivia_challenge_stake_draw", {
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
@@ -88,13 +88,13 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.content}>
-                {challengeDetails.score > challengeDetails.opponent.score &&
+                {formatNumber(challengeDetails.score) > formatNumber(challengeDetails.opponent.score) &&
                     <Text style={styles.headText}>Congrats {user.username}</Text>
                 }
-                {challengeDetails.score < challengeDetails.opponent.score &&
+                {formatNumber(challengeDetails.score) < formatNumber(challengeDetails.opponent.score) &&
                     <Text style={styles.headText}>Sorry {user.username}</Text>
                 }
-                {challengeDetails.score === challengeDetails.opponent.score &&
+                {formatNumber(challengeDetails.score) === formatNumber(challengeDetails.opponent.score) &&
                     <Text style={styles.headText}>Draw, you can try again</Text>
                 }
                 <ChallengePlayers challengeDetails={challengeDetails} />
@@ -103,14 +103,14 @@ const ChallengeEndGameScreen = ({ navigation }) => {
             </ScrollView>
             {/* <AppButton text="Return to Dashboard" onPress={goHome} style={styles.button} /> */}
             <View style={styles.gameButtons}>
-				<GameButton buttonText='Return to Home'
-					onPress={goHome}
-				/>
-				<GameButton buttonText={loading ? 'loading...' : 'Play Again'}
-					onPress={onPlayButtonClick}
-					disabled={loading}
-				/>
-			</View>
+                <GameButton buttonText='Return to Home'
+                    onPress={goHome}
+                />
+                <GameButton buttonText={loading ? 'loading...' : 'Play Again'}
+                    onPress={onPlayButtonClick}
+                    disabled={loading}
+                />
+            </View>
         </View>
     )
 }
@@ -119,13 +119,13 @@ const WinningAmount = ({ challengeDetails }) => {
     const amount = useSelector(state => state.triviaChallenge.challengeDetails.amount_won);
     return (
         <View style={styles.winningsContainer}>
-            {challengeDetails.score > challengeDetails.opponent.score &&
+            {formatNumber(challengeDetails.score) > formatNumber(challengeDetails.opponent.score) &&
                 <Text style={styles.winningsText}>You have won <Text style={styles.winningsAmount}> &#8358;{formatCurrency(amount)}!</Text></Text>
             }
-            {challengeDetails.score < challengeDetails.opponent.score &&
+            {formatNumber(challengeDetails.score) < formatNumber(challengeDetails.opponent.score) &&
                 <Text style={styles.winningsText}>You can try again</Text>
             }
-            {challengeDetails.score === challengeDetails.opponent.score &&
+            {formatNumber(challengeDetails.score) === formatNumber(challengeDetails.opponent.score) &&
                 <Text style={styles.winningsText}>You have been refunded</Text>
             }
         </View>
@@ -137,19 +137,19 @@ const ChallengePlayers = ({ challengeDetails }) => {
     console.log("challenge",)
     return (
         <View style={styles.playersContainer}>
-            {challengeDetails.score > challengeDetails.opponent.score &&
+            {formatNumber(challengeDetails.score) > formatNumber(challengeDetails.opponent.score) &&
                 <>
                     <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                     <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
-            {challengeDetails.score < challengeDetails.opponent.score &&
+            {formatNumber(challengeDetails.score) < formatNumber(challengeDetails.opponent.score) &&
                 <>
                     <ChallengeLoser playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                     <ChallengeWinner playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
-            {challengeDetails.score === challengeDetails.opponent.score &&
+            {formatNumber(challengeDetails.score) === formatNumber(challengeDetails.opponent.score) &&
                 <>
                     <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                     <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
@@ -199,11 +199,11 @@ const FinalScoreBoard = ({ challengeDetails }) => {
 }
 
 const GameButton = ({ buttonText, onPress, disabled }) => {
-	return (
-		<Pressable onPress={onPress} style={[styles.gameButton, disabled ? styles.gameButtonDisabled : {}]} >
-			<Text style={styles.buttonText}>{buttonText}</Text>
-		</Pressable>
-	)
+    return (
+        <Pressable onPress={onPress} style={[styles.gameButton, disabled ? styles.gameButtonDisabled : {}]} >
+            <Text style={styles.buttonText}>{buttonText}</Text>
+        </Pressable>
+    )
 }
 
 export default ChallengeEndGameScreen;
@@ -330,29 +330,29 @@ const styles = EStyleSheet.create({
         marginTop: 0
     },
     gameButton: {
-		borderColor: '#FFFF',
-		borderWidth: 1,
-		width: responsiveScreenWidth(35),
-		height: responsiveScreenHeight(6.5),
-		borderRadius: 8,
-		justifyContent: 'center',
-		alignItems: 'center',
-		display: 'flex',
-	},
-	gameButtonDisabled: {
-		backgroundColor: '#DFCBCF'
-	},
-	gameButtons: {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		marginBottom: normalize(50),
-	},
-	buttonText: {
-		textAlign: 'center',
-		color: '#FFFF',
-		fontFamily: 'graphik-medium',
-		fontSize: '0.72rem',
-	},
+        borderColor: '#FFFF',
+        borderWidth: 1,
+        width: responsiveScreenWidth(35),
+        height: responsiveScreenHeight(6.5),
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        display: 'flex',
+    },
+    gameButtonDisabled: {
+        backgroundColor: '#DFCBCF'
+    },
+    gameButtons: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: normalize(50),
+    },
+    buttonText: {
+        textAlign: 'center',
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+        fontSize: '0.72rem',
+    },
 })
