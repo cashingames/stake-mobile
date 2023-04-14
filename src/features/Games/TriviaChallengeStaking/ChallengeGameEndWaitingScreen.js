@@ -63,7 +63,7 @@ const ChallengeGameEndWaitingScreen = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.message}>Great, you finshed first</Text>
+            <Text style={styles.message}>Great, you finished first</Text>
             <View style={styles.animationContainer}>
                 <LottieAnimations
                     animationView={require('../../../../assets/hour-glass.json')}
@@ -72,8 +72,8 @@ const ChallengeGameEndWaitingScreen = ({navigation}) => {
                 />
             </View>
             <SelectedPlayers challengeDetails={challengeDetails} />
-            <Text style={styles.message}>Wait for both scores to be calculated</Text>
-            <Text style={styles.matchingText}>Calculating....</Text>
+            <Text style={styles.message}>Waiting for your opponent to finish</Text>
+            <Text style={styles.matchingText}>Loading....</Text>
         </View>
     )
 }
