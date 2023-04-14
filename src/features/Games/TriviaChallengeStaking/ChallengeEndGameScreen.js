@@ -39,21 +39,21 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
-        if (formatNumber(challengeDetails.score) > formatNumber(challengeDetails.opponent.score)) {
+        if (Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score)) {
             analytics().logEvent("trivia_challenge_stake_won", {
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
             })
             return
         }
-        if (formatNumber(challengeDetails.score) < formatNumber(challengeDetails.opponent.score)) {
+        if (Number.parseFloat(challengeDetails.score) < Number.parseFloat(challengeDetails.opponent.score)) {
             analytics().logEvent("trivia_challenge_stake_lost", {
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
             })
             return
         }
-        if (formatNumber(challengeDetails.score) === formatNumber(challengeDetails.opponent.score)) {
+        if (Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score)) {
             analytics().logEvent("trivia_challenge_stake_draw", {
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
@@ -88,13 +88,13 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.content}>
-                {formatNumber(challengeDetails.score) > formatNumber(challengeDetails.opponent.score) &&
+                {Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score) &&
                     <Text style={styles.headText}>Congrats {user.username}</Text>
                 }
-                {formatNumber(challengeDetails.score) < formatNumber(challengeDetails.opponent.score) &&
+                {Number.parseFloat(challengeDetails.score) < Number.parseFloat(challengeDetails.opponent.score) &&
                     <Text style={styles.headText}>Sorry {user.username}</Text>
                 }
-                {formatNumber(challengeDetails.score) === formatNumber(challengeDetails.opponent.score) &&
+                {Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score) &&
                     <Text style={styles.headText}>Draw, you can try again</Text>
                 }
                 <ChallengePlayers challengeDetails={challengeDetails} />
@@ -119,13 +119,13 @@ const WinningAmount = ({ challengeDetails }) => {
     const amount = useSelector(state => state.triviaChallenge.challengeDetails.amount_won);
     return (
         <View style={styles.winningsContainer}>
-            {formatNumber(challengeDetails.score) > formatNumber(challengeDetails.opponent.score) &&
+            {Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score) &&
                 <Text style={styles.winningsText}>You have won <Text style={styles.winningsAmount}> &#8358;{formatCurrency(amount)}!</Text></Text>
             }
-            {formatNumber(challengeDetails.score) < formatNumber(challengeDetails.opponent.score) &&
+            {Number.parseFloat(challengeDetails.score) < Number.parseFloat(challengeDetails.opponent.score) &&
                 <Text style={styles.winningsText}>You can try again</Text>
             }
-            {formatNumber(challengeDetails.score) === formatNumber(challengeDetails.opponent.score) &&
+            {Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score) &&
                 <Text style={styles.winningsText}>You have been refunded</Text>
             }
         </View>
@@ -137,19 +137,19 @@ const ChallengePlayers = ({ challengeDetails }) => {
     console.log("challenge",)
     return (
         <View style={styles.playersContainer}>
-            {formatNumber(challengeDetails.score) > formatNumber(challengeDetails.opponent.score) &&
+            {Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score) &&
                 <>
                     <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                     <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
-            {formatNumber(challengeDetails.score) < formatNumber(challengeDetails.opponent.score) &&
+            {Number.parseFloat(challengeDetails.score) < Number.parseFloat(challengeDetails.opponent.score) &&
                 <>
                     <ChallengeLoser playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                     <ChallengeWinner playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                 </>
             }
-            {formatNumber(challengeDetails.score) === formatNumber(challengeDetails.opponent.score) &&
+            {Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score) &&
                 <>
                     <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
                     <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
