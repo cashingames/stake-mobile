@@ -52,7 +52,9 @@ const gamesType = [
 const GameScreen = ({ navigation }) => {
     const dispatch = useDispatch()
     const activePlans = useSelector(state => state.auth.user.hasActivePlan);
-    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'));
+    const user = useSelector(state => state.auth.user)
+console.log(user)
 
     const goToGameInstruction = () => {
         navigation.navigate('GameInstructions')

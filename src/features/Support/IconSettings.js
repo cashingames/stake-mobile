@@ -60,13 +60,14 @@ const IconSettings = () => {
                                 }}>
                                 <Image style={styles.imageIcons} source={require('../../../assets/images/profile-icon.png')} />
                             </Pressable>
-                            <Pressable style={styles.icons}>
+                            <Pressable style={styles.icons}
+                                  onPress={() => {
+                                    navigation.navigate('ContactUs')
+                                }}
+                            >
                                 <Image style={styles.imageIcons} source={require('../../../assets/images/icon.png')} />
                             </Pressable>
-                            <Pressable style={styles.icons}
-                                 onPress={() => {
-                                    navigation.navigate('ContactUs')
-                                }}>
+                            <Pressable style={styles.icons}>
                                 <Image style={styles.imageIcons} source={require('../../../assets/images/help-icon.png')} />
                             </Pressable >
                         </View>
