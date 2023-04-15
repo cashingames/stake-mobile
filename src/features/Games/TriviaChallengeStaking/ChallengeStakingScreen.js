@@ -21,6 +21,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
     const user = useSelector(state => state.auth.user);
     const boosts = useSelector(state => state.common.boosts);
     const minimumChallengeStakeAmount = useSelector(state => state.common.minimumChallengeStakeAmount);
+    const maximumChallengeStakeAmount = useSelector(state => state.common.maximumChallengeStakeAmount);
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
     const [amount, setAmount] = useState('200');
     const [loading, setLoading] = useState(false);
@@ -36,6 +37,12 @@ const ChallengeStakingScreen = ({ navigation }) => {
 
         if (Number.parseFloat(amount) < Number.parseFloat(minimumChallengeStakeAmount)) {
             Alert.alert(`Minimum stake amount is ${minimumChallengeStakeAmount} naira`);
+            setLoading(false);
+            return false;
+        }
+
+        if (Number.parseFloat(amount) < Number.parseFloat(maximumChallengeStakeAmount)) {
+            Alert.alert(`Maximum stake amount is ${maximumChallengeStakeAmount} naira`);
             setLoading(false);
             return false;
         }
@@ -136,7 +143,6 @@ const InputStakeAmount = ({ balance, stakeAmount, loading, amount, setAmount }) 
             <View style={styles.fundContainer}
             >
                 <Input
-                    editable={false}
                     style={styles.fundAmount}
                     value={amount}
                     defaultValue="200"
