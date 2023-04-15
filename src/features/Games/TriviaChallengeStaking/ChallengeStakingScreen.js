@@ -41,7 +41,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
             return false;
         }
 
-        if (Number.parseFloat(amount) < Number.parseFloat(maximumChallengeStakeAmount)) {
+        if (Number.parseFloat(amount) > Number.parseFloat(maximumChallengeStakeAmount)) {
             Alert.alert(`Maximum stake amount is ${maximumChallengeStakeAmount} naira`);
             setLoading(false);
             return false;
@@ -145,7 +145,7 @@ const InputStakeAmount = ({ balance, stakeAmount, loading, amount, setAmount }) 
                 <Input
                     style={styles.fundAmount}
                     value={amount}
-                    defaultValue="200"
+                    defaultValue="Enter Amount"
                     keyboardType="numeric"
                     onChangeText={setAmount}
                     autoFocus={true}
