@@ -163,7 +163,8 @@ const styles = EStyleSheet.create({
         alignItems:'flex-end',
         width:'100%',
         marginBottom: -50,
-        paddingHorizontal: responsiveScreenWidth(3)
+        paddingHorizontal: responsiveScreenWidth(3),
+        zIndex:10
     },
 
     welcome: {
