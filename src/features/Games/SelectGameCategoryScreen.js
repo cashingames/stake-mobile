@@ -14,6 +14,7 @@ import QuizContainerBackground from '../../shared/ContainerBackground/QuizContai
 import TopIcons from '../../shared/TopIcons';
 import DashboardSettings from '../../shared/DashboardSettings';
 import { ScrollView } from 'react-native';
+import GameSettings from '../../shared/GameSettings';
 
 const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -53,27 +54,31 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     );
 
     return (
+        <ScrollView>
             <QuizContainerBackground>
                 <ScrollView style={styles.container}>
                         <TopIcons />
-                    <View style={styles.logo}>
+                        <View>
+                            <View style={styles.logo}>
                         <Pressable style={styles.icons} onPress={() => navigation.navigate('Home')}>
                             <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
                         </Pressable>
-                        <Text style={styles.title}>Quiz Game</Text>
+                        <Text style={styles.title}>Word Trivia</Text>
                     </View>
                     <View style={styles.imgContainer}>
-                        <Image style={styles.quizImage} source={require('../../../assets/images/quiz-large.png')} />
+                        <Image style={styles.quizImage} source={require('../../../assets/images/word-trivia.png')} />
                     </View>
                     <View>
-                        <GamePicker title={"Pick a game"} navigation={navigation} />
+                        <GamePicker navigation={navigation} />
                     </View>
-                              
-                </ScrollView>
-                <View style={styles.setting}>
-                        <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
-                    </View>     
+                    </View>
+
+                     <View style={styles.setting}>
+                        <GameSettings onPress={()=> navigation.goBack(null)} />
+                    </View>             
+                </ScrollView> 
             </QuizContainerBackground>
+            </ScrollView>
     )
 }
 
@@ -108,13 +113,10 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     quizImage: {
-        width: normalize(167),
-        height: normalize(226)
+        width: normalize(300),
+        height: normalize(184)
     },
     setting: {
-        position: 'absolute',
-        left:0,
-        right: 0,
-        bottom: 180,
+        marginTop: responsiveScreenHeight(10)
     },
 })

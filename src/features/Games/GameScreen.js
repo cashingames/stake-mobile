@@ -20,9 +20,9 @@ import GameScreenHeader from '../../shared/GameScreenHeader'
 const gamesType = [
     {
         id: 1,
-        gameName: 'quiz game',
+        gameName: 'Word Trivia',
         backgroundImage: require('../../../assets/images/quiz-background.png'),
-        gameImage: require('../../../assets/images/quiz-image.png'),
+        gameImage: require('../../../assets/images/word-trivia2.png'),
         unlocked: true
     },
     {
@@ -95,9 +95,9 @@ console.log(user)
                                     <Text style={styles.gameText}>{gameName}</Text>
                                 </View>
                                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                    <Image style={styles.cardImage} source={gameImage} />
+                                    <Image style={[gameName !== 'Word Trivia' ? styles.cardImage : styles.wordTrivia]} source={gameImage} />
                                 </View>
-                                <View style={styles.cardBtnContainer}>
+                                <View style={[gameName !== 'Word Trivia' ? styles.cardBtnContainer : styles.wordTriviaBtnContainer]}>
                                     <Pressable style={styles.playBtn} onPress={goToGameCategory}>
                                         <Text style={styles.playText}>Play</Text>
                                     </Pressable>
@@ -197,8 +197,23 @@ const styles = EStyleSheet.create({
         width: 144,
         marginTop: 10
     },
+    wordTrivia:{
+        position:'absolute',
+        height: 300,
+        top: 0,
+        width: 155,
+        marginTop: 10
+    },
     cardBtnContainer: {
         marginTop: -12
+    },
+    wordTriviaBtnContainer:{
+        position:'absolute',
+        bottom: responsiveScreenHeight(6),
+        right:0,
+        left:0,
+        alignItems:'center',
+        paddingHorizontal: responsiveScreenWidth(5),
     },
     playBtn: {
         backgroundColor: '#15397D',

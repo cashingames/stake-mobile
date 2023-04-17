@@ -18,7 +18,7 @@ import useSound from '../../utils/useSound';
 import QuizContainerBackground from '../../shared/ContainerBackground/QuizContainerBackground';
 import TopIcons from '../../shared/TopIcons';
 import { ImageBackground } from 'react-native';
-import DashboardSettings from '../../shared/DashboardSettings';
+import GameSettings from '../../shared/GameSettings';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -182,7 +182,7 @@ export default function GameEndResultScreen({ navigation }) {
 				<TopIcons />
 				<EndGameData homeNavigation={onHomeButtonClick} playAgain={onPlayButtonClick} pointsGained={pointsGained} minimumBoostScore={minimumBoostScore} />
 				<View style={styles.setting}>
-					<DashboardSettings />
+					<GameSettings onPress={() => navigation.navigate('Games')}/>
 				</View>
 			</ScrollView>
 		</QuizContainerBackground>
