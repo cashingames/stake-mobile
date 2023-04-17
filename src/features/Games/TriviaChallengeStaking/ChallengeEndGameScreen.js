@@ -17,6 +17,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
+    console.log(challengeDetails)
     const [loading, setLoading] = useState(false);
 
 
@@ -55,6 +56,13 @@ const ChallengeEndGameScreen = ({ navigation }) => {
         }
         if (Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score)) {
             analytics().logEvent("trivia_challenge_stake_draw", {
+                'opponentName': challengeDetails.opponent.username,
+                'username': challengeDetails.username,
+            })
+            return
+        }
+        if (challengeDetails.opponent.is_bot === true) {
+            analytics().logEvent("trivia_challenge_bot_opponent", {
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
             })
