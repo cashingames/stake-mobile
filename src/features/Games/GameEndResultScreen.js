@@ -189,57 +189,65 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 }
 
-const EndGameData = ({homeNavigation, playAgain, pointsGained, minimumBoostScore}) => {
+const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScore }) => {
+	console.log(minimumBoostScore)
+	console.log
 	return (
 		<View style={styles.endImageCase}>
-			{ pointsGained > minimumBoostScore ?
-			<ImageBackground style={styles.endImage} source={require('../../../assets/images/endgame-image.png')}>
-				<Text style={styles.winText}>You win</Text>
-				<View style={styles.starIcons}>
-					<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
-					<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
-					<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
-				</View>
-				<View style={styles.pointsCase}>
-					<Text style={styles.point}>You Scored {pointsGained} Points</Text>
-				</View>
-				<View style={styles.winPoints}>
-					<Text style={styles.pointEarned}>+10</Text>
-				</View>
-				<View style={styles.btnContainer}>
-					<Pressable onPress={homeNavigation}>
-						<Image style={styles.btn} source={require('../../../assets/images/okay.png')} />
-					</Pressable>
-					<Pressable onPress={playAgain}>
-						<Image style={styles.btn} source={require('../../../assets/images/replay.png')} />
-					</Pressable>
-				</View>
-			</ImageBackground>
-			:
-			<ImageBackground style={styles.endImage} source={require('../../../assets/images/lose-endgame.png')}>
-				<Text style={styles.winText}>You Lose!</Text>
-				<View style={styles.starIcons}>
-					<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
-					<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
-					<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
-				</View>
-				<View style={styles.pointsCase}>
-					<Text style={styles.point}>You Scored {pointsGained} Points</Text>
-				</View>
-				<View style={styles.winPoints}>
+			{pointsGained > Number(minimumBoostScore)?
+				<ImageBackground style={styles.endImage} source={require('../../../assets/images/no-game.png')}>
+					<Text style={styles.winText}>You win</Text>
+					<View style={styles.starIcons}>
+						<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
+						<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
+						<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
+					</View>
+					<View style={styles.pointsCase}>
+						<Text style={styles.point}>You Scored {pointsGained} Points</Text>
+					</View>
+					{/* <View style={styles.winPoints}>
+						<Text style={styles.pointEarned}>+10</Text>
+					</View> */}
+					<View style={styles.btnContainer}>
+						<Pressable onPress={homeNavigation}>
+							<Image style={styles.btn} source={require('../../../assets/images/okay.png')} />
+						</Pressable>
+						<Pressable onPress={playAgain}>
+							<Image style={styles.btn} source={require('../../../assets/images/replay.png')} />
+						</Pressable>
+					</View>
+					<View style={styles.winnerProfile}>
+						<Image style={styles.winnerImage} source={require('../../../assets/images/winner-picture.png')} />
+					</View> 
+				</ImageBackground>
+				:
+				<ImageBackground style={styles.endImage} source={require('../../../assets/images/no-game.png')}>
+					<Text style={styles.winText}>You Lose!</Text>
+					<View style={styles.starIcons}>
+						<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+						<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+						<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+					</View>
+					<View style={styles.pointsCase}>
+						<Text style={styles.point}>You Scored {pointsGained} Points</Text>
+					</View>
+					{/* <View style={styles.winPoints}>
 					<Text style={styles.pointEarned}>-10</Text>
-				</View>
-				<View style={styles.btnContainer}>
-					<Pressable onPress={homeNavigation}>
-						<Image style={styles.btn} source={require('../../../assets/images/okay.png')} />
-					</Pressable>
-					<Pressable onPress={playAgain}>
-						<Image style={styles.btn} source={require('../../../assets/images/replay.png')} />
-					</Pressable>
-				</View>
-			</ImageBackground>
+				</View> */}
+					<View style={styles.btnContainer}>
+						<Pressable onPress={homeNavigation}>
+							<Image style={styles.btn} source={require('../../../assets/images/okay.png')} />
+						</Pressable>
+						<Pressable onPress={playAgain}>
+							<Image style={styles.btn} source={require('../../../assets/images/replay.png')} />
+						</Pressable>
+					</View>
+					<View style={styles.loserProfile}>
+						<Image style={styles.loserImage} source={require('../../../assets/images/loser-profile.png')} />
+					</View>
+				</ImageBackground>
 
-}
+			}
 		</View>
 	)
 }
@@ -251,7 +259,7 @@ const styles = EStyleSheet.create({
 	endImageCase: {
 		alignItems: 'center',
 		paddingTop: responsiveScreenHeight(3.5),
-		marginVertical: responsiveScreenHeight(8),     
+		marginVertical: responsiveScreenHeight(8),
 	},
 	endImage: {
 		height: 413,
@@ -277,7 +285,9 @@ const styles = EStyleSheet.create({
 	},
 	pointsCase: {
 		alignItems: 'center',
-		width: 178
+		width: 198,
+		marginVertical: normalize(20),
+		zIndex:10
 	},
 	point: {
 		color: '#fff',
@@ -297,12 +307,30 @@ const styles = EStyleSheet.create({
 	},
 	btnContainer: {
 		flexDirection: 'row',
-		marginTop:normalize(10)
+		marginTop: normalize(10)
 	},
 	btn: {
-		height:50,
-		width:50,
-		marginHorizontal:responsiveScreenWidth(2)
+		height: 50,
+		width: 50,
+		marginHorizontal: responsiveScreenWidth(2)
+	},
+	loserProfile: {
+		position: 'absolute',
+		right: responsiveScreenWidth(-11),
+		bottom: responsiveScreenHeight(8)
+	},
+	loserImage: {
+		width: normalize(139),
+		height: normalize(135)
+	},
+	winnerImage:{
+		width:normalize(145),
+		height:normalize(254)
+	},
+	winnerProfile:{
+		position: 'absolute',
+		right: responsiveScreenWidth(-11),
+		bottom: responsiveScreenHeight(-10)
 	}
-	
+
 });
