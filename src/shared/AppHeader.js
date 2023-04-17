@@ -11,13 +11,11 @@ const AppHeader = ({ title }) => {
     const navigation = useNavigation()
     return (
         <>
-        {/* <View style={styles.btnContainer}> */}
          <Pressable
             style={styles.closeBtn} 
             onPress={() => navigation.goBack(null)}>
                 <Image style={styles.closeIcon} source={require('../../assets/images/close-icon.png')} />
             </Pressable>
-            {/* </View> */}
             <View style={styles.header}>
                 <GameArkLogo />
                 <Text style={styles.title}>{title}</Text>

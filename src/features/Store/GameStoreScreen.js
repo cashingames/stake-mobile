@@ -221,7 +221,7 @@ export default function ({ navigation }) {
                 </View>
                 <GamePlans user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />
                 <GameBoosts user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />
-                <SpecialOffer />
+                {/* <SpecialOffer /> */}
             </ScrollView>
         </MixedContainerBackground>
 

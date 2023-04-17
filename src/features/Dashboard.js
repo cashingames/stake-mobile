@@ -20,6 +20,7 @@ import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../utils/utils'
 import { ScrollView } from 'react-native-gesture-handler';
 import { setGameMode } from './Games/GameSlice';
 import { getAchievements } from './Profile/AchievementSlice';
+import { Image } from 'react-native';
 
 const Dashboard = ({ navigation }) => {
     const loading = useSelector(state => state.common.initialLoading);
@@ -37,7 +38,7 @@ const Dashboard = ({ navigation }) => {
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
 
     const isFocused = useIsFocused();
-    const { playSound } = useSound(require('./../../assets/sounds/dashboard.mp3'));
+    const { playSound, toogle, handleToggle, stopSound } = useSound(require('./../../assets/sounds/dashboard.mp3'));
     
     useEffect(() => {
         if (isFocused && isSoundLoaded) {
@@ -115,10 +116,20 @@ const Dashboard = ({ navigation }) => {
         return <Loader />
     }
 
+    const handleToggleSwitch = () => {
+        handleToggle();
+        stopSound()
+    };
+
     return (
         <ScrollView>
         <MainContainerBackground>
             <View style={styles.container}>
+            <Pressable style={styles.icons} onPress={handleToggleSwitch}>
+                    {toogle ? <Image style={styles.imageIcons} source={require('../../assets/images/sound-1.png')} /> :
+                        <Image style={styles.imageIcons} source={require('../../assets/images/sound-off.png')} />
+                    }
+                </Pressable>
                 <View style={styles.logo}>
                     <GameArkLogo />
                 </View>
@@ -141,23 +152,31 @@ const Dashboard = ({ navigation }) => {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: responsiveScreenWidth(3),
+        paddingVertical: responsiveScreenWidth(20),
     },
 
     logo: {
-        alignItems: 'center',
-        marginTop: normalize(80)
+        // alignItems: 'center',
+        // marginTop: normalize(20),
+    },
+    icons:{
+        alignItems:'flex-end',
+        width:'100%',
+        marginBottom: -50,
+        paddingHorizontal: responsiveScreenWidth(3),
+        zIndex:10
     },
 
     welcome: {
         alignItems: 'center',
-        marginTop: responsiveScreenHeight(35)
+        marginTop: responsiveScreenHeight(36)
     },
 
     welcomeText: {
         fontSize: '1.4rem',
         fontFamily: 'blues-smile',
-        color: '#fff'
+        color: '#fff',
+        marginVertical: normalize(10)
     },
 
     welcomeBtn: {
@@ -176,6 +195,12 @@ const styles = EStyleSheet.create({
     },
     setting: {
         marginTop: responsiveScreenHeight(10),
+    },
+    imageIcons: {
+        width: 50,
+        height: 50,
+        // marginBottom: normalize(60)
+
     },
 
 })

@@ -24,6 +24,7 @@ import { logActionToServer } from '../CommonSlice';
 import { useEffect } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Loader from '../../shared/Loader';
+import GameSettings from '../../shared/GameSettings';
 
 const SubCategoryScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -39,27 +40,29 @@ const SubCategoryScreen = ({ navigation, route }) => {
         {loading ? (
           <Loader />
         ) : (
+            <ScrollView>
         <QuizContainerBackground>
             <ScrollView style={styles.container}>
                 <TopIcons />
                 <View style={styles.logo}>
-                    <Pressable style={styles.icons} onPress={() => navigation.navigate('Home')}>
+                    <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
                         <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
                     </Pressable>
-                    <Text style={styles.title}>Quiz Game</Text>
+                    <Text style={styles.title}>Word Trivia</Text>
                 </View>
                 {/* <Text style={styles.categoryHeading}>Select Category</Text> */}
                 <View style={styles.imgContainer}>
-                    <Image style={styles.quizImage} source={require('../../../assets/images/quiz-large.png')} />
+                    <Image style={styles.quizImage} source={require('../../../assets/images/word-trivia.png')} />
                 </View>
                 <View>
                     <SubCategories category={gameTypeId} loading={loading} setLoading={setLoading}/>
                 </View>
             </ScrollView>
             <View style={styles.setting}>
-                    <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
+                    <GameSettings onPress={()=> navigation.goBack(null)} />
                 </View>
         </QuizContainerBackground>
+        </ScrollView>
     )}
     </>
     )
@@ -146,7 +149,7 @@ export default SubCategoryScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: responsiveScreenWidth(3),
+        paddingVertical: responsiveScreenHeight(2),
     },
     logo: {
         alignItems: 'flex-start',
@@ -174,14 +177,14 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     quizImage: {
-        width: normalize(167),
-        height: normalize(226)
+        width: normalize(300),
+        height: normalize(184)
     },
     setting: {
         position: 'absolute',
         left:0,
         right: 0,
-        bottom: 180,
+        bottom:Platform.OS === 'ios' ? 70 : 180,
     },
 
     categoryHeading: {

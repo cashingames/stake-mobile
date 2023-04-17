@@ -15,7 +15,7 @@ const GameScreenHeader = () => {
     return (
         <View>
             <View style={styles.logo}>
-                <Pressable style={styles.icons} onPress={() => navigation.navigate('Home')}>
+                <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
                     <Image style={styles.imageIcons} source={require('../../assets/images/home.png')} />
                 </Pressable>
                 <Image style={styles.smallLogo} source={require('../../assets/images/ga-logo-small.png')} />
