@@ -5,6 +5,8 @@ import Constants from 'expo-constants';
 
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber, isTrue } from '../utils/stringUtl';
+import { Platform } from 'react-native';
+import { ScrollView } from 'react-native';
 
 export default function OtherLeaders({ leaders, otherStyles, otherName }) {
     const currentLeadedrs = leaders?.slice(3, leaders.length) ?? null;
@@ -13,14 +15,19 @@ export default function OtherLeaders({ leaders, otherStyles, otherName }) {
     }
 
     return (
-        <View style={[styles.container, otherStyles]}>
-            {currentLeadedrs.map((leader, i) => <OtherLeader key={i} leader={leader}
+        <ScrollView>
+            <ScrollView style={[styles.container, otherStyles]}>
+
+                {currentLeadedrs.map((leader, i) => <OtherLeader key={i} leader={leader}
                 position={formatNumber(i + 4)}
                 indexArrow={require('../../assets/images/up_arrow.png')}
                 otherName={otherName}
             />)}
-            {currentLeadedrs.length === 0 && <Text style={otherLeaderStyles.noData}>No data</Text>}
-        </View>
+
+
+                {currentLeadedrs.length === 0 && <Text style={otherLeaderStyles.noData}>No data</Text>}
+            </ScrollView>
+        </ScrollView>
     );
 }
 function OtherLeader({ leader, position, indexArrow, otherName }) {
@@ -29,13 +36,17 @@ function OtherLeader({ leader, position, indexArrow, otherName }) {
             <View style={otherLeaderStyles.avatar}>
                 <Image
                     style={otherLeaderStyles.profilePic}
-                    source={isTrue(leader.avatar) ?
+                    source={
+                        isTrue(leader.avatar) ?
                         { uri: `${Constants.manifest.extra.assetBaseUrl}/${leader.avatar}` } :
                         require("../../assets/images/user-icon.png")}
                 />
                 <View style={otherLeaderStyles.username}>
                     <Text style={[otherLeaderStyles.names, otherName]}>{`${leader.username}`}</Text>
+                    {/* <Text style={[otherLeaderStyles.names, otherName]}>jackgrealish</Text> */}
+
                     <Text style={otherLeaderStyles.point}>{formatNumber(leader.points)} pts</Text>
+                    {/* <Text style={otherLeaderStyles.point}>20 pts</Text> */}
                 </View>
             </View>
             <View style={otherLeaderStyles.position}>
@@ -54,13 +65,12 @@ function OtherLeader({ leader, position, indexArrow, otherName }) {
 const styles = StyleSheet.create({
     container: {
         display: 'flex',
-        justifyContent: 'space-between',
-        // backgroundColor: '#FAC502',
-        paddingHorizontal: responsiveScreenWidth(4),
-        paddingVertical: responsiveScreenWidth(6),
-        borderBottomEndRadius: 10,
-        borderBottomStartRadius: 10,
-        marginBottom: responsiveScreenWidth(19),
+        backgroundColor: '#0A1F45',
+        paddingVertical: responsiveScreenWidth(3),
+        marginTop: responsiveScreenWidth(3),
+        borderTopRightRadius: 40,
+        borderTopLeftRadius: 40,
+        height: 200,
     },
 });
 
@@ -70,12 +80,16 @@ const otherLeaderStyles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: responsiveScreenWidth(6),
-        alignItems:'flex-start'
+        // marginBottom: responsiveScreenWidth(6),
+        marginHorizontal: responsiveScreenWidth(10),
+        alignItems: 'center',
+        borderColor: ' rgba(95, 89, 89, 0.54)',
+        borderBottomWidth: 1,
+        paddingVertical: normalize(20),
     },
     profilePic: {
-        width: normalize(30),
-        height: normalize(30),
+        width: normalize(48),
+        height: normalize(48),
         backgroundColor: '#FFFF',
         borderRadius: 50,
     },
@@ -93,29 +107,29 @@ const otherLeaderStyles = EStyleSheet.create({
         alignItems: 'center',
     },
     username: {
-        marginLeft: normalize(10),
+        marginLeft: normalize(20),
     },
     names: {
-        color: '#535761',
-        fontSize: '0.66rem',
+        color: '#fff',
+        fontSize: '0.85rem',
         fontFamily: 'graphik-bold',
     },
-    rank: {
-        backgroundColor: '#C4C4C4',
-        paddingHorizontal: Platform.OS === 'ios' ? normalize(7) : normalize(8.6),
-        paddingVertical: normalize(3),
-        borderRadius: 5
-    },
+    // rank: {
+    //     backgroundColor: '#C4C4C4',
+    //     paddingHorizontal: Platform.OS === 'ios' ? normalize(7) : normalize(8.6),
+    //     paddingVertical: normalize(3),
+    //     borderRadius: 5
+    // },
     rankText: {
-        color: '#535761',
-        fontSize: '0.6rem',
+        color: '#fff',
+        fontSize: '0.85rem',
         fontFamily: 'graphik-bold',
     },
     point: {
         color: '#FFFF',
         fontSize: '0.55rem',
         fontFamily: 'graphik-bold',
-        marginTop:'.5rem'
+        marginTop: '.5rem'
     },
     noData: {
         textAlign: 'center',

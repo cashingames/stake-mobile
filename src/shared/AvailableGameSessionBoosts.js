@@ -123,7 +123,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingLeft: normalize(30),
-        paddingVertical: normalize(18),
+        paddingVertical: normalize(10),
     },
     boostinfo: {
         display: 'flex',
@@ -153,8 +153,8 @@ const styles = EStyleSheet.create({
         alignItems: 'flex-end'
     },
     boostIcon: {
-        width: normalize(40),
-        height: normalize(40)
+        width: normalize(28),
+        height: normalize(28)
     },
     amount: {
         color: '#FFFF',

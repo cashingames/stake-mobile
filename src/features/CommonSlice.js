@@ -202,7 +202,7 @@ const initialState = {
     minimumChallengeStakeAmount: 0,
     minimumWalletFundableAmount: 0,
     minimumBoostScore:0,
-    periodBeforeChallengeStakingExpiry: ''
+    periodBeforeChallengeStakingExpiry: '',
 }
 
 const stakingGameMode =
@@ -238,7 +238,7 @@ export const CommonSlice = createSlice({
                 state.achievements = data.achievements;
                 state.plans = data.plans;
                 state.gameTypes = data.gameTypes;
-                state.gameModes = [...data.gameModes, stakingGameMode];
+                state.gameModes = data.gameModes;
                 state.gameCategories = data.gameCategories;
                 state.minVersionCode = data.minVersionCode;
                 state.minVersionForce = data.minVersionForce;

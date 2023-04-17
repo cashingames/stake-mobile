@@ -10,6 +10,9 @@ import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { getUser } from "../Auth/AuthSlice";
 import { sendUserFeedback } from "../CommonSlice";
 import analytics from '@react-native-firebase/analytics';
+import MixedContainerBackground from "../../shared/ContainerBackground/MixedContainerBackground";
+import AppHeader from "../../shared/AppHeader";
+import GaButton from "../../shared/GaButton";
 
 
 
@@ -21,27 +24,28 @@ const ContactUs = ({ navigation }) => {
 
 
     return (
-        <ScrollView style={styles.container}>
+        <MixedContainerBackground>     
+                            <AppHeader title='Help Center' />
+   
+            <ScrollView style={styles.container}>
             <Text style={styles.title}>Do you have any question?</Text>
             <ContactForm user={user} />
         </ScrollView>
+        </MixedContainerBackground>
+
     )
 }
 
 const ContactForm = ({ user }) => {
     const dispatch = useDispatch();
     const [saving, setSaving] = useState(false);
-    // const [first_name, setFirstName] = useState('');
-    // const [last_name, setLastName] = useState('');
     const [email, setEmail] = useState(user.email);
     const [message_body, setMessage] = useState('');
-    // const [firstNameErr, setFirstNameError] = useState(false);
-    // const [lastNameErr, setLastNameError] = useState(false);
     const [messageError, setMessageError] = useState(false);
     const [canSave, setCanSave] = useState(false);
     const first_name = user.firstName
     const last_name = user.lastName
-
+console.log(email)
 
     const sendFeedback = () => {
         setSaving(true)
@@ -69,17 +73,6 @@ const ContactForm = ({ user }) => {
             });
 
     }
-
-    // const onChangeFirstName = (text) => {
-    //     text.length > 0 && text.length < 3 ? setFirstNameError(true) : setFirstNameError(false);
-    //     setFirstName(text)
-    // }
-
-    // const onChangeLastName = (text) => {
-    //     text.length > 0 && text.length < 3 ? setLastNameError(true) : setLastNameError(false);
-    //     setLastName(text)
-    // }
-
     const onChangeMessage = (text) => {
         text.length > 0 && text.length < 3 ? setMessageError(true) : setMessageError(false);
         setMessage(text)
@@ -93,18 +86,6 @@ const ContactForm = ({ user }) => {
 
     return (
         <View style={styles.formContainer}>
-            {/* <Input
-                label='First name'
-                value={first_name}
-                onChangeText={text => { onChangeFirstName(text) }}
-                error={firstNameErr && '*first name must not be empty'}
-            /> */}
-            {/* <Input
-                label='Last name'
-                value={last_name}
-                onChangeText={text => { onChangeLastName(text) }}
-                error={lastNameErr && '*last name must not be empty'}
-            /> */}
             <Input
                 label='Email'
                 value={email}
@@ -122,7 +103,7 @@ const ContactForm = ({ user }) => {
                 />
                 {messageError && <Text>Please input your message</Text>}
             </View>
-            <AppButton
+            <GaButton
                 text={saving ? 'Sending' : 'Send'}
                 onPress={sendFeedback}
                 disabled={!canSave || saving}
@@ -135,16 +116,16 @@ export default ContactUs;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
         padding: normalize(20),
     },
     title: {
         fontSize: '0.95rem',
         fontFamily: 'graphik-medium',
         marginTop: normalize(9),
+        color:'#fff'
     },
     formContainer: {
-        marginTop: '4rem'
+        marginTop: '1rem'
     },
     messageBox: {
         paddingBottom: Platform.OS === 'ios' ? '5rem' : '3rem',
@@ -152,10 +133,12 @@ const styles = EStyleSheet.create({
         paddingHorizontal: '.7rem',
         borderColor: '#CDD4DF',
         fontFamily: 'graphik-regular',
-        color: '#00000080',
+        color: '#000',
         fontSize: '0.75rem',
         borderWidth: 1,
         borderRadius: 10,
-        textAlignVertical:'top'
+        textAlignVertical:'top',
+    backgroundColor: '#FFFF',
+
     },
 })

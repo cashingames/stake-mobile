@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { Text } from "react-native";
+import { Pressable } from "react-native";
+import { View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet"
 import { useDispatch, useSelector } from "react-redux";
 import { nextQuestion, pauseGame, setSelectedOption, setShowCorrectAnswer, setSubmissionResult } from "../features/Games/GameSlice";
+import normalize from "../utils/normalize";
 import useSound from "../utils/useSound";
 import AppButton from "./AppButton"
 
@@ -44,33 +48,63 @@ const NextButton = ({ ending, onEndGame }) => {
         submitBtnSound.playSound()
 
         let timeoutId;
-           timeoutId = setTimeout(() => {
-            if(isLastQuestion){
+        timeoutId = setTimeout(() => {
+            if (isLastQuestion) {
                 onEndGame()
-            }else{
-            pressNext();
+            } else {
+                pressNext();
             }
-        },1000);
+        }, 1000);
     };
     return (
-        <AppButton
+        <View style={styles.btnContainer}>
+            <Pressable
+                style={ ending ? styles.disabled : styles.nextButton}
+                onPress={handleSubmission}
+                disabled={ending}
+            >
+                <Text style={styles.btnText}>{isLastQuestion ? 'Finish' : 'Next'}</Text>
+            </Pressable>
+            {/* <AppButton
             disabled={ending}
-            text={isLastQuestion ? 'Finish' : 'Next'}
+            text=
             onPress={handleSubmission}
             style={styles.nextButton}
-        />
+        /> */}
+        </View>
     )
 }
 
 const styles = EStyleSheet.create({
+
+    btnContainer: {
+        alignItems: 'center',
+        // marginTop:-100
+        // paddingHorizontal:normalize(50)
+    },
     nextButton: {
-        // position: 'absolute',
-        // bottom: 0,
-        // right: 0,
-        // left: 0,
-        // display: 'flex'
-        marginVertical: 10
-    }
+        backgroundColor: '#15397D',
+        borderRadius: 20,
+        height: normalize(42),
+        paddingHorizontal: 60,
+        justifyContent: 'center',
+        borderBottomColor: '#0A1F45',
+        borderBottomWidth: 4,
+    },
+    btnText:{
+        color:'#fff',
+        fontSize:'1.2rem',
+        fontFamily:'blues-smile'
+    },
+    disabled: {
+        backgroundColor: 'gray',
+        borderRadius: 20,
+        height: normalize(42),
+        paddingHorizontal: 60,
+        justifyContent: 'center',
+        borderBottomColor: '#0A1F45',
+        borderBottomWidth: 4,
+      },
 
 })
 

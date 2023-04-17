@@ -165,7 +165,7 @@ export const GameSlice = createSlice({
     reducers: {
         setGameType: (state, action) => {
             state.gameType = action.payload;
-            state.gameCategory = null;
+            // state.gameCategory = null;
         },
         setSelectedOption: (state, action) => {
             state.selectedOption = action.payload;

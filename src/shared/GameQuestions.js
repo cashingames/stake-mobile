@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import { questionAnswered, setCorrectAnswer, setSelectedOption, setShowCorrectAnswer } from "../features/Games/GameSlice";
-import normalize from "../utils/normalize";
+import normalize, { responsiveScreenWidth } from "../utils/normalize";
 import useSound from "../utils/useSound";
 import GameOption from "./GameOption";
 
@@ -60,12 +60,15 @@ export default GameQuestions;
 const styles = EStyleSheet.create({
     gameQuestions: {
         // width: normalize(270),
-        marginHorizontal: normalize(15),
-        marginBottom: normalize(20)
+        paddingHorizontal: responsiveScreenWidth(3),
+        marginBottom: normalize(20),
+        borderRadius:15,
+        padding:'1rem',
+        backgroundColor: '#15397D'
 
     },
     options: {
-        paddingBottom: normalize(45),
+        // paddingBottom: normalize(),
     },
     questions: {
         textAlign: 'center',

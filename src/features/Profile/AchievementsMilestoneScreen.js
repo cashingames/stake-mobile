@@ -9,6 +9,9 @@ import { formatNumber } from '../../utils/stringUtl';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getAchievements } from './AchievementSlice';
+import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
+import GameArkLogo from '../../shared/GameArkLogo';
+import AppHeader from '../../shared/AppHeader';
 
 
 
@@ -42,18 +45,15 @@ export default function AchievementsMilestoneScreen({ navigation }) {
             }
         }    
     }
-
-
-
     return (
-        <LinearGradient
-            colors={['rgb(255, 254, 250)', 'rgb(255, 251, 237)',
-                'rgb(250, 197, 2)',
-            ]}
-            start={[0.5, 0]}
-            end={[0.5, 1]}
+        <MixedContainerBackground>
+        <View
             style={styles.container}
         >
+            <View style={styles.header}>           
+                <AppHeader title="Achievements" />
+            </View>
+
             <ScrollView >
                 <View style={styles.content}>
                     {
@@ -81,7 +81,8 @@ export default function AchievementsMilestoneScreen({ navigation }) {
                     
                 </View>
             </ScrollView>
-        </LinearGradient>
+        </View>
+        </MixedContainerBackground>
     );
 }
 
@@ -101,7 +102,7 @@ const Badges = ({ milestoneIcon, progress, title, description, reward = 'Get 60p
             </View>
             <View>
                 <LinearProgress
-                    color='#EF2F55'
+                    color='#2D53A0'
                     value={progress}
                     trackColor='#F0BACB'
                     variant="determinate"
@@ -119,7 +120,8 @@ const Badges = ({ milestoneIcon, progress, title, description, reward = 'Get 60p
 
 const styles = EStyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        position: 'relative',
     },
     content: {
         marginHorizontal: normalize(18),
@@ -146,6 +148,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         textAlign: 'center',
         marginBottom: '0.5rem',
+        color:'#fff',
         textTransform: 'capitalize'
     },
     statusText: {
@@ -162,6 +165,7 @@ const styles = EStyleSheet.create({
         width: '11rem',
         marginBottom:'0.5rem',
         lineHeight: '1rem',
+        color:'#fff',
     },
     milestoneIcon: {
         width: 45,
@@ -184,7 +188,7 @@ const styles = EStyleSheet.create({
     btn: {
         height: 22,
         width: 66,
-        backgroundColor: '#752A00',
+        backgroundColor: '#0A1F45',
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -194,5 +198,5 @@ const styles = EStyleSheet.create({
         color: '#fff',
         fontSize: '0.69rem',
         fontFamily: 'graphik-regular',
-    }
+    },
 });

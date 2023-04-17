@@ -23,6 +23,9 @@ import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import analytics from '@react-native-firebase/analytics';
 import useSound from "../../utils/useSound";
 import NextButton from "../../shared/NextButton";
+import TopIcons from "../../shared/TopIcons";
+import DashboardSettings from "../../shared/DashboardSettings";
+import GameSettings from "../../shared/GameSettings";
 
 
 
@@ -32,7 +35,6 @@ export default function GameInProgressScreen({ navigation, route }) {
     const dispatch = useDispatch();
     const refRBSheet = useRef();
     const params = route.params;
-
     const gameSessionToken = useSelector(state => state.game.gameSessionToken);
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
@@ -184,14 +186,14 @@ export default function GameInProgressScreen({ navigation, route }) {
     if (isEnded) {
         return null;
     }
-
     return (
-        // <View>
-        //     <Text>me</Text>
-        // </View>
-        <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
+        <ImageBackground source={require('../../../assets/images/quiz-background-large.png')}
+            style={styles.image}
+            resizeMode="cover" >
+                <View style={styles.top}>
+                <TopIcons />
+                </View>
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
-                <PlayGameHeader onPress={showExitConfirmation} onPressBoost={openBottomSheet} />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
                 <GameQuestions />
                 <UniversalBottomSheet
@@ -200,7 +202,10 @@ export default function GameInProgressScreen({ navigation, route }) {
                     subComponent={<UserAvailableBoosts onClose={closeBottomSheet} />}
                 />
             </ScrollView>
-            <NextButton ending={ending} onEndGame={() => onEndGame()}/>
+            <NextButton ending={ending} onEndGame={() => onEndGame()} />
+            <View style={styles.setting}>
+                <GameSettings onPress={() => showExitConfirmation()}/>
+            </View>
         </ImageBackground>
     );
 }
@@ -218,13 +223,15 @@ const styles = EStyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#9C3DB8',
-        paddingTop: normalize(45),
+        // paddingTop: normalize(45),
+        paddingHorizontal: responsiveScreenWidth(6),
+        // backgroundColor: 'blue',
+        height: responsiveScreenHeight(10)
+
     },
     image: {
-        paddingHorizontal: normalize(18),
-        backgroundColor: '#9C3DB8',
         flex: 1,
+        height:900
     },
     gameProgressAndBoost: {
         display: 'flex',
@@ -233,7 +240,11 @@ const styles = EStyleSheet.create({
         borderRadius: 16,
         marginVertical: normalize(18)
     },
-    nextButton: {
-        marginVertical: 10,
+    setting: {
+        marginBottom: responsiveScreenHeight(5)
+    },
+    top:{
+        marginTop:10
     }
+
 });

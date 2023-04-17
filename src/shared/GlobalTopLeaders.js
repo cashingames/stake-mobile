@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform, Pressable, Text, View } from 'react-native';
-import { responsiveScreenWidth } from '../utils/normalize';
+import { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import TopLeader from './TopLeader';
@@ -20,24 +20,32 @@ function GlobalTopLeaders({ leaders }) {
         <View style={styles.contentContainer}>
             <View style={styles.headerContainer}>
                 <View></View>
-                {/* <Text style={styles.title}>Top Players</Text> */}
             </View>
             <View style={styles.content}>
                 <TopLeader
-                    podPosition={require('../../assets/images/position3.png')}
-                    name={`${thirdLeader.username}`}
-                    point={`${formatNumber(thirdLeader.points ? `${thirdLeader.points}` : 0)} pts`}
-                    avatar={thirdLeader.avatar} />
-                <TopLeader
-                    podPosition={require('../../assets/images/position1.png')}
-                    name={`${firstLeader.username}`}
-                    point={`${formatNumber(firstLeader.points ? `${firstLeader.points}` : 0)} pts`}
-                    avatar={firstLeader.avatar} />
-                <TopLeader
-                    podPosition={require('../../assets/images/position2.png')}
                     name={`${secondLeader.username}`}
                     point={`${formatNumber(secondLeader.points ? `${secondLeader.points}` : 0)} pts`}
-                    avatar={secondLeader.avatar} />
+                    avatar={secondLeader.avatar} 
+                    style={styles.second}
+                    position={2}
+                    imageStyle={styles.secondImage}
+                    positionStyle={styles.secondPosition}/>
+                 <TopLeader
+                    name={`${firstLeader.username}`}
+                    point={`${formatNumber(firstLeader.points ? `${firstLeader.points}` : 0)} pts`}
+                    avatar={firstLeader.avatar}
+                    style={styles.first}
+                    position={1}
+                    imageStyle={styles.firstImage} 
+                    positionStyle={styles.firstPosition}/>
+                <TopLeader
+                    name={`${thirdLeader.username}`}
+                    point={`${formatNumber(thirdLeader.points ? `${thirdLeader.points}` : 0)} pts`}
+                    avatar={thirdLeader.avatar} 
+                    style={styles.third}
+                    position={3}
+                    imageStyle={styles.thirdImage} 
+                    positionStyle={styles.thirdPosition}/> 
             </View>
         </View>
     )
@@ -48,52 +56,75 @@ const styles = EStyleSheet.create({
     contentContainer: {
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#FAC502',
         paddingHorizontal: responsiveScreenWidth(5.5),
         paddingTop: responsiveScreenWidth(5.5),
-        // borderRadius: 15,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        borderBottomWidth: Platform.OS === 'ios' ? 1 : 1.5,
-        borderColor:Platform.OS === 'ios' ? '#E0E0E0': '#FFFF'
+        borderRadius: 15,
     },
     content: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'flex-end',
         paddingTop: responsiveScreenWidth(6.5),
     },
-    title: {
-        // textAlign: 'center',
-        fontSize: '.8rem',
-        // lineHeight: '1.3rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-bold',
+    third: {
+        backgroundColor:'#0A1F45',
+        alignItems:'center',
+        borderTopRightRadius: 12,
+        borderBottomRightRadius: 12,
+        paddingHorizontal:responsiveScreenWidth(4),
+        paddingVertical:responsiveScreenHeight(2)
     },
-
-    viewContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '2rem'
+    thirdImage:{
+        height:65,
+        width:65,
+        borderRadius:50,
+        backgroundColor:'#fff',
+        marginTop:-50,
+        borderColor:'#00D95F',
+        borderWidth:3
     },
-    extendedText: {
-        fontSize: '.6rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-regular',
-        textDecoration: 'underline',
+    thirdPosition:{
+        backgroundColor:'#00D95F'
     },
-    viewText: {
-        // textAlign: 'center',
-        fontSize: '.6rem',
-        // lineHeight: '1.3rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-regular',
+    first: {
+        backgroundColor:'#2D53A0',
+        alignItems:'center',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        paddingHorizontal:responsiveScreenWidth(4),
+        paddingVertical:responsiveScreenHeight(2),
+        height:153
     },
-    headerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
+    firstImage:{
+        height:75,
+        width:75,
+        borderRadius:50,
+        backgroundColor:'#fff',
+        borderColor:'#FFAA00',
+        borderWidth:3
     },
-
+    firstPosition:{
+        backgroundColor:'#FFAA00'
+    },
+    second: {
+        backgroundColor:'#0A1F45',
+        alignItems:'center',
+        borderTopLeftRadius: 12,
+        borderBottomLeftRadius: 12,
+        paddingHorizontal:responsiveScreenWidth(4),
+        paddingVertical:responsiveScreenHeight(2)
+    },
+    secondImage:{
+        height:65,
+        width:65,
+        borderRadius:50,
+        backgroundColor:'#fff',
+        marginTop:-60,
+        borderColor:'#009BD6',
+        borderWidth:3
+    },
+    secondPosition:{
+        backgroundColor:'#009BD6'
+    },
 });

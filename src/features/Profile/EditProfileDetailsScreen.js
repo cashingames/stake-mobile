@@ -1,45 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Alert, Pressable, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { CountryPicker } from "react-native-country-codes-picker";
-
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Input from '../../shared/Input';
-import { Ionicons } from "@expo/vector-icons";
 import { editPersonalDetails, getUser } from '../Auth/AuthSlice';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { isTrue } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import useSound from '../../utils/useSound';
+import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
+import GameArkLogo from '../../shared/GameArkLogo';
+import GaButton from '../../shared/GaButton';
+import { setModalOpen } from '../CommonSlice';
+import { Image } from 'react-native';
+import AppHeader from '../../shared/AppHeader';
+import TopIcons from '../../shared/TopIcons';
+
+const chooseGender = [
+    {
+        id: 1,
+        myGender: 'Male'
+    },
+    {
+        id: 2,
+        myGender: 'Female'
+    }
+]
 
 export default function EditProfileDetailsScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
-
     const dispatch = useDispatch();
-
     const user = useSelector(state => state.auth.user);
-    console.log(user)
-
     const [saving, setSaving] = useState(false);
     const [email, setEmail] = useState(user.email);
-    const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
-    const [firstName, setFirstName] = useState(user.firstName);
-    const [lastName, setLastName] = useState(user.lastName);
     const [username, setUsername] = useState(user.username);
-    const [firstNameErr, setFirstNameError] = useState(false);
-    const [lastNameErr, setLastNameError] = useState(false);
-    const [phoneNumberErr, setPhoneNumberError] = useState(false);
     const [canSave, setCanSave] = useState(false);
     const [dateOfBirth, setDateOfBirth] = useState(isTrue(user.dateOfBirth) ? new Date(Date.parse(user.dateOfBirth)) : new Date(2003, 0, 1));
     const [gender, setGender] = useState(user.gender);
     const [showDatePicker, setShowDatePicker] = useState(false);
+    const [usernameErr, setUsernameError] = useState(false);
     const [show, setShow] = useState(false);
-    const [countryCode, setCountryCode] = useState(user.countryCode);
-    const { playSound } =  useSound(require('../../../assets/sounds/updated.mp3'))
+    const { playSound } = useSound(require('../../../assets/sounds/updated.mp3'))
 
     const onChangeDateOfBirth = (event, selectedDate) => {
         const currentDate = selectedDate || dateOfBirth;
@@ -47,33 +52,27 @@ export default function EditProfileDetailsScreen({ navigation }) {
         setShowDatePicker(false);
     };
 
-    const onChangeFirstName = (text) => {
-        text.length > 0 && text.length < 3 ? setFirstNameError(true) : setFirstNameError(false);
-        setFirstName(text)
+    const onChangeUserName = (text) => {
+        text.length > 0 && text.length < 5 ? setUsernameError(true) : setUsernameError(false);
+        setUsername(text)
     }
-
-    const onChangeLastName = (text) => {
-        text.length > 0 && text.length < 3 ? setLastNameError(true) : setLastNameError(false);
-        setLastName(text)
-    }
-
-    const onChangePhoneNumber = (text) => {
-        text.length > 0 && text.length < 4 ? setPhoneNumberError(true) : setPhoneNumberError(false);
-        setPhoneNumber(text)
-    }
-
     useEffect(() => {
-        const invalid = firstNameErr || firstName === '' || lastNameErr || lastName === '' ||
-            phoneNumber === '' || phoneNumberErr;
+        const usernameRule = /^[a-zA-Z][a-zA-Z0-9]+$/;
+        if (username) {
+            const validUsername = !usernameRule.test(username)
+            setUsernameError(validUsername);
+        } else {
+            setUsernameError('')
+        }
+    }, [username, usernameErr, setUsernameError])
+    useEffect(() => {
+        const invalid = username < 3;
         setCanSave(!invalid);
-    }, [firstNameErr, firstName, lastNameErr, lastName, phoneNumber, phoneNumberErr])
+    }, [])
 
     const onSavePersonalDetails = () => {
         setSaving(true);
         dispatch(editPersonalDetails({
-            firstName,
-            lastName,
-            // phoneNumber,
             username,
             email,
             dateOfBirth,
@@ -101,131 +100,82 @@ export default function EditProfileDetailsScreen({ navigation }) {
             });
     }
 
+    const selectGender = (myGender) => {
+        setGender(myGender)
+    }
+
     return (
-        <View style={styles.container}>
-            <ScrollView style={styles.contentContainer}>
-                <View style={styles.content}>
-                    <Input
-                        label='Username'
-                        value={username}
-                        onChangeText={setUsername}
-                        editable={false}
-                        labelStyle={styles.inputLabel}
-                    />
-                    <Input
-                        label='Email'
-                        value={email}
-                        onChangeText={setEmail}
-                        editable={false}
-                        labelStyle={styles.inputLabel}
-                    />
-
-                    <>
-                        <Text style={styles.inputLabel} >phone number</Text>
-                        <View style={styles.phonePicker}>
-                            <Pressable
-                                onPress={() => setShow(true)}
-                                style={styles.codeButton}
-                                disabled
-                            >
-                                <Text style={styles.countryCodeDigit}>
-                                    {countryCode}
-                                </Text>
-                                <Ionicons name="caret-down-outline" size={14} color="#00000080" />
-                            </Pressable>
-                            <TextInput
-                                style={styles.phoneNumberInput}
-                                value={phoneNumber}
-                                onChangeText={text => { onChangePhoneNumber(text) }}
-                                error={phoneNumberErr && '*input a valid phone number'}
-                                type="phone"
-                                maxLength={12}
-                                keyboardType='numeric'
-                                editable={false}
-
-                            />
-                        </View>
-                    </>
-
-                    <CountryPicker
-                        show={show}
-                        style={{
-                            // Styles for whole modal [View]
-                            modal: {
-                                height: 500,
-                                // backgroundColor: 'red'
-                            },
-                        }}
-                        pickerButtonOnPress={(item) => {
-                            setCountryCode(item.dial_code);
-                            setShow(false);
-                        }}
-                    />
-
-                    <Input
-                        label='First name'
-                        value={firstName}
-                        onChangeText={text => { onChangeFirstName(text) }}
-                        error={firstNameErr && '*first name must not be empty'}
-                        labelStyle={styles.inputLabel}
-                    />
-                    <Input
-                        label='Last name'
-                        value={lastName}
-                        onChangeText={text => { onChangeLastName(text) }}
-                        error={lastNameErr && '*last name must not be empty'}
-                        labelStyle={styles.inputLabel}
-                    />
-
-
-                    <View style={styles.detail}>
-
-                        {!showDatePicker ?
-                            <Input
-                                label='Date of Birth'
-                                value={dateOfBirth.toDateString()}
-                                onPressIn={() => setShowDatePicker(true)}
-                                labelStyle={styles.inputLabel}
-                            />
-
-                            :
-                            <>
-                                <Text style={styles.inputLabel}>Date of Birth</Text>
-                                <DateTimePicker
-                                    value={dateOfBirth}
-                                    mode={"date"}
-                                    display="default"
-                                    onChange={onChangeDateOfBirth}
-                                    maximumDate={new Date(2010, 11, 31)}
-                                    style={styles.dateOfBirth}
-                                    textColor='#00000080'
-                                />
-                            </>
-                        }
+        <MixedContainerBackground>
+            <View style={styles.container}>
+                <TopIcons />
+                <AppHeader title="Edit Details" />
+                <ScrollView style={styles.contentContainer}>
+                    <View style={styles.content}>
+                        <Input
+                            label='Username'
+                            value={username}
+                            editable={true}
+                            labelStyle={styles.inputLabel}
+                            error={usernameErr && '*Username is invalid. It must start with an alphabet and have more than 2 characters'}
+                            onChangeText={text => onChangeUserName(text)}
+                        />
+                        <Input
+                            label='Email'
+                            value={email}
+                            onChangeText={setEmail}
+                            editable={true}
+                            labelStyle={styles.inputLabel}
+                        />
 
                         <View style={styles.detail}>
+
+                            {!showDatePicker ?
+                                <Input
+                                    label='Date of Birth'
+                                    value={dateOfBirth.toDateString()}
+                                    onPressIn={() => setShowDatePicker(true)}
+                                    labelStyle={styles.inputLabel}
+                                />
+
+                                :
+                                <>
+                                    <Text style={styles.inputLabel}>Date of Birth</Text>
+                                    <DateTimePicker
+                                        value={dateOfBirth}
+                                        mode={"date"}
+                                        display="default"
+                                        onChange={onChangeDateOfBirth}
+                                        maximumDate={new Date(2010, 11, 31)}
+                                        style={styles.dateOfBirth}
+                                        textColor='#00000080'
+                                    />
+                                </>
+                            }
+
+                            {/* <View style={styles.detail}> */}
                             <Text style={styles.inputLabel}>Select Gender</Text>
-                            <Picker
-                                selectedValue={gender}
-                                onValueChange={(itemValue, itemIndex) =>
-                                    setGender(itemValue)
-                                }
-                                mode='dropdown'
-                                style={styles.select}
-                            >
-                                <Picker.Item label="Male" value="male" style={styles.pickerItem} />
-                                <Picker.Item label="Female" value="female" style={styles.pickerItem} />
-                            </Picker>
+                            <View style={styles.genderBox}>
+                                {chooseGender.map((item) => {
+                                    const { myGender, id } = item
+                                    return (
+                                        <Pressable key={id} style={[styles.genderBtn, { backgroundColor: gender === myGender ? 'blue' : 'white' }]}
+                                            onPress={() => selectGender(myGender)}>
+                                            <Text style={[styles.genderText, { color: gender === myGender ? '#fff' : '#15397D' }]}>{myGender}</Text>
+                                        </Pressable>
+                                    )
+                                })}
+                            </View>
+                            {/* </View> */}
                         </View>
                     </View>
-                </View>
-            </ScrollView>
-            <AppButton
-                text={saving ? 'Saving' : 'Save Changes'}
-                onPress={onSavePersonalDetails}
-                disabled={!canSave}
-                style={styles.saveButton} />
-        </View>
+                    <GaButton
+                        text={saving ? 'Saving' : 'Save Changes'}
+                        onPress={onSavePersonalDetails}
+                        disabled={!canSave}
+                        style={styles.saveButton} />
+                </ScrollView>
+            </View>
+        </MixedContainerBackground>
     );
 }
 
@@ -233,16 +183,14 @@ export default function EditProfileDetailsScreen({ navigation }) {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
-        paddingHorizontal: normalize(18),
-        paddingBottom: normalize(20),
+        paddingVertical: responsiveScreenHeight(2)
     },
     contentContainer: {
-        paddingTop: normalize(20),
+        paddingHorizontal: responsiveScreenWidth(3)
     },
     inputLabel: {
         fontFamily: 'blues-smile',
-        color: '#000000B2',
+        color: '#fff',
         fontSize: '0.76rem',
         marginBottom: normalize(8)
     },
@@ -257,7 +205,6 @@ const styles = EStyleSheet.create({
         color: '#00000080',
         marginRight: 'auto',
     },
-
     detail: {
         marginVertical: normalize(10)
     },
@@ -278,24 +225,33 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         height: normalize(38),
         alignItems: 'center',
-        marginBottom:'.8rem'
-    },
-    phoneNumberInput: {
-        fontFamily: 'graphik-regular',
-        color: '#00000080',
-        fontSize: '0.75rem',
-        marginLeft: '.5rem'
-    },
-    countryCodeDigit: {
-        fontFamily: 'graphik-regular',
-        color: '#00000080',
-        fontSize: '0.75rem',
-        marginRight:'.2rem'
+        marginBottom: '.8rem'
     },
     codeButton: {
         flexDirection: 'row',
         alignItems: 'center',
         borderColor: ' rgba(0, 0, 0, 0.1)',
         borderRightWidth: 1,
-    }
+    },
+    genderBox: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    genderBtn: {
+        backgroundColor: 'white',
+        width: '45%',
+        paddingHorizontal: '2rem',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 38,
+        borderRadius: 30
+    },
+    genderText: {
+        fontFamily: 'graphik-medium'
+    },
+    settingIcon: {
+        marginTop: responsiveScreenHeight(10),
+        width: 50,
+        height: 50
+    },
 });

@@ -5,9 +5,10 @@ const MainContainerBackground = ({children}) => {
   return (
     <ImageBackground source={require('../../../assets/images/login-image.png')}
     style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
-    resizeMethod="resize">
+    resizeMode="cover">
         {children}
     </ImageBackground>
+
   )
 }
 

@@ -1,128 +1,54 @@
-import React, { useRef, useState } from "react";
-import { Text, View, ScrollView, Alert, Platform , Linking} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
-import Constants from 'expo-constants';
+import React, { useRef } from "react";
+import { Text, View, ScrollView, Pressable, Image } from 'react-native';
+import { useSelector } from 'react-redux';
 import EStyleSheet from "react-native-extended-stylesheet";
-import { startGame, setIsPlayingTrivia, startChallengeGame } from "./GameSlice";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
-import normalize, { responsiveScreenWidth } from "../../utils/normalize";
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../utils/normalize";
 import AppButton from './../../shared/AppButton';
-import { logActionToServer } from "../CommonSlice";
-import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
-import analytics from '@react-native-firebase/analytics';
-import ExhibitionStakeAmount from "../../shared/ExhibitionStakeAmount";
-import StakingButtons from "../../shared/StakingButtons";
-import ExhibitionUserAvailableBoosts from "../../shared/ExhibitionUserAvailableBoosts";
-import LottieAnimations from "../../shared/LottieAnimations";
-import NoGame from "../../shared/NoGame";
-import crashlytics from '@react-native-firebase/crashlytics';
 import useSound from "../../utils/useSound";
+import QuizContainerBackground from "../../shared/ContainerBackground/QuizContainerBackground";
 
 export default function GameInstructionsScreen({ navigation }) {
   useApplyHeaderWorkaround(navigation.setOptions);
+  const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
+  const activePlans = useSelector(state => state.auth.user.hasActivePlan);
 
-  const token = useSelector(state => state.auth.token);
-  const gameMode = useSelector(state => state.game.gameMode);
-  const user = useSelector(state => state.auth.user);
-  const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
-
-  const features = useSelector(state => state.common.featureFlags);
-
-  const isStakingFeatureEnabled = features['exhibition_game_staking'] !== undefined && features['exhibition_game_staking'].enabled == true;
-
-  const isStakingEntryMode = () => gameMode.name === "STAKING";
-  const refRBSheet = useRef();
-  const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
-
-  const gotoStaking = async () => {
-    await analytics().logEvent('navigating_to_staking_platform', {
-      'id': user.username,
-      'phone_number': user.phoneNumber,
-      'email': user.email
-    })
-    handleStakingNavigation(`${Constants.manifest.extra.stakingAppUrl}/${token}`);
-  }
-
-  const handleStakingNavigation = async (url) => {
-    const isValidUrl = await Linking.canOpenURL(url);
-    if (isValidUrl) {
-      await Linking.openURL(url);
+  const goToGame = () => {
+    if (!activePlans) {
+      navigation.navigate('NoGame')
     } else {
-      console.log(`This url is not valid: ${url}`);
+      navigation.navigate('SelectGameCategory')
     }
   }
 
-  const openBottomSheet = async () => {
-    await analytics().logEvent('proceed_exhibition_without_staking', {
-      'id': user.username,
-      'phone_number': user.phoneNumber,
-      'email': user.email
-    })
-    playSound()
-    refRBSheet.current.open()
-  }
-
-  const closeBottomSheet = () => {
-    refRBSheet.current.close()
-  }
-
-
   return (
-
-    <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.animation}>
-          <LottieAnimations
-            animationView={require('../../../assets/guidelines.json')}
-            width={normalize(150)}
-            height={normalize(150)}
-          />
+    <>
+      <View style={styles.logo}>
+        <View style={styles.imageContainer}>
+          <Image style={styles.smallLogo} source={require('../../../assets/images/ga-logo-small.png')} />
         </View>
-        <ExhibitionInstructions />
-        {/* {isStakingFeatureEnabled && gameMode.name !== "STAKING" &&
-          <ExhibitionStakeAmount onPress={gotoStaking} />
-        } */}
-        {hasActivePlan ?
-          <UniversalBottomSheet
-            refBottomSheet={refRBSheet}
-            height={430}
-            subComponent={<AvailableBoosts onClose={closeBottomSheet} user={user} />}
-          />
-          :
-          <UniversalBottomSheet
-            refBottomSheet={refRBSheet}
-            height={Platform.OS === 'ios' ? 410 : 240}
-            subComponent={<NoGame
-              onClose={closeBottomSheet}
-              onPress={gotoStaking}
-            />}
-          />
-        }
-
-      </ScrollView>
-      <View style={styles.stakingButtons}>
-        <AppButton
-          onPress={gameMode.name === "STAKING" ? gotoStaking : openBottomSheet}
-          text='Proceed'
-          style={styles.noStakeProcced}
-          textStyle={styles.noStakingText}
-        />
-        {/* {!isStakingEntryMode() &&
-          <AppButton
-            onPress={openBottomSheet}
-            text={isStakingFeatureEnabled ? 'Play exhibition' : 'Proceed'}
-            style={isStakingFeatureEnabled ? styles.proceed : styles.noStaking}
-            textStyle={isStakingFeatureEnabled ? styles.buttonText : styles.noStakingText}
-          />
-        }
-        {isStakingFeatureEnabled &&
-          <StakingButtons gameMode={gameMode} onPress={gotoStaking} />
- 
-        } */}
+        <Pressable style={styles.icons} onPress={() => navigation.goBack(null)}>
+          <Image style={styles.imageIcons} source={require('../../../assets/images/close-icon.png')} />
+        </Pressable>
       </View>
-    </View>
+      <QuizContainerBackground>
+
+        <View style={styles.container}>
+          <ScrollView>
+            <Text style={styles.title}>Game Instructions</Text>
+            <ExhibitionInstructions />
+            <View style={styles.btnContainer}>
+              <AppButton
+                text='Proceed to play'
+                onPress={goToGame}
+                style={styles.proceedBtn}
+                textStyle={styles.btnText}
+              />
+            </View>
+          </ScrollView>
+        </View>
+      </QuizContainerBackground>
+    </>
   );
 };
 
@@ -154,83 +80,53 @@ const ExhibitionInstructions = () => {
   )
 };
 
-
-
-
-
-const AvailableBoosts = ({ onClose, user }) => {
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const boosts = useSelector(state => state.auth.user.boosts);
-  const gameCategoryId = useSelector(state => state.game.gameCategory.id);
-  const gameTypeId = useSelector(state => state.game.gameType.id);
-  const gameModeId = useSelector(state => state.game.gameMode.id);
-  const gameMode = useSelector(state => state.game.gameMode);
-  const [loading, setLoading] = useState(false);
-
-
-  const onStartGame = () => {
-    setLoading(true);
-    dispatch(setIsPlayingTrivia(false))
-    dispatch(startGame({
-      category: gameCategoryId,
-      type: gameTypeId,
-      mode: gameModeId
-    }))
-      .then(unwrapResult)
-      .then(async result => {
-        crashlytics().log('User started exhibition game');
-        await analytics().logEvent("exhibition_without_staking_game_started", {
-          'id': user.username,
-          'phone_number': user.phoneNumber,
-          'email': user.email
-        })
-        dispatch(logActionToServer({
-          message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
-          data: result.data.questions
-        }))
-        setLoading(false);
-        onClose();
-        navigation.navigate("GameInProgress")
-      })
-      .catch((error) => {
-        crashlytics().recordError(error);
-        crashlytics().log('failed to start exhibition game');
-        setLoading(false);
-      });
-  }
-
-  return (
-    <ExhibitionUserAvailableBoosts gameMode={gameMode}
-      boosts={boosts} onStartGame={onStartGame}
-      loading={loading}
-      onClose={onClose}
-    />
-  )
-}
-
-
-
-
 const styles = EStyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F2F5FF',
+    opacity: 0.8,
     paddingHorizontal: normalize(18),
     paddingTop: normalize(20),
     paddingBottom: normalize(5)
   },
-  animation: {
-    alignItems: 'center'
+  logo: {
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+    paddingRight: responsiveScreenWidth(4),
+    paddingVertical: responsiveScreenHeight(3),
+    backgroundColor: '#15397D',
+    justifyContent: 'space-between'
+  },
+  imageContainer: {
+    // backgroundColor:'white',
+    flex: 1,
+    alignItems: 'flex-end'
+  },
+  imageIcons: {
+    width: 50,
+    height: 50,
+    marginLeft: normalize(60)
+
+  },
+  smallLogo: {
+    width: 150,
+    height: 95,
+    // marginRight: normalize(60)
   },
   instruction: {
     flexDirection: 'row',
     marginBottom: normalize(15)
   },
+  title: {
+    textAlign: 'center',
+    fontSize: '1rem',
+    fontFamily: 'blues-smile',
+    color: '#15397D'
+  },
   instructionHeader: {
     fontSize: '0.9rem',
-    fontFamily: 'graphik-regular',
-    color: '#4F4F4F',
+    fontFamily: 'graphik-medium',
+    color: '#15397D',
     lineHeight: '1.4rem',
     textAlign: 'justify',
     width: responsiveScreenWidth(80),
@@ -239,42 +135,31 @@ const styles = EStyleSheet.create({
   unicode: {
     fontSize: '1.5rem',
     fontFamily: 'graphik-bold',
-    color: '#4F4F4F',
+    color: '#15397D',
     marginRight: normalize(10)
   },
   instructionText: {
     fontSize: '0.9rem',
-    fontFamily: 'graphik-regular',
-    color: '#4F4F4F',
+    fontFamily: 'graphik-medium',
+    color: '#15397D',
     lineHeight: '1.3rem',
     textAlign: 'justify',
     width: responsiveScreenWidth(80)
   },
-  proceed: {
-    marginVertical: 10,
-    backgroundColor: '#FFFF',
-    width: '9rem',
-    borderColor: '#EF2F55',
-    borderWidth: 1,
-    paddingHorizontal: normalize(5)
+  btnContainer: {
+    alignItems: 'center'
+  },
+  proceedBtn: {
+    backgroundColor: '#15397D',
+    // paddingVertical:'1rem',
+    paddingHorizontal: '4rem',
+    justifyContent: 'center',
+    borderRadius: 20,
+    // height:normalize(54)
+  },
+  btnText: {
+    fontFamily: 'blues-smile',
+    fontSize: '.7rem',
+  }
 
-  },
-  noStakeProcced: {
-    width: '100%',
-    marginVertical: 10,
-    backgroundColor: '#EF2F55',
-  },
-  stakingButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  proceedText: {
-    color: '#EF2F55',
-  },
-  noStakingText: {
-    color: '#FFFF'
-  },
-  buttonText: {
-    color: '#EF2F55'
-  },
 });

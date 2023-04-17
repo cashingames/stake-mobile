@@ -12,15 +12,20 @@ const GameTopicProgress = ({ onComplete, ending }) => {
     const isGamePaused = useSelector(state => state.game.countdownFrozen);
     const gameDuration = useSelector(state => state.game.gameDuration);
     const isEnded = useSelector(state => state.game.isEnded);
+    const gameTypeName = useSelector(state => state.game.gameType.name);
+    const gameCategoryName = useSelector(state => state.game.gameCategory.name);
+
+    // console.log(gameTypeId)
 
     return (
         <View style={styles.topicProgress}>
             {/* <Text style={styles.title}>{gameCategory} {gameTopic}</Text> */}
-            <LottieAnimations
+            {/* <LottieAnimations
                 animationView={require('../../assets/game-board.json')}
                 width={normalize(110)}
                 height={normalize(110)}
-            />
+            /> */}
+            <Text style={styles.gameInfo}>{`${gameTypeName}(${gameCategoryName})`}</Text>
             <View style={styles.topicProgressRight}>
                 <AnsweredGameProgress />
                 <View style={styles.questionsAnsweredContainer}>
@@ -81,6 +86,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         borderBottomWidth: 1,
+        padding: '1rem',
         borderColor: 'rgba(255, 255, 255, 0.2)',
     },
     topicProgressRight: {
@@ -95,5 +101,10 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '0.7rem'
     },
-
+    gameInfo:{
+        marginRight:'0.3rem',
+        color:'#fff',
+        fontSize:'0.65rem',
+        fontFamily:'blues-smile'
+    }
 })

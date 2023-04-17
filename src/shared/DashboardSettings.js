@@ -1,109 +1,87 @@
-import { View, Text } from 'react-native'
+import { View, Text, Modal } from 'react-native'
 import React from 'react'
-import { ImageBackground } from 'react-native'
-import { Dimensions } from 'react-native'
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize'
+import { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { Image } from 'react-native'
 import { Pressable } from 'react-native'
-import Animated, { BounceInRight, BounceOutRight, SlideInRight, SlideOutRight } from 'react-native-reanimated'
+import MixedContainerBackground from './ContainerBackground/MixedContainerBackground'
+import GameArkLogo from './GameArkLogo'
+import { useNavigation } from '@react-navigation/core'
+import { useDispatch, useSelector } from 'react-redux'
+import { getGlobalLeaders, setModalOpen } from '../features/CommonSlice'
+import { useRef } from 'react'
+import { Animated } from 'react-native'
+import { useEffect } from 'react'
 
+const DashboardSettings = () => {
+   const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getGlobalLeaders());
+    },[]);
+    const spinValue = useRef(new Animated.Value(0)).current;
 
-{/* <Animated.View style={[styles.card, { backgroundColor: category.bgColor }]} entering={BounceInRight.duration(2000)}> */}
-const DashboardSettings = ({ onPress }) => {
-  return (
-    <Animated.View style={styles.container} entering={SlideInRight.duration(200)}
-    exiting={SlideOutRight.duration(100)}>
-    <ImageBackground source={require('./../../assets/images/trans-image.png')}
-    style={styles.secondBgImg}
-    resizeMethod="resize">
-                 <View style={styles.container}>
-                <View style={styles.logo}>
-                    <Image source={require('./../../assets/images/Ga-logo.png')} />
-                </View>
-                <View style={styles.welcome}>
-                   <Pressable style={styles.icons}>
-                        <Image source={require('./../../assets/images/sound-icon.png')} />   
-                   </Pressable>
-                   <Pressable style={styles.icons}>
-                        <Image source={require('./../../assets/images/leaderboard-icon.png')} />   
-                   </Pressable>
-                   <Pressable style={styles.icons}>
-                        <Image source={require('./../../assets/images/profile-icon.png')} />   
-                   </Pressable>
-                   <Pressable style={styles.icons}>
-                        <Image source={require('./../../assets/images/sound-icon.png')} />   
-                   </Pressable>
-                   <Pressable style={styles.icons}>
-                        <Image source={require('./../../assets/images/help-icon.png')} />   
-                   </Pressable >
-                </View>
-                <View style={styles.setting}>
-                    <Pressable onPress={onPress}>
-                        <Image source={require('./../../assets/images/close-icon.png')} />
-                    </Pressable>
-                </View>
-            </View >
-            </ImageBackground>
-            </Animated.View>
-
-  )
+    useEffect(() => {
+      const spin = () => {
+        Animated.timing(spinValue, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }).start(() => {
+          spinValue.setValue(0);
+          spin();
+        });
+      };
+      spin();
+    }, [spinValue]);
+  
+    const spinAnimation = spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '360deg'],
+    });
+  
+    const navigation = useNavigation()
+    return (
+        <>
+            <View style={styles.setting}>
+                <Pressable onPress={() => navigation.navigate('IconSettings')}>
+                <Animated.View style={[styles.circle, { transform: [{ rotate: spinAnimation }] }]}>
+                    <Image style={styles.settingIcon} source={require('./../../assets/images/setting-icon.png')} />
+                    </Animated.View>
+                </Pressable>
+                <Pressable onPress={() => navigation.navigate('GameStore')}>
+                    <Image style={styles.storeIcon} source={require('../../assets/images/store-icon.png')} />
+                    
+                </Pressable>
+            </View>
+        </>
+    )
 }
-
 const styles = EStyleSheet.create({
-    container: {
-        flex: 1,
-        paddingVertical: responsiveScreenWidth(3),
-    },
-
-    secondBgImg: {
-        height: responsiveScreenHeight(100)
-    },
-
-    logo: {
-        alignItems: 'center',
-        marginTop: normalize(110)
-    },
-
-    welcome: {
-        flexDirection:'row',
-        paddingHorizontal: responsiveScreenHeight(3),
-        marginTop: responsiveScreenHeight(35),
+    settingIconsContainter: {
+        flexDirection: 'row',
         flexWrap: 'wrap',
-        marginTop:responsiveScreenHeight(25)
-    },
+        marginTop: responsiveScreenHeight(34),
+        paddingHorizontal: responsiveScreenHeight(3),
 
-    welcomeText: {
-        fontSize: '1.4rem',
-        fontFamily: 'blues-smile',
-        color: '#fff'
-    },
-
-    welcomeBtn: {
-        backgroundColor: '#15397D',
-        height:normalize(38),
-        width:responsiveScreenWidth(50),
-        justifyContent:'center',
-        borderRadius:20
-    },
-
-    welcomeBtnText: {
-        color: "#fff",
-        // lineHeight: '1.3rem',
-        fontSize: '1.4rem',
-        textAlign: 'center',
-        fontFamily: 'blues-smile'
     },
 
     setting: {
-        paddingHorizontal: responsiveScreenHeight(3),
-        marginTop:responsiveScreenHeight(3)
+        width: '100%',
+        marginTop: responsiveScreenHeight(3),
+        paddingHorizontal: responsiveScreenWidth(3),
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
-
-    icons: {
-        marginHorizontal: 10,
-        marginVertical: 10,
+    settingIcon: {
+        width: 50,
+        height: 50
+    },
+    storeIcon: {
+        width: 75.55,
+        height: 50
     }
 })
 
 export default DashboardSettings
+

@@ -9,7 +9,7 @@ import messaging from '@react-native-firebase/messaging';
 import axios from "axios";
 
 import PageLoading from './shared/PageLoading';
-import HomeRouter from './features/Home/HomeRouter';
+// import HomeRouter from './features/Home/HomeRouter';
 import ExtendedLeaderboard from './features/Leaderboard/ExtendedLeaderboard';
 import FundWalletScreen from './features/Transactions/FundWalletScreen';
 import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
@@ -79,8 +79,14 @@ import Settings from './features/Support/Settings';
 import useSound from './utils/useSound';
 import Dashboard from './features/Dashboard';
 import { StatusBar } from 'react-native';
+import Home from './features/Home/Home';
+import GameScreen from './features/Games/GameScreen';
+import SubCategoryScreen from './features/Games/SubCategoryScreen';
+import IconSettings from './features/Support/IconSettings';
+import Loader from './shared/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { triggerNotificationForAppInstallation } from './shared/Notification';
+import NoGame from './shared/NoGame';
 
 const AppStack = createNativeStackNavigator();
 
@@ -89,7 +95,7 @@ function AppRouter() {
 	const dispatch = useDispatch();
 
 	const [loading, setLoading] = useState(true);
-	const { playSound } =  useSound(require('../assets/sounds/pop-up.wav'))
+	const { playSound } = useSound(require('../assets/sounds/pop-up.wav'))
 
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
@@ -177,37 +183,8 @@ function AppRouter() {
 		return unsubscribe;
 	}, [token]);
 
-// 	useEffect(() => {
-
-//         // Get the stored Expo push token, or generate a new one if it doesn't exist
-//         let token = await AsyncStorage.getItem('expoPushToken');
-//         if (!token) {
-//           token = await Notifications.getExpoPushTokenAsync();
-//           await AsyncStorage.setItem('expoPushToken', JSON.stringify(token));
-//         } else {
-//           token = JSON.parse(token);
-//         }
-
-//         // Schedule a push notification to the user immediately
-//         await Notifications.scheduleNotificationAsync({
-//           content: {
-//             title: 'Welcome back to MyApp',
-//             body: 'Thanks for using our app!',
-//           },
-//           trigger: null,
-//         });
-//       } catch (error) {
-//         console.error(error);
-//       }
-//     };
-
-//     sendNotification();
-//   }, []);
-	  
-
-
 	if (loading) {
-		return <PageLoading spinnerColor="#0000ff" />
+		return <Loader />
 	}
 
 	return (
@@ -215,15 +192,13 @@ function AppRouter() {
 			{isTrue(token) ?
 				(
 					<>
-						<AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
+
+						<AppStack.Screen options={{ headerShown: false }} name="Dashboard" component={Dashboard} />
+						<AppStack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+						{/* <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} /> */}
 
 						<AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{
-							title: 'Leaderboards',
-							headerRight: () => <LeaderBoardFilter />,
-							headerStyle: {
-								backgroundColor: '#5d5fef',
-							},
-							headerTintColor: '#FFFF',
+							headerShown: false
 						}} />
 						<AppStack.Screen name="WeeklyLeaderboard" component={WeeklyLeaderboard} options={{
 							title: 'Leaderboard',
@@ -243,20 +218,15 @@ function AppRouter() {
 						/>
 
 						{/* game */}
+						<AppStack.Screen options={{ headerShown: false }} name="Games" component={GameScreen} />
 						<AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
 						<AppStack.Screen name="SelectGameCategory" component={SelectGameCategoryScreen} options={{
-							title: 'Select Game',
-							headerStyle: {
-								backgroundColor: '#5d5fef',
-							},
-							headerTintColor: '#FFFF',
+							headerShown: false,
 						}} />
-						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{
-							title: 'Game Instructions', headerStyle: {
-								backgroundColor: '#F2F5FF',
-							},
-							headerTintColor: '#000000',
+						<AppStack.Screen name="SelectSubCategory" component={SubCategoryScreen} options={{
+							headerShown: false,
 						}} />
+						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{headerShown: false}}/>
 						<AppStack.Screen name="AppTour" component={TourIndex} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
 						<AppStack.Screen name="LiveTriviaStaking" component={LiveTriviaStakingScreen} options={{ title: 'Game Staking' }} />
@@ -308,19 +278,21 @@ function AppRouter() {
 						<AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
 
 						{/* user profile */}
-						<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
-						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Edit Details' }} />
-						<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Change Password' }} />
-						<AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ title: 'Stats' }} />
-						<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ title: 'Achievements' }} />
+						<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{headerShown: false }} />
+						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ headerShown: false}} />
 						<AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
 
 
 						{/** store */}
-						<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ title: 'Store', headerShadowVisible: false }} />
+						<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ headerShown: false  }} />
 						<AppStack.Screen name="GameBoostPurchaseSuccessful" component={GameBoostPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GamePlanPurchaseSuccessful" component={GamePlanPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
+						<AppStack.Screen name="IconSettings" component={IconSettings} options={{ headerShown: false }} />
+						<AppStack.Screen name="NoGame" component={NoGame} options={{ headerShown: false }} />
 
 						<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
 						<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{
@@ -345,9 +317,9 @@ function AppRouter() {
 						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
 						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} options={{ headerShown: false }}/>
-						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }}/>
-						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} options={{ headerShown: false }}/>
+						<AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupVerifyEmail" component={SignupVerifyEmailScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="SignupVerifyPhone" component={SignupVerifyPhoneScreen} options={{ headerShown: false }} />
 
@@ -363,7 +335,7 @@ function AppRouter() {
 			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Help' }} />
 			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
 			<AppStack.Screen name="Settings" component={Settings} options={{ title: 'Settings' }} />
-			<AppStack.Screen name="ContactUs" component={ContactUs} options={{ title: 'Contact Us' }} />
+			<AppStack.Screen name="ContactUs" component={ContactUs} options={{ headerShown: false }} />
 			<AppStack.Screen name="EmailVerified" component={EmailVerifiedScreen} options={{ headerShown: false }} />
 			<AppStack.Screen name="ChallengeNotPending" component={ChallengeNotPendingScreen} options={{ headerShown: false }} />
 			{/* <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} /> */}

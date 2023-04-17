@@ -1,33 +1,31 @@
 import React, { useRef, useState } from 'react';
-import { Pressable, ScrollView, StatusBar, View } from 'react-native';
+import { Image, Pressable, StatusBar, Text, View } from 'react-native';
 import GamePicker from './GamePicker';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize from '../../utils/normalize';
-import LottieAnimations from '../../shared/LottieAnimations';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useFocusEffect } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
 import { isTrue } from '../../utils/stringUtl';
 import { useSelector } from 'react-redux';
 import NoGame from '../../shared/NoGame';
-import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { Platform } from 'react-native';
 import useSound from '../../utils/useSound';
+import QuizContainerBackground from '../../shared/ContainerBackground/QuizContainerBackground';
+import TopIcons from '../../shared/TopIcons';
+import DashboardSettings from '../../shared/DashboardSettings';
+import { ScrollView } from 'react-native';
 
 const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
-    const activeSubcategory = useSelector(state => state.game.gameCategory);
     const gameMode = useSelector(state => state.game.gameMode);
     const refRBSheet = useRef();
-    const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
+    const [showSettings, setShowSettings] = useState(false);
+    const user = useSelector(state => state.auth.user);
 
-    // const openBottomSheet = () => {
-    //     refRBSheet.current.open()
-    // }
+    console.log(user)
+    // console.log(activeSubcategory)
 
-    const closeBottomSheet = () => {
-        refRBSheet.current.close()
-    }
 
     const onPlayButtonClick = () => {
         onSelectGameMode();
@@ -55,36 +53,27 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     );
 
     return (
-        <View style={styles.container}>
-            <ScrollView>
-                <View style={styles.animation}>
-                    <LottieAnimations
-                        animationView={require('../../../assets/select-game.json')}
-                        width={normalize(100)}
-                        height={normalize(100)}
-                    />
-                </View>
-                <View>
-                    <GamePicker title={"Pick a game"} activeSubcategory={activeSubcategory} />
-                </View>
-                <UniversalBottomSheet
-                    refBottomSheet={refRBSheet}
-                    height={Platform.OS === 'ios' ? 400 : 350}
-                    subComponent={<NoGame
-                        onClose={closeBottomSheet}
-                    />}
-                />
-            </ScrollView>
-            <ProceedButton disabled={!isTrue(activeSubcategory)} onPress={onPlayButtonClick} />
-        </View>
-    )
-}
-
-const ProceedButton = ({ onPress, disabled }) => {
-    return (
-        <Pressable onPress={onPress} style={[styles.selectButton, disabled ? styles.disabled : {}]} disabled={disabled} >
-            <Ionicons name='arrow-forward-sharp' size={35} color='#FFFF' />
-        </Pressable>
+            <QuizContainerBackground>
+                <ScrollView style={styles.container}>
+                        <TopIcons />
+                    <View style={styles.logo}>
+                        <Pressable style={styles.icons} onPress={() => navigation.navigate('Home')}>
+                            <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
+                        </Pressable>
+                        <Text style={styles.title}>Quiz Game</Text>
+                    </View>
+                    <View style={styles.imgContainer}>
+                        <Image style={styles.quizImage} source={require('../../../assets/images/quiz-large.png')} />
+                    </View>
+                    <View>
+                        <GamePicker title={"Pick a game"} navigation={navigation} />
+                    </View>
+                              
+                </ScrollView>
+                <View style={styles.setting}>
+                        <DashboardSettings showSettings={showSettings} setShowSettings={setShowSettings} />
+                    </View>     
+            </QuizContainerBackground>
     )
 }
 
@@ -92,30 +81,40 @@ export default SelectGameCategoryScreen;
 
 const styles = EStyleSheet.create({
     container: {
+        // flex: 1,
+        paddingVertical: responsiveScreenWidth(3),
+    },
+    logo: {
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+        marginTop: normalize(40),
+        paddingHorizontal: responsiveScreenWidth(3),
+    },
+    imageIcons: {
+        width: 50,
+        height: 50,
+        marginTop: -10,
+    },
+    title: {
+        color: '#fff',
+        fontFamily: 'blues-smile',
+        fontSize: '2.5rem',
+        textAlign: 'center',
         flex: 1,
-        backgroundColor: '#5d5fef',
-        paddingHorizontal: normalize(18),
-        // justifyContent: 'center'
+        marginRight: 30,
+        marginBottom:40
     },
-    animation: {
-        alignItems: 'center',
-        // marginBottom: normalize(10)
+    imgContainer: {
+        alignItems: 'center'
     },
-    selectButton: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 100,
-        width: 70,
-        height: 70,
-        elevation: 5,
-        backgroundColor: '#EF2F55',
+    quizImage: {
+        width: normalize(167),
+        height: normalize(226)
+    },
+    setting: {
         position: 'absolute',
+        left:0,
         right: 0,
-        bottom: 0,
-        margin: normalize(18)
+        bottom: 180,
     },
-    disabled: {
-        backgroundColor: '#DFCBCF'
-    },
-
 })
