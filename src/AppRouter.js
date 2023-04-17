@@ -57,6 +57,7 @@ import ChallengeGameEndWaitingScreen from './features/Games/TriviaChallengeStaki
 import ChallengeGameBoardScreen from './features/Games/TriviaChallengeStaking/ChallengeGameBoardScreen';
 import ChallengeMatchingScreen from './features/Games/TriviaChallengeStaking/ChallengeMatchingScreen';
 import GamesListScreen from './features/Games/GamesListScreen';
+import VerifyPasswordOtpScreen from './features/Auth/VerifyPasswordOtpScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -200,6 +201,7 @@ function AppRouter() {
 						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} />
 						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} />
 						<AppStack.Screen name="SignupVerifyPhone" component={SignupVerifyPhoneScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="VerifyPasswordOtp" component={VerifyPasswordOtpScreen} options={{ headerShown: false }} />
 					</AppStack.Group >
 				)
 			}

@@ -38,7 +38,7 @@ export default function ({ navigation }) {
                 console.log('here before')
                 setLoading(false);
                 setCanSend(true);
-                navigation.navigate("VerifyEmail", {
+                navigation.navigate("VerifyPasswordOtp", {
                     phone: phone
                 });
             })

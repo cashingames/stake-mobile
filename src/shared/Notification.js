@@ -4,7 +4,7 @@ export const triggerNotifierForReferral = ()=>{
     setTimeout(()=>{
         Notifications.presentNotificationAsync({
             title: "Referral Rewards",
-            body: 'Invite Your Friends to earns more games',
+            body: 'Invite Your Friends to earn more games',
         })
     }, 7000)
     

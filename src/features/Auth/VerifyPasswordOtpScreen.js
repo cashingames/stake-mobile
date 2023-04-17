@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-    StyleSheet,
     View,
     Text,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import AppButton from '../../shared/AppButton';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import ResendOtp from '../../shared/ResendOtp';
 import { setUserPasswordResetToken, verifyOtp, verifyAccount, setUserPhone } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -14,8 +13,10 @@ import { calculateTimeRemaining } from '../../utils/utils';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { TextInput } from 'react-native';
 import { ScrollView } from 'react-native';
+import LottieAnimations from '../../shared/LottieAnimations';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-export default function VerifyEmailScreen({ navigation, route }) {
+export default function VerifyPasswordOtpScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
     const params = route.params 
@@ -94,13 +95,25 @@ export default function VerifyEmailScreen({ navigation, route }) {
     }
 
     return (
-        <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
+        <ScrollView style={styles.container} >
+             <View style={styles.excellent}>
+                    <LottieAnimations
+                        animationView={require('../../../assets/excellent.json')}
+                        width={normalize(170)}
+                        height={normalize(140)}
+                    />
+                </View>
 
             <Text style={styles.headerTextStyle}>
                 Verify OTP
             </Text>
 
-            <Text style={styles.instructionTextStyle}>Enter the One-time passcode we sent  to the phone number you provided</Text>
+            <Text style={styles.verifySubText}>
+                A One Time Password(OTP) has been sent to your phone number {params.phone}.
+                Please input the five(5) digit
+                number below to verify your phone number so you
+                can play exicting games and stand a chance to win lots of prizes
+            </Text>
             {error.length > 0 &&
                 <Text style={styles.errorBox}>{error}</Text>
             }
@@ -180,19 +193,33 @@ export default function VerifyEmailScreen({ navigation, route }) {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFF',
-        paddingBottom: 10,
-        paddingLeft: 30,
-        paddingRight: 30,
-        paddingTop: 20,
+        paddingVertical: responsiveScreenWidth(10),
+        paddingHorizontal: normalize(20)
+    },
+
+    excellent: {
+        alignItems: 'center'
+    },
+
+    verifySubText: {
+        fontSize: '.9rem',
+        color: '#151C2F',
+        fontFamily: 'graphik-medium',
+        textAlign: 'center',
+        lineHeight: '1.5rem',
+        opacity: 0.6,
+        marginTop: normalize(25)
     },
     headerTextStyle: {
-        fontSize: 26,
-        fontFamily: 'graphik-bold',
-        color: 'black',
+        fontSize: '1.4rem',
+        color: '#151C2F',
+        fontFamily: 'graphik-medium',
+        textAlign: 'center',
+        lineHeight: '1.5rem'
     },
     instructionTextStyle: {
         fontSize: 14,
