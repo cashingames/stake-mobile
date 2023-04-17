@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+import normalize, { responsiveHeight } from "../../utils/normalize";
 
 
 //Not in use currently

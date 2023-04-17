@@ -5,7 +5,7 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import AppButton from "../../shared/AppButton";
 import Input from "../../shared/Input";
-import normalize from "../../utils/normalize";
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../utils/normalize";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { getUser } from "../Auth/AuthSlice";
 import { sendUserFeedback } from "../CommonSlice";
@@ -13,24 +13,24 @@ import analytics from '@react-native-firebase/analytics';
 import MixedContainerBackground from "../../shared/ContainerBackground/MixedContainerBackground";
 import AppHeader from "../../shared/AppHeader";
 import GaButton from "../../shared/GaButton";
+import TopIcons from "../../shared/TopIcons";
 
 
 
 const ContactUs = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector(state => state.auth.user);
-   
-
-
 
     return (
-        <MixedContainerBackground>     
-                            <AppHeader title='Help Center' />
-   
+        <MixedContainerBackground>
             <ScrollView style={styles.container}>
-            <Text style={styles.title}>Do you have any question?</Text>
-            <ContactForm user={user} />
-        </ScrollView>
+                <TopIcons />
+                <AppHeader title='Help Center' />
+                <View style={styles.contact}>
+                    <Text style={styles.title}>How can we be of help to you today?</Text>
+                    <ContactForm user={user} />
+                </View>
+            </ScrollView>
         </MixedContainerBackground>
 
     )
@@ -45,7 +45,7 @@ const ContactForm = ({ user }) => {
     const [canSave, setCanSave] = useState(false);
     const first_name = user.firstName
     const last_name = user.lastName
-console.log(email)
+    console.log(email)
 
     const sendFeedback = () => {
         setSaving(true)
@@ -116,20 +116,23 @@ export default ContactUs;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        padding: normalize(20),
+        paddingVertical: responsiveScreenHeight(2),
+    },
+    contact:{
+        paddingHorizontal: responsiveScreenWidth(3),
     },
     title: {
         fontSize: '0.95rem',
         fontFamily: 'graphik-medium',
         marginTop: normalize(9),
-        color:'#fff'
+        color: '#fff'
     },
     formContainer: {
         marginTop: '1rem'
     },
     messageBox: {
         paddingBottom: Platform.OS === 'ios' ? '5rem' : '3rem',
-        paddingTop:'.8rem',
+        paddingTop: '.8rem',
         paddingHorizontal: '.7rem',
         borderColor: '#CDD4DF',
         fontFamily: 'graphik-regular',
@@ -137,8 +140,8 @@ const styles = EStyleSheet.create({
         fontSize: '0.75rem',
         borderWidth: 1,
         borderRadius: 10,
-        textAlignVertical:'top',
-    backgroundColor: '#FFFF',
+        textAlignVertical: 'top',
+        backgroundColor: '#FFFF',
 
     },
 })

@@ -81,54 +81,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(18),
         paddingBottom: normalize(40),
     },
-    winBig: {
-        display: 'flex',
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingVertical: normalize(14),
-        paddingHorizontal: normalize(15),
-        borderRadius: 8,
-        borderWidth: normalize(1),
-        borderColor: 'rgba(0, 0, 0, 0.15)',
-    },
-    progress: {
-        display: 'flex',
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingVertical: normalize(10),
-        paddingHorizontal: normalize(15),
-        marginVertical: normalize(22),
-        borderRadius: 8,
-        borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
-        borderColor: '#E5E5E5',
-    },
-    progressText: {
-        width: responsiveScreenWidth(45),
-    },
-    progressTitle: {
-        fontFamily: 'graphik-medium',
-        fontSize: '1.3rem',
-        color: '#151C2F',
-    },
-    text: {
-        fontFamily: 'graphik-regular',
-        fontSize: '0.68rem',
-        color: '#7C7D7F',
-        lineHeight: '1rem',
-        marginTop: normalize(8)
-    },
-    noGamesText: {
-        fontFamily: 'graphik-medium',
-        fontSize: normalize(16),
-        width: normalize(130),
-        textAlign: 'center',
-        color: '#000',
-        lineHeight: normalize(24)
-    },
+   
     createQuiz: {
         display: 'flex',
         flexDirection: 'row',
@@ -147,25 +100,10 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
-    create: {
-        fontFamily: 'graphik-bold',
-        fontSize: normalize(12),
-        color: '#EF2F55',
-    },
-    games: {
-        paddingVertical: normalize(10),
-        width: "88%",
-    },
-    title: {
-        fontSize: '1rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        marginVertical: normalize(10),
-    },
     cards: {
         display: 'flex',
         flexDirection: 'column',
-        marginTop:-70,
+        marginTop:-30,
         paddingHorizontal:normalize(40),
         alignItems:'center'
     },
