@@ -12,12 +12,8 @@ import { useRef } from 'react'
 const TopIcons = () => {
     const user = useSelector(state => state.auth.user);
     var plans = useSelector(state => state.auth.user.activePlans ?? []);
-    var boosts = useSelector(state => state.auth.user.boosts ?? []);
+    
     const [sumOfPlans, setSumOfPlans] = useState(0);
-
-    const skip = boosts.find(item => item.name === 'Skip') ?? []
-    const freeze = boosts.find(item => item.name === 'Time Freeze') ?? []
-    const bomb = boosts.find(item => item.name === 'Bomb') ?? []
 
     // const { playSound } =  useSound(require('../../assets/sounds/option-picked.mp3'))
     useEffect(() => {
@@ -27,7 +23,6 @@ const TopIcons = () => {
     }, [plans]);
 
     const scaleValue = useRef(new Animated.Value(1)).current;
-
     const zoomAnimation = {
         transform: [{ scale: scaleValue }],
     };
@@ -72,34 +67,6 @@ const TopIcons = () => {
                    <IconDetails />
                 </View>
             </View>
-            <View style={styles.iconContainer}>
-                <Image style={styles.timeFreeze} source={require('./../../assets/images/time-freeze.png')} />
-                <View style={styles.iconBox}>
-                    <View style={styles.iconText}>
-                        <Text style={styles.text}>{freeze.count ?? 0}</Text>
-                    </View>
-                   <IconDetails />
-                </View>
-            </View>
-            <View style={styles.iconContainer}>
-                <Image style={styles.coinIcon} source={require('./../../assets/images/skip.png')} />
-                <View style={styles.iconBox}>
-                    <View style={styles.iconText}>
-                        <Text style={styles.text}>{skip.count ?? 0}</Text>
-                    </View>
-                   <IconDetails />
-                </View>
-            </View>
-            <View style={styles.iconContainer}>
-                <Image style={styles.coinIcon} source={require('./../../assets/images/bomb.png')} />
-                <View style={styles.iconBox}>
-                    <View style={styles.iconText}>
-                        <Text style={styles.text}>{bomb.count ?? 0}</Text>
-                    </View>
-                   <IconDetails />
-                </View>
-            </View>
-
         </View>
     )
 }
@@ -107,7 +74,6 @@ const TopIcons = () => {
 const IconDetails = () => {
     return(
         <View style={styles.plusCase}>
-        {/* <Text style={styles.plus}>+</Text> */}
         <Feather name="plus" size={18} color="#fff" />
     </View>
     )
@@ -158,17 +124,9 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
 
     },
-    bombIcon: {
-        height: 37,
-        width: 41
-    },
     coinIcon: {
         height: 37,
-        width: 39
-    },
-    timeFreeze: {
-        height: 44,
-        width: 54,
+        width: 43
     },
     plusCase: {
         height: 18,

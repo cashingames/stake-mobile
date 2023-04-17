@@ -9,7 +9,7 @@ import messaging from '@react-native-firebase/messaging';
 import axios from "axios";
 
 import PageLoading from './shared/PageLoading';
-import HomeRouter from './features/Home/HomeRouter';
+// import HomeRouter from './features/Home/HomeRouter';
 import ExtendedLeaderboard from './features/Leaderboard/ExtendedLeaderboard';
 import FundWalletScreen from './features/Transactions/FundWalletScreen';
 import FundWalletCompleted from './features/Transactions/FundWalletCompleted';
@@ -183,35 +183,6 @@ function AppRouter() {
 		return unsubscribe;
 	}, [token]);
 
-// 	useEffect(() => {
-
-//         // Get the stored Expo push token, or generate a new one if it doesn't exist
-//         let token = await AsyncStorage.getItem('expoPushToken');
-//         if (!token) {
-//           token = await Notifications.getExpoPushTokenAsync();
-//           await AsyncStorage.setItem('expoPushToken', JSON.stringify(token));
-//         } else {
-//           token = JSON.parse(token);
-//         }
-
-//         // Schedule a push notification to the user immediately
-//         await Notifications.scheduleNotificationAsync({
-//           content: {
-//             title: 'Welcome back to MyApp',
-//             body: 'Thanks for using our app!',
-//           },
-//           trigger: null,
-//         });
-//       } catch (error) {
-//         console.error(error);
-//       }
-//     };
-
-//     sendNotification();
-//   }, []);
-	  
-
-
 	if (loading) {
 		return <Loader />
 	}
@@ -224,7 +195,7 @@ function AppRouter() {
 
 						<AppStack.Screen options={{ headerShown: false }} name="Dashboard" component={Dashboard} />
 						<AppStack.Screen options={{ headerShown: false }} name="Home" component={Home} />
-						<AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
+						{/* <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} /> */}
 
 						<AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{
 							headerShown: false

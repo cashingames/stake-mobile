@@ -182,8 +182,8 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',      
     },
     avatar: {
-        width: normalize(150),
-        height: normalize(150),
+        width: normalize(120),
+        height: normalize(120),
         backgroundColor: '#FFFF',
         borderRadius: 100,
         borderColor: '#fff',
@@ -199,8 +199,8 @@ const styles = EStyleSheet.create({
         right: 10
     },
     imageIcon: {
-        height: 50,
-        width: 50
+        height: 30,
+        width: 30
     },
     profileTab: {
         flexDirection: 'row',
@@ -219,12 +219,6 @@ const styles = EStyleSheet.create({
     },
     profileTabs: {
         paddingVertical: normalize(25)
-    },
-    logoutContainer: {
-        backgroundColor: '#FFFF',
-        marginBottom: 22,
-        // flex: 1,
-        // justifyContent: 'flex-end'
     },
     appVersion: {
         color: '#000000',
