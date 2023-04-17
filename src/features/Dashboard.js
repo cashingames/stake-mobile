@@ -18,13 +18,14 @@ import Loader from '../shared/Loader'
 import useSound from '../utils/useSound'
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../utils/utils'
 import { ScrollView } from 'react-native-gesture-handler';
+import { setGameMode } from './Games/GameSlice';
+import { getAchievements } from './Profile/AchievementSlice';
 
 const Dashboard = ({ navigation }) => {
     const loading = useSelector(state => state.common.initialLoading);
     const dispatch = useDispatch()
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
-    const challengeLeaders = useSelector(state => state.game.challengeLeaders);
     const [modalVisible, setModalVisible] = useState(false);
     const [achievementPopup, setAchievementPopup] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
@@ -33,7 +34,7 @@ const Dashboard = ({ navigation }) => {
     // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
     const [forceRender, setForceRender] = useState(true)
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
-
+    const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
 
     const isFocused = useIsFocused();
     const { playSound } = useSound(require('./../../assets/sounds/dashboard.mp3'));
@@ -87,11 +88,27 @@ const Dashboard = ({ navigation }) => {
     );
     useFocusEffect(
         React.useCallback(() => {
+            // console.info('UserDetails focus effect')
+            dispatch(getUser());
+
+            // get achievements badges
+            dispatch(getAchievements());
+
+        }, [])
+    );
+    useFocusEffect(
+        React.useCallback(() => {
             if (loading) {
                 return;
             }
         }, [loading])
         );
+
+        const gameModeSelected = () => {
+            dispatch(setGameMode(exhibitionSelected));
+            navigation.navigate('Games')
+            playSound()
+        }
 
         
     if (loading) {
@@ -107,7 +124,7 @@ const Dashboard = ({ navigation }) => {
                 </View>
                 <View style={styles.welcome}>
                     <Text style={styles.welcomeText}>Welcome to the ark</Text>
-                    <Pressable onPress={() => navigation.navigate('Home')} style={styles.welcomeBtn}>
+                    <Pressable onPress={gameModeSelected} style={styles.welcomeBtn}>
                         <Text style={styles.welcomeBtnText}>Play</Text>
                     </Pressable>
                 </View>
