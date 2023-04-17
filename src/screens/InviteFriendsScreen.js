@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, View, ScrollView, Share, Alert, Pressable, Platform, Modal } from 'react-native';
-import normalize from '../utils/normalize';
+import normalize, { responsiveScreenHeight } from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -13,16 +13,16 @@ import { clearTour } from '../features/Tour/TourSlice';
 import analytics from '@react-native-firebase/analytics';
 import { useNavigation } from '@react-navigation/core';
 import { Image } from 'react-native';
+import TopIcons from '../shared/TopIcons';
+import { ImageBackground } from 'react-native';
 
-// export default copilot({
-//     animated: true,
-//     overlay: 'svg'
-// })(function InviteFriendsScreen(props) {
-// const CopilotProps = props;
-const InviteFriendsScreen = ({showInviteFriends, setShowInviteFriends}) => {
+const InviteFriendsScreen = ({ showInviteFriends, setShowInviteFriends }) => {
 
     const navigation = useNavigation()
+    const user = useSelector(state => state.auth.user);
 
+    const referralUrl = (user.referralCode)
+    const referralMsg = `Play exciting games with me on Gameark! Create an account with my referral code - ${referralUrl}`
     const [refreshing, setRefreshing] = React.useState(false);
     const isTourActive = useSelector(state => state.tourSlice.isTourActive);
 
@@ -30,112 +30,19 @@ const InviteFriendsScreen = ({showInviteFriends, setShowInviteFriends}) => {
 
     useApplyHeaderWorkaround(navigation.setOptions);
 
-    // tour
-
-    // React.useEffect(()=>{
-    //     setTimeout(()=>{
-    //         if((isTourActive?.payload || isTourActive) ){
-    //             // tourStart(7)
-    //             // setForceRender(!forceRender);
-    //             // console.log(canStart, 7)
-                
-    //             console.log('reach11')
-    //             CopilotProps.start()
-    //             CopilotProps.copilotEvents.on('stop', handleTourStop)
-
-    //             // eventEmitter.on('stop', handleTourStop)
-    
-    //             return () => {
-    //                 // eventEmitter.off('stop', handleTourStop)
-    //                 CopilotProps.copilotEvents.off('stop', handleTourStop)
-    //             }
-    //         }else{
-    //             // console.log(AppTourStep)
-    //             // AppTour.start();
-    //             // AppTour.stop();
-    //         }
-    //     }, 1000)
-    // }, [isTourActive])
-
-    const handleTourStop = ()=>{
+   
+    const handleTourStop = () => {
         console.log("tour stopped, going to next screen to continue....")
-        
+
         // end tour
-        try{
+        try {
             dispatch(clearTour())
             navigation.popToTop()
             navigation.navigate("AppRouter")
-        }catch(e){
+        } catch (e) {
             navigation.navigate("AppRouter")
         }
     }
-
-
-    return (
-        <ScrollView style={styles.container}>
-             <View style={styles.onView}>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={showInviteFriends}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    setShowInviteFriends(!showInviteFriends);
-                }}
-            >
-                <View style={styles.centeredView}>
-                 
-                            <Pressable
-                                style={styles.buttonClose}
-                                onPress={() => setShowInviteFriends(!showInviteFriends)}
-                            >
-                                <Ionicons name="close" size={10} color="#fff" />
-                            </Pressable>
-                            <View style={styles.resultContainer}>
-                                <Image
-                                    source={require("../../assets/images/tag.png")}
-                                />
-                            </View>
-                            <Text style={styles.modalTopText}>Power Ups</Text>
-                            <View style={styles.resultContainer}>
-                                <Image
-                                    style={styles.hat}
-                                    source={require("../../assets/images/boost-popup.png")}
-                                />
-                            </View>
-                        </View>
-                        </Modal>
-                        </View>
-        </ScrollView>
-
-    );
-}
-
-const Heading = () => {
-    return (
-        <View style={styles.heading}>
-            <Text style={styles.value}>We value friendship</Text>
-            <Text style={styles.points}>with your referrals</Text>
-        </View>
-    )
-}
-
-const Instructions = () => {
-    return (
-        <>
-            <Text style={styles.instructions}>
-                Refer your friends to us and get 2 bonus games for each friend referred, and has played at least 1 game,
-                and also stand a chance of winning exciting prizes.
-            </Text>
-        </>
-    )
-}
-
-const InviteLink = () => {
-    const user = useSelector(state => state.auth.user);
-
-    const referralUrl = (user.referralCode)
-    const referralMsg = `Play exciting games with me on Gameark! Create an account with my referral code - ${referralUrl}`
 
     const onShare = async () => {
         try {
@@ -151,36 +58,127 @@ const InviteLink = () => {
         }
     };
 
-    const copyToClipboard = () => {
-        Clipboard.setString(referralUrl);
-        Alert.alert('Copied to clipboard')
-    };
+    return (
+        <ScrollView style={styles.container}>
+            <View style={styles.onView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={showInviteFriends}
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setShowInviteFriends(!showInviteFriends);
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                        <TopIcons />
+                        <View style={styles.inviteFriendsContainer}>
+                            <View style={styles.inviteBg}>
+                                <ImageBackground style={styles.inviteBg} source={require('./../../assets/images/invite-bg.png')}>
+                                    <Text style={styles.modalTitle}>Play with friends!</Text>
+                                    <View>
+                                        <Image style={{height:85, width: 112, marginVertical: 10}} source={require('./../../assets/images/heart-icon.png')} />
+                                    </View>
+                                    <Text style={styles.modalTitle}>Free 2 Lives!</Text>
+                                    <Text style={styles.inviteText}>Invite your {'\n'}
+                                        friends to get</Text>
+                                    <Text style={styles.gift}>FREE 2 Lives!</Text>
+                                    <ImageBackground style={styles.btnBg} source={require('./../../assets/images/button-case.png')} >
+                                        <Pressable style={styles.btn}
+                                        onPress={onShare}
+                                        >
+                                            <Text style={styles.btnText}>Invite</Text>
+                                        </Pressable>
+                                    </ImageBackground>
+                                     <Pressable style={styles.closeBtn}
+                                        onPress={() => setShowInviteFriends(false)}
+                                    >
+                                        <Image style={styles.closeIcon} source={require('./../../assets/images/close-icon.png')} />
+                                    </Pressable>
+                                    <Image style={styles.friendImage} source={require('./../../assets/images/friend.png')} /> 
+                                </ImageBackground>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+            </View>
+        </ScrollView>
 
-    return (
-        <>
-            <Text style={styles.inviteLink}>Your referral code</Text>
-            <View style={styles.linkContainer} >
-                <Text style={styles.link}>{referralUrl}</Text>
-                <View style={styles.shareIcons}>
-                    <ShareLink iconName="md-copy" text='Copy' onPress={copyToClipboard} />
-                    <ShareLink iconName="md-share-social" text='Share' onPress={onShare} />
-                </View>
-            </View>
-        </>
-    )
+    );
 }
-const ShareLink = ({ iconName, text, onPress }) => {
-    return (
-        <Pressable onPress={onPress}>
-            <View style={styles.icon}>
-                <Ionicons name={iconName} size={20} color="#EB5757" />
-                <Text style={styles.iconText}>{text}</Text>
-            </View>
-        </Pressable>
-    )
-}
+
+
 export default InviteFriendsScreen;
 
 const styles = EStyleSheet.create({
-    
+    centeredView: {
+        flex: 1,
+        paddingVertical: responsiveScreenHeight(2),
+        // justifyContent: 'center',
+        backgroundColor: 'rgba(17, 41, 103, 0.77)'
+    },
+
+    inviteFriendsContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    inviteBg: {
+        paddingVertical: normalize(15),
+        paddingHorizontal: '3rem',
+        alignItems: 'center',
+        // height: normalize(311),
+        // width: normalize(376)
+    },
+    modalTitle: {
+        color: '#fff',
+        fontSize: '1.7rem',
+        marginVertical: normalize(5),
+        fontFamily: 'graphik-medium'
+
+    },
+    inviteText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: '1.5rem',
+        fontFamily: 'graphik-medium',
+        marginVertical:'0.3rem'
+    },
+    gift: {
+        color: '#FFBB4F',
+        textAlign: 'center',
+        fontSize: '1.5rem',
+        fontFamily: 'graphik-medium'
+    },
+    btnBg: {
+        marginBottom: -50,
+        marginVertical: normalize(10),
+    },
+    btn: {
+        paddingVertical: 20,
+        paddingHorizontal: '3rem',
+        marginVertical: normalize(10),
+        zIndex: 10
+    },
+    btnText: {
+        color: '#A92101',
+        fontSize: '1.7rem',
+        fontFamily: 'blues-smile'
+    },
+    closeBtn: {
+        position: 'absolute',
+        right: -15,
+        top: -20,
+    },
+    closeIcon:{
+        width: 50,
+        height: 50,
+    },
+    friendImage:{
+        position: 'absolute',
+        bottom: 50,
+        right: normalize(-30),
+        height: normalize(200),
+        width: normalize(110)        
+    }
 });
