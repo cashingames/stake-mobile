@@ -134,10 +134,10 @@ const ProfileTabs = () => {
                 playSound()
                 navigation.navigate('ChangePassword')
             }} />
-            <ProfileTab tabName='Achievements' onPress={() => {
+            {/* <ProfileTab tabName='Achievements' onPress={() => {
                 playSound()
                 navigation.navigate('AchievementsMilestone')
-            }} />
+            }} /> */}
             <ProfileTab tabName='Stats' onPress={() => {
                 playSound()
                 navigation.navigate('UserStats')

@@ -60,7 +60,7 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
                         <TopIcons />
                         <View>
                             <View style={styles.logo}>
-                        <Pressable style={styles.icons} onPress={() => navigation.navigate('Home')}>
+                        <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
                             <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
                         </Pressable>
                         <Text style={styles.title}>Word Trivia</Text>
@@ -72,7 +72,6 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
                         <GamePicker navigation={navigation} />
                     </View>
                     </View>
-
                      <View style={styles.setting}>
                         <GameSettings onPress={()=> navigation.goBack(null)} />
                     </View>             
@@ -87,7 +86,7 @@ export default SelectGameCategoryScreen;
 const styles = EStyleSheet.create({
     container: {
         // flex: 1,
-        paddingVertical: responsiveScreenWidth(3),
+        paddingVertical: responsiveScreenHeight(2),
     },
     logo: {
         alignItems: 'flex-start',

@@ -176,16 +176,17 @@ export default function GameEndResultScreen({ navigation }) {
 	}, [])
 
 	return (
+		<ScrollView>
 		<QuizContainerBackground>
-
-			<ScrollView style={styles.container}>
+			<View style={styles.container}>
 				<TopIcons />
 				<EndGameData homeNavigation={onHomeButtonClick} playAgain={onPlayButtonClick} pointsGained={pointsGained} minimumBoostScore={minimumBoostScore} />
 				<View style={styles.setting}>
 					<GameSettings onPress={() => navigation.navigate('Games')}/>
 				</View>
-			</ScrollView>
+			</View>
 		</QuizContainerBackground>
+		</ScrollView>
 	);
 }
 
@@ -254,7 +255,7 @@ const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScor
 const styles = EStyleSheet.create({
 	container: {
 		flex: 1,
-		paddingVertical: responsiveScreenWidth(3),
+		paddingVertical: responsiveScreenHeight(2),
 	},
 	endImageCase: {
 		alignItems: 'center',
@@ -269,8 +270,8 @@ const styles = EStyleSheet.create({
 	winText: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '2rem',
-		marginVertical: '2rem'
+		fontSize: Platform.OS === 'ios' ? '1.6rem' :'2rem',
+		marginVertical: Platform.OS === 'ios' ? '1.6rem' : '2rem'
 	},
 	starIcons: {
 		flexDirection: 'row',
@@ -292,7 +293,7 @@ const styles = EStyleSheet.create({
 	point: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '2rem',
+		fontSize: Platform.OS === 'ios' ? '1.7rem'  : '2rem',
 		textAlign: 'center'
 	},
 	winPoints: {
@@ -316,7 +317,7 @@ const styles = EStyleSheet.create({
 	},
 	loserProfile: {
 		position: 'absolute',
-		right: responsiveScreenWidth(-11),
+		right: Platform.OS === 'ios' ? responsiveScreenWidth(-17) : responsiveScreenWidth(-13),
 		bottom: responsiveScreenHeight(8)
 	},
 	loserImage: {

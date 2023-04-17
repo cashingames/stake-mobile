@@ -122,7 +122,7 @@ console.log(user)
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: responsiveScreenWidth(3),
+        paddingVertical: responsiveScreenHeight(2),
         // paddingHorizontal: responsiveScreenWidth(3),
     },
 

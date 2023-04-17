@@ -45,7 +45,7 @@ const SubCategoryScreen = ({ navigation, route }) => {
             <ScrollView style={styles.container}>
                 <TopIcons />
                 <View style={styles.logo}>
-                    <Pressable style={styles.icons} onPress={() => navigation.navigate('Home')}>
+                    <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
                         <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
                     </Pressable>
                     <Text style={styles.title}>Word Trivia</Text>
@@ -149,7 +149,7 @@ export default SubCategoryScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: responsiveScreenWidth(3),
+        paddingVertical: responsiveScreenHeight(2),
     },
     logo: {
         alignItems: 'flex-start',
@@ -184,7 +184,7 @@ const styles = EStyleSheet.create({
         position: 'absolute',
         left:0,
         right: 0,
-        bottom: 180,
+        bottom:Platform.OS === 'ios' ? 70 : 180,
     },
 
     categoryHeading: {

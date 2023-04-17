@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, ScrollView, Share, Alert, Pressable, Platform } from 'react-native';
+import { Text, View, ScrollView, Share, Alert, Pressable, Platform, Modal } from 'react-native';
 import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
@@ -12,13 +12,14 @@ import LottieAnimations from '../shared/LottieAnimations';
 import { clearTour } from '../features/Tour/TourSlice';
 import analytics from '@react-native-firebase/analytics';
 import { useNavigation } from '@react-navigation/core';
+import { Image } from 'react-native';
 
 // export default copilot({
 //     animated: true,
 //     overlay: 'svg'
 // })(function InviteFriendsScreen(props) {
 // const CopilotProps = props;
-const InviteFriendsScreen = () => {
+const InviteFriendsScreen = ({showInviteFriends, setShowInviteFriends}) => {
 
     const navigation = useNavigation()
 
@@ -72,26 +73,39 @@ const InviteFriendsScreen = () => {
 
     return (
         <ScrollView style={styles.container}>
-            <LottieAnimations
-                animationView={require('../../assets/friends.json')}
-                width={normalize(160)}
-                height={normalize(160)}
-            />
-            <Heading />
-            <Instructions />
-{/* 
-            <CopilotStep text={
-                <View>
-                    <Text style={styles.tourTitle} >Invite Friends</Text>
-                    <Text>Refer your friends and get bonuses for each friend referred and also stand a chance of winning cash prizes</Text>
-                </View>
-            } order={1} name={`Invite1`}>
-                <Walkthroughable> */}
-                    <InviteLink />
-                {/* </Walkthroughable>
-            </CopilotStep> */}
-
-
+             <View style={styles.onView}>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showInviteFriends}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setShowInviteFriends(!showInviteFriends);
+                }}
+            >
+                <View style={styles.centeredView}>
+                 
+                            <Pressable
+                                style={styles.buttonClose}
+                                onPress={() => setShowInviteFriends(!showInviteFriends)}
+                            >
+                                <Ionicons name="close" size={10} color="#fff" />
+                            </Pressable>
+                            <View style={styles.resultContainer}>
+                                <Image
+                                    source={require("../../assets/images/tag.png")}
+                                />
+                            </View>
+                            <Text style={styles.modalTopText}>Power Ups</Text>
+                            <View style={styles.resultContainer}>
+                                <Image
+                                    style={styles.hat}
+                                    source={require("../../assets/images/boost-popup.png")}
+                                />
+                            </View>
+                        </View>
+                        </Modal>
+                        </View>
         </ScrollView>
 
     );
@@ -168,79 +182,5 @@ const ShareLink = ({ iconName, text, onPress }) => {
 export default InviteFriendsScreen;
 
 const styles = EStyleSheet.create({
-    container: {
-        backgroundColor: '#F8F9FD',
-        paddingHorizontal: normalize(18)
-    },
-
-    heading: {
-        marginVertical: normalize(30),
-    },
-    headingContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    value: {
-        fontSize: '1.5rem',
-        fontFamily: 'graphik-medium',
-        color: '#151C2F',
-        marginBottom: Platform.OS === 'ios' ? normalize(10) : normalize(0),
-    },
-    points: {
-        fontSize: '1.5rem',
-        fontFamily: 'graphik-medium',
-        color: '#EF2F55',
-    },
-    instructions: {
-        fontSize: '0.95rem',
-        fontFamily: 'graphik-regular',
-        color: '#151C2F',
-        lineHeight: '1.7rem',
-        opacity: 0.6,
-        marginBottom: normalize(40),
-    },
-    inviteLink: {
-        color: 'rgba(0, 0, 0, 0.6)',
-        fontSize: '0.79rem',
-        fontFamily: 'graphik-medium',
-        lineHeight: '1.2rem',
-        marginBottom: normalize(12),
-    },
-    link: {
-        fontSize: '0.73rem',
-        fontFamily: 'graphik-medium',
-        lineHeight: '1.1rem',
-        color: '#151C2F',
-        width: '80%',
-    },
-    linkContainer: {
-        backgroundColor: '#FFFF',
-        paddingVertical: normalize(10),
-        paddingHorizontal: normalize(15),
-        borderRadius: 16,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    shareIcons: {
-        display: 'flex',
-        flexDirection: 'row'
-    },
-    iconText: {
-        color: '#EB5757',
-        fontSize: '0.55rem',
-        fontFamily: 'graphik-bold',
-    },
-    icon: {
-        marginLeft: normalize(10),
-        alignItems: 'center'
-    },
-    tourTitle: {
-        color: '#EF2F55',
-        fontWeight: '600',
-        fontSize: 22,
-        marginBottom: 10
-    }
+    
 });

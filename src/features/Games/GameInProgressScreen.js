@@ -244,7 +244,7 @@ const styles = EStyleSheet.create({
         marginBottom: responsiveScreenHeight(5)
     },
     top:{
-        marginTop:10
+        paddingTop: responsiveScreenHeight(2),
     }
 
 });

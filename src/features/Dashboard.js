@@ -157,7 +157,8 @@ const styles = EStyleSheet.create({
     welcomeText: {
         fontSize: '1.4rem',
         fontFamily: 'blues-smile',
-        color: '#fff'
+        color: '#fff',
+        marginVertical: normalize(10)
     },
 
     welcomeBtn: {

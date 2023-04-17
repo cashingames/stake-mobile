@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, ScrollView, Platform } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from 'react-redux';
-import normalize, { responsiveScreenWidth } from '../../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import UserItems from '../../shared/UserItems';
 import LottieAnimations from '../../shared/LottieAnimations';
@@ -23,8 +23,8 @@ export default function UserStatsScreen({ navigation }) {
 
     return (
         <MixedContainerBackground>
-            <TopIcons />
             <View style={styles.container}>
+            <TopIcons />
                 <AppHeader />
                 <View style={styles.header}>
                     <Image
@@ -33,7 +33,7 @@ export default function UserStatsScreen({ navigation }) {
 
                     />
                     <View style={styles.headerTextCase}>
-                        <Text style={styles.headerText}>Creativity</Text>
+                        <Text style={styles.headerText}>{user.username}</Text>
                     </View>
                 </View>
                 <Detail
@@ -96,7 +96,7 @@ const styles = EStyleSheet.create({
 
     container: {
         flex: 1,
-        paddingVertical: normalize(25),
+        paddingVertical: responsiveScreenHeight(2),
         // marginBottom: normalize(20)
     },
     header: {
