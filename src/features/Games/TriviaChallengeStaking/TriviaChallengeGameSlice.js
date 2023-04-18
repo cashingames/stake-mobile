@@ -18,7 +18,7 @@ export const submitGameSession = createAsyncThunk(
         const data = {
             challenge_request_id: state.challengeDetails.challenge_request_id,
             selected_options: state.selectedOptions,
-            consumedBoosts: state.consumedBoosts
+            consumed_boosts: state.consumedBoosts
         }
         // console.log('submitting game session')
 
