@@ -17,7 +17,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
-    console.log(challengeDetails)
+    // console.log(challengeDetails)
     const [loading, setLoading] = useState(false);
 
 

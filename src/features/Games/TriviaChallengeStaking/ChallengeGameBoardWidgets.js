@@ -1,21 +1,67 @@
-import React from "react";
-import { View, Animated, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Animated, Image, Pressable } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { Text } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Constants from 'expo-constants';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import LottieAnimations from "../../../shared/LottieAnimations";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
-import { isTrue } from "../../../utils/stringUtl";
+import { formatNumber, isTrue } from "../../../utils/stringUtl";
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
+import { reduceBoostCount } from "../../Auth/AuthSlice";
+import { boostReleased, consumeBoost, pauseGame, skipQuestion } from "./TriviaChallengeGameSlice";
 
 const ChallengeGameBoardWidgets = ({ onComplete }) => {
+    const dispatch = useDispatch();
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
+    const boosts = useSelector(state => state.auth.user.boosts);
+    const [showText, setShowText] = useState(true);
+    const gameMode = useSelector(state => state.game.gameMode);
+
+
+
+    const boostApplied = (data) => {
+        dispatch(consumeBoost(data))
+        dispatch(reduceBoostCount(data.id))
+        const name = data.name.toUpperCase();
+        if (name === 'TIME FREEZE') {
+            dispatch(pauseGame(true));
+            setTimeout(() => {
+                dispatch(pauseGame(false))
+                dispatch(boostReleased())
+            }, 10000);
+        }
+        if (name === 'SKIP') {
+            dispatch(skipQuestion());
+            dispatch(boostReleased());
+        }
+        // if (name === "BOMB") {
+        //     dispatch(bombOptions());
+        //     dispatch(boostReleased());
+        // }
+    }
+
+    const boostsToDisplay = () => {
+        //  bomb is only applicable to multiple choices
+        if (gameMode.name === "CHALLENGE") {
+            return boosts.filter(x => x.name.toUpperCase() !== "BOMB");
+        }
+        return boosts;
+    }
+
+    useEffect(() => {
+        // Change the state every second or the time given by User.
+        const interval = setInterval(() => {
+            setShowText((showText) => !showText);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <View style={styles.gameProgressAndBoost}>
             <RenderGameProgress onComplete={onComplete} />
+            <ChallengeStakingBoosts boosts={boosts}  showText={showText} boostsToDisplay={boostsToDisplay} boostApplied={boostApplied}  />
             <PlayersInfo challengeDetails={challengeDetails} />
         </View>
     )
@@ -40,7 +86,7 @@ const RenderGameProgress = ({ onComplete }) => {
                         isPlaying={!isGamePaused}
                         duration={gameDuration}
                         colors={['#fff', '#F7B801', '#A30000']}
-                        colorsTime={[gameDuration/2, gameDuration/4, 0]}
+                        colorsTime={[gameDuration / 2, gameDuration / 4, 0]}
                         trailColor="#2D9CDB"
                         size={60}
                         strokeWidth={5}
@@ -116,6 +162,49 @@ const OpponentPlayerInfo = ({ playerName, playerAvatar }) => {
             />
             <Text style={styles.opponentName}>{playerName}</Text>
         </View>
+    )
+}
+
+const ChallengeStakingBoosts = ({ boosts, showText, boostsToDisplay, boostApplied }) => {
+    return (
+        <>
+            {boosts?.length > 0 ?
+                <View style={styles.availableBoosts}>
+                    <View style={styles.boostinfo}>
+                        <Text style={styles.title}>BOOST</Text>
+                    </View>
+                    {
+                        boostsToDisplay().map((boost, index) =>
+                            boost.count >= 1 &&
+                            <ChallengeStakingBoost boost={boost} key={index} onConsume={boostApplied} showText={showText} />
+                        )
+                    }
+
+                </View>
+                :
+                <></>
+            }
+        </>
+    )
+}
+
+const ChallengeStakingBoost = ({ boost, showText, onConsume }) => {
+    const activeBoost = useSelector(state => state.triviaChallenge.activeBoost);
+    console.log(activeBoost, 'lllll')
+    const isActive = activeBoost.id === boost.id;
+    return (
+        <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
+            <View style={styles.boostContainer}>
+            <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
+                    <Image
+                        source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
+                        style={[styles.boostIcon, { opacity: showText ? 0 : 1 }]}
+                    />
+                    <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
+                </View>
+                <Text style={styles.name}>{boost.name}</Text>
+            </View>
+        </Pressable>
     )
 }
 
@@ -235,7 +324,7 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         width: responsiveScreenWidth(25),
         textAlign: 'center',
-        marginRight:'1rem'
+        marginRight: '1rem'
     },
     opponentName: {
         fontSize: '0.75rem',
@@ -243,11 +332,21 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         width: responsiveScreenWidth(25),
         textAlign: 'center',
-        marginLeft:'1rem'
+        marginLeft: '1rem'
     },
     versus: {
         fontSize: '0.75rem',
         fontFamily: 'graphik-medium',
         color: '#FFFF',
     },
+    boostIcon: {
+        width: responsiveScreenWidth(7),
+        height: responsiveScreenWidth(7),
+    },
+    boostContainer: {
+        alignItems:'flex-start',
+        flexDirection:'column'
+    },
+
+
 })

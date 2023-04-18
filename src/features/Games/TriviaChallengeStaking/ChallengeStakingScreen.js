@@ -278,8 +278,8 @@ const styles = EStyleSheet.create({
     },
     boostIcon: {
         marginBottom: normalize(5),
-        width: responsiveScreenHeight(4),
-        height: responsiveScreenHeight(4),
+        width: responsiveScreenWidth(7),
+        height: responsiveScreenWidth(7),
     },
     boostContainer: {
         flexDirection: 'row',
