@@ -4,6 +4,7 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import { Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Constants from 'expo-constants';
+import analytics from '@react-native-firebase/analytics';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import LottieAnimations from "../../../shared/LottieAnimations";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
@@ -18,6 +19,7 @@ const ChallengeGameBoardWidgets = ({ onComplete }) => {
     const boosts = useSelector(state => state.auth.user.boosts);
     const [showText, setShowText] = useState(true);
     const gameMode = useSelector(state => state.game.gameMode);
+    const documentId = useSelector(state => state.triviaChallenge.documentId);
 
 
 
@@ -31,14 +33,29 @@ const ChallengeGameBoardWidgets = ({ onComplete }) => {
                 dispatch(pauseGame(false))
                 dispatch(boostReleased())
             }, 10000);
+            analytics().logEvent("trivia_challenge_freeze_boost_used", {
+                'documentId': documentId,
+                'opponentName': challengeDetails.opponent.username,
+                'username': challengeDetails.username,
+            })
         }
         if (name === 'SKIP') {
             dispatch(skipQuestion());
             dispatch(boostReleased());
+            analytics().logEvent("trivia_challenge_skip_boost_used", {
+                'documentId': documentId,
+                'opponentName': challengeDetails.opponent.username,
+                'username': challengeDetails.username,
+            })
         }
         // if (name === "BOMB") {
         //     dispatch(bombOptions());
         //     dispatch(boostReleased());
+        //     analytics().logEvent("trivia_challenge_bomb_boost_used", {
+        //         'documentId': documentId,
+        //         'opponentName': challengeDetails.opponent.username,
+        //         'username': challengeDetails.username,
+        //     })
         // }
     }
 
@@ -61,7 +78,7 @@ const ChallengeGameBoardWidgets = ({ onComplete }) => {
     return (
         <View style={styles.gameProgressAndBoost}>
             <RenderGameProgress onComplete={onComplete} />
-            <ChallengeStakingBoosts boosts={boosts}  showText={showText} boostsToDisplay={boostsToDisplay} boostApplied={boostApplied}  />
+            <ChallengeStakingBoosts boosts={boosts} showText={showText} boostsToDisplay={boostsToDisplay} boostApplied={boostApplied} />
             <PlayersInfo challengeDetails={challengeDetails} />
         </View>
     )
@@ -195,7 +212,7 @@ const ChallengeStakingBoost = ({ boost, showText, onConsume }) => {
     return (
         <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
             <View style={styles.boostContainer}>
-            <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
+                <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
                     <Image
                         source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
                         style={[styles.boostIcon, { opacity: showText ? 0 : 1 }]}
@@ -344,8 +361,8 @@ const styles = EStyleSheet.create({
         height: responsiveScreenWidth(7),
     },
     boostContainer: {
-        alignItems:'flex-start',
-        flexDirection:'column'
+        alignItems: 'flex-start',
+        flexDirection: 'column'
     },
 
 
