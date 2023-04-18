@@ -16,39 +16,33 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import Loader from '../shared/Loader'
 import useSound from '../utils/useSound'
-import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../utils/utils'
 import { ScrollView } from 'react-native-gesture-handler';
 import { setGameMode } from './Games/GameSlice';
 import { getAchievements } from './Profile/AchievementSlice';
 import { Image } from 'react-native';
+import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../utils/utils';
+import { Alert } from 'react-native';
 
 const Dashboard = ({ navigation }) => {
     const loading = useSelector(state => state.common.initialLoading);
     const dispatch = useDispatch()
-    const minVersionCode = useSelector(state => state.common.minVersionCode);
-    const minVersionForce = useSelector(state => state.common.minVersionForce);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [achievementPopup, setAchievementPopup] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
-    const items = useSelector(state => state.inAppPurchase.items);
-    const [refreshing, setRefreshing] = useState(false);
-    // const isTourActive = useSelector(state => state.tourSlice.isTourActive);
-    const [forceRender, setForceRender] = useState(true)
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
 
     const isFocused = useIsFocused();
     const { playSound, toogle, handleToggle, stopSound } = useSound(require('./../../assets/sounds/dashboard.mp3'));
-    
+
     useEffect(() => {
         if (isFocused && isSoundLoaded) {
             playSound()
         }
     }, [isFocused, isSoundLoaded]);
+
     useEffect(() => {
         const _2 = dispatch(getCommonData());
         const _3 = dispatch(fetchFeatureFlags())
-        // const _4 = dispatch(getUser())
+
 
         Promise.all([_2, _3]).then(() => {
             dispatch(initialLoadingComplete());
@@ -57,36 +51,6 @@ const Dashboard = ({ navigation }) => {
         // getStoreItems()
     }, []);
 
-    useEffect(() => {
-        if (Constants.manifest.extra.isDevelopment) {
-            return;
-        }
-        //whether we are forcing or not, show the first time
-        notifyOfStoreUpdates(minVersionCode, minVersionForce);
-    }, [minVersionCode]);
-
-
-    useFocusEffect(
-        React.useCallback(() => {
-
-            if (loading) {
-                return;
-            }
-
-            // console.info('home screen focus effect')
-
-            if (Constants.manifest.extra.isDevelopment) {
-                return;
-            }
-
-            notifyOfPublishedUpdates();
-
-            if (minVersionForce) {
-                notifyOfStoreUpdates(minVersionCode, minVersionForce);
-            }
-
-        }, [loading])
-    );
     useFocusEffect(
         React.useCallback(() => {
             // console.info('UserDetails focus effect')
@@ -97,21 +61,14 @@ const Dashboard = ({ navigation }) => {
 
         }, [])
     );
-    useFocusEffect(
-        React.useCallback(() => {
-            if (loading) {
-                return;
-            }
-        }, [loading])
-        );
 
-        const gameModeSelected = () => {
-            dispatch(setGameMode(exhibitionSelected));
-            navigation.navigate('Games')
-            playSound()
-        }
+    const gameModeSelected = () => {
+        dispatch(setGameMode(exhibitionSelected));
+        navigation.navigate('Games')
+        playSound()
+    }
 
-        
+
     if (loading) {
         return <Loader />
     }
@@ -122,32 +79,47 @@ const Dashboard = ({ navigation }) => {
     };
 
     return (
-        <ScrollView>
-        <MainContainerBackground>
-            <View style={styles.container}>
-            <Pressable style={styles.icons} onPress={handleToggleSwitch}>
-                    {toogle ? <Image style={styles.imageIcons} source={require('../../assets/images/sound-1.png')} /> :
-                        <Image style={styles.imageIcons} source={require('../../assets/images/sound-off.png')} />
-                    }
-                </Pressable>
-                <View style={styles.logo}>
-                    <GameArkLogo />
-                </View>
-                <View style={styles.welcome}>
-                    <Text style={styles.welcomeText}>Welcome to the ark</Text>
-                    <Pressable onPress={gameModeSelected} style={styles.welcomeBtn}>
-                        <Text style={styles.welcomeBtnText}>Play</Text>
-                    </Pressable>
-                </View>
-                <View style={styles.setting}>
-                    <DashboardSettings />
+        <>
+            <RenderUpdateChecker />
+            <ScrollView>
+                <MainContainerBackground>
+                    <View style={styles.container}>
+                        <Pressable style={styles.icons} onPress={handleToggleSwitch}>
+                            {toogle ? <Image style={styles.imageIcons} source={require('../../assets/images/sound-1.png')} /> :
+                                <Image style={styles.imageIcons} source={require('../../assets/images/sound-off.png')} />
+                            }
+                        </Pressable>
+                        <View style={styles.logo}>
+                            <GameArkLogo />
+                        </View>
+                        <View style={styles.welcome}>
+                            <Text style={styles.welcomeText}>Welcome to the ark</Text>
+                            <Pressable onPress={gameModeSelected} style={styles.welcomeBtn}>
+                                <Text style={styles.welcomeBtnText}>Play</Text>
+                            </Pressable>
+                        </View>
+                        <View style={styles.setting}>
+                            <DashboardSettings />
 
-                </View>
-            </View >
-        </MainContainerBackground>
-        </ScrollView>
+                        </View>
+                    </View >
+                </MainContainerBackground>
+            </ScrollView>
+        </>
     )
 }
+
+
+function RenderUpdateChecker() {
+    const minVersionCode = useSelector(state => state.common.minVersionCode);
+    const minVersionForce = useSelector(state => state.common.minVersionForce);
+    if (minVersionCode && Constants.manifest.extra.isDevelopment !== "true") {
+        notifyOfStoreUpdates(minVersionCode, minVersionForce);
+    }
+    notifyOfPublishedUpdates();
+    return null;
+}
+
 
 const styles = EStyleSheet.create({
     container: {
@@ -159,12 +131,12 @@ const styles = EStyleSheet.create({
         // alignItems: 'center',
         // marginTop: normalize(20),
     },
-    icons:{
-        alignItems:'flex-end',
-        width:'100%',
+    icons: {
+        alignItems: 'flex-end',
+        width: '100%',
         marginBottom: -50,
         paddingHorizontal: responsiveScreenWidth(3),
-        zIndex:10
+        zIndex: 10
     },
 
     welcome: {

@@ -7,6 +7,7 @@ import {
 } from "react-native-reanimated";
 import * as Updates from 'expo-updates';
 import crashlytics from '@react-native-firebase/crashlytics';
+import { useNavigation } from "@react-navigation/native";
 
 
 export const randomElement = (arr) => {
@@ -72,30 +73,28 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
 }
 
 export const notifyOfPublishedUpdates = async () => {
+    const navigation = useNavigation()
     try {
-        Updates.checkForUpdateAsync().then(x => {
-
-            if (!x.isAvailable) {
-                return;
-            }
-
-            Updates.fetchUpdateAsync().then(() => {
-                Alert.alert(
-                    "Updates available",
-                    "Please reload the app to enjoy the new experience we just added to Gameark",
-                    [
-                        {
-                            text: 'Restart',
-                            onPress: async () => {
-                                await Updates.reloadAsync().catch((error) => crashlytics().recordError(error));
-                            },
-                        }
-                    ]
-                );
-            });
-        });
+        const update = await Updates.checkForUpdateAsync();
+        if (!update.isAvailable) {
+            return;
+        }
+        await Updates.fetchUpdateAsync();
+        Alert.alert(
+            "Updates available",
+            "Please reload the app to enjoy the new experience we just added to Gameark",
+            [
+                {
+                    text: 'Restart',
+                    onPress: async () => {
+                        await Updates.reloadAsync();
+                        navigation.navigate('Dashboard')
+                    },
+                }
+            ]
+        );
     } catch (e) {
-        crashlytics().recordError(e);
+        crashlytics().recordError(error);
     }
 }
 

@@ -10,9 +10,18 @@ import {
 } from '../../utils/ApiHelper';
 import { isTrue } from '../../utils/stringUtl';
 
-export const registerUser = async (data) => {
-    return axios.post('auth/register', data);
-}
+export const registerUser = createAsyncThunk(
+    'auth/registerUser',
+    async (data, thunkAPI) => {
+    try {
+        const response = await axios.post('auth/register', data);
+        await AsyncStorage.setItem("token", JSON.stringify(response.data.data));
+        return response.data;
+    } catch (err) {
+        return thunkAPI.rejectWithValue(err.response.data);
+    }
+})
+
 
 export const registerUserThunk = createAsyncThunk(
     'auth/RegisterUser',

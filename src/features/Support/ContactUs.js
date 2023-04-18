@@ -14,6 +14,8 @@ import MixedContainerBackground from "../../shared/ContainerBackground/MixedCont
 import AppHeader from "../../shared/AppHeader";
 import GaButton from "../../shared/GaButton";
 import TopIcons from "../../shared/TopIcons";
+import { useNavigation } from "@react-navigation/native";
+import { KeyboardAvoidingView } from "react-native";
 
 
 
@@ -22,17 +24,18 @@ const ContactUs = ({ navigation }) => {
     const user = useSelector(state => state.auth.user);
 
     return (
+        <ScrollView>
         <MixedContainerBackground>
             <ScrollView style={styles.container}>
                 <TopIcons />
                 <AppHeader title='Help Center' />
                 <View style={styles.contact}>
                     <Text style={styles.title}>How can we be of help to you today?</Text>
-                    <ContactForm user={user} />
+                    <ContactForm user={user} navigation={navigation}/>
                 </View>
             </ScrollView>
         </MixedContainerBackground>
-
+        </ScrollView>
     )
 }
 
@@ -45,8 +48,7 @@ const ContactForm = ({ user }) => {
     const [canSave, setCanSave] = useState(false);
     const first_name = user.firstName
     const last_name = user.lastName
-    console.log(email)
-
+    const navigation = useNavigation()
     const sendFeedback = () => {
         setSaving(true)
         dispatch(sendUserFeedback({
@@ -58,12 +60,13 @@ const ContactForm = ({ user }) => {
         }))
             .then(unwrapResult)
             .then(async result => {
-                Alert.alert('Thanks for your feedback. You would be responded to shortly')
+                Alert.alert('Thanks for your feedback', 'You would be responded to shortly',[{ text: 'Ok', onPress: () => navigation.goBack(null)}])
                 await analytics().logEvent("user_sent_feedback", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email
                 })
+                // navigation.navigate('Dashboard')
                 setMessage('')
                 setSaving(false)
             })
@@ -86,6 +89,7 @@ const ContactForm = ({ user }) => {
     }, [messageError, message_body])
 
     return (
+        <KeyboardAvoidingView behavior="padding">
         <View style={styles.formContainer}>
             <Input
                 label='Email'
@@ -110,6 +114,7 @@ const ContactForm = ({ user }) => {
                 disabled={!canSave || saving}
             />
         </View>
+        </KeyboardAvoidingView>
     )
 }
 
