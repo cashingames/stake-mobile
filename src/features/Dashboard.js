@@ -28,7 +28,6 @@ const Dashboard = ({ navigation }) => {
     const dispatch = useDispatch()
     const gameModes = useSelector(state => state.common.gameModes);
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
-    const token = useSelector(state => state.auth.token);
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
 
     const isFocused = useIsFocused();
@@ -39,10 +38,6 @@ const Dashboard = ({ navigation }) => {
             playSound()
         }
     }, [isFocused, isSoundLoaded]);
-
-    useEffect(()=>{
-        Alert.alert('after publish', token)
-    },[])
 
     useEffect(() => {
         const _2 = dispatch(getCommonData());

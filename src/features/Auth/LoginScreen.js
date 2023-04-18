@@ -26,16 +26,11 @@ export default function LoginScreen({ navigation }) {
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const token = useSelector(state => state.auth.token);
     const dispatch = useDispatch()
     const onChangeEmail = (value) => {
         setEmail(value)
     }
-
-    useEffect(()=>{
-        Alert.alert('after publish', token)
-    },[])
-
+    
     const onChangePassword = (value) => {
         setPassword(value)
     }
