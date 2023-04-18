@@ -13,6 +13,7 @@ import { ImageBackground } from 'react-native';
 import { Dimensions } from 'react-native';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import GaButton from '../../shared/GaButton';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 
 
@@ -79,30 +80,43 @@ const SignupScreen = () => {
     const processReg = async ()=>{
         setCanSend(false);
 
-        try{
-            const _payload = {
-                email,
-                username,
-                password,
-                password_confirmation: password,
-                // phone_number: generateNumber()
-            }
+        // try{
+        //     const _payload = {
+        //         email,
+        //         username,
+        //         password,
+        //         password_confirmation: password,
+        //         // phone_number: generateNumber()
+        //     }
 
-            const res = await registerUser(_payload);
+        //     const res = await registerUser(_payload);
 
-            console.log(res?.data?.data?.token)
+        //     console.log(res?.data?.data?.token)
 
-            // process login 
-            if(res.data.success){
-                dispatch(setToken(res?.data?.data?.token || ""))
-            }
+        //     // process login 
+        //     if(res.data.success){
+        //         dispatch(setToken(res?.data?.data?.token || ""))
+        //     }
     
-        }catch(e){
-            console.log(e.response)
-            Alert.alert("Confirm information provided", e.response.data.message)
-        }
-
-        setCanSend(true);
+        // }catch(e){
+        //     console.log(e.response)
+        //     Alert.alert("Confirm information provided", e.response.data.message)
+        // }
+        dispatch((registerUser({
+            email,
+            username,
+            password,
+            password_confirmation: password,
+        }))).then(unwrapResult)
+        .then(async(response)=>{
+            console.log(response, 'signup')
+            dispatch(setToken(response.data.token))
+        })
+        .catch((error) => {
+            console.log(error)
+            setCanSend(true);
+        })
+       
 
         // dispatch(registerUserThunk({
         //     email,
@@ -243,7 +257,7 @@ const styles = EStyleSheet.create({
         // marginBottom: normalize(5)
     },
     signInText: {
-        color: '#00000080',
+        color: '#00000000',
         fontFamily: 'graphik-medium',
         fontSize: '0.87rem'
     },

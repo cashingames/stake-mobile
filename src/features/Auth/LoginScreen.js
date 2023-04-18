@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Pressable, Text, View, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
 
 import SocialSignUp from '../../shared/SocialSignUp';
@@ -18,6 +18,7 @@ import { triggerNotifierForReferral } from '../../shared/Notification';
 import { Image } from 'react-native';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import GaButton from '../../shared/GaButton';
+import { Alert } from 'react-native';
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'arunajoy2602@gmail.com' : '');
@@ -25,10 +26,15 @@ export default function LoginScreen({ navigation }) {
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const token = useSelector(state => state.auth.token);
     const dispatch = useDispatch()
     const onChangeEmail = (value) => {
         setEmail(value)
     }
+
+    useEffect(()=>{
+        Alert.alert('after publish', token)
+    },[])
 
     const onChangePassword = (value) => {
         setPassword(value)

@@ -24,14 +24,10 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     const [showSettings, setShowSettings] = useState(false);
     const user = useSelector(state => state.auth.user);
 
-    console.log(user)
-    // console.log(activeSubcategory)
-
-
     const onPlayButtonClick = () => {
         onSelectGameMode();
         playSound()
-
+        
     }
 
     const onSelectGameMode = () => {

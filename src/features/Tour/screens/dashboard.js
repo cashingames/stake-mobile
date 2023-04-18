@@ -13,17 +13,14 @@ import normalize, {
 } from '../../../utils/normalize';
 import { isTrue, formatCurrency, formatNumber } from '../../../utils/stringUtl';
 import LiveTriviaCard from '../../LiveTrivia/LiveTriviaCard';
-import PageLoading from '../../../shared/PageLoading';
 import { getUser } from '../../Auth/AuthSlice';
 import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../../CommonSlice';
 import UserItems from '../../../shared/UserItems';
-import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../../utils/utils';
 import crashlytics from '@react-native-firebase/crashlytics';
 import LottieAnimations from '../../../shared/LottieAnimations';
-import SelectGameMode, { AvailableMode } from '../../Games/SelectGameMode';
+import  { AvailableMode } from '../../Games/SelectGameMode';
 import ChallengeWeeklyTopLeaders from '../../Leaderboard/ChallengeWeeklyTopLeaders';
 import { getLiveTriviaStatus } from '../../LiveTrivia/LiveTriviaSlice';
-import SwiperFlatList from 'react-native-swiper-flatlist';
 import Stakingpopup from '../../../shared/Stakingpopup';
 import WeeklyTopLeadersHero from '../../../shared/WeeklyTopLeadersHero';
 import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
@@ -32,6 +29,8 @@ import { Dimensions } from 'react-native';
 import { Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { defaultToolTip } from '../Index';
+import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../../utils/utils';
+import Loader from '../../../shared/Loader';
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 const window = Dimensions.get("window")
@@ -42,9 +41,6 @@ const HomeScreen = (props) => {
     const navigation = useNavigation();
 
     const dispatch = useDispatch();
-
-    const minVersionCode = useSelector(state => state.common.minVersionCode);
-    const minVersionForce = useSelector(state => state.common.minVersionForce);
     const loading = useSelector(state => state.common.initialLoading);
     const challengeLeaders = useSelector(state => state.game.challengeLeaders);
     const showStakingAdvert = false;
@@ -74,39 +70,11 @@ const HomeScreen = (props) => {
 
     }, []);
 
-    useEffect(() => {
-        if (Constants.manifest.extra.isDevelopment) {
-            return;
-        }
-        //whether we are forcing or not, show the first time
-        notifyOfStoreUpdates(minVersionCode, minVersionForce);
-    }, [minVersionCode]);
+    
 
     useEffect(()=>{
         setModalVisible(showStakingAdvert);
     }, [showStakingAdvert])
-
-    useFocusEffect(
-        React.useCallback(() => {
-
-            if (loading) {
-                return;
-            }
-
-            // console.info('home screen focus effect')
-
-            if (Constants.manifest.extra.isDevelopment) {
-                return;
-            }
-
-            // notifyOfPublishedUpdates();
-
-            if (minVersionForce) {
-                // notifyOfStoreUpdates(minVersionCode, minVersionForce);
-            }
-
-        }, [loading])
-    );
 
     useFocusEffect(
         React.useCallback(() => {
@@ -120,9 +88,7 @@ const HomeScreen = (props) => {
     );
 
     useEffect(()=>{
-        setTimeout(()=>{
-            
-            
+        setTimeout(()=>{   
             // console.log('reach11')
             CopilotProps.start()
             CopilotProps.copilotEvents.on('stop', handleTourStop)
@@ -147,7 +113,13 @@ const HomeScreen = (props) => {
 
     const games = [...gameModes].sort((a, b) => a.id - b.id);
 
+    if(loading){
+        return <Loader />
+    }
+
     return (
+        <>
+        <RenderUpdateChecker />
         <View style={styles.headContainer}>
             <ScrollView contentContainerStyle={[styles.scrollView, {width: window.width}]}
                 refreshControl={
@@ -248,6 +220,7 @@ const HomeScreen = (props) => {
                 <Stakingpopup setModalVisible={setModalVisible} modalVisible={modalVisible} gameModes={gameModes} />
             </ScrollView>
         </View>
+        </>
     );
 }
 
@@ -361,6 +334,15 @@ const LiveTriviaBanner = () => {
     return show ? <LiveTriviaCard trivia={trivia} /> : null;
 }
 
+function RenderUpdateChecker() {
+    const minVersionCode = useSelector(state => state.common.minVersionCode);
+    const minVersionForce = useSelector(state => state.common.minVersionForce);
+    if (minVersionCode && Constants.expoConfig.extra.isDevelopment !== "true") {
+        notifyOfStoreUpdates(minVersionCode, minVersionForce);
+    }
+    notifyOfPublishedUpdates();
+    return null;
+}
 
 
 const styles = EStyleSheet.create({

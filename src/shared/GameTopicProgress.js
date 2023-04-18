@@ -15,19 +15,9 @@ const GameTopicProgress = ({ onComplete, ending }) => {
     const gameTypeName = useSelector(state => state.game.gameType.name);
     const gameCategoryName = useSelector(state => state.game.gameCategory.name);
 
-    // console.log(gameTypeId)
-
     return (
         <View style={styles.topicProgress}>
-            {/* <Text style={styles.title}>{gameCategory} {gameTopic}</Text> */}
-            {/* <LottieAnimations
-                animationView={require('../../assets/game-board.json')}
-                width={normalize(110)}
-                height={normalize(110)}
-            /> */}
             <Text style={styles.gameInfo}>{`${gameTypeName}(${gameCategoryName})`}</Text>
-            {/* <Text style={styles.gameInfo}>General Knowledge (General Knowledge In Music)</Text> */}
-
             <View style={styles.topicProgressRight}>
                 <AnsweredGameProgress />
                 <View style={styles.questionsAnsweredContainer}>
@@ -85,7 +75,7 @@ const styles = EStyleSheet.create({
     topicProgress: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         alignItems: 'center',
         borderBottomWidth: 1,
         padding: '1rem',
@@ -106,8 +96,9 @@ const styles = EStyleSheet.create({
     gameInfo:{
         marginRight:'0.3rem',
         color:'#fff',
-        fontSize:'0.65rem',
+        fontSize:'0.6rem',
         fontFamily:'blues-smile',
-        width: '12.5rem'
+        textAlign:'center',
+        width:normalize(150)
     }
 })

@@ -226,7 +226,7 @@ const styles = EStyleSheet.create({
         // paddingTop: normalize(45),
         paddingHorizontal: responsiveScreenWidth(6),
         // backgroundColor: 'blue',
-        height: responsiveScreenHeight(10)
+        height: responsiveScreenHeight(15)
 
     },
     image: {

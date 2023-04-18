@@ -220,7 +220,7 @@ export default function ({ navigation }) {
                     </View>
                 </View>
                 <GamePlans user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />
-                <GameBoosts user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />
+                {/* <GameBoosts user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} /> */}
                 {/* <SpecialOffer /> */}
             </ScrollView>
         </MixedContainerBackground>
@@ -230,6 +230,7 @@ export default function ({ navigation }) {
 
 const GamePlans = ({ user, purchaeStoreItem, getStorePrice }) => {
     const plans = useSelector(state => state.common.plans);
+    const boosts = useSelector(state => state.common.boosts);
     return (
         <View style={styles.storeItems}>
 
@@ -253,6 +254,7 @@ const GamePlans = ({ user, purchaeStoreItem, getStorePrice }) => {
                     </ImageBackground>
                 </View> */}
                 {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />)}
+                {boosts.map((boost, i) => <BoostCard key={i} boost={boost} user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />)}
             </View>
         </View>
     )
@@ -335,30 +337,33 @@ const BoostCard = ({ boost, user, purchaeStoreItem, getStorePrice }) => {
         // refRBSheet.current.open()
     }
     return (
-        <Pressable activeOpacity={0.8} onPress={buyBoost}>
-            <Animated.View style={styles.storeItemContainer} entering={randomEnteringAnimation().duration(1000)}>
-                <BoostCardDetails boost={boost} getStorePrice={getStorePrice} />
-            </Animated.View>
-        </Pressable>
+        <ImageBackground style={styles.storeItemContainer} source={require('../../../assets/images/store-items-bg.png')}>
+            <Pressable activeOpacity={0.8} onPress={buyBoost}>
+                <Animated.View entering={randomEnteringAnimation().duration(1000)}>
+                    <BoostCardDetails boost={boost} getStorePrice={getStorePrice} />
+                </Animated.View>
+            </Pressable>
+        </ImageBackground>
+
     )
 }
 
 const BoostCardDetails = ({ boost, getStorePrice }) => {
     return (
         <>
-            <ImageBackground style={styles.storeItemContainer} source={require('../../../assets/images/store-items-bg.png')}>
+            <View style={styles.giftBoxCase}>
                 <Image
                     source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
-                    style={[boost.name === 'Time Freeze' ? styles.boostIcon : boost.name ==='Skip' ? styles.skipIcon : styles.bombIcon]}
+                    style={[boost.name === 'Time Freeze' ? styles.boostIcon : boost.name === 'Skip' ? styles.skipIcon : styles.bombIcon]}
                 />
                 <Text style={styles.storeItemName}>{formatNumber(boost.pack_count)} {boost.name}</Text>
-                <View style={styles.boostDetailsContainer}>
-                    <Text style={styles.cardDescription}>{boost.description}</Text>
-                </View>
-                <View style={styles.boostPriceCase}>
-                    <Text style={styles.buyWithCash}>{getStorePrice(boost, 'boost')}</Text>
-                </View>
-            </ImageBackground>
+            </View>
+            <View style={styles.boostDetailsContainer}>
+                <Text style={styles.cardDescription}>{boost.description}</Text>
+            </View>
+            <View style={styles.boostPriceCase}>
+                <Text style={styles.buyWithCash}>{getStorePrice(boost, 'boost')}</Text>
+            </View>
         </>
     )
 }
@@ -464,11 +469,11 @@ const styles = EStyleSheet.create({
         width: normalize(110),
         height: normalize(89),
     },
-    skipIcon:{
-        width: normalize(76),
-        height: normalize(78)
+    skipIcon: {
+        width: normalize(82),
+        height: normalize(85)
     },
-    bombIcon:{
+    bombIcon: {
         width: normalize(79),
         height: normalize(85)
     },
@@ -508,7 +513,7 @@ const styles = EStyleSheet.create({
         fontSize: '2rem'
     },
     giftBoxCase: {
-        alignItems: 'center'
+        alignItems: 'center',
     },
     giftBox: {
         height: normalize(95),
@@ -521,12 +526,12 @@ const styles = EStyleSheet.create({
     boostPriceCase: {
         backgroundColor: '#0038B3',
         paddingVertical: normalize(4),
-        width: normalize(156),
+        width: normalize(158),
         borderWidth: 2,
         borderColor: '#00EDF1',
         marginTop: 10,
         justifyContent: 'center',
         alignItems: 'center'
     },
-   
+
 });
