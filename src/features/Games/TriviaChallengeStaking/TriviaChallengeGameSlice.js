@@ -112,6 +112,7 @@ export const TriviaChallengeStakeGameSlice = createSlice({
             state.currentQuestionIndex = 0;
             state.countdownFrozen = false;
             state.consumedBoosts = [];
+            state.activeBoost= [];
             state.challengeDetails = {};
             state.totalQuestions = 10
             state.isEnded = false;
