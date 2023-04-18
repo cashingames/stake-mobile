@@ -75,7 +75,7 @@ const HomeScreen = () => {
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}
-                        tintColor="#FFF"
+                        tintColor="#000000"
                     />
                 }
             >
