@@ -26,6 +26,8 @@ const GameTopicProgress = ({ onComplete, ending }) => {
                 height={normalize(110)}
             /> */}
             <Text style={styles.gameInfo}>{`${gameTypeName}(${gameCategoryName})`}</Text>
+            {/* <Text style={styles.gameInfo}>General Knowledge (General Knowledge In Music)</Text> */}
+
             <View style={styles.topicProgressRight}>
                 <AnsweredGameProgress />
                 <View style={styles.questionsAnsweredContainer}>
@@ -105,6 +107,7 @@ const styles = EStyleSheet.create({
         marginRight:'0.3rem',
         color:'#fff',
         fontSize:'0.65rem',
-        fontFamily:'blues-smile'
+        fontFamily:'blues-smile',
+        width: '12.5rem'
     }
 })

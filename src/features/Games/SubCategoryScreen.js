@@ -184,7 +184,7 @@ const styles = EStyleSheet.create({
         position: 'absolute',
         left:0,
         right: 0,
-        bottom:Platform.OS === 'ios' ? 70 : 180,
+        bottom:Platform.OS === 'ios' ? 70 : 160,
     },
 
     categoryHeading: {
