@@ -234,7 +234,7 @@ const GamePlans = ({ user, purchaeStoreItem, getStorePrice }) => {
         <View style={styles.storeItems}>
 
             <View style={styles.storeCards}>
-                <View>
+                {/* <View>
                     <ImageBackground style={styles.storeItemContainer} source={require('../../../assets/images/store-items-bg.png')}>
                         <Animated.View entering={randomEnteringAnimation().duration(1000)}>
                             <View style={styles.giftBoxCase}>
@@ -251,7 +251,7 @@ const GamePlans = ({ user, purchaeStoreItem, getStorePrice }) => {
                             </View>
                         </Animated.View>
                     </ImageBackground>
-                </View>
+                </View> */}
                 {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />)}
             </View>
         </View>
@@ -349,7 +349,7 @@ const BoostCardDetails = ({ boost, getStorePrice }) => {
             <ImageBackground style={styles.storeItemContainer} source={require('../../../assets/images/store-items-bg.png')}>
                 <Image
                     source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
-                    style={styles.boostIcon}
+                    style={[boost.name === 'Time Freeze' ? styles.boostIcon : boost.name ==='Skip' ? styles.skipIcon : styles.bombIcon]}
                 />
                 <Text style={styles.storeItemName}>{formatNumber(boost.pack_count)} {boost.name}</Text>
                 <View style={styles.boostDetailsContainer}>
@@ -400,8 +400,8 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(20),
         paddingVertical: responsiveScreenHeight(2),
         justifyContent: 'space-between',
-        width: responsiveScreenWidth(45),
-        height: 210,
+        width: 160,
+        height: 193,
     },
     buyItemCard: {
         alignItems: 'center',
@@ -426,12 +426,12 @@ const styles = EStyleSheet.create({
     },
     storeItemName: {
         fontFamily: 'blues-smile',
-        fontSize: '1.4rem',
+        fontSize: '1.2rem',
         color: '#fff',
     },
     cardDescription: {
         fontFamily: 'graphik-medium',
-        fontSize: '0.63rem',
+        fontSize: '0.5rem',
         color: '#fff',
         // lineHeight: responsiveScreenHeight(2.5),
         width: responsiveScreenWidth(38),
@@ -461,9 +461,16 @@ const styles = EStyleSheet.create({
         marginTop: responsiveScreenHeight(5)
     },
     boostIcon: {
-        marginTop: normalize(12),
+        width: normalize(110),
+        height: normalize(89),
+    },
+    skipIcon:{
+        width: normalize(76),
+        height: normalize(78)
+    },
+    bombIcon:{
         width: normalize(79),
-        height: normalize(85),
+        height: normalize(85)
     },
     boostDetailsContainer: {
         alignItems: 'center',
@@ -508,13 +515,13 @@ const styles = EStyleSheet.create({
         width: normalize(96)
     },
     planIcon: {
-        height: 96,
-        width: 125
+        height: 82,
+        width: 104
     },
     boostPriceCase: {
         backgroundColor: '#0038B3',
         paddingVertical: normalize(4),
-        width: responsiveScreenWidth(43.5),
+        width: normalize(156),
         borderWidth: 2,
         borderColor: '#00EDF1',
         marginTop: 10,

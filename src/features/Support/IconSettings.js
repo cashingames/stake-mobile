@@ -108,7 +108,7 @@ const styles = EStyleSheet.create({
     settingIconsContainter: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        marginTop: Platform.OS === 'ios' ? responsiveScreenHeight(50) : responsiveScreenHeight(35),
+        marginTop: Platform.OS === 'ios' ? responsiveScreenHeight(40) : responsiveScreenHeight(35),
         paddingHorizontal: responsiveScreenWidth(5),
     },
 

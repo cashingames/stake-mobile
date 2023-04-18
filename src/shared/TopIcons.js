@@ -8,11 +8,13 @@ import { Feather } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { Animated } from 'react-native'
 import { useRef } from 'react'
+import { Pressable } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
 const TopIcons = () => {
     const user = useSelector(state => state.auth.user);
     var plans = useSelector(state => state.auth.user.activePlans ?? []);
-    
+
     const [sumOfPlans, setSumOfPlans] = useState(0);
 
     // const { playSound } =  useSound(require('../../assets/sounds/option-picked.mp3'))
@@ -55,7 +57,7 @@ const TopIcons = () => {
                     <View style={styles.iconText}>
                         <Text style={styles.text}>{sumOfPlans}</Text>
                     </View>
-                   <IconDetails />
+                    <IconDetails />
                 </View>
             </View>
             <View style={styles.iconContainer}>
@@ -64,7 +66,7 @@ const TopIcons = () => {
                     <View style={styles.iconText}>
                         <Text style={styles.text}>{user.points}</Text>
                     </View>
-                   <IconDetails />
+                    <IconDetails />
                 </View>
             </View>
         </View>
@@ -72,10 +74,13 @@ const TopIcons = () => {
 }
 
 const IconDetails = () => {
-    return(
-        <View style={styles.plusCase}>
-        <Feather name="plus" size={18} color="#fff" />
-    </View>
+    const navigation = useNavigation()
+    return (
+        <Pressable onPress={() => navigation.navigate('GameStore')}>
+            <View style={styles.plusCase}>
+                <Feather name="plus" size={18} color="#fff" />
+            </View>
+        </Pressable>
     )
 }
 
@@ -104,7 +109,7 @@ const styles = EStyleSheet.create({
         marginTop: '.6rem',
         marginLeft: '0.2rem'
     },
-    iconBox:{
+    iconBox: {
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -113,7 +118,7 @@ const styles = EStyleSheet.create({
         borderTopLeftRadius: 4,
         borderBottomLeftRadius: 4,
         paddingHorizontal: '0.6rem',
-        justifyContent:'center',
+        justifyContent: 'center',
         backgroundColor: '#102058',
         marginTop: '0.3rem',
     },
@@ -137,9 +142,9 @@ const styles = EStyleSheet.create({
         borderRadius: 2,
         marginTop: '0.3rem',
     },
-    plus:{
-        color:'#fff',
-        fontSize:'1rem'
+    plus: {
+        color: '#fff',
+        fontSize: '1rem'
     }
 })
 export default TopIcons
