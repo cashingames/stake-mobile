@@ -53,6 +53,7 @@ const ContactForm = ({ user }) => {
             first_name,
             last_name,
             email,
+            username: user.username,
             message_body,
         }))
             .then(unwrapResult)
