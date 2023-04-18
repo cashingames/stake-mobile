@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Pressable, Text, View, ScrollView, Platform } from 'react-native';
+import { Pressable, Text, View, ScrollView, Platform, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import Constants from 'expo-constants';
@@ -82,8 +82,9 @@ export default function LoginScreen({ navigation }) {
 
 
     return (
+        // <ScrollView>
         <MixedContainerBackground>
-            <View style={styles.container}>
+            <KeyboardAvoidingView style={styles.container}>
                 <View style={styles.logo}>
                     <Image source={require('../../../assets/images/Ga-logo.png')} />
                 </View>
@@ -112,7 +113,7 @@ export default function LoginScreen({ navigation }) {
                         disabled={!canLogin} />
                 </View>
                 <RenderCreateAccount navigation={navigation} />
-                </View>
+                </KeyboardAvoidingView>
         </MixedContainerBackground>
     );
 }
@@ -166,7 +167,7 @@ const styles = EStyleSheet.create({
     },
 
     inputSection: {
-        marginTop: Platform.OS === 'ios' ? normalize(80) : normalize(110),
+        marginTop: Platform.OS === 'ios' ? normalize(80) : normalize(60),
     },
 
     errorBox: {

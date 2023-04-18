@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 
-import normalize, { responsiveScreenWidth } from '../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber, isTrue } from '../utils/stringUtl';
 import { Platform } from 'react-native';
 import { ScrollView } from 'react-native';
@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         backgroundColor: '#0A1F45',
-        paddingVertical: responsiveScreenWidth(3),
+        paddingTop: responsiveScreenWidth(3),
+        paddingBottom: responsiveScreenHeight(15),
         marginTop: responsiveScreenWidth(3),
         borderTopRightRadius: 40,
         borderTopLeftRadius: 40,

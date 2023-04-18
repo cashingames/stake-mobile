@@ -33,7 +33,7 @@ const styles = EStyleSheet.create({
     logo: {
         alignItems: 'flex-start',
         flexDirection: 'row',
-        marginTop: normalize(40),
+        marginTop: normalize(15),
         paddingHorizontal: responsiveScreenWidth(3),
         justifyContent: 'space-between'
     },

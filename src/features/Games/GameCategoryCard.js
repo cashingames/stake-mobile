@@ -28,7 +28,7 @@ const styles = EStyleSheet.create({
 
     card: {
         width: '100%',
-        height:63,
+        height:55,
         paddingHorizontal: normalize(20),
         borderRadius: normalize(20),
         marginBottom: normalize(10),

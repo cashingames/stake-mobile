@@ -60,7 +60,9 @@ const AvailableGameSessionBoosts = () => {
             setTimeout(() => {
                 dispatch(pauseGame(false))
                 dispatch(boostReleased())
-            }, 10000);
+            }, 333333310000);
+        // }, 10000);
+
         }
         if (name === 'SKIP') {
             dispatch(skipQuestion());

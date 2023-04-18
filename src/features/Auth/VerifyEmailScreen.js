@@ -190,9 +190,8 @@ const styles = EStyleSheet.create({
         flex: 1,
         // backgroundColor: '#FFFF',
         paddingBottom: 10,
-        paddingLeft: 30,
-        paddingRight: 30,
-        paddingTop: 10,
+        paddingHorizontal: 30,
+        paddingTop: 50,
     },
     headerTextStyle: {
         fontSize: '2.2rem',

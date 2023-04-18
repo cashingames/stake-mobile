@@ -50,7 +50,6 @@ const IconSettings = () => {
       outputRange: ['0deg', '360deg'],
     });
     return(
-        <ScrollView>
             <MixedContainerBackground>
                     <View style={styles.container}>
                         <GameArkLogo />
@@ -95,7 +94,6 @@ const IconSettings = () => {
                     </View>
                     <InviteFriendsScreen  showInviteFriends={showInviteFriends} setShowInviteFriends={setShowInviteFriends}/>
             </MixedContainerBackground>
-            </ScrollView>
     )
 }
 
@@ -104,11 +102,13 @@ const styles = EStyleSheet.create({
         flex: 1,
         paddingTop: normalize(60),
         paddingVertical: responsiveScreenWidth(3),
+        zIndex:10
+
     },
     settingIconsContainter: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        marginTop: Platform.OS === 'ios' ? responsiveScreenHeight(40) : responsiveScreenHeight(35),
+        marginTop: Platform.OS === 'ios' ? responsiveScreenHeight(40) : responsiveScreenHeight(27),
         paddingHorizontal: responsiveScreenWidth(5),
     },
 

@@ -59,7 +59,7 @@ const InviteFriendsScreen = ({ showInviteFriends, setShowInviteFriends }) => {
     };
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.onView}>
                 <Modal
                     animationType="slide"
@@ -104,7 +104,7 @@ const InviteFriendsScreen = ({ showInviteFriends, setShowInviteFriends }) => {
                     </View>
                 </Modal>
             </View>
-        </ScrollView>
+        </View>
 
     );
 }
@@ -115,7 +115,7 @@ export default InviteFriendsScreen;
 const styles = EStyleSheet.create({
     centeredView: {
         flex: 1,
-        paddingVertical: responsiveScreenHeight(2),
+        paddingVertical: responsiveScreenHeight(1),
         backgroundColor: 'rgba(17, 41, 103, 0.77)'
     },
 

@@ -176,7 +176,6 @@ export default function GameEndResultScreen({ navigation }) {
 	}, [])
 
 	return (
-		<ScrollView>
 		<QuizContainerBackground>
 			<View style={styles.container}>
 				<TopIcons />
@@ -186,7 +185,6 @@ export default function GameEndResultScreen({ navigation }) {
 				</View>
 			</View>
 		</QuizContainerBackground>
-		</ScrollView>
 	);
 }
 
@@ -257,7 +255,7 @@ const styles = EStyleSheet.create({
 	},
 	endImageCase: {
 		alignItems: 'center',
-		paddingTop: responsiveScreenHeight(3.5),
+		// paddingTop: responsiveScreenHeight(3.5),
 		marginVertical: responsiveScreenHeight(6),
 	},
 	endImage: {

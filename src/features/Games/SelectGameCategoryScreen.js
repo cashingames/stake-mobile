@@ -50,7 +50,6 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     );
 
     return (
-        <ScrollView>
             <QuizContainerBackground>
                 <ScrollView style={styles.container}>
                         <TopIcons />
@@ -67,13 +66,12 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
                     <View>
                         <GamePicker navigation={navigation} />
                     </View>
-                    </View>
-                     <View style={styles.setting}>
-                        <GameSettings onPress={()=> navigation.goBack(null)} />
-                    </View>             
+                    </View>           
                 </ScrollView> 
+                <View style={styles.setting}>
+                        <GameSettings onPress={()=> navigation.goBack(null)} />
+                    </View>  
             </QuizContainerBackground>
-            </ScrollView>
     )
 }
 
@@ -82,12 +80,13 @@ export default SelectGameCategoryScreen;
 const styles = EStyleSheet.create({
     container: {
         // flex: 1,
-        paddingVertical: responsiveScreenHeight(2),
+        paddingVertical: responsiveScreenHeight(1),
     },
     logo: {
         alignItems: 'flex-start',
         flexDirection: 'row',
-        marginTop: normalize(40),
+        // marginTop: normalize(40),
+        marginTop: normalize(20),
         paddingHorizontal: responsiveScreenWidth(3),
     },
     imageIcons: {
@@ -112,6 +111,9 @@ const styles = EStyleSheet.create({
         height: normalize(184)
     },
     setting: {
-        marginTop: responsiveScreenHeight(10)
+        position: 'absolute',
+        left:0,
+        right: 0,
+        top:Platform.OS === 'ios' ? responsiveScreenHeight(78) : responsiveScreenHeight(78),
     },
 })

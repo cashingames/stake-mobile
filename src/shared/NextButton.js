@@ -79,13 +79,11 @@ const styles = EStyleSheet.create({
 
     btnContainer: {
         alignItems: 'center',
-        // marginTop:-100
-        // paddingHorizontal:normalize(50)
     },
     nextButton: {
         backgroundColor: '#15397D',
         borderRadius: 20,
-        height: normalize(42),
+        height: normalize(35),
         paddingHorizontal: 60,
         justifyContent: 'center',
         borderBottomColor: '#0A1F45',
@@ -93,7 +91,7 @@ const styles = EStyleSheet.create({
     },
     btnText:{
         color:'#fff',
-        fontSize:'1.2rem',
+        fontSize:'0.9rem',
         fontFamily:'blues-smile'
     },
     disabled: {

@@ -52,7 +52,7 @@ const styles = EStyleSheet.create({
         justifyContent:'space-between',
         alignItems: 'center',
         backgroundColor: '#FFFF',
-        marginBottom: normalize(10),
+        marginBottom: normalize(8),
         padding: normalize(15),
         borderRadius: 16,
         borderBottomColor: '#15397D',
