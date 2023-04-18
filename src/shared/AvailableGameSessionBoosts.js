@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Pressable, View, Image, Text } from "react-native";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Pressable, View, Image, Text, Animated } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import Constants from 'expo-constants';
@@ -10,6 +10,7 @@ import { reduceBoostCount } from "../features/Auth/AuthSlice";
 import { unwrapResult } from '@reduxjs/toolkit';
 import analytics from '@react-native-firebase/analytics';
 import useSound from '../utils/useSound';
+import { useRef } from 'react';
 
 
 
@@ -37,13 +38,13 @@ const AvailableGameSessionBoosts = () => {
         return boosts;
     }
 
-    useEffect(() => {
-        // Change the state every second or the time given by User.
-        const interval = setInterval(() => {
-            setShowText((showText) => !showText);
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
+    // useEffect(() => {
+    //     // Change the state every second or the time given by User.
+    //     const interval = setInterval(() => {
+    //         setShowText((showText) => !showText);
+    //     }, 1000);
+    //     return () => clearInterval(interval);
+    // }, []);
 
     const boostApplied = (data) => {
         dispatch(consumeBoost(data))
@@ -95,21 +96,46 @@ const AvailableGameSessionBoosts = () => {
 }
 
 const AvailableBoost = ({ boost, onConsume, showText }) => {
+    const scaleValue = useRef(new Animated.Value(1)).current;
+    const zoomAnimation = {
+        transform: [{ scale: scaleValue }],
+    };
+
+    const zoom = useCallback(() => {
+        Animated.sequence([
+            Animated.timing(scaleValue, { toValue: 1.2, duration: 500, useNativeDriver: true }),
+            Animated.timing(scaleValue, { toValue: 1, duration: 500, useNativeDriver: true }),
+        ]).start(() => {
+            scaleValue.setValue(1);
+        });
+    }, [scaleValue]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            zoom();
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [zoom]);
+
+    useEffect(() => {
+        zoom();
+    }, []);
     const activeBoost = useSelector(state => state.game.activeBoost);
     const isActive = activeBoost.id === boost.id;
 
     return (
         <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
-            <View style={styles.boostContainer}>
+            <Animated.View style={[styles.boostContainer, zoomAnimation]}>
                 <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
                     <Image
                         source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
-                        style={[styles.boostIcon, { opacity: showText ? 0 : 1 }]}
+                        style={styles.boostIcon}
                     />
                     <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
                 </View>
                 <Text style={styles.name}>{boost.name}</Text>
-            </View>
+            </Animated.View>
         </Pressable>
     )
 }

@@ -191,8 +191,6 @@ export default function GameEndResultScreen({ navigation }) {
 }
 
 const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScore }) => {
-	console.log(minimumBoostScore)
-	console.log
 	return (
 		<View style={styles.endImageCase}>
 			{pointsGained > Number(minimumBoostScore)?

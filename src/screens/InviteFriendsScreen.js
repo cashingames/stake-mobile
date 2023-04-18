@@ -79,17 +79,19 @@ const InviteFriendsScreen = ({ showInviteFriends, setShowInviteFriends }) => {
                                     <View>
                                         <Image style={{height:85, width: 112, marginVertical: 10}} source={require('./../../assets/images/heart-icon.png')} />
                                     </View>
-                                    <Text style={styles.modalTitle}>Free 2 Lives!</Text>
+                                    <Text style={styles.giftTitle}>Free 2 Lives!</Text>
                                     <Text style={styles.inviteText}>Invite your {'\n'}
                                         friends to get</Text>
                                     <Text style={styles.gift}>FREE 2 Lives!</Text>
-                                    <ImageBackground style={styles.btnBg} source={require('./../../assets/images/button-case.png')} >
+                                   
                                         <Pressable style={styles.btn}
                                         onPress={onShare}
                                         >
+                                             <ImageBackground style={styles.btnBg} source={require('./../../assets/images/button-case.png')} >
                                             <Text style={styles.btnText}>Invite</Text>
+                                            </ImageBackground>
                                         </Pressable>
-                                    </ImageBackground>
+                                  
                                      <Pressable style={styles.closeBtn}
                                         onPress={() => setShowInviteFriends(false)}
                                     >
@@ -114,7 +116,6 @@ const styles = EStyleSheet.create({
     centeredView: {
         flex: 1,
         paddingVertical: responsiveScreenHeight(2),
-        // justifyContent: 'center',
         backgroundColor: 'rgba(17, 41, 103, 0.77)'
     },
 
@@ -127,15 +128,21 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(15),
         paddingHorizontal: '3rem',
         alignItems: 'center',
-        // height: normalize(311),
-        // width: normalize(376)
+        height: normalize(376),
+        width: normalize(311)
     },
     modalTitle: {
         color: '#fff',
         fontSize: '1.7rem',
         marginVertical: normalize(5),
         fontFamily: 'graphik-medium'
-
+    },
+    giftTitle:{
+        color: '#fff',
+        fontSize: '1.7rem',
+        marginTop: normalize(5),
+        fontFamily: 'graphik-medium',
+        marginBottom: normalize(20)
     },
     inviteText: {
         color: '#fff',
@@ -147,22 +154,23 @@ const styles = EStyleSheet.create({
     gift: {
         color: '#FFBB4F',
         textAlign: 'center',
-        fontSize: '1.5rem',
+        fontSize: '1.7rem',
         fontFamily: 'graphik-medium'
     },
     btnBg: {
-        marginBottom: -50,
-        marginVertical: normalize(10),
+        width: 120,
+        height: 70,
+        alignItems:'center',
+        justifyContent: 'center'
     },
     btn: {
-        paddingVertical: 20,
-        paddingHorizontal: '3rem',
-        marginVertical: normalize(10),
+        position: 'absolute',
+        bottom:-20,
         zIndex: 10
     },
     btnText: {
         color: '#A92101',
-        fontSize: '1.7rem',
+        fontSize: '1.4rem',
         fontFamily: 'blues-smile'
     },
     closeBtn: {

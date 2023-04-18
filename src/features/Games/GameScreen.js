@@ -97,7 +97,7 @@ console.log(user)
                                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                     <Image style={[gameName !== 'Word Trivia' ? styles.cardImage : styles.wordTrivia]} source={gameImage} />
                                 </View>
-                                <View style={[gameName !== 'Word Trivia' ? styles.cardBtnContainer : styles.wordTriviaBtnContainer]}>
+                                <View style={styles.cardBtnContainer}>
                                     <Pressable style={styles.playBtn} onPress={goToGameCategory}>
                                         <Text style={styles.playText}>Play</Text>
                                     </Pressable>
@@ -198,10 +198,9 @@ const styles = EStyleSheet.create({
         marginTop: 10
     },
     wordTrivia:{
-        position:'absolute',
-        height: 300,
-        top: 0,
-        width: 155,
+        
+        height: 200,
+        width: 105,
         marginTop: 10
     },
     cardBtnContainer: {
