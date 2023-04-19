@@ -182,7 +182,7 @@ const styles = EStyleSheet.create({
         position: 'absolute',
         left:0,
         right: 0,
-        top:Platform.OS === 'ios' ? responsiveScreenHeight(70) : responsiveScreenHeight(78),
+        top:Platform.OS === 'ios' ? responsiveScreenHeight(85) : responsiveScreenHeight(78),
     },
 
     categoryHeading: {

@@ -138,11 +138,12 @@ const styles = EStyleSheet.create({
         width: 150,
         height: 95
     },
+    gameContainer:{},
     //game card section to be removed
     gameCard: {
         height: normalize(399),
         width: normalize(192),
-        marginVertical: responsiveScreenHeight(2),
+        marginVertical: Platform.OS === 'ios' ? responsiveScreenHeight(5) : responsiveScreenHeight(2),
         marginHorizontal: responsiveScreenWidth(3),
         paddingVertical: responsiveScreenHeight(2),
         paddingHorizontal: responsiveScreenWidth(5),
@@ -228,7 +229,7 @@ const styles = EStyleSheet.create({
         position: 'absolute',
         left:0,
         right: 0,
-        top:Platform.OS === 'ios' ? responsiveScreenHeight(78) : responsiveScreenHeight(78),
+        top:Platform.OS === 'ios' ? responsiveScreenHeight(85) : responsiveScreenHeight(78),
     },
 
 })

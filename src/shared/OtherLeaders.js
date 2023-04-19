@@ -15,7 +15,7 @@ export default function OtherLeaders({ leaders, otherStyles, otherName }) {
     }
 
     return (
-        <ScrollView>
+        <ScrollView scrollEnabled={false}>
             <ScrollView style={[styles.container, otherStyles]}>
 
                 {currentLeadedrs.map((leader, i) => <OtherLeader key={i} leader={leader}
@@ -23,8 +23,6 @@ export default function OtherLeaders({ leaders, otherStyles, otherName }) {
                 indexArrow={require('../../assets/images/up_arrow.png')}
                 otherName={otherName}
             />)}
-
-
                 {currentLeadedrs.length === 0 && <Text style={otherLeaderStyles.noData}>No data</Text>}
             </ScrollView>
         </ScrollView>
@@ -71,7 +69,7 @@ const styles = StyleSheet.create({
         marginTop: responsiveScreenWidth(3),
         borderTopRightRadius: 40,
         borderTopLeftRadius: 40,
-        height: 200,
+        height: Platform.OS === 'ios' ? 300 : 200,
     },
 });
 

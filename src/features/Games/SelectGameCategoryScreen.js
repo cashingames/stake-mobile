@@ -27,7 +27,7 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     const onPlayButtonClick = () => {
         onSelectGameMode();
         playSound()
-        
+
     }
 
     const onSelectGameMode = () => {
@@ -50,11 +50,11 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     );
 
     return (
-            <QuizContainerBackground>
-                <ScrollView style={styles.container}>
-                        <TopIcons />
-                        <View>
-                            <View style={styles.logo}>
+        <QuizContainerBackground>
+            <View style={styles.container}>
+                <TopIcons />
+                <View>
+                    <View style={styles.logo}>
                         <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
                             <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
                         </Pressable>
@@ -66,12 +66,13 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
                     <View>
                         <GamePicker navigation={navigation} />
                     </View>
-                    </View>           
-                </ScrollView> 
+                </View>
+
                 <View style={styles.setting}>
-                        <GameSettings onPress={()=> navigation.goBack(null)} />
-                    </View>  
-            </QuizContainerBackground>
+                    <GameSettings onPress={() => navigation.goBack(null)} />
+                </View>
+            </View>
+        </QuizContainerBackground>
     )
 }
 
@@ -101,7 +102,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         flex: 1,
         marginRight: 30,
-        marginBottom:40
+        marginBottom: 40
     },
     imgContainer: {
         alignItems: 'center'
@@ -112,8 +113,8 @@ const styles = EStyleSheet.create({
     },
     setting: {
         position: 'absolute',
-        left:0,
+        left: 0,
         right: 0,
-        top:Platform.OS === 'ios' ? responsiveScreenHeight(78) : responsiveScreenHeight(78),
+        top: Platform.OS === 'ios' ? responsiveScreenHeight(85) : responsiveScreenHeight(78),
     },
 })
