@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Animated, Image, Pressable } from "react-native";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { View, Image, Pressable, Animated } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +17,6 @@ const ChallengeGameBoardWidgets = ({ onComplete }) => {
     const dispatch = useDispatch();
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const boosts = useSelector(state => state.auth.user.boosts);
-    const [showText, setShowText] = useState(true);
     const gameMode = useSelector(state => state.game.gameMode);
     const documentId = useSelector(state => state.triviaChallenge.documentId);
 
@@ -67,18 +66,10 @@ const ChallengeGameBoardWidgets = ({ onComplete }) => {
         return boosts;
     }
 
-    useEffect(() => {
-        // Change the state every second or the time given by User.
-        const interval = setInterval(() => {
-            setShowText((showText) => !showText);
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
-
     return (
         <View style={styles.gameProgressAndBoost}>
             <RenderGameProgress onComplete={onComplete} />
-            <ChallengeStakingBoosts boosts={boosts} showText={showText} boostsToDisplay={boostsToDisplay} boostApplied={boostApplied} />
+            <ChallengeStakingBoosts boosts={boosts} boostsToDisplay={boostsToDisplay} boostApplied={boostApplied} />
             <PlayersInfo challengeDetails={challengeDetails} />
         </View>
     )
@@ -182,7 +173,7 @@ const OpponentPlayerInfo = ({ playerName, playerAvatar }) => {
     )
 }
 
-const ChallengeStakingBoosts = ({ boosts, showText, boostsToDisplay, boostApplied }) => {
+const ChallengeStakingBoosts = ({ boosts, boostsToDisplay, boostApplied }) => {
     return (
         <>
             {boosts?.length > 0 ?
@@ -193,7 +184,7 @@ const ChallengeStakingBoosts = ({ boosts, showText, boostsToDisplay, boostApplie
                     {
                         boostsToDisplay().map((boost, index) =>
                             boost.count >= 1 &&
-                            <ChallengeStakingBoost boost={boost} key={index} onConsume={boostApplied} showText={showText} />
+                            <ChallengeStakingBoost boost={boost} key={index} onConsume={boostApplied} />
                         )
                     }
 
@@ -205,22 +196,49 @@ const ChallengeStakingBoosts = ({ boosts, showText, boostsToDisplay, boostApplie
     )
 }
 
-const ChallengeStakingBoost = ({ boost, showText, onConsume }) => {
+const ChallengeStakingBoost = ({ boost, onConsume }) => {
+
+    const scaleValue = useRef(new Animated.Value(1)).current;
+    const zoomAnimation = {
+        transform: [{ scale: scaleValue }],
+    };
+
+    const zoom = useCallback(() => {
+        Animated.sequence([
+            Animated.timing(scaleValue, { toValue: 1.2, duration: 500, useNativeDriver: true }),
+            Animated.timing(scaleValue, { toValue: 1, duration: 500, useNativeDriver: true }),
+        ]).start(() => {
+            scaleValue.setValue(1);
+        });
+    }, [scaleValue]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            zoom();
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [zoom]);
+
+    useEffect(() => {
+        zoom();
+    }, []);
+
+
     const activeBoost = useSelector(state => state.triviaChallenge.activeBoost);
-    console.log(activeBoost, 'lllll')
     const isActive = activeBoost.id === boost.id;
     return (
         <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
-            <View style={styles.boostContainer}>
+            <Animated.View style={[styles.boostContainer, zoomAnimation]}>
                 <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
                     <Image
                         source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
-                        style={[styles.boostIcon, { opacity: showText ? 0 : 1 }]}
+                        style={styles.boostIcon}
                     />
                     <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
                 </View>
                 <Text style={styles.name}>{boost.name}</Text>
-            </View>
+            </Animated.View>
         </Pressable>
     )
 }

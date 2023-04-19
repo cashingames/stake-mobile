@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, Dimensions, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Text, View, Pressable } from 'react-native';
+import { ActivityIndicator, Alert, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Text, View, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
 import AppButton from '../../../shared/AppButton';
@@ -57,7 +57,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
             category: gameCategoryId,
             amount: amount
         })).then(unwrapResult)
-            .then (async result => {
+            .then(async result => {
                 setLoading(false)
                 await analytics().logEvent("trivia_challenge_stake_now_clicked", {
                     'amount': amount,
@@ -80,14 +80,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
                     style={styles.headContainer}
                 >
 
-                    <ScrollView style={styles.container} contentContainerStyle={{justifyContent:'center', flex:1}}>
-                        <SelectedPlayers user={user} />
-                        <InputStakeAmount balance={user.walletBalance}
-                            stakeAmount={stakeAmount}
-                            loading={loading}
-                            amount={amount}
-                            setAmount={setAmount}
-                        />
+                    <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', flex: 1 }}>
                         <View style={styles.purchaseBoost}>
                             <Text style={styles.boostText}>Score higher with boosts</Text>
                             <View style={styles.boostContainer}>
@@ -99,7 +92,14 @@ const ChallengeStakingScreen = ({ navigation }) => {
                                 </Pressable>
                             }
                         </View>
-                        
+                        <SelectedPlayers user={user} />
+                        <InputStakeAmount balance={user.walletBalance}
+                            stakeAmount={stakeAmount}
+                            loading={loading}
+                            amount={amount}
+                            setAmount={setAmount}
+                        />
+
                     </ScrollView>
                 </KeyboardAvoidingView>
             </ImageBackground>
@@ -302,11 +302,11 @@ const styles = EStyleSheet.create({
     matchingText: {
         fontSize: '.8rem',
         fontFamily: 'graphik-regular',
-        color: '#EF2F55',
+        color: '#FFF',
         textAlign: 'center',
         lineHeight: '2rem',
-        textDecorationStyle:'dashed',
-        textDecorationColor:'#fff',
+        textDecorationStyle: 'dashed',
+        textDecorationColor: '#fff',
         textDecorationLine: 'underline',
     },
     purchaseBoost: {

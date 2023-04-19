@@ -178,7 +178,7 @@ const styles = EStyleSheet.create({
     },
     container: {
         flex: 1,
-        paddingTop: responsiveScreenWidth(15),
+        paddingTop: responsiveScreenWidth(10),
     },
     gameQuestions: {
         // marginHorizontal: normalize(15),

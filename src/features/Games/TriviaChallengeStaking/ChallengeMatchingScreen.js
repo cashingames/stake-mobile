@@ -131,7 +131,7 @@ const ChallengeMatchingScreen = ({ navigation }) => {
             <View style={styles.messageContainer}>
                 <SelectedPlayers user={user} challengeDetails={challengeInfo} dataUpdated={dataUpdated} />
             </View>
-            <View>
+            <View style={styles.boostInfoContainer}>
                 <Text style={styles.boostText}>Score higher by using boosts</Text>
                 <View style={styles.boostContainer}>
                     {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
@@ -188,6 +188,7 @@ const BoostCardDetails = ({ boost }) => {
             <View style={styles.boostDetailsContainer}>
                 <View style={styles.boostNameCount}>
                     <Text style={styles.storeItemName}>{boost.name}</Text>
+                    <Text style={styles.storeItemDescription}>{boost.description}</Text>
                 </View>
             </View>
         </View>
@@ -267,8 +268,13 @@ const styles = EStyleSheet.create({
     },
     boostContainer: {
         flexDirection: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'center'
+        // alignItems: 'flex-start',
+        // justifyContent: 'center',
+
+    },
+    boostInfoContainer: {
+        // paddingHorizontal:'2rem'
+
     },
     boostDetailsHead: {
         flexDirection: 'column',
@@ -285,7 +291,16 @@ const styles = EStyleSheet.create({
     storeItemName: {
         fontFamily: 'graphik-medium',
         fontSize: '0.7rem',
-        color: '#EF2F55',
+        color: '#FFF',
+        marginVertical: '.3rem'
+    },
+    storeItemDescription: {
+        fontFamily: 'graphik-medium',
+        fontSize: '0.7rem',
+        color: '#FFF',
+        width: '8rem',
+        textAlign: 'center',
+        lineHeight: '1.2rem'
     },
     cardDescription: {
         fontFamily: 'graphik-medium',

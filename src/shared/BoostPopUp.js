@@ -58,7 +58,8 @@ const Boostspopup = ({ setModalVisible, modalVisible }) => {
                             </View>
                         </View>
                         <View style={styles.modalItems}>
-                            <Text style={styles.infoText}>With time freeze, you get to pause the game for 15seconds and skip allows you jump a question</Text>
+                        <Text style={styles.infoTextHead}>Score higher</Text>
+                            <Text style={styles.infoText}>With time freeze, you get to pause the game for 15 seconds and skip allows you jump a question</Text>
                             <Pressable style={styles.boost} onPress={goToStore}>
                                 <Text style={styles.boostText}>Buy now</Text>
                             </Pressable>
@@ -154,11 +155,17 @@ const styles = EStyleSheet.create({
     },
     infoText: {
         textAlign: 'center',
-        width: '15rem',
+        width: '11rem',
         fontSize: '.7rem',
         fontFamily: 'graphik-medium',
         lineHeight:'1rem',
         paddingVertical: '.65rem',  
+    },
+    infoTextHead: {
+        textAlign: 'center',
+        fontSize: '.9rem',
+        fontFamily: 'graphik-medium',
+        lineHeight:'1rem',
     },
     resultContainer: {
         alignItems: 'center'

@@ -10,6 +10,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { clearSession } from "./TriviaChallengeGameSlice";
 import analytics from '@react-native-firebase/analytics';
 import { useState } from "react";
+import Boostspopup from "../../../shared/BoostPopUp";
 
 
 const ChallengeEndGameScreen = ({ navigation }) => {
@@ -18,6 +19,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     // console.log(challengeDetails)
+    const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
 
@@ -71,6 +73,12 @@ const ChallengeEndGameScreen = ({ navigation }) => {
         return
     }, [])
 
+    useEffect(() => {
+        if ((challengeDetails.score < challengeDetails.opponent.score) || (challengeDetails.score === challengeDetails.opponent.score)) {
+            setModalVisible(true)
+        }
+    }, [challengeDetails])
+
     useFocusEffect(
         useCallback(() => {
             if (Platform.OS === "android") {
@@ -108,6 +116,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
                 <ChallengePlayers challengeDetails={challengeDetails} />
                 <WinningAmount challengeDetails={challengeDetails} />
                 <FinalScoreBoard challengeDetails={challengeDetails} />
+                <Boostspopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
             </ScrollView>
             {/* <AppButton text="Return to Dashboard" onPress={goHome} style={styles.button} /> */}
             <View style={styles.gameButtons}>
@@ -297,7 +306,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: '2rem',
+        paddingVertical: '.8rem',
         paddingHorizontal: '1rem',
         marginTop: '.3rem',
         borderRadius: 16
