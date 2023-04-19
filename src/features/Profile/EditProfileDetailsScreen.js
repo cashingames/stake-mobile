@@ -123,7 +123,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                             label='Email'
                             value={email}
                             onChangeText={setEmail}
-                            editable={true}
+                            editable={false}
                             labelStyle={styles.inputLabel}
                         />
 
