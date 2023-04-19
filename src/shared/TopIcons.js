@@ -14,6 +14,8 @@ import { useNavigation } from '@react-navigation/native'
 const TopIcons = () => {
     const user = useSelector(state => state.auth.user);
     var plans = useSelector(state => state.auth.user.activePlans ?? []);
+    const navigation = useNavigation()
+
 
     const [sumOfPlans, setSumOfPlans] = useState(0);
 
@@ -51,7 +53,7 @@ const TopIcons = () => {
     }, []);
     return (
         <View style={styles.container}>
-            <View style={styles.iconContainer}>
+            <Pressable style={styles.iconContainer} onPress={() => navigation.navigate('GameStore')}>
                 <Image style={styles.heartIcon} source={require('./../../assets/images/heart-icon.png')} />
                 <View style={styles.iconBox}>
                     <View style={styles.iconText}>
@@ -59,8 +61,8 @@ const TopIcons = () => {
                     </View>
                     <IconDetails />
                 </View>
-            </View>
-            <View style={styles.iconContainer}>
+            </Pressable>
+            <Pressable style={styles.iconContainer} onPress={() => navigation.navigate('GameStore')}>
                 <Image style={styles.coinIcon} source={require('./../../assets/images/coin-icon.png')} />
                 <View style={styles.iconBox}>
                     <View style={styles.iconText}>
@@ -68,15 +70,14 @@ const TopIcons = () => {
                     </View>
                     <IconDetails />
                 </View>
-            </View>
+            </Pressable>
         </View>
     )
 }
 
 const IconDetails = () => {
-    const navigation = useNavigation()
     return (
-        <Pressable onPress={() => navigation.navigate('GameStore')}>
+        <Pressable>
             <View style={styles.plusCase}>
                 <Feather name="plus" size={18} color="#fff" />
             </View>
