@@ -18,7 +18,7 @@ const AppHeader = ({ title }) => {
             </Pressable>
             <View style={styles.header}>
                 <GameArkLogo />
-                <Text style={styles.title}>{title}</Text>
+                {title && <Text style={styles.title}>{title}</Text>}
             </View>
         </>
     )

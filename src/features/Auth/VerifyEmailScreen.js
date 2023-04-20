@@ -17,6 +17,7 @@ import MixedContainerBackground from '../../shared/ContainerBackground/MixedCont
 import GameArkLogo from '../../shared/GameArkLogo';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import GaButton from '../../shared/GaButton';
+import AppHeader from '../../shared/AppHeader';
 
 export default function VerifyEmailScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -98,7 +99,8 @@ export default function VerifyEmailScreen({ navigation, route }) {
     return (
         <MixedContainerBackground>
             <SafeAreaView style={styles.container}>
-                <GameArkLogo />
+                {/* <GameArkLogo /> */}
+                <AppHeader />
                 <Text style={styles.headerTextStyle}>
                     Verify OTP
                 </Text>
@@ -188,10 +190,9 @@ export default function VerifyEmailScreen({ navigation, route }) {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        // backgroundColor: '#FFFF',
-        paddingBottom: 10,
-        paddingHorizontal: 30,
-        paddingTop: 50,
+        paddingTop: normalize(50),
+        paddingHorizontal: normalize(15),
+
     },
     headerTextStyle: {
         fontSize: '2.2rem',
