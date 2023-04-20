@@ -75,7 +75,7 @@ function ExtendedLeaderboard(props) {
                 <TopIcons />
                 <AppHeader title="Leaderboard" />
 
-                <ScrollView stickyHeaderIndices={[0]}>
+                <View stickyHeaderIndices={[0]}>
                     <View style={styles.leaderContainer}>
                         <View style={styles.leaderboardBtn}>
                             {leaderCategories.map((leaderboard, i) => {
@@ -104,7 +104,7 @@ function ExtendedLeaderboard(props) {
                         </>
 
                     }
-                </ScrollView>
+                </View>
             </View>
         </MixedContainerBackground>
     )
@@ -126,7 +126,7 @@ export default ExtendedLeaderboard;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: responsiveScreenHeight(2)
+        paddingVertical: responsiveScreenHeight(1)
 
     },
     animation: {

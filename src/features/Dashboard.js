@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Platform } from 'react-native'
 import React from 'react'
 import Constants from 'expo-constants';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize'
@@ -81,7 +81,6 @@ const Dashboard = ({ navigation }) => {
     return (
         <>
             <RenderUpdateChecker />
-            <ScrollView>
                 <MainContainerBackground>
                     <View style={styles.container}>
                         <Pressable style={styles.icons} onPress={handleToggleSwitch}>
@@ -104,7 +103,6 @@ const Dashboard = ({ navigation }) => {
                         </View>
                     </View >
                 </MainContainerBackground>
-            </ScrollView>
         </>
     )
 }
@@ -125,11 +123,6 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingVertical: responsiveScreenWidth(20),
-    },
-
-    logo: {
-        // alignItems: 'center',
-        // marginTop: normalize(20),
     },
     icons: {
         alignItems: 'flex-end',
@@ -166,7 +159,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'blues-smile'
     },
     setting: {
-        marginTop: responsiveScreenHeight(10),
+        marginTop:Platform.OS === 'ios' ? responsiveScreenHeight(10): responsiveScreenHeight(5),
     },
     imageIcons: {
         width: 50,

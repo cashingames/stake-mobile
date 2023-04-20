@@ -27,7 +27,7 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     const onPlayButtonClick = () => {
         onSelectGameMode();
         playSound()
-        
+
     }
 
     const onSelectGameMode = () => {
@@ -50,12 +50,11 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     );
 
     return (
-        <ScrollView>
-            <QuizContainerBackground>
-                <ScrollView style={styles.container}>
-                        <TopIcons />
-                        <View>
-                            <View style={styles.logo}>
+        <QuizContainerBackground>
+            <View style={styles.container}>
+                <TopIcons />
+                <View>
+                    <View style={styles.logo}>
                         <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
                             <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
                         </Pressable>
@@ -67,13 +66,13 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
                     <View>
                         <GamePicker navigation={navigation} />
                     </View>
-                    </View>
-                     <View style={styles.setting}>
-                        <GameSettings onPress={()=> navigation.goBack(null)} />
-                    </View>             
-                </ScrollView> 
-            </QuizContainerBackground>
-            </ScrollView>
+                </View>
+
+                <View style={styles.setting}>
+                    <GameSettings onPress={() => navigation.goBack(null)} />
+                </View>
+            </View>
+        </QuizContainerBackground>
     )
 }
 
@@ -82,12 +81,13 @@ export default SelectGameCategoryScreen;
 const styles = EStyleSheet.create({
     container: {
         // flex: 1,
-        paddingVertical: responsiveScreenHeight(2),
+        paddingVertical: responsiveScreenHeight(1),
     },
     logo: {
         alignItems: 'flex-start',
         flexDirection: 'row',
-        marginTop: normalize(40),
+        // marginTop: normalize(40),
+        marginTop: normalize(20),
         paddingHorizontal: responsiveScreenWidth(3),
     },
     imageIcons: {
@@ -102,7 +102,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         flex: 1,
         marginRight: 30,
-        marginBottom:40
+        marginBottom: 40
     },
     imgContainer: {
         alignItems: 'center'
@@ -112,6 +112,9 @@ const styles = EStyleSheet.create({
         height: normalize(184)
     },
     setting: {
-        marginTop: responsiveScreenHeight(10)
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: Platform.OS === 'ios' ? responsiveScreenHeight(85) : responsiveScreenHeight(78),
     },
 })

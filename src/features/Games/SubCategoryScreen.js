@@ -40,7 +40,6 @@ const SubCategoryScreen = ({ navigation, route }) => {
         {loading ? (
           <Loader />
         ) : (
-            <ScrollView>
         <QuizContainerBackground>
             <ScrollView style={styles.container}>
                 <TopIcons />
@@ -62,7 +61,6 @@ const SubCategoryScreen = ({ navigation, route }) => {
                     <GameSettings onPress={()=> navigation.goBack(null)} />
                 </View>
         </QuizContainerBackground>
-        </ScrollView>
     )}
     </>
     )
@@ -155,7 +153,7 @@ const styles = EStyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'space-between',
         flexDirection: 'row',
-        marginTop: normalize(40),
+        marginTop: normalize(20),
         paddingHorizontal: responsiveScreenWidth(3),
     },
     imageIcons: {
@@ -184,7 +182,7 @@ const styles = EStyleSheet.create({
         position: 'absolute',
         left:0,
         right: 0,
-        bottom:Platform.OS === 'ios' ? 70 : 160,
+        top:Platform.OS === 'ios' ? responsiveScreenHeight(85) : responsiveScreenHeight(78),
     },
 
     categoryHeading: {

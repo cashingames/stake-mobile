@@ -16,9 +16,9 @@ const MixedContainerBackground = ({ children }) => {
                     // width: Dimensions.get("screen").width, height: Dimensions.get("screen").height 
                     flex:1
                     }}> 
-                <ScrollView>               
+                {/* <ScrollView>                */}
                 {children}
-                </ScrollView>
+                {/* </ScrollView> */}
             </ImageBackground>
         </ImageBackground>
     )

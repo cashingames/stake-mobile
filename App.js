@@ -21,6 +21,14 @@ import store from './src/store';
 import AppRouter from './src/AppRouter';
 import messaging from '@react-native-firebase/messaging';
 
+
+// import SystemNavigationBar from 'react-native-system-navigation-bar';
+
+// useEffect(() => {
+//   SystemNavigationBar.navigationHide();
+
+// }, [])
+
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();
 const prefix = Linking.createURL("/");

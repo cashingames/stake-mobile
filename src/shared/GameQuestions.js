@@ -77,7 +77,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
-        fontSize: '0.9rem',
+        fontSize: '0.8rem',
         lineHeight: normalize(26)
     }
 })

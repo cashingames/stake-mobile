@@ -48,7 +48,7 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        paddingTop: normalize(10)
+        paddingTop: normalize(50)
         // justifyContent: 'center',
     },
     headerTextStyle: {

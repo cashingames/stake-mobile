@@ -191,9 +191,10 @@ export default function GameInProgressScreen({ navigation, route }) {
             style={styles.image}
             resizeMode="cover" >
                 <View style={styles.top}>
-                <TopIcons />
+                
                 </View>
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
+            <TopIcons />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
                 <GameQuestions />
                 <UniversalBottomSheet
@@ -202,9 +203,11 @@ export default function GameInProgressScreen({ navigation, route }) {
                     subComponent={<UserAvailableBoosts onClose={closeBottomSheet} />}
                 />
             </ScrollView>
+            <View style={styles.buttonCase}>
             <NextButton ending={ending} onEndGame={() => onEndGame()} />
             <View style={styles.setting}>
-                <GameSettings onPress={() => showExitConfirmation()}/>
+                <GameSettings onPress={() => showExitConfirmation()} isDisabled={true}/>
+            </View>
             </View>
         </ImageBackground>
     );
@@ -225,8 +228,9 @@ const styles = EStyleSheet.create({
         flex: 1,
         // paddingTop: normalize(45),
         paddingHorizontal: responsiveScreenWidth(6),
+        // paddingTop: normalize(45),
         // backgroundColor: 'blue',
-        height: responsiveScreenHeight(15)
+        // height: responsiveScreenHeight(15)
 
     },
     image: {
@@ -238,13 +242,14 @@ const styles = EStyleSheet.create({
         backgroundColor: 'rgba(57, 15, 15, 0.4)',
         shadowColor: 'inset 0px 4px 0px rgba(0, 0, 0, 0.05)',
         borderRadius: 16,
-        marginVertical: normalize(18)
+        // marginVertical: normalize(18)
+        marginVertical: normalize(10)
     },
     setting: {
-        marginBottom: responsiveScreenHeight(5)
+        marginBottom: normalize(8)
     },
     top:{
-        paddingTop: responsiveScreenHeight(2),
+        paddingTop: responsiveScreenHeight(1),
     }
 
 });

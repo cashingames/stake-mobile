@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground } from 'react-native'
+import { View, Text, ImageBackground, Platform } from 'react-native'
 import React from 'react'
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize'
 import EStyleSheet from 'react-native-extended-stylesheet'
@@ -72,7 +72,6 @@ console.log(user)
       
     }
     return (
-        <ScrollView>
         <MixedContainerBackground>
             <View style={styles.container}>
                 <TopIcons />
@@ -80,7 +79,6 @@ console.log(user)
                 <ScrollView horizontal={true} style={styles.gameContainer}>
                     {gamesType.map((game) => {
                         const { id, gameName, backgroundImage, gameImage, unlocked } = game;
-                        console.log(backgroundImage)
                         return (
                             <Animated.View entering={randomEnteringAnimation().duration(1000)} key={id}>                                 
                             <ImageBackground style={styles.gameCard} source={backgroundImage}>
@@ -115,35 +113,17 @@ console.log(user)
                 </View>
             </View >
         </MixedContainerBackground>
-        </ScrollView>
     )
 }
 
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: responsiveScreenHeight(2),
+        paddingVertical: responsiveScreenHeight(1),
         // paddingHorizontal: responsiveScreenWidth(3),
-    },
-
-    logo: {
-        alignItems: 'flex-start',
-        flexDirection: 'row',
-        marginTop: normalize(40),
-        paddingHorizontal: responsiveScreenWidth(3),
-    },
-    welcome: {
-        alignItems: 'center',
-        marginTop: responsiveScreenHeight(30)
     },
     games: {
         flexDirection: 'row'
-    },
-
-    welcomeText: {
-        fontSize: '1.4rem',
-        fontFamily: 'blues-smile',
-        color: '#fff'
     },
     setting: {
         // marginTop: responsiveScreenHeight(),
@@ -158,15 +138,12 @@ const styles = EStyleSheet.create({
         width: 150,
         height: 95
     },
-
-    gameContainer: {
-        marginTop: 20
-    },
+    gameContainer:{},
     //game card section to be removed
     gameCard: {
         height: normalize(399),
         width: normalize(192),
-        marginVertical: responsiveScreenHeight(2),
+        marginVertical: Platform.OS === 'ios' ? responsiveScreenHeight(5) : responsiveScreenHeight(2),
         marginHorizontal: responsiveScreenWidth(3),
         paddingVertical: responsiveScreenHeight(2),
         paddingHorizontal: responsiveScreenWidth(5),
@@ -198,7 +175,6 @@ const styles = EStyleSheet.create({
         marginTop: 10
     },
     wordTrivia:{
-        
         height: 200,
         width: 105,
         marginTop: 10
@@ -248,7 +224,13 @@ const styles = EStyleSheet.create({
     lockImage: {
         height: normalize(92),
         width: normalize(72),
-    }
+    },
+    setting: {
+        position: 'absolute',
+        left:0,
+        right: 0,
+        top:Platform.OS === 'ios' ? responsiveScreenHeight(85) : responsiveScreenHeight(78),
+    },
 
 })
 

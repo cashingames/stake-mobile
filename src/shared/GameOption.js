@@ -52,8 +52,8 @@ const styles = EStyleSheet.create({
         justifyContent:'space-between',
         alignItems: 'center',
         backgroundColor: '#FFFF',
-        marginBottom: normalize(10),
-        padding: normalize(15),
+        marginBottom: normalize(8),
+        padding: normalize(13),
         borderRadius: 16,
         borderBottomColor: '#15397D',
         borderBottomWidth: 4,
@@ -61,7 +61,7 @@ const styles = EStyleSheet.create({
     answerText: {
         color: '#15397D',
         fontFamily: 'blues-smile',
-        fontSize: '0.75rem',
+        fontSize: '0.7rem',
         textAlign: 'left',
     },
     selectedOption: {

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 
-import normalize, { responsiveScreenWidth } from '../utils/normalize';
+import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber, isTrue } from '../utils/stringUtl';
 import { Platform } from 'react-native';
 import { ScrollView } from 'react-native';
@@ -15,7 +15,7 @@ export default function OtherLeaders({ leaders, otherStyles, otherName }) {
     }
 
     return (
-        <ScrollView>
+        <ScrollView scrollEnabled={false}>
             <ScrollView style={[styles.container, otherStyles]}>
 
                 {currentLeadedrs.map((leader, i) => <OtherLeader key={i} leader={leader}
@@ -23,8 +23,6 @@ export default function OtherLeaders({ leaders, otherStyles, otherName }) {
                 indexArrow={require('../../assets/images/up_arrow.png')}
                 otherName={otherName}
             />)}
-
-
                 {currentLeadedrs.length === 0 && <Text style={otherLeaderStyles.noData}>No data</Text>}
             </ScrollView>
         </ScrollView>
@@ -66,11 +64,12 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         backgroundColor: '#0A1F45',
-        paddingVertical: responsiveScreenWidth(3),
+        paddingTop: responsiveScreenWidth(3),
+        paddingBottom: responsiveScreenHeight(15),
         marginTop: responsiveScreenWidth(3),
         borderTopRightRadius: 40,
         borderTopLeftRadius: 40,
-        height: 200,
+        height: Platform.OS === 'ios' ? 300 : 200,
     },
 });
 

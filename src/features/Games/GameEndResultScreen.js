@@ -176,7 +176,6 @@ export default function GameEndResultScreen({ navigation }) {
 	}, [])
 
 	return (
-		<ScrollView>
 		<QuizContainerBackground>
 			<View style={styles.container}>
 				<TopIcons />
@@ -186,7 +185,6 @@ export default function GameEndResultScreen({ navigation }) {
 				</View>
 			</View>
 		</QuizContainerBackground>
-		</ScrollView>
 	);
 }
 
@@ -257,8 +255,8 @@ const styles = EStyleSheet.create({
 	},
 	endImageCase: {
 		alignItems: 'center',
-		paddingTop: responsiveScreenHeight(3.5),
-		marginVertical: responsiveScreenHeight(6),
+		// paddingTop: responsiveScreenHeight(3.5),
+		marginVertical: Platform.OS === 'ios' ? responsiveScreenHeight(15) : responsiveScreenHeight(6),
 	},
 	endImage: {
 		height: 413,
@@ -328,8 +326,8 @@ const styles = EStyleSheet.create({
 	},
 	winnerProfile:{
 		position: 'absolute',
-		right: responsiveScreenWidth(-11),
-		bottom: responsiveScreenHeight(-10)
+		left: responsiveScreenWidth(50),
+		top: Platform.OS === 'ios' ? responsiveScreenHeight(27) : responsiveScreenHeight(25)
 	}
 
 });

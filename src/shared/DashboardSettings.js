@@ -67,7 +67,7 @@ const styles = EStyleSheet.create({
 
     setting: {
         width: '100%',
-        marginTop: responsiveScreenHeight(3),
+        marginTop: responsiveScreenHeight(1),
         paddingHorizontal: responsiveScreenWidth(3),
         flexDirection: 'row',
         justifyContent: 'space-between',
