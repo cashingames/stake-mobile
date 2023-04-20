@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { useEffect } from 'react'
 import { useRef } from 'react'
-import { Image, Platform } from 'react-native'
+import { Alert, Image, Platform } from 'react-native'
 import { Pressable } from 'react-native'
 import { Animated } from 'react-native'
 import { View } from 'react-native'
@@ -9,19 +9,21 @@ import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet'
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground'
 import GameArkLogo from '../../shared/GameArkLogo'
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize'
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize'
 import useSound from '../../utils/useSound'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Text } from 'react-native'
 import { useState } from 'react'
 import InviteFriendsScreen from '../../screens/InviteFriendsScreen'
+import { useDispatch } from 'react-redux'
+import { logoutUser } from '../Auth/AuthSlice'
 
 const IconSettings = () => {
     const navigation = useNavigation()
     const [showInviteFriends, setShowInviteFriends] = useState(false);
     const spinValue = useRef(new Animated.Value(0)).current;
     const { toogle, handleToggle, stopSound } = useSound('../../../assets/sounds/dashboard.mp3')
-
+    const dispatch = useDispatch()
     const handleToggleSwitch = () => {
         handleToggle();
         stopSound()
@@ -29,6 +31,24 @@ const IconSettings = () => {
 
     const showInvite = () => {
         setShowInviteFriends(true)
+    }
+
+    const logoutHandler = () => {
+             
+                Alert.alert(
+                    'Logout?',
+                    'Are you sure you want to logout?',
+                    [
+                        {
+                            text: "No",
+                           
+                        },
+                        {
+                            text: 'Yes',
+                            onPress: () =>   dispatch(logoutUser())
+                        },
+                    ]
+                )
     }
 
     useEffect(() => {
@@ -52,8 +72,11 @@ const IconSettings = () => {
     return(
             <MixedContainerBackground>
                     <View style={styles.container}>
-                        <GameArkLogo />
-                        <View style={styles.settingIconsContainter}>
+                        <View style={styles.top}>
+                            <GameArkLogo />
+                        </View>
+                        <View style={styles.content}>                        
+                            <View style={styles.settingIconsContainter}>
                             <Pressable style={styles.icons} onPress={handleToggleSwitch}>
                                 {toogle ? <Image style={styles.imageIcons} source={require('../../../assets/images/sound-1.png')} />:
                                  <Image style={styles.imageIcons} source={require('../../../assets/images/sound-off.png')} />
@@ -89,8 +112,14 @@ const IconSettings = () => {
                                 <Image style={styles.settingIcon} source={require('../../../assets/images/close-icon.png')} />
                                 </Animated.View>
                             </Pressable>
+                            <View>
                             <Text style={styles.appVersion}>App version: {Constants.manifest.version}</Text>
+                            <Pressable onPress={logoutHandler}>
+                            <Text style={styles.appVersion}>Logout</Text>
+                            </Pressable>
+                            </View>
                         </View>
+                    </View>
                     </View>
                     <InviteFriendsScreen  showInviteFriends={showInviteFriends} setShowInviteFriends={setShowInviteFriends}/>
             </MixedContainerBackground>
@@ -99,11 +128,19 @@ const IconSettings = () => {
 
 const styles = EStyleSheet.create({
     container: {
-        flex: 1,
-        paddingTop: normalize(60),
-        paddingVertical: responsiveScreenWidth(3),
-        zIndex:10
+        height: responsiveHeight(100),
+        paddingVertical: responsiveHeight(6),
 
+    },
+
+    top:{
+        height: responsiveHeight(20),
+        // backgroundColor:'yellow',
+        justifyContent:'flex-end'
+    },
+    content:{
+        height:responsiveHeight(70), 
+        justifyContent:"flex-end"
     },
     settingIconsContainter: {
         flexDirection: 'row',

@@ -3,7 +3,7 @@ import { Image, Pressable, StatusBar, Text, View } from 'react-native';
 import GamePicker from './GamePicker';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { isTrue } from '../../utils/stringUtl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -42,13 +42,16 @@ const SubCategoryScreen = ({ navigation, route }) => {
         ) : (
         <QuizContainerBackground>
             <ScrollView style={styles.container}>
-                <TopIcons />
+                <View>                
+                    <TopIcons />
                 <View style={styles.logo}>
                     <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
                         <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
                     </Pressable>
-                    <Text style={styles.title}>Word Trivia</Text>
+                    <Text style={styles.title}>Trivia Hub</Text>
                 </View>
+                </View>
+
                 {/* <Text style={styles.categoryHeading}>Select Category</Text> */}
                 <View style={styles.imgContainer}>
                     <Image style={styles.quizImage} source={require('../../../assets/images/word-trivia.png')} />
@@ -146,8 +149,8 @@ export default SubCategoryScreen;
 
 const styles = EStyleSheet.create({
     container: {
-        flex: 1,
-        paddingVertical: responsiveScreenHeight(2),
+        height: responsiveHeight(100),
+        paddingVertical: responsiveHeight(2),
     },
     logo: {
         alignItems: 'flex-start',
@@ -181,8 +184,8 @@ const styles = EStyleSheet.create({
     setting: {
         position: 'absolute',
         left:0,
-        right: 0,
-        top:Platform.OS === 'ios' ? responsiveScreenHeight(85) : responsiveScreenHeight(78),
+        right:0,
+        top:responsiveHeight(88),
     },
 
     categoryHeading: {

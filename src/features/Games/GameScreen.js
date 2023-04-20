@@ -1,6 +1,6 @@
 import { View, Text, ImageBackground, Platform } from 'react-native'
 import React from 'react'
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize'
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { Image } from 'react-native'
 import { Pressable } from 'react-native'
@@ -20,7 +20,7 @@ import GameScreenHeader from '../../shared/GameScreenHeader'
 const gamesType = [
     {
         id: 1,
-        gameName: 'Word Trivia',
+        gameName: 'Trivia Hub',
         backgroundImage: require('../../../assets/images/quiz-background.png'),
         gameImage: require('../../../assets/images/word-trivia2.png'),
         unlocked: true
@@ -74,14 +74,16 @@ console.log(user)
     return (
         <MixedContainerBackground>
             <View style={styles.container}>
+                <View style={styles.top}>
                 <TopIcons />
                 <GameScreenHeader />
+                </View>
                 <ScrollView horizontal={true} style={styles.gameContainer}>
                     {gamesType.map((game) => {
                         const { id, gameName, backgroundImage, gameImage, unlocked } = game;
                         return (
                             <Animated.View entering={randomEnteringAnimation().duration(1000)} key={id}>                                 
-                            <ImageBackground style={styles.gameCard} source={backgroundImage}>
+                            <ImageBackground resizeMode="contain" style={styles.gameCard} source={backgroundImage}>
                                 {!unlocked && 
                                     //  <ImageBackground source={require('../../../assets/images/game-cover.png')} >
                                      <View style={styles.gameCover}>
@@ -93,7 +95,7 @@ console.log(user)
                                     <Text style={styles.gameText}>{gameName}</Text>
                                 </View>
                                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                    <Image style={[gameName !== 'Word Trivia' ? styles.cardImage : styles.wordTrivia]} source={gameImage} />
+                                    <Image resizeMode='contain' style={[gameName !== 'Word Trivia' ? styles.cardImage : styles.wordTrivia]} source={gameImage} />
                                 </View>
                                 <View style={styles.cardBtnContainer}>
                                     <Pressable style={styles.playBtn} onPress={goToGameCategory}>
@@ -118,12 +120,16 @@ console.log(user)
 
 const styles = EStyleSheet.create({
     container: {
-        flex: 1,
-        paddingVertical: responsiveScreenHeight(1),
+        // flex: 1,
+        height: responsiveHeight(100),
+        paddingVertical: responsiveHeight(2),
         // paddingHorizontal: responsiveScreenWidth(3),
     },
     games: {
         flexDirection: 'row'
+    },
+    top:{
+        height:responsiveHeight(20)
     },
     setting: {
         // marginTop: responsiveScreenHeight(),
@@ -138,7 +144,12 @@ const styles = EStyleSheet.create({
         width: 150,
         height: 95
     },
-    gameContainer:{},
+    gameContainer:{
+        height: responsiveHeight(70),
+        // marginVertical:
+        marginTop:responsiveHeight(8),
+        // justifyContent:'center'
+    },
     //game card section to be removed
     gameCard: {
         height: normalize(399),
@@ -228,8 +239,8 @@ const styles = EStyleSheet.create({
     setting: {
         position: 'absolute',
         left:0,
-        right: 0,
-        top:Platform.OS === 'ios' ? responsiveScreenHeight(85) : responsiveScreenHeight(78),
+        right:0,
+        top:responsiveHeight(90),
     },
 
 })

@@ -32,10 +32,10 @@ const NoGame = () => {
 					<ImageBackground style={styles.endImage} source={require('../../assets/images/no-game.png')}>
 						<Text style={styles.titleText}>Out of lives</Text>
 						<View style={styles.livesCase}>
-							<Text style={styles.liveText}>Buy extra lives now or play again tomorrow!</Text>
+							<Text style={styles.liveText}>Get lives or come back in the next 3 hrs</Text>
 						</View>
 						<View style={styles.heartCase}>
-							<ImageBackground style={styles.heart} source={require('../../assets/images/heart-icon.png')}>
+							<ImageBackground resizeMode='contain' style={styles.heart} source={require('../../assets/images/heart-icon.png')}>
 								<Text style={styles.heartText}>+15</Text>
 							</ImageBackground>
 						</View>
@@ -82,8 +82,8 @@ const styles = EStyleSheet.create({
 	titleText: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '1.5rem',
-		marginVertical: '2.4rem'
+		fontSize: Platform.OS === 'ios' ? '1.6rem' :'2rem',
+		marginVertical: Platform.OS === 'ios' ? '1.6rem' : '2rem'
 	},
 	heart: {
 		width: 143,

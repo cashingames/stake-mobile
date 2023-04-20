@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar, Platform } from 'react-native';
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -250,13 +250,13 @@ const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScor
 }
 const styles = EStyleSheet.create({
 	container: {
-		flex: 1,
-		paddingVertical: responsiveScreenHeight(2),
+		height: responsiveHeight(100),
+        paddingVertical: responsiveHeight(2),
 	},
 	endImageCase: {
 		alignItems: 'center',
-		// paddingTop: responsiveScreenHeight(3.5),
-		marginVertical: Platform.OS === 'ios' ? responsiveScreenHeight(15) : responsiveScreenHeight(6),
+		height:responsiveHeight(80),
+		justifyContent:'center',
 	},
 	endImage: {
 		height: 413,
@@ -328,6 +328,12 @@ const styles = EStyleSheet.create({
 		position: 'absolute',
 		left: responsiveScreenWidth(50),
 		top: Platform.OS === 'ios' ? responsiveScreenHeight(27) : responsiveScreenHeight(25)
+	},
+	setting:{
+		position: 'absolute',
+        left:0,
+        right:0,
+        top:responsiveHeight(88),
 	}
 
 });

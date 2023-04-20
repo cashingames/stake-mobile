@@ -106,7 +106,8 @@ const styles = EStyleSheet.create({
         borderBottomWidth: 4,
         justifyContent: 'space-around',
         height: 50,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginVertical: normalize(20)
     },
     avatar: {
         height: 71,

@@ -127,9 +127,9 @@ const AvailableBoost = ({ boost, onConsume, showText }) => {
 
     return (
         <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
-            <Animated.View style={[styles.boostContainer, zoomAnimation]}>
+            <Animated.View style={styles.boostContainer}>
                 <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
-                    <Image
+                    <Image resizeMode="contain"
                         source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
                         style={styles.boostIcon}
                     />

@@ -9,15 +9,17 @@ import Constants from 'expo-constants';
 
 
 export default ({ category, onSelect, isSelected, activeCategory,activeSubcategory,onSubCategorySelected }) => {
+    console.log(category)
     return (
         <Animated.View style={styles.card} entering={BounceInRight.duration(2000)}>
             <Pressable onPress={() => onSelect(category)} >
                 <View style={styles.categoryCardTopRow}>
                     <Text style={styles.cardTitle}>{category.name} Quiz</Text>
-                </View>
-                {/* <View style={styles.categoryCardTopRow}>
-                    <Text style={styles.cardInstruction}>{formatNumber(category.played)} times played </Text>
-                </View> */}
+                <Image
+                        style={styles.cardIcon}
+                        source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${category.icon}` }}
+                    />
+                    </View>
             </Pressable>
         </Animated.View>
     )
@@ -28,14 +30,15 @@ const styles = EStyleSheet.create({
 
     card: {
         width: '100%',
-        height:55,
-        paddingHorizontal: normalize(20),
+        // height:55,
+
+        padding: normalize(20),
         borderRadius: normalize(20),
         marginBottom: normalize(10),
         backgroundColor: '#15397D',
         borderBottomColor: '#0D2859',
         borderBottomWidth: 4,
-        justifyContent:'center'
+        // justifyContent:'center'
     },
     cardIcon: {
         width: 40,
@@ -53,6 +56,11 @@ const styles = EStyleSheet.create({
         color: '#FFFF',
         fontFamily: 'graphik-regular',
     },
+    cardIcon: {
+        width: 40,
+        height: 41.5,
+        borderRadius: normalize(10)
+    },
     checkbox: {
         // backgroundColor: '#FFFF',
     },
@@ -60,7 +68,8 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+
     },
     checkIcon: {
         backgroundColor: '#EF2F55',

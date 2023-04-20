@@ -3,7 +3,7 @@ import { Image, Pressable, StatusBar, Text, View } from 'react-native';
 import GamePicker from './GamePicker';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useFocusEffect } from '@react-navigation/native';
 import { isTrue } from '../../utils/stringUtl';
 import { useSelector } from 'react-redux';
@@ -52,14 +52,16 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
     return (
         <QuizContainerBackground>
             <View style={styles.container}>
+                <View style={{height:responsiveHeight(20)}}>
                 <TopIcons />
-                <View>
                     <View style={styles.logo}>
                         <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
                             <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
                         </Pressable>
-                        <Text style={styles.title}>Word Trivia</Text>
+                        <Text style={styles.title}>Trivia Hub</Text>
                     </View>
+                    </View>
+                    <View style={{height:responsiveHeight(40)}}>
                     <View style={styles.imgContainer}>
                         <Image style={styles.quizImage} source={require('../../../assets/images/word-trivia.png')} />
                     </View>
@@ -80,14 +82,14 @@ export default SelectGameCategoryScreen;
 
 const styles = EStyleSheet.create({
     container: {
-        // flex: 1,
-        paddingVertical: responsiveScreenHeight(1),
+        height: responsiveHeight(100),
+        paddingVertical: responsiveHeight(2),
     },
     logo: {
         alignItems: 'flex-start',
         flexDirection: 'row',
-        // marginTop: normalize(40),
         marginTop: normalize(20),
+        marginBottom: responsiveHeight(5),
         paddingHorizontal: responsiveScreenWidth(3),
     },
     imageIcons: {
@@ -102,7 +104,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         flex: 1,
         marginRight: 30,
-        marginBottom: 40
+        // marginBottom: 40
     },
     imgContainer: {
         alignItems: 'center'
@@ -113,8 +115,8 @@ const styles = EStyleSheet.create({
     },
     setting: {
         position: 'absolute',
-        left: 0,
-        right: 0,
-        top: Platform.OS === 'ios' ? responsiveScreenHeight(85) : responsiveScreenHeight(78),
+        left:0,
+        right:0,
+        top:responsiveHeight(88),
     },
 })
