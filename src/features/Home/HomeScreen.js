@@ -83,36 +83,16 @@ const HomeScreen = (props) => {
 
         const items = Platform.select({
             android: ['boost_plan_time_freeze', 'boost_plan_skip', 'game_plan_ultimate', 'game_plan_dicey_multiples', 'game_plan_doubleo', 'game_plan_least', 'game_plan_mini'],
+            ios: ['boost_plan_time_freeze', 'boost_plan_skip', 'game_plan_ultimate', 'game_plan_dicey_multiples', 'game_plan_doubleo', 'game_plan_least', 'game_plan_mini'],
         });
+
+        console.log(items, "results")
         const { responseCode, results } = await InAppPurchases.getProductsAsync(items);
         if (responseCode === InAppPurchases.IAPResponseCode.OK) {
             dispatch(setItems(results.length !== 0 ? results : PRODUCTS))
         } else {
             
         }
-
-        // to be removed
-        // try{
-        //     const payload = {
-        //         type: "BOOST",
-        //         item_id: 6
-        //     };
-        //     await buyItemFromStoreRaw(payload)
-        // }catch(e){
-        //     console.log(e.request)
-        // }
-
-        // dispatch(buyItemFromStore({
-        //     type: 'boost',
-        //     item_id: 6
-        // }))
-        //     .then(unwrapResult)
-        //     .then(result => {
-        //         console.log(result, 'result')
-        //     })
-        //     .catch(async rejectedValueOrSerializedError => {
-        //         console.log(rejectedValueOrSerializedError)
-        //     })
     }
 
     // {"priceAmountMicros":160000000,"title":"Time Freeze (GameArk)","productId":"boost_plan_time_freeze","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦160.00","subscriptionPeriod":"P0D"}
