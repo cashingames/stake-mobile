@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Text, View, ScrollView, StatusBar, Alert } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import CategoryLeaderboard from '../../shared/CategoryLeaderboard';
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import PageLoading from '../../shared/PageLoading';
 import GlobalTopLeaders from '../../shared/GlobalTopLeaders';
 import OtherLeaders from '../../shared/OtherLeaders';
@@ -125,16 +125,16 @@ export default ExtendedLeaderboard;
 
 const styles = EStyleSheet.create({
     container: {
-        flex: 1,
-        paddingVertical: responsiveScreenHeight(1)
-
+        height: responsiveHeight(100),
+        paddingVertical: responsiveHeight(2),
     },
     animation: {
         alignItems: 'center'
     },
     global: {
         // paddingHorizontal: normalize(15),
-        marginTop: normalize(40),
+        marginTop: responsiveHeight(100) * 0.04,
+        height:responsiveHeight(80),
         borderRadius: 12,
     },
     leaderContainer: {
@@ -149,10 +149,9 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     btn: {
-        marginHorizontal: normalize(5),
         marginHorizontal: '1rem',
         alignItems: 'flex-start',
-        paddingVertical: responsiveScreenHeight(2),
+        paddingVertical: responsiveHeight(100) * 0.03,
 
     },
     btnText: {

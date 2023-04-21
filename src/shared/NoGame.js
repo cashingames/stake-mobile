@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, Image, Platform } from 'react-native';
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import GoToStore from './GoToStore';
@@ -19,7 +19,7 @@ const NoGame = () => {
 	}
 
 	const { playSound } = useSound(require('../../assets/sounds/loss.wav'))
-	
+
 	useEffect(() => {
 		playSound()
 	}, [])
@@ -29,32 +29,33 @@ const NoGame = () => {
 			<View style={styles.noGames}>
 				<TopIcons />
 				<View style={styles.endImageCase}>
-					<ImageBackground style={styles.endImage} source={require('../../assets/images/no-game.png')}>
+					<ImageBackground style={styles.endImage} resizeMode='contain' source={require('../../assets/images/no-game.png')}>
 						<Text style={styles.titleText}>Out of lives</Text>
 						<View style={styles.livesCase}>
-							<Text style={styles.liveText}>Buy extra lives now or play again tomorrow!</Text>
+							<Text style={styles.liveText}>Get lives or come back in the next 3 hrs</Text>
 						</View>
 						<View style={styles.heartCase}>
-							<ImageBackground style={styles.heart} source={require('../../assets/images/heart-icon.png')}>
+							<ImageBackground resizeMode='contain' style={styles.heart} source={require('../../assets/images/heart-icon.png')}>
 								<Text style={styles.heartText}>+15</Text>
 							</ImageBackground>
 						</View>
-
 						<View style={styles.livesPriceCase}>
 							<Text style={styles.priceText}>N1000</Text>
 						</View>
 						<View style={styles.storeLink}>
-						<ImageBackground  source={require('../../assets/images/button-case.png')} >
-							<Pressable style={styles.btn}
-								onPress={visitStore}
-							>
-								<Text style={styles.btnText}>Buy</Text>
-							</Pressable>
-						</ImageBackground>
+							<ImageBackground source={require('../../assets/images/button-case.png')} >
+								<Pressable style={styles.btn}
+									onPress={visitStore}
+								>
+									<Text style={styles.btnText}>Buy</Text>
+								</Pressable>
+							</ImageBackground>
 						</View>
-					</ImageBackground>	
+					</ImageBackground>
 				</View>
-				<GameSettings onPress={() => navigation.goBack(null)} />
+				<View style={styles.setting}>
+					<GameSettings onPress={() => navigation.goBack(null)} />
+				</View>
 			</View>
 		</MixedContainerBackground>
 	)
@@ -64,43 +65,40 @@ export default NoGame;
 
 const styles = EStyleSheet.create({
 	noGames: {
-		flex: 1,
-		height: '100%',
-		paddingVertical: responsiveScreenHeight(2)
+		height: responsiveHeight(100),
+		paddingVertical: responsiveHeight(2),
 	},
 	endImageCase: {
 		alignItems: 'center',
-		paddingTop: responsiveScreenHeight(3.5),
-		marginVertical: responsiveScreenHeight(8),
+		height: responsiveHeight(80),
+		justifyContent: 'center',
 	},
 	endImage: {
-		height: 413,
-		width: 300,
-		alignItems: 'center',
-
+		height: responsiveHeight(50),
+		width: responsiveWidth(80),
+		alignItems: 'center'
 	},
 	titleText: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '1.5rem',
-		marginVertical: '2.4rem'
+		fontSize:'1.5rem',
+		marginVertical: Platform.OS === 'ios' ? '1.6rem' : '2rem'
 	},
 	heart: {
-		width: 143,
-		height: 109,
-		marginTop: normalize(10),
-		alignItems:'center',
-		justifyContent:'center'
+		height: responsiveHeight(12),
+		width: responsiveWidth(30),
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 	heartCase: {
 		alignItems: 'center',
-		width: 178
+		marginTop: responsiveHeight(100) * 0.02,
 	},
-	heartText:{
+	heartText: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '2rem',
-		marginTop: normalize(20)
+		fontSize: '1.7rem',
+		marginTop:  responsiveHeight(100) * 0.02,
 	},
 	point: {
 		color: '#fff',
@@ -109,19 +107,21 @@ const styles = EStyleSheet.create({
 		textAlign: 'center'
 	},
 	livesCase: {
-		marginVertical: responsiveScreenHeight(.60),
+		marginTop: responsiveHeight(100) * 0.02,
 		paddingHorizontal: responsiveScreenWidth(4),
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	liveText: {
-		color: '#fff',
+		color: '#575EE8',
 		fontFamily: 'blues-smile',
 		fontSize: '.8rem',
-		textAlign: 'center'
+		textAlign: 'center',
+		width:Platform.OS === "ios" ? normalize(200) : normalize(150)
+
 	},
 	livesPriceCase: {
 		flexDirection: 'row',
-		marginVertical: normalize(20)
+		marginVertical: responsiveHeight(100) * 0.01
 	},
 	priceText: {
 		color: '#FFD839',
@@ -129,19 +129,27 @@ const styles = EStyleSheet.create({
 		fontSize: '1.8rem',
 		textAlign: 'center'
 	},
-	storeLink:{
-		alignItems:'center'
+	storeLink: {
+		alignItems: 'center',
+		marginTop:5
 	},
-	btn:{
-		height:53,
-		width:89,
-		alignItems:'center',
-		justifyContent:'center'
+	btn: {
+		height: 53,
+		width: 89,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	btnText: {
-		color:'#A92101',
+		color: '#A92101',
 		fontFamily: 'blues-smile',
-		fontSize:'1.4rem'
+		fontSize: '1.4rem'
+	},
+	setting: {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: responsiveHeight(88),
 	}
+
 
 })

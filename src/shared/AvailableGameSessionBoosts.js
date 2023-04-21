@@ -127,9 +127,9 @@ const AvailableBoost = ({ boost, onConsume, showText }) => {
 
     return (
         <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
-            <Animated.View style={[styles.boostContainer, zoomAnimation]}>
+            <Animated.View style={styles.boostContainer}>
                 <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
-                    <Image
+                    <Image resizeMode="contain"
                         source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
                         style={styles.boostIcon}
                     />
@@ -190,8 +190,8 @@ const styles = EStyleSheet.create({
     },
     name: {
         color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        fontSize: '0.65rem',
+        fontFamily: 'poppins',
+        fontSize: '0.6rem',
         marginTop: '.5rem',
         width: "4rem"
     },

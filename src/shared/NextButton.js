@@ -97,7 +97,7 @@ const styles = EStyleSheet.create({
     disabled: {
         backgroundColor: 'gray',
         borderRadius: 20,
-        height: normalize(42),
+        height: normalize(35),
         paddingHorizontal: 60,
         justifyContent: 'center',
         borderBottomColor: '#0A1F45',

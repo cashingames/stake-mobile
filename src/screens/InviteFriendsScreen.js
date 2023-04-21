@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, View, ScrollView, Share, Alert, Pressable, Platform, Modal } from 'react-native';
-import normalize, { responsiveScreenHeight } from '../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenHeight } from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -32,7 +32,6 @@ const InviteFriendsScreen = ({ showInviteFriends, setShowInviteFriends }) => {
 
    
     const handleTourStop = () => {
-        console.log("tour stopped, going to next screen to continue....")
 
         // end tour
         try {
@@ -115,7 +114,7 @@ export default InviteFriendsScreen;
 const styles = EStyleSheet.create({
     centeredView: {
         flex: 1,
-        paddingVertical: responsiveScreenHeight(1),
+        paddingVertical: responsiveHeight(2),
         backgroundColor: 'rgba(17, 41, 103, 0.77)'
     },
 

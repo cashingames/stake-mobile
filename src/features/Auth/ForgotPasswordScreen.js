@@ -11,6 +11,7 @@ import MixedContainerBackground from '../../shared/ContainerBackground/MixedCont
 import GameArkLogo from '../../shared/GameArkLogo';
 import GaButton from '../../shared/GaButton';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import AppHeader from '../../shared/AppHeader';
 
 export default function ({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -55,7 +56,8 @@ export default function ({ navigation }) {
     return (
         <MixedContainerBackground>
             <View style={styles.container}>
-                <GameArkLogo />
+                {/* <GameArkLogo /> */}
+                <AppHeader />
                 <ForgotPasswordTitle />
                 <View style={styles.form}>
 
@@ -102,9 +104,8 @@ const styles = EStyleSheet.create({
         fontSize: 26,
         fontFamily: 'blues-smile',
         color: '#fff',
-        paddingTop: normalize(10),
+        marginTop: '2rem',
         textAlign: 'center',
-        marginTop: normalize(40)
     },
     instructionTextStyle: {
         fontSize: 12,

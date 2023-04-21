@@ -33,12 +33,6 @@ export default ({ title, initialShowPlayButton = true ,activeSubcategory, naviga
         playSound()
     }
 
-    // console.log(dispatch(setGameType(activeCategory)))
-    // const onSubCategorySelected = (subcategory) => {
-    //     dispatch(setGameCategory(subcategory));
-    //     playSound()
-    // }
-
 
     useFocusEffect(
         React.useCallback(() => {

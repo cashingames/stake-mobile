@@ -107,11 +107,13 @@ export default function LoginScreen({ navigation }) {
                         placeholder="Enter password"
                         onChangeText={text => { onChangePassword(text) }}
                     />
-                    <RenderForgotPassword />
+                </View>
+                <View style={styles.renderForgotPassword}>
+                <RenderForgotPassword />
+                </View>
                     <GaButton text={loading ? 'Signing in...' : 'Sign in'}
                         onPress={() => onLogin()}
                         disabled={!canLogin} />
-                </View>
                 <RenderCreateAccount navigation={navigation} />
                 </KeyboardAvoidingView>
         </MixedContainerBackground>
@@ -121,12 +123,13 @@ export default function LoginScreen({ navigation }) {
 const RenderForgotPassword = () => {
     const navigation = useNavigation();
     return (
+        <Pressable onPress={() => navigation.navigate('ForgotPassword')}>
         <Text
             style={styles.forgotPassword}
-            onPress={() => navigation.navigate('ForgotPassword')}
         >
             Forgot Password?
         </Text>
+        </Pressable>
     )
 }
 
@@ -180,12 +183,14 @@ const styles = EStyleSheet.create({
         lineHeight: '1.4rem',
         color: '#fff',
     },
+    renderForgotPassword:{
+        alignItems: 'flex-start'
+    },
     forgotPassword: {
         color: '#F1D818',
         fontFamily: 'blues-smile',
-        fontSize: '1rem'
+        fontSize: '1rem',
     },
-
     signIn: {
         flexDirection: 'column',
         marginTop: responsiveScreenWidth(2),
@@ -224,5 +229,5 @@ const styles = EStyleSheet.create({
         fontSize: '0.8rem',
         color: '#fff',
         fontFamily: 'graphik-regular'
-    }
+    },
 });

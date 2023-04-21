@@ -68,20 +68,18 @@ const styles = EStyleSheet.create({
         // },
     },
     cardIconBigger: {
-        // flex: 2,
         width: normalize(20),
         height: normalize(20),
         alignSelf: 'center',
     },
     cardContent: {
-        // flex: 4,
         paddingHorizontal: responsiveScreenWidth(1),
         justifyContent: "space-evenly",
     },
     cardTitle: {
         fontSize: '0.8rem',
         color: '#fff',
-        fontFamily: 'graphik-medium',
+        fontFamily: 'poppins',
     },
 
     replay: {

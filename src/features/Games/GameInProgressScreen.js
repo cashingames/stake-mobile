@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Text, View, Image, ScrollView, ImageBackground, Alert, StatusBar, BackHandler } from 'react-native';
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../utils/normalize";
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSelector, useDispatch } from 'react-redux';
@@ -190,11 +190,10 @@ export default function GameInProgressScreen({ navigation, route }) {
         <ImageBackground source={require('../../../assets/images/quiz-background-large.png')}
             style={styles.image}
             resizeMode="cover" >
-                <View style={styles.top}>
-                
-                </View>
+            <View style={styles.top}>
+            </View>
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
-            <TopIcons />
+                <TopIcons />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
                 <GameQuestions />
                 <UniversalBottomSheet
@@ -204,10 +203,10 @@ export default function GameInProgressScreen({ navigation, route }) {
                 />
             </ScrollView>
             <View style={styles.buttonCase}>
-            <NextButton ending={ending} onEndGame={() => onEndGame()} />
-            <View style={styles.setting}>
-                <GameSettings onPress={() => showExitConfirmation()} isDisabled={true}/>
-            </View>
+                <NextButton ending={ending} onEndGame={() => onEndGame()} />
+                <View style={styles.setting}>
+                    <GameSettings onPress={() => showExitConfirmation()} isDisabled={true} />
+                </View>
             </View>
         </ImageBackground>
     );
@@ -226,16 +225,11 @@ const styles = EStyleSheet.create({
 
     container: {
         flex: 1,
-        // paddingTop: normalize(45),
         paddingHorizontal: responsiveScreenWidth(6),
-        // paddingTop: normalize(45),
-        // backgroundColor: 'blue',
-        // height: responsiveScreenHeight(15)
-
     },
     image: {
-        flex: 1,
-        height:900
+        width: responsiveWidth(100),
+        height: responsiveHeight(100)
     },
     gameProgressAndBoost: {
         display: 'flex',
@@ -246,10 +240,15 @@ const styles = EStyleSheet.create({
         marginVertical: normalize(10)
     },
     setting: {
-        marginBottom: normalize(8)
+        // marginBottom: normalize(8)
     },
-    top:{
-        paddingTop: responsiveScreenHeight(1),
+    top: {
+        paddingTop: responsiveHeight(2),
+    },
+    buttonCase:{
+        position: 'absolute',
+        left:0,
+        right:0,
+        top:responsiveHeight(85),
     }
-
 });

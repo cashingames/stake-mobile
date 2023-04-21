@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Platform, Pressable, Text, View } from 'react-native';
-import { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize';
+import { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize';
 import { formatNumber } from '../utils/stringUtl';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import TopLeader from './TopLeader';
@@ -73,7 +73,7 @@ const styles = EStyleSheet.create({
         borderTopRightRadius: 12,
         borderBottomRightRadius: 12,
         paddingHorizontal:responsiveScreenWidth(4),
-        paddingVertical:responsiveScreenHeight(2)
+        paddingVertical:responsiveScreenHeight(1)
     },
     thirdImage:{
         height:65,
@@ -94,7 +94,7 @@ const styles = EStyleSheet.create({
         borderTopRightRadius: 30,
         paddingHorizontal:responsiveScreenWidth(4),
         paddingVertical:responsiveScreenHeight(2),
-        height:153
+        height:responsiveHeight(20)
     },
     firstImage:{
         height:75,

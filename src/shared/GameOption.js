@@ -60,7 +60,7 @@ const styles = EStyleSheet.create({
     },
     answerText: {
         color: '#15397D',
-        fontFamily: 'blues-smile',
+        fontFamily: 'poppins',
         fontSize: '0.7rem',
         textAlign: 'left',
     },

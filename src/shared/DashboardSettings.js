@@ -1,19 +1,20 @@
-import { View, Text, Modal } from 'react-native'
+import { View } from 'react-native'
 import React from 'react'
 import { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { Image } from 'react-native'
 import { Pressable } from 'react-native'
-import MixedContainerBackground from './ContainerBackground/MixedContainerBackground'
-import GameArkLogo from './GameArkLogo'
 import { useNavigation } from '@react-navigation/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { getGlobalLeaders, setModalOpen } from '../features/CommonSlice'
 import { useRef } from 'react'
 import { Animated } from 'react-native'
 import { useEffect } from 'react'
+import useSound from '../utils/useSound'
 
 const DashboardSettings = () => {
+    const { playSound } = useSound(require('../../assets/sounds/open.wav'));
+
    const dispatch = useDispatch()
     useEffect(() => {
         dispatch(getGlobalLeaders());
@@ -43,12 +44,16 @@ const DashboardSettings = () => {
     return (
         <>
             <View style={styles.setting}>
-                <Pressable onPress={() => navigation.navigate('IconSettings')}>
+                <Pressable onPress={() => {
+                    playSound()
+                    navigation.navigate('IconSettings')}}>
                 <Animated.View style={[styles.circle, { transform: [{ rotate: spinAnimation }] }]}>
                     <Image style={styles.settingIcon} source={require('./../../assets/images/setting-icon.png')} />
                     </Animated.View>
                 </Pressable>
-                <Pressable onPress={() => navigation.navigate('GameStore')}>
+                <Pressable onPress={() => {
+                    playSound()
+                    navigation.navigate('GameStore')}}>
                     <Image style={styles.storeIcon} source={require('../../assets/images/store-icon.png')} />
                     
                 </Pressable>

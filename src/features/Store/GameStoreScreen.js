@@ -16,7 +16,7 @@ import AppButton from "../../shared/AppButton";
 import UserItems from "../../shared/UserItems";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { randomEnteringAnimation } from "../../utils/utils";
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize';
 import useSound from "../../utils/useSound";
 import * as InAppPurchases from 'expo-in-app-purchases';
 import { Alert } from "react-native";
@@ -282,7 +282,7 @@ const GamePlanCard = ({ plan, user, purchaeStoreItem, getStorePrice }) => {
         // refRBSheet.current.open()
     }
     return (
-        <ImageBackground style={styles.storeItemContainer} source={require('../../../assets/images/store-items-bg.png')}>
+        <ImageBackground resizeMode="contain" style={styles.storeItemContainer} source={require('../../../assets/images/store-items-bg.png')}>
             <Pressable onPress={buyGamePlan}>
                 <Animated.View entering={randomEnteringAnimation().duration(1000)}>
                     <PlanCardDetails plan={plan} getStorePrice={getStorePrice} />
@@ -297,7 +297,7 @@ const PlanCardDetails = ({ plan, getStorePrice }) => {
     return (
         <>
             <View style={styles.giftBoxCase}>
-                <Image style={styles.planIcon} source={require('../../../assets/images/heart-plan.png')} />
+                <Image resizeMode="contain" style={styles.planIcon} source={require('../../../assets/images/heart-plan.png')} />
                 <Text style={styles.storeItemName}>{plan.name}</Text>
             </View>
             {/* <Text style={styles.planCount}>{plan.game_count}</Text> */}
@@ -341,7 +341,7 @@ const BoostCard = ({ boost, user, purchaeStoreItem, getStorePrice }) => {
         // refRBSheet.current.open()
     }
     return (
-        <ImageBackground style={styles.storeItemContainer} source={require('../../../assets/images/store-items-bg.png')}>
+        <ImageBackground resizeMode="contain" style={styles.storeItemContainer} source={require('../../../assets/images/store-items-bg.png')}>
             <Pressable activeOpacity={0.8} onPress={buyBoost}>
                 <Animated.View entering={randomEnteringAnimation().duration(1000)}>
                     <BoostCardDetails boost={boost} getStorePrice={getStorePrice} />
@@ -356,17 +356,19 @@ const BoostCardDetails = ({ boost, getStorePrice }) => {
     return (
         <>
             <View style={styles.giftBoxCase}>
-                <Image
+                <Image resizeMode="contain"
                     source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
-                    style={[boost.name === 'Time Freeze' ? styles.boostIcon : boost.name === 'Skip' ? styles.skipIcon : styles.bombIcon]}
+                    style={ styles.boostIcon}
                 />
                 <Text style={styles.storeItemName}>{formatNumber(boost.pack_count)} {boost.name}</Text>
             </View>
             <View style={styles.boostDetailsContainer}>
                 <Text style={styles.cardDescription}>{boost.description}</Text>
             </View>
+            <View>
             <View style={styles.boostPriceCase}>
                 <Text style={styles.buyWithCash}>{getStorePrice(boost, 'boost')}</Text>
+            </View>
             </View>
         </>
     )
@@ -374,13 +376,11 @@ const BoostCardDetails = ({ boost, getStorePrice }) => {
 const styles = EStyleSheet.create({
 
     container: {
-        paddingTop: responsiveScreenHeight(2),
-        paddingBottom: responsiveScreenHeight(10)
+        paddingVertical: responsiveScreenHeight(2),
+        // paddingBottom: responsiveScreenHeight(10)
     },
     storeItems: {
-        // paddingBottom: normalize(20),
         flexDirection: 'column',
-        // backgroundColor: 'yellow',
     },
     title: {
         fontFamily: 'graphik-bold',
@@ -400,17 +400,16 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        // marginTop: normalize(15), 
-        justifyContent: 'space-between',
-        paddingHorizontal: responsiveScreenWidth(3)
+        justifyContent: 'center',
     },
     storeItemContainer: {
         alignItems: 'center',
         marginBottom: normalize(20),
         paddingVertical: responsiveScreenHeight(2),
         justifyContent: 'space-between',
-        width: 160,
-        height: 193,
+        width: responsiveWidth(45),
+        height: Platform.OS === "ios" ? responsiveHeight(22.5) : responsiveHeight(23.5),
+        marginHorizontal:'0.5rem'
     },
     buyItemCard: {
         alignItems: 'center',
@@ -435,14 +434,14 @@ const styles = EStyleSheet.create({
     },
     storeItemName: {
         fontFamily: 'blues-smile',
-        fontSize: '1.2rem',
+        fontSize: '1rem',
         color: '#fff',
+        textAlign: 'center'
     },
     cardDescription: {
         fontFamily: 'graphik-medium',
         fontSize: '0.5rem',
         color: '#fff',
-        // lineHeight: responsiveScreenHeight(2.5),
         width: responsiveScreenWidth(38),
         textAlign: 'center'
     },
@@ -470,16 +469,8 @@ const styles = EStyleSheet.create({
         marginTop: responsiveScreenHeight(5)
     },
     boostIcon: {
-        width: normalize(110),
-        height: normalize(89),
-    },
-    skipIcon: {
-        width: normalize(82),
-        height: normalize(85)
-    },
-    bombIcon: {
-        width: normalize(79),
-        height: normalize(85)
+        width: responsiveWidth(30),
+        height: responsiveHeight(10),
     },
     boostDetailsContainer: {
         alignItems: 'center',
@@ -496,7 +487,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-around',
         height: 50,
         alignItems: 'center',
-        marginBottom: normalize(20)
+        marginVertical: normalize(20)
     },
     avatar: {
         height: 71,
@@ -510,6 +501,7 @@ const styles = EStyleSheet.create({
     headerTextCase: {
         width: '50%',
         alignItems: "flex-start",
+        marginVertical: '2rem'
     },
     headerText: {
         fontFamily: 'blues-smile',
@@ -524,13 +516,13 @@ const styles = EStyleSheet.create({
         width: normalize(96)
     },
     planIcon: {
-        height: 82,
-        width: 104
+        width: responsiveWidth(30),
+        height: responsiveHeight(10),
     },
     boostPriceCase: {
         backgroundColor: '#0038B3',
         paddingVertical: normalize(4),
-        width: normalize(158),
+        // width: responsiveWidth(35)-10,
         borderWidth: 2,
         borderColor: '#00EDF1',
         marginTop: 10,

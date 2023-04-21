@@ -1,7 +1,7 @@
 import { View, Text, Platform } from 'react-native'
 import React from 'react'
 import Constants from 'expo-constants';
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../utils/normalize'
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../utils/normalize'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { Pressable } from 'react-native'
 import { useState } from 'react'
@@ -110,6 +110,7 @@ const Dashboard = ({ navigation }) => {
             <RenderUpdateChecker />
                 <MainContainerBackground>
                     <View style={styles.container}>
+                        <View style={{height:responsiveHeight(25),  justifyContent:'center'}}>
                         <Pressable style={styles.icons} onPress={handleToggleSwitch}>
                             {toogle ? <Image style={styles.imageIcons} source={require('../../assets/images/sound-1.png')} /> :
                                 <Image style={styles.imageIcons} source={require('../../assets/images/sound-off.png')} />
@@ -117,6 +118,7 @@ const Dashboard = ({ navigation }) => {
                         </Pressable>
                         <View style={styles.logo}>
                             <GameArkLogo />
+                        </View>
                         </View>
                         <View style={styles.welcome}>
                             <Text style={styles.welcomeText}>Welcome to the ark</Text>
@@ -126,7 +128,6 @@ const Dashboard = ({ navigation }) => {
                         </View>
                         <View style={styles.setting}>
                             <DashboardSettings />
-
                         </View>
                     </View >
                 </MainContainerBackground>
@@ -144,12 +145,12 @@ function RenderUpdateChecker() {
     notifyOfPublishedUpdates();
     return null;
 }
-
-
+console.log(responsiveWidth(100))
 const styles = EStyleSheet.create({
     container: {
-        flex: 1,
-        paddingVertical: responsiveScreenWidth(20),
+        height: responsiveHeight(100),
+        // backgroundColor:'yellow',
+        paddingTop: responsiveHeight(8),
     },
     icons: {
         alignItems: 'flex-end',
@@ -161,22 +162,25 @@ const styles = EStyleSheet.create({
 
     welcome: {
         alignItems: 'center',
-        marginTop: responsiveScreenHeight(36)
+        justifyContent:'flex-end',
+        height: responsiveHeight(40),
     },
 
     welcomeText: {
         fontSize: '1.4rem',
         fontFamily: 'blues-smile',
         color: '#fff',
-        marginVertical: normalize(10)
     },
 
     welcomeBtn: {
+        marginTop:'.3rem',
         backgroundColor: '#15397D',
         height: normalize(38),
         width: responsiveScreenWidth(50),
         justifyContent: 'center',
-        borderRadius: 20
+        borderRadius: 20,
+        borderBottomColor: '#0D2859',
+        borderBottomWidth: 4,
     },
     welcomeBtnText: {
         color: "#fff",
@@ -186,7 +190,12 @@ const styles = EStyleSheet.create({
         fontFamily: 'blues-smile'
     },
     setting: {
-        marginTop:Platform.OS === 'ios' ? responsiveScreenHeight(10): responsiveScreenHeight(5),
+        position: 'absolute',
+        left:0,
+        right:0,
+        top:responsiveHeight(90),
+        justifyContent:'flex-end',
+        // marginTop:Platform.OS === 'ios' ? responsiveScreenHeight(10): responsiveScreenHeight(5),
     },
     imageIcons: {
         width: 50,

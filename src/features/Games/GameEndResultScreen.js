@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar, Platform } from 'react-native';
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -192,7 +192,7 @@ const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScor
 	return (
 		<View style={styles.endImageCase}>
 			{pointsGained > Number(minimumBoostScore)?
-				<ImageBackground style={styles.endImage} source={require('../../../assets/images/no-game.png')}>
+				<ImageBackground style={styles.endImage} resizeMode="contain" source={require('../../../assets/images/no-game.png')}>
 					<Text style={styles.winText}>You win</Text>
 					<View style={styles.starIcons}>
 						<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
@@ -214,11 +214,11 @@ const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScor
 						</Pressable>
 					</View>
 					<View style={styles.winnerProfile}>
-						<Image style={styles.winnerImage} source={require('../../../assets/images/winner-picture.png')} />
+						<Image style={styles.winnerImage} resizeMode="contain" source={require('../../../assets/images/winner-picture.png')} />
 					</View> 
 				</ImageBackground>
 				:
-				<ImageBackground style={styles.endImage} source={require('../../../assets/images/no-game.png')}>
+				<ImageBackground style={styles.endImage} resizeMode="contain" source={require('../../../assets/images/no-game.png')}>
 					<Text style={styles.winText}>You Lose!</Text>
 					<View style={styles.starIcons}>
 						<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
@@ -250,24 +250,25 @@ const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScor
 }
 const styles = EStyleSheet.create({
 	container: {
-		flex: 1,
-		paddingVertical: responsiveScreenHeight(2),
+		height: responsiveHeight(100),
+        paddingVertical: responsiveHeight(2),
 	},
 	endImageCase: {
 		alignItems: 'center',
-		// paddingTop: responsiveScreenHeight(3.5),
-		marginVertical: Platform.OS === 'ios' ? responsiveScreenHeight(15) : responsiveScreenHeight(6),
+		height:responsiveHeight(80),
+		justifyContent:'center',
 	},
 	endImage: {
-		height: 413,
-		width: 300,
+		height: responsiveHeight(50),
+		width: responsiveWidth(80),
 		alignItems: 'center'
 	},
 	winText: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
 		fontSize: Platform.OS === 'ios' ? '1.6rem' :'2rem',
-		marginVertical: Platform.OS === 'ios' ? '1.6rem' : '2rem'
+		// marginVertical: Platform.OS === 'ios' ? '1.6rem' : '2rem'
+		marginVertical: Platform.OS === 'ios' ? responsiveHeight(100) * 0.035 : responsiveHeight(100) * 0.03
 	},
 	starIcons: {
 		flexDirection: 'row',
@@ -282,7 +283,7 @@ const styles = EStyleSheet.create({
 	},
 	pointsCase: {
 		alignItems: 'center',
-		width: 198,
+		width: responsiveWidth(46),
 		marginVertical: normalize(20),
 		zIndex:10
 	},
@@ -321,13 +322,19 @@ const styles = EStyleSheet.create({
 		height: normalize(135)
 	},
 	winnerImage:{
-		width:normalize(145),
-		height:normalize(254)
+		height: responsiveHeight(50),
+		width: responsiveWidth(35),
 	},
 	winnerProfile:{
 		position: 'absolute',
-		left: responsiveScreenWidth(50),
-		top: Platform.OS === 'ios' ? responsiveScreenHeight(27) : responsiveScreenHeight(25)
+		left: responsiveWidth(55),
+		top: responsiveHeight(20),
+	},
+	setting:{
+		position: 'absolute',
+        left:0,
+        right:0,
+        top:responsiveHeight(88),
 	}
 
 });
