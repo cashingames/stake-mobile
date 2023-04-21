@@ -1,33 +1,25 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Image, Pressable, StatusBar, Text, View } from 'react-native';
 import GamePicker from './GamePicker';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useFocusEffect } from '@react-navigation/native';
-import { isTrue } from '../../utils/stringUtl';
 import { useSelector } from 'react-redux';
-import NoGame from '../../shared/NoGame';
-import { Platform } from 'react-native';
 import useSound from '../../utils/useSound';
 import QuizContainerBackground from '../../shared/ContainerBackground/QuizContainerBackground';
 import TopIcons from '../../shared/TopIcons';
-import DashboardSettings from '../../shared/DashboardSettings';
-import { ScrollView } from 'react-native';
 import GameSettings from '../../shared/GameSettings';
 
 const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const gameMode = useSelector(state => state.game.gameMode);
-    const refRBSheet = useRef();
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
-    const [showSettings, setShowSettings] = useState(false);
     const user = useSelector(state => state.auth.user);
 
     const onPlayButtonClick = () => {
         onSelectGameMode();
         playSound()
-
     }
 
     const onSelectGameMode = () => {

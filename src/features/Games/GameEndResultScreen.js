@@ -268,7 +268,7 @@ const styles = EStyleSheet.create({
 		fontFamily: 'blues-smile',
 		fontSize: Platform.OS === 'ios' ? '1.6rem' :'2rem',
 		// marginVertical: Platform.OS === 'ios' ? '1.6rem' : '2rem'
-		marginVertical: responsiveHeight(100) * 0.03
+		marginVertical: Platform.OS === 'ios' ? responsiveHeight(100) * 0.035 : responsiveHeight(100) * 0.03
 	},
 	starIcons: {
 		flexDirection: 'row',

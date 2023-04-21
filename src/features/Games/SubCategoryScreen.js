@@ -1,19 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Image, Pressable, StatusBar, Text, View } from 'react-native';
-import GamePicker from './GamePicker';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { isTrue } from '../../utils/stringUtl';
+import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import NoGame from '../../shared/NoGame';
-import { Platform } from 'react-native';
 import useSound from '../../utils/useSound';
 import analytics from '@react-native-firebase/analytics';
 import QuizContainerBackground from '../../shared/ContainerBackground/QuizContainerBackground';
 import TopIcons from '../../shared/TopIcons';
-import DashboardSettings from '../../shared/DashboardSettings';
 import { ScrollView } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { randomEnteringAnimation } from '../../utils/utils';
@@ -29,43 +24,39 @@ import GameSettings from '../../shared/GameSettings';
 const SubCategoryScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const gameTypeId = useSelector(state => state.game.gameType);
-    const gameModeId = useSelector(state => state.game.gameMode);
-    // const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
-    const gameMode = useSelector(state => state.game.gameMode);
-    const [showSettings, setShowSettings] = useState(false);
     const [loading, setLoading] = useState(false);
-    
+
     return (
         <>
-        {loading ? (
-          <Loader />
-        ) : (
-        <QuizContainerBackground>
-            <ScrollView style={styles.container}>
-                <View>                
-                    <TopIcons />
-                <View style={styles.logo}>
-                    <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
-                        <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
-                    </Pressable>
-                    <Text style={styles.title}>Trivia Hub</Text>
-                </View>
-                </View>
+            {loading ? (
+                <Loader />
+            ) : (
+                <QuizContainerBackground>
+                    <ScrollView style={styles.container}>
+                        <View>
+                            <TopIcons />
+                            <View style={styles.logo}>
+                                <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
+                                    <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
+                                </Pressable>
+                                <Text style={styles.title}>Trivia Hub</Text>
+                            </View>
+                        </View>
 
-                {/* <Text style={styles.categoryHeading}>Select Category</Text> */}
-                <View style={styles.imgContainer}>
-                    <Image style={styles.quizImage} source={require('../../../assets/images/word-trivia.png')} />
-                </View>
-                <View>
-                    <SubCategories category={gameTypeId} loading={loading} setLoading={setLoading}/>
-                </View>
-            </ScrollView>
-            <View style={styles.setting}>
-                    <GameSettings onPress={()=> navigation.goBack(null)} />
-                </View>
-        </QuizContainerBackground>
-    )}
-    </>
+                        {/* <Text style={styles.categoryHeading}>Select Category</Text> */}
+                        <View style={styles.imgContainer}>
+                            <Image style={styles.quizImage} source={require('../../../assets/images/word-trivia.png')} />
+                        </View>
+                        <View>
+                            <SubCategories category={gameTypeId} loading={loading} setLoading={setLoading} />
+                        </View>
+                    </ScrollView>
+                    <View style={styles.setting}>
+                        <GameSettings onPress={() => navigation.goBack(null)} />
+                    </View>
+                </QuizContainerBackground>
+            )}
+        </>
     )
 }
 
@@ -77,9 +68,12 @@ const SubCategories = ({ category, loading, setLoading }) => {
     const gameModeId = useSelector(state => state.game.gameMode.id);
     const [categoryId, setCategoryId] = useState('')
     const user = useSelector(state => state.auth.user);
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
+
 
     const onStartGame = () => {
         setLoading(true);
+        playSound()
         dispatch(setIsPlayingTrivia(false))
         dispatch(startGame({
             category: categoryId,
@@ -90,9 +84,9 @@ const SubCategories = ({ category, loading, setLoading }) => {
             .then(async result => {
                 crashlytics().log('User started exhibition game');
                 await analytics().logEvent("exhibition_without_staking_game_started", {
-                  'id': user.username,
-                  'phone_number': user.phoneNumber,
-                  'email': user.email
+                    'id': user.username,
+                    'phone_number': user.phoneNumber,
+                    'email': user.email
                 })
                 dispatch(logActionToServer({
                     message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
@@ -103,20 +97,18 @@ const SubCategories = ({ category, loading, setLoading }) => {
                 setCategoryId('')
             })
             .catch((error) => {
-
-                console.log(error)
-                // crashlytics().recordError(error);
-                // crashlytics().log('failed to start exhibition game');
-                // setLoading(false);
+                crashlytics().recordError(error);
+                crashlytics().log('failed to start exhibition game');
+                setLoading(false);
             });
     }
-    
+
     useEffect(() => {
-        if(categoryId){
-            if (gameMode.name === "CHALLENGE"){
-            navigation.navigate('ChallengeSelectPlayer');
-            }else{
-            onStartGame()
+        if (categoryId) {
+            if (gameMode.name === "CHALLENGE") {
+                navigation.navigate('ChallengeSelectPlayer');
+            } else {
+                onStartGame()
             }
         }
     }, [categoryId])
@@ -128,21 +120,21 @@ const SubCategories = ({ category, loading, setLoading }) => {
     }
 
     return (
-      
-            <Animated.View entering={randomEnteringAnimation()}>
-              <View style={styles.subcategories}>
+
+        <Animated.View entering={randomEnteringAnimation()}>
+            <View style={styles.subcategories}>
                 {category.subcategories.map((subcategory, i) => (
-                  <GameSubcategoryCard
-                    key={i}
-                    game={subcategory}
-                    onPress={() => onPressMe(subcategory)}
-                    loading={loading}
-                  />
+                    <GameSubcategoryCard
+                        key={i}
+                        game={subcategory}
+                        onPress={() => onPressMe(subcategory)}
+                        loading={loading}
+                    />
                 ))}
-              </View>
-            </Animated.View>
-          )
-      
+            </View>
+        </Animated.View>
+    )
+
 };
 
 export default SubCategoryScreen;
@@ -172,7 +164,7 @@ const styles = EStyleSheet.create({
         // letterSpacing: 7,
         flex: 1,
         marginRight: 30,
-        marginBottom:40
+        marginBottom: 40
     },
     imgContainer: {
         alignItems: 'center'
@@ -183,9 +175,9 @@ const styles = EStyleSheet.create({
     },
     setting: {
         position: 'absolute',
-        left:0,
-        right:0,
-        top:responsiveHeight(88),
+        left: 0,
+        right: 0,
+        top: responsiveHeight(88),
     },
 
     categoryHeading: {

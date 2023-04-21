@@ -49,14 +49,11 @@ const gamesType = [
     },
 ]
 
-
-
 const GameScreen = ({ navigation }) => {
     const dispatch = useDispatch()
     const activePlans = useSelector(state => state.auth.user.hasActivePlan);
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'));
     const user = useSelector(state => state.auth.user)
-console.log(user)
 
     const goToGameInstruction = () => {
         navigation.navigate('GameInstructions')
@@ -132,6 +129,7 @@ const styles = EStyleSheet.create({
         height: responsiveHeight(70),
         width: responsiveWidth(100),
         marginTop:responsiveHeight(8),
+        paddingHorizontal: responsiveScreenWidth(2),
     },
     //game card section to be removed
     gameCard: {
@@ -164,7 +162,7 @@ const styles = EStyleSheet.create({
         zIndex: 10
     },
     cardImage: {
-        height: responsiveHeight(30),
+        height:Platform.OS === "ios" ? responsiveHeight(27) : responsiveHeight(29),
         width: responsiveWidth(30),
         marginTop: 10
     },

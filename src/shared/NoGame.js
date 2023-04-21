@@ -81,7 +81,7 @@ const styles = EStyleSheet.create({
 	titleText: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: Platform.OS === 'ios' ? '1.6rem' : '1.5rem',
+		fontSize:'1.5rem',
 		marginVertical: Platform.OS === 'ios' ? '1.6rem' : '2rem'
 	},
 	heart: {
@@ -97,7 +97,8 @@ const styles = EStyleSheet.create({
 	heartText: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '2rem',
+		fontSize: '1.7rem',
+		marginTop:  responsiveHeight(100) * 0.02,
 	},
 	point: {
 		color: '#fff',
@@ -115,7 +116,7 @@ const styles = EStyleSheet.create({
 		fontFamily: 'blues-smile',
 		fontSize: '.8rem',
 		textAlign: 'center',
-		width: normalize(150)
+		width:Platform.OS === "ios" ? normalize(200) : normalize(150)
 
 	},
 	livesPriceCase: {

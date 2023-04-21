@@ -11,7 +11,6 @@ import MixedContainerBackground from '../../shared/ContainerBackground/MixedCont
 import GameArkLogo from '../../shared/GameArkLogo'
 import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize'
 import useSound from '../../utils/useSound'
-import { ScrollView } from 'react-native-gesture-handler'
 import { Text } from 'react-native'
 import { useState } from 'react'
 import InviteFriendsScreen from '../../screens/InviteFriendsScreen'
@@ -22,7 +21,9 @@ const IconSettings = () => {
     const navigation = useNavigation()
     const [showInviteFriends, setShowInviteFriends] = useState(false);
     const spinValue = useRef(new Animated.Value(0)).current;
-    const { toogle, handleToggle, stopSound } = useSound('../../../assets/sounds/dashboard.mp3')
+    const { toogle, handleToggle, stopSound } = useSound('../../../assets/sounds/open.wav')
+    const { playSound } = useSound('../../../assets/sounds/open.wav')
+
     const dispatch = useDispatch()
     const handleToggleSwitch = () => {
         handleToggle();
@@ -34,7 +35,6 @@ const IconSettings = () => {
     }
 
     const logoutHandler = () => {
-             
                 Alert.alert(
                     'Logout?',
                     'Are you sure you want to logout?',
@@ -83,18 +83,22 @@ const IconSettings = () => {
                                 }
                             </Pressable>
                             <Pressable style={styles.icons}
-                            onPress={() => navigation.navigate('Leaderboard')} 
+                            onPress={() => {
+                                playSound()
+                                navigation.navigate('Leaderboard')}} 
                             >
                                 <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/leaderboard-icon.png')} />
                             </Pressable>
                             <Pressable style={styles.icons}
                                 onPress={() => {
+                                    playSound()
                                     navigation.navigate('UserProfile')
                                 }}>
                                 <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/profile-icon.png')} />
                             </Pressable>
                             <Pressable style={styles.icons}
                                   onPress={() => {
+                                    playSound()
                                     navigation.navigate('ContactUs')
                                 }}
                             >
@@ -107,7 +111,9 @@ const IconSettings = () => {
                             </Pressable >
                         </View>
                         <View style={styles.setting}>
-                            <Pressable onPress={() => navigation.goBack(null)}>
+                            <Pressable onPress={() => {
+                                playSound()
+                                navigation.goBack(null)}}>
                             <Animated.View style={[styles.circle, { transform: [{ rotate: spinAnimation }] }]}>
                                 <Image style={styles.settingIcon} resizeMode='contain' source={require('../../../assets/images/close-icon.png')} />
                                 </Animated.View>

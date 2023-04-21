@@ -404,7 +404,7 @@ const styles = EStyleSheet.create({
         paddingVertical: responsiveScreenHeight(2),
         justifyContent: 'space-between',
         width: responsiveWidth(45),
-        height: responsiveHeight(23.5),
+        height: Platform.OS === "ios" ? responsiveHeight(22.5) : responsiveHeight(23.5),
         marginHorizontal:'0.5rem'
     },
     buyItemCard: {
