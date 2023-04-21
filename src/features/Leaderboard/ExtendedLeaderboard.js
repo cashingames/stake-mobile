@@ -133,7 +133,7 @@ const styles = EStyleSheet.create({
     },
     global: {
         // paddingHorizontal: normalize(15),
-        marginTop: normalize(40),
+        marginTop: responsiveHeight(100) * 0.04,
         height:responsiveHeight(80),
         borderRadius: 12,
     },
@@ -149,10 +149,9 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     btn: {
-        marginHorizontal: normalize(5),
         marginHorizontal: '1rem',
         alignItems: 'flex-start',
-        paddingVertical: responsiveScreenHeight(2),
+        paddingVertical: responsiveHeight(100) * 0.03,
 
     },
     btnText: {

@@ -4,8 +4,8 @@ import React from 'react'
 const QuizContainerBackground = ({children}) => {
   return (
     <ImageBackground source={require('../../../assets/images/quiz-background-large-min.png')}
-    style={{ width: Dimensions.get("screen").width, height: 900 }}
-    resizeMode="cover">
+    style={{ width: Dimensions.get("window").width, height: Dimensions.get("window").height }}
+    >
         {children}
     </ImageBackground>
 

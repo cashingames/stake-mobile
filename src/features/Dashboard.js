@@ -83,7 +83,7 @@ const Dashboard = ({ navigation }) => {
             <RenderUpdateChecker />
                 <MainContainerBackground>
                     <View style={styles.container}>
-                        <View style={{height:responsiveHeight(25),  justifyContent:'flex-end'}}>
+                        <View style={{height:responsiveHeight(25),  justifyContent:'center'}}>
                         <Pressable style={styles.icons} onPress={handleToggleSwitch}>
                             {toogle ? <Image style={styles.imageIcons} source={require('../../assets/images/sound-1.png')} /> :
                                 <Image style={styles.imageIcons} source={require('../../assets/images/sound-off.png')} />
@@ -146,7 +146,7 @@ const styles = EStyleSheet.create({
     },
 
     welcomeBtn: {
-        marginTop:'1rem',
+        marginTop:'.3rem',
         backgroundColor: '#15397D',
         height: normalize(38),
         width: responsiveScreenWidth(50),

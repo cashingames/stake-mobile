@@ -30,15 +30,12 @@ const styles = EStyleSheet.create({
 
     card: {
         width: '100%',
-        // height:55,
-
-        padding: normalize(20),
+        padding: normalize(15),
         borderRadius: normalize(20),
         marginBottom: normalize(10),
         backgroundColor: '#15397D',
         borderBottomColor: '#0D2859',
         borderBottomWidth: 4,
-        // justifyContent:'center'
     },
     cardIcon: {
         width: 40,

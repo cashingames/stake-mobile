@@ -1,6 +1,6 @@
 import { View, Text, ImageBackground, Platform } from 'react-native'
 import React from 'react'
-import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize'
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { Image } from 'react-native'
 import { Pressable } from 'react-native'
@@ -15,6 +15,7 @@ import { randomEnteringAnimation } from '../../utils/utils'
 import useSound from '../../utils/useSound';
 import Animated from 'react-native-reanimated'
 import GameScreenHeader from '../../shared/GameScreenHeader'
+import { responsiveFontSize } from '../../utils/normalize'
 
 
 const gamesType = [
@@ -85,17 +86,15 @@ console.log(user)
                             <Animated.View entering={randomEnteringAnimation().duration(1000)} key={id}>                                 
                             <ImageBackground resizeMode="contain" style={styles.gameCard} source={backgroundImage}>
                                 {!unlocked && 
-                                    //  <ImageBackground source={require('../../../assets/images/game-cover.png')} >
                                      <View style={styles.gameCover}>
                                         <Image style={styles.lockImage} source={require('../../../assets/images/game-lock.png')} />
                                      </View>
-                                //  </ImageBackground>
                                 }
                                 <View>
                                     <Text style={styles.gameText}>{gameName}</Text>
                                 </View>
                                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                    <Image resizeMode='contain' style={[gameName !== 'Word Trivia' ? styles.cardImage : styles.wordTrivia]} source={gameImage} />
+                                    <Image resizeMode='contain' style={ styles.cardImage} source={gameImage} />
                                 </View>
                                 <View style={styles.cardBtnContainer}>
                                     <Pressable style={styles.playBtn} onPress={goToGameCategory}>
@@ -120,10 +119,8 @@ console.log(user)
 
 const styles = EStyleSheet.create({
     container: {
-        // flex: 1,
         height: responsiveHeight(100),
         paddingVertical: responsiveHeight(2),
-        // paddingHorizontal: responsiveScreenWidth(3),
     },
     games: {
         flexDirection: 'row'
@@ -131,39 +128,27 @@ const styles = EStyleSheet.create({
     top:{
         height:responsiveHeight(20)
     },
-    setting: {
-        // marginTop: responsiveScreenHeight(),
-    },
-    imageIcons: {
-        width: 50,
-        height: 50,
-        marginRight: normalize(60)
-
-    },
-    smallLogo: {
-        width: 150,
-        height: 95
-    },
     gameContainer:{
         height: responsiveHeight(70),
-        // marginVertical:
+        width: responsiveWidth(100),
         marginTop:responsiveHeight(8),
-        // justifyContent:'center'
     },
     //game card section to be removed
     gameCard: {
-        height: normalize(399),
-        width: normalize(192),
-        marginVertical: Platform.OS === 'ios' ? responsiveScreenHeight(5) : responsiveScreenHeight(2),
-        marginHorizontal: responsiveScreenWidth(3),
+        height: responsiveHeight(50),
+        width: responsiveWidth(50),
+        marginHorizontal: 10,
         paddingVertical: responsiveScreenHeight(2),
-        paddingHorizontal: responsiveScreenWidth(5),
+        paddingHorizontal: responsiveScreenWidth(1),
+        alignItems:'center',
     },
     gameText: {
-        fontSize: '2.2rem',
+        fontSize: '1.7rem',
         fontFamily: 'blues-smile',
         color: '#fff',
-        textAlign: 'center'
+        textAlign: 'center',
+        width:'8rem',
+        textAlign: 'center',
     },
     gameCover: {
         flex:1,
@@ -176,41 +161,31 @@ const styles = EStyleSheet.create({
         bottom: 0,
         backgroundColor:'rgba(0, 0, 0, 0.8)',
         borderRadius:15,
-        height: normalize(400),
-        width: normalize(195),
         zIndex: 10
     },
     cardImage: {
-        height: 191,
-        width: 144,
+        height: responsiveHeight(30),
+        width: responsiveWidth(30),
         marginTop: 10
     },
-    wordTrivia:{
-        height: 200,
-        width: 105,
-        marginTop: 10
-    },
+
     cardBtnContainer: {
-        marginTop: -12
+        marginTop: -12,
+        paddingHorizontal: responsiveScreenWidth(2),
     },
-    wordTriviaBtnContainer:{
-        position:'absolute',
-        bottom: responsiveScreenHeight(6),
-        right:0,
-        left:0,
-        alignItems:'center',
-        paddingHorizontal: responsiveScreenWidth(5),
-    },
+    
     playBtn: {
         backgroundColor: '#15397D',
-        width: '100%',
+        width: responsiveWidth(45),
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 20,
         borderBottomColor: '#0D2859',
         borderBottomWidth: 4,
         paddingVertical: '0.4rem',
-        marginBottom: 5
+        marginBottom: 5,
+        paddingHorizontal: '2rem',
+
     },
     playText: {
         color: '#fff',
@@ -219,7 +194,6 @@ const styles = EStyleSheet.create({
     },
     instructionBtn: {
         backgroundColor: '#fff',
-        width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 20,

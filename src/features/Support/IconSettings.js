@@ -9,7 +9,7 @@ import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet'
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground'
 import GameArkLogo from '../../shared/GameArkLogo'
-import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize'
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize'
 import useSound from '../../utils/useSound'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Text } from 'react-native'
@@ -78,38 +78,38 @@ const IconSettings = () => {
                         <View style={styles.content}>                        
                             <View style={styles.settingIconsContainter}>
                             <Pressable style={styles.icons} onPress={handleToggleSwitch}>
-                                {toogle ? <Image style={styles.imageIcons} source={require('../../../assets/images/sound-1.png')} />:
-                                 <Image style={styles.imageIcons} source={require('../../../assets/images/sound-off.png')} />
+                                {toogle ? <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/sound-1.png')} />:
+                                 <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/sound-off.png')} />
                                 }
                             </Pressable>
                             <Pressable style={styles.icons}
                             onPress={() => navigation.navigate('Leaderboard')} 
                             >
-                                <Image style={styles.imageIcons} source={require('../../../assets/images/leaderboard-icon.png')} />
+                                <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/leaderboard-icon.png')} />
                             </Pressable>
                             <Pressable style={styles.icons}
                                 onPress={() => {
                                     navigation.navigate('UserProfile')
                                 }}>
-                                <Image style={styles.imageIcons} source={require('../../../assets/images/profile-icon.png')} />
+                                <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/profile-icon.png')} />
                             </Pressable>
                             <Pressable style={styles.icons}
                                   onPress={() => {
                                     navigation.navigate('ContactUs')
                                 }}
                             >
-                                <Image style={styles.imageIcons} source={require('../../../assets/images/icon.png')} />
+                                <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/icon.png')} />
                             </Pressable>
                             <Pressable style={styles.icons}
                                 onPress={showInvite}
                             >
-                                <Image style={styles.imageIcons} source={require('../../../assets/images/invite-friends.png')} />
+                                <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/invite-friends.png')} />
                             </Pressable >
                         </View>
                         <View style={styles.setting}>
                             <Pressable onPress={() => navigation.goBack(null)}>
                             <Animated.View style={[styles.circle, { transform: [{ rotate: spinAnimation }] }]}>
-                                <Image style={styles.settingIcon} source={require('../../../assets/images/close-icon.png')} />
+                                <Image style={styles.settingIcon} resizeMode='contain' source={require('../../../assets/images/close-icon.png')} />
                                 </Animated.View>
                             </Pressable>
                             <View>
@@ -130,7 +130,6 @@ const styles = EStyleSheet.create({
     container: {
         height: responsiveHeight(100),
         paddingVertical: responsiveHeight(6),
-
     },
 
     top:{
@@ -145,34 +144,30 @@ const styles = EStyleSheet.create({
     settingIconsContainter: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        marginTop: Platform.OS === 'ios' ? responsiveScreenHeight(40) : responsiveScreenHeight(27),
+        // marginTop: Platform.OS === 'ios' ? responsiveScreenHeight(40) : responsiveScreenHeight(27),
         paddingHorizontal: responsiveScreenWidth(5),
     },
 
     setting: {
         width: '100%',
         marginTop: responsiveScreenHeight(3),
-        paddingHorizontal: responsiveScreenWidth(5),
+        paddingHorizontal: responsiveScreenWidth(10),
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
 
     icons: {
-        marginRight: 30,
-        marginVertical: 10,
+        // marginRight: 30,
+        marginVertical: 20,
     },
     imageIcons: {
-        height: 75,
-        width: 75
+        height: responsiveHeight(10),
+        width: responsiveWidth(30)
     },
     settingIcon: {
-        width: 50,
-        height: 50
-    },
-    storeIcon: {
-        width: 75.55,
-        height: 50
+        height: responsiveHeight(10),
+        width: responsiveWidth(15)
     },
     appVersion:{
         fontFamily: 'graphik-medium',

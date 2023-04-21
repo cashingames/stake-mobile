@@ -16,7 +16,7 @@ import AppButton from "../../shared/AppButton";
 import UserItems from "../../shared/UserItems";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { randomEnteringAnimation } from "../../utils/utils";
-import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize';
 import useSound from "../../utils/useSound";
 import * as InAppPurchases from 'expo-in-app-purchases';
 import { Alert } from "react-native";
@@ -361,8 +361,10 @@ const BoostCardDetails = ({ boost, getStorePrice }) => {
             <View style={styles.boostDetailsContainer}>
                 <Text style={styles.cardDescription}>{boost.description}</Text>
             </View>
+            <View>
             <View style={styles.boostPriceCase}>
                 <Text style={styles.buyWithCash}>{getStorePrice(boost, 'boost')}</Text>
+            </View>
             </View>
         </>
     )
@@ -370,13 +372,11 @@ const BoostCardDetails = ({ boost, getStorePrice }) => {
 const styles = EStyleSheet.create({
 
     container: {
-        paddingTop: responsiveScreenHeight(2),
-        paddingBottom: responsiveScreenHeight(10)
+        paddingVertical: responsiveScreenHeight(2),
+        // paddingBottom: responsiveScreenHeight(10)
     },
     storeItems: {
-        // paddingBottom: normalize(20),
         flexDirection: 'column',
-        // backgroundColor: 'yellow',
     },
     title: {
         fontFamily: 'graphik-bold',
@@ -403,8 +403,8 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(20),
         paddingVertical: responsiveScreenHeight(2),
         justifyContent: 'space-between',
-        width: 160,
-        height: 180,
+        width: responsiveWidth(45),
+        height: responsiveHeight(23.5),
         marginHorizontal:'0.5rem'
     },
     buyItemCard: {
@@ -438,7 +438,6 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '0.5rem',
         color: '#fff',
-        // lineHeight: responsiveScreenHeight(2.5),
         width: responsiveScreenWidth(38),
         textAlign: 'center'
     },
@@ -466,8 +465,8 @@ const styles = EStyleSheet.create({
         marginTop: responsiveScreenHeight(5)
     },
     boostIcon: {
-        width: normalize(75),
-        height: normalize(75),
+        width: responsiveWidth(30),
+        height: responsiveHeight(10),
     },
     boostDetailsContainer: {
         alignItems: 'center',
@@ -513,13 +512,13 @@ const styles = EStyleSheet.create({
         width: normalize(96)
     },
     planIcon: {
-        height: 75,
-        width: 75
+        width: responsiveWidth(30),
+        height: responsiveHeight(10),
     },
     boostPriceCase: {
         backgroundColor: '#0038B3',
         paddingVertical: normalize(4),
-        // width: normalize(158),
+        // width: responsiveWidth(35)-10,
         borderWidth: 2,
         borderColor: '#00EDF1',
         marginTop: 10,

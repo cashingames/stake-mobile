@@ -190,7 +190,7 @@ const styles = EStyleSheet.create({
     },
     name: {
         color: '#FFFF',
-        fontFamily: 'graphik-medium',
+        fontFamily: 'poppins',
         fontSize: '0.65rem',
         marginTop: '.5rem',
         width: "4rem"

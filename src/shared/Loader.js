@@ -10,8 +10,9 @@ import normalize from '../utils/normalize'
 const Loader = () => {
     return (
         <ImageBackground source={require('../../assets/images/login-image.png')}
-            style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
-            resizeMethod="resize">
+        style={{ width: Dimensions.get("window").width, height: Dimensions.get("window").height }}
+        // resizeMethod=''
+        resizeMode="stretch">
             <ImageBackground source={require('../../assets/images/transparent2.png')}
                 resizeMethod="resize"
                 style={{
