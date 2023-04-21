@@ -71,10 +71,10 @@ export default function ({ navigation }) {
     // }, [])
 
     const itemBought = async (productID) => {
-        Alert.alert('init')
+        // Alert.alert('init')
         const { product, type } = getProductFromStoreId(productID)
         setLoading(false);
-        Alert.alert('before triggering a call to server')
+        // Alert.alert('before triggering a call to server')
 
         dispatch(buyItemFromStore({
             type,
@@ -189,7 +189,7 @@ export default function ({ navigation }) {
 
     const getStorePrice = (plan, type) => {
         const productID = getProductID(plan, type)
-        // console.log(storeProducts)
+        console.log(storeProducts, "storeProducts")
         const _item = (storeProducts || []).find(_val => (_val.productId === productID))
 
         if (_item !== null) {
@@ -201,7 +201,11 @@ export default function ({ navigation }) {
 
     const purchaeStoreItem = async (plan, type) => {
         const productID = getProductID(plan, type)
-        await InAppPurchases.purchaseItemAsync(productID)
+        try{
+            await InAppPurchases.purchaseItemAsync(productID)
+        }catch(e){
+            Alert.alert('can\'t trigger purchase')
+        }
     }
 
     return (

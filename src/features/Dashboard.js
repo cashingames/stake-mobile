@@ -22,6 +22,17 @@ import { getAchievements } from './Profile/AchievementSlice';
 import { Image } from 'react-native';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../utils/utils';
 import { Alert } from 'react-native';
+import * as InAppPurchases from 'expo-in-app-purchases';
+
+const PRODUCTS = [
+    {"priceAmountMicros":160000000,"title":"Time Freeze (GameArk)","productId":"boost_plan_time_freeze","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦100.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"Skip (GameArk)","productId":"boost_plan_skip","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦150.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"Ultimate (GameArk)","productId":"game_plan_ultimate","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦1000.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"DiceyMultiples (GameArk)","productId":"game_plan_dicey_multiples","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦800.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"Double O (GameArk)","productId":"game_plan_doubleo","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦500.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"Least Plan (GameArk)","productId":"game_plan_least","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦100.00","subscriptionPeriod":"P0D"},
+    {"priceAmountMicros":160000000,"title":"Mini Plan (GameArk)","productId":"game_plan_mini","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦150.00","subscriptionPeriod":"P0D"}
+]
 
 const Dashboard = ({ navigation }) => {
     const loading = useSelector(state => state.common.initialLoading);
@@ -39,6 +50,22 @@ const Dashboard = ({ navigation }) => {
         }
     }, [isFocused, isSoundLoaded]);
 
+    const getStoreItems = async () => {
+
+        const items = Platform.select({
+            android: ['boost_plan_time_freeze', 'boost_plan_skip', 'game_plan_ultimate', 'game_plan_dicey_multiples', 'game_plan_doubleo', 'game_plan_least', 'game_plan_mini'],
+            ios: ['boost_plan_time_freeze', 'boost_plan_skip', 'game_plan_ultimate', 'game_plan_dicey_multiples', 'game_plan_doubleo', 'game_plan_least', 'game_plan_mini'],
+        });
+
+        const { responseCode, results } = await InAppPurchases.getProductsAsync(items);
+        if (responseCode === InAppPurchases.IAPResponseCode.OK) {
+            // console.error(results, "results")
+            dispatch(setItems(results.length !== 0 ? results : PRODUCTS))
+        } else {
+            
+        }
+    }
+
     useEffect(() => {
         const _2 = dispatch(getCommonData());
         const _3 = dispatch(fetchFeatureFlags())
@@ -48,7 +75,7 @@ const Dashboard = ({ navigation }) => {
             dispatch(initialLoadingComplete());
         });
         loadSoundPrefernce(dispatch, setSound)
-        // getStoreItems()
+        getStoreItems()
     }, []);
 
     useFocusEffect(
