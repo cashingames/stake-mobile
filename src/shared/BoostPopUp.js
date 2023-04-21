@@ -8,11 +8,23 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import analytics from '@react-native-firebase/analytics';
+import { Overlay } from 'react-native-elements';
+
 
 
 const Boostspopup = ({ setModalVisible, modalVisible }) => {
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
+    const [visible, setVisible] = React.useState(true);
+
+    const toggleOverlay = () => {
+        setVisible(!visible);
+    };
+
+    const closeModal = () => {
+        setVisible(false)
+        setModalVisible(false)
+    }
 
     const goToStore = async () => {
         await analytics().logEvent('buy_now_button_on_boostpopup_clicked', {
@@ -23,53 +35,56 @@ const Boostspopup = ({ setModalVisible, modalVisible }) => {
         navigation.navigate('GameStore')
     }
     return (
-        <View style={styles.onView}>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    // Alert.alert("Modal has been closed.");
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <LinearGradient
-                        colors={['#151C2F', '#792592']}
-                        style={styles.modalView}>
-                        <View style={styles.container}>
-                            <Pressable
-                                style={styles.buttonClose}
-                                onPress={() => setModalVisible(!modalVisible)}
-                            >
-                                <Ionicons name="close" size={10} color="#fff" />
-                            </Pressable>
-                            <View style={styles.resultContainer}>
-                                <Image
-                                    source={require("../../assets/images/tag.png")}
-                                />
+        <Overlay isVisible={visible} onBackdropPress={toggleOverlay} backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, .7)'}}>
+            <View style={styles.onView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        // Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                        <LinearGradient
+                            colors={['#151C2F', '#792592']}
+                            style={styles.modalView}>
+                            <View style={styles.container}>
+                                <Pressable
+                                    style={styles.buttonClose}
+                                    onPress={closeModal}
+                                >
+                                    <Ionicons name="close" size={18} color="#fff" />
+                                </Pressable>
+                                <View style={styles.resultContainer}>
+                                    <Image
+                                        source={require("../../assets/images/tag.png")}
+                                    />
+                                </View>
+                                <Text style={styles.modalTopText}>Power Ups</Text>
+                                <View style={styles.resultContainer}>
+                                    <Image
+                                        style={styles.hat}
+                                        source={require("../../assets/images/boost-popup.png")}
+                                    />
+                                </View>
                             </View>
-                            <Text style={styles.modalTopText}>Power Ups</Text>
-                            <View style={styles.resultContainer}>
-                                <Image
-                                    style={styles.hat}
-                                    source={require("../../assets/images/boost-popup.png")}
-                                />
+                            <View style={styles.modalItems}>
+                                {/* <Text style={styles.infoTextHead}>Score higher</Text> */}
+                                <Text style={styles.infoText}>With time freeze, you get to pause the game for 15 seconds and skip allows you jump a question</Text>
+                                <Pressable style={styles.boost} onPress={goToStore}>
+                                    <Text style={styles.boostText}>Buy now</Text>
+                                </Pressable>
                             </View>
-                        </View>
-                        <View style={styles.modalItems}>
-                        <Text style={styles.infoTextHead}>Score higher</Text>
-                            <Text style={styles.infoText}>With time freeze, you get to pause the game for 15 seconds and skip allows you jump a question</Text>
-                            <Pressable style={styles.boost} onPress={goToStore}>
-                                <Text style={styles.boostText}>Buy now</Text>
-                            </Pressable>
-                        </View>
 
-                    </LinearGradient>
+                        </LinearGradient>
 
-                </View>
-            </Modal>
-        </View>
+                    </View>
+                </Modal>
+            </View>
+        </Overlay>
+
     )
 }
 export default Boostspopup;
@@ -107,7 +122,7 @@ const styles = EStyleSheet.create({
             height: 4,
         },
         shadowOpacity: 0.32,
-        shadowRadius: 5.46, 
+        shadowRadius: 5.46,
         elevation: 9,
     },
     container: {
@@ -143,14 +158,14 @@ const styles = EStyleSheet.create({
         backgroundColor: '#FAC502',
         borderBottomEndRadius: 10,
         borderBottomStartRadius: 10,
-        paddingTop: '.65rem',  
+        paddingTop: '.65rem',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
             height: 4,
         },
         shadowOpacity: 0.32,
-        shadowRadius: 5.46,   
+        shadowRadius: 5.46,
         elevation: 9,
     },
     infoText: {
@@ -158,14 +173,14 @@ const styles = EStyleSheet.create({
         width: '11rem',
         fontSize: '.7rem',
         fontFamily: 'graphik-medium',
-        lineHeight:'1rem',
-        paddingVertical: '.65rem',  
+        lineHeight: '1rem',
+        paddingVertical: '.65rem',
     },
     infoTextHead: {
         textAlign: 'center',
         fontSize: '.9rem',
         fontFamily: 'graphik-medium',
-        lineHeight:'1rem',
+        lineHeight: '1rem',
     },
     resultContainer: {
         alignItems: 'center'

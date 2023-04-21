@@ -79,6 +79,8 @@ const ChallengeEndGameScreen = ({ navigation }) => {
         }
     }, [challengeDetails])
 
+
+
     useFocusEffect(
         useCallback(() => {
             if (Platform.OS === "android") {
@@ -116,9 +118,8 @@ const ChallengeEndGameScreen = ({ navigation }) => {
                 <ChallengePlayers challengeDetails={challengeDetails} />
                 <WinningAmount challengeDetails={challengeDetails} />
                 <FinalScoreBoard challengeDetails={challengeDetails} />
-                <Boostspopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                    <Boostspopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
             </ScrollView>
-            {/* <AppButton text="Return to Dashboard" onPress={goHome} style={styles.button} /> */}
             <View style={styles.gameButtons}>
                 <GameButton buttonText='Return to Home'
                     onPress={goHome}
@@ -129,6 +130,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
                 />
             </View>
         </View>
+
     )
 }
 
@@ -225,13 +227,21 @@ const GameButton = ({ buttonText, onPress, disabled }) => {
 
 export default ChallengeEndGameScreen;
 const styles = EStyleSheet.create({
+
+    head: {
+        backgroundColor: '#000',
+        opacity: 0.2,
+        flex: 1,
+        paddingBottom: normalize(15),
+        paddingHorizontal: normalize(18),
+        paddingTop: normalize(45),
+    },
     container: {
         flex: 1,
         paddingHorizontal: normalize(18),
         paddingTop: normalize(45),
         backgroundColor: '#9C3DB8',
         paddingBottom: normalize(15),
-
     },
     content: {
         flex: 1,
