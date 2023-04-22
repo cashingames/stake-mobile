@@ -35,7 +35,7 @@ const Boostspopup = ({ setModalVisible, modalVisible }) => {
         navigation.navigate('GameStore')
     }
     return (
-        <Overlay isVisible={visible} onBackdropPress={toggleOverlay} backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, .7)'}}>
+        <Overlay isVisible={visible} onBackdropPress={toggleOverlay} backdropStyle={{ backgroundColor: 'rgba(0, 0, 0, .7)' }}>
             <View style={styles.onView}>
                 <Modal
                     animationType="slide"
@@ -73,9 +73,11 @@ const Boostspopup = ({ setModalVisible, modalVisible }) => {
                             <View style={styles.modalItems}>
                                 {/* <Text style={styles.infoTextHead}>Score higher</Text> */}
                                 <Text style={styles.infoText}>With time freeze, you get to pause the game for 15 seconds and skip allows you jump a question</Text>
-                                <Pressable style={styles.boost} onPress={goToStore}>
-                                    <Text style={styles.boostText}>Buy now</Text>
-                                </Pressable>
+                                {Platform.OS === "android" &&
+                                    <Pressable style={styles.boost} onPress={goToStore}>
+                                        <Text style={styles.boostText}>Buy now</Text>
+                                    </Pressable>
+                                }
                             </View>
 
                         </LinearGradient>
