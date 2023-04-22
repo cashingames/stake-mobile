@@ -36,8 +36,8 @@ const IconSettings = () => {
 
     const logoutHandler = () => {
                 Alert.alert(
-                    'Logout?',
-                    'Are you sure you want to logout?',
+                    'Log Out?',
+                    'Are you sure you want to log out?',
                     [
                         {
                             text: "No",
@@ -109,6 +109,11 @@ const IconSettings = () => {
                             >
                                 <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/invite-friends.png')} />
                             </Pressable >
+                            <Pressable style={styles.icons}
+                                onPress={logoutHandler}
+                            >
+                                <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/logout-icon.png')} />
+                            </Pressable >
                         </View>
                         <View style={styles.setting}>
                             <Pressable onPress={() => {
@@ -120,9 +125,6 @@ const IconSettings = () => {
                             </Pressable>
                             <View>
                             <Text style={styles.appVersion}>App version: {Constants.manifest.version}</Text>
-                            <Pressable onPress={logoutHandler}>
-                            <Text style={styles.appVersion}>Logout</Text>
-                            </Pressable>
                             </View>
                         </View>
                     </View>

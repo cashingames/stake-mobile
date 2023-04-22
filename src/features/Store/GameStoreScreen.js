@@ -189,7 +189,6 @@ export default function ({ navigation }) {
 
     const getStorePrice = (plan, type) => {
         const productID = getProductID(plan, type)
-        console.log(storeProducts, "storeProducts")
         const _item = (storeProducts || []).find(_val => (_val.productId === productID))
 
         if (_item !== null) {
@@ -293,7 +292,6 @@ const GamePlanCard = ({ plan, user, purchaeStoreItem, getStorePrice }) => {
 }
 
 const PlanCardDetails = ({ plan, getStorePrice }) => {
-    console.log(plan)
     return (
         <>
             <View style={styles.giftBoxCase}>
