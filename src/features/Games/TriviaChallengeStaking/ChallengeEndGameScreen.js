@@ -10,7 +10,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { clearSession } from "./TriviaChallengeGameSlice";
 import analytics from '@react-native-firebase/analytics';
 import { useState } from "react";
-import Boostspopup from "../../../shared/BoostPopUp";
+import BoostPopUp from "../../../shared/BoostPopUp";
 
 
 const ChallengeEndGameScreen = ({ navigation }) => {
@@ -118,7 +118,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
                 <ChallengePlayers challengeDetails={challengeDetails} />
                 <WinningAmount challengeDetails={challengeDetails} />
                 <FinalScoreBoard challengeDetails={challengeDetails} />
-                    <Boostspopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                    <BoostPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} />
             </ScrollView>
             <View style={styles.gameButtons}>
                 <GameButton buttonText='Return to Home'

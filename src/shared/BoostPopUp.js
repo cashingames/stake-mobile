@@ -12,7 +12,7 @@ import { Overlay } from 'react-native-elements';
 
 
 
-const Boostspopup = ({ setModalVisible, modalVisible }) => {
+const BoostPopUp = ({ setModalVisible, modalVisible }) => {
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
     const [visible, setVisible] = React.useState(true);
@@ -89,7 +89,7 @@ const Boostspopup = ({ setModalVisible, modalVisible }) => {
 
     )
 }
-export default Boostspopup;
+export default BoostPopUp;
 const styles = EStyleSheet.create({
     contentContainer: {
         display: 'flex',
