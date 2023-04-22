@@ -1,15 +1,13 @@
 const env = process.env.APP_VARIANT;
 const isDevelopment = env === 'development' || env === 'local' || false;
 
-const version = "1.1.24"; //Update for every build and publish
-
-// Reminder: android is still on 1.1.14 @ 13 march, 2023
+const version = "1.1.25"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
   version: version,
-  runtimeVersion: "1.24", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "1.25", //All apps using the same runtime will get the published updates. Generally update for every new build
   icon: "./assets/images/adaptive-icon2.png",
   jsEngine: "hermes",
   scheme: "gameark",
