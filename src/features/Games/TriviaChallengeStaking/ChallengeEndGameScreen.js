@@ -74,7 +74,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     }, [])
 
     useEffect(() => {
-        if ((challengeDetails.score < challengeDetails.opponent.score) || (challengeDetails.score === challengeDetails.opponent.score)) {
+        if ((Number.parseFloat(challengeDetails.score) < Number.parseFloat(challengeDetails.opponent.score)) || (Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score))) {
             setModalVisible(true)
         }
     }, [challengeDetails])

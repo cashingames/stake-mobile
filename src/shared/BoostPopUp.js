@@ -55,7 +55,7 @@ const BoostPopUp = ({ setModalVisible, modalVisible }) => {
                                     style={styles.buttonClose}
                                     onPress={closeModal}
                                 >
-                                    <Ionicons name="close" size={18} color="#fff" />
+                                    <Ionicons name="close" size={16} color="#fff" />
                                 </Pressable>
                                 <View style={styles.resultContainer}>
                                     <Image
@@ -138,12 +138,14 @@ const styles = EStyleSheet.create({
         marginLeft: 'auto',
         marginBottom: normalize(2),
         backgroundColor: '#FAC502',
-        borderRadius: 100,
-        width: '1rem',
-        height: '1rem',
+        borderRadius: 50,
+        // width: '1rem',
+        // height: '1rem',
         alignItems: 'center',
         justifyContent: 'center',
-        textAlignVertical: 'center'
+        // textAlignVertical: 'center'
+        textAlign:'center',
+        padding:'.1rem'
     },
     closeStyle: {
         fontSize: '0.7rem',
