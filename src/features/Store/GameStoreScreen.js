@@ -545,7 +545,8 @@ const styles = EStyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 99
+        zIndex: 99,
+        backgroundColor: 'rgba(0, 0, 0, 0.3)'
     }
 
 });
