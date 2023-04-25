@@ -93,7 +93,7 @@ export const notifyOfPublishedUpdates = async () => {
                 }
             ]
         );
-    } catch (e) {
+    } catch (error) {
         crashlytics().recordError(error);
     }
 }

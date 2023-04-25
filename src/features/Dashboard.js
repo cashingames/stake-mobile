@@ -22,6 +22,7 @@ import { getAchievements } from './Profile/AchievementSlice';
 import { Image } from 'react-native';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../utils/utils';
 import { Alert } from 'react-native';
+import { setItems } from '../features/InAppPurchaseSlice';
 import * as InAppPurchases from 'expo-in-app-purchases';
 
 const PRODUCTS = [
@@ -62,7 +63,7 @@ const Dashboard = ({ navigation }) => {
             // console.error(results, "results")
             dispatch(setItems(results.length !== 0 ? results : PRODUCTS))
         } else {
-            
+
         }
     }
 
