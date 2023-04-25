@@ -55,10 +55,13 @@ export default function ({ navigation }) {
             });
         } else if (responseCode === InAppPurchases.IAPResponseCode.USER_CANCELED) {
             console.log('User canceled the transaction');
+            setLoading(false)
         } else if (responseCode === InAppPurchases.IAPResponseCode.DEFERRED) {
             console.log('User does not have permissions to buy but requested parental approval (iOS only)');
+            setLoading(false)
         } else {
             console.warn(`Something went wrong with the purchase. Received errorCode ${errorCode}`);
+            setLoading(false)
         }
     });
 
