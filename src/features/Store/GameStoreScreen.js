@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Text, View, Image, Pressable, ScrollView, Platform, ImageBackground } from 'react-native';
+import { Text, View, Image, Pressable, ScrollView, Platform, ImageBackground, ActivityIndicator } from 'react-native';
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -73,7 +73,7 @@ export default function ({ navigation }) {
     const itemBought = async (productID) => {
         // Alert.alert('init')
         const { product, type } = getProductFromStoreId(productID)
-        setLoading(false);
+        setLoading(true);
         // Alert.alert('before triggering a call to server')
 
         dispatch(buyItemFromStore({
@@ -82,8 +82,9 @@ export default function ({ navigation }) {
         }))
             .then(unwrapResult)
             .then(result => {
-                Alert.alert('handshake with server successful')
+                // Alert.alert('handshake with server successful')
                 dispatch(getUser())
+                setLoading(false);
                 // onClose()
                 successfulPurchase.playSound()
                 navigation.navigate("GameBoostPurchaseSuccessful")
@@ -190,7 +191,7 @@ export default function ({ navigation }) {
     const getStorePrice = (plan, type) => {
         const productID = getProductID(plan, type)
         const _item = (storeProducts || []).find(_val => (_val.productId === productID))
-
+        // console.log(storeProducts)
         if (_item !== null) {
             const _price = _item?.price || ''
             return _price
@@ -201,14 +202,23 @@ export default function ({ navigation }) {
     const purchaeStoreItem = async (plan, type) => {
         const productID = getProductID(plan, type)
         try{
+            setLoading(true);
             await InAppPurchases.purchaseItemAsync(productID)
         }catch(e){
+            setLoading(false);
             Alert.alert('can\'t trigger purchase')
         }
     }
 
     return (
         <MixedContainerBackground>
+            {
+                ((loading) && (
+                    <View style={styles.loader}>
+                        <ActivityIndicator size={'large'} />
+                    </View>
+                ))
+            }
             <ScrollView contentContainerStyle={styles.container}>
                 <TopIcons />
                 <AppHeader />
@@ -527,5 +537,15 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    loader: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 99
+    }
 
 });
