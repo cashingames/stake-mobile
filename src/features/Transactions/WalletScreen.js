@@ -24,6 +24,7 @@ export default function WalletScreen() {
     const user = useSelector(state => state.auth.user)
     const [withdraw, setWithdraw] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
+    const [withdrawAlert, setWithdrawAlert] = useState(false);
 
 
     const refRBSheet = useRef();
@@ -43,7 +44,19 @@ export default function WalletScreen() {
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
+    const withdrawValidation = () => {
+        setWithdrawAlert(true)
+        Alert.alert(
+            "Withdrawal Notification",
+            `Fund kept in withdrawable balance for more than a month will be rendered invalid and non-withdrawable. Ensure you withdraw your winnings before the deadline. `,
+            [
+                { text: "Got it", onPress: () => withdrawBalance() }
+            ]
+        );
+    }
+
     const withdrawBalance = () => {
+        setWithdrawAlert(false)
         setWithdraw(true)
         withdrawWinnings()
             .then(async response => {
@@ -63,7 +76,7 @@ export default function WalletScreen() {
                         Alert.alert("Your Network is Offline.");
                         setWithdraw(false)
                     }
-                       
+
                     else if (err.response.data.errors.verifyEmailNavigation) {
                         navigation.navigate('EditDetails')
                         Alert.alert(err.response.data.message);
@@ -74,7 +87,7 @@ export default function WalletScreen() {
                         setWithdraw(false)
 
                     }
-                    console.log(err.response.data.errors.verifyEmailNavigation,'hhhh')
+                    console.log(err.response.data.errors.verifyEmailNavigation, 'hhhh')
                 }
 
             )
@@ -82,23 +95,24 @@ export default function WalletScreen() {
 
     return (
         <ImageBackground source={require('../../../assets/images/vector-coin-background.jpg')}
-            style={{ flex:1 }}
+            style={{ flex: 1 }}
             resizeMethod="resize">
             <ScrollView style={styles.container}
-            refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    tintColor="#FFFF"
-                />
-            }
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        tintColor="#FFFF"
+                    />
+                }
             >
                 <WalletBalance balance={user.walletBalance} />
                 <WithdrawableWalletBalance
                     withdrawableBalance={user.withdrawableBalance}
                     bookBalance={user.bookBalance}
-                    onPress={withdrawBalance}
+                    onPress={withdrawValidation}
                     withdraw={withdraw}
+                    withdrawAlert={withdrawAlert}
                 />
                 {/* <UserEarnings point={user.points} /> */}
                 <TransactionLink />
@@ -122,7 +136,7 @@ const TransactionLink = () => {
     )
 };
 
-const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, withdraw }) => {
+const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, withdraw, withdrawAlert }) => {
     const features = useSelector(state => state.common.featureFlags);
 
     const isWithdrawFeatureEnabled = features['withdrawable_wallet'] !== undefined && features['withdrawable_wallet'].enabled === true;
@@ -135,9 +149,9 @@ const WithdrawableWalletBalance = ({ withdrawableBalance, bookBalance, onPress, 
             <View style={styles.earnings}>
                 <Text style={styles.earningText}>Withdrawable Balance</Text>
                 <Text style={styles.earningAmount}>&#8358;{formatCurrency(withdrawableBalance)}</Text>
-                <AppButton text="Withdraw" textStyle={styles.fundButton}
+                <AppButton text={withdraw ? "Processing...." : "Withdraw"} textStyle={styles.fundButton}
                     style={styles.button} onPress={onPress}
-                    disabled={withdraw}
+                    disabled={withdraw || withdrawAlert}
                 />
             </View>
             <View style={styles.earnings}>
@@ -240,7 +254,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         opacity: 0.8,
         marginTop: normalize(15),
-        lineHeight:'1rem'
+        lineHeight: '1rem'
     },
     earningAmount: {
         fontFamily: 'graphik-medium',
