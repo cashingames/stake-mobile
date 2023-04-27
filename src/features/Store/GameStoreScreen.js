@@ -512,7 +512,6 @@ const styles = EStyleSheet.create({
     headerTextCase: {
         width: '50%',
         alignItems: "flex-start",
-        marginVertical: '2rem'
     },
     headerText: {
         fontFamily: 'blues-smile',

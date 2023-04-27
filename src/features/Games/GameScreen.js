@@ -129,15 +129,15 @@ const styles = EStyleSheet.create({
         height: responsiveHeight(70),
         width: responsiveWidth(100),
         marginTop:responsiveHeight(8),
-        paddingHorizontal: responsiveScreenWidth(2),
+        paddingHorizontal: responsiveHeight(2),
     },
     //game card section to be removed
     gameCard: {
         height: responsiveHeight(50),
         width: responsiveWidth(50),
         marginHorizontal: 10,
-        paddingVertical: responsiveScreenHeight(2),
-        paddingHorizontal: responsiveScreenWidth(1),
+        paddingVertical: responsiveHeight(2),
+        paddingHorizontal: responsiveHeight(1),
         alignItems:'center',
     },
     gameText: {
@@ -168,7 +168,7 @@ const styles = EStyleSheet.create({
     },
 
     cardBtnContainer: {
-        marginTop: -12,
+        marginTop: responsiveHeight(-4),
         paddingHorizontal: responsiveScreenWidth(2),
     },
     
