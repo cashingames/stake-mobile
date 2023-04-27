@@ -8,7 +8,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { AccessToken, GraphRequest, GraphRequestManager, LoginManager, Profile } from 'react-native-fbsdk-next';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/AuthSlice';
-import { triggerTour } from '../features/Tour/Index';
 import { saveToken } from '../utils/ApiHelper';
 import analytics from '@react-native-firebase/analytics';
 import normalize from '../utils/normalize';
@@ -75,7 +74,6 @@ const Login = ({ text }) => {
       referrer
     })).then(unwrapResult)
       .then((originalPromiseResult) => {
-        triggerTour(navigation)
         triggerNotifierForReferral()
         console.log(originalPromiseResult, 'hitting');
         saveToken(originalPromiseResult.data.token)
