@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         marginTop: responsiveScreenWidth(3),
         borderTopRightRadius: 40,
         borderTopLeftRadius: 40,
-        height: Platform.OS === "ios" ? responsiveHeight(30) : responsiveHeight(50),
+        height: responsiveHeight(50),
     },
 });
 

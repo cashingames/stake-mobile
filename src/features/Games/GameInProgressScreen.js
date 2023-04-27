@@ -246,9 +246,6 @@ const styles = EStyleSheet.create({
         paddingTop: responsiveHeight(2),
     },
     buttonCase:{
-        position: 'absolute',
-        left:0,
-        right:0,
-        top:responsiveHeight(85),
+       paddingBottom: normalize(20),
     }
 });
