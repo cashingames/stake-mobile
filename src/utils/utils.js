@@ -56,7 +56,7 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
     }
     
     const link = Platform.OS === 'ios' ?
-        "https://apps.apple.com/us/app/cashingames/id6443878628"
+        "https://apps.apple.com/ng/app/gameark-quiz-and-trivia-games/id6446021022"
         :
         "https://play.google.com/store/apps/details?id=com.cashingames.gameark";
     

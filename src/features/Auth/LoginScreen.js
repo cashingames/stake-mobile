@@ -83,40 +83,43 @@ export default function LoginScreen({ navigation }) {
 
     return (
         // <ScrollView>
-        <MixedContainerBackground>
-            <KeyboardAvoidingView style={styles.container}>
-                <View style={styles.logo}>
-                    <Image source={require('../../../assets/images/Ga-logo.png')} />
-                </View>
-                <View style={styles.inputSection}>
-                     {error.length > 0 && 
-                    <Text style={styles.errorBox}>{error}</Text>
-                       }
+        <ScrollView style={{ flex: 1 }}>
+            <MixedContainerBackground>
+                <KeyboardAvoidingView style={styles.container}>
+                    <View style={styles.logo}>
+                        <Image source={require('../../../assets/images/Ga-logo.png')} />
+                    </View>
+                    <View style={styles.inputSection}>
+                        {error.length > 0 && 
+                        <Text style={styles.errorBox}>{error}</Text>
+                        }
 
-                    <Input
-                        label='Email/username'
-                        placeholder="johndoe or johndoe@example.com"
-                        value={email}
-                        onChangeText={text => onChangeEmail(text)}
-                    />
+                        <Input
+                            label='Email/username'
+                            placeholder="johndoe or johndoe@example.com"
+                            value={email}
+                            onChangeText={text => onChangeEmail(text)}
+                        />
 
-                    <Input
-                        type="password"
-                        label='Password'
-                        value={password}
-                        placeholder="Enter password"
-                        onChangeText={text => { onChangePassword(text) }}
-                    />
-                </View>
-                <View style={styles.renderForgotPassword}>
-                <RenderForgotPassword />
-                </View>
-                    <GaButton text={loading ? 'Signing in...' : 'Sign in'}
-                        onPress={() => onLogin()}
-                        disabled={!canLogin} />
-                <RenderCreateAccount navigation={navigation} />
-                </KeyboardAvoidingView>
-        </MixedContainerBackground>
+                        <Input
+                            type="password"
+                            label='Password'
+                            value={password}
+                            placeholder="Enter password"
+                            onChangeText={text => { onChangePassword(text) }}
+                        />
+                    </View>
+                    <View style={styles.renderForgotPassword}>
+                    <RenderForgotPassword />
+                    </View>
+                        <GaButton text={loading ? 'Signing in...' : 'Sign in'}
+                            onPress={() => onLogin()}
+                            disabled={!canLogin} />
+                        <RenderCreateAccount navigation={navigation} />
+                    </KeyboardAvoidingView>
+            </MixedContainerBackground>
+        </ScrollView>
+        
     );
 }
 
