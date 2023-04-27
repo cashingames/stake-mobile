@@ -3,7 +3,7 @@ import { Text, View, Image, Platform } from 'react-native';
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import normalize, { responsiveScreenWidth } from '../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenWidth } from '../utils/normalize';
 import { isTrue } from '../utils/stringUtl';
 
 function TopLeader({ avatar, name, point, style, imageStyle, position, positionStyle }) {
@@ -50,16 +50,18 @@ const styles = EStyleSheet.create({
     },
     point: {
         color: '#FFFF',
-        fontSize: '0.85rem',
-        fontFamily: 'graphik-regular',
+        fontSize: '0.6rem',
+        fontFamily: 'poppins',
+        marginTop:6
     },
     leaderName: {
         color: '#fff',
-        fontSize: '0.9rem',
-        fontFamily: 'graphik-medium',
+        fontSize: '0.6rem',
+        fontFamily: 'poppins',
         width: responsiveScreenWidth(22),
         textAlign: 'center',
-        marginVertical: Platform.OS === 'ios' ? normalize(4) : normalize(15),
+        marginTop: normalize(16),
+        height: responsiveHeight(100) * 0.03
     },
     crown:{
         height:24,
@@ -74,11 +76,12 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         marginTop:-10,
         transform: [{ rotate: '45deg' }],
+        borderRadius:4,
     },
     positionText: {
         color:'#fff',
         fontSize:'0.65rem',
         transform: [{ rotate: '-45deg' }],
-        fontFamily:'graphik-medium'
+        fontFamily:'poppins'
     }
 });

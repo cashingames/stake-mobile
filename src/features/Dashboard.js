@@ -24,6 +24,7 @@ import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../utils/utils';
 import { Alert } from 'react-native';
 import { setItems } from '../features/InAppPurchaseSlice';
 import * as InAppPurchases from 'expo-in-app-purchases';
+import MixedContainerBackground from '../shared/ContainerBackground/MixedContainerBackground';
 
 const PRODUCTS = [
     {"priceAmountMicros":160000000,"title":"Time Freeze (GameArk)","productId":"boost_plan_time_freeze","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦100.00","subscriptionPeriod":"P0D"},
@@ -109,7 +110,7 @@ const Dashboard = ({ navigation }) => {
     return (
         <>
             <RenderUpdateChecker />
-                <MainContainerBackground>
+                <MixedContainerBackground>
                     <View style={styles.container}>
                         <View style={{height:responsiveHeight(25),  justifyContent:'center'}}>
                         <Pressable style={styles.icons} onPress={handleToggleSwitch}>
@@ -131,7 +132,7 @@ const Dashboard = ({ navigation }) => {
                             <DashboardSettings />
                         </View>
                     </View >
-                </MainContainerBackground>
+                </MixedContainerBackground>
         </>
     )
 }

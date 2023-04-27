@@ -8,6 +8,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 import { isTrue } from '../../utils/stringUtl';
 import { getUser, editProfileAvatar, logoutUser } from '../Auth/AuthSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
@@ -19,6 +20,7 @@ import GameArkLogo from '../../shared/GameArkLogo';
 import { setModalOpen } from '../CommonSlice';
 import AppHeader from '../../shared/AppHeader';
 import TopIcons from '../../shared/TopIcons';
+import { Alert } from 'react-native';
 
 
 export default function UserProfileScreen({ navigation }) {
@@ -40,7 +42,7 @@ export default function UserProfileScreen({ navigation }) {
     return (
         <MixedContainerBackground>
             <SafeAreaView style={styles.container}>
-            <TopIcons />
+                <TopIcons />
                 <AppHeader />
                 <ScrollView>
                     <View style={[styles.content, { flex: 1 }]}>
@@ -60,6 +62,7 @@ const UserAvatar = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
+    
 
     const pickImage = async () => {
         setLoading(true);
@@ -70,15 +73,24 @@ const UserAvatar = () => {
             quality: 1,
         });
 
-        if (result.cancelled) {
+        if (result.canceled) {
             setLoading(false);
             return;
         }
 
-        let localUri = result.uri;
+        let localUri = result.assets[0].uri;
         let filename = localUri.split('/').pop();
         let match = /\.(\w+)$/.exec(filename);
         let type = match ? `image/${match[1]}` : `image`;
+        result = await FileSystem.getInfoAsync(localUri)
+        const acceptedSize = (result.size / 1024) < 1024
+
+        if(!acceptedSize){
+            setLoading(false);
+            localUri= ""
+            Alert.alert("Warning", "Image size must be smaller than 1mb" );
+            return;
+        }
 
         let formData = new FormData();
         formData.append('avatar', { uri: localUri, name: filename, type });
@@ -87,8 +99,9 @@ const UserAvatar = () => {
             dispatch(getUser()).then(x => {
                 setLoading(false)
             });
-        }).catch(ex => {
-            // console.log("erroring", ex);
+        })
+        .catch(ex => {
+            console.log("erroring", ex);
             setLoading(false);
         });
     }
@@ -105,7 +118,7 @@ const UserAvatar = () => {
                     <Pressable style={styles.camera} onPress={pickImage}>
                         {/* <Ionicons name="camera-sharp" size={26} color="#FFFF" /> */}
                         <Image style={styles.imageIcon} source={require('../../../assets/images/addImage.png')} />
-                    </Pressable> : <ActivityIndicator size="large" color="#0000ff" />}
+                    </Pressable> : <ActivityIndicator size="large" color="#fff" />}
             </View>
         </View>
     )
@@ -179,7 +192,7 @@ const styles = EStyleSheet.create({
     },
     userAvatar: {
         flexDirection: 'row',
-        justifyContent: 'center',      
+        justifyContent: 'center',
     },
     avatar: {
         width: normalize(120),

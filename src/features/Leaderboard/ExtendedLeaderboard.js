@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Text, View, ScrollView, StatusBar, Alert } from 'react-native';
-import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import CategoryLeaderboard from '../../shared/CategoryLeaderboard';
-import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
-import PageLoading from '../../shared/PageLoading';
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize';
 import GlobalTopLeaders from '../../shared/GlobalTopLeaders';
 import OtherLeaders from '../../shared/OtherLeaders';
 import {
@@ -14,12 +12,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
-import AppHeader from '../../shared/AppHeader';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import { Pressable } from 'react-native';
-import Loader from '../../shared/Loader';
 import LottieAnimations from '../../shared/LottieAnimations';
 import TopIcons from '../../shared/TopIcons';
+import { Image } from 'react-native';
 
 
 function ExtendedLeaderboard(props) {
@@ -73,8 +70,14 @@ function ExtendedLeaderboard(props) {
         <MixedContainerBackground>
             <View style={styles.container}>
                 <TopIcons />
-                <AppHeader title="Leaderboard" />
-
+                <View>
+                    <Pressable
+                        style={styles.closeBtn}
+                        onPress={() => navigation.goBack(null)}>
+                        <Image style={styles.closeIcon} source={require('../../../assets/images/close-icon.png')} />
+                    </Pressable>
+                    <Text style={styles.title}>Leaderboard</Text>
+                </View>
                 <View stickyHeaderIndices={[0]}>
                     <View style={styles.leaderContainer}>
                         <View style={styles.leaderboardBtn}>
@@ -132,9 +135,8 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     global: {
-        // paddingHorizontal: normalize(15),
-        marginTop: responsiveHeight(100) * 0.04,
-        height:responsiveHeight(80),
+        marginTop: responsiveHeight(100) * 0.05,
+        height: responsiveHeight(80),
         borderRadius: 12,
     },
     leaderContainer: {
@@ -164,5 +166,21 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1
-    }
+    },
+    closeBtn:{
+        alignItems: 'flex-end',
+        paddingHorizontal:responsiveWidth(2),
+    },
+    closeIcon: {
+        width: 50,
+        height: 50
+    },
+    title: {
+        textAlign: 'center',
+        color: "#fff",
+        fontFamily: 'blues-smile',
+        fontSize: '2rem',
+        marginTop: responsiveHeight(-30) * 0.06,
+        marginBottom: normalize(10)
+    },
 });

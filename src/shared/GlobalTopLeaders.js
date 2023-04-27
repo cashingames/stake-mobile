@@ -73,11 +73,12 @@ const styles = EStyleSheet.create({
         borderTopRightRadius: 12,
         borderBottomRightRadius: 12,
         paddingHorizontal:responsiveScreenWidth(4),
-        paddingVertical:responsiveScreenHeight(1)
+        paddingVertical:responsiveScreenHeight(2),
+        height:responsiveHeight(14)
     },
     thirdImage:{
-        height:65,
-        width:65,
+        height:60,
+        width:60,
         borderRadius:50,
         backgroundColor:'#fff',
         marginTop:-50,
@@ -113,14 +114,15 @@ const styles = EStyleSheet.create({
         borderTopLeftRadius: 12,
         borderBottomLeftRadius: 12,
         paddingHorizontal:responsiveScreenWidth(4),
-        paddingVertical:responsiveScreenHeight(2)
+        paddingVertical:responsiveScreenHeight(2),
+        height:responsiveHeight(14)
     },
     secondImage:{
-        height:65,
-        width:65,
+        height:60,
+        width:60,
         borderRadius:50,
         backgroundColor:'#fff',
-        marginTop:-60,
+        marginTop:-50,
         borderColor:'#009BD6',
         borderWidth:3
     },
