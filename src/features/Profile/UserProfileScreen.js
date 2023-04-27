@@ -40,7 +40,7 @@ export default function UserProfileScreen({ navigation }) {
     return (
         <MixedContainerBackground>
             <SafeAreaView style={styles.container}>
-            <TopIcons />
+                <TopIcons />
                 <AppHeader />
                 <ScrollView>
                     <View style={[styles.content, { flex: 1 }]}>
@@ -105,7 +105,7 @@ const UserAvatar = () => {
                     <Pressable style={styles.camera} onPress={pickImage}>
                         {/* <Ionicons name="camera-sharp" size={26} color="#FFFF" /> */}
                         <Image style={styles.imageIcon} source={require('../../../assets/images/addImage.png')} />
-                    </Pressable> : <ActivityIndicator size="large" color="#0000ff" />}
+                    </Pressable> : <ActivityIndicator size="large" color="#fff" />}
             </View>
         </View>
     )
@@ -179,7 +179,7 @@ const styles = EStyleSheet.create({
     },
     userAvatar: {
         flexDirection: 'row',
-        justifyContent: 'center',      
+        justifyContent: 'center',
     },
     avatar: {
         width: normalize(120),
