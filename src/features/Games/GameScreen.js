@@ -70,6 +70,7 @@ const GameScreen = ({ navigation }) => {
       
     }
     return (
+        <ScrollView>
         <MixedContainerBackground>
             <View style={styles.container}>
                 <View style={styles.top}>
@@ -106,16 +107,19 @@ const GameScreen = ({ navigation }) => {
                         )
                     })}
                 </ScrollView>
+
                 <View style={styles.setting}>
                     <DashboardSettings />
                 </View>
             </View >
         </MixedContainerBackground>
+        </ScrollView>
     )
 }
 
 const styles = EStyleSheet.create({
     container: {
+        flex:1,
         height: responsiveHeight(100),
         paddingVertical: responsiveHeight(2),
     },
@@ -123,7 +127,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row'
     },
     top:{
-        height:responsiveHeight(20)
+        // height:responsiveHeight(20)
     },
     gameContainer:{
         height: responsiveHeight(70),
@@ -174,7 +178,7 @@ const styles = EStyleSheet.create({
     
     playBtn: {
         backgroundColor: '#15397D',
-        width: responsiveWidth(45),
+        width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 20,
@@ -182,7 +186,7 @@ const styles = EStyleSheet.create({
         borderBottomWidth: 4,
         paddingVertical: '0.4rem',
         marginBottom: 5,
-        paddingHorizontal: '2rem',
+        paddingHorizontal: '4rem',
 
     },
     playText: {
@@ -197,7 +201,7 @@ const styles = EStyleSheet.create({
         borderRadius: 20,
         borderBottomColor: '#C5C2C2',
         borderBottomWidth: 4,
-        paddingVertical: '0.4rem'
+        paddingVertical: '0.4rem',
     },
     instructionText: {
         color: '#15397D',

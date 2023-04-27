@@ -445,9 +445,10 @@ const styles = EStyleSheet.create({
     },
     storeItemName: {
         fontFamily: 'blues-smile',
-        fontSize: '1rem',
+        fontSize: '0.8rem',
         color: '#fff',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginVertical:Platform.OS === "android" ? 5 : '',
     },
     cardDescription: {
         fontFamily: 'graphik-medium',
@@ -532,7 +533,6 @@ const styles = EStyleSheet.create({
     boostPriceCase: {
         backgroundColor: '#0038B3',
         paddingVertical: normalize(4),
-        // width: responsiveWidth(35)-10,
         borderWidth: 2,
         borderColor: '#00EDF1',
         marginTop: 10,
