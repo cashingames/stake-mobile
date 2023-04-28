@@ -42,6 +42,10 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
+        analytics().logEvent("trivia_challenge_stake_completed", {
+            'opponentName': challengeDetails.opponent.username,
+            'username': challengeDetails.username,
+        })
         if (Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score)) {
             analytics().logEvent("trivia_challenge_stake_won", {
                 'opponentName': challengeDetails.opponent.username,
@@ -70,7 +74,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
             })
             return
         }
-        return
+
     }, [])
 
     useEffect(() => {
@@ -118,7 +122,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
                 <ChallengePlayers challengeDetails={challengeDetails} />
                 <WinningAmount challengeDetails={challengeDetails} />
                 <FinalScoreBoard challengeDetails={challengeDetails} />
-                    <BoostPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                <BoostPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} />
             </ScrollView>
             <View style={styles.gameButtons}>
                 <GameButton buttonText='Return to Home'
