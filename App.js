@@ -113,7 +113,7 @@ function App() {
   }
 
   useEffect(() => {
-    Settings.initializeSDK();
+    Settings.initializeSDK('401438355501146');
   }, []);
 
   if (fontsLoaded) {
