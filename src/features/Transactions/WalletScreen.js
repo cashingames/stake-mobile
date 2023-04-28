@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions, Alert, Image, RefreshControl, Platform } from 'react-native';
+import { Text, View, ScrollView, Pressable, ImageBackground, Dimensions, Alert, Image, RefreshControl, Platform, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
 import WalletBalance from './WalletBalance';

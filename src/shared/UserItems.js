@@ -52,7 +52,7 @@ const UserItems = () => {
 
 const styles = EStyleSheet.create({
     container: {
-        backgroundColor: '#518EF8',
+        backgroundColor: '#2B89C9',
         borderRadius: normalize(10),
         marginVertical: normalize(10),
         display: 'flex',
@@ -64,7 +64,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
     },
     boostContainer: {
-        backgroundColor: '#072169',
+        backgroundColor: '#282829',
         paddingVertical: normalize(15),
         paddingHorizontal: normalize(15),
         borderRadius: 10,

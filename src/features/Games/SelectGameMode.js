@@ -59,7 +59,7 @@ const styles = EStyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#072169',
+        backgroundColor: '#282829',
         marginVertical: '1rem',
         paddingVertical: '.68rem',
         borderRadius: 15,

@@ -52,11 +52,12 @@ const HomeScreen = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            if (Platform.OS === "ios")
+            if (Platform.OS === "android") {
+                StatusBar.setTranslucent(true);
+                StatusBar.setBackgroundColor("transparent");
                 return;
-            StatusBar.setTranslucent(true)
-            StatusBar.setBackgroundColor("transparent")
-            StatusBar.setBarStyle('dark-content');
+            }
+            StatusBar.setBarStyle('light-content');
             return () => {
                 StatusBar.setTranslucent(true)
             }
@@ -216,7 +217,7 @@ const styles = EStyleSheet.create({
         alignItems: 'flex-start'
     },
     userDetails: {
-        backgroundColor: '#072169',
+        backgroundColor: '#DF5C38',
         paddingBottom: normalize(15),
         paddingHorizontal: normalize(20),
     },
@@ -261,7 +262,7 @@ const styles = EStyleSheet.create({
         borderRadius: 100,
         width: responsiveScreenWidth(15),
         height: responsiveScreenWidth(15),
-        backgroundColor: '#FAC502',
+        backgroundColor: '#DF5C38',
         position: 'absolute',
         right: 10,
         bottom: 10,

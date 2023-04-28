@@ -35,12 +35,12 @@ const HomeRouter = () => {
                 paddingRight: normalize(20),
             },
             headerStyle: {
-                backgroundColor: '#FAC502',
+                backgroundColor: '#2B89C9',
             },
             headerTitleStyle: {
                 fontSize: normalize(20),
                 lineHeight: normalize(20),
-                color: "#000000",
+                color: "#FFFF",
                 fontFamily: 'graphik-medium',
             },
             headerShadowVisible: true,
@@ -95,17 +95,17 @@ const RightButtons = () => {
         <View style={styles.headerIcons}>
 
             <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={viewHome}>
-                <Ionicons name='home-outline' size={26} />
+                <Ionicons name='home-outline' size={26} color='#fff' />
                 <Text style={styles.headerIconText}>Home</Text>
             </Pressable>
             < Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={viewWallet}>
-                <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
+                <Ionicons name='wallet-outline' color='#fff' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
                 <Text style={styles.headerIconText}>Wallet</Text>
             </Pressable>
 
             <Pressable style={[styles.headerIconContainerNot, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={viewNotifications}>
                 <View style={styles.notificationContainer}>
-                    <Ionicons name='notifications-outline' size={26} style={[styles.headerIcon, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} />
+                    <Ionicons name='notifications-outline' color='#fff' size={26} style={[styles.headerIcon, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} />
                     {user.unreadNotificationsCount !== 0 &&
                         <View style={styles.numberContainer}>
                             <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
@@ -215,6 +215,7 @@ const styles = EStyleSheet.create({
     headerIconText: {
         fontSize: '0.5rem',
         fontFamily: 'graphik-medium',
+        color:'#fff'
     },
     activeHeaderIcon: {
         opacity: 1
