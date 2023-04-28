@@ -20,6 +20,7 @@ import { useEffect } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Loader from '../../shared/Loader';
 import GameSettings from '../../shared/GameSettings';
+import { Alert } from 'react-native';
 
 const SubCategoryScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -97,6 +98,7 @@ const SubCategories = ({ category, loading, setLoading }) => {
                 setCategoryId('')
             })
             .catch((error) => {
+                Alert.alert('Category not available for now, try again later')
                 crashlytics().recordError(error);
                 crashlytics().log('failed to start exhibition game');
                 setLoading(false);
