@@ -53,7 +53,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#FFFF',
         marginBottom: normalize(8),
-        padding: normalize(13),
+        padding: normalize(15),
         borderRadius: 16,
         borderBottomColor: '#15397D',
         borderBottomWidth: 4,
@@ -63,6 +63,8 @@ const styles = EStyleSheet.create({
         fontFamily: 'poppins',
         fontSize: '0.7rem',
         textAlign: 'left',
+        height:normalize(14),
+        // backgroundColor:'yellow'
     },
     selectedOption: {
         backgroundColor: '#F5D2FF'
@@ -71,10 +73,12 @@ const styles = EStyleSheet.create({
         backgroundColor: '#FFBC10',
         borderBottomColor: '#15397D',
         borderBottomWidth: 4,
+        padding: normalize(15),
     },
     wrongOption: {
         backgroundColor: '#E7262A',
         borderBottomColor: '#15397D',
+        padding: normalize(15),
     },
     checkmark: {
         backgroundColor: '#fff',

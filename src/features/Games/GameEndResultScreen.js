@@ -290,7 +290,7 @@ const styles = EStyleSheet.create({
 	point: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: Platform.OS === 'ios' ? '1.7rem'  : '2rem',
+		fontSize: '1.7rem',
 		textAlign: 'center'
 	},
 	winPoints: {
