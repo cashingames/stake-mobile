@@ -8,7 +8,6 @@ import Animated from "react-native-reanimated";
 import { Ionicons } from '@expo/vector-icons';
 import { unwrapResult } from "@reduxjs/toolkit";
 import EStyleSheet from "react-native-extended-stylesheet";
-import analytics from '@react-native-firebase/analytics';
 import { buyBoostFromWallet, buyPlanFromWallet } from "./StoreSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
@@ -17,6 +16,7 @@ import UserItems from "../../shared/UserItems";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { randomEnteringAnimation } from "../../utils/utils";
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
+import logToAnalytics from "../../utils/analytics";
 
 
 export default function ({ navigation }) {
@@ -57,8 +57,8 @@ const GamePlans = ({ user }) => {
 
 const GamePlanCard = ({ plan, user }) => {
     const refRBSheet = useRef();
-    const buyGamePlan = async () => {
-        await analytics().logEvent('initiate_plan_purchase', {
+    const buyGamePlan = () => {
+        logToAnalytics('initiate_plan_purchase', {
             'transaction_id': user.username,
             'currency': 'NGN',
             'value': plan.price,
@@ -131,7 +131,7 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
             .then(unwrapResult)
             .then(async () => {
                 if (formattedDate === newUserDate) {
-                    await analytics().logEvent('new_user_plan_purchased', {
+                    logToAnalytics('new_user_plan_purchased', {
                         'transaction_id': user.username,
                         'currency': 'NGN',
                         'value': plan.price,
@@ -141,7 +141,7 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
                         'price': plan.price
                     })
                 } else {
-                    await analytics().logEvent('plan_purchase', {
+                    logToAnalytics('plan_purchase', {
                         'transaction_id': user.username,
                         'currency': 'NGN',
                         'value': plan.price,
@@ -158,10 +158,10 @@ const BuyGamePlan = ({ plan, onClose, user }) => {
                 onClose()
                 navigation.navigate("GamePlanPurchaseSuccessful")
             })
-            .catch(async rejectedValueOrSerializedError => {
+            .catch(rejectedValueOrSerializedError => {
                 setLoading(false);
                 // Alert.alert("Notice", "Operation could not be completed, please try again");
-                await analytics().logEvent('game_plan_purchased_failed', {
+                logToAnalytics('game_plan_purchased_failed', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email,
@@ -205,8 +205,8 @@ const GameBoosts = (user) => {
 
 const BoostCard = ({ boost, user }) => {
     const refRBSheet = useRef();
-    const buyBoost = async () => {
-        await analytics().logEvent('initiate_boost_purchase', {
+    const buyBoost = () => {
+        logToAnalytics('initiate_boost_purchase', {
             'transaction_id': user.username,
             'currency': 'NGN',
             'value': boost.currency_value,
@@ -283,7 +283,7 @@ const BuyBoost = ({ boost, onClose, user }) => {
             .then(unwrapResult)
             .then(async () => {
                 if (formattedDate === newUserDate) {
-                    await analytics().logEvent('new_user_boost_purchased', {
+                    logToAnalytics('new_user_boost_purchased', {
                         'transaction_id': user.username,
                         'currency': 'NGN',
                         'value': boost.currency_value,
@@ -293,7 +293,7 @@ const BuyBoost = ({ boost, onClose, user }) => {
                         'price': boost.currency_value
                     })
                 } else {
-                    await analytics().logEvent('boost_purchase', {
+                    logToAnalytics('boost_purchase', {
                         'transaction_id': user.username,
                         'currency': 'NGN',
                         'value': boost.currency_value,
@@ -309,10 +309,10 @@ const BuyBoost = ({ boost, onClose, user }) => {
                 onClose()
                 navigation.navigate("GameBoostPurchaseSuccessful")
             })
-            .catch(async rejectedValueOrSerializedError => {
+            .catch(rejectedValueOrSerializedError => {
                 setLoading(false);
                 // Alert.alert("Notice", "Operation could not be completed, please try again");
-                await analytics().logEvent('boost_purchased_failed', {
+                logToAnalytics('boost_purchased_failed', {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email

@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { sendFriendInvite } from "../features/Games/GameSlice";
 import { useState } from "react";
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from "../utils/analytics";
 
 
 const ChallengeStakingBottomSheet = ({ stakeCash}) => {
@@ -39,7 +39,7 @@ const ChallengeStakingBottomSheet = ({ stakeCash}) => {
         ))
             .then(unwrapResult)
             .then(async result => {
-                await analytics().logEvent("challenge_invite_sent_without_staking", {
+                logToAnalytics("challenge_invite_sent_without_staking", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email

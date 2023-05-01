@@ -11,10 +11,10 @@ import normalize, { responsiveScreenHeight } from '../../utils/normalize';
 import HomeScreen from './HomeScreen';
 import WalletScreen from '../Transactions/WalletScreen';
 import { isTrue } from '../../utils/stringUtl';
-import analytics from '@react-native-firebase/analytics';
 import AppButton from '../../shared/AppButton';
 import { setGameMode, setGameType } from '../Games/GameSlice';
 import { logoutUser } from '../Auth/AuthSlice';
+import logToAnalytics from '../../utils/analytics';
 
 
 const HomeStack = createDrawerNavigator();
@@ -64,8 +64,8 @@ const RightButtons = () => {
     const route = useRoute();
     const routeName = route.name
 
-    const viewHome = async () => {
-        await analytics().logEvent("home_button_clicked", {
+    const viewHome = () => {
+        logToAnalytics("home_button_clicked", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email
@@ -74,7 +74,7 @@ const RightButtons = () => {
     }
 
     const viewWallet = async () => {
-        await analytics().logEvent("wallet_button_clicked", {
+        logToAnalytics("wallet_button_clicked", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email
@@ -83,7 +83,7 @@ const RightButtons = () => {
     }
 
     const viewNotifications = async () => {
-        await analytics().logEvent("notification_button_clicked", {
+        logToAnalytics("notification_button_clicked", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email

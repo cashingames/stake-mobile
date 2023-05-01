@@ -10,10 +10,10 @@ import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import Input from '../../shared/Input';
 import crashlytics from '@react-native-firebase/crashlytics';
-import analytics from '@react-native-firebase/analytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { loginUser } from './AuthSlice';
 import { triggerNotifierForReferral } from '../../shared/Notification';
+import logToAnalytics from '../../utils/analytics';
 
 export default function LoginScreen({ navigation }) {
 
@@ -32,9 +32,10 @@ export default function LoginScreen({ navigation }) {
         setPassword(value)
     }
 
-    const onLogin = async () => {
+    const onLogin = () => {
         crashlytics().log('login clicked');
-        await analytics().logEvent('login_clicked')
+        logToAnalytics('login_clicked')
+
         setLoading(true);
         setCanLogin(false);
         setError("");
@@ -54,11 +55,11 @@ export default function LoginScreen({ navigation }) {
 
     }
 
-    const processLoginError = async (err) => {
+    const processLoginError = (err) => {
         const errors = err.errors;
 
         if (err.message == 'Account not verified') {
-            await analytics().logEvent("unverified_user", {
+            logToAnalytics("unverified_user", {
                 'username': errors.username,
                 'phone_number': errors.phone_number
             })
@@ -72,8 +73,8 @@ export default function LoginScreen({ navigation }) {
         setError(firstError)
     }
 
-    const contactUs = async () => {
-        await analytics().logEvent("clicked_contact_us_from_login")
+    const contactUs = () => {
+        logToAnalytics("clicked_contact_us_from_login")
         navigation.navigate('AuthContact')
     }
 

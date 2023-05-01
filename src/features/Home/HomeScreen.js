@@ -5,7 +5,6 @@ import { Text, View, ScrollView, StatusBar, Platform, RefreshControl, Pressable,
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import Animated, { BounceInRight } from 'react-native-reanimated';
-import analytics from '@react-native-firebase/analytics';
 import { useNavigation } from '@react-navigation/native';
 import normalize, {
     responsiveHeight, responsiveScreenWidth
@@ -22,6 +21,7 @@ import SelectGameMode from '../Games/SelectGameMode';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import WinnersScroller from '../Leaderboard/WinnersScroller';
 import { setGameMode, setGameType } from '../Games/GameSlice';
+import logToAnalytics from '../../utils/analytics';
 
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
@@ -160,10 +160,10 @@ const RenderEvents = () => {
     const gameType = useSelector(state => state.common.gameTypes[0]);
     const user = useSelector(state => state.auth.user);
 
-    const selectTriviaMode = async () => {
+    const selectTriviaMode = () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
-        await analytics().logEvent("game_mode_selected_with_gamepad", {
+        logToAnalytics("game_mode_selected_with_gamepad", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
@@ -175,7 +175,7 @@ const RenderEvents = () => {
 
     const onSelectGameMode = async () => {
         if (isChallengeFeatureEnabled) {
-            await analytics().logEvent("game_entry_with_gamepad", {
+            logToAnalytics("game_entry_with_gamepad", {
                 'id': user.username,
                 'phone_number': user.phoneNumber,
                 'email': user.email,

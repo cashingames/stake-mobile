@@ -6,7 +6,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { setGameMode } from '../features/Games/GameSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from '../utils/analytics';
 
 
 
@@ -16,10 +16,10 @@ const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
     const user = useSelector(state => state.auth.user);
     const token = useSelector(state => state.auth.token);
 
-    const playStaking = async () => {
+    const playStaking = () => {
         setModalVisible(!modalVisible)
         dispatch(setGameMode(gameModeSelected));
-        await analytics().logEvent('stake_cash_now_button_clicked', {
+        logToAnalytics('stake_cash_now_button_clicked', {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email

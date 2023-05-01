@@ -5,7 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { Image } from 'react-native';
 import Constants from 'expo-constants';
 import { useSelector } from 'react-redux';
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from '../utils/analytics';
 
 
 const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
@@ -21,7 +21,7 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
             if(newAchievement != undefined){
                 setAchievement(newAchievement);
                 setAchievementPopup(true)
-                analytics().logEvent(`${newAchievement.title.replace(/\s/g, '_').toLowerCase()}_badge`, {
+                logToAnalytics(`${newAchievement.title.replace(/\s/g, '_').toLowerCase()}_badge`, {
                     'achievement_title': newAchievement.title,
                     'user_id': user.username,
                 })

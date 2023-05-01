@@ -13,8 +13,8 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import ChallengeInviteSuccessText from '../../../shared/ChallengeInviteSuccessText';
 import UniversalBottomSheet from '../../../shared/UniversalBottomSheet';
 import { debounce } from 'lodash';
-import analytics from '@react-native-firebase/analytics';
 import ChallengeStakingBottomSheet from '../../../shared/ChallengeStakingBottomSheet';
+import logToAnalytics from '../../../utils/analytics';
 
 
 export default function ChallengeSelectPlayerScreen({ navigation }) {
@@ -55,9 +55,9 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         }
         ))
             .then(unwrapResult)
-            .then(async result => {
+            .then(result => {
                 openBottomSheet()
-                await analytics().logEvent("challenge_invite_sent_without_staking", {
+                logToAnalytics("challenge_invite_sent_without_staking", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email
@@ -78,8 +78,8 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         }
         ))
             .then(unwrapResult)
-            .then(async result => {
-                await analytics().logEvent("challenge_invite_sent_without_staking", {
+            .then(result => {
+                logToAnalytics("challenge_invite_sent_without_staking", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email
@@ -92,10 +92,10 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
         setSending(false)
     }
 
-    const initiateChallengeStaking = async () => {
+    const initiateChallengeStaking = () => {
         setSending(false)
         openBottomSheet()
-        await analytics().logEvent("challenge_staking_option", {
+        logToAnalytics("challenge_staking_option", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email
@@ -151,7 +151,7 @@ export default function ChallengeSelectPlayerScreen({ navigation }) {
 
     const stakeCash = async () => {
         closeStakeBottomSheet();
-        await analytics().logEvent("challenge_staking_initiated", {
+        logToAnalytics("challenge_staking_initiated", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email

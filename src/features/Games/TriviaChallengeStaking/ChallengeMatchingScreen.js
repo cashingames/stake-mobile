@@ -9,8 +9,8 @@ import LottieAnimations from "../../../shared/LottieAnimations";
 import { useFocusEffect } from "@react-navigation/native";
 import AppButton from "../../../shared/AppButton";
 import firestore from '@react-native-firebase/firestore';
-import analytics from '@react-native-firebase/analytics';
 import { setChallengeDetails } from "./TriviaChallengeGameSlice";
+import logToAnalytics from "../../../utils/analytics";
 
 const ChallengeMatchingScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -63,12 +63,12 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                  * when opponent info changes
                  */
                 if (data.status === "MATCHED" && data.opponent.status !== "COMPLETED") {
-                    analytics().logEvent("trivia_challenge_stake_matched", {
+                    logToAnalytics("trivia_challenge_stake_matched", {
                         'documentId': documentId,
                         'opponentName': data.opponent.username,
                         'username': data.username,
                     })
-                    analytics().logEvent("trivia_challenge_stake_start_initiated", {
+                    logToAnalytics("trivia_challenge_stake_start_initiated", {
                         'documentId': documentId,
                         'opponentName': data.opponent.username,
                         'username': data.username,

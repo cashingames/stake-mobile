@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Text, View, ScrollView, Alert, Platform , Linking} from 'react-native';
+import { Text, View, ScrollView, Alert, Platform, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -11,13 +11,13 @@ import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import AppButton from './../../shared/AppButton';
 import { logActionToServer } from "../CommonSlice";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
-import analytics from '@react-native-firebase/analytics';
 import ExhibitionStakeAmount from "../../shared/ExhibitionStakeAmount";
 import StakingButtons from "../../shared/StakingButtons";
 import ExhibitionUserAvailableBoosts from "../../shared/ExhibitionUserAvailableBoosts";
 import LottieAnimations from "../../shared/LottieAnimations";
 import NoGame from "../../shared/NoGame";
 import crashlytics from '@react-native-firebase/crashlytics';
+import logToAnalytics from "../../utils/analytics";
 
 
 
@@ -36,8 +36,8 @@ export default function GameInstructionsScreen({ navigation }) {
   const isStakingEntryMode = () => gameMode.name === "STAKING";
   const refRBSheet = useRef();
 
-  const gotoStaking = async () => {
-    await analytics().logEvent('navigating_to_staking_platform', {
+  const gotoStaking = () => {
+    logToAnalytics('navigating_to_staking_platform', {
       'id': user.username,
       'phone_number': user.phoneNumber,
       'email': user.email
@@ -54,8 +54,8 @@ export default function GameInstructionsScreen({ navigation }) {
     }
   }
 
-  const openBottomSheet = async () => {
-    await analytics().logEvent('proceed_exhibition_without_staking', {
+  const openBottomSheet = () => {
+    logToAnalytics('proceed_exhibition_without_staking', {
       'id': user.username,
       'phone_number': user.phoneNumber,
       'email': user.email
@@ -177,9 +177,9 @@ const AvailableBoosts = ({ onClose, user }) => {
       mode: gameModeId
     }))
       .then(unwrapResult)
-      .then(async result => {
+      .then(result => {
         crashlytics().log('User started exhibition game');
-        await analytics().logEvent("exhibition_without_staking_game_started", {
+        logToAnalytics("exhibition_without_staking_game_started", {
           'id': user.username,
           'phone_number': user.phoneNumber,
           'email': user.email

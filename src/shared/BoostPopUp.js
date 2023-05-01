@@ -7,8 +7,8 @@ import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
-import analytics from '@react-native-firebase/analytics';
 import { Overlay } from 'react-native-elements';
+import logToAnalytics from '../utils/analytics';
 
 
 
@@ -26,8 +26,8 @@ const BoostPopUp = ({ setModalVisible, modalVisible }) => {
         setModalVisible(false)
     }
 
-    const goToStore = async () => {
-        await analytics().logEvent('buy_now_button_on_boostpopup_clicked', {
+    const goToStore = () => {
+        logToAnalytics('buy_now_button_on_boostpopup_clicked', {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email

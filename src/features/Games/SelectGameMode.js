@@ -5,7 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { setGameMode, setGameType } from './GameSlice';
 import normalize from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/core';
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from '../../utils/analytics';
 
 
 
@@ -19,10 +19,10 @@ const SelectGameMode = () => {
     const gameType = useSelector(state => state.common.gameTypes[0]);
     const user = useSelector(state => state.auth.user);
 
-    const selectTriviaMode = async () => {
+    const selectTriviaMode = () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
-        await analytics().logEvent("game_mode_selected_with_playnow", {
+        logToAnalytics("game_mode_selected_with_playnow", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
@@ -31,9 +31,9 @@ const SelectGameMode = () => {
         navigation.navigate('SelectGameCategory')
 
     }
-    const onSelectGameMode = async () => {
+    const onSelectGameMode = () => {
         if (isChallengeFeatureEnabled) {
-            await analytics().logEvent("game_entry_with_playnow", {
+            logToAnalytics("game_entry_with_playnow", {
                 'id': user.username,
                 'phone_number': user.phoneNumber,
                 'email': user.email,

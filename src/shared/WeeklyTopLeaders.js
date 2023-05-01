@@ -11,8 +11,8 @@ import WeeklyLeader from './WeeklyLeader';
 import PrizePoolTitle from './PrizePoolTitle';
 import { Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import analytics from '@react-native-firebase/analytics';
 import { useState } from 'react';
+import logToAnalytics from '../utils/analytics';
 
 
 
@@ -31,9 +31,9 @@ function WeeklyTopLeaders({ leaders, firstDay, lastDay, gameModes }) {
 
     const gameModeSelected = gameModes.find(mode => mode.name === 'EXHIBITION')
 
-    const playGame = async () => {
+    const playGame = () => {
         dispatch(setGameMode(gameModeSelected));
-        await analytics().logEvent("weekly_leaderboard_play_now_clicked", {
+        logToAnalytics("weekly_leaderboard_play_now_clicked", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email
@@ -41,8 +41,8 @@ function WeeklyTopLeaders({ leaders, firstDay, lastDay, gameModes }) {
         navigation.navigate('SelectGameCategory')    
     }
 
-    const viewPrizePool = async () => {
-        await analytics().logEvent("weekly_leaderboard_prize_pool_clicked", {
+    const viewPrizePool =  () => {
+        logToAnalytics("weekly_leaderboard_prize_pool_clicked", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email

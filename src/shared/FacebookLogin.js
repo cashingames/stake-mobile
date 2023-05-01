@@ -10,11 +10,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginWithSocialLink, registerWithSocialLink } from '../features/Auth/AuthSlice';
 import { triggerTour } from '../features/Tour/Index';
 import { saveToken } from '../utils/ApiHelper';
-import analytics from '@react-native-firebase/analytics';
 import normalize from '../utils/normalize';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import UniversalBottomSheet from './UniversalBottomSheet';
 import { triggerNotifierForReferral } from './Notification';
+import logToAnalytics from '../utils/analytics';
 
 
 const Login = ({ text }) => {
@@ -127,7 +127,7 @@ const Login = ({ text }) => {
           Alert.alert('Network error. Please, try again later.')
           setLoading(false)
         })
-        await analytics().logEvent('signin_with_facebook', {
+        logToAnalytics('signin_with_facebook', {
           'id': userProfile.first_name,
           'email': userProfile.email,
           'username': user.username

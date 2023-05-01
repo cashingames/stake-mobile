@@ -1,16 +1,15 @@
 import React, { useCallback, useEffect } from "react";
 import { BackHandler, Image, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { formatCurrency, formatNumber, isTrue } from "../../../utils/stringUtl";
+import { formatCurrency, isTrue } from "../../../utils/stringUtl";
 import EStyleSheet from "react-native-extended-stylesheet";
 import Constants from 'expo-constants';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../../utils/normalize";
-import AppButton from "../../../shared/AppButton";
 import { useFocusEffect } from "@react-navigation/native";
 import { clearSession } from "./TriviaChallengeGameSlice";
-import analytics from '@react-native-firebase/analytics';
 import { useState } from "react";
 import BoostPopUp from "../../../shared/BoostPopUp";
+import logToAnalytics from "../../../utils/analytics";
 
 
 const ChallengeEndGameScreen = ({ navigation }) => {
@@ -30,10 +29,10 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     };
 
 
-    const onPlayButtonClick = async () => {
+    const onPlayButtonClick = () => {
         setLoading(true);
         dispatch(clearSession());
-        analytics().logEvent('trivia_challenge_play_again_clicked', {
+        logToAnalytics('trivia_challenge_play_again_clicked', {
             'id': user.username,
         });
         navigation.navigate("SelectGameCategory")
@@ -42,33 +41,33 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
-        analytics().logEvent("trivia_challenge_stake_completed", {
+        logToAnalytics("trivia_challenge_stake_completed", {
             'opponentName': challengeDetails.opponent.username,
             'username': challengeDetails.username,
         })
         if (Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score)) {
-            analytics().logEvent("trivia_challenge_stake_won", {
+            logToAnalytics("trivia_challenge_stake_won", {
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
             })
             return
         }
         if (Number.parseFloat(challengeDetails.score) < Number.parseFloat(challengeDetails.opponent.score)) {
-            analytics().logEvent("trivia_challenge_stake_lost", {
+            logToAnalytics("trivia_challenge_stake_lost", {
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
             })
             return
         }
         if (Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score)) {
-            analytics().logEvent("trivia_challenge_stake_draw", {
+            logToAnalytics("trivia_challenge_stake_draw", {
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
             })
             return
         }
         if (challengeDetails.opponent.is_bot === true) {
-            analytics().logEvent("trivia_challenge_bot_opponent", {
+            logToAnalytics("trivia_challenge_bot_opponent", {
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
             })

@@ -10,8 +10,8 @@ import ResendOtp from '../../shared/ResendOtp';
 import { ResendPhoneOtp, verifyPhoneOtp } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { calculateTimeRemaining } from '../../utils/utils';
-import analytics from '@react-native-firebase/analytics';
 import { triggerNotifierForReferral } from '../../shared/Notification';
+import logToAnalytics from '../../utils/analytics';
 
 
 const SignupVerifyPhoneScreen = ({ navigation, route }) => {
@@ -80,12 +80,12 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
             token: token
         }))
             .then(unwrapResult)
-            .then(async response => {
-                await analytics().logEvent("verified_phone_number", {
+            .then(response => {
+                logToAnalytics("verified_phone_number", {
                     'id': params.username,
                     'phone_number': params.phone_number,
                 })
-                await analytics().logEvent("verified", {
+                logToAnalytics("verified", {
                     'id': params.username,
                     'phone_number': params.phone_number,
                 })

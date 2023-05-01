@@ -13,9 +13,9 @@ import Constants from "expo-constants";
 import normalize from '../utils/normalize';
 import UniversalBottomSheet from './UniversalBottomSheet';
 import { googleSignUp, loginWithSocialLink, setToken } from '../features/Auth/AuthSlice';
-import analytics from '@react-native-firebase/analytics';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import { triggerNotifierForReferral } from './Notification';
+import logToAnalytics from '../utils/analytics';
 
 
 
@@ -134,7 +134,7 @@ export default function SocialSignUp({ googleText }) {
                             }
                             console.log(originalPromiseResult);
                             saveToken(originalPromiseResult.data.token)
-                            analytics().logEvent('signin_with_Google', {
+                            logToAnalytics('signin_with_Google', {
                                 'id': userDetails.given_name,
                                 'email': userDetails.email,
                                 'username': user.username

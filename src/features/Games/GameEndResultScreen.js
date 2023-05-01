@@ -8,11 +8,11 @@ import UserName from '../../shared/UserName';
 import NoGame from '../../shared/NoGame';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { getUser } from '../Auth/AuthSlice';
-import analytics from '@react-native-firebase/analytics';
 import StakeWinnings from '../../shared/StakeWinnings';
 import Boostspopup from '../../shared/BoostPopUp';
 // import { PopGoogleReviewLogic } from '../../shared/GoogleReview';
 import { getAchievements } from '../Profile/AchievementSlice';
+import logToAnalytics from '../../utils/analytics';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -61,9 +61,9 @@ export default function GameEndResultScreen({ navigation }) {
 		refRBSheet.current.close()
 	}
 
-	const onPlayButtonClick = async () => {
+	const onPlayButtonClick = () => {
 		setLoading(true);
-		analytics().logEvent('exhibition_play_again_clicked', {
+		logToAnalytics('exhibition_play_again_clicked', {
 			'id': user.username,
 			'phone_number': user.phoneNumber,
 			'email': user.email
@@ -106,7 +106,7 @@ export default function GameEndResultScreen({ navigation }) {
 		}, [])
 	);
 	const reviewStaking = () => {
-		analytics().logEvent('review_staking', {
+		logToAnalytics('review_staking', {
 			'id': user.username,
 			'phone_number': user.phoneNumber,
 			'email': user.email

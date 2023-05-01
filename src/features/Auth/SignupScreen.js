@@ -10,8 +10,8 @@ import AuthTitle from '../../shared/AuthTitle';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from "@expo/vector-icons";
 import { CountryPicker } from "react-native-country-codes-picker";
-import analytics from '@react-native-firebase/analytics';
 import { registerUser } from './AuthSlice';
+import logToAnalytics from '../../utils/analytics';
 
 
 
@@ -33,8 +33,8 @@ const SignupScreen = () => {
     const [loading, setLoading] = useState(false);
 
 
-    const contactUs = async () => {
-        await analytics().logEvent("clicked_contact_us_from_login")
+    const contactUs = () => {
+        logToAnalytics("clicked_contact_us_from_login")
         navigation.navigate('AuthContact')
     }
 

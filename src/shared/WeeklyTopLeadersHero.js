@@ -6,7 +6,7 @@ import normalize from "../utils/normalize";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import WeeklyTopLeaders from './WeeklyTopLeaders';
 import { getWeeklyLeadersByDate } from '../features/CommonSlice';
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from '../utils/analytics';
 
 
 export default function WeeklyTopLeadersHero({ gameModes }) {
@@ -28,8 +28,8 @@ export default function WeeklyTopLeadersHero({ gameModes }) {
         }, [])
     );
 
-    const viewLeaderboard = async () => {
-        await analytics().logEvent("weekly_leaderboard_view_more_clicked", {
+    const viewLeaderboard = () => {
+        logToAnalytics("weekly_leaderboard_view_more_clicked", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email

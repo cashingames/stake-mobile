@@ -8,7 +8,7 @@ import { formatNumber } from '../utils/stringUtl';
 import { bombOptions, boostReleased, consumeBoost, pauseGame, skipQuestion } from "../features/Games/GameSlice";
 import { reduceBoostCount } from "../features/Auth/AuthSlice";
 import { unwrapResult } from '@reduxjs/toolkit';
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from '../utils/analytics';
 
 
 
@@ -43,7 +43,7 @@ const AvailableGameSessionBoosts = () => {
     const boostApplied = (data) => {
         dispatch(consumeBoost(data))
         dispatch(reduceBoostCount(data.id))
-        analytics().logEvent('boost_used', {
+        logToAnalytics('boost_used', {
             'id': user.username,
             'boostName': data.name
         })

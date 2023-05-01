@@ -9,7 +9,7 @@ import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { sendUserFeedback } from "../CommonSlice";
 import { useNavigation } from '@react-navigation/native';
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from "../../utils/analytics";
 
 
 
@@ -52,9 +52,9 @@ const ContactForm = () => {
             message_body,
         }))
             .then(unwrapResult)
-            .then(async result => {
+            .then(result => {
                 Alert.alert('Thanks for your feedback. You would be responded to shortly')
-                await analytics().logEvent("user_sent_feedback_from_auth_screens", {
+                logToAnalytics("user_sent_feedback_from_auth_screens", {
                     'id': first_name,
                     'email': email
                 })
