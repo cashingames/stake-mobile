@@ -13,6 +13,8 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { loginUser } from './AuthSlice';
 import { triggerNotifierForReferral } from '../../shared/Notification';
+import Login from '../../shared/FacebookLogin';
+import { AppEventsLogger } from "react-native-fbsdk-next";
 import logToAnalytics from '../../utils/analytics';
 
 export default function LoginScreen({ navigation }) {
@@ -34,8 +36,8 @@ export default function LoginScreen({ navigation }) {
 
     const onLogin = () => {
         crashlytics().log('login clicked');
+        AppEventsLogger.logEvent('login clicked')
         logToAnalytics('login_clicked')
-
         setLoading(true);
         setCanLogin(false);
         setError("");
@@ -122,6 +124,7 @@ export default function LoginScreen({ navigation }) {
 
                 <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
                 <RenderCreateAccount />
+                <Login text="Sign in" />
                 <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
             </ScrollView >
         </>
