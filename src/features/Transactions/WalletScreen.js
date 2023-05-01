@@ -9,9 +9,9 @@ import { getUser } from '../Auth/AuthSlice';
 import WalletBalance from './WalletBalance';
 import { formatCurrency, formatNumber } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
-import analytics from '@react-native-firebase/analytics';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { withdrawWinnings } from '../CommonSlice';
+import logToAnalytics from '../../utils/analytics';
 
 
 const wait = (timeout) => {
@@ -59,8 +59,8 @@ export default function WalletScreen() {
         setWithdrawAlert(false)
         setWithdraw(true)
         withdrawWinnings()
-            .then(async response => {
-                await analytics().logEvent('winnings_withdrawn_successfully', {
+            .then(response => {
+                logToAnalytics('winnings_withdrawn_successfully', {
                     'product_id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email,

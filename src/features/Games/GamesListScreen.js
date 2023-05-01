@@ -8,7 +8,7 @@ import { isTrue } from "../../utils/stringUtl";
 import { setGameMode, setGameType } from "./GameSlice";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { LinearGradient } from 'expo-linear-gradient';
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from "../../utils/analytics";
 
 
 
@@ -60,10 +60,10 @@ const ChallengeCard = () => {
     const gameMode = useSelector(state => state.common.gameModes[1]);
     const gameType = useSelector(state => state.common.gameTypes[0]);
 
-    const selectChallengeMode = async () => {
+    const selectChallengeMode = () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
-        await analytics().logEvent("trivia_challenge_staking_selected", {
+        logToAnalytics("trivia_challenge_staking_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
@@ -105,10 +105,10 @@ const TriviaStakingCard = () => {
     const user = useSelector(state => state.auth.user)
 
 
-    const selectTriviaMode = async () => {
+    const selectTriviaMode = () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
-        await analytics().logEvent("trivia_staking_selected", {
+        logToAnalytics("trivia_staking_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,

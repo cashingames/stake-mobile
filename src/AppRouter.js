@@ -39,7 +39,6 @@ import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen'
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import routeDecider from './utils/notificationRouteDecider';
-import analytics from '@react-native-firebase/analytics';
 import GameStakingScreen from './features/Games/GameStakingScreen';
 import NotificationsScreen from './features/Notifications/NotificationsScreen';
 import SignupVerifyPhoneScreen from './features/Auth/SignupVerifyPhoneScreen';
@@ -58,6 +57,7 @@ import ChallengeGameBoardScreen from './features/Games/TriviaChallengeStaking/Ch
 import ChallengeMatchingScreen from './features/Games/TriviaChallengeStaking/ChallengeMatchingScreen';
 import GamesListScreen from './features/Games/GamesListScreen';
 import VerifyPasswordOtpScreen from './features/Auth/VerifyPasswordOtpScreen';
+import logToAnalytics from './utils/analytics';
 
 
 const AppStack = createNativeStackNavigator();
@@ -92,10 +92,10 @@ function AppRouter() {
 			dispatch(verifyDeviceToken(deviceToken))
 		});
 
-		messaging().onNotificationOpenedApp(async remoteMessage => {
+		messaging().onNotificationOpenedApp(remoteMessage => {
 			if (!remoteMessage) return;
 
-			await analytics().logEvent("bg_notification", {
+			logToAnalytics("bg_notification", {
 				state: "background"
 			})
 			routeDecider(remoteMessage, navigation);
@@ -107,7 +107,7 @@ function AppRouter() {
 			.getInitialNotification()
 			.then(async remoteMessage => {
 				if (remoteMessage) {
-					await analytics().logEvent("bg_notification", {
+					logToAnalytics("bg_notification", {
 						state: "quit"
 					})
 				}

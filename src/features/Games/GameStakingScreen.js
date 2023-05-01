@@ -12,11 +12,11 @@ import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import { getUser } from "../Auth/AuthSlice";
 import { logActionToServer } from "../CommonSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
-import analytics from '@react-native-firebase/analytics';
 // import ExhibitionUserAvailableBoosts from "../../shared/ExhibitionUserAvailableBoosts";
 import StakingPredictionsTable from "../../shared/StakingPredictionsTable";
 import LowWalletBalance from "../../shared/LowWalletBalance";
 import UserWalletBalance from "../../shared/UserWalletBalance";
+import logToAnalytics from "../../utils/analytics";
 
 
 const GameStakingScreen = ({ navigation }) => {
@@ -55,7 +55,7 @@ const GameStakingScreen = ({ navigation }) => {
         }
     }, [maximumExhibitionStakeAmount, user.walletBalance])
 
-    const validate = async () => {
+    const validate = () => {
         setLoading(true);
         if (Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount)) {
             Alert.alert(`Minimum stake amount is ${minimumExhibitionStakeAmount} naira`);
@@ -69,7 +69,7 @@ const GameStakingScreen = ({ navigation }) => {
             return false;
         }
         if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-            await analytics().logEvent('exhibition_staking_low_balance', {
+            logToAnalytics('exhibition_staking_low_balance', {
                 'id': user.username,
                 'phone_number': user.phoneNumber,
                 'email': user.email
@@ -78,7 +78,7 @@ const GameStakingScreen = ({ navigation }) => {
             setLoading(false);
             return
         }
-        analytics().logEvent('exhibition_staking_initiated', {
+        logToAnalytics('exhibition_staking_initiated', {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email
@@ -104,8 +104,8 @@ const GameStakingScreen = ({ navigation }) => {
                     data: result.data.questions
                 }))
                     .then(unwrapResult)
-                    .then(async result => {
-                        await analytics().logEvent("start_trivia_staking_game", {
+                    .then(result => {
+                        logToAnalytics("start_trivia_staking_game", {
                             'id': user.username,
                             'phone_number': user.phoneNumber,
                             'email': user.email

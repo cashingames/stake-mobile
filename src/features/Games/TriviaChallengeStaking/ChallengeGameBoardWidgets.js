@@ -4,7 +4,6 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import { Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Constants from 'expo-constants';
-import analytics from '@react-native-firebase/analytics';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import LottieAnimations from "../../../shared/LottieAnimations";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
@@ -12,6 +11,7 @@ import { formatNumber, isTrue } from "../../../utils/stringUtl";
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import { reduceBoostCount } from "../../Auth/AuthSlice";
 import { boostReleased, consumeBoost, pauseGame, skipQuestion } from "./TriviaChallengeGameSlice";
+import logToAnalytics from "../../../utils/analytics";
 
 const ChallengeGameBoardWidgets = ({ onComplete }) => {
     const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const ChallengeGameBoardWidgets = ({ onComplete }) => {
                 dispatch(pauseGame(false))
                 dispatch(boostReleased())
             }, 10000);
-            analytics().logEvent("trivia_challenge_freeze_boost_used", {
+            logToAnalytics("trivia_challenge_freeze_boost_used", {
                 'documentId': documentId,
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,
@@ -41,7 +41,7 @@ const ChallengeGameBoardWidgets = ({ onComplete }) => {
         if (name === 'SKIP') {
             dispatch(skipQuestion());
             dispatch(boostReleased());
-            analytics().logEvent("trivia_challenge_skip_boost_used", {
+            logToAnalytics("trivia_challenge_skip_boost_used", {
                 'documentId': documentId,
                 'opponentName': challengeDetails.opponent.username,
                 'username': challengeDetails.username,

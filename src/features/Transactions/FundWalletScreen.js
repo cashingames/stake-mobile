@@ -14,7 +14,7 @@ import Input from "../../shared/Input";
 import { formatCurrency } from "../../utils/stringUtl";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { Paystack } from "react-native-paystack-webview";
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from "../../utils/analytics";
 
 
 export default function FundWalletScreen() {
@@ -27,9 +27,9 @@ export default function FundWalletScreen() {
   const [showPayment, setShowPayment] = React.useState(false);
   const minimumWalletFundableAmount = useSelector(state => state.common.minimumWalletFundableAmount);
   
-  const transactionCompleted = async (res) => {
+  const transactionCompleted = (res) => {
     // verifyFunding(res.reference); for local testing
-    await analytics().logEvent('wallet_funding_successfully', {
+    logToAnalytics('wallet_funding_successfully', {
       'product_id': user.username,
       'item_name': 'Wallet Funding',
       'currency': 'NGN',
@@ -42,8 +42,8 @@ export default function FundWalletScreen() {
     navigation.navigate("Wallet");
   };
 
-  const startPayment = async () => {
-    await analytics().logEvent('funding_wallet_initiated', {
+  const startPayment = () => {
+    logToAnalytics('funding_wallet_initiated', {
       'product_id': user.username,
       'item_name': 'Wallet Funding',
       'currency': 'NGN',

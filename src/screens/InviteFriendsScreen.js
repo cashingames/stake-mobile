@@ -6,8 +6,8 @@ import * as Clipboard from 'expo-clipboard';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from 'react-redux';
 import LottieAnimations from '../shared/LottieAnimations';
-import analytics from '@react-native-firebase/analytics';
 import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
+import logToAnalytics from '../utils/analytics';
 
 
 const InviteFriendsScreen = ({navigation}) => {
@@ -60,7 +60,7 @@ const InviteLink = () => {
             await Share.share({
                 message: referralMsg,
             });
-            await analytics().logEvent("share_referral", {
+            logToAnalytics("share_referral", {
                 'id': user.username,
             })
 

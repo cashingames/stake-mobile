@@ -13,7 +13,7 @@ import LottieAnimations from '../../shared/LottieAnimations';
 import { getFirstTimeUserReward, setToken, verifyUser } from './AuthSlice';
 import { saveToken } from '../../utils/ApiHelper';
 import { unwrapResult } from '@reduxjs/toolkit';
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from '../../utils/analytics';
 
 
 
@@ -32,13 +32,13 @@ const EmailVerifiedScreen = ({ navigation, route }) => {
         setLoading(true);
         dispatch(verifyUser({ email: params.email }))
             .then(unwrapResult)
-            .then(async response => {
+            .then(response => {
                 saveToken(response.data);
                 dispatch(setToken(response.data));
-                await analytics().logEvent("verified_email", {
+                logToAnalytics("verified_email", {
                     'email': params.email,
                 })
-                await analytics().logEvent("verified", {
+                logToAnalytics("verified", {
                     'email': params.email,
                 })
                 navigation.navigate('AppRouter', { screen: 'Home' });

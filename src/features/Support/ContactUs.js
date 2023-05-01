@@ -7,9 +7,8 @@ import AppButton from "../../shared/AppButton";
 import Input from "../../shared/Input";
 import normalize from "../../utils/normalize";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
-import { getUser } from "../Auth/AuthSlice";
 import { sendUserFeedback } from "../CommonSlice";
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from "../../utils/analytics";
 
 
 
@@ -52,9 +51,9 @@ const ContactForm = ({ user }) => {
             message_body,
         }))
             .then(unwrapResult)
-            .then(async result => {
+            .then(result => {
                 Alert.alert('Thanks for your feedback. You would be responded to shortly')
-                await analytics().logEvent("user_sent_feedback", {
+                logToAnalytics("user_sent_feedback", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email

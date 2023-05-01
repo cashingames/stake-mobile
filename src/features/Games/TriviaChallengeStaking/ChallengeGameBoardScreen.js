@@ -5,12 +5,12 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit';
 import firestore from "@react-native-firebase/firestore";
-import analytics from '@react-native-firebase/analytics';
 import { getNextQuestion, selectedOption, setChallengeDetails, submitGameSession, setIsEnded } from "./TriviaChallengeGameSlice";
 import ChallengeGameBoardWidgets from "./ChallengeGameBoardWidgets";
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import PlayGameHeader from "../../../shared/PlayGameHeader";
 import AppButton from "../../../shared/AppButton";
+import logToAnalytics from "../../../utils/analytics";
 
 const ChallengeGameBoardScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        analytics().logEvent("trivia_challenge_stake_started", {
+        logToAnalytics("trivia_challenge_stake_started", {
             'documentId': documentId,
             'opponentName': challengeDetails.opponent.username,
             'username': challengeDetails.username,

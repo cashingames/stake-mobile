@@ -11,7 +11,7 @@ import { getUser } from "../features/Auth/AuthSlice";
 import AppButton from "./AppButton";
 import normalize, { responsiveScreenWidth } from "../utils/normalize";
 import { formatCurrency } from "../utils/stringUtl";
-import analytics from '@react-native-firebase/analytics';
+import logToAnalytics from "../utils/analytics";
 
 
 const FundWalletComponent = ({ onClose }) => {
@@ -25,8 +25,8 @@ const FundWalletComponent = ({ onClose }) => {
     const minimumWalletFundableAmount = useSelector(state => state.common.minimumWalletFundableAmount);
 
 
-    const transactionCompleted = async (res) => {
-        await analytics().logEvent('wallet_funding_successfully', {
+    const transactionCompleted = (res) => {
+        logToAnalytics('wallet_funding_successfully', {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email
@@ -37,8 +37,8 @@ const FundWalletComponent = ({ onClose }) => {
         onClose()
     };
 
-    const startPayment = async () => {
-        await analytics().logEvent('funding_wallet_initiated', {
+    const startPayment =  () => {
+        logToAnalytics('funding_wallet_initiated', {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email
