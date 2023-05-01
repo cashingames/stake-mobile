@@ -9,7 +9,6 @@ import Constants from 'expo-constants';
 
 
 export default ({ category, onSelect, isSelected, activeCategory,activeSubcategory,onSubCategorySelected }) => {
-    console.log(category)
     return (
         <Animated.View style={styles.card} entering={BounceInRight.duration(2000)}>
             <Pressable onPress={() => onSelect(category)} >

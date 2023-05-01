@@ -24,7 +24,7 @@ import GameSettings from '../../shared/GameSettings';
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
 	const user = useSelector(state => state.auth.user);
-	const pointsGained = useSelector(state => state.game.pointsGained);
+	const pointsGained = useSelector(state => state.game.correctCount);
 	const amountWon = useSelector(state => state.game.amountWon);
 	const withStaking = useSelector(state => state.game.withStaking);
 	const minimumBoostScore = useSelector(state => state.common.minimumBoostScore)
@@ -181,7 +181,7 @@ export default function GameEndResultScreen({ navigation }) {
 				<TopIcons />
 				<EndGameData homeNavigation={onHomeButtonClick} playAgain={onPlayButtonClick} pointsGained={pointsGained} minimumBoostScore={minimumBoostScore} />
 				<View style={styles.setting}>
-					<GameSettings onPress={() => navigation.navigate('Games')}/>
+					<GameSettings onPress={() => navigation.navigate('Games')} />
 				</View>
 			</View>
 		</QuizContainerBackground>
@@ -189,36 +189,55 @@ export default function GameEndResultScreen({ navigation }) {
 }
 
 const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScore }) => {
+	const coinsEarned = useSelector(state => state.game.coinsEarned);
 	return (
 		<View style={styles.endImageCase}>
-			{pointsGained > Number(minimumBoostScore)?
-				<ImageBackground style={styles.endImage} resizeMode="contain" source={require('../../../assets/images/no-game.png')}>
+			{pointsGained > 2 ?
+				<ImageBackground style={styles.endImage} resizeMode="contain" source={require('../../../assets/images/endgame-image.png')}>
 					<Text style={styles.winText}>You win</Text>
 					<View style={styles.starIcons}>
-						<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
-						<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
-						<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
+						{ pointsGained >= 8 &&
+							<>
+								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
+								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
+								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
+							</>
+						}
+						{ pointsGained >= 5 && pointsGained < 8 &&
+							<>
+								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
+								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
+								<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+							</>
+						}
+						{ pointsGained >= 3 && pointsGained < 5 &&
+							<>
+								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
+								<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+								<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+							</>
+						}
 					</View>
 					<View style={styles.pointsCase}>
 						<Text style={styles.point}>You Scored {pointsGained} Points</Text>
 					</View>
-					{/* <View style={styles.winPoints}>
-						<Text style={styles.pointEarned}>+10</Text>
-					</View> */}
-					<View style={styles.btnContainer}>
-						<Pressable onPress={homeNavigation}>
-							<Image style={styles.btn} source={require('../../../assets/images/okay.png')} />
-						</Pressable>
-						<Pressable onPress={playAgain}>
-							<Image style={styles.btn} source={require('../../../assets/images/replay.png')} />
-						</Pressable>
+					<View style={styles.winPoints}>
+						<Text style={styles.pointEarned}>+{coinsEarned}</Text>
+						<View style={styles.btnContainer}>
+							<Pressable onPress={homeNavigation}>
+								<Image style={styles.btn} source={require('../../../assets/images/okay.png')} />
+							</Pressable>
+							<Pressable onPress={playAgain}>
+								<Image style={styles.btn} source={require('../../../assets/images/replay.png')} />
+							</Pressable>
+						</View>
 					</View>
 					<View style={styles.winnerProfile}>
 						<Image style={styles.winnerImage} resizeMode="contain" source={require('../../../assets/images/winner-picture.png')} />
-					</View> 
+					</View>
 				</ImageBackground>
 				:
-				<ImageBackground style={styles.endImage} resizeMode="contain" source={require('../../../assets/images/no-game.png')}>
+				<ImageBackground style={styles.endImage} resizeMode="contain" source={require('../../../assets/images/lose-endgame.png')}>
 					<Text style={styles.winText}>You Lose!</Text>
 					<View style={styles.starIcons}>
 						<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
@@ -228,16 +247,16 @@ const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScor
 					<View style={styles.pointsCase}>
 						<Text style={styles.point}>You Scored {pointsGained} Points</Text>
 					</View>
-					{/* <View style={styles.winPoints}>
-					<Text style={styles.pointEarned}>-10</Text>
-				</View> */}
-					<View style={styles.btnContainer}>
-						<Pressable onPress={homeNavigation}>
-							<Image style={styles.btn} source={require('../../../assets/images/okay.png')} />
-						</Pressable>
-						<Pressable onPress={playAgain}>
-							<Image style={styles.btn} source={require('../../../assets/images/replay.png')} />
-						</Pressable>
+					<View style={styles.winPoints}>
+						<Text style={styles.zeroPoint}>{coinsEarned}</Text>
+						<View style={styles.btnContainer}>
+							<Pressable onPress={homeNavigation}>
+								<Image style={styles.btn} source={require('../../../assets/images/okay.png')} />
+							</Pressable>
+							<Pressable onPress={playAgain}>
+								<Image style={styles.btn} source={require('../../../assets/images/replay.png')} />
+							</Pressable>
+						</View>
 					</View>
 					<View style={styles.loserProfile}>
 						<Image style={styles.loserImage} source={require('../../../assets/images/loser-profile.png')} />
@@ -251,12 +270,12 @@ const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScor
 const styles = EStyleSheet.create({
 	container: {
 		height: responsiveHeight(100),
-        paddingVertical: responsiveHeight(2),
+		paddingVertical: responsiveHeight(2),
 	},
 	endImageCase: {
 		alignItems: 'center',
-		height:responsiveHeight(80),
-		justifyContent:'center',
+		height: responsiveHeight(80),
+		justifyContent: 'center',
 	},
 	endImage: {
 		height: responsiveHeight(50),
@@ -266,7 +285,7 @@ const styles = EStyleSheet.create({
 	winText: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: Platform.OS === 'ios' ? '1.6rem' :'2rem',
+		fontSize: Platform.OS === 'ios' ? '1.6rem' : '2rem',
 		// marginVertical: Platform.OS === 'ios' ? '1.6rem' : '2rem'
 		marginVertical: Platform.OS === 'ios' ? responsiveHeight(100) * 0.035 : responsiveHeight(100) * 0.03
 	},
@@ -284,8 +303,8 @@ const styles = EStyleSheet.create({
 	pointsCase: {
 		alignItems: 'center',
 		width: responsiveWidth(46),
-		marginVertical: normalize(20),
-		zIndex:10
+		marginVertical: responsiveHeight(100) * 0.003,
+		zIndex: 10
 	},
 	point: {
 		color: '#fff',
@@ -294,18 +313,31 @@ const styles = EStyleSheet.create({
 		textAlign: 'center'
 	},
 	winPoints: {
+		position: 'absolute',
+		top: responsiveHeight(29),
 		marginVertical: responsiveScreenHeight(.60),
-		marginRight: normalize(60)
-		// width:'100%'
+		// backgroundColor:'yellow'
+
 	},
 	pointEarned: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '2.5rem'
+		fontSize: '2rem',
+		paddingLeft:Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 :responsiveWidth(100) * 0.05,
+		paddingTop: responsiveHeight(100) * 0.01,
+		// backgroundColor:'blue',
+	},
+	zeroPoint: {
+		color: '#fff',
+		fontFamily: 'blues-smile',
+		fontSize: '2.5rem',
+		// backgroundColor:'blue',
+		paddingLeft: 20,
+		paddingTop: 5
 	},
 	btnContainer: {
 		flexDirection: 'row',
-		marginTop: normalize(10)
+		marginTop: normalize(19)
 	},
 	btn: {
 		height: 50,
@@ -321,20 +353,20 @@ const styles = EStyleSheet.create({
 		width: normalize(139),
 		height: normalize(135)
 	},
-	winnerImage:{
+	winnerImage: {
 		height: responsiveHeight(50),
 		width: responsiveWidth(35),
 	},
-	winnerProfile:{
+	winnerProfile: {
 		position: 'absolute',
 		left: responsiveWidth(55),
 		top: responsiveHeight(20),
 	},
-	setting:{
+	setting: {
 		position: 'absolute',
-        left:0,
-        right:0,
-        top:responsiveHeight(88),
+		left: 0,
+		right: 0,
+		top: responsiveHeight(88),
 	}
 
 });

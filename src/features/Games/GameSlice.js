@@ -157,6 +157,7 @@ let initialState = {
     correctAnswer: null,
     submissionResult:null,
     showCorrectAnswer: null,
+    coinsEarned: null
 }
 
 export const GameSlice = createSlice({
@@ -302,6 +303,7 @@ export const GameSlice = createSlice({
                 state.withStaking = action.payload.data.with_staking ?? false;
                 state.amountStaked = action.payload.data.amount_staked;
                 state.correctCount = action.payload.data.correct_count;
+                state.coinsEarned = action.payload.data.coins_earned;
                 resetState(state)
             })
             .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
