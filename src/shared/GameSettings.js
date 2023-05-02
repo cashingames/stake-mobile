@@ -13,7 +13,7 @@ import { useRef } from 'react'
 import { Animated } from 'react-native'
 import { useEffect } from 'react'
 
-const GameSettings = ({onPress, isDisabled}) => {
+const GameSettings = ({navigationHandler, isDisabled}) => {
    const dispatch = useDispatch()
     useEffect(() => {
         dispatch(getGlobalLeaders());
@@ -48,9 +48,8 @@ const GameSettings = ({onPress, isDisabled}) => {
                     <Image style={styles.settingIcon} source={require('./../../assets/images/setting-icon.png')} />
                     </Animated.View>
                 </Pressable>
-                <Pressable onPress={onPress}>
-                    <Image style={styles.settingIcon} source={require('../../assets/images/close-icon.png')} />
-                    
+                <Pressable onPress={navigationHandler}>
+                    <Image style={styles.settingIcon} source={require('../../assets/images/close-icon.png')} />    
                 </Pressable>
                 <Pressable onPress={() => navigation.navigate('GameStore')} disabled={isDisabled}>
                     <Image style={styles.storeIcon} source={require('../../assets/images/store-icon.png')} />

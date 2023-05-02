@@ -63,7 +63,7 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
                 </View>
 
                 <View style={styles.setting}>
-                    <GameSettings onPress={() => navigation.goBack(null)} />
+                    <GameSettings navigationHandler={() => navigation.goBack(null)} />
                 </View>
             </View>
         </QuizContainerBackground>

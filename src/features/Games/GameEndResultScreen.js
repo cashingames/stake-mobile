@@ -179,7 +179,7 @@ export default function GameEndResultScreen({ navigation }) {
 				<TopIcons />
 				<EndGameData homeNavigation={onHomeButtonClick} playAgain={onPlayButtonClick} pointsGained={pointsGained} minimumBoostScore={minimumBoostScore} />
 				<View style={styles.setting}>
-					<GameSettings onPress={() => navigation.navigate('Games')} />
+					<GameSettings navigationHandler={() => navigation.navigate('Games')} />
 				</View>
 			</View>
 		</QuizContainerBackground>
