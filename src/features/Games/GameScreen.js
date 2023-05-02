@@ -145,7 +145,7 @@ const styles = EStyleSheet.create({
         alignItems:'center',
     },
     gameText: {
-        fontSize: '1.7rem',
+        fontSize: '1.8rem',
         fontFamily: 'blues-smile',
         color: '#fff',
         textAlign: 'center',
@@ -186,6 +186,8 @@ const styles = EStyleSheet.create({
         borderBottomWidth: 4,
         paddingVertical: '0.4rem',
         marginBottom: 5,
+        // paddingHorizontal: '3rem',
+
     },
     playText: {
         color: '#fff',
