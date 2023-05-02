@@ -24,9 +24,7 @@ import GameSettings from '../../shared/GameSettings';
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
 	const user = useSelector(state => state.auth.user);
-	const pointsGained = useSelector(state => state.game.correctCount);
-	const amountWon = useSelector(state => state.game.amountWon);
-	const withStaking = useSelector(state => state.game.withStaking);
+	const pointsGained = useSelector(state => state.game.pointsGained);
 	const minimumBoostScore = useSelector(state => state.common.minimumBoostScore)
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
@@ -198,23 +196,23 @@ const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScor
 					<View style={styles.starIcons}>
 						{ pointsGained >= 8 &&
 							<>
-								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
-								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
-								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
+								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
+								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
+								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
 							</>
 						}
 						{ pointsGained >= 5 && pointsGained < 8 &&
 							<>
-								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
-								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
-								<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
+								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
+								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/loss-star.png')} />
 							</>
 						}
 						{ pointsGained >= 3 && pointsGained < 5 &&
 							<>
-								<Image style={styles.star} source={require('../../../assets/images/win-star.png')} />
-								<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
-								<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
+								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/loss-star.png')} />
+								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/loss-star.png')} />
 							</>
 						}
 					</View>
@@ -240,9 +238,9 @@ const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScor
 				<ImageBackground style={styles.endImage} resizeMode="contain" source={require('../../../assets/images/lose-endgame.png')}>
 					<Text style={styles.winText}>You Lose!</Text>
 					<View style={styles.starIcons}>
-						<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
-						<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
-						<Image style={styles.star} source={require('../../../assets/images/loss-star.png')} />
+						<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/loss-star.png')} />
+						<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/loss-star.png')} />
+						<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/loss-star.png')} />
 					</View>
 					<View style={styles.pointsCase}>
 						<Text style={styles.point}>You Scored {pointsGained} Points</Text>
@@ -293,11 +291,11 @@ const styles = EStyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		width: '100%',
-		marginTop: responsiveScreenHeight(1.5)
+		marginTop: responsiveScreenHeight(1.3)
 	},
 	star: {
-		height: 66,
-		width: 64,
+		height: 64,
+		width: 60,
 		marginHorizontal: responsiveScreenWidth(2)
 	},
 	pointsCase: {
@@ -309,21 +307,20 @@ const styles = EStyleSheet.create({
 	point: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '1.7rem',
+		fontSize: '1.6rem',
 		textAlign: 'center'
 	},
 	winPoints: {
 		position: 'absolute',
 		top: responsiveHeight(29),
 		marginVertical: responsiveScreenHeight(.60),
-		// backgroundColor:'yellow'
 
 	},
 	pointEarned: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
 		fontSize: '2rem',
-		paddingLeft:Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 :responsiveWidth(100) * 0.05,
+		paddingLeft:Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 :responsiveWidth(100) * 0.04,
 		paddingTop: responsiveHeight(100) * 0.01,
 		// backgroundColor:'blue',
 	},
@@ -332,12 +329,12 @@ const styles = EStyleSheet.create({
 		fontFamily: 'blues-smile',
 		fontSize: '2.5rem',
 		// backgroundColor:'blue',
-		paddingLeft: 20,
-		paddingTop: 5
+		paddingLeft:Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 :responsiveWidth(100) * 0.09,
+		paddingTop: responsiveHeight(100) * 0.003
 	},
 	btnContainer: {
 		flexDirection: 'row',
-		marginTop: normalize(19)
+		marginTop: responsiveHeight(100) * 0.018
 	},
 	btn: {
 		height: 50,
