@@ -16,7 +16,6 @@ const TopIcons = () => {
     var plans = useSelector(state => state.auth.user.activePlans ?? []);
     const navigation = useNavigation()
 
-
     const [sumOfPlans, setSumOfPlans] = useState(0);
 
     // const { playSound } =  useSound(require('../../assets/sounds/option-picked.mp3'))
@@ -66,7 +65,7 @@ const TopIcons = () => {
                 <Image style={styles.coinIcon} source={require('./../../assets/images/coin-icon.png')} />
                 <View style={styles.iconBox}>
                     <View style={styles.iconText}>
-                        <Text style={styles.text}>{user.points}</Text>
+                        <Text style={styles.text}>{user.coinsBalance}</Text>
                     </View>
                     <IconDetails />
                 </View>

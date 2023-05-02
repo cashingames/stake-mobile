@@ -205,7 +205,7 @@ export default function GameInProgressScreen({ navigation, route }) {
             <View style={styles.buttonCase}>
                 <NextButton ending={ending} onEndGame={() => onEndGame()} />
                 <View style={styles.setting}>
-                    <GameSettings onPress={() => showExitConfirmation()} isDisabled={true} />
+                    <GameSettings navigationHandler={() => showExitConfirmation()} isDisabled={true} />
                 </View>
             </View>
         </ImageBackground>

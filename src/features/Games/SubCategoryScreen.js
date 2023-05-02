@@ -53,7 +53,7 @@ const SubCategoryScreen = ({ navigation, route }) => {
                         </View>
                     </ScrollView>
                     <View style={styles.setting}>
-                        <GameSettings onPress={() => navigation.goBack(null)} />
+                        <GameSettings navigationHandler={() => navigation.goBack(null)} />
                     </View>
                 </QuizContainerBackground>
             )}
