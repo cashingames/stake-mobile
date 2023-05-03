@@ -82,12 +82,13 @@ const AppleSignUp = () => {
                     AppleAuthentication.AppleAuthenticationScope.EMAIL,
                 ],
             });
-            console.log(credential, 'this is the credentials')
+            console.warn(credential.user, 'this is the credentials')
 
             dispatch(loginWithSocialLink({
                 firstName: credential.fullName.givenName,
                 lastName: credential.fullName.familyName,
-                email: credential.email
+                email: credential.email,
+                appleUserId: credential.user
             })).then(unwrapResult)
 
                 .then((originalPromiseResult) => {
