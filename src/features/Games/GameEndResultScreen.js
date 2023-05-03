@@ -24,7 +24,7 @@ import GameSettings from '../../shared/GameSettings';
 export default function GameEndResultScreen({ navigation }) {
 	const dispatch = useDispatch();
 	const user = useSelector(state => state.auth.user);
-	const pointsGained = useSelector(state => state.game.pointsGained);
+	const pointsGained = useSelector(state => state.game.correctCount);
 	const minimumBoostScore = useSelector(state => state.common.minimumBoostScore)
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
@@ -307,7 +307,7 @@ const styles = EStyleSheet.create({
 	point: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '1.6rem',
+		fontSize: '1.5rem',
 		textAlign: 'center'
 	},
 	winPoints: {
@@ -320,7 +320,7 @@ const styles = EStyleSheet.create({
 		color: '#fff',
 		fontFamily: 'blues-smile',
 		fontSize: '2rem',
-		paddingLeft:Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 :responsiveWidth(100) * 0.04,
+		paddingLeft:Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 :responsiveWidth(100) * 0.035,
 		paddingTop: responsiveHeight(100) * 0.01,
 		// backgroundColor:'blue',
 	},

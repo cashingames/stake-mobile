@@ -63,7 +63,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'poppins',
         fontSize: '0.7rem',
         textAlign: 'left',
-        height:normalize(14),
+        height:normalize(17),
         // backgroundColor:'yellow'
     },
     selectedOption: {
