@@ -7,8 +7,11 @@ import { formatCurrency } from "../utils/stringUtl";
 const UserWalletBalance = ({ balance, style,textstyle }) => {
     return (
         <View style={[styles.amountContainer, style]}>
-            <Text style={[styles.availableAmount, textstyle]}>
+            {/* <Text style={[styles.availableAmount, textstyle]}>
                 Wallet Balance: &#8358;{formatCurrency(balance)}
+            </Text> */}
+            <Text style={[styles.availableAmount, textstyle]}>
+                Demo Cash: &#8358;{formatCurrency(balance)}
             </Text>
         </View>
     );
