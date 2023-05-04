@@ -47,17 +47,17 @@ const ChallengeStakingScreen = ({ navigation }) => {
             return false;
         }
 
-        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-            Alert.alert(`Your demo wallet has been exhausted. Fund your wallet now`);
-            setLoading(false);
-            return false;
-        }
-
         // if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-        //     Alert.alert(`Insufficient balance in your wallet. Please fund your wallet`);
+        //     Alert.alert(`Your demo wallet has been exhausted. Fund your wallet now`);
         //     setLoading(false);
         //     return false;
         // }
+
+        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
+            Alert.alert(`Insufficient balance in your wallet. Please fund your wallet`);
+            setLoading(false);
+            return false;
+        }
 
 
         dispatch(startChallengeRequest({

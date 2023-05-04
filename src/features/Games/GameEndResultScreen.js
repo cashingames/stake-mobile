@@ -13,6 +13,7 @@ import Boostspopup from '../../shared/BoostPopUp';
 // import { PopGoogleReviewLogic } from '../../shared/GoogleReview';
 import { getAchievements } from '../Profile/AchievementSlice';
 import logToAnalytics from '../../utils/analytics';
+import BoostPopUp from '../../shared/BoostPopUp';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -26,7 +27,7 @@ export default function GameEndResultScreen({ navigation }) {
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
 	// const [lastRunDate, setLastRunDate] = useState();
-	const [modalVisible, setModalVisible] = useState(false);
+	// const [modalVisible, setModalVisible] = useState(false);
 	// const [sumOfPlans, setSumOfPlans] = useState(0);
 	// const activePlan = useSelector(state => state.auth.user.activePlans ?? []);
 	// const bonusGame = activePlan?.find((item) => item.name === 'Bonus Games')
@@ -94,8 +95,8 @@ export default function GameEndResultScreen({ navigation }) {
 
 	useFocusEffect(
 		React.useCallback(() => {
-			if(Platform.OS === "ios")
-			return;
+			if (Platform.OS === "ios")
+				return;
 			StatusBar.setTranslucent(true)
 			StatusBar.setBackgroundColor("transparent")
 			StatusBar.setBarStyle('light-content');
@@ -145,9 +146,9 @@ export default function GameEndResultScreen({ navigation }) {
 	return (
 		<ScrollView style={styles.container}>
 			<View style={styles.trophy}>
-			<Image
-				source={require('../../../assets/images/point-trophy.png')}
-			/>
+				<Image
+					source={require('../../../assets/images/point-trophy.png')}
+				/>
 			</View>
 			<UserName userName={user.firstName} />
 			{withStaking &&
@@ -167,7 +168,7 @@ export default function GameEndResultScreen({ navigation }) {
 					disabled={loading}
 				/>
 			</View>
-			<Boostspopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
+			{/* <BoostPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} /> */}
 			<UniversalBottomSheet
 				refBottomSheet={refRBSheet}
 				height={Platform.OS === 'ios' ? 400 : 350}
@@ -211,10 +212,9 @@ const styles = EStyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#9C3DB8',
-		paddingTop: responsiveScreenWidth(25),
+		paddingTop: responsiveScreenWidth(15),
 		paddingHorizontal: normalize(18),
 		paddingBottom: normalize(20),
-		display: 'flex',
 	},
 	image: {
 		flex: 1,

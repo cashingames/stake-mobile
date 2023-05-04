@@ -135,10 +135,10 @@ const UserWallet = ({ balance }) => {
                 />
                 <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
             </View>
-            <View style={styles.walletContainer}>
+            {/* <View style={styles.walletContainer}>
                <Text style={styles.demoText}>Demo Cash:</Text>
                 <Text style={styles.demoAmount}>&#8358;{formatCurrency(balance)}</Text>
-            </View>
+            </View> */}
         </Animated.View>
     );
 }
