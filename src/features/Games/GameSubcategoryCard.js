@@ -49,23 +49,14 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         marginHorizontal: '.2rem',
         flexDirection: "row",
-        // borderWidth: Platform.OS === 'ios' ? normalize(0.5) : 1,
         borderBottomColor: '#0A1F45',
         borderBottomWidth: 4,
-        // borderColor: '#E0E0E0',
         paddingHorizontal:'.8rem',
         paddingVertical:'.5rem',
         elevation: 3.5,
         shadowColor: '#000',
         shadowOffset: { width: 0.5, height: 2 },
         shadowOpacity: 0.1,
-        // // width: responsiveScreenWidth(70),
-        // '@media (min-height: 781) and (max-height: 1200)': {
-        //     // height: responsiveHeight(8),
-        // },
-        // '@media (min-height: 300) and (max-height: 780)': {
-        //     // height: responsiveHeight(9),
-        // },
     },
     cardIconBigger: {
         width: normalize(20),

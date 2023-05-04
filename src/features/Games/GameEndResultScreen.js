@@ -194,21 +194,21 @@ const EndGameData = ({ homeNavigation, playAgain, pointsGained, minimumBoostScor
 				<ImageBackground style={styles.endImage} resizeMode="contain" source={require('../../../assets/images/endgame-image.png')}>
 					<Text style={styles.winText}>You win</Text>
 					<View style={styles.starIcons}>
-						{ pointsGained >= 8 &&
+						{pointsGained >= 8 &&
 							<>
 								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
 								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
 								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
 							</>
 						}
-						{ pointsGained >= 5 && pointsGained < 8 &&
+						{pointsGained >= 5 && pointsGained < 8 &&
 							<>
 								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
 								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
 								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/loss-star.png')} />
 							</>
 						}
-						{ pointsGained >= 3 && pointsGained < 5 &&
+						{pointsGained >= 3 && pointsGained < 5 &&
 							<>
 								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/win-star.png')} />
 								<Image style={styles.star} resizeMode="contain" source={require('../../../assets/images/loss-star.png')} />
@@ -283,9 +283,8 @@ const styles = EStyleSheet.create({
 	winText: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: Platform.OS === 'ios' ? '1.6rem' : '2rem',
-		// marginVertical: Platform.OS === 'ios' ? '1.6rem' : '2rem'
-		marginVertical: Platform.OS === 'ios' ? responsiveHeight(100) * 0.035 : responsiveHeight(100) * 0.03
+		fontSize: '1.5rem',
+		marginVertical: responsiveHeight(100) * 0.038
 	},
 	starIcons: {
 		flexDirection: 'row',
@@ -294,7 +293,7 @@ const styles = EStyleSheet.create({
 		marginTop: responsiveScreenHeight(1.3)
 	},
 	star: {
-		height: 64,
+		height: 60,
 		width: 60,
 		marginHorizontal: responsiveScreenWidth(2)
 	},
@@ -313,23 +312,20 @@ const styles = EStyleSheet.create({
 	winPoints: {
 		position: 'absolute',
 		top: responsiveHeight(29),
-		marginVertical: responsiveScreenHeight(.60),
-
+		marginVertical: responsiveHeight(.60),
 	},
 	pointEarned: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '2rem',
-		paddingLeft:Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 :responsiveWidth(100) * 0.035,
+		fontSize: '2.4rem',
+		paddingLeft: Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 : responsiveWidth(100) * 0.035,
 		paddingTop: responsiveHeight(100) * 0.01,
-		// backgroundColor:'blue',
 	},
 	zeroPoint: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '2.5rem',
-		// backgroundColor:'blue',
-		paddingLeft:Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 :responsiveWidth(100) * 0.09,
+		fontSize: '2.4rem',
+		paddingLeft: Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 : responsiveWidth(100) * 0.09,
 		paddingTop: responsiveHeight(100) * 0.003
 	},
 	btnContainer: {

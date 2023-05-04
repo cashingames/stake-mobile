@@ -61,78 +61,78 @@ const GameScreen = ({ navigation }) => {
     }
 
     const goToGameCategory = () => {
-        if(!activePlans){
+        if (!activePlans) {
             navigation.navigate('NoGame')
-        }else{
+        } else {
             navigation.navigate('SelectGameCategory')
         }
         playSound()
-      
+
     }
     return (
         <ScrollView>
-        <MixedContainerBackground>
-            <View style={styles.container}>
-                <View style={styles.top}>
-                <TopIcons />
-                <GameScreenHeader />
-                </View>
-                <ScrollView horizontal={true} style={styles.gameContainer}>
-                    {gamesType.map((game) => {
-                        const { id, gameName, backgroundImage, gameImage, unlocked } = game;
-                        return (
-                            <Animated.View entering={randomEnteringAnimation().duration(1000)} key={id}>                                 
-                            <ImageBackground resizeMode="contain" style={styles.gameCard} source={backgroundImage}>
-                                {!unlocked && 
-                                     <View style={styles.gameCover}>
-                                        <Image style={styles.lockImage} source={require('../../../assets/images/game-lock.png')} />
-                                     </View>
-                                }
-                                <View>
-                                    <Text style={styles.gameText}>{gameName}</Text>
-                                </View>
-                                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                    <Image resizeMode='contain' style={ styles.cardImage} source={gameImage} />
-                                </View>
-                                <View style={styles.cardBtnContainer}>
-                                    <Pressable style={styles.playBtn} onPress={goToGameCategory}>
-                                        <Text style={styles.playText}>Play</Text>
-                                    </Pressable>
-                                    <Pressable style={styles.instructionBtn} onPress={goToGameInstruction}>
-                                        <Text style={styles.instructionText}>How to play</Text>
-                                    </Pressable>
-                                </View>
-                            </ImageBackground>
-                            </Animated.View>
-                        )
-                    })}
-                </ScrollView>
+            <MixedContainerBackground>
+                <View style={styles.container}>
+                    <View style={styles.top}>
+                        <TopIcons />
+                        <GameScreenHeader />
+                    </View>
+                    <ScrollView horizontal={true} style={styles.gameContainer} contentContainerStyle={{paddingHorizontal:10}}>
+                        {gamesType.map((game) => {
+                            const { id, gameName, backgroundImage, gameImage, unlocked } = game;
+                            return (
+                                <Animated.View entering={randomEnteringAnimation().duration(1000)} key={id}>
+                                    <ImageBackground resizeMode="contain" style={styles.gameCard} source={backgroundImage}>
+                                        {!unlocked &&
+                                            <View style={styles.gameCover}>
+                                                <Image style={styles.lockImage} source={require('../../../assets/images/game-lock.png')} />
+                                            </View>
+                                        }
+                                        <View>
+                                            <Text style={styles.gameText}>{gameName}</Text>
+                                        </View>
+                                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                            <Image resizeMode='contain' style={styles.cardImage} source={gameImage} />
+                                        </View>
+                                        <View style={styles.cardBtnContainer}>
+                                            <Pressable style={styles.playBtn} onPress={goToGameCategory}>
+                                                <Text style={styles.playText}>Play</Text>
+                                            </Pressable>
+                                            <Pressable style={styles.instructionBtn} onPress={goToGameInstruction}>
+                                                <Text style={styles.instructionText}>How to play</Text>
+                                            </Pressable>
+                                        </View>
+                                    </ImageBackground>
+                                </Animated.View>
+                            )
+                        })}
+                    </ScrollView>
 
-                <View style={styles.setting}>
-                    <DashboardSettings />
-                </View>
-            </View >
-        </MixedContainerBackground>
+                    <View style={styles.setting}>
+                        <DashboardSettings />
+                    </View>
+                </View >
+            </MixedContainerBackground>
         </ScrollView>
     )
 }
 
 const styles = EStyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
         height: responsiveHeight(100),
         paddingVertical: responsiveHeight(2),
     },
     games: {
         flexDirection: 'row'
     },
-    top:{
+    top: {
         // height:responsiveHeight(20)
     },
-    gameContainer:{
+    gameContainer: {
         height: responsiveHeight(70),
         width: responsiveWidth(100),
-        marginTop:responsiveHeight(8),
+        marginTop: responsiveHeight(8),
         paddingHorizontal: responsiveHeight(2),
     },
     //game card section to be removed
@@ -141,19 +141,19 @@ const styles = EStyleSheet.create({
         width: responsiveWidth(50),
         marginHorizontal: 10,
         paddingVertical: responsiveHeight(2),
-        paddingHorizontal: responsiveHeight(1),
-        alignItems:'center',
+        paddingHorizontal: responsiveWidth(1),
+        alignItems: 'center',
     },
     gameText: {
         fontSize: '1.8rem',
         fontFamily: 'blues-smile',
         color: '#fff',
         textAlign: 'center',
-        width:'8rem',
+        width: '8rem',
         textAlign: 'center',
     },
     gameCover: {
-        flex:1,
+        flex: 1,
         position: 'absolute',
         justifyContent: 'center',
         alignItems: 'center',
@@ -161,24 +161,24 @@ const styles = EStyleSheet.create({
         left: 0,
         top: 0,
         bottom: 0,
-        backgroundColor:'rgba(0, 0, 0, 0.8)',
-        borderRadius:15,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        borderRadius: 15,
         zIndex: 10
     },
     cardImage: {
-        height:Platform.OS === "ios" ? responsiveHeight(27) : responsiveHeight(29),
+        height: Platform.OS === "ios" ? responsiveHeight(27) : responsiveHeight(29),
         width: responsiveWidth(30),
         marginTop: 10
     },
 
     cardBtnContainer: {
-        marginTop: responsiveHeight(-4),
+        marginTop: responsiveHeight(-6),
         paddingHorizontal: responsiveScreenWidth(2),
     },
-    
+
     playBtn: {
         backgroundColor: '#15397D',
-        width: responsiveWidth(37),
+        width: Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(34) : responsiveWidth(40),
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 20,
@@ -186,8 +186,6 @@ const styles = EStyleSheet.create({
         borderBottomWidth: 4,
         paddingVertical: '0.4rem',
         marginBottom: 5,
-        // paddingHorizontal: '3rem',
-
     },
     playText: {
         color: '#fff',
@@ -214,9 +212,9 @@ const styles = EStyleSheet.create({
     },
     setting: {
         position: 'absolute',
-        left:0,
-        right:0,
-        top:responsiveHeight(90),
+        left: 0,
+        right: 0,
+        top: responsiveHeight(90),
     },
 
 })
