@@ -14,7 +14,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { loginUser } from './AuthSlice';
 import { triggerNotifierForReferral } from '../../shared/Notification';
 // import Login from '../../shared/FacebookLogin';
-import { AppEventsLogger } from "react-native-fbsdk-next";
 import logToAnalytics from '../../utils/analytics';
 
 export default function LoginScreen({ navigation }) {
@@ -36,7 +35,6 @@ export default function LoginScreen({ navigation }) {
 
     const onLogin = () => {
         crashlytics().log('login clicked');
-        AppEventsLogger.logEvent('login clicked')
         logToAnalytics('login_clicked')
         setLoading(true);
         setCanLogin(false);
