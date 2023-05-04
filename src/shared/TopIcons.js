@@ -1,7 +1,7 @@
 import { View, Text, Image, ImageBackground } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { responsiveScreenWidth } from '../utils/normalize'
+import normalize, { responsiveScreenWidth } from '../utils/normalize'
 import { useSelector } from 'react-redux'
 import { formatNumber, isTrue } from '../utils/stringUtl'
 import { Feather } from '@expo/vector-icons';
@@ -114,17 +114,18 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
     },
     iconText: {
-        height: 18,
+        height: 20,
         borderTopLeftRadius: 4,
         borderBottomLeftRadius: 4,
         paddingHorizontal: '0.6rem',
+        // paddingVertical:normalize(4),
         justifyContent: 'center',
         backgroundColor: '#102058',
         marginTop: '0.3rem',
     },
     text: {
         color: '#FFD600',
-        fontSize: '.9rem',
+        fontSize: '.8rem',
         fontFamily: 'blues-smile',
         alignItems: 'center',
 
@@ -134,7 +135,7 @@ const styles = EStyleSheet.create({
         width: 43
     },
     plusCase: {
-        height: 18,
+        height: 20,
         width: 18,
         backgroundColor: '#E0004B',
         alignItems: 'center',

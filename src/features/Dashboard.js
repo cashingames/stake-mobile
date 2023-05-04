@@ -4,10 +4,7 @@ import Constants from 'expo-constants';
 import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../utils/normalize'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { Pressable } from 'react-native'
-import { useState } from 'react'
 import DashboardSettings from '../shared/DashboardSettings'
-import { set } from 'lodash'
-import MainContainerBackground from '../shared/ContainerBackground/MainContainerBackground'
 import GameArkLogo from '../shared/GameArkLogo'
 import { useEffect } from 'react'
 import { fetchFeatureFlags, getCommonData, initialLoadingComplete, loadSoundPrefernce, setSound } from './CommonSlice'
@@ -16,25 +13,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import Loader from '../shared/Loader'
 import useSound from '../utils/useSound'
-import { ScrollView } from 'react-native-gesture-handler';
 import { setGameMode } from './Games/GameSlice';
 import { getAchievements } from './Profile/AchievementSlice';
 import { Image } from 'react-native';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../utils/utils';
-import { Alert } from 'react-native';
 import { setItems } from '../features/InAppPurchaseSlice';
 import * as InAppPurchases from 'expo-in-app-purchases';
 import MixedContainerBackground from '../shared/ContainerBackground/MixedContainerBackground';
-
-const PRODUCTS = [
-    {"priceAmountMicros":160000000,"title":"Time Freeze (GameArk)","productId":"boost_plan_time_freeze","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦100.00","subscriptionPeriod":"P0D"},
-    {"priceAmountMicros":160000000,"title":"Skip (GameArk)","productId":"boost_plan_skip","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦150.00","subscriptionPeriod":"P0D"},
-    {"priceAmountMicros":160000000,"title":"Ultimate (GameArk)","productId":"game_plan_ultimate","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦1000.00","subscriptionPeriod":"P0D"},
-    {"priceAmountMicros":160000000,"title":"DiceyMultiples (GameArk)","productId":"game_plan_dicey_multiples","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦800.00","subscriptionPeriod":"P0D"},
-    {"priceAmountMicros":160000000,"title":"Double O (GameArk)","productId":"game_plan_doubleo","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦500.00","subscriptionPeriod":"P0D"},
-    {"priceAmountMicros":160000000,"title":"Least Plan (GameArk)","productId":"game_plan_least","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦100.00","subscriptionPeriod":"P0D"},
-    {"priceAmountMicros":160000000,"title":"Mini Plan (GameArk)","productId":"game_plan_mini","type":0,"priceCurrencyCode":"NGN","description":"Freezes game time For 15 Seconds","price":"₦150.00","subscriptionPeriod":"P0D"}
-]
+import { PRODUCTS, items } from '../utils/StoreProductsArray';
 
 const Dashboard = ({ navigation }) => {
     const loading = useSelector(state => state.common.initialLoading);
@@ -53,11 +39,6 @@ const Dashboard = ({ navigation }) => {
     }, [isFocused, isSoundLoaded]);
 
     const getStoreItems = async () => {
-
-        const items = Platform.select({
-            android: ['boost_plan_time_freeze', 'boost_plan_skip', 'game_plan_ultimate', 'game_plan_dicey_multiples', 'game_plan_doubleo', 'game_plan_least', 'game_plan_mini', 'boost_plan_bomb'],
-            ios: ['boost_plan_time_freeze', 'boost_plan_skip', 'game_plan_ultimate', 'game_plan_dicey_multiples', 'game_plan_doubleo', 'game_plan_least', 'game_plan_mini', 'boost_plan_bomb'],
-        });
 
         const { responseCode, results } = await InAppPurchases.getProductsAsync(items);
         if (responseCode === InAppPurchases.IAPResponseCode.OK) {
@@ -110,9 +91,9 @@ const Dashboard = ({ navigation }) => {
     return (
         <>
             <RenderUpdateChecker />
-                <MixedContainerBackground>
-                    <View style={styles.container}>
-                        <View style={{height:responsiveHeight(25),  justifyContent:'center'}}>
+            <MixedContainerBackground>
+                <View style={styles.container}>
+                    <View style={{ height: responsiveHeight(25), justifyContent: 'center' }}>
                         <Pressable style={styles.icons} onPress={handleToggleSwitch}>
                             {toogle ? <Image style={styles.imageIcons} source={require('../../assets/images/sound-1.png')} /> :
                                 <Image style={styles.imageIcons} source={require('../../assets/images/sound-off.png')} />
@@ -121,18 +102,18 @@ const Dashboard = ({ navigation }) => {
                         <View style={styles.logo}>
                             <GameArkLogo />
                         </View>
-                        </View>
-                        <View style={styles.welcome}>
-                            <Text style={styles.welcomeText}>Welcome to the ark</Text>
-                            <Pressable onPress={gameModeSelected} style={styles.welcomeBtn}>
-                                <Text style={styles.welcomeBtnText}>Play</Text>
-                            </Pressable>
-                        </View>
-                        <View style={styles.setting}>
-                            <DashboardSettings />
-                        </View>
-                    </View >
-                </MixedContainerBackground>
+                    </View>
+                    <View style={styles.welcome}>
+                        <Text style={styles.welcomeText}>Welcome to the ark</Text>
+                        <Pressable onPress={gameModeSelected} style={styles.welcomeBtn}>
+                            <Text style={styles.welcomeBtnText}>Play</Text>
+                        </Pressable>
+                    </View>
+                    <View style={styles.setting}>
+                        <DashboardSettings />
+                    </View>
+                </View >
+            </MixedContainerBackground>
         </>
     )
 }
@@ -164,7 +145,7 @@ const styles = EStyleSheet.create({
 
     welcome: {
         alignItems: 'center',
-        justifyContent:'flex-end',
+        justifyContent: 'flex-end',
         height: responsiveHeight(40),
     },
 
@@ -175,7 +156,7 @@ const styles = EStyleSheet.create({
     },
 
     welcomeBtn: {
-        marginTop:'.3rem',
+        marginTop: '.3rem',
         backgroundColor: '#15397D',
         height: normalize(38),
         width: responsiveScreenWidth(50),
@@ -193,10 +174,10 @@ const styles = EStyleSheet.create({
     },
     setting: {
         position: 'absolute',
-        left:0,
-        right:0,
-        top:responsiveHeight(90),
-        justifyContent:'flex-end',
+        left: 0,
+        right: 0,
+        top: responsiveHeight(90),
+        justifyContent: 'flex-end',
         // marginTop:Platform.OS === 'ios' ? responsiveScreenHeight(10): responsiveScreenHeight(5),
     },
     imageIcons: {

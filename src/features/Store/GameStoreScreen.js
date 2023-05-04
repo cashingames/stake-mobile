@@ -34,6 +34,7 @@ export default function ({ navigation }) {
     const user = useSelector(state => state.auth.user)
     const storeProducts = useSelector(state => state.inAppPurchase.items);
 
+    
     const successfulPurchase = useSound(require('../../../assets/sounds/updated.mp3'))
     const failedPurchase = useSound(require('../../../assets/sounds/failed.mp3'))
 
@@ -416,11 +417,12 @@ const styles = EStyleSheet.create({
     storeItemContainer: {
         alignItems: 'center',
         marginBottom: normalize(20),
-        paddingVertical: responsiveScreenHeight(2),
+        paddingVertical: responsiveHeight(2),
+        paddingHorizontal: responsiveWidth(1),
         justifyContent: 'space-between',
         width: responsiveWidth(45),
-        height: Platform.OS === "ios" ? responsiveHeight(22.5) : responsiveHeight(23.5),
-        marginHorizontal:'0.5rem'
+        height: Platform.OS === "ios" ? responsiveHeight(22.5) : responsiveHeight(25),
+        marginHorizontal:'0.5rem',
     },
     buyItemCard: {
         alignItems: 'center',
@@ -454,12 +456,12 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '0.5rem',
         color: '#fff',
-        width: responsiveScreenWidth(38),
+        width: '10.5rem',
         textAlign: 'center'
     },
     buyWithCash: {
         fontFamily: 'blues-smile',
-        fontSize: '1.2rem',
+        fontSize: '1rem',
         color: '#fff',
     },
     buyBoost: {

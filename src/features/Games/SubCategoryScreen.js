@@ -33,7 +33,7 @@ const SubCategoryScreen = ({ navigation, route }) => {
                 <Loader />
             ) : (
                 <QuizContainerBackground>
-                    <ScrollView style={styles.container}>
+                    <ScrollView style={styles.container} contentContainerStyle={{paddingVertical:25}}>
                         <View>
                             <TopIcons />
                             <View style={styles.logo}>
