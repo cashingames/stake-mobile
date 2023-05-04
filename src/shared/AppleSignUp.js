@@ -87,7 +87,7 @@ const AppleSignUp = () => {
             dispatch(loginWithSocialLink({
                 firstName: credential.fullName.givenName,
                 lastName: credential.fullName.familyName,
-                email: credential.email,
+                email: credential?.email || "mmm@sss.aaa",
                 appleUserId: credential.user
             })).then(unwrapResult)
 
