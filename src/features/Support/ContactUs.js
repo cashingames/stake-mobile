@@ -1,6 +1,7 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
-import { Alert, Platform, ScrollView, Text, TextInput, View } from "react-native";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import { Alert, Linking, Platform, ScrollView, Text, TextInput, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import AppButton from "../../shared/AppButton";
@@ -15,7 +16,7 @@ import logToAnalytics from "../../utils/analytics";
 const ContactUs = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector(state => state.auth.user);
-   
+
 
 
 
@@ -126,6 +127,11 @@ const ContactForm = ({ user }) => {
                 onPress={sendFeedback}
                 disabled={!canSave || saving}
             />
+            <View style={styles.whatsappChat}>
+                <Text style={styles.title}>Live chat with a support agent on Whatsapp</Text>
+                <FontAwesome5 name="whatsapp" size={48} color="#25D366" style={styles.icon}
+                    onPress={() => Linking.openURL('https://wa.me/2348025116306')} />
+            </View>
         </View>
     )
 }
@@ -147,7 +153,7 @@ const styles = EStyleSheet.create({
     },
     messageBox: {
         paddingBottom: Platform.OS === 'ios' ? '5rem' : '3rem',
-        paddingTop:'.8rem',
+        paddingTop: '.8rem',
         paddingHorizontal: '.7rem',
         borderColor: '#CDD4DF',
         fontFamily: 'graphik-regular',
@@ -155,6 +161,14 @@ const styles = EStyleSheet.create({
         fontSize: '0.75rem',
         borderWidth: 1,
         borderRadius: 10,
-        textAlignVertical:'top'
+        textAlignVertical: 'top'
     },
+    whatsappChat: {
+        display:"flex",
+        flexDirection:'column',
+        alignItems:'center'
+    },
+    icon: {
+        marginTop:'.5rem'
+    }
 })

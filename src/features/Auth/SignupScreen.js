@@ -19,11 +19,13 @@ const SignupScreen = () => {
     const navigation = useNavigation();
 
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [canSend, setCanSend] = useState(true);
     const [passErr, setPassError] = useState(false);
     const [emailErr, setEmailError] = useState(false);
+    const [usernameErr, setUsernameError] = useState(false);
     const [phoneErr, setPhoneError] = useState(false);
     const [allError, setAllError] = useState('')
     const [checked, setChecked] = useState(false);
@@ -43,6 +45,11 @@ const SignupScreen = () => {
         setEmailError(!rule.test(text))
         setEmail(text)
     }
+    const onChangeUsername = (text) => {
+        const rule = /^[a-zA-Z][a-zA-Z0-9]+$/;
+        setUsernameError(!rule.test(text))
+        setUsername(text)
+    }
 
     const onChangePassword = (text) => {
         text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
@@ -58,6 +65,7 @@ const SignupScreen = () => {
         setLoading(true);
         registerUser({
             email, password,
+            username,
             password_confirmation: password,
             phone_number: phone,
             country_code: countryCode,
@@ -86,7 +94,7 @@ const SignupScreen = () => {
     }
 
     useEffect(() => {
-        const invalid = passErr || emailErr || phoneErr || !checked;
+        const invalid = passErr || emailErr || phoneErr || usernameErr || !checked;
         setCanSend(!invalid);
     }, [emailErr, phoneErr, passErr, checked])
 
@@ -117,6 +125,14 @@ const SignupScreen = () => {
                     type="email"
                     error={emailErr && '*invalid email address'}
                     onChangeText={text => onChangeEmail(text)}
+                />
+                <Input
+                    label='Username'
+                    placeholder="input a username"
+                    value={username}
+                    type="text"
+                    error={usernameErr && '*username is invalid. It must start with an alphabet and have more than 2 characters'}
+                    onChangeText={text => onChangeUsername(text)}
                 />
                 <>
                     <Text style={styles.inputLabel} >Phone number</Text>
