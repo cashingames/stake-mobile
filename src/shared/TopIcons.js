@@ -1,11 +1,9 @@
-import { View, Text, Image, ImageBackground } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import normalize, { responsiveScreenWidth } from '../utils/normalize'
+import  { responsiveScreenWidth } from '../utils/normalize'
 import { useSelector } from 'react-redux'
-import { formatNumber, isTrue } from '../utils/stringUtl'
 import { Feather } from '@expo/vector-icons';
-import Constants from 'expo-constants';
 import { Animated } from 'react-native'
 import { useRef } from 'react'
 import { Pressable } from 'react-native'
@@ -39,6 +37,14 @@ const TopIcons = () => {
         });
     }, [scaleValue]);
 
+    const storeLink = (coinLives) => {
+        if(coinLives == 0){
+            navigation.navigate('GameStore')
+        }else{
+            return
+        }
+    }
+
     useEffect(() => {
         const intervalId = setInterval(() => {
             zoom();
@@ -52,7 +58,7 @@ const TopIcons = () => {
     }, []);
     return (
         <View style={styles.container}>
-            <Pressable style={styles.iconContainer} onPress={() => navigation.navigate('GameStore')} scree>
+            <Pressable style={styles.iconContainer} onPress={() => storeLink(sumOfPlans)}>
                 <Image style={styles.heartIcon} source={require('./../../assets/images/heart-icon.png')} />
                 <View style={styles.iconBox}>
                     <View style={styles.iconText}>
@@ -61,7 +67,7 @@ const TopIcons = () => {
                     <IconDetails />
                 </View>
             </Pressable>
-            <Pressable style={styles.iconContainer} onPress={() => navigation.navigate('GameStore')}>
+            <Pressable style={styles.iconContainer} onPress={() => storeLink(user.coinsBalance)}>
                 <Image style={styles.coinIcon} source={require('./../../assets/images/coin-icon.png')} />
                 <View style={styles.iconBox}>
                     <View style={styles.iconText}>

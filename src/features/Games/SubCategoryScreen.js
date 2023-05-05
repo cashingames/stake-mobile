@@ -33,7 +33,7 @@ const SubCategoryScreen = ({ navigation, route }) => {
                 <Loader />
             ) : (
                 <QuizContainerBackground>
-                    <ScrollView style={styles.container} contentContainerStyle={{paddingVertical:25}}>
+                    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 25 }}>
                         <View>
                             <TopIcons />
                             <View style={styles.logo}>
@@ -69,40 +69,45 @@ const SubCategories = ({ category, loading, setLoading }) => {
     const gameModeId = useSelector(state => state.game.gameMode.id);
     const [categoryId, setCategoryId] = useState('')
     const user = useSelector(state => state.auth.user);
+    const activePlans = useSelector(state => state.auth.user.hasActivePlan);
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
 
     const onStartGame = () => {
-        setLoading(true);
-        playSound()
-        dispatch(setIsPlayingTrivia(false))
-        dispatch(startGame({
-            category: categoryId,
-            type: gameTypeId,
-            mode: gameModeId
-        }))
-            .then(unwrapResult)
-            .then(async result => {
-                crashlytics().log('User started exhibition game');
-                await analytics().logEvent("exhibition_without_staking_game_started", {
-                    'id': user.username,
-                    'phone_number': user.phoneNumber,
-                    'email': user.email
+        if (!activePlans) {
+            navigation.navigate('NoGame')
+        } else {
+            setLoading(true);
+            playSound()
+            dispatch(setIsPlayingTrivia(false))
+            dispatch(startGame({
+                category: categoryId,
+                type: gameTypeId,
+                mode: gameModeId
+            }))
+                .then(unwrapResult)
+                .then(async result => {
+                    crashlytics().log('User started exhibition game');
+                    await analytics().logEvent("exhibition_without_staking_game_started", {
+                        'id': user.username,
+                        'phone_number': user.phoneNumber,
+                        'email': user.email
+                    })
+                    dispatch(logActionToServer({
+                        message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
+                        data: result.data.questions
+                    }))
+                    setLoading(false);
+                    navigation.navigate("GameInProgress")
+                    setCategoryId('')
                 })
-                dispatch(logActionToServer({
-                    message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
-                    data: result.data.questions
-                }))
-                setLoading(false);
-                navigation.navigate("GameInProgress")
-                setCategoryId('')
-            })
-            .catch((error) => {
-                Alert.alert('Category not available for now, try again later')
-                crashlytics().recordError(error);
-                crashlytics().log('failed to start exhibition game');
-                setLoading(false);
-            });
+                .catch((error) => {
+                    Alert.alert('Category not available for now, try again later')
+                    crashlytics().recordError(error);
+                    crashlytics().log('failed to start exhibition game');
+                    setLoading(false);
+                });
+        }
     }
 
     useEffect(() => {

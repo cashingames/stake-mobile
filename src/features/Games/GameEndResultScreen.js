@@ -290,12 +290,12 @@ const styles = EStyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		width: '100%',
-		marginTop: responsiveScreenHeight(1.3)
+		marginTop: responsiveHeight(1.3)
 	},
 	star: {
 		height: 60,
 		width: 60,
-		marginHorizontal: responsiveScreenWidth(2)
+		marginHorizontal: responsiveWidth(2)
 	},
 	pointsCase: {
 		alignItems: 'center',
@@ -317,16 +317,16 @@ const styles = EStyleSheet.create({
 	pointEarned: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '2.4rem',
-		paddingLeft: Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 : responsiveWidth(100) * 0.035,
+		fontSize: '2.2rem',
+		paddingLeft: Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 : responsiveWidth(100) * 0.03,
 		paddingTop: responsiveHeight(100) * 0.01,
 	},
 	zeroPoint: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '2.4rem',
+		fontSize: '2.2rem',
 		paddingLeft: Platform.OS === "android" && responsiveHeight(100) > 850 ? responsiveWidth(100) * 0.02 : responsiveWidth(100) * 0.09,
-		paddingTop: responsiveHeight(100) * 0.003
+		paddingTop: responsiveHeight(100) * 0.01
 	},
 	btnContainer: {
 		flexDirection: 'row',
@@ -335,12 +335,12 @@ const styles = EStyleSheet.create({
 	btn: {
 		height: 50,
 		width: 50,
-		marginHorizontal: responsiveScreenWidth(2)
+		marginHorizontal: responsiveWidth(2)
 	},
 	loserProfile: {
 		position: 'absolute',
-		right: Platform.OS === 'ios' ? responsiveScreenWidth(-17) : responsiveScreenWidth(-13),
-		bottom: responsiveScreenHeight(8)
+		right: Platform.OS === 'ios' ? responsiveWidth(-17) : responsiveWidth(-13),
+		bottom: responsiveHeight(8)
 	},
 	loserImage: {
 		width: normalize(139),

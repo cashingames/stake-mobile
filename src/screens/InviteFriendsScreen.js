@@ -65,7 +65,6 @@ const InviteFriendsScreen = ({ showInviteFriends, setShowInviteFriends }) => {
                     transparent={true}
                     visible={showInviteFriends}
                     onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
                         setShowInviteFriends(!showInviteFriends);
                     }}
                 >
