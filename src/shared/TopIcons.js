@@ -58,7 +58,7 @@ const TopIcons = () => {
     }, []);
     return (
         <View style={styles.container}>
-            <Pressable style={styles.iconContainer} onPress={() => storeLink(sumOfPlans)} scree>
+            <Pressable style={styles.iconContainer} onPress={() => storeLink(sumOfPlans)}>
                 <Image style={styles.heartIcon} source={require('./../../assets/images/heart-icon.png')} />
                 <View style={styles.iconBox}>
                     <View style={styles.iconText}>
