@@ -38,7 +38,7 @@ const GameBoostPurchaseSuccessfulScreen = () => {
             <View style={styles.congratsButtons}>
                 <AppButton text={"Play a Game"} onPress={() => {
                     playSound()
-                    navigation.navigate('Home')
+                    navigation.navigate('Dashboard')
                 }}
                     style={styles.actionButton} />
                 <AppButton text={"Store"} onPress={() => {

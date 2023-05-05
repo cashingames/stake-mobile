@@ -30,7 +30,7 @@ const GameStoreItemsPurchaseFailed = () => {
                     style={styles.actionButton} />
                 <AppButton text={"Home"} onPress={() => {
                     playSound()
-                    navigation.navigate('Home')
+                    navigation.navigate('Dashboard')
                 }}
                     style={styles.actionButton} />
             </View>
