@@ -15,39 +15,7 @@ import { randomEnteringAnimation } from '../../utils/utils'
 import useSound from '../../utils/useSound';
 import Animated from 'react-native-reanimated'
 import GameScreenHeader from '../../shared/GameScreenHeader'
-import { responsiveFontSize } from '../../utils/normalize'
-
-
-const gamesType = [
-    {
-        id: 1,
-        gameName: 'Trivia Hub',
-        backgroundImage: require('../../../assets/images/quiz-background.png'),
-        gameImage: require('../../../assets/images/word-trivia2.png'),
-        unlocked: true
-    },
-    {
-        id: 2,
-        gameName: 'picture trivia',
-        backgroundImage: require('../../../assets/images/picture-trivia.png'),
-        gameImage: require('../../../assets/images/picture-trivia-icon.png'),
-        unlocked: false
-    },
-    {
-        id: 3,
-        gameName: 'word swap',
-        backgroundImage: require('../../../assets/images/word-snap.png'),
-        gameImage: require('../../../assets/images/wordswap-icon.png'),
-        unlocked: false
-    },
-    {
-        id: 4,
-        gameName: 'picture jumbo',
-        backgroundImage: require('../../../assets/images/picture-jumbo.png'),
-        gameImage: require('../../../assets/images/picturejumbo-icon.png'),
-        unlocked: false
-    },
-]
+import { gamesType } from '../../utils/GameTypes'
 
 const GameScreen = ({ navigation }) => {
     const dispatch = useDispatch()
@@ -77,7 +45,8 @@ const GameScreen = ({ navigation }) => {
                         <TopIcons />
                         <GameScreenHeader />
                     </View>
-                    <ScrollView horizontal={true} style={styles.gameContainer} contentContainerStyle={{paddingHorizontal:10}}>
+                    <ScrollView horizontal={true} style={styles.gameContainer} contentContainerStyle={styles.scrollview}
+                    showsHorizontalScrollIndicator={false}>
                         {gamesType.map((game) => {
                             const { id, gameName, backgroundImage, gameImage, unlocked } = game;
                             return (
@@ -126,6 +95,9 @@ const styles = EStyleSheet.create({
     games: {
         flexDirection: 'row'
     },
+    scrollview:{
+        paddingRight:15
+    },
     top: {
         // height:responsiveHeight(20)
     },
@@ -133,7 +105,7 @@ const styles = EStyleSheet.create({
         height: responsiveHeight(70),
         width: responsiveWidth(100),
         marginTop: responsiveHeight(8),
-        paddingHorizontal: responsiveHeight(2),
+        paddingHorizontal: responsiveWidth(2),
     },
     //game card section to be removed
     gameCard: {
