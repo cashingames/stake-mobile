@@ -59,7 +59,7 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
                                 />
                             </View>
                             <Text style={styles.congratulatoryText}>
-                            Congratulations, you have unlocked an  achievement badge and earned  {(achievement.rewardType === "POINTS") ? "" : "N"}{achievement.reward}{(achievement.rewardType === "POINTS") ? "pts" : ""}. Unlock more badges and win other exciting rewards
+                            Congratulations, you have unlocked an  achievement badge and earned {(achievement.rewardType === "POINTS") ? "" : ""}{achievement.reward}{(achievement.rewardType === "POINTS") ? "coins" : "coins"}. Unlock more badges and win other exciting rewards
                                 
                             </Text>
                         </View>

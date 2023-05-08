@@ -61,7 +61,8 @@ export default function AchievementsMilestoneScreen({ navigation }) {
                                     <Badges key={key} milestoneIcon={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${_item?.medal || _item?.logoUrl}` }}
                                         title={`${_item?.title || ""}`}
                                         description={`${_item?.description || ""}`}
-                                        reward={`${_item.reward} ${_item.reward_type === 'POINTS' ? 'pts' : 'NGN'}`}
+                                        // reward={`${_item.reward} ${_item.reward_type === 'POINTS' ? 'pts' : 'NGN'}`}
+                                        reward={`${_item.reward} ${_item.reward_type === 'POINTS' ? 'coins' : 'coins'}`}
                                         progress={(() => {
                                             let total = (_item.milestone * _item.milestone_count);
                                             let count = _item.count;

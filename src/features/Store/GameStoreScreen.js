@@ -25,7 +25,6 @@ import AppHeader from "../../shared/AppHeader";
 import TopIcons from "../../shared/TopIcons";
 import SpecialOffer from "./SpecialOffer";
 
-
 export default function ({ navigation }) {
     const dispatch = useDispatch();
     useApplyHeaderWorkaround(navigation.setOptions);
