@@ -126,13 +126,19 @@ const UserDetails = () => {
 const UserWallet = ({ balance }) => {
     return (
         <Animated.View entering={BounceInRight.duration(2000)} style={styles.wallet}>
+            <View style={styles.walletContainer}>
 
-            <LottieAnimations
-                animationView={require('../../../assets/wallet.json')}
-                width={normalize(55)}
-                height={normalize(60)}
-            />
-            <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
+                <LottieAnimations
+                    animationView={require('../../../assets/wallet.json')}
+                    width={normalize(55)}
+                    height={normalize(60)}
+                />
+                <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
+            </View>
+            {/* <View style={styles.walletContainer}>
+               <Text style={styles.demoText}>Demo Cash:</Text>
+                <Text style={styles.demoAmount}>&#8358;{formatCurrency(balance)}</Text>
+            </View> */}
         </Animated.View>
     );
 }
@@ -187,7 +193,7 @@ const RenderEvents = () => {
     };
 
     return (
-        <Pressable style={styles.gameButton}  onPress={onSelectGameMode}>
+        <Pressable style={styles.gameButton} onPress={onSelectGameMode}>
             <Image
                 source={require('../../../assets/images/black-gamepad.png')}
                 style={styles.gamepad}
@@ -220,15 +226,34 @@ const styles = EStyleSheet.create({
         paddingBottom: normalize(15),
         paddingHorizontal: normalize(20),
     },
+    walletContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     wallet: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent:'space-between'
     },
     walletText: {
         fontSize: '1.2rem',
         color: '#FFFF',
         fontFamily: 'graphik-medium',
         marginLeft: normalize(2),
+        marginTop: normalize(5)
+    },
+    demoText: {
+        fontSize: '.8rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+        marginRight: normalize(8),
+        marginTop: normalize(5)
+    },
+    demoAmount: {
+        fontSize: '.8rem',
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+        marginRight: normalize(8),
         marginTop: normalize(5)
     },
 

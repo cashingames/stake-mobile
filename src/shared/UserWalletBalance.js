@@ -10,6 +10,9 @@ const UserWalletBalance = ({ balance, style,textstyle }) => {
             <Text style={[styles.availableAmount, textstyle]}>
                 Wallet Balance: &#8358;{formatCurrency(balance)}
             </Text>
+            {/* <Text style={[styles.availableAmount, textstyle]}>
+                Demo Cash: &#8358;{formatCurrency(balance)}
+            </Text> */}
         </View>
     );
 }
