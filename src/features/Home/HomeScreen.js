@@ -1,29 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect } from '@react-navigation/native';
-import { Text, View, ScrollView, StatusBar, Platform, RefreshControl, Pressable, Image } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { Text, View, ScrollView, StatusBar, Platform, RefreshControl, Image, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
-import Animated, { BounceInRight } from 'react-native-reanimated';
-import { useNavigation } from '@react-navigation/native';
 import normalize, {
     responsiveHeight, responsiveScreenWidth
 } from '../../utils/normalize';
-import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
+import { isTrue } from '../../utils/stringUtl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../CommonSlice';
-import UserItems from '../../shared/UserItems';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
-import crashlytics from '@react-native-firebase/crashlytics';
-import LottieAnimations from '../../shared/LottieAnimations';
-import SelectGameMode from '../Games/SelectGameMode';
-import SwiperFlatList from 'react-native-swiper-flatlist';
-import WinnersScroller from '../Leaderboard/WinnersScroller';
-import { setGameMode, setGameType } from '../Games/GameSlice';
-import logToAnalytics from '../../utils/analytics';
 import { Ionicons } from '@expo/vector-icons';
 import UserWalletAccounts from '../../shared/UserWalletAccounts';
+import GamesCards from '../Games/GamesCards';
+import LeaderboardCards from '../Leaderboard/LeaderboardCards';
+import logToAnalytics from '../../utils/analytics';
 
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
@@ -92,21 +85,26 @@ const HomeScreen = () => {
             >
                 <UserProfile user={user} />
                 <UserWalletAccounts user={user} />
-                {/* <UserDetails /> */}
-                {/* <View style={styles.gamesContainer}>
-                    <SelectGameMode />
-                    <WinnersScroller />
-                    <SwiperFlatList content
-                        ContainerStyle={styles.leaderboardContainer}></SwiperFlatList>
-                </View> */}
+                <GamesCards />
+                <LeaderboardCards />
             </ScrollView>
-            {/* <RenderEvents /> */}
         </>
     );
 }
 export default HomeScreen;
 
 const UserProfile = ({ user }) => {
+    const navigation = useNavigation();
+
+    const viewNotifications = async () => {
+        logToAnalytics("notification_button_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('Notifications')
+    }
+
     return (
         <View style={styles.userProfileContainer}>
             <View style={styles.userProfileLeft}>
@@ -118,18 +116,23 @@ const UserProfile = ({ user }) => {
                 <View style={styles.nameMainContainer}>
                     <View style={styles.nameContainer}>
                         <Text style={styles.welcomeText}>Hi, </Text>
-                        <Text style={styles.usernameText}>{user.username}</Text>
+                        <Text style={styles.usernameText} onPress={() => navigation.navigate('UserProfile')}>{user.username}</Text>
                         <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
                     </View>
                     <Text style={styles.greetingText}>Good Morning 🙌🏻</Text>
                 </View>
             </View>
-            <View style={styles.notificationContainer}>
-                <Ionicons name='mail-unread' size={40} color='#072169' />
-                <View style={styles.numberContainer}>
-                    <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
-                </View>
-            </View>
+            <Pressable style={styles.notificationContainer} onPress={viewNotifications}>
+                {user.unreadNotificationsCount !== 0 ?
+                    <Ionicons name='mail-unread' size={40} color='#072169' /> :
+                    <Ionicons name='mail' size={40} color='#072169' />
+                }
+                {user.unreadNotificationsCount !== 0 &&
+                    <View style={styles.numberContainer}>
+                        <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
+                    </View>
+                }
+            </Pressable>
         </View>
     )
 }
@@ -148,50 +151,6 @@ function RenderUpdateChecker() {
     return null;
 }
 
-const RenderEvents = () => {
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
-    const features = useSelector(state => state.common.featureFlags);
-    const isChallengeFeatureEnabled = features['enable_challenge'] !== undefined && features['enable_challenge'].enabled == true;
-    const gameMode = useSelector(state => state.common.gameModes[0]);
-    const gameType = useSelector(state => state.common.gameTypes[0]);
-    const user = useSelector(state => state.auth.user);
-
-    const selectTriviaMode = () => {
-        dispatch(setGameMode(gameMode));
-        dispatch(setGameType(gameType));
-        logToAnalytics("game_mode_selected_with_gamepad", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email,
-            'gamemode': gameMode.displayName,
-        })
-        navigation.navigate('SelectGameCategory')
-
-    }
-
-    const onSelectGameMode = async () => {
-        if (isChallengeFeatureEnabled) {
-            logToAnalytics("game_entry_with_gamepad", {
-                'id': user.username,
-                'phone_number': user.phoneNumber,
-                'email': user.email,
-            })
-            navigation.navigate('GamesList')
-            return;
-        }
-        selectTriviaMode();
-    };
-
-    return (
-        <Pressable style={styles.gameButton} onPress={onSelectGameMode}>
-            <Image
-                source={require('../../../assets/images/black-gamepad.png')}
-                style={styles.gamepad}
-            />
-        </Pressable>
-    )
-}
 
 const styles = EStyleSheet.create({
     container: {
@@ -199,6 +158,7 @@ const styles = EStyleSheet.create({
         paddingTop: responsiveScreenWidth(20),
         paddingHorizontal: normalize(20),
         backgroundColor: '#EFF2F6',
+        paddingBottom: responsiveScreenWidth(10)
     },
     mainContainer: {
         backgroundColor: '#EFF2F6',

@@ -55,12 +55,13 @@ const HomeRouter = () => {
     return (
         // <HomeStack.Navigator
         //     initialRouteName="Home"
-        //     drawerContent={(props) => <CustomDrawerContent {...props} />}
+            // drawerContent={(props) => <CustomDrawerContent {...props} />}
         //     screenOptions={AppMainHeaderOptions}>
         //     <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
         //     <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
         // </HomeStack.Navigator>
-        <Tab.Navigator screenOptions={{ tabBarActiveTintColor: "#072169", tabBarInactiveTintColor: '#0721697d' }} >
+        <Tab.Navigator screenOptions={{ tabBarActiveTintColor: "#072169", tabBarInactiveTintColor: '#0721697d', 
+        tabBarStyle:{backgroundColor:'#EFF2F6', paddingTop: normalize(10), paddingBottom: normalize(20)}}} >
             <Tab.Screen name="Home" component={HomeScreen}
                 options={{
                     headerShown: false,

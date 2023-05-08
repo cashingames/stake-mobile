@@ -4,7 +4,7 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import Animated from 'react-native-reanimated';
 import { randomEnteringAnimation } from '../../utils/utils';
-import normalize from "../../utils/normalize";
+import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { useNavigation } from "@react-navigation/native";
 
@@ -40,8 +40,9 @@ export default HelpPages;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
+        backgroundColor: '#EFF2F6',
         paddingHorizontal: normalize(18),
+        paddingVertical:responsiveScreenWidth(20)
     },
     profileTab: {
         flexDirection: 'row',
