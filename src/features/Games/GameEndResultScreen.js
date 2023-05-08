@@ -19,6 +19,7 @@ import QuizContainerBackground from '../../shared/ContainerBackground/QuizContai
 import TopIcons from '../../shared/TopIcons';
 import { ImageBackground } from 'react-native';
 import GameSettings from '../../shared/GameSettings';
+import AchievementPopup from '../../shared/AchievementPopup';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -32,6 +33,8 @@ export default function GameEndResultScreen({ navigation }) {
 	const [lastRunDate, setLastRunDate] = useState();
 	const [modalVisible, setModalVisible] = useState(false);
 	const [sumOfPlans, setSumOfPlans] = useState(0);
+	const [achievementPopup, setAchievementPopup] = useState(false)
+
 	const activePlan = useSelector(state => state.auth.user.activePlans ?? []);
 	const bonusGame = activePlan?.find((item) => item.name === 'Bonus Games')
 	const newUser = useSelector(state => state.auth.user.joinedOn);
@@ -182,6 +185,8 @@ export default function GameEndResultScreen({ navigation }) {
 					<GameSettings navigationHandler={() => navigation.navigate('Games')} />
 				</View>
 			</View>
+
+			<AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} />
 		</QuizContainerBackground>
 	);
 }
