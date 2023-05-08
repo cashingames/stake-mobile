@@ -1,26 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect } from '@react-navigation/native';
-import { Text, View, ScrollView, StatusBar, Platform, RefreshControl, Pressable, Image } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { Text, View, ScrollView, StatusBar, Platform, RefreshControl, Image, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
-import Animated, { BounceInRight } from 'react-native-reanimated';
-import { useNavigation } from '@react-navigation/native';
 import normalize, {
     responsiveHeight, responsiveScreenWidth
 } from '../../utils/normalize';
-import { isTrue, formatCurrency } from '../../utils/stringUtl';
+import { isTrue } from '../../utils/stringUtl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../CommonSlice';
-import UserItems from '../../shared/UserItems';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
-import crashlytics from '@react-native-firebase/crashlytics';
-import LottieAnimations from '../../shared/LottieAnimations';
-import SelectGameMode from '../Games/SelectGameMode';
-import SwiperFlatList from 'react-native-swiper-flatlist';
-import WinnersScroller from '../Leaderboard/WinnersScroller';
-import { setGameMode, setGameType } from '../Games/GameSlice';
+import { Ionicons } from '@expo/vector-icons';
+import UserWalletAccounts from '../../shared/UserWalletAccounts';
+import GamesCards from '../Games/GamesCards';
+import LeaderboardCards from '../Leaderboard/LeaderboardCards';
 import logToAnalytics from '../../utils/analytics';
 
 
@@ -31,6 +26,8 @@ const HomeScreen = () => {
 
     const loading = useSelector(state => state.common.initialLoading);
     const [refreshing, setRefreshing] = useState(false);
+    const user = useSelector(state => state.auth.user);
+    console.log(user)
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
@@ -48,6 +45,13 @@ const HomeScreen = () => {
         });
 
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            dispatch(getUser());
+            dispatch(getCommonData());
+        }, [])
+    );
 
 
     useFocusEffect(
@@ -79,68 +83,58 @@ const HomeScreen = () => {
                     />
                 }
             >
-                <UserDetails />
-                <View style={styles.gamesContainer}>
-                    <SelectGameMode />
-                    <WinnersScroller />
-                    <SwiperFlatList content
-                        ContainerStyle={styles.leaderboardContainer}></SwiperFlatList>
-                </View>
+                <UserProfile user={user} />
+                <UserWalletAccounts user={user} />
+                <GamesCards />
+                <LeaderboardCards />
             </ScrollView>
-            <RenderEvents />
         </>
     );
 }
 export default HomeScreen;
 
-const UserDetails = () => {
+const UserProfile = ({ user }) => {
+    const navigation = useNavigation();
 
-    const dispatch = useDispatch();
-    const user = useSelector(state => state.auth.user);
-
-    useEffect(() => {
-        if (!user || !isTrue(user.walletBalance)) {
-            return;
-        }
-
-        Promise.all([
-            crashlytics().setAttribute('username', user.username),
-        ]);
-
-    }, [user]);
-
-    useFocusEffect(
-        React.useCallback(() => {
-            dispatch(getUser());
-        }, [])
-    );
+    const viewNotifications = async () => {
+        logToAnalytics("notification_button_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('Notifications')
+    }
 
     return (
-        <View style={styles.userDetails}>
-            <UserWallet balance={user.walletBalance ?? 0} />
-            <UserItems showBuy={Platform.OS === 'ios' ? false : true} />
-        </View>
-    );
-}
+        <View style={styles.userProfileContainer}>
+            <View style={styles.userProfileLeft}>
+                <Image
+                    style={styles.avatar}
+                    source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/home-avatar.png")}
 
-const UserWallet = ({ balance }) => {
-    return (
-        <Animated.View entering={BounceInRight.duration(2000)} style={styles.wallet}>
-            <View style={styles.walletContainer}>
-
-                <LottieAnimations
-                    animationView={require('../../../assets/wallet.json')}
-                    width={normalize(55)}
-                    height={normalize(60)}
                 />
-                <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
+                <View style={styles.nameMainContainer}>
+                    <View style={styles.nameContainer}>
+                        <Text style={styles.welcomeText}>Hi, </Text>
+                        <Text style={styles.usernameText} onPress={() => navigation.navigate('UserProfile')}>{user.username}</Text>
+                        <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+                    </View>
+                    <Text style={styles.greetingText}>Good Morning 🙌🏻</Text>
+                </View>
             </View>
-            {/* <View style={styles.walletContainer}>
-               <Text style={styles.demoText}>Demo Cash:</Text>
-                <Text style={styles.demoAmount}>&#8358;{formatCurrency(balance)}</Text>
-            </View> */}
-        </Animated.View>
-    );
+            <Pressable style={styles.notificationContainer} onPress={viewNotifications}>
+                {user.unreadNotificationsCount !== 0 ?
+                    <Ionicons name='mail-unread' size={40} color='#072169' /> :
+                    <Ionicons name='mail' size={40} color='#072169' />
+                }
+                {user.unreadNotificationsCount !== 0 &&
+                    <View style={styles.numberContainer}>
+                        <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
+                    </View>
+                }
+            </Pressable>
+        </View>
+    )
 }
 
 function RenderUpdateChecker() {
@@ -157,60 +151,75 @@ function RenderUpdateChecker() {
     return null;
 }
 
-const RenderEvents = () => {
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
-    const features = useSelector(state => state.common.featureFlags);
-    const isChallengeFeatureEnabled = features['enable_challenge'] !== undefined && features['enable_challenge'].enabled == true;
-    const gameMode = useSelector(state => state.common.gameModes[0]);
-    const gameType = useSelector(state => state.common.gameTypes[0]);
-    const user = useSelector(state => state.auth.user);
-
-    const selectTriviaMode = () => {
-        dispatch(setGameMode(gameMode));
-        dispatch(setGameType(gameType));
-        logToAnalytics("game_mode_selected_with_gamepad", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email,
-            'gamemode': gameMode.displayName,
-        })
-        navigation.navigate('SelectGameCategory')
-
-    }
-
-    const onSelectGameMode = async () => {
-        if (isChallengeFeatureEnabled) {
-            logToAnalytics("game_entry_with_gamepad", {
-                'id': user.username,
-                'phone_number': user.phoneNumber,
-                'email': user.email,
-            })
-            navigation.navigate('GamesList')
-            return;
-        }
-        selectTriviaMode();
-    };
-
-    return (
-        <Pressable style={styles.gameButton} onPress={onSelectGameMode}>
-            <Image
-                source={require('../../../assets/images/black-gamepad.png')}
-                style={styles.gamepad}
-            />
-        </Pressable>
-    )
-}
 
 const styles = EStyleSheet.create({
     container: {
         // flex: 1,
-        paddingBottom: normalize(10),
-        backgroundColor: '#FFFF',
+        paddingTop: responsiveScreenWidth(20),
+        paddingHorizontal: normalize(20),
+        backgroundColor: '#EFF2F6',
+        paddingBottom: responsiveScreenWidth(10)
     },
     mainContainer: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#EFF2F6',
         flex: 1,
+    },
+    avatar: {
+        width: normalize(55),
+        height: normalize(55),
+        backgroundColor: '#FFFF',
+        borderRadius: 100,
+        borderColor: ' rgba(0, 0, 0, 0.1)',
+        borderWidth: 1,
+    },
+    nameMainContainer: {
+        marginLeft: '1rem'
+    },
+    nameContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    welcomeText: {
+        fontSize: '1.1rem',
+        color: '#072169',
+        fontFamily: 'sansation-regular',
+    },
+    usernameText: {
+        fontSize: '1.1rem',
+        color: '#072169',
+        fontFamily: 'sansation-bold',
+    },
+    greetingText: {
+        fontSize: '1rem',
+        color: '#072169',
+        fontFamily: 'sansation-regular',
+    },
+    notificationContainer: {
+        alignItems: 'center'
+    },
+    numberContainer: {
+        backgroundColor: '#FF3B81',
+        borderRadius: 100,
+        width: '1.1rem',
+        height: '1.1rem',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 32,
+    },
+    number: {
+        fontSize: '.55rem',
+        color: '#FFFF',
+        fontFamily: 'sansation-regular',
+    },
+    userProfileContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    userProfileLeft: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     gamesContainer: {
         paddingHorizontal: '1.2rem',
@@ -233,7 +242,7 @@ const styles = EStyleSheet.create({
     wallet: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent:'space-between'
+        justifyContent: 'space-between'
     },
     walletText: {
         fontSize: '1.2rem',

@@ -58,6 +58,7 @@ import ChallengeMatchingScreen from './features/Games/TriviaChallengeStaking/Cha
 import GamesListScreen from './features/Games/GamesListScreen';
 import VerifyPasswordOtpScreen from './features/Auth/VerifyPasswordOtpScreen';
 import logToAnalytics from './utils/analytics';
+import WalletScreen from './features/Transactions/WalletScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -159,6 +160,12 @@ function AppRouter() {
 						<AppStack.Screen name="ChallengeEndGame" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
 
 						{/** wallet */}
+						<AppStack.Screen name="Wallet" component={WalletScreen} options={{
+							title: 'Wallet', headerStyle: {
+								backgroundColor: '#FAC502',
+							},
+							headerTintColor: '#000000',
+						}} />
 						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
 						<AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
 						<AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />

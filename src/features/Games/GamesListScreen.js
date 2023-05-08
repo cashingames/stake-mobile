@@ -23,7 +23,7 @@ const GamesListScreen = ({ navigation }) => {
                 StatusBar.setBackgroundColor("transparent");
                 return;
             }
-            StatusBar.setBarStyle('light-content');
+            StatusBar.setBarStyle('dark-content');
             return () => {
                 if (Platform.OS === "android") {
                     StatusBar.setTranslucent(true)
@@ -36,20 +36,12 @@ const GamesListScreen = ({ navigation }) => {
 
 
     return (
-        <LinearGradient
-            colors={['#072169', '#752A00']}
-            start={[0.5, 0]}
-            end={[0.5, 1]}
-            style={styles.container}
-        >
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.gamesContainer}>
                     <ChallengeCard />
                     <TriviaStakingCard />
                 </View>
             </ScrollView>
-        </LinearGradient>
-
     )
 }
 
@@ -89,8 +81,8 @@ const ChallengeCard = () => {
                     style={styles.avatar}
                 />
             </View>
-            <Text style={styles.title}>Challenge a friend</Text>
-            <Pressable style={styles.button} onPress={selectChallengeMode}>
+            <Text style={styles.title}>Challenge a player</Text>
+            <Pressable style={styles.challengeButton} onPress={selectChallengeMode}>
                 <Text style={styles.playText}>Play now</Text>
             </Pressable>
         </Pressable>
@@ -122,11 +114,11 @@ const TriviaStakingCard = () => {
         <Pressable style={styles.triviaContainer} onPress={selectTriviaMode}>
             <View style={styles.avatarContainer}>
                 <Image
-                    source={require('../../../assets/images/quiz.png')}
-                    style={styles.quiz}
+                source={require('../../../assets/images/trivia-book.png')}
+                style={styles.quiz}
                 />
             </View>
-            <Text style={styles.title}>Trivia Staking</Text>
+            <Text style={styles.title}>Trivia Bet</Text>
             <Pressable style={styles.button} onPress={selectTriviaMode}>
                 <Text style={styles.playText}>Play now</Text>
             </Pressable>
@@ -139,6 +131,7 @@ export default GamesListScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#EFF2F6',
         // backgroundColor: '#072169',
         // paddingHorizontal: normalize(18),
         // paddingVertical: normalize(30),
@@ -149,6 +142,7 @@ const styles = EStyleSheet.create({
         // backgroundColor: '#072169',
         // paddingHorizontal: normalize(18),
         // paddingVertical: normalize(30),
+        backgroundColor: '#EFF2F6',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -161,7 +155,9 @@ const styles = EStyleSheet.create({
         // justifyContent: 'space-between'
     },
     cardContainer: {
-        backgroundColor: '#FAC502',
+        backgroundColor: '#FDCCD4',
+        borderColor: '#EF2F55',
+        borderWidth: 2,
         paddingHorizontal: normalize(10),
         paddingVertical: normalize(18),
         display: 'flex',
@@ -172,12 +168,14 @@ const styles = EStyleSheet.create({
         marginBottom: '1rem'
     },
     triviaContainer: {
-        backgroundColor: '#eab676',
+        backgroundColor: '#ECF7FF',
+        borderColor: '#4FAAFD',
+        borderWidth: 2,
+        borderRadius: 13,        
         paddingHorizontal: normalize(10),
         paddingVertical: normalize(18),
         display: 'flex',
         alignItems: 'center',
-        borderRadius: 13,
         width: responsiveScreenWidth(65),
         justifyContent: 'flex-end',
         marginBottom: '1rem'
@@ -206,25 +204,28 @@ const styles = EStyleSheet.create({
         marginHorizontal: '.8rem'
     },
     title: {
-        fontSize: '.8rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
+        fontSize: '1.1rem',
+        color: '#072169',
+        fontFamily: 'sansation-bold',
         marginVertical: 23,
         width: responsiveScreenWidth(35),
         textAlign: 'center'
     },
     button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: normalize(8),
-        paddingHorizontal: normalize(28),
-        borderRadius: 20,
-        elevation: 10,
-        backgroundColor: '#EF2F55'
+        backgroundColor: '#4FAAFD',
+        paddingVertical: '.7rem',
+        paddingHorizontal: '1.7rem',
+        borderRadius: 20
+    },
+    challengeButton: {
+        backgroundColor: '#EF2F55',
+        paddingVertical: '.7rem',
+        paddingHorizontal: '1.7rem',
+        borderRadius: 20
     },
     playText: {
-        fontSize: '.7rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
+        fontSize: '.95rem',
+        color: '#E3ECF2',
+        fontFamily: 'sansation-bold',
     },
 })

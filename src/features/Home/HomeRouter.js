@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/core';
 import { Image, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,187 +16,217 @@ import AppButton from '../../shared/AppButton';
 import { setGameMode, setGameType } from '../Games/GameSlice';
 import { logoutUser } from '../Auth/AuthSlice';
 import logToAnalytics from '../../utils/analytics';
+import SelectGameCategoryScreen from '../Games/SelectGameCategoryScreen';
+import GamesListScreen from '../Games/GamesListScreen';
+import HelpPages from '../Support/HelpPages';
 
 
 const HomeStack = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
 
 const HomeRouter = () => {
 
     const loading = useSelector(state => state.common.initialLoading);
 
-    const AppMainHeaderOptions = () => {
-        return {
-            headerShown: !loading,
-            drawerType: "slide",
-            drawerStyle: {
-                width: '85%',
-            },
-            headerRight: (props) => <RightButtons {...props} />,
-            headerRightContainerStyle: {
-                paddingRight: normalize(20),
-            },
-            headerStyle: {
-                backgroundColor: '#FAC502',
-            },
-            headerTitleStyle: {
-                fontSize: normalize(20),
-                lineHeight: normalize(20),
-                color: "#000000",
-                fontFamily: 'graphik-medium',
-            },
-            headerShadowVisible: true,
-        };
-    }
+    // const AppMainHeaderOptions = () => {
+    //     return {
+    //         headerShown: !loading,
+    //         drawerType: "slide",
+    //         drawerStyle: {
+    //             width: '85%',
+    //         },
+    //         headerRight: (props) => <RightButtons {...props} />,
+    //         headerRightContainerStyle: {
+    //             paddingRight: normalize(20),
+    //         },
+    //         headerStyle: {
+    //             backgroundColor: '#FAC502',
+    //         },
+    //         headerTitleStyle: {
+    //             fontSize: normalize(20),
+    //             lineHeight: normalize(20),
+    //             color: "#000000",
+    //             fontFamily: 'graphik-medium',
+    //         },
+    //         headerShadowVisible: true,
+    //     };
+    // }
 
     return (
-        <HomeStack.Navigator
-            initialRouteName="Home"
-            drawerContent={(props) => <CustomDrawerContent {...props} />}
-            screenOptions={AppMainHeaderOptions}>
-            <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
-            <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
-        </HomeStack.Navigator>
+        // <HomeStack.Navigator
+        //     initialRouteName="Home"
+            // drawerContent={(props) => <CustomDrawerContent {...props} />}
+        //     screenOptions={AppMainHeaderOptions}>
+        //     <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
+        //     <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
+        // </HomeStack.Navigator>
+        <Tab.Navigator screenOptions={{ tabBarActiveTintColor: "#072169", tabBarInactiveTintColor: '#0721697d', 
+        tabBarStyle:{backgroundColor:'#EFF2F6', paddingTop: normalize(10), paddingBottom: normalize(20)}}} >
+            <Tab.Screen name="Home" component={HomeScreen}
+                options={{
+                    headerShown: false,
+                    tabBarLabel: 'Home',
+                    tabBarIcon: ({ color }) => (
+                        <Ionicons name="home" color={color} size={30} />
+                    ),
+                }} />
+            <Tab.Screen name="Games" component={GamesListScreen} options={{
+                headerShown: false,
+                tabBarLabel: 'Games',
+                tabBarIcon: ({ color }) => (
+                    <Ionicons name="game-controller" color={color} size={30} />
+                ),
+            }} />
+            {/* <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} /> */}
+            <Tab.Screen name="Contact Us" component={HelpPages} options={{
+                headerShown: false,
+                tabBarLabel: 'Contact Us',
+                tabBarIcon: ({ color }) => (
+                    <Ionicons name="help-circle" color={color} size={30} />
+                ),
+            }} />
+        </Tab.Navigator>
     );
 }
 
-const RightButtons = () => {
-    const navigation = useNavigation();
-    const user = useSelector(state => state.auth.user);
-    const route = useRoute();
-    const routeName = route.name
+// const RightButtons = () => {
+//     const navigation = useNavigation();
+//     const user = useSelector(state => state.auth.user);
+//     const route = useRoute();
+//     const routeName = route.name
 
-    const viewHome = () => {
-        logToAnalytics("home_button_clicked", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email
-        })
-        navigation.navigate('Home')
-    }
+//     const viewHome = () => {
+//         logToAnalytics("home_button_clicked", {
+//             'id': user.username,
+//             'phone_number': user.phoneNumber,
+//             'email': user.email
+//         })
+//         navigation.navigate('Home')
+//     }
 
-    const viewWallet = async () => {
-        logToAnalytics("wallet_button_clicked", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email
-        })
-        navigation.navigate('Wallet')
-    }
+//     const viewWallet = async () => {
+//         logToAnalytics("wallet_button_clicked", {
+//             'id': user.username,
+//             'phone_number': user.phoneNumber,
+//             'email': user.email
+//         })
+//         navigation.navigate('Wallet')
+//     }
 
-    const viewNotifications = async () => {
-        logToAnalytics("notification_button_clicked", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email
-        })
-        navigation.navigate('Notifications')
-    }
+//     const viewNotifications = async () => {
+//         logToAnalytics("notification_button_clicked", {
+//             'id': user.username,
+//             'phone_number': user.phoneNumber,
+//             'email': user.email
+//         })
+//         navigation.navigate('Notifications')
+//     }
 
-    return (
-        <View style={styles.headerIcons}>
+//     return (
+//         <View style={styles.headerIcons}>
 
-            <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={viewHome}>
-                <Ionicons name='home-outline' size={26} />
-                <Text style={styles.headerIconText}>Home</Text>
-            </Pressable>
-            < Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={viewWallet}>
-                <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
-                <Text style={styles.headerIconText}>Wallet</Text>
-            </Pressable>
+//             <Pressable style={[styles.headerIconContainer, routeName === 'Home' ? styles.activeHeaderIcon : {}]} onPress={viewHome}>
+//                 <Ionicons name='home-outline' size={26} />
+//                 <Text style={styles.headerIconText}>Home</Text>
+//             </Pressable>
+//             < Pressable style={[styles.headerIconContainer, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} onPress={viewWallet}>
+//                 <Ionicons name='wallet-outline' size={26} style={[styles.headerIcon, routeName === 'Wallet' ? styles.activeHeaderIcon : {}]} />
+//                 <Text style={styles.headerIconText}>Wallet</Text>
+//             </Pressable>
 
-            <Pressable style={[styles.headerIconContainerNot, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={viewNotifications}>
-                <View style={styles.notificationContainer}>
-                    <Ionicons name='notifications-outline' size={26} style={[styles.headerIcon, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} />
-                    {user.unreadNotificationsCount !== 0 &&
-                        <View style={styles.numberContainer}>
-                            <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
-                        </View>
-                    }
-                </View>
-            </Pressable>
-        </View >
-    )
-}
+//             <Pressable style={[styles.headerIconContainerNot, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} onPress={viewNotifications}>
+//                 <View style={styles.notificationContainer}>
+//                     <Ionicons name='notifications-outline' size={26} style={[styles.headerIcon, routeName === 'Notifications' ? styles.activeHeaderIcon : {}]} />
+//                     {user.unreadNotificationsCount !== 0 &&
+//                         <View style={styles.numberContainer}>
+//                             <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
+//                         </View>
+//                     }
+//                 </View>
+//             </Pressable>
+//         </View >
+//     )
+// }
 
-function CustomDrawerContent(props) {
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
-    const user = useSelector(state => state.auth.user);
-    const gameMode = useSelector(state => state.common.gameModes[1]);
-    const gameType = useSelector(state => state.common.gameTypes[0]);
+// function CustomDrawerContent(props) {
+//     const navigation = useNavigation();
+//     const dispatch = useDispatch();
+//     const user = useSelector(state => state.auth.user);
+//     const gameMode = useSelector(state => state.common.gameModes[1]);
+//     const gameType = useSelector(state => state.common.gameTypes[0]);
 
-    const selectChallengeMode = () => {
-        dispatch(setGameMode(gameMode));
-        dispatch(setGameType(gameType));
-        navigation.navigate('SelectGameCategory')
+//     const selectChallengeMode = () => {
+//         dispatch(setGameMode(gameMode));
+//         dispatch(setGameType(gameType));
+//         navigation.navigate('SelectGameCategory')
 
-    }
+//     }
 
-    const onLogout = () => {
-        dispatch(logoutUser());
-    }
+//     const onLogout = () => {
+//         dispatch(logoutUser());
+//     }
 
-    return (
-        <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
-            <ScrollView>
-                <View style={drawStyles.sideHeader}>
-                    <Image
-                        style={drawStyles.avatar}
-                        source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
-                    />
-                    <Text style={drawStyles.userTitle}> {user.fullName}</Text>
-                    <Text style={drawStyles.userName}> @{user.username}</Text>
-                    <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
-                </View>
+//     return (
+//         <DrawerContentScrollView {...props} contentContainerStyle={drawStyles.container}>
+//             <ScrollView>
+//                 <View style={drawStyles.sideHeader}>
+//                     <Image
+//                         style={drawStyles.avatar}
+//                         source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+//                     />
+//                     <Text style={drawStyles.userTitle}> {user.fullName}</Text>
+//                     <Text style={drawStyles.userName}> @{user.username}</Text>
+//                     <AppButton text="View Profile" style={drawStyles.profile} textStyle={drawStyles.profileText} onPress={() => navigation.navigate('UserProfile')} />
+//                 </View>
 
 
-                <View style={drawStyles.menu}>
-                    {Platform.OS !== 'ios' &&
-                        <DrawerItem
-                            label={() =>
-                                <View style={drawStyles.item}>
-                                    <Text style={drawStyles.itemLabel}>Get Boosts</Text>
-                                    <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                                </View>}
-                            onPress={() => navigation.navigate('GameStore')}
-                            activeTintColor='#EF2F55'
-                            style={drawStyles.label}
-                            labelContainerStyle
-                        />
-                    }
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Invite Friends</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('Invite')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-                    <DrawerItem
-                        label={() =>
-                            <View style={drawStyles.item}>
-                                <Text style={drawStyles.itemLabel}>Get Help</Text>
-                                <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
-                            </View>}
-                        onPress={() => navigation.navigate('Help')}
-                        activeTintColor='#EF2F55'
-                        style={drawStyles.label}
-                        labelContainerStyle
-                    />
-                </View>
-            </ScrollView>
-            <View style={drawStyles.logoutContainer}>
-                <Text style={drawStyles.appVersion}>App version: {Constants.expoConfig.version}</Text>
-                <Pressable onPress={onLogout}>
-                    <Text style={styles.logoutText}>Logout</Text>
-                </Pressable>
-            </View>
-        </DrawerContentScrollView>
-    );
-}
+//                 <View style={drawStyles.menu}>
+//                     {Platform.OS !== 'ios' &&
+//                         <DrawerItem
+//                             label={() =>
+//                                 <View style={drawStyles.item}>
+//                                     <Text style={drawStyles.itemLabel}>Get Boosts</Text>
+//                                     <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+//                                 </View>}
+//                             onPress={() => navigation.navigate('GameStore')}
+//                             activeTintColor='#EF2F55'
+//                             style={drawStyles.label}
+//                             labelContainerStyle
+//                         />
+//                     }
+//                     <DrawerItem
+//                         label={() =>
+//                             <View style={drawStyles.item}>
+//                                 <Text style={drawStyles.itemLabel}>Invite Friends</Text>
+//                                 <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+//                             </View>}
+//                         onPress={() => navigation.navigate('Invite')}
+//                         activeTintColor='#EF2F55'
+//                         style={drawStyles.label}
+//                         labelContainerStyle
+//                     />
+//                     <DrawerItem
+//                         label={() =>
+//                             <View style={drawStyles.item}>
+//                                 <Text style={drawStyles.itemLabel}>Get Help</Text>
+//                                 <Ionicons name="chevron-forward-outline" size={24} color="#7C7D7F" />
+//                             </View>}
+//                         onPress={() => navigation.navigate('Help')}
+//                         activeTintColor='#EF2F55'
+//                         style={drawStyles.label}
+//                         labelContainerStyle
+//                     />
+//                 </View>
+//             </ScrollView>
+//             <View style={drawStyles.logoutContainer}>
+//                 <Text style={drawStyles.appVersion}>App version: {Constants.expoConfig.version}</Text>
+//                 <Pressable onPress={onLogout}>
+//                     <Text style={styles.logoutText}>Logout</Text>
+//                 </Pressable>
+//             </View>
+//         </DrawerContentScrollView>
+//     );
+// }
 
 const styles = EStyleSheet.create({
     headerIcons: {
