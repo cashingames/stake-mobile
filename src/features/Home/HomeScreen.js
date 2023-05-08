@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import normalize, {
     responsiveHeight, responsiveScreenWidth
 } from '../../utils/normalize';
-import { isTrue, formatCurrency } from '../../utils/stringUtl';
+import { isTrue, formatCurrency, formatNumber } from '../../utils/stringUtl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../CommonSlice';
@@ -22,6 +22,8 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import WinnersScroller from '../Leaderboard/WinnersScroller';
 import { setGameMode, setGameType } from '../Games/GameSlice';
 import logToAnalytics from '../../utils/analytics';
+import { Ionicons } from '@expo/vector-icons';
+import UserWalletAccounts from '../../shared/UserWalletAccounts';
 
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
@@ -31,6 +33,8 @@ const HomeScreen = () => {
 
     const loading = useSelector(state => state.common.initialLoading);
     const [refreshing, setRefreshing] = useState(false);
+    const user = useSelector(state => state.auth.user);
+    console.log(user)
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
@@ -48,6 +52,13 @@ const HomeScreen = () => {
         });
 
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            dispatch(getUser());
+            dispatch(getCommonData());
+        }, [])
+    );
 
 
     useFocusEffect(
@@ -79,68 +90,48 @@ const HomeScreen = () => {
                     />
                 }
             >
-                <UserDetails />
-                <View style={styles.gamesContainer}>
+                <UserProfile user={user} />
+                <UserWalletAccounts user={user} />
+                {/* <UserDetails /> */}
+                {/* <View style={styles.gamesContainer}>
                     <SelectGameMode />
                     <WinnersScroller />
                     <SwiperFlatList content
                         ContainerStyle={styles.leaderboardContainer}></SwiperFlatList>
-                </View>
+                </View> */}
             </ScrollView>
-            <RenderEvents />
+            {/* <RenderEvents /> */}
         </>
     );
 }
 export default HomeScreen;
 
-const UserDetails = () => {
-
-    const dispatch = useDispatch();
-    const user = useSelector(state => state.auth.user);
-
-    useEffect(() => {
-        if (!user || !isTrue(user.walletBalance)) {
-            return;
-        }
-
-        Promise.all([
-            crashlytics().setAttribute('username', user.username),
-        ]);
-
-    }, [user]);
-
-    useFocusEffect(
-        React.useCallback(() => {
-            dispatch(getUser());
-        }, [])
-    );
-
+const UserProfile = ({ user }) => {
     return (
-        <View style={styles.userDetails}>
-            <UserWallet balance={user.walletBalance ?? 0} />
-            <UserItems showBuy={Platform.OS === 'ios' ? false : true} />
-        </View>
-    );
-}
+        <View style={styles.userProfileContainer}>
+            <View style={styles.userProfileLeft}>
+                <Image
+                    style={styles.avatar}
+                    source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/home-avatar.png")}
 
-const UserWallet = ({ balance }) => {
-    return (
-        <Animated.View entering={BounceInRight.duration(2000)} style={styles.wallet}>
-            <View style={styles.walletContainer}>
-
-                <LottieAnimations
-                    animationView={require('../../../assets/wallet.json')}
-                    width={normalize(55)}
-                    height={normalize(60)}
                 />
-                <Text style={styles.walletText}>&#8358;{formatCurrency(balance)}</Text>
+                <View style={styles.nameMainContainer}>
+                    <View style={styles.nameContainer}>
+                        <Text style={styles.welcomeText}>Hi, </Text>
+                        <Text style={styles.usernameText}>{user.username}</Text>
+                        <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+                    </View>
+                    <Text style={styles.greetingText}>Good Morning 🙌🏻</Text>
+                </View>
             </View>
-            {/* <View style={styles.walletContainer}>
-               <Text style={styles.demoText}>Demo Cash:</Text>
-                <Text style={styles.demoAmount}>&#8358;{formatCurrency(balance)}</Text>
-            </View> */}
-        </Animated.View>
-    );
+            <View style={styles.notificationContainer}>
+                <Ionicons name='mail-unread' size={40} color='#072169' />
+                <View style={styles.numberContainer}>
+                    <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
+                </View>
+            </View>
+        </View>
+    )
 }
 
 function RenderUpdateChecker() {
@@ -205,12 +196,70 @@ const RenderEvents = () => {
 const styles = EStyleSheet.create({
     container: {
         // flex: 1,
-        paddingBottom: normalize(10),
-        backgroundColor: '#FFFF',
+        paddingTop: responsiveScreenWidth(20),
+        paddingHorizontal: normalize(20),
+        backgroundColor: '#EFF2F6',
     },
     mainContainer: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#EFF2F6',
         flex: 1,
+    },
+    avatar: {
+        width: normalize(55),
+        height: normalize(55),
+        backgroundColor: '#FFFF',
+        borderRadius: 100,
+        borderColor: ' rgba(0, 0, 0, 0.1)',
+        borderWidth: 1,
+    },
+    nameMainContainer: {
+        marginLeft: '1rem'
+    },
+    nameContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    welcomeText: {
+        fontSize: '1.1rem',
+        color: '#072169',
+        fontFamily: 'sansation-regular',
+    },
+    usernameText: {
+        fontSize: '1.1rem',
+        color: '#072169',
+        fontFamily: 'sansation-bold',
+    },
+    greetingText: {
+        fontSize: '1rem',
+        color: '#072169',
+        fontFamily: 'sansation-regular',
+    },
+    notificationContainer: {
+        alignItems: 'center'
+    },
+    numberContainer: {
+        backgroundColor: '#FF3B81',
+        borderRadius: 100,
+        width: '1.1rem',
+        height: '1.1rem',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 32,
+    },
+    number: {
+        fontSize: '.55rem',
+        color: '#FFFF',
+        fontFamily: 'sansation-regular',
+    },
+    userProfileContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    userProfileLeft: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     gamesContainer: {
         paddingHorizontal: '1.2rem',
@@ -233,7 +282,7 @@ const styles = EStyleSheet.create({
     wallet: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent:'space-between'
+        justifyContent: 'space-between'
     },
     walletText: {
         fontSize: '1.2rem',

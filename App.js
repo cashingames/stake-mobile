@@ -97,6 +97,9 @@ function App() {
     'graphik-bold': require('./assets/fonts/GraphikBold.otf'),
     'graphik-italic': require('./assets/fonts/GraphikRegularItalic.otf'),
     'graphik-medium': require('./assets/fonts/GraphikMedium.otf'),
+    'sansation-regular': require('./assets/fonts/Sansation_Regular.ttf'),
+    'sansation-bold': require('./assets/fonts/Sansation_Bold.ttf'),
+    'sansation-light': require('./assets/fonts/Sansation_Light.ttf')
   });
 
   const onRouteChange = async () => {
