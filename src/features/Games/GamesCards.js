@@ -144,7 +144,6 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: '1rem',
-        marginRight: '1rem',
         opacity: 0.6
     },
     avatar: {

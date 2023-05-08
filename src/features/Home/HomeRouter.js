@@ -61,7 +61,7 @@ const HomeRouter = () => {
         //     <HomeStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
         // </HomeStack.Navigator>
         <Tab.Navigator screenOptions={{ tabBarActiveTintColor: "#072169", tabBarInactiveTintColor: '#0721697d', 
-        tabBarStyle:{backgroundColor:'#EFF2F6', paddingTop: normalize(10), paddingBottom: normalize(20)}}} >
+        tabBarStyle:{backgroundColor:'#EFF2F6'}}} >
             <Tab.Screen name="Home" component={HomeScreen}
                 options={{
                     headerShown: false,
