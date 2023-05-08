@@ -19,8 +19,9 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
     // listen for changes and prompt alert
     React.useEffect(()=>{
         // code to check
+        console.log(achievementBadges.mine)
         if((achievementBadges.mine).length != 0){
-            const newAchievement = (achievementBadges.mine).find(val => ( (val.is_claimed == "1") && (val.is_rewarded == "1") && (val.is_notified == "0") ) );
+            const newAchievement = (achievementBadges.mine).find(val => ( (val.is_claimed == "1") && (val.is_notified == "0") ) );
             if(newAchievement != undefined){
                 setAchievement(newAchievement);
                 setAchievementPopup(true)
