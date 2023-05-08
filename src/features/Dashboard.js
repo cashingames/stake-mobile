@@ -1,5 +1,5 @@
 import { View, Text, Platform } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import Constants from 'expo-constants';
 import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../utils/normalize'
 import EStyleSheet from 'react-native-extended-stylesheet'
@@ -21,10 +21,12 @@ import { setItems } from '../features/InAppPurchaseSlice';
 import * as InAppPurchases from 'expo-in-app-purchases';
 import MixedContainerBackground from '../shared/ContainerBackground/MixedContainerBackground';
 import { PRODUCTS, items } from '../utils/StoreProductsArray';
+import AchievementPopup from '../shared/AchievementPopup';
 
 const Dashboard = ({ navigation }) => {
     const loading = useSelector(state => state.common.initialLoading);
     const dispatch = useDispatch()
+    const [achievementPopup, setAchievementPopup] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
@@ -113,6 +115,8 @@ const Dashboard = ({ navigation }) => {
                         <DashboardSettings />
                     </View>
                 </View >
+
+                <AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} />
             </MixedContainerBackground>
         </>
     )
