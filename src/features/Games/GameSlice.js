@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+import moment from 'moment';
 
 const shuffleArray = array => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -71,8 +72,17 @@ export const getLiveTriviaLeaders = createAsyncThunk(
 export const challengeTopLeaders = createAsyncThunk(
     'game/challengeTopLeaders',
     async (data, sthunkAPI) => {
+        // 
+        const startDate = moment().subtract(7, 'days').format("YYYY-MM-DD");
+        const endDate = moment().format("YYYY-MM-DD");
+
+        console.log(startDate, endDate);
+        console.log("startDate", "endDate");
         //make a network request to the server
-        const response = await axios.post('v3/challenge/leaders/global');
+        const response = await axios.post('v3/challenge/leaders/global', {
+            startDate,
+            endDate
+        });
         // console.log(response.data, 'this is response')
         return response.data;
     }

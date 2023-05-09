@@ -2,6 +2,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios';
+import moment from 'moment';
 
 export const getCommonData = createAsyncThunk(
     'common/get',
@@ -22,7 +23,16 @@ export const getBankData = createAsyncThunk(
 export const getGlobalLeaders = createAsyncThunk(
     'common/globalLeaders/get',
     async () => {
-        const response = await axios.post('v2/leaders/global');
+        const startDate = moment().subtract(7, 'days').format("YYYY-MM-DD");
+        const endDate = moment().format("YYYY-MM-DD");
+
+        console.log(startDate, endDate);
+        console.log("startDate", "endDate");
+
+        const response = await axios.post('v2/leaders/global', {
+            startDate,
+            endDate
+        });
         return response.data
     }
 )
