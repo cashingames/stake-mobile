@@ -7,7 +7,7 @@ import { randomEnteringAnimation } from '../../utils/utils';
 import normalize from "../../utils/normalize";
 
 
-const HelpPages = () => {
+const HelpPages = ({navigation}) => {
     return (
         <ScrollView contentContainerStyle={styles.contentContainer}>
             <View style={styles.profileTabs}>

@@ -218,10 +218,7 @@ function AppRouter() {
 			<AppStack.Screen name="Terms" component={TermsAndConditionsScreen} options={{ title: 'Terms & Conditions' }} />
 			<AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
 			<AppStack.Screen name="Help" component={HelpPages} options={{
-				title: 'Support', headerStyle: {
-					backgroundColor: '#072169',
-				},
-				headerTintColor: '#FFF',
+				title: 'Support'
 			}} />
 			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Help' }} />
 			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
