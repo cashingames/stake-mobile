@@ -34,7 +34,7 @@ const StakingWallet = ({ user }) => {
         navigation.navigate('Wallet')
     }
     return (
-        <View style={styles.stakingWalletContainer}>
+        <Pressable style={styles.stakingWalletContainer} onPress={viewWallet}>
             <View style={styles.walletHeader}>
                 <Ionicons name='wallet-outline' size={20} color='#E3ECF2' />
                 <Text style={styles.walletHeaderText}>Staking Balance</Text>
@@ -44,12 +44,12 @@ const StakingWallet = ({ user }) => {
                     <Text style={styles.balanceDigit}>NGN {formatCurrency(user.walletBalance ?? 0)}</Text>
                     <Ionicons name='chevron-forward-sharp' size={20} color='#E3ECF2' />
                 </View>
-                <Pressable style={styles.addContainer} onPress={viewWallet}>
+                <View style={styles.addContainer} >
                     <Ionicons name='add' size={20} color='#072169' />
                     <Text style={styles.addText}>Add funds</Text>
-                </Pressable>
+                </View>
             </View>
-        </View>
+        </Pressable>
     )
 }
 const EarningsWallet = ({ user }) => {
@@ -63,7 +63,7 @@ const EarningsWallet = ({ user }) => {
         navigation.navigate('Wallet')
     }
     return (
-        <View style={styles.earningsWalletContainer}>
+        <Pressable style={styles.earningsWalletContainer} onPress={viewWallet}>
             <View style={styles.walletHeader}>
                 <Ionicons name='wallet-outline' size={20} color='#E3ECF2' />
                 <Text style={styles.walletHeaderText}>Earnings</Text>
@@ -73,12 +73,12 @@ const EarningsWallet = ({ user }) => {
                     <Text style={styles.balanceDigit}>NGN {formatCurrency(user.withdrawableBalance ?? 0)}</Text>
                     <Ionicons name='chevron-forward-sharp' size={20} color='#E3ECF2' />
                 </View>
-                <Pressable style={styles.addContainer} onPress={viewWallet}>
+                <View style={styles.addContainer} >
                     <Ionicons name='card-outline' size={20} color='#072169' />
                     <Text style={styles.addText}>Withdraw</Text>
-                </Pressable>
+                </View>
             </View>
-        </View>
+        </Pressable>
     )
 }
 const UserBoosts = ({ user }) => {
@@ -91,11 +91,25 @@ const UserBoosts = ({ user }) => {
         })
         navigation.navigate('GameStore')
     }
+
+    const doNothing = () => {
+
+    }
+
     return (
-        <View style={styles.boostsContainer}>
-            <View style={styles.walletHeader}>
+        <Pressable style={styles.boostsContainer} 
+        // onPress={Platform.OS !== 'ios' ? goToStore : doNothing}
+        onPress={goToStore}>
+            <View style={styles.boostHeader}>
                 <Text style={styles.boostHeaderText}>{user.username} you have</Text>
-                <Ionicons name='chevron-forward-sharp' size={20} color='#E3ECF2' />
+                <View style={styles.boostSub}>
+                     {/* {Platform.OS !== 'ios' && */}
+                    <View style={styles.addContainer}>
+                        <Ionicons name='card-outline' size={20} color='#072169' />
+                        <Text style={styles.addText}>Buy Boost</Text>
+                    </View>
+                    {/* } */}
+                </View>
             </View>
             {boosts?.length > 0 ?
                 <View style={styles.itemsContainer}>
@@ -110,18 +124,16 @@ const UserBoosts = ({ user }) => {
                 </View>
                 :
                 <View style={styles.noContainer}>
-                    <Text style={styles.noBoostText}>You have no boost</Text>
-                    {/* {Platform.OS !== 'ios' ? */}
-                    <Pressable onPress={goToStore} style={styles.addContainer}>
-                        <Ionicons name='card-outline' size={20} color='#072169' />
-                        <Text style={styles.addText}>Buy Boost</Text>
-                    </Pressable>
-                    {/* :
-                            <></>
-                        } */}
+                    <Text style={styles.noBoostText}>No boost</Text>
+                    {/* {Platform.OS !== 'ios' && */}
+                        <View style={styles.boostSub}>
+                            <Text style={styles.boostSubText}>Purchase boost</Text>
+                            <Ionicons name='chevron-forward-sharp' size={20} color='#E3ECF2' />
+                        </View>
+                    {/* } */}
                 </View>
             }
-        </View>
+        </Pressable>
     )
 }
 
@@ -186,6 +198,20 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
+    boostHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    boostSub: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    boostSubText: {
+        fontSize: '.7rem',
+        color: '#E3ECF2',
+        fontFamily: 'sansation-bold',
+    },
     walletHeaderText: {
         fontSize: '1rem',
         color: '#E3ECF2',
@@ -211,7 +237,7 @@ const styles = EStyleSheet.create({
     },
     itemsContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: '1rem'
     },
@@ -222,7 +248,8 @@ const styles = EStyleSheet.create({
         borderWidth: 1,
         borderRadius: 20,
         paddingHorizontal: '.3rem',
-        paddingVertical: '.2rem'
+        paddingVertical: '.2rem',
+        marginRight:'.5rem'
     },
     boostIconContainer: {
         backgroundColor: '#EFF2F6',
