@@ -116,7 +116,7 @@ const Dashboard = ({ navigation }) => {
                     </View>
                 </View >
 
-                <AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} />
+                {/* <AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} /> */}
             </MixedContainerBackground>
         </>
     )
