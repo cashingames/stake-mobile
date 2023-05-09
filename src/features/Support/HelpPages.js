@@ -42,7 +42,7 @@ const styles = EStyleSheet.create({
         flex: 1,
         backgroundColor: '#EFF2F6',
         paddingHorizontal: normalize(18),
-        paddingVertical:responsiveScreenWidth(20)
+        paddingVertical:responsiveScreenWidth(5)
     },
     profileTab: {
         flexDirection: 'row',

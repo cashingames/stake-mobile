@@ -137,7 +137,8 @@ function AppRouter() {
 							headerTintColor: '#FFFF',
 						}} />
 						<AppStack.Screen name="GamesList" component={GamesListScreen} options={{
-							title: 'Games', headerStyle: {
+							title: 'Games', 
+							headerStyle: {
 								backgroundColor: '#072169',
 							},
 							headerTintColor: '#FFF',
