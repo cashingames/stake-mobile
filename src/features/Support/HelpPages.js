@@ -40,7 +40,7 @@ export default HelpPages;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#EFF2F6',
+        backgroundColor: '#F2F5FF',
         paddingHorizontal: normalize(18),
         paddingVertical:responsiveScreenWidth(5)
     },

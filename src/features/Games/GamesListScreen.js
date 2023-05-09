@@ -131,7 +131,7 @@ export default GamesListScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#EFF2F6',
+        backgroundColor: '#F2F5FF',
         // backgroundColor: '#072169',
         // paddingHorizontal: normalize(18),
         // paddingVertical: normalize(30),
@@ -142,7 +142,7 @@ const styles = EStyleSheet.create({
         // backgroundColor: '#072169',
         // paddingHorizontal: normalize(18),
         // paddingVertical: normalize(30),
-        backgroundColor: '#EFF2F6',
+        backgroundColor: '#F2F5FF',
         justifyContent: 'center',
         alignItems: 'center',
     },
