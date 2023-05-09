@@ -1,7 +1,7 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import { Alert, Linking, Platform, ScrollView, Text, TextInput, View } from "react-native";
+import { Alert, Linking, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import AppButton from "../../shared/AppButton";
@@ -127,11 +127,11 @@ const ContactForm = ({ user }) => {
                 onPress={sendFeedback}
                 disabled={!canSave || saving}
             />
-            <View style={styles.whatsappChat}>
-                <Text style={styles.title}>Live chat with a support agent on Whatsapp</Text>
-                <FontAwesome5 name="whatsapp" size={48} color="#25D366" style={styles.icon}
-                    onPress={() => Linking.openURL('https://wa.me/2348025116306')} />
-            </View>
+            <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
+                <Text style={styles.whatsappTitle}>Live chat with a support agent on Whatsapp</Text>
+                <FontAwesome5 name="whatsapp" size={30} color="#25D366" style={styles.icon}
+                     />
+            </Pressable>
         </View>
     )
 }
@@ -149,7 +149,7 @@ const styles = EStyleSheet.create({
         marginTop: normalize(9),
     },
     formContainer: {
-        marginTop: '4rem'
+        marginTop: '2rem'
     },
     messageBox: {
         paddingBottom: Platform.OS === 'ios' ? '5rem' : '3rem',
@@ -165,8 +165,14 @@ const styles = EStyleSheet.create({
     },
     whatsappChat: {
         display:"flex",
-        flexDirection:'column',
+        flexDirection:'row',
         alignItems:'center'
+    },
+    whatsappTitle: {
+        fontSize: '0.85rem',
+        fontFamily: 'graphik-medium',
+        marginTop: normalize(9),
+        marginRight:'.5rem'
     },
     icon: {
         marginTop:'.5rem'
