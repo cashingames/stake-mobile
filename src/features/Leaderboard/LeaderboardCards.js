@@ -10,9 +10,9 @@ const LeaderboardCards = () => {
     return (
         <View style={styles.leadersContainer}>
             <SwiperFlatList>
+                <BoostsCard />
                 <TopLeaderboards />
                 <ChallengeLeaderboard />
-                <BoostsCard />
             </SwiperFlatList>
         </View>
     )
@@ -90,7 +90,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: '1rem',
-        marginRight: '1rem',
+        // marginRight: '1rem',
         opacity: 0.6,
         paddingHorizontal: '1rem'
     },
@@ -118,7 +118,9 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: '1rem',
-        paddingHorizontal: '1rem'
+        paddingHorizontal: '1rem',
+        marginRight: '1rem',
+
     },
     topLeadersHeader: {
         fontSize: '1.1rem',
