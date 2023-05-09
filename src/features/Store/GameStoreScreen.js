@@ -24,12 +24,15 @@ import MixedContainerBackground from "../../shared/ContainerBackground/MixedCont
 import AppHeader from "../../shared/AppHeader";
 import TopIcons from "../../shared/TopIcons";
 import SpecialOffer from "./SpecialOffer";
+import GameModal from "../../shared/GameModal";
 
 export default function ({ navigation }) {
     const dispatch = useDispatch();
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const [loading, setLoading] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [updateSuccessful, setUpdateSuccessful] = useState(false)
     const user = useSelector(state => state.auth.user)
     const storeProducts = useSelector(state => state.inAppPurchase.items);
 
@@ -85,15 +88,15 @@ export default function ({ navigation }) {
         }))
             .then(unwrapResult)
             .then(result => {
-                // Alert.alert('handshake with server successful')
                 dispatch(getUser())
                 setLoading(false);
-                // onClose()
+                setUpdateSuccessful(true)
+                setShowModal(true)
                 successfulPurchase.playSound()
-                navigation.navigate("GameBoostPurchaseSuccessful")
             })
             .catch(async rejectedValueOrSerializedError => {
                 setLoading(false);
+                setShowModal(true)
                 Alert.alert("Notice", "Operation could not be completed, please try again");
                 await analytics().logEvent('game_plan_purchased_failed', {
                     'id': user.username,
@@ -102,7 +105,6 @@ export default function ({ navigation }) {
                     'item_name': plan?.name || productID || "",
                 })
                 failedPurchase.playSound()
-                navigation.navigate("GameStoreItemsPurchaseFailed")
             })
     }
 
@@ -238,7 +240,19 @@ export default function ({ navigation }) {
                 <GamePlans user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />
                 {/* <GameBoosts user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} /> */}
                 {/* <SpecialOffer /> */}
+                
             </ScrollView>
+            <GameModal 
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    multipleBtn= {true}
+                    title= {updateSuccessful ? 'Payment Successful!' : 'Payment Failed😥'}
+                    modalBody= {updateSuccessful ? 'Your purchased item has been accrued to your account.' : 'Purchase could not be completed, please try again.'}
+                    btnText= 'Play'
+                    btnText_2= 'Store'
+                    btnHandler={() => navigation.navigate('Dashboard')}
+                    btnHandler_2={ () => setShowModal(false) }
+                />
         </MixedContainerBackground>
 
     );

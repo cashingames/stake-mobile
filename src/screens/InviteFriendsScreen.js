@@ -134,22 +134,21 @@ const styles = EStyleSheet.create({
     },
     giftTitle: {
         color: '#fff',
-        fontSize: '1.7rem',
+        fontSize: '1.5rem',
         marginTop: normalize(5),
         fontFamily: 'graphik-medium',
-        marginBottom: normalize(20)
+        marginBottom: normalize(10)
     },
     inviteText: {
         color: '#fff',
         textAlign: 'center',
         fontSize: '1.5rem',
         fontFamily: 'graphik-medium',
-        marginVertical: '0.3rem'
     },
     gift: {
         color: '#FFBB4F',
         textAlign: 'center',
-        fontSize: '1.7rem',
+        fontSize: '1.5rem',
         fontFamily: 'graphik-medium'
     },
     btnBg: {

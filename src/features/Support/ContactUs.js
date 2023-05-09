@@ -16,6 +16,7 @@ import GaButton from "../../shared/GaButton";
 import TopIcons from "../../shared/TopIcons";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAvoidingView } from "react-native";
+import GameModal from "../../shared/GameModal";
 
 
 
@@ -25,16 +26,16 @@ const ContactUs = ({ navigation }) => {
 
     return (
         <ScrollView>
-        <MixedContainerBackground>
-            <ScrollView style={styles.container}>
-                <TopIcons />
-                <AppHeader title='Help Center' />
-                <View style={styles.contact}>
-                    <Text style={styles.title}>How can we be of help to you today?</Text>
-                    <ContactForm user={user} navigation={navigation}/>
-                </View>
-            </ScrollView>
-        </MixedContainerBackground>
+            <MixedContainerBackground>
+                <ScrollView style={styles.container}>
+                    <TopIcons />
+                    <AppHeader title='Help Center' />
+                    <View style={styles.contact}>
+                        <Text style={styles.title}>How can we be of help to you today?</Text>
+                        <ContactForm user={user} navigation={navigation} />
+                    </View>
+                </ScrollView>
+            </MixedContainerBackground>
         </ScrollView>
     )
 }
@@ -45,10 +46,12 @@ const ContactForm = ({ user }) => {
     const [email, setEmail] = useState(user.email);
     const [message_body, setMessage] = useState('');
     const [messageError, setMessageError] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [canSave, setCanSave] = useState(false);
     const first_name = user.firstName
     const last_name = user.lastName
     const navigation = useNavigation()
+   
     const sendFeedback = () => {
         setSaving(true)
         dispatch(sendUserFeedback({
@@ -60,7 +63,8 @@ const ContactForm = ({ user }) => {
         }))
             .then(unwrapResult)
             .then(async result => {
-                Alert.alert('Thanks for your feedback', 'You would be responded to shortly',[{ text: 'Ok', onPress: () => navigation.goBack(null)}])
+                // Alert.alert('Thanks for your feedback', 'You would be responded to shortly',[{ text: 'Ok', onPress: () => navigation.goBack(null)}])
+                setShowModal(true)
                 await analytics().logEvent("user_sent_feedback", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
@@ -90,30 +94,38 @@ const ContactForm = ({ user }) => {
 
     return (
         <KeyboardAvoidingView behavior="padding">
-        <View style={styles.formContainer}>
-            <Input
-                label='Email'
-                value={email}
-                onChangeText={setEmail}
-                editable={false}
-            />
-            <View>
-                <TextInput
-                    placeholder="Your message"
-                    value={message_body}
-                    onChangeText={text => { onChangeMessage(text) }}
-                    style={styles.messageBox}
-                    multiline={true}
-                    numberOfLines={6}
+            <View style={styles.formContainer}>
+                <Input
+                    label='Email'
+                    value={email}
+                    onChangeText={setEmail}
+                    editable={false}
                 />
-                {messageError && <Text>Please input your message</Text>}
+                <View>
+                    <TextInput
+                        placeholder="Your message"
+                        value={message_body}
+                        onChangeText={text => { onChangeMessage(text) }}
+                        style={styles.messageBox}
+                        multiline={true}
+                        numberOfLines={6}
+                    />
+                    {messageError && <Text>Please input your message</Text>}
+                </View>
+                <GaButton
+                    text={saving ? 'Sending' : 'Send'}
+                    onPress={sendFeedback}
+                    disabled={!canSave || saving}
+                />
             </View>
-            <GaButton
-                text={saving ? 'Sending' : 'Send'}
-                onPress={sendFeedback}
-                disabled={!canSave || saving}
+            <GameModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+                title= 'Message Sent!'
+                modalBody= 'Thanks for your feedback, You would be responded to shortly'
+                btnText= 'Home'
+                btnHandler={() => navigation.navigate('Dashboard')}
             />
-        </View>
         </KeyboardAvoidingView>
     )
 }
@@ -124,7 +136,7 @@ const styles = EStyleSheet.create({
         flex: 1,
         paddingVertical: responsiveScreenHeight(2),
     },
-    contact:{
+    contact: {
         paddingHorizontal: responsiveScreenWidth(3),
     },
     title: {

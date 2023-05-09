@@ -19,6 +19,7 @@ import { setModalOpen } from '../CommonSlice';
 import { Image } from 'react-native';
 import AppHeader from '../../shared/AppHeader';
 import TopIcons from '../../shared/TopIcons';
+import GameModal from '../../shared/GameModal';
 
 const chooseGender = [
     {
@@ -44,6 +45,9 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [usernameErr, setUsernameError] = useState(false);
     const [show, setShow] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [updateSuccessful, setUpdateSuccessful] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const { playSound } = useSound(require('../../../assets/sounds/updated.mp3'))
 
     const onChangeDateOfBirth = (event, selectedDate) => {
@@ -82,15 +86,17 @@ export default function EditProfileDetailsScreen({ navigation }) {
             .then(result => {
                 dispatch(getUser())
                 playSound()
-                Alert.alert('Personal details updated successfully')
-                navigation.navigate("UserProfile")
+                setShowModal(true)
+                setUpdateSuccessful(true)
+                // navigation.navigate("UserProfile")
             })
             .catch((rejectedValueOrSerializedError) => {
+                setShowModal(true)
                 if (rejectedValueOrSerializedError.message === "Request failed with status code 422") {
-                    Alert.alert('The phone number has already been taken')
+                    setErrorMessage('The phone number has already been taken')
                 }
                 else {
-                    Alert.alert("Could not update profile, Please try again later.");
+                    setErrorMessage("Could not update profile, Please try again later.");
                 }
                 console.log(rejectedValueOrSerializedError.message);
                 setSaving(false);
@@ -174,6 +180,14 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         disabled={!canSave}
                         style={styles.saveButton} />
                 </ScrollView>
+                <GameModal
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    title={updateSuccessful ? 'Update Successful!' : 'Update Failed😥'}
+                    modalBody={updateSuccessful ? 'Personal details updated successfully' : errorMessage}
+                    btnText='Ok'
+                    btnHandler={() => updateSuccessful ? navigation.goBack(null) : setShowModal(false)}
+                />
             </View>
         </MixedContainerBackground>
     );
