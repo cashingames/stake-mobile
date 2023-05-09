@@ -180,8 +180,8 @@ const styles = EStyleSheet.create({
         borderColor: "#fff"
     },
     quiz: {
-        width: responsiveScreenWidth(18),
-        height: responsiveScreenWidth(18),
+        width: '7rem',
+        height: '4.5rem',
     },
     versus: {
         width: responsiveScreenWidth(8),
