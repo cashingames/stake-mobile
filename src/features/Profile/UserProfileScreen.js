@@ -88,7 +88,7 @@ const UserAvatar = () => {
         if(!acceptedSize){
             setLoading(false);
             localUri= ""
-            Alert.alert("Warning", "Image size must be smaller than 1mb" );
+            Alert.alert("Upload Error", "Kindly note that that the image size must be less than 1mb. Please upload another image");             
             return;
         }
 

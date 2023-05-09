@@ -81,6 +81,7 @@ const IconSettings = () => {
                                 {toogle ? <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/sound-1.png')} />:
                                  <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/sound-off.png')} />
                                 }
+                            <Text style={styles.iconName}>Sound</Text>
                             </Pressable>
                             <Pressable style={styles.icons}
                             onPress={() => {
@@ -88,6 +89,7 @@ const IconSettings = () => {
                                 navigation.navigate('Leaderboard')}} 
                             >
                                 <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/leaderboard-icon.png')} />
+                                <Text style={styles.iconName}>Leaderboard</Text>
                             </Pressable>
                             <Pressable style={styles.icons}
                                 onPress={() => {
@@ -95,6 +97,7 @@ const IconSettings = () => {
                                     navigation.navigate('UserProfile')
                                 }}>
                                 <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/profile-icon.png')} />
+                                <Text style={styles.iconName}>Profile</Text>
                             </Pressable>
                             <Pressable style={styles.icons}
                                   onPress={() => {
@@ -103,16 +106,19 @@ const IconSettings = () => {
                                 }}
                             >
                                 <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/icon.png')} />
+                                <Text style={styles.iconName}>Contact Us</Text>
                             </Pressable>
                             <Pressable style={styles.icons}
                                 onPress={showInvite}
                             >
                                 <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/invite-friends.png')} />
+                                <Text style={styles.iconName}>Invite Friends</Text>
                             </Pressable >
                             <Pressable style={styles.icons}
                                 onPress={logoutHandler}
                             >
                                 <Image style={styles.imageIcons} resizeMode='contain' source={require('../../../assets/images/logout-icon.png')} />
+                                <Text style={styles.iconName}>Log Out</Text>
                             </Pressable >
                         </View>
                         <View style={styles.setting}>
@@ -154,6 +160,7 @@ const styles = EStyleSheet.create({
         flexWrap: 'wrap',
         // marginTop: Platform.OS === 'ios' ? responsiveScreenHeight(40) : responsiveScreenHeight(27),
         paddingHorizontal: responsiveScreenWidth(5),
+        justifyContent: 'space-between',
     },
 
     setting: {
@@ -166,20 +173,28 @@ const styles = EStyleSheet.create({
     },
 
     icons: {
-        // marginRight: 30,
         marginVertical: 20,
+        borderRadius:10,
+        padding:normalize(10),
+        alignItems:'center'
     },
     imageIcons: {
         height: responsiveHeight(10),
-        width: responsiveWidth(30)
+        width: responsiveWidth(20)
     },
     settingIcon: {
-        height: responsiveHeight(10),
-        width: responsiveWidth(15)
+        width: 50,
+        height: 50
     },
     appVersion:{
         fontFamily: 'graphik-medium',
         color: '#FBC437'
+    },
+    iconName:{
+        fontFamily:'poppins',
+        fontSize: '0.8rem',
+        color:  '#FBC437',
+        marginTop:normalize(5)
     }
 })
 
