@@ -217,7 +217,7 @@ const HomeScreen = (props) => {
                     </SwiperFlatList>
                 </View>
                 <Stakingpopup setModalVisible={setModalVisible} modalVisible={modalVisible} gameModes={gameModes} />
-                <AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} />
+                {/* <AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} /> */}
             </ScrollView>
         </View>
     );
