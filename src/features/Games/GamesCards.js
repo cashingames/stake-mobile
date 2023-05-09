@@ -45,7 +45,7 @@ const TriviaBetCard = () => {
             <Text style={styles.triviaBetHeader}>Trivia Bet</Text>
             <Image
                 source={require('../../../assets/images/trivia-book.png')}
-                style={styles.avatar}
+                style={styles.triviaAvatar}
             />
             <View style={styles.playButton}>
                 <Text style={styles.playButtonText}>
@@ -147,8 +147,12 @@ const styles = EStyleSheet.create({
         opacity: 0.6
     },
     avatar: {
-        width: '3.5rem',
-        heightt: '3.5rem',
+        width: '6rem',
+        height: '5.5rem',
+    },
+    triviaAvatar: {
+        width: '7rem',
+        height: '5.5rem',
     },
     triviaBetHeader: {
         fontSize: '1.1rem',

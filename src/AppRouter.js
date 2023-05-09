@@ -137,7 +137,7 @@ function AppRouter() {
 							headerTintColor: '#FFFF',
 						}} />
 						<AppStack.Screen name="GamesList" component={GamesListScreen} options={{
-							title: 'Games', 
+							title: 'Games',
 							headerStyle: {
 								backgroundColor: '#072169',
 							},
@@ -217,7 +217,12 @@ function AppRouter() {
 			{/** general */}
 			<AppStack.Screen name="Terms" component={TermsAndConditionsScreen} options={{ title: 'Terms & Conditions' }} />
 			<AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
-			<AppStack.Screen name="Help" component={HelpPages} options={{ title: 'Support' }} />
+			<AppStack.Screen name="Help" component={HelpPages} options={{
+				title: 'Support', headerStyle: {
+					backgroundColor: '#072169',
+				},
+				headerTintColor: '#FFF',
+			}} />
 			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Help' }} />
 			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
 			<AppStack.Screen name="ContactUs" component={ContactUs} options={{ title: 'Contact Us' }} />

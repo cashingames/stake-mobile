@@ -65,7 +65,7 @@ const BoostsCard = () => {
                 source={require('../../../assets/images/boost-chest.png')}
                 style={styles.avatar}
             />
-            <Text style={styles.topLeadersText}>Bonuses, Time freeze, Skip & Bombs</Text>
+            <Text style={styles.topLeadersText}>Bonuses, Time freeze & Skip</Text>
             <View style={styles.boostButton}>
                 <Text style={styles.playButtonText}>
                     Learn More

@@ -56,13 +56,15 @@ const HomeScreen = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            if (Platform.OS === "ios")
-                return;
+            if (Platform.OS === "ios"){
+                return
+            }
             StatusBar.setTranslucent(true)
-            StatusBar.setBackgroundColor("transparent")
+            StatusBar.setBackgroundColor("#ffff")
             StatusBar.setBarStyle('dark-content');
             return () => {
                 StatusBar.setTranslucent(true)
+                StatusBar.setBackgroundColor("#ffff")  
             }
         }, [])
     );

@@ -129,19 +129,8 @@ const TriviaStakingCard = () => {
 export default GamesListScreen;
 
 const styles = EStyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F2F5FF',
-        // backgroundColor: '#072169',
-        // paddingHorizontal: normalize(18),
-        // paddingVertical: normalize(30),
-
-    },
     contentContainer: {
         flex: 1,
-        // backgroundColor: '#072169',
-        // paddingHorizontal: normalize(18),
-        // paddingVertical: normalize(30),
         backgroundColor: '#F2F5FF',
         justifyContent: 'center',
         alignItems: 'center',
@@ -149,10 +138,6 @@ const styles = EStyleSheet.create({
     gamesContainer: {
         display: 'flex',
         flexDirection: 'column',
-        // justifyContent:'center',
-        // alignItems:'center',
-        // flexWrap: 'wrap',
-        // justifyContent: 'space-between'
     },
     cardContainer: {
         backgroundColor: '#FDCCD4',

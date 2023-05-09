@@ -12,7 +12,8 @@ const HomeRouter = () => {
 
     return (
         <Tab.Navigator screenOptions={{ tabBarActiveTintColor: "#072169", tabBarInactiveTintColor: '#0721697d', 
-        tabBarStyle:{backgroundColor:'#EFF2F6'}}} >
+        headerTitleAlign:'center', tabBarLabelStyle:{fontSize: 11, fontFamily:'sansation-bold'},
+        tabBarStyle:{backgroundColor:'#EFF2F6', height: 71, paddingBottom: 15}}} >
             <Tab.Screen name="Home" component={HomeScreen}
                 options={{
                     headerShown: false,
