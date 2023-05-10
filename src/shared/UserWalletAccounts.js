@@ -97,18 +97,19 @@ const UserBoosts = ({ user }) => {
     }
 
     return (
-        <Pressable style={styles.boostsContainer} 
-        // onPress={Platform.OS !== 'ios' ? goToStore : doNothing}
-        onPress={goToStore}>
+        <Pressable style={styles.boostsContainer}
+            onPress={Platform.OS !== 'ios' ? goToStore : doNothing}
+        // onPress={goToStore}
+        >
             <View style={styles.boostHeader}>
                 <Text style={styles.boostHeaderText}>{user.username} you have</Text>
                 <View style={styles.boostSub}>
-                     {/* {Platform.OS !== 'ios' && */}
-                    <View style={styles.addContainer}>
-                        <Ionicons name='card-outline' size={20} color='#072169' />
-                        <Text style={styles.addText}>Buy Boost</Text>
-                    </View>
-                    {/* } */}
+                    {Platform.OS !== 'ios' &&
+                        <View style={styles.addContainer}>
+                            <Ionicons name='card-outline' size={20} color='#072169' />
+                            <Text style={styles.addText}>Buy Boost</Text>
+                        </View>
+                    }
                 </View>
             </View>
             {boosts?.length > 0 ?
@@ -126,10 +127,10 @@ const UserBoosts = ({ user }) => {
                 <View style={styles.noContainer}>
                     <Text style={styles.noBoostText}>No boost</Text>
                     {/* {Platform.OS !== 'ios' && */}
-                        <View style={styles.boostSub}>
-                            <Text style={styles.boostSubText}>Purchase boost</Text>
-                            <Ionicons name='chevron-forward-sharp' size={20} color='#E3ECF2' />
-                        </View>
+                    <View style={styles.boostSub}>
+                        <Text style={styles.boostSubText}>Purchase boost</Text>
+                        <Ionicons name='chevron-forward-sharp' size={20} color='#E3ECF2' />
+                    </View>
                     {/* } */}
                 </View>
             }
@@ -249,7 +250,7 @@ const styles = EStyleSheet.create({
         borderRadius: 20,
         paddingHorizontal: '.3rem',
         paddingVertical: '.2rem',
-        marginRight:'.5rem'
+        marginRight: '.5rem'
     },
     boostIconContainer: {
         backgroundColor: '#EFF2F6',

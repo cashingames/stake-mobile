@@ -10,7 +10,9 @@ const LeaderboardCards = () => {
     return (
         <View style={styles.leadersContainer}>
             <SwiperFlatList>
-                <BoostsCard />
+                {Platform.OS !== 'ios' &&
+                    <BoostsCard />
+                }
                 <TopLeaderboards />
                 <ChallengeLeaderboard />
             </SwiperFlatList>
