@@ -89,6 +89,9 @@ import { triggerNotificationForAppInstallation } from './shared/Notification';
 import NoGame from './shared/NoGame';
 import AchievementPopup from './shared/AchievementPopup';
 import { View } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
+import NetworkModal from './shared/NetworkModal';
+
 
 const AppStack = createNativeStackNavigator();
 
@@ -98,11 +101,41 @@ function AppRouter() {
 	const [achievementPopup, setAchievementPopup] = useState(false)
 
 	const [loading, setLoading] = useState(true);
+	const [netInfo, setNetInfo] = useState('');
+	const [connected, setConnected] = useState(true)
+	const [showModal, setShowModal] = useState(true)
 	const { playSound } = useSound(require('../assets/sounds/pop-up.wav'))
 
 	const token = useSelector(state => state.auth.token);
 	const showIntro = useSelector(state => state.auth.showIntro);
 	appendAxiosAuthHeader(token);
+
+
+	
+	useEffect(() => {
+		// Subscribe to network state updates
+		const unsubscribe = NetInfo.addEventListener((state) => {
+			setNetInfo(
+				`Connection type: ${state.type}
+	  Is connected?: ${state.isConnected}
+	  IP Address: ${state.details.ipAddress}`
+			);
+			setConnected(state.isConnected)
+		});
+		return () => {
+			// Unsubscribe to network state updates
+			unsubscribe();
+		};
+	}, [])
+
+	console.log(connected)
+	useEffect(() => {
+		if (!connected) {
+			setShowModal(true)
+		}else{
+			setShowModal(false)
+		}
+	}, [connected])
 
 	//during app restart, check localstorage for these info
 	useEffect(() => {
@@ -115,21 +148,21 @@ function AppRouter() {
 	}, []);
 
 
-//handling the notification when it's called
+	//handling the notification when it's called
 	Notifications.setNotificationHandler({
 		handleNotification: async () => {
-		  return {
-			shouldShowAlert: true,
-			shouldPlaySound: true,
-			shouldSetBadge: true,
-		  };
+			return {
+				shouldShowAlert: true,
+				shouldPlaySound: true,
+				shouldSetBadge: true,
+			};
 		},
-	  });
+	});
 
 	useEffect(() => {
 		StatusBar.setHidden(true);
 		triggerNotificationForAppInstallation();
-    }, []);
+	}, []);
 
 	useEffect(() => {
 		if (!isTrue(token)) {
@@ -191,7 +224,7 @@ function AppRouter() {
 	}
 
 	return (
-		<View style={{flex: 1}}>
+		<View style={{ flex: 1 }}>
 			<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' } }} >
 				{isTrue(token) ?
 					(
@@ -230,7 +263,7 @@ function AppRouter() {
 							<AppStack.Screen name="SelectSubCategory" component={SubCategoryScreen} options={{
 								headerShown: false,
 							}} />
-							<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{headerShown: false}}/>
+							<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{ headerShown: false }} />
 							<AppStack.Screen name="AppTour" component={TourIndex} options={{ headerShown: false }} />
 							<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
 							<AppStack.Screen name="LiveTriviaStaking" component={LiveTriviaStakingScreen} options={{ title: 'Game Staking' }} />
@@ -282,16 +315,16 @@ function AppRouter() {
 							<AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
 
 							{/* user profile */}
-							<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{headerShown: false }} />
+							<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ headerShown: false }} />
 							<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ headerShown: false }} />
 							<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ headerShown: false }} />
 							<AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ headerShown: false }} />
-							<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ headerShown: false}} />
+							<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ headerShown: false }} />
 							<AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
 
 
 							{/** store */}
-							<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ headerShown: false  }} />
+							<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ headerShown: false }} />
 							<AppStack.Screen name="GameBoostPurchaseSuccessful" component={GameBoostPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 							<AppStack.Screen name="GamePlanPurchaseSuccessful" component={GamePlanPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 							<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
@@ -346,6 +379,7 @@ function AppRouter() {
 			</AppStack.Navigator >
 
 			<AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} />
+			<NetworkModal showModal={showModal} setShowModal={setShowModal} />
 		</View>
 	)
 }

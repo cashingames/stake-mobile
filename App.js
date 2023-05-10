@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useRef } from 'react';
-import { Dimensions, PixelRatio, Text } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Dimensions, PixelRatio, Text } from 'react-native';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import { useFonts } from 'expo-font';
@@ -28,6 +28,7 @@ import messaging from '@react-native-firebase/messaging';
 //   SystemNavigationBar.navigationHide();
 
 // }, [])
+
 
 let { height, width } = Dimensions.get('window');
 let fontScale = PixelRatio.getFontScale();
