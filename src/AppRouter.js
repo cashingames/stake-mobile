@@ -87,12 +87,15 @@ import Loader from './shared/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { triggerNotificationForAppInstallation } from './shared/Notification';
 import NoGame from './shared/NoGame';
+import AchievementPopup from './shared/AchievementPopup';
+import { View } from 'react-native';
 
 const AppStack = createNativeStackNavigator();
 
 function AppRouter() {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
+	const [achievementPopup, setAchievementPopup] = useState(false)
 
 	const [loading, setLoading] = useState(true);
 	const { playSound } = useSound(require('../assets/sounds/pop-up.wav'))
@@ -188,158 +191,162 @@ function AppRouter() {
 	}
 
 	return (
-		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' } }} >
-			{isTrue(token) ?
-				(
-					<>
+		<View style={{flex: 1}}>
+			<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' } }} >
+				{isTrue(token) ?
+					(
+						<>
 
-						<AppStack.Screen options={{ headerShown: false }} name="Dashboard" component={Dashboard} />
-						<AppStack.Screen options={{ headerShown: false }} name="Home" component={Home} />
-						{/* <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} /> */}
+							<AppStack.Screen options={{ headerShown: false }} name="Dashboard" component={Dashboard} />
+							<AppStack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+							{/* <AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} /> */}
 
-						<AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{
-							headerShown: false
-						}} />
-						<AppStack.Screen name="WeeklyLeaderboard" component={WeeklyLeaderboard} options={{
-							title: 'Leaderboard',
-							headerStyle: {
-								backgroundColor: '#701F88',
-							},
-							headerTintColor: '#FFFF',
-						}} />
-						<AppStack.Screen name="LiveTriviaLeaderboard" component={LiveTriviaLeaderBoard}
-							options={{
+							<AppStack.Screen name="Leaderboard" component={ExtendedLeaderboard} options={{
+								headerShown: false
+							}} />
+							<AppStack.Screen name="WeeklyLeaderboard" component={WeeklyLeaderboard} options={{
 								title: 'Leaderboard',
+								headerStyle: {
+									backgroundColor: '#701F88',
+								},
+								headerTintColor: '#FFFF',
+							}} />
+							<AppStack.Screen name="LiveTriviaLeaderboard" component={LiveTriviaLeaderBoard}
+								options={{
+									title: 'Leaderboard',
+									headerStyle: {
+										backgroundColor: '#072169',
+									},
+									headerTintColor: '#FFFF',
+								}}
+							/>
+
+							{/* game */}
+							<AppStack.Screen options={{ headerShown: false }} name="Games" component={GameScreen} />
+							<AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
+							<AppStack.Screen name="SelectGameCategory" component={SelectGameCategoryScreen} options={{
+								headerShown: false,
+							}} />
+							<AppStack.Screen name="SelectSubCategory" component={SubCategoryScreen} options={{
+								headerShown: false,
+							}} />
+							<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{headerShown: false}}/>
+							<AppStack.Screen name="AppTour" component={TourIndex} options={{ headerShown: false }} />
+							<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
+							<AppStack.Screen name="LiveTriviaStaking" component={LiveTriviaStakingScreen} options={{ title: 'Game Staking' }} />
+							<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
+							<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Challenge - Select a player' }} />
+							<AppStack.Screen name="ChallengeGameInstruction" component={ChallengeGameInstructionsScreen} options={{ title: 'Game Instructions' }} />
+							<AppStack.Screen name="ChallengeGameInProgress" component={ChallengeGameInProgressScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="ChallengeEndGameScreen" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
+							{/* <AppStack.Screen name="AcceptDeclineChallenge" component={AcceptDeclineChallengeScreen} options={{ headerShown: false }} /> */}
+							<AppStack.Screen name="MyChallengesScore" component={MyChallengesScoreScreen} options={{
+								title: 'Scores',
+								headerStyle: {
+									backgroundColor: '#EDDA74',
+								},
+								headerTintColor: '#000000',
+							}} />
+							<AppStack.Screen name="MyChallenges" component={MyChallengesScreen} options={{
+								title: 'My Challenges',
+								headerStyle: {
+									backgroundColor: '#701F88',
+								},
+								headerTintColor: '#FFFF',
+							}} />
+							<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{
+								title: 'Challenge Staking',
+								headerStyle: {
+									backgroundColor: '#EDDA74',
+								},
+								headerTintColor: '#000000',
+							}} />
+
+							<AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{ title: 'Game Instructions' }} />
+							<AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="LiveTrivias" component={LiveTriviasScreen} options={{
+								title: 'Live Trivia',
 								headerStyle: {
 									backgroundColor: '#072169',
 								},
 								headerTintColor: '#FFFF',
-							}}
-						/>
-
-						{/* game */}
-						<AppStack.Screen options={{ headerShown: false }} name="Games" component={GameScreen} />
-						<AppStack.Screen name="GameMode" component={GameModeScreen} options={{ title: 'Game Mode' }} />
-						<AppStack.Screen name="SelectGameCategory" component={SelectGameCategoryScreen} options={{
-							headerShown: false,
-						}} />
-						<AppStack.Screen name="SelectSubCategory" component={SubCategoryScreen} options={{
-							headerShown: false,
-						}} />
-						<AppStack.Screen name="GameInstructions" component={GameInstructionsScreen} options={{headerShown: false}}/>
-						<AppStack.Screen name="AppTour" component={TourIndex} options={{ headerShown: false }} />
-						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
-						<AppStack.Screen name="LiveTriviaStaking" component={LiveTriviaStakingScreen} options={{ title: 'Game Staking' }} />
-						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
-						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Challenge - Select a player' }} />
-						<AppStack.Screen name="ChallengeGameInstruction" component={ChallengeGameInstructionsScreen} options={{ title: 'Game Instructions' }} />
-						<AppStack.Screen name="ChallengeGameInProgress" component={ChallengeGameInProgressScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="ChallengeEndGameScreen" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
-						{/* <AppStack.Screen name="AcceptDeclineChallenge" component={AcceptDeclineChallengeScreen} options={{ headerShown: false }} /> */}
-						<AppStack.Screen name="MyChallengesScore" component={MyChallengesScoreScreen} options={{
-							title: 'Scores',
-							headerStyle: {
-								backgroundColor: '#EDDA74',
-							},
-							headerTintColor: '#000000',
-						}} />
-						<AppStack.Screen name="MyChallenges" component={MyChallengesScreen} options={{
-							title: 'My Challenges',
-							headerStyle: {
-								backgroundColor: '#701F88',
-							},
-							headerTintColor: '#FFFF',
-						}} />
-						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{
-							title: 'Challenge Staking',
-							headerStyle: {
-								backgroundColor: '#EDDA74',
-							},
-							headerTintColor: '#000000',
-						}} />
-
-						<AppStack.Screen name="TriviaInstructions" component={TriviaInstructionsScreen} options={{ title: 'Game Instructions' }} />
-						<AppStack.Screen name="TriviaEndResult" component={TriviaEndResultScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="LiveTrivias" component={LiveTriviasScreen} options={{
-							title: 'Live Trivia',
-							headerStyle: {
-								backgroundColor: '#072169',
-							},
-							headerTintColor: '#FFFF',
-						}} />
+							}} />
 
 
 
-						{/** wallet */}
-						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
-						<AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
-						<AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
+							{/** wallet */}
+							<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
+							<AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
+							<AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
 
-						{/* user profile */}
-						<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{headerShown: false }} />
-						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ headerShown: false}} />
-						<AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
-
-
-						{/** store */}
-						<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ headerShown: false  }} />
-						<AppStack.Screen name="GameBoostPurchaseSuccessful" component={GameBoostPurchaseSuccessfulScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="GamePlanPurchaseSuccessful" component={GamePlanPurchaseSuccessfulScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
-						<AppStack.Screen name="IconSettings" component={IconSettings} options={{ headerShown: false }} />
-						<AppStack.Screen name="NoGame" component={NoGame} options={{ headerShown: false }} />
-
-						<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
-						<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{
-							title: 'Notifications',
-							headerStyle: {
-								backgroundColor: '#FFE900',
-							},
-							headerTintColor: '#000000',
-						}} />
-
-					</>
-				) :
-				(
-
-					<AppStack.Group screenOptions={{ title: "", headerShadowVisible: false }}>
-						{/* unauthenticated */}
-						{showIntro &&
-							<AppStack.Screen name="Landing" component={LandingPage} options={{ headerShown: false }} />
-						}
-						<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="AuthContact" component={AuthContactUs} options={{ headerShown: false }} />
-						<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
-						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="SignupVerifyEmail" component={SignupVerifyEmailScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="SignupVerifyPhone" component={SignupVerifyPhoneScreen} options={{ headerShown: false }} />
+							{/* user profile */}
+							<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{headerShown: false }} />
+							<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="UserStats" component={UserStatsScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="AchievementsMilestone" component={AchievementsMilestoneScreen} options={{ headerShown: false}} />
+							<AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
 
 
-					</AppStack.Group >
-				)
-			}
+							{/** store */}
+							<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ headerShown: false  }} />
+							<AppStack.Screen name="GameBoostPurchaseSuccessful" component={GameBoostPurchaseSuccessfulScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="GamePlanPurchaseSuccessful" component={GamePlanPurchaseSuccessfulScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
+							<AppStack.Screen name="IconSettings" component={IconSettings} options={{ headerShown: false }} />
+							<AppStack.Screen name="NoGame" component={NoGame} options={{ headerShown: false }} />
 
-			{/** general */}
-			<AppStack.Screen name="Terms" component={TermsAndConditionsScreen} options={{ title: 'Terms & Conditions' }} />
-			<AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
-			<AppStack.Screen name="Help" component={HelpPages} options={{ title: 'Support' }} />
-			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Help' }} />
-			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
-			<AppStack.Screen name="Settings" component={Settings} options={{ title: 'Settings' }} />
-			<AppStack.Screen name="ContactUs" component={ContactUs} options={{ headerShown: false }} />
-			<AppStack.Screen name="EmailVerified" component={EmailVerifiedScreen} options={{ headerShown: false }} />
-			<AppStack.Screen name="ChallengeNotPending" component={ChallengeNotPendingScreen} options={{ headerShown: false }} />
-			{/* <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} /> */}
-		</AppStack.Navigator >
+							<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
+							<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{
+								title: 'Notifications',
+								headerStyle: {
+									backgroundColor: '#FFE900',
+								},
+								headerTintColor: '#000000',
+							}} />
+
+						</>
+					) :
+					(
+
+						<AppStack.Group screenOptions={{ title: "", headerShadowVisible: false }}>
+							{/* unauthenticated */}
+							{showIntro &&
+								<AppStack.Screen name="Landing" component={LandingPage} options={{ headerShown: false }} />
+							}
+							<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="AuthContact" component={AuthContactUs} options={{ headerShown: false }} />
+							<AppStack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="SignupProfile" component={SignupProfileScreen} />
+							<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="VerifyEmail" component={VerifyEmailScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="SignupVerifyEmail" component={SignupVerifyEmailScreen} options={{ headerShown: false }} />
+							<AppStack.Screen name="SignupVerifyPhone" component={SignupVerifyPhoneScreen} options={{ headerShown: false }} />
+
+
+						</AppStack.Group >
+					)
+				}
+
+				{/** general */}
+				<AppStack.Screen name="Terms" component={TermsAndConditionsScreen} options={{ title: 'Terms & Conditions' }} />
+				<AppStack.Screen name="Privacy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
+				<AppStack.Screen name="Help" component={HelpPages} options={{ title: 'Support' }} />
+				<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Help' }} />
+				<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
+				<AppStack.Screen name="Settings" component={Settings} options={{ title: 'Settings' }} />
+				<AppStack.Screen name="ContactUs" component={ContactUs} options={{ headerShown: false }} />
+				<AppStack.Screen name="EmailVerified" component={EmailVerifiedScreen} options={{ headerShown: false }} />
+				<AppStack.Screen name="ChallengeNotPending" component={ChallengeNotPendingScreen} options={{ headerShown: false }} />
+				{/* <AppStack.Screen name="Tournament" component={TournamentScreen} options={{ title: 'Tournament' }} /> */}
+			</AppStack.Navigator >
+
+			<AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} />
+		</View>
 	)
 }
 

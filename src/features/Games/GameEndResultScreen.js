@@ -186,7 +186,7 @@ export default function GameEndResultScreen({ navigation }) {
 				</View>
 			</View>
 
-			<AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} />
+			{/* <AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} /> */}
 		</QuizContainerBackground>
 	);
 }
