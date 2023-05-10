@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import SwiperFlatList from "react-native-swiper-flatlist";
 import logToAnalytics from "../utils/analytics";
-import { Pressable, View, Text, Image } from "react-native";
+import { Pressable, View, Text, Image, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from "../utils/normalize";
