@@ -126,12 +126,12 @@ const UserBoosts = ({ user }) => {
                 :
                 <View style={styles.noContainer}>
                     <Text style={styles.noBoostText}>No boost</Text>
-                    {/* {Platform.OS !== 'ios' && */}
-                    <View style={styles.boostSub}>
-                        <Text style={styles.boostSubText}>Purchase boost</Text>
-                        <Ionicons name='chevron-forward-sharp' size={20} color='#E3ECF2' />
-                    </View>
-                    {/* } */}
+                    {Platform.OS !== 'ios' &&
+                        <View style={styles.boostSub}>
+                            <Text style={styles.boostSubText}>Purchase boost</Text>
+                            <Ionicons name='chevron-forward-sharp' size={20} color='#E3ECF2' />
+                        </View>
+                    }
                 </View>
             }
         </Pressable>
