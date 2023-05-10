@@ -7,15 +7,26 @@ import { useNavigation } from "@react-navigation/native";
 import logToAnalytics from "../../utils/analytics";
 
 const LeaderboardCards = () => {
+
+
+    const RenderForAndroid = () => {
+        return <SwiperFlatList>
+            <BoostsCard />
+            <TopLeaderboards />
+            <ChallengeLeaderboard />
+        </SwiperFlatList>
+    }
+
+    const RenderForIOS = () => {
+        return <SwiperFlatList>
+            <TopLeaderboards />
+            <ChallengeLeaderboard />
+        </SwiperFlatList>
+    }
     return (
         <View style={styles.leadersContainer}>
-            <SwiperFlatList>
-                <TopLeaderboards />
-                {Platform.OS !== 'ios' &&
-                    <BoostsCard />
-                }
-                <ChallengeLeaderboard />
-            </SwiperFlatList>
+            {Platform.OS === 'ios' ? <RenderForIOS /> : <RenderForAndroid />}
+
         </View>
     )
 }
@@ -54,12 +65,15 @@ const ChallengeLeaderboard = () => {
         </Pressable>
     )
 }
+
 const BoostsCard = () => {
     const navigation = useNavigation();
     const goToStore = async () => {
         logToAnalytics("boost_card_clicked")
         navigation.navigate('GameStore')
     }
+    console.log("PSPPP", Platform.OS);
+    if (Platform.OS === 'ios') return null
     return (
         <Pressable style={styles.boostsContainer} onPress={goToStore}>
             <Text style={styles.topLeadersHeader}>Boost</Text>
