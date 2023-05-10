@@ -38,7 +38,7 @@ const TopLeaderboards = () => {
 const ChallengeLeaderboard = () => {
     return (
         <Pressable style={styles.challengeContainer}>
-            <Text style={styles.topLeadersHeader}>Leaderboard</Text>
+            <Text style={styles.topLeadersHeader}>Challenges</Text>
             <Image
                 source={require('../../../assets/images/challenge-coin.png')}
                 style={styles.avatar}

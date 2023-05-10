@@ -27,7 +27,6 @@ const HomeScreen = () => {
     const loading = useSelector(state => state.common.initialLoading);
     const [refreshing, setRefreshing] = useState(false);
     const user = useSelector(state => state.auth.user);
-    console.log(user)
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
@@ -121,7 +120,7 @@ const UserProfile = ({ user }) => {
                         <Text style={styles.usernameText} onPress={() => navigation.navigate('UserProfile')}>{user.username}</Text>
                         <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
                     </View>
-                    <Text style={styles.greetingText}>Good Morning 🙌🏻</Text>
+                    <Text style={styles.greetingText}>Welcome 🙌🏻</Text>
                 </View>
             </View>
             <Pressable style={styles.notificationContainer} onPress={viewNotifications}>
