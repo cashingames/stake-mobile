@@ -35,7 +35,6 @@ export default function UserProfileScreen({ navigation }) {
 
     useFocusEffect(
         React.useCallback(() => {
-            // console.info('UserDetails focus effect')
             dispatch(getUser());
         }, [])
     );
@@ -62,9 +61,9 @@ const UserAvatar = () => {
     const user = useSelector(state => state.auth.user)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
-    const [showModal, setShowModal] = useState(true);
+    const [showModal, setShowModal] = useState(false);
     const [updateSuccessful, setUpdateSuccessful] = useState(false)
-    
+
     const pickImage = async () => {
         setLoading(true);
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -86,10 +85,10 @@ const UserAvatar = () => {
         result = await FileSystem.getInfoAsync(localUri)
         const acceptedSize = (result.size / 1024) < 1024
 
-        if(!acceptedSize){
+        if (!acceptedSize) {
             setLoading(false);
             setShowModal(true);
-            localUri= ""         
+            localUri = ""
             return;
         }
 
@@ -101,10 +100,10 @@ const UserAvatar = () => {
                 setLoading(false)
             });
         })
-        .catch(ex => {
-            console.log("erroring", ex);
-            setLoading(false);
-        });
+            .catch(ex => {
+                console.log("erroring", ex);
+                setLoading(false);
+            });
     }
 
     return (
@@ -117,16 +116,15 @@ const UserAvatar = () => {
                 />
                 {!loading ?
                     <Pressable style={styles.camera} onPress={pickImage}>
-                        {/* <Ionicons name="camera-sharp" size={26} color="#FFFF" /> */}
                         <Image style={styles.imageIcon} source={require('../../../assets/images/addImage.png')} />
                     </Pressable> : <ActivityIndicator size="large" color="#fff" />}
             </View>
-            <GameModal 
+            <GameModal
                 showModal={showModal}
                 setShowModal={setShowModal}
-                title= 'Upload Error😥'
-                modalBody= 'Kindly note that that the image size must be less than 1mb. Please upload another image'
-                btnText= 'Ok'
+                title='Upload Error😥'
+                modalBody='Kindly note that that the image size must be less than 1mb. Please upload another image.'
+                btnText='Ok'
                 btnHandler={() => setShowModal(false)}
             />
         </View>
@@ -140,10 +138,6 @@ const ProfileTabs = () => {
     const navigation = useNavigation();
     const features = useSelector(state => state.common.featureFlags);
     const isAchievementBadgeFeatureEnabled = features['achievement_badges'] !== undefined && features['achievement_badges'].enabled === true;
-
-    // const onLogout = () => {
-    //     dispatch(logoutUser());
-    // }
 
     return (
 
@@ -213,7 +207,6 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(10)
     },
     camera: {
-        // backgroundColor: '#EF2F55',
         borderRadius: 100,
         padding: normalize(6),
         position: 'absolute',

@@ -88,7 +88,6 @@ export default function EditProfileDetailsScreen({ navigation }) {
                 playSound()
                 setShowModal(true)
                 setUpdateSuccessful(true)
-                // navigation.navigate("UserProfile")
             })
             .catch((rejectedValueOrSerializedError) => {
                 setShowModal(true)
@@ -100,9 +99,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                 }
                 console.log(rejectedValueOrSerializedError.message);
                 setSaving(false);
-                // after login eager get commond data for the whole app
-                // console.log("failed");
-                // console.log(rejectedValueOrSerializedError.message);
+               
             });
     }
 
@@ -184,7 +181,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                     showModal={showModal}
                     setShowModal={setShowModal}
                     title={updateSuccessful ? 'Update Successful!' : 'Update Failed😥'}
-                    modalBody={updateSuccessful ? 'Personal details updated successfully' : errorMessage}
+                    modalBody={updateSuccessful ? 'Personal details updated successfully.' : errorMessage}
                     btnText='Ok'
                     btnHandler={() => updateSuccessful ? navigation.goBack(null) : setShowModal(false)}
                 />

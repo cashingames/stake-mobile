@@ -87,7 +87,7 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(15),
         paddingHorizontal: '2rem',
         alignItems: 'center',
-        height: responsiveHeight(40),
+        height: responsiveHeight(35),
         width: responsiveWidth(80)
     },
     modalTitle: {
@@ -99,10 +99,10 @@ const styles = EStyleSheet.create({
     modalBody: {
         color: '#fff',
         textAlign: 'center',
-        fontSize: '1rem',
+        fontSize: '0.95rem',
         fontFamily: 'graphik-medium',
         marginVertical: '1rem',
-        lineHeight: '2rem',
+        lineHeight: '1.5rem',
         width:responsiveWidth(50)
     },
     gift: {
@@ -122,7 +122,6 @@ const styles = EStyleSheet.create({
         width: responsiveWidth(20),
         alignItems: 'center',
         justifyContent: 'center',
-        // backgroundColor:'yellow',
         paddingHorizontal: 20
     },
     btn: {
@@ -135,7 +134,7 @@ const styles = EStyleSheet.create({
     },
     closeBtn: {
         position: 'absolute',
-        left: responsiveWidth(65),
+        left: responsiveWidth(62),
         top: responsiveHeight(-2),
     },
     closeIcon: {
