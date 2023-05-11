@@ -36,7 +36,7 @@ export default function ({ navigation }) {
     const user = useSelector(state => state.auth.user)
     const storeProducts = useSelector(state => state.inAppPurchase.items);
 
-    
+
     const successfulPurchase = useSound(require('../../../assets/sounds/updated.mp3'))
     const failedPurchase = useSound(require('../../../assets/sounds/failed.mp3'))
 
@@ -72,15 +72,9 @@ export default function ({ navigation }) {
         dispatch(getUser());
     }, []);
 
-    // useEffect(()=>{
-    //     itemBought('game_plan_ultimate')
-    // }, [])
-
     const itemBought = async (productID) => {
-        // Alert.alert('init')
         const { product, type } = getProductFromStoreId(productID)
         setLoading(true);
-        // Alert.alert('before triggering a call to server')
 
         dispatch(buyItemFromStore({
             type,
@@ -206,10 +200,10 @@ export default function ({ navigation }) {
 
     const purchaeStoreItem = async (plan, type) => {
         const productID = getProductID(plan, type)
-        try{
+        try {
             setLoading(true);
             await InAppPurchases.purchaseItemAsync(productID)
-        }catch(e){
+        } catch (e) {
             setLoading(false);
             Alert.alert('can\'t trigger purchase')
         }
@@ -240,19 +234,19 @@ export default function ({ navigation }) {
                 <GamePlans user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />
                 {/* <GameBoosts user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} /> */}
                 {/* <SpecialOffer /> */}
-                
+
             </ScrollView>
-            <GameModal 
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                    multipleBtn= {true}
-                    title= {updateSuccessful ? 'Payment Successful!' : 'Payment Failed😥'}
-                    modalBody= {updateSuccessful ? 'Your purchased item has been accrued to your account.' : 'Purchase could not be completed, please try again.'}
-                    btnText= 'Play'
-                    btnText_2= 'Store'
-                    btnHandler={() => navigation.navigate('Dashboard')}
-                    btnHandler_2={ () => setShowModal(false) }
-                />
+            <GameModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+                multipleBtn={true}
+                title={updateSuccessful ? 'Payment Successful!' : 'Payment Failed😥'}
+                modalBody={updateSuccessful ? 'Your purchased item has been accrued to your account.' : 'Purchase could not be completed, please try again.'}
+                btnText='Play'
+                btnText_2='Store'
+                btnHandler={() => navigation.navigate('Dashboard')}
+                btnHandler_2={() => setShowModal(false)}
+            />
         </MixedContainerBackground>
 
     );
@@ -265,24 +259,6 @@ const GamePlans = ({ user, purchaeStoreItem, getStorePrice }) => {
         <View style={styles.storeItems}>
 
             <View style={styles.storeCards}>
-                {/* <View>
-                    <ImageBackground style={styles.storeItemContainer} source={require('../../../assets/images/store-items-bg.png')}>
-                        <Animated.View entering={randomEnteringAnimation().duration(1000)}>
-                            <View style={styles.giftBoxCase}>
-                                <View>
-                                    <Image style={styles.giftBox} source={require('../../../assets/images/free-gift.png')} />
-                                </View>
-                                <Text style={styles.storeItemName}>Daily Gift</Text>
-                            </View>
-                            <View style={styles.boostDetailsContainer}>
-                                <Text style={styles.cardDescription}>Get free daily gifts</Text>
-                            </View>
-                            <View style={styles.boostPriceCase}>
-                                <Text style={styles.buyWithCash}>Free</Text>
-                            </View>
-                        </Animated.View>
-                    </ImageBackground>
-                </View> */}
                 {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />)}
                 {boosts.map((boost, i) => <BoostCard key={i} boost={boost} user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />)}
             </View>
@@ -305,7 +281,6 @@ const GamePlanCard = ({ plan, user, purchaeStoreItem, getStorePrice }) => {
         })
         purchaeStoreItem(plan, 'plan')
         playSound()
-        // refRBSheet.current.open()
     }
     return (
         <ImageBackground resizeMode="contain" style={styles.storeItemContainer} source={require('../../../assets/images/store-items-bg.png')}>
@@ -325,28 +300,18 @@ const PlanCardDetails = ({ plan, getStorePrice }) => {
                 <Image resizeMode="contain" style={styles.planIcon} source={require('../../../assets/images/heart-plan.png')} />
                 <Text style={styles.storeItemName}>{plan.name}</Text>
             </View>
-            {/* <Text style={styles.planCount}>{plan.game_count}</Text> */}
             <View style={styles.boostDetailsContainer}>
                 <Text style={styles.cardDescription}>{plan.description}</Text>
             </View>
-            <View style={styles.boostPriceCase}>
-                <Text style={styles.buyWithCash}>{getStorePrice(plan, 'plan')}</Text>
+            <View style={styles.priceContainer}>
+                <View style={styles.boostPriceCase}>
+                    <Text style={styles.buyWithCash}>{getStorePrice(plan, 'plan')}</Text>
+                </View>
             </View>
         </>
     )
 }
 
-
-const GameBoosts = ({ user, purchaeStoreItem, getStorePrice }) => {
-    const boosts = useSelector(state => state.common.boosts);
-    return (
-        <View style={styles.storeItems}>
-            <View style={styles.storeCards}>
-                {boosts.map((boost, i) => <BoostCard key={i} boost={boost} user={user} purchaeStoreItem={purchaeStoreItem} getStorePrice={getStorePrice} />)}
-            </View>
-        </View>
-    )
-}
 
 const BoostCard = ({ boost, user, purchaeStoreItem, getStorePrice }) => {
     const { playSound } = useSound(require('../../../assets/sounds/achievement-unlocked2.wav'))
@@ -363,7 +328,6 @@ const BoostCard = ({ boost, user, purchaeStoreItem, getStorePrice }) => {
         })
         purchaeStoreItem(boost, 'boost')
         playSound()
-        // refRBSheet.current.open()
     }
     return (
         <ImageBackground resizeMode="contain" style={styles.storeItemContainer} source={require('../../../assets/images/store-items-bg.png')}>
@@ -383,17 +347,17 @@ const BoostCardDetails = ({ boost, getStorePrice }) => {
             <View style={styles.giftBoxCase}>
                 <Image resizeMode="contain"
                     source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${boost.icon}` }}
-                    style={ styles.boostIcon}
+                    style={styles.boostIcon}
                 />
                 <Text style={styles.storeItemName}>{formatNumber(boost.pack_count)} {boost.name}</Text>
             </View>
             <View style={styles.boostDetailsContainer}>
                 <Text style={styles.cardDescription}>{boost.description}</Text>
             </View>
-            <View>
-            <View style={styles.boostPriceCase}>
-                <Text style={styles.buyWithCash}>{getStorePrice(boost, 'boost')}</Text>
-            </View>
+            <View style={styles.priceContainer}>
+                <View style={styles.boostPriceCase}>
+                    <Text style={styles.buyWithCash}>{getStorePrice(boost, 'boost')}</Text>
+                </View>
             </View>
         </>
     )
@@ -402,7 +366,6 @@ const styles = EStyleSheet.create({
 
     container: {
         paddingVertical: responsiveScreenHeight(2),
-        // paddingBottom: responsiveScreenHeight(10)
     },
     storeItems: {
         flexDirection: 'column',
@@ -419,7 +382,6 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-regular',
         opacity: 0.6,
         lineHeight: responsiveScreenHeight(2.6),
-        // marginVertical: normalize(18)
     },
     storeCards: {
         display: 'flex',
@@ -435,7 +397,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         width: responsiveWidth(45),
         height: Platform.OS === "ios" ? responsiveHeight(22.5) : responsiveHeight(25),
-        marginHorizontal:'0.5rem',
+        marginHorizontal: '0.5rem',
     },
     buyItemCard: {
         alignItems: 'center',
@@ -463,7 +425,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.8rem',
         color: '#fff',
         textAlign: 'center',
-        marginVertical:Platform.OS === "android" ? 5 : '',
+        marginVertical: Platform.OS === "android" ? 5 : '',
     },
     cardDescription: {
         fontFamily: 'graphik-medium',
@@ -545,6 +507,9 @@ const styles = EStyleSheet.create({
         width: responsiveWidth(30),
         height: responsiveHeight(10),
     },
+    priceContainer: {
+        alignItems: 'center'
+    },
     boostPriceCase: {
         backgroundColor: '#0038B3',
         paddingVertical: normalize(4),
@@ -552,7 +517,8 @@ const styles = EStyleSheet.create({
         borderColor: '#00EDF1',
         marginTop: 10,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: responsiveWidth(36)
     },
     loader: {
         position: 'absolute',
