@@ -26,9 +26,6 @@ export const getGlobalLeaders = createAsyncThunk(
         const startDate = moment().subtract(7, 'days').format("YYYY-MM-DD");
         const endDate = moment().format("YYYY-MM-DD");
 
-        console.log(startDate, endDate);
-        console.log("startDate", "endDate");
-
         const response = await axios.post('v2/leaders/global', {
             startDate,
             endDate
@@ -58,7 +55,13 @@ export const loadSoundPrefernce = async (dispatch, setSound) => {
 export const getCategoryLeaders = createAsyncThunk(
     'common/categoryLeaders/get',
     async () => {
-        const response = await axios.post('v2/leaders/categories');
+        const startDate = moment().subtract(7, 'days').format("YYYY-MM-DD");
+        const endDate = moment().format("YYYY-MM-DD");
+
+        const response = await axios.post('v2/leaders/categories', {
+            startDate,
+            endDate
+        });
         return response.data
     }
 )
