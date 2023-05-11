@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, ScrollView, Alert, Pressable, Platform, Image } from 'react-native';
+import { Text, View, ScrollView, Alert, Pressable, Platform, Image, KeyboardAvoidingView } from 'react-native';
 import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch } from 'react-redux';
@@ -18,6 +18,7 @@ import GaButton from '../../shared/GaButton';
 import { setModalOpen } from '../CommonSlice';
 import AppHeader from '../../shared/AppHeader';
 import TopIcons from '../../shared/TopIcons';
+import GameModal from '../../shared/GameModal';
 
 
 export default function ChangePasswordScreen({ navigation }) {
@@ -25,6 +26,8 @@ export default function ChangePasswordScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const [saving, setSaving] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [updateSuccessful, setUpdateSuccessful] = useState(false)
     const [canSave, setCanSave] = useState(false);
     const [password, setPassword] = useState(Constants.manifest.extra.isStaging ? '123456789' : '');
     const [new_password, setNewPassword] = useState(Constants.manifest.extra.isStaging ? '12345678' : '');
@@ -72,81 +75,92 @@ export default function ChangePasswordScreen({ navigation }) {
 
         setSaving(true);
         setCanSave(false);
-        // console.log(new_password + 'fish')
         dispatch(changePassword({ password, new_password, new_password_confirmation }))
             .then(unwrapResult)
             .then(result => {
                 // console.log(result);
                 // dispatch(getUser())
                 playSound()
-                Alert.alert('Password changed successfully')
+                setUpdateSuccessful(true)
+                setShowModal(true)
                 navigation.navigate("Home")
             })
             .catch((rejectedValueOrSerializedError) => {
                 // console.log(rejectedValueOrSerializedError);
+                setUpdateSuccessful(false)
+                setShowModal(true)
                 setSaving(false);
                 setCanSave(true);
-                Alert.alert('Invalid data provided')
+                // Alert.alert('Invalid data provided')
                 // after login eager get commond data for the whole app
                 // console.log("failed");
                 // console.log(rejectedValueOrSerializedError)
             });
     }
     return (
-        <MixedContainerBackground>
-            <ScrollView style={styles.container}>
-                <TopIcons />
-                <AppHeader title="Change Password" />
-                <View style={styles.content}>
-                    <Input
-                        type="password"
-                        label='Old Password'
-                        value={password}
-                        placeholder="Enter password"
-                        error={passErr && '*password must not be less than 8 digits'}
-                        onChangeText={text => { onChangePassword(text) }}
-                        labelStyle={styles.inputLabel}
-                    />
-                    <Input
-                        type="password"
-                        label='New Password'
-                        value={new_password}
-                        placeholder="Enter new password"
-                        error={passErr && '*password must not be less than 8 digits'}
-                        onChangeText={text => { onChangeNewPassword(text) }}
-                        labelStyle={styles.inputLabel}
-                    />
-                    <Input
-                        type="password"
-                        label='Password'
-                        value={new_password_confirmation}
-                        placeholder="Confirm new password"
-                        error={new_password_confirmation !== new_password && '*password confirmation must match password'}
-                        onChangeText={text => { onChangeConfirmPassword(text) }}
-                        labelStyle={styles.inputLabel}
-                    />
-                <PasswordRequirement />
-                <UniversalBottomSheet
-                    refBottomSheet={refRBSheet}
-                    height={Platform.OS === 'ios' ? 300 : 250}
-                    subComponent={<DeleteAccount
-                        onClose={closeBottomSheet}
-                        onPressYes={deleteAccount}
-                    />}
-                />
-                 <GaButton
-                text={saving ? 'Saving' : 'Change Password'}
-                onPress={onSavePassword}
-                disabled={!canSave}
-                style={styles.saveButton}
-            />
-             <Pressable style={styles.deleteContainer} onPress={openBottomSheet}>
-                    <Text style={styles.deleteText}>Delete Account</Text>
-                </Pressable>
+        <ScrollView >
+            <MixedContainerBackground>
+                <View style={styles.container}>
+                    <TopIcons />
+                    <AppHeader title="Change Password" />
+                    <KeyboardAvoidingView style={styles.content}>
+                        <Input
+                            type="password"
+                            label='Old Password'
+                            value={password}
+                            placeholder="Enter password"
+                            error={passErr && '*password must not be less than 8 digits'}
+                            onChangeText={text => { onChangePassword(text) }}
+                            labelStyle={styles.inputLabel}
+                        />
+                        <Input
+                            type="password"
+                            label='New Password'
+                            value={new_password}
+                            placeholder="Enter new password"
+                            error={passErr && '*password must not be less than 8 digits'}
+                            onChangeText={text => { onChangeNewPassword(text) }}
+                            labelStyle={styles.inputLabel}
+                        />
+                        <Input
+                            type="password"
+                            label='Password'
+                            value={new_password_confirmation}
+                            placeholder="Confirm new password"
+                            error={new_password_confirmation !== new_password && '*password confirmation must match password'}
+                            onChangeText={text => { onChangeConfirmPassword(text) }}
+                            labelStyle={styles.inputLabel}
+                        />
+                        <PasswordRequirement />
+                        <UniversalBottomSheet
+                            refBottomSheet={refRBSheet}
+                            height={Platform.OS === 'ios' ? 300 : 250}
+                            subComponent={<DeleteAccount
+                                onClose={closeBottomSheet}
+                                onPressYes={deleteAccount}
+                            />}
+                        />
+                        <GaButton
+                            text={saving ? 'Saving' : 'Change Password'}
+                            onPress={onSavePassword}
+                            disabled={!canSave}
+                            style={styles.saveButton}
+                        />
+                        <Pressable style={styles.deleteContainer} onPress={openBottomSheet}>
+                            <Text style={styles.deleteText}>Delete Account</Text>
+                        </Pressable>
+                    </KeyboardAvoidingView>
                 </View>
-            </ScrollView>
-           
-        </MixedContainerBackground>
+                <GameModal
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    title={updateSuccessful ? 'Update Successful!' : 'Update Failed😥'}
+                    modalBody={updateSuccessful ? 'Password changed successfully' : "Sorry, Couldn't update password. Try again."}
+                    btnText='Ok'
+                    btnHandler={() => updateSuccessful ? navigation.goBack(null) : setShowModal(false)}
+                />
+            </MixedContainerBackground>
+        </ScrollView>
     );
 }
 
@@ -167,7 +181,7 @@ const styles = EStyleSheet.create({
         flex: 1,
         paddingVertical: normalize(25),
     },
-    content:{
+    content: {
         paddingHorizontal: responsiveScreenWidth(3)
     },
     header: {
@@ -249,7 +263,7 @@ const styles = EStyleSheet.create({
     },
     deleteContainer: {
         marginTop: normalize(15),
-        alignItems:'flex-end',
+        alignItems: 'flex-end',
     },
     deleteText: {
         fontSize: '1rem',
@@ -260,7 +274,7 @@ const styles = EStyleSheet.create({
         marginVertical: 10,
     },
     settingIcon: {
-        marginTop:responsiveScreenHeight(10),
+        marginTop: responsiveScreenHeight(10),
         width: 50,
         height: 50
     },

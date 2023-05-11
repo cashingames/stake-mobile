@@ -21,6 +21,7 @@ import { setModalOpen } from '../CommonSlice';
 import AppHeader from '../../shared/AppHeader';
 import TopIcons from '../../shared/TopIcons';
 import { Alert } from 'react-native';
+import GameModal from '../../shared/GameModal';
 
 
 export default function UserProfileScreen({ navigation }) {
@@ -61,9 +62,9 @@ const UserAvatar = () => {
     const user = useSelector(state => state.auth.user)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
-
+    const [showModal, setShowModal] = useState(true);
+    const [updateSuccessful, setUpdateSuccessful] = useState(false)
     
-
     const pickImage = async () => {
         setLoading(true);
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -87,8 +88,8 @@ const UserAvatar = () => {
 
         if(!acceptedSize){
             setLoading(false);
-            localUri= ""
-            Alert.alert("Upload Error", "Kindly note that that the image size must be less than 1mb. Please upload another image");             
+            setShowModal(true);
+            localUri= ""         
             return;
         }
 
@@ -120,6 +121,14 @@ const UserAvatar = () => {
                         <Image style={styles.imageIcon} source={require('../../../assets/images/addImage.png')} />
                     </Pressable> : <ActivityIndicator size="large" color="#fff" />}
             </View>
+            <GameModal 
+                showModal={showModal}
+                setShowModal={setShowModal}
+                title= 'Upload Error😥'
+                modalBody= 'Kindly note that that the image size must be less than 1mb. Please upload another image'
+                btnText= 'Ok'
+                btnHandler={() => setShowModal(false)}
+            />
         </View>
     )
 }
