@@ -305,13 +305,13 @@ const styles = EStyleSheet.create({
 	pointsCase: {
 		alignItems: 'center',
 		width: responsiveWidth(46),
-		marginVertical: responsiveHeight(100) * 0.003,
+		marginTop: responsiveHeight(100) * 0.01,
 		zIndex: 10
 	},
 	point: {
 		color: '#fff',
 		fontFamily: 'blues-smile',
-		fontSize: '1.5rem',
+		fontSize: '1.4rem',
 		textAlign: 'center'
 	},
 	winPoints: {

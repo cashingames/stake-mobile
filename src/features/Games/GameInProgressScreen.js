@@ -26,6 +26,7 @@ import NextButton from "../../shared/NextButton";
 import TopIcons from "../../shared/TopIcons";
 import DashboardSettings from "../../shared/DashboardSettings";
 import GameSettings from "../../shared/GameSettings";
+import GameModal from "../../shared/GameModal";
 
 
 
@@ -35,6 +36,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     const dispatch = useDispatch();
     const refRBSheet = useRef();
     const params = route.params;
+    const [showModal, setShowModal] = useState(false);
     const gameSessionToken = useSelector(state => state.game.gameSessionToken);
     const chosenOptions = useSelector(state => state.game.chosenOptions);
     const consumedBoosts = useSelector(state => state.game.consumedBoosts);
@@ -66,7 +68,7 @@ export default function GameInProgressScreen({ navigation, route }) {
             // console.log("Trying to end second time. If this happens, please notify Oye")
             return;
         }
-
+        setShowModal(false)
         setEnding(true);
         if (confirm) {
             showExitConfirmation()
@@ -144,24 +146,7 @@ export default function GameInProgressScreen({ navigation, route }) {
 
     const showExitConfirmation = () => {
         // onEndGame();
-        Alert.alert(
-            'Exit Game?',
-            'You have an ongoing game. Do you want to submit this game ?',
-            [
-                {
-                    text: "Continue playing",
-                    style: 'cancel',
-                    onPress: () => setEnding(false)
-                },
-                {
-                    text: 'Exit',
-                    onPress: () => {
-                        // console.log("show exit from exit button")
-                        onEndGame();
-                    },
-                },
-            ]
-        );
+        setShowModal(true)
     }
 
     //disable back button
@@ -208,6 +193,17 @@ export default function GameInProgressScreen({ navigation, route }) {
                     <GameSettings navigationHandler={() => showExitConfirmation()} isDisabled={true} />
                 </View>
             </View>
+            <GameModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+                multipleBtn={true}
+                title= 'Exist Game?'
+                modalBody= 'You have an ongoing game. Do you want to submit this game ?'
+                btnText= 'Yes'
+                btnText_2= 'No'
+                btnHandler_2={() => setShowModal(false)}
+                btnHandler={() => onEndGame()}
+            />
         </ImageBackground>
     );
 }
@@ -245,7 +241,7 @@ const styles = EStyleSheet.create({
     top: {
         paddingTop: responsiveHeight(2),
     },
-    buttonCase:{
-       paddingBottom: normalize(20),
+    buttonCase: {
+        paddingBottom: normalize(20),
     }
 });
