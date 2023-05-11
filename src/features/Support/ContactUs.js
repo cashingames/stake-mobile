@@ -122,7 +122,7 @@ const ContactForm = ({ user }) => {
                 showModal={showModal}
                 setShowModal={setShowModal}
                 title= 'Message Sent!'
-                modalBody= 'Thanks for your feedback, You would be responded to shortly'
+                modalBody= 'Thanks for your feedback, You would be responded to shortly.'
                 btnText= 'Home'
                 btnHandler={() => navigation.navigate('Dashboard')}
             />
