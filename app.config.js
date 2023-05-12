@@ -187,9 +187,9 @@ function getApiUrl() {
       return 'http://172.20.10.3:8000/api';
     case "development":
     case "preview":
-      return 'https://stg-api.cashingames.com/api';
+      return 'https://stg-gameark-api.cashingames.com/api';
     default:
-      return 'https://api.cashingames.com/api';
+      return 'https://gameark-api.cashingames.com/api';
   }
 }
 
