@@ -215,10 +215,9 @@ function getDomain() {
 
 function getAssetsBaseUrl() {
   if (isDevelopment || env === "preview") {
-    return 'https://stg-api.cashingames.com';
+    return 'https://stg-gameark-api.cashingames.com';
   }
-
-  return 'https://api.cashingames.com';
+  return 'https://gameark-api.cashingames.com';
 }
 
 function getGoogleAndroidClientId() {
