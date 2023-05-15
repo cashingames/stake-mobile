@@ -1,11 +1,9 @@
-import React from 'react';
-import { Text, View, ScrollView, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, ScrollView } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from 'react-redux';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
-import UserItems from '../../shared/UserItems';
-import LottieAnimations from '../../shared/LottieAnimations';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import AppHeader from '../../shared/AppHeader';
 import TopIcons from '../../shared/TopIcons';
@@ -17,14 +15,31 @@ import Constants from 'expo-constants';
 export default function UserStatsScreen({ navigation }) {
 
     useApplyHeaderWorkaround(navigation.setOptions);
-
+    const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
     const user = useSelector(state => state.auth.user)
+    const userBoosts = useSelector(state => state.auth.user.boosts ?? [])
+    const [totalBoosts, setTotalBoosts] = useState(null)
+    const [mostPlayedCategory, setMostPlayedCategory] = useState(null)
 
+    useEffect(() => {
+        const reducer = (accumulator, curr) => accumulator + curr;
+        var x = userBoosts && userBoosts.map(a => Number(a.count)).reduce(reducer, 0);
+        setTotalBoosts(x ?? 0);
+
+        const mostPlayed = currentGame.categories.reduce((acc, curr) => {
+            if (curr.played > acc.played) {
+                return curr;
+            } else {
+                return acc;
+            }
+        });
+        setMostPlayedCategory(mostPlayed);
+    }, [userBoosts]);
 
     return (
         <MixedContainerBackground>
             <View style={styles.container}>
-            <TopIcons />
+                <TopIcons />
                 <AppHeader />
                 <View style={styles.header}>
                     <Image
@@ -43,8 +58,10 @@ export default function UserStatsScreen({ navigation }) {
                     gamesPlayed={user.gamesCount}
                     globalRanking={user.globalRank}
                     winRate={user.winRate}
-                    challengesPlayed={user.totalChallenges}
+                    joinedOn={user.joinedOn}
                     userPoint={user.points}
+                    totalBoosts={totalBoosts}
+                    mostPlayedCategory={mostPlayedCategory}
                 />
             </View>
         </MixedContainerBackground>
@@ -58,14 +75,16 @@ const Detail = ({
     gamesPlayed,
     globalRanking,
     winRate,
-    challengesPlayed,
-    userPoint
+    joinedOn,
+    userPoint,
+    totalBoosts,
+    mostPlayedCategory
 }) => {
     return (
-        <View style={styles.detailContainer}>
+        <ScrollView style={styles.detailContainer}>
             <Text style={styles.title}>Statistics</Text>
             <View style={styles.detail}>
-                <Text style={styles.detailText}>All Time Best</Text>
+                <Text style={styles.detailText}>Total Points Gained</Text>
                 <Text style={styles.responseText}>{userPoint}</Text>
             </View>
             <View style={styles.detail}>
@@ -81,10 +100,18 @@ const Detail = ({
                 <Text style={styles.responseText}>{winRate}</Text>
             </View>
             <View style={styles.detail}>
-                <Text style={styles.detailText}>Challenges Played</Text>
-                <Text style={styles.responseText}>{challengesPlayed}</Text>
+                <Text style={styles.detailText}>Joined On</Text>
+                <Text style={styles.responseText}>{joinedOn}</Text>
             </View>
-        </View>
+            <View style={styles.detail}>
+                <Text style={styles.detailText}>Available Boosts</Text>
+                <Text style={styles.responseText}>{totalBoosts}</Text>
+            </View>
+            <View style={styles.detail}>
+                <Text style={styles.detailText}>Most played category</Text>
+                <Text style={styles.responseText}>{mostPlayedCategory.name}</Text>
+            </View>
+        </ScrollView>
     )
 }
 
@@ -97,7 +124,6 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingVertical: responsiveScreenHeight(2),
-        // marginBottom: normalize(20)
     },
     header: {
         flexDirection: 'row',
@@ -127,15 +153,15 @@ const styles = EStyleSheet.create({
         color: '#fff',
         fontSize: '1.2rem'
     },
-    title:{
+    title: {
         fontFamily: 'blues-smile',
         color: '#fff',
         fontSize: '2rem',
         textAlign: 'center',
         marginTop: normalize(20)
     },
-    detailContainer:{
-        paddingHorizontal:responsiveScreenWidth(3),
+    detailContainer: {
+        paddingHorizontal: responsiveScreenWidth(3),
     },
     detail: {
         flexDirection: 'row',
@@ -149,12 +175,12 @@ const styles = EStyleSheet.create({
     },
     detailText: {
         fontSize: '1rem',
-        fontFamily: 'graphik-medium',
+        fontFamily: 'poppins',
         color: '#fff'
     },
     responseText: {
         fontSize: '1rem',
-        fontFamily: 'graphik-medium',
+        fontFamily: 'poppins',
         color: '#fff',
     },
 
