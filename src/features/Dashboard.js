@@ -1,4 +1,4 @@
-import { View, Text, Platform } from 'react-native'
+import { View, Text, Platform, Alert } from 'react-native'
 import React, { useState } from 'react'
 import Constants from 'expo-constants';
 import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../utils/normalize'
@@ -21,13 +21,15 @@ import { setItems } from '../features/InAppPurchaseSlice';
 import * as InAppPurchases from 'expo-in-app-purchases';
 import MixedContainerBackground from '../shared/ContainerBackground/MixedContainerBackground';
 import { PRODUCTS, items } from '../utils/StoreProductsArray';
-import AchievementPopup from '../shared/AchievementPopup';
+import NetworkModal from '../shared/NetworkModal';
 
 const Dashboard = ({ navigation }) => {
-    const loading = useSelector(state => state.common.initialLoading);
+    // const loading = useSelector(state => state.common.initialLoading);
     const dispatch = useDispatch()
+    const [loading, setLoading] = useState(true)
     const [achievementPopup, setAchievementPopup] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
+    const [showModal, setShowModal] = useState(false)
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
 
@@ -51,26 +53,32 @@ const Dashboard = ({ navigation }) => {
         }
     }
 
-    useEffect(() => {
+    const reloadNetworkConnection = () => {
+        setLoading(true)
         const _2 = dispatch(getCommonData());
-        const _3 = dispatch(fetchFeatureFlags())
-
-
-        Promise.all([_2, _3]).then(() => {
-            dispatch(initialLoadingComplete());
-        });
-        loadSoundPrefernce(dispatch, setSound)
-        getStoreItems()
-    }, []);
+            const _3 = dispatch(fetchFeatureFlags())
+            const _4 = dispatch(getUser())
+            Promise.all([_2.unwrap(), _3.unwrap(), _4.unwrap()]).then(() => {
+                setLoading(false)
+                setShowModal(false)
+            })
+                .catch(error => {
+                    setLoading(true)
+                    setTimeout(() => {
+                        setShowModal(true)
+                        setLoading(false)
+                    }, 3000)
+                });
+            loadSoundPrefernce(dispatch, setSound)
+            getStoreItems();
+            console.log('hey')
+        // get achievements badges
+        dispatch(getAchievements());
+    }
 
     useFocusEffect(
         React.useCallback(() => {
-            // console.info('UserDetails focus effect')
-            dispatch(getUser());
-
-            // get achievements badges
-            dispatch(getAchievements());
-
+            reloadNetworkConnection();
         }, [])
     );
 
@@ -115,8 +123,7 @@ const Dashboard = ({ navigation }) => {
                         <DashboardSettings />
                     </View>
                 </View >
-
-                {/* <AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} /> */}
+                <NetworkModal showModal={showModal} setShowModal={setShowModal} onPress={reloadNetworkConnection} />
             </MixedContainerBackground>
         </>
     )
