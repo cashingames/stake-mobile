@@ -1,22 +1,13 @@
 import * as React from 'react';
 import { Text, View, ScrollView, Share, Alert, Pressable, Platform, Modal } from 'react-native';
 import normalize, { responsiveHeight, responsiveScreenHeight, responsiveWidth } from '../utils/normalize';
-import { Ionicons } from '@expo/vector-icons';
-import * as Clipboard from 'expo-clipboard';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { useDispatch, useSelector } from 'react-redux';
-import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
-import LottieAnimations from '../shared/LottieAnimations';
-// import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
-// import { Walkthroughable } from '../features/Tour/Walkthrouable';
-import { clearTour } from '../features/Tour/TourSlice';
-import analytics from '@react-native-firebase/analytics';
-import { useNavigation } from '@react-navigation/core';
 import { Image } from 'react-native';
 import TopIcons from '../shared/TopIcons';
 import { ImageBackground } from 'react-native';
 
-const NetworkModal = ({ showModal, setShowModal }) => {
+const NetworkModal = ({ showModal, setShowModal, onPress }) => {
+    
     return (
         <View>
             <Modal
@@ -36,7 +27,8 @@ const NetworkModal = ({ showModal, setShowModal }) => {
                                 <View style={styles.imgContainer}>
                                     <Image style={styles.networkImage} resizeMode="contain" source={require('./../../assets/images/poor-network.png')} />
                                 </View>
-                                <Pressable style={styles.btn}>
+                                <Pressable style={styles.btn}
+                                onPress={onPress}>
                                         <ImageBackground style={styles.btnBg} resizeMode="contain" source={require('./../../assets/images/button-case.png')} >
                                             <Text style={styles.btnText}>Try{'\n'}Again</Text>
                                         </ImageBackground>

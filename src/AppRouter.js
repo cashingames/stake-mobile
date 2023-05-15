@@ -139,9 +139,8 @@ useEffect(() => {
 		};
 	}, [])
 
-	console.log(connected)
 	useEffect(() => {
-		if (!connected) {
+		if (!connected && isTrue(token)) {
 			setShowModal(true)
 		}else{
 			setShowModal(false)
@@ -158,6 +157,10 @@ useEffect(() => {
 		});
 	}, []);
 
+	 const networkNavigationHandler = () => {
+        navigation.navigate('Dashboard')
+        setShowModal(false)
+    }
 
 	//handling the notification when it's called
 	Notifications.setNotificationHandler({
@@ -390,7 +393,8 @@ useEffect(() => {
 			</AppStack.Navigator >
 
 			<AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} />
-			<NetworkModal showModal={showModal} setShowModal={setShowModal} />
+			<NetworkModal showModal={showModal} setShowModal={setShowModal} onPress={networkNavigationHandler}/>
+
 		</View>
 	)
 }
