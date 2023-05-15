@@ -157,7 +157,7 @@ let initialState = {
     triviaMode: '',
     triviaId: '',
     hasPlayedTrivia: false,
-    gameDuration: 60,
+    gameDuration: 120,
     challengeDetails: {},
     gameStakes: [],
     withStaking: false,
