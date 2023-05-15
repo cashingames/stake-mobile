@@ -15,16 +15,17 @@ import Constants from 'expo-constants';
 export default function UserStatsScreen({ navigation }) {
 
     useApplyHeaderWorkaround(navigation.setOptions);
-    const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
+    const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : []);
     const user = useSelector(state => state.auth.user)
     const userBoosts = useSelector(state => state.auth.user.boosts ?? [])
     const [totalBoosts, setTotalBoosts] = useState(null)
-    const [mostPlayedCategory, setMostPlayedCategory] = useState(null)
+    const [mostPlayedCategory, setMostPlayedCategory] = useState([])
 
     useEffect(() => {
         const reducer = (accumulator, curr) => accumulator + curr;
         var x = userBoosts && userBoosts.map(a => Number(a.count)).reduce(reducer, 0);
         setTotalBoosts(x ?? 0);
+
 
         const mostPlayed = currentGame.categories.reduce((acc, curr) => {
             if (curr.played > acc.played) {
