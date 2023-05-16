@@ -94,7 +94,7 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
             dispatch(setIsPlayingTrivia(false))
             dispatch(startGame({
                 category: categoryId,
-                type: gameTypeId,
+                type: 2,
                 mode: gameModeId
             }))
                 .then(unwrapResult)
