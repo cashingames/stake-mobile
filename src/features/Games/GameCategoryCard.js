@@ -8,17 +8,17 @@ import { randomEnteringAnimation } from "../../utils/utils";
 import Constants from 'expo-constants';
 
 
-export default ({ category, onSelect, isSelected, activeCategory,activeSubcategory,onSubCategorySelected }) => {
+export default ({ category, onSelect, isSelected, activeCategory, activeSubcategory, onSubCategorySelected }) => {
     return (
         <Animated.View style={styles.card} entering={BounceInRight.duration(2000)}>
             <Pressable onPress={() => onSelect(category)} >
                 <View style={styles.categoryCardTopRow}>
                     <Text style={styles.cardTitle}>{category.name} Quiz</Text>
-                <Image
+                    <Image
                         style={styles.cardIcon}
                         source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${category.icon}` }}
                     />
-                    </View>
+                </View>
             </Pressable>
         </Animated.View>
     )

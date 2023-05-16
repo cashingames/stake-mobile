@@ -1,49 +1,24 @@
-
-import React, { useEffect, useState, useRef } from 'react';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import React from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Animated from 'react-native-reanimated';
-import { Platform, Text, View } from 'react-native';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import AppButton from '../../shared/AppButton';
-import { isTrue } from '../../utils/stringUtl';
 import { setGameCategory, setGameType } from './GameSlice';
-import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import { randomEnteringAnimation } from '../../utils/utils';
+import normalize from '../../utils/normalize';
 import GameCategoryCard from './GameCategoryCard';
-import GameSubcategoryCard from './GameSubcategoryCard';
 import useSound from '../../utils/useSound';
 
 
-export default ({ title, initialShowPlayButton = true ,activeSubcategory, navigation}) => {
+export default ({ navigation }) => {
     const dispatch = useDispatch();
-   
+
     const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
-    const [activeCategory, setActiveCategory] = useState();
-    const activeGame = useSelector(state => state.game.gameType);
-    // const hasActivePlan = useSelector(state => state.auth.user.hasActivePlan);
-    const { playSound } =  useSound(require('../../../assets/sounds/open.wav'))
+    const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
     const onCategorySelected = (category) => {
-        setActiveCategory(category);
-        dispatch(setGameType(category));
-        navigation.navigate('SelectSubCategory', {category : category})
-        dispatch(setGameCategory(undefined));
+        dispatch(setGameCategory(category));
+        navigation.navigate('SelectSubCategory', { category: category })
         playSound()
     }
-
-
-    useFocusEffect(
-        React.useCallback(() => {
-            setActiveCategory(undefined);
-            dispatch(setGameType(currentGame));
-        }, [])
-    );
-
-    useEffect(() => {
-        setActiveCategory(undefined); //category
-    }, [activeGame]);
 
     if (!currentGame) {
         return <></>;
@@ -58,7 +33,6 @@ export default ({ title, initialShowPlayButton = true ,activeSubcategory, naviga
                 />
                 )}
             </View>
-            {/* {isTrue(activeCategory) && <SubCategories category={activeCategory} onSubCategorySelected={onSubCategorySelected} selectedSubcategory={activeSubcategory} />} */}
         </>
 
     )
@@ -75,7 +49,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(18),
         paddingBottom: normalize(40),
     },
-   
+
     createQuiz: {
         display: 'flex',
         flexDirection: 'row',
@@ -97,9 +71,9 @@ const styles = EStyleSheet.create({
     cards: {
         display: 'flex',
         flexDirection: 'column',
-        marginTop:-30,
-        paddingHorizontal:normalize(40),
-        alignItems:'center'
+        marginTop: -30,
+        paddingHorizontal: normalize(40),
+        alignItems: 'center'
     },
     card: {
         // width: normalize(130),

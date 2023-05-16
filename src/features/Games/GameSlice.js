@@ -130,6 +130,7 @@ export const getGameStakes = createAsyncThunk(
 let initialState = {
     gameMode: {},
     gameCategory: {},
+    subGameCategory: {},
     gameType: {},
     gameSessionToken: '',
     questions: [],
@@ -176,6 +177,7 @@ export const GameSlice = createSlice({
     reducers: {
         setGameType: (state, action) => {
             state.gameType = action.payload;
+            // console.log(state.gameType, 'hetet');
             // state.gameCategory = null;
         },
         setSelectedOption: (state, action) => {
@@ -193,6 +195,9 @@ export const GameSlice = createSlice({
         setGameCategory: (state, action) => {
             // console.log("seeting")
             state.gameCategory = action.payload;
+        },
+        setSubGameCategory: (state, action) => {
+            state.subGameCategory = action.payload;
         },
         setGameMode: (state, action) => {
             // console.log("here")
@@ -360,7 +365,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, setAmountWon, setCorrectCount, setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend, setWithStaking,showStakingPopup,setSelectedOption, setCorrectAnswer, setSubmissionResult, setShowCorrectAnswer
+    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend, setWithStaking,showStakingPopup,setSelectedOption, setCorrectAnswer, setSubmissionResult, setShowCorrectAnswer, setSubGameCategory
 } = GameSlice.actions
 
 

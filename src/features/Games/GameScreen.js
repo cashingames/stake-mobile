@@ -9,7 +9,7 @@ import DashboardSettings from '../../shared/DashboardSettings'
 import TopIcons from '../../shared/TopIcons'
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground'
 import { ScrollView } from 'react-native-gesture-handler'
-import { setGameMode } from './GameSlice'
+import { setGameMode, setGameType } from './GameSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { randomEnteringAnimation } from '../../utils/utils'
 import useSound from '../../utils/useSound';
@@ -22,13 +22,16 @@ const GameScreen = ({ navigation }) => {
     const activePlans = useSelector(state => state.auth.user.hasActivePlan);
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'));
     const user = useSelector(state => state.auth.user)
+    const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
 
     const goToGameInstruction = () => {
         navigation.navigate('GameInstructions')
         playSound()
     }
 
+    console.log(currentGame);
     const goToGameCategory = () => {
+        dispatch(setGameType(currentGame))
         if (!activePlans) {
             navigation.navigate('NoGame')
         } else {

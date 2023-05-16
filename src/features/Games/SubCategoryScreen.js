@@ -13,19 +13,18 @@ import { ScrollView } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { randomEnteringAnimation } from '../../utils/utils';
 import GameSubcategoryCard from './GameSubcategoryCard';
-import { setGameCategory, setIsPlayingTrivia, startGame } from './GameSlice';
+import { setIsPlayingTrivia, setSubGameCategory, startGame } from './GameSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { logActionToServer } from '../CommonSlice';
 import { useEffect } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Loader from '../../shared/Loader';
 import GameSettings from '../../shared/GameSettings';
-import { Alert } from 'react-native';
 import GameModal from '../../shared/GameModal';
 
 const SubCategoryScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
-    const gameTypeId = useSelector(state => state.game.gameType);
+    const gameCategory = useSelector(state => state.game.gameCategory);
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false)
     const networkNavigationHandler = () => {
@@ -53,7 +52,7 @@ const SubCategoryScreen = ({ navigation, route }) => {
                             <Image style={styles.quizImage} source={require('../../../assets/images/word-trivia.png')} />
                         </View>
                         <View>
-                            <SubCategories category={gameTypeId} loading={loading} setLoading={setLoading} setShowModal={setShowModal} />
+                            <SubCategories category={gameCategory} loading={loading} setLoading={setLoading} setShowModal={setShowModal} />
                         </View>
                     </ScrollView>
                     <View style={styles.setting}>
@@ -77,13 +76,12 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
     const dispatch = useDispatch()
     const navigation = useNavigation();
     const gameMode = useSelector(state => state.game.gameMode);
-    const gameTypeId = useSelector(state => state.game.gameType.id);
     const gameModeId = useSelector(state => state.game.gameMode.id);
-    const [categoryId, setCategoryId] = useState('')
+    const gameTypeId = useSelector(state => state.game.gameType.id)
+    const [subCategoryId, setSubCategoryId] = useState('')
     const user = useSelector(state => state.auth.user);
     const activePlans = useSelector(state => state.auth.user.hasActivePlan);
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
-
 
     const onStartGame = () => {
         if (!activePlans) {
@@ -93,8 +91,8 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
             playSound()
             dispatch(setIsPlayingTrivia(false))
             dispatch(startGame({
-                category: categoryId,
-                type: 2,
+                category: subCategoryId,
+                type: gameTypeId,
                 mode: gameModeId
             }))
                 .then(unwrapResult)
@@ -111,11 +109,10 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
                     }))
                     setLoading(false);
                     navigation.navigate("GameInProgress")
-                    setCategoryId('')
+                    setSubCategoryId('')
                 })
                 .catch((error) => {
                     setShowModal(true)
-                    // Alert.alert('Category not available for now, try again later')
                     crashlytics().recordError(error);
                     crashlytics().log('failed to start exhibition game');
                     setLoading(false);
@@ -124,19 +121,20 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
     }
 
     useEffect(() => {
-        if (categoryId) {
+        if (subCategoryId) {
             if (gameMode.name === "CHALLENGE") {
                 navigation.navigate('ChallengeSelectPlayer');
             } else {
                 onStartGame()
             }
         }
-    }, [categoryId])
+        return
+    }, [subCategoryId])
 
 
     const onPressMe = (subcategory) => {
-        dispatch(setGameCategory(subcategory));
-        setCategoryId(subcategory.id)
+        dispatch(setSubGameCategory(subcategory));
+        setSubCategoryId(subcategory.id)
     }
 
     return (
