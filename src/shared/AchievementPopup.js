@@ -1,28 +1,29 @@
 import * as React from 'react';
-import { Pressable, Text, View, Modal, Alert } from 'react-native';
-import normalize, { responsiveScreenWidth } from '../utils/normalize';
+import { Pressable, Text, View, Modal, Alert, ImageBackground } from 'react-native';
+import normalize, { responsiveHeight, responsiveScreenWidth, responsiveWidth } from '../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Image } from 'react-native';
 import Constants from 'expo-constants';
 import { useSelector } from 'react-redux';
 import analytics from '@react-native-firebase/analytics';
 import useSound from '../utils/useSound';
+import TopIcons from './TopIcons';
 
 
 const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
     const [achievement, setAchievement] = React.useState({});
     const user = useSelector(state => state.auth.user);
     const achievementBadges = useSelector(state => state.achievementSlice)
-    const { playSound } =  useSound(require('../../assets/sounds/achievement-unlocked1.wav'))
+    const { playSound } = useSound(require('../../assets/sounds/achievement-unlocked1.wav'))
 
 
     // listen for changes and prompt alert
-    React.useEffect(()=>{
+    React.useEffect(() => {
         // code to check
         console.log(achievementBadges.mine)
-        if((achievementBadges.mine).length != 0){
-            const newAchievement = (achievementBadges.mine).find(val => ( (val.is_claimed == "1") && (val.is_notified == "0") ) );
-            if(newAchievement != undefined){
+        if ((achievementBadges.mine).length != 0) {
+            const newAchievement = (achievementBadges.mine).find(val => ((val.is_claimed == "1") && (val.is_notified == "0")));
+            if (newAchievement != undefined) {
                 setAchievement(newAchievement);
                 setAchievementPopup(true)
                 analytics().logEvent(`${newAchievement.title.replace(/\s/g, '_').toLowerCase()}_badge`, {
@@ -34,35 +35,36 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
     }, [achievementBadges])
 
     return (
-        <View style={styles.onView}>
+        <View>
             <Modal
                 animationType="slide"
                 transparent={true}
                 visible={achievementPopup}
                 onRequestClose={() => {
-                    // Alert.alert("Modal has been closed.");
                     setAchievementPopup(!achievementPopup);
-                }}>
-                <View style={styles.modalContainer}>
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <TopIcons />
                     <View style={styles.container}>
-                        <View style={styles.modalView}>
-                            <Pressable
-                                style={styles.buttonClose}
-                                onPress={() => setAchievementPopup(!achievementPopup)}
-                            >
-                                <Text style={styles.closeModal}> close x </Text>
-                            </Pressable>
-                            <Text style={styles.achievementTitle}>{achievement?.title || ""}</Text>
-                            <View style={styles.imageContainer}>
-                                <Image
-                                    style={styles.image}
-                                    source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${achievement?.quality_image || achievement?.medal || achievement?.logoUrl}` }}
-                                />
-                            </View>
-                            <Text style={styles.congratulatoryText}>
-                            Congratulations, you have unlocked an  achievement badge and earned {(achievement.rewardType === "POINTS") ? "" : ""}{achievement.reward}{(achievement.rewardType === "POINTS") ? "coins" : "coins"}. Unlock more badges and win other exciting rewards
-                                
-                            </Text>
+                        <View>
+                            <ImageBackground style={styles.achievementBg} resizeMode="contain" source={require('./../../assets/images/invite-bg.png')}>
+                                <Text style={styles.modalTitle}>{achievement?.title || ""}</Text>
+                                <View style={styles.imgContainer}>
+                                    <Image
+                                        style={styles.achievementImage}
+                                        source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${achievement?.quality_image || achievement?.medal || achievement?.logoUrl}` }}
+                                    />
+                                </View>
+                                <Text style={styles.congratulatoryText}>
+                                    Congratulations, you have unlocked an  achievement badge and earned {(achievement.rewardType === "POINTS") ? "" : ""}{achievement.reward}{(achievement.rewardType === "POINTS") ? "coins" : "coins"}. Unlock more badges and win other exciting rewards
+                                </Text>
+                                <Pressable style={styles.closeBtn}
+                                    onPress={() => setAchievementPopup(false)}
+                                >
+                                    <Image style={styles.closeIcon} source={require('./../../assets/images/close-icon.png')} />
+                                </Pressable>
+                            </ImageBackground>
                         </View>
                     </View>
                 </View>
@@ -71,68 +73,53 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
     )
 }
 export default AchievementPopup;
+
 const styles = EStyleSheet.create({
-    modalContainer: {
+    centeredView: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: 'rgba(0,0,0,0.5)'
-    },
-    modalView: {
-        backgroundColor: '#151C2F',
-        marginTop: 100,
-        paddingHorizontal: normalize(25),
-        paddingVertical: normalize(18),
-        borderRadius: 10,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.32,
-        shadowRadius: 5.46,
-        elevation: 9,
-    },
-    // container: {
-    //     paddingHorizontal: normalize(25),
-    //     paddingVertical: normalize(18),
-    // },
-    closeModal: {
-        display: 'flex',
-        marginLeft: 'auto',
-        marginTop: normalize(8),
-        marginBottom: normalize(22),
-        color: '#fff',
-        fontSize: '0.69rem',
-        fontFamily: 'graphik-regular'
-    },
-    achievementTitle: {
-        fontSize: '1.5rem',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        marginBottom: normalize(8),
-        textAlign: 'center',
-        textShadowOffset: { width: 4, height: 4 },
-        textShadowRadius: 4,
-        textShadowColor: 'rgba(255, 255, 255, 0.25)',
-        textTransform: 'uppercase'
+        paddingVertical: responsiveHeight(2),
+        backgroundColor: 'rgba(17, 41, 103, 0.77)'
     },
 
-    imageContainer: {
+    container: {
+        flex: 1,
         alignItems: 'center',
-        marginBottom:'1rem'
+        justifyContent: 'center'
     },
-    image: {
-        width: 200,
-        height: 200,
+    achievementBg: {
+        paddingVertical: '2rem',
+        paddingHorizontal: '2rem',
+        alignItems: 'center',
+        height: responsiveHeight(55),
+        width: responsiveWidth(70)
+    },
+    modalTitle: {
+        color: '#fff',
+        fontSize: '1.4rem',
+        marginTop: responsiveHeight(100) * 0.05,
+        fontFamily: 'poppins',
+        textAlign: 'center'
+    },
+    imgContainer: {
+        alignItems: 'center',
+    },
+    achievementImage: {
+        height: 150,
+        width: 150
     },
     congratulatoryText: {
+        fontFamily: 'poppins',
+        fontSize: '0.8rem',
         textAlign: 'center',
-        width: '16.5rem',
-        fontSize: '.8rem',
-        fontFamily: 'graphik-medium',
-        color: '#FFF',
-        lineHeight: '1.5rem',
-        paddingVertical: '.65rem',
-    }
+        color: '#fff'
+    },
+    closeBtn: {
+        position: 'absolute',
+        left: responsiveWidth(62),
+        top: responsiveHeight(5),
+    },
+    closeIcon: {
+        width: 40,
+        height: 40,
+    },
 });
