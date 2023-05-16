@@ -102,7 +102,7 @@ const Detail = ({
             </View>
             <View style={styles.detail}>
                 <Text style={styles.detailText}>Joined On</Text>
-                <Text style={styles.responseText}>{joinedOn}</Text>
+                <Text style={styles.responseText}>{joinedOn.slice(0, 10)}</Text>
             </View>
             <View style={styles.detail}>
                 <Text style={styles.detailText}>Available Boosts</Text>

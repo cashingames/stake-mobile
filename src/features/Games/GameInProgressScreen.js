@@ -197,10 +197,10 @@ export default function GameInProgressScreen({ navigation, route }) {
                 showModal={showModal}
                 setShowModal={setShowModal}
                 multipleBtn={true}
-                title= 'Exist Game?'
-                modalBody= 'You have an ongoing game. Do you want to submit this game ?'
-                btnText= 'Yes'
-                btnText_2= 'No'
+                title='Exist Game?'
+                modalBody='You have an ongoing game. Do you want to submit this game ?'
+                btnText='Yes'
+                btnText_2='No'
                 btnHandler_2={() => setShowModal(false)}
                 btnHandler={() => onEndGame()}
             />
