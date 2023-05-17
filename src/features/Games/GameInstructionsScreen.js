@@ -76,6 +76,10 @@ const ExhibitionInstructions = () => {
         <Text style={styles.instructionText}>Click “Play again” to start another session in winning
           more points to climb the leader board.</Text>
       </View>
+      <View style={styles.instruction}>
+        <Text style={styles.unicode}>{'\u0035'}.</Text>
+        <Text style={styles.instructionText}>Use boosts to increase your winning chances. The skip boost replaces a question with another, the time freeze boost pauses the countdown timer for 15 seconds and the bomb boost eliminates two wrong options.</Text>
+      </View>
     </>
   )
 };
