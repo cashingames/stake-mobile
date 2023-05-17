@@ -15,11 +15,12 @@ import { TextInput } from 'react-native';
 import { ScrollView } from 'react-native';
 import LottieAnimations from '../../shared/LottieAnimations';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function VerifyPasswordOtpScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
-    const params = route.params 
+    const params = route.params
 
     const pin1Ref = useRef(null)
     const pin2Ref = useRef(null)
@@ -54,7 +55,7 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
             })
             .catch((rejectedValueOrSerializedError) => {
                 setActive(true);
-                setError("Your passcode is not correct");
+                setError("Otp code is not correct");
             })
     }
 
@@ -77,7 +78,7 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
         futureDateStamp.setMinutes(futureDateStamp.getMinutes() + nextResendMinutes)
 
         const futureDate = futureDateStamp.getTime()
-        
+
         const countDown = setInterval(() => {
             const timeString = calculateTimeRemaining(futureDate, onComplete);
             setCounter(timeString);
@@ -89,31 +90,22 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
 
     const resend = () => {
         dispatch(verifyAccount({
-            phone_number:params.phone
+            phone_number: params.phone
         }))
         setIsCountdownInProgress(true)
     }
 
     return (
         <ScrollView style={styles.container} >
-             <View style={styles.excellent}>
-                    <LottieAnimations
-                        animationView={require('../../../assets/excellent.json')}
-                        width={normalize(170)}
-                        height={normalize(140)}
-                    />
-                </View>
 
-            <Text style={styles.headerTextStyle}>
-                Verify OTP
-            </Text>
+            <View style={styles.headerContainerStyle}>
+                <Ionicons name="close-sharp" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
+                <Text style={styles.headerTextStyle}>
+                    OTP Verification
+                </Text>
+            </View>
 
-            <Text style={styles.verifySubText}>
-                A One Time Password(OTP) has been sent to your phone number {params.phone}.
-                Please input the five(5) digit
-                number below to verify your phone number so you
-                can play exicting games and stand a chance to win lots of prizes
-            </Text>
+            <Text style={styles.verifySubText}>Enter Otp code</Text>
             {error.length > 0 &&
                 <Text style={styles.errorBox}>{error}</Text>
             }
@@ -127,7 +119,7 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
                         setOtp1(otp1);
                         if (otp1 !== '') {
                             pin2Ref.current.focus()
-                        } 
+                        }
                     }}
                     style={styles.input}
                 />
@@ -179,14 +171,15 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
                 />
 
             </View>
-
+            <View style={styles.expireContainer}>
+                <Text style={styles.digitText}>Enter 5 digit OTP Code</Text>
+            </View>
+            <AppButton onPress={() => nextAction()} text="Verify Otp" disabled={!active} disabledStyle={styles.disabled}
+                style={styles.loginButton} textStyle={styles.buttonText} />
             <View style={styles.reset}>
-            <ResendOtp  counter={counter}
+                <ResendOtp counter={counter}
                     isCountdownInProgress={isCountdownInProgress}
                     onPress={resend} />
-            </View>
-            <View style={styles.button}>
-                <AppButton onPress={() => nextAction()} text="Continue" disabled={!active} />
             </View>
 
         </ScrollView>
@@ -196,9 +189,9 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
-        paddingVertical: responsiveScreenWidth(10),
-        paddingHorizontal: normalize(20)
+        backgroundColor: '#F9FBFF',
+        paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(22) : responsiveScreenWidth(13),
+        paddingHorizontal: normalize(22)
     },
 
     excellent: {
@@ -206,20 +199,23 @@ const styles = EStyleSheet.create({
     },
 
     verifySubText: {
-        fontSize: '.9rem',
-        color: '#151C2F',
-        fontFamily: 'graphik-medium',
-        textAlign: 'center',
+        fontSize: '1.1rem',
+        color: '#072169',
+        fontFamily: 'gotham-medium',
         lineHeight: '1.5rem',
-        opacity: 0.6,
-        marginTop: normalize(25)
+        marginTop: '4rem'
+    },
+    headerContainerStyle: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     headerTextStyle: {
-        fontSize: '1.4rem',
-        color: '#151C2F',
-        fontFamily: 'graphik-medium',
-        textAlign: 'center',
-        lineHeight: '1.5rem'
+        fontSize: 26,
+        fontFamily: 'gotham-bold',
+        color: '#072169',
+        marginLeft: '2.5rem',
+        textAlign: 'center'
+        // paddingTop: normalize(10),
     },
     instructionTextStyle: {
         fontSize: 14,
@@ -234,7 +230,7 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(6),
         borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'graphik-regular',
+        fontFamily: 'gotham-light',
         color: '#EF2F55',
         fontSize: normalize(10)
     },
@@ -242,25 +238,48 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: normalize(48),
+        marginTop: '1.3rem',
     },
     input: {
-        height: 40,
+        height: 58,
         borderWidth: 1,
-        borderRadius: 10,
-        width: 50,
-        borderColor: '#CDD4DF',
-        fontFamily: 'graphik-regular',
+        borderRadius: 13,
+        width: 56,
+        borderColor: '#D9D9D9',
+        backgroundColor: '#fff',
+        fontFamily: 'sansation-bold',
         textAlign: 'center',
-        color: "#000",
+        color: "#072169",
+        fontSize: '1.1rem'
+    },
+    expireContainer: {
+        marginTop: '2rem'
+    },
+    digitText: {
+        fontFamily: 'sansation-bold',
+        color: "#072169",
+        fontSize: '.9rem'
+    },
+    loginButton: {
+        // backgroundColor: '#E15220',
+        marginBottom: 20,
+        marginTop: 40,
+        paddingVertical: normalize(19),
+    },
+    buttonText: {
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem'
     },
 
-    reset:{
-        flex:1,
+    reset: {
+        flex: 1,
     },
 
     button: {
         marginTop: normalize(150),
+    },
+    disabled: {
+        backgroundColor: '#EA8663'
     }
 }
 )

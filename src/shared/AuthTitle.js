@@ -9,8 +9,9 @@ export default function AuthTitle({ text }) {
 const styles = EStyleSheet.create({
     titleText: {
         textAlign: 'center',
-        fontFamily: 'graphik-bold',
-        fontSize: '1.55rem',
+        fontFamily: 'gotham-bold',
+        fontSize: '1.35rem',
+        color:'#072169'
     },
 
 });

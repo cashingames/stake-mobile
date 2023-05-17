@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Pressable, Text, View, ScrollView } from 'react-native';
+import { Pressable, Text, View, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
@@ -90,10 +90,8 @@ export default function LoginScreen({ navigation }) {
         <>
             <ScrollView style={styles.container}>
 
-                <AuthBanner />
-
                 <View style={styles.headerBox}>
-                    <AuthTitle text='Sign in' />
+                    <AuthTitle text='Login to your account' />
                 </View>
 
                 <View style={styles.inputContainer} >
@@ -102,8 +100,8 @@ export default function LoginScreen({ navigation }) {
                     }
 
                     <Input
-                        label='Email or username'
-                        placeholder="johndoe or johndoe@example.com"
+                        label=' Enter email or username'
+                        placeholder="e.g john or john@example.com"
                         value={email}
                         onChangeText={text => onChangeEmail(text)}
                     />
@@ -119,10 +117,13 @@ export default function LoginScreen({ navigation }) {
                     <RenderForgotPassword />
 
                 </View>
-
-                <AppButton text={loading ? 'Signing in...' : 'Sign in'} onPress={() => onLogin()} disabled={!canLogin} />
-                <RenderCreateAccount />
-                {/* <Login text="Sign in" /> */}
+                <View style={styles.buttonsContainer}>
+                    <AppButton text={loading ? 'Signing in...' : 'Log me in'} onPress={() => onLogin()}
+                        disabled={!canLogin} style={styles.loginButton} textStyle={styles.buttonText} isIcon={true} iconColor="#FFF"
+                        disabledStyle={styles.disabled} />
+                    <Text style={styles.orText}>Or</Text>
+                    <RenderCreateAccount />
+                </View>
                 <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
             </ScrollView >
         </>
@@ -146,14 +147,11 @@ const RenderCreateAccount = () => {
     const navigation = useNavigation();
 
     return (
-        <View style={styles.signIn}>
-            <View style={styles.create}>
-                <Text style={styles.signInText}>Don't have an account ?</Text>
-                <Pressable onPress={() => navigation.navigate('Signup')}>
-                    <Text style={styles.linkText}> Create one</Text>
-                </Pressable>
-            </View>
-        </View>
+        // <Pressable onPress={() => navigation.navigate('Signup')}>
+        //     <Text style={styles.linkText}> Create one</Text>
+        // </Pressable>
+        <AppButton text='Create Account' onPress={() => navigation.navigate('Signup')}
+            style={styles.signupButton} textStyle={styles.signupText} isIcon={true} iconColor="#072169" />
     )
 }
 
@@ -161,14 +159,14 @@ const styles = EStyleSheet.create({
 
     container: {
         flex: 1,
-        paddingHorizontal: responsiveScreenWidth(3),
-
+        backgroundColor: '#F9FBFF',
+        paddingHorizontal: responsiveScreenWidth(5),
     },
     headerBox: {
-        marginTop: responsiveScreenWidth(30),
+        marginTop: Platform.OS === 'ios' ? responsiveScreenWidth(22) : responsiveScreenWidth(15),
     },
     inputContainer: {
-        marginTop: responsiveScreenWidth(10),
+        marginTop: responsiveScreenWidth(20),
     },
 
     errorBox: {
@@ -177,7 +175,7 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(6),
         borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'graphik-regular',
+        fontFamily: 'gotham-light',
         color: '#EF2F55',
         fontSize: '0.7rem'
     },
@@ -185,10 +183,10 @@ const styles = EStyleSheet.create({
         textAlign: "right"
     },
     linkText: {
-        color: '#EF2F55',
-        fontFamily: 'graphik-medium',
+        color: '#072169',
+        fontFamily: 'gotham-medium',
         // marginLeft: normalize(15),
-        fontSize: '0.87rem'
+        fontSize: '0.95rem'
     },
     divider: {
         display: 'flex',
@@ -211,6 +209,36 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         fontSize: '0.87rem'
     },
+    buttonsContainer: {
+        marginTop: '2rem'
+    },
+    loginButton: {
+        // backgroundColor: '#E15220',
+        marginVertical: 20,
+        paddingVertical: normalize(19),
+    },
+    buttonText: {
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem'
+    },
+    orText: {
+        fontFamily: 'sansation-bold',
+        fontSize: '1.1rem',
+        color: '#072169',
+        textAlign: 'center'
+    },
+    signupButton: {
+        backgroundColor: '#F9FBFF',
+        marginVertical: 20,
+        paddingVertical: normalize(19),
+        borderWidth: 2,
+        borderColor: '#072169'
+    },
+    signupText: {
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem',
+        color: '#072169'
+    },
     google: {
         alignItems: 'center',
         marginVertical: normalize(10)
@@ -230,8 +258,13 @@ const styles = EStyleSheet.create({
     contactUs: {
         fontSize: '.7rem',
         fontFamily: 'graphik-medium',
-        color: '#EF2F55',
+        color: '#E15220',
         textAlign: 'center',
-        marginTop: '1rem'
+        marginTop: '1rem',
+        marginBottom: '1.2rem'
+
+    },
+    disabled: {
+        backgroundColor: '#EA8663'
     }
 });

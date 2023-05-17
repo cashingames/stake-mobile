@@ -1,18 +1,24 @@
 import React from "react";
-import { Text, Pressable } from 'react-native';
+import { Text, Pressable, View } from 'react-native';
 import normalize from "../utils/normalize";
 import EStyleSheet from "react-native-extended-stylesheet";
+import { Ionicons } from "@expo/vector-icons";
 
 
-export default function AppButton({ onPress, text, disabled, style, textStyle }) {
+export default function AppButton({ onPress, text, disabled, style, textStyle, isIcon, iconColor, disabledStyle }) {
     return (
 
         <Pressable
             onPress={onPress}
-            style={[styles.button, disabled ? styles.disabled : {}, style]}
+            style={[styles.button, disabled ? disabledStyle : {}, style]}
             disabled={disabled}
         >
-            <Text style={[styles.text, textStyle]}>{text}</Text>
+            <View style={styles.textContainer}>
+                <Text style={[styles.text, textStyle]}>{text}</Text>
+                {isIcon &&
+                    <Ionicons name="chevron-forward" size={22} color={iconColor} />
+                }
+            </View>
         </Pressable>
     );
 }
@@ -24,9 +30,9 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(15),
         paddingHorizontal: normalize(28),
         marginVertical: 30,
-        borderRadius: 12,
+        borderRadius: 13,
         elevation: 3,
-        backgroundColor: '#EF2F55'
+        backgroundColor: '#E15220',
     },
     text: {
 
@@ -35,6 +41,10 @@ const styles = EStyleSheet.create({
         color: 'white',
         fontFamily: 'graphik-medium',
         fontSize: '0.9rem'
+    },
+    textContainer: {
+        flexDirection: "row",
+        alignItems: 'center'
     },
     disabled: {
         backgroundColor: '#DFCBCF'

@@ -20,22 +20,23 @@ export default function (props) {
 
     return (
         <View style={styles.inputHeader}>
-            <Text style={styles.inputLabel} >{label}</Text>
+            <View style={styles.labelContainer}>
+                <Text style={styles.inputLabel} >{label}</Text>
+                {type === "password" &&
+                    <Text
+                        onPress={toggleSecureText}
+                    // style={styles.passwordIcon}
+                    >
+                        <Ionicons name={hidden ? 'eye-off' : "eye"} size={20} color="#072169" />
+                    </Text>
+                }
+            </View>
             <View style={styles.inputContainer}>
                 <TextInput
                     style={[styles.input, shouldUseEditableStyle ? {} : styles.disabled]}
                     {...props}
                     secureTextEntry={hidden}
                 />
-
-                {type === "password" &&
-                    <Text
-                        onPress={toggleSecureText}
-                        style={styles.passwordIcon}
-                    >
-                        <Ionicons name={hidden ? 'eye-off' : "eye"} size={20} color="#00000080" />
-                    </Text>
-                }
 
                 {error && <Text style={styles.error} >{error}</Text>}
             </View>
@@ -45,29 +46,36 @@ export default function (props) {
 }
 
 const styles = EStyleSheet.create({
-    inputHeader:{
+    inputHeader: {
         display: 'flex',
         flexDirection: 'column',
     },
     inputLabel: {
-        fontFamily: 'graphik-medium',
-        color: '#000000B2',
-        fontSize:'0.76rem',
-        marginBottom: normalize(8)
+        fontFamily: 'gotham-medium',
+        color: '#072169',
+        fontSize: '0.98rem',
+        marginBottom: normalize(10)
     },
     inputContainer: {
-        marginBottom: normalize(15),
+        marginBottom: normalize(30),
+    },
+    labelContainer: {
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        marginBottom:'.3rem'
     },
     input: {
-        height: normalize(38),
+        height: normalize(52),
         borderWidth: 1,
         borderRadius: 10,
-        paddingLeft: normalize(10),
+        paddingLeft: normalize(18),
         paddingRight: normalize(20),
-        borderColor: '#CDD4DF',
-        fontFamily: 'graphik-regular',
-        color: '#00000080',
-        fontSize: '0.75rem'
+        borderColor: '#D9D9D9',
+        fontFamily: 'sansation-regular',
+        color: '#072169',
+        fontSize: '0.85rem',
+        backgroundColor: '#fff',
     },
     passwordIcon: {
         position: 'absolute',

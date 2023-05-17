@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { StyleSheet, View, Text, ScrollView, Alert } from 'react-native';
+import { View, Text, ScrollView, Alert, Platform } from 'react-native';
 import Constants from 'expo-constants';
 
 import AppButton from '../../shared/AppButton';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import Input from '../../shared/Input';
 import { resetPassword } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
 
     const [password, setPassword] = useState(Constants.expoConfig.extra.isStaging ? 'zubby1234' : '');
+    const [confirmPassword, setConfirmPassword] = useState(Constants.expoConfig.extra.isStaging ? 'zubby1234' : '');
     const [canSend, setCanSend] = useState(false);
     const [error, setError] = useState('');
     const [passErr, setPassError] = useState(false);
+    const [confirmPassErr, setConfirmPassError] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const phone = useSelector(state => state.auth.passwordReset.userPhone);
@@ -26,6 +31,10 @@ export default function ({ navigation }) {
     const onChangePassword = (text) => {
         text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
         setPassword(text)
+    }
+    const onChangeConfirmPassword = (text) => {
+        text.length > 0 && text.length < 8 ? setConfirmPassError(true) : setConfirmPassError(false);
+        setConfirmPassword(text)
     }
 
     const onSend = async () => {
@@ -49,10 +58,10 @@ export default function ({ navigation }) {
     }
 
     useEffect(() => {
-        var invalid = passErr;
+        var invalid = passErr || confirmPassErr || password === ''|| confirmPassword === '' || confirmPassword !== password;
         setCanSend(!invalid);
         setError('');
-    }, [passErr]);
+    }, [passErr, confirmPassErr, password,confirmPassword]);
 
     return (
         <ScrollView style={styles.container}>
@@ -72,10 +81,19 @@ export default function ({ navigation }) {
                         value={password}
                         onChangeText={text => { onChangePassword(text) }}
                     />
+                       <Input
+                        label='Confirm password'
+                        type="password"
+                        error={confirmPassErr && '*passwords must match'}
+                        placeholder="password must match"
+                        value={confirmPassword}
+                        onChangeText={text => { onChangeConfirmPassword(text) }}
+                    />
 
                 </View>
                 <View style={styles.button}>
-                    <AppButton onPress={() => onSend()} text={loading ? 'Sending...' : 'RESET'} disabled={!canSend} />
+                    <AppButton onPress={() => onSend()} text={loading ? 'Updating...' : 'Update password'} disabled={!canSend}
+                    style={styles.loginButton} textStyle={styles.buttonText} disabledStyle={styles.disabled} />
                 </View>
             </View>
         </ScrollView>
@@ -84,31 +102,34 @@ export default function ({ navigation }) {
 
 const ForgotPasswordTitle = () => {
     return (
-        <>
-            <Text style={styles.headerTextStyle}>
-                Set New Password
-            </Text>
-            <Text style={styles.instructionTextStyle}>Enter your new password below</Text>
-        </>
+        <View style={styles.headerContainerStyle}>
+            <Text style={styles.headerTextStyle}>Update your password</Text>
+        </View>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        paddingTop: normalize(30),
-        paddingHorizontal: normalize(15),
+        backgroundColor: '#F9FBFF',
+        paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(22) : responsiveScreenWidth(15),
+        paddingHorizontal: normalize(22),
 
+    },
+    headerContainerStyle: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     content: {
         justifyContent: 'space-between'
     },
     headerTextStyle: {
         fontSize: 26,
-        fontFamily: 'graphik-bold',
-        color: 'black',
-        paddingTop: normalize(10),
+        fontFamily: 'gotham-bold',
+        color: '#072169',
+        marginLeft: '2.5rem',
+        textAlign: 'center'
+        // paddingTop: normalize(10),
     },
     instructionTextStyle: {
         fontSize: 14,
@@ -123,13 +144,13 @@ const styles = StyleSheet.create({
         paddingVertical: normalize(6),
         borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'graphik-regular',
+        fontFamily: 'gotham-light',
         color: '#EF2F55',
         fontSize: normalize(10)
     },
     form: {
-        marginTop: normalize(30),
-        marginBottom: normalize(60)
+        marginTop: '5rem',
+        // marginBottom: normalize(60)
     },
     input: {
         height: normalize(40),
@@ -150,5 +171,17 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: normalize(10),
+    },
+    loginButton: {
+        // backgroundColor: '#E15220',
+        marginVertical: 20,
+        paddingVertical: normalize(19),
+    },
+    buttonText: {
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem'
+    },
+    disabled: {
+        backgroundColor: '#EA8663'
     }
 })

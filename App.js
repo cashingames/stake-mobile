@@ -99,7 +99,12 @@ function App() {
     'graphik-medium': require('./assets/fonts/GraphikMedium.otf'),
     'sansation-regular': require('./assets/fonts/Sansation_Regular.ttf'),
     'sansation-bold': require('./assets/fonts/Sansation_Bold.ttf'),
-    'sansation-light': require('./assets/fonts/Sansation_Light.ttf')
+    'sansation-light': require('./assets/fonts/Sansation_Light.ttf'),
+    'gotham-bold': require('./assets/fonts/GothamRoundedBold_21016.ttf'),
+    'gotham-book': require('./assets/fonts/GothamRoundedBook_21018.ttf'),
+    'gotham-light': require('./assets/fonts/GothamRoundedLight_21020.ttf'),
+    'gotham-medium': require('./assets/fonts/GothamRoundedMedium_21022.ttf'),
+
   });
 
   const onRouteChange = async () => {
