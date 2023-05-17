@@ -31,7 +31,7 @@ const Dashboard = ({ navigation }) => {
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(true)
     const [achievementPopup, setAchievementPopup] = useState(false);
-    const [updateModal, setUpdateModal] = useState(true)
+    const [updateModal, setUpdateModal] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
     const [showModal, setShowModal] = useState(false)
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
