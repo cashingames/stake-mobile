@@ -122,7 +122,6 @@ const styles = EStyleSheet.create({
         width: responsiveWidth(20),
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 20
     },
     btn: {
 
