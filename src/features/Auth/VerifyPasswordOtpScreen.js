@@ -13,7 +13,6 @@ import { calculateTimeRemaining } from '../../utils/utils';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { TextInput } from 'react-native';
 import { ScrollView } from 'react-native';
-import LottieAnimations from '../../shared/LottieAnimations';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -192,10 +191,6 @@ const styles = EStyleSheet.create({
         backgroundColor: '#F9FBFF',
         paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(22) : responsiveScreenWidth(13),
         paddingHorizontal: normalize(22)
-    },
-
-    excellent: {
-        alignItems: 'center'
     },
 
     verifySubText: {

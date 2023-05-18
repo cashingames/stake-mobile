@@ -3,9 +3,7 @@ import { Text, View, ScrollView, Pressable, TextInput } from 'react-native';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, Link } from '@react-navigation/native';
-import AuthBanner from '../../shared/AuthBanner';
 import Input from '../../shared/Input';
-import { CheckBox } from 'react-native-elements'
 import AuthTitle from '../../shared/AuthTitle';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from "@expo/vector-icons";
@@ -21,14 +19,21 @@ const SignupScreen = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [phone, setPhone] = useState('');
+    const [firstname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
     const [canSend, setCanSend] = useState(true);
     const [passErr, setPassError] = useState(false);
     const [emailErr, setEmailError] = useState(false);
     const [usernameErr, setUsernameError] = useState(false);
     const [phoneErr, setPhoneError] = useState(false);
+    const [fNameErr, setFnameErr] = useState(false);
+    const [lNameErr, setLnameErr] = useState(false);
+    const [confirmPassErr, setConfirmPassError] = useState(false);
     const [allError, setAllError] = useState('')
     const [checked, setChecked] = useState(false);
+    const [bonusChecked, setBonusChecked] = useState(false);
     const [show, setShow] = useState(false);
     const [countryCode, setCountryCode] = useState('+234');
     const [referrer, setReferrer] = useState('');
@@ -55,20 +60,33 @@ const SignupScreen = () => {
         text.length > 0 && text.length < 8 ? setPassError(true) : setPassError(false);
         setPassword(text)
     }
+    const onChangeConfirmPassword = (text) => {
+        text.length > 0 && text.length < 8 ? setConfirmPassError(true) : setConfirmPassError(false);
+        setConfirmPassword(text)
+    }
     const onChangePhone = (text) => {
         text.length > 0 && text.length < 10 ? setPhoneError(true) : setPhoneError(false);
         setPhone(text)
     }
 
+    const toggleBonusOffer = () => {
+        setBonusChecked(!bonusChecked);
+    }
+    const toggleAgreement = () => {
+        setChecked(!checked);
+    }
+
     const onSend = () => {
-        console.log('next')
         setLoading(true);
         registerUser({
             email, password,
             username,
             password_confirmation: password,
             phone_number: phone,
+            first_name: firstname,
+            last_name: lastname,
             country_code: countryCode,
+            // bonus_checked: bonusChecked,
             referrer: referrer,
         }).then(response => {
             console.log(response)
@@ -94,48 +112,33 @@ const SignupScreen = () => {
     }
 
     useEffect(() => {
-        const invalid = passErr || emailErr || phoneErr || usernameErr || !checked;
+        const nameRule = /\d/;
+        const validFirstName = !nameRule.test(firstname);
+        const validLastName = !nameRule.test(lastname);
+        setFnameErr(!validFirstName);
+        setLnameErr(!validLastName);
+
+        const invalid = passErr || emailErr || phoneErr || usernameErr || !checked || fNameErr || firstname === "" || lNameErr || lastname === "" ||
+            confirmPassErr || confirmPassword === '' || confirmPassword !== password;
         setCanSend(!invalid);
-    }, [emailErr, phoneErr, passErr, checked])
+
+    }, [emailErr, phoneErr, passErr, checked, fNameErr, firstname,
+        lNameErr, lastname, confirmPassErr, confirmPassword, password])
 
     return (
         <ScrollView style={styles.container}>
-            <AuthBanner />
             <View style={styles.headerBox}>
-                <AuthTitle text='Create an account' />
+                <AuthTitle text='Create Account' />
             </View>
-            {/* <View style={styles.signIn}>
-                <Text style={styles.signInText}>Use your social link</Text>
-                <View style={styles.google}>
-                    <SocialSignUp googleText="Sign up" />
-                    {Platform.OS === 'ios' &&
-                        <AppleSignUp />
-                    }
-                </View>
-                <Text style={styles.signInText}>or</Text>
-            </View> */}
             <View style={styles.inputContainer}>
                 {allError.length > 0 &&
                     <Text>{allError}</Text>
                 }
-                <Input
-                    label='Email'
-                    placeholder="johndoe@example.com"
-                    value={email}
-                    type="email"
-                    error={emailErr && '*invalid email address'}
-                    onChangeText={text => onChangeEmail(text)}
-                />
-                <Input
-                    label='Username'
-                    placeholder="input a username"
-                    value={username}
-                    type="text"
-                    error={usernameErr && '*username is invalid. It must start with an alphabet and have more than 2 characters'}
-                    onChangeText={text => onChangeUsername(text)}
-                />
                 <>
-                    <Text style={styles.inputLabel} >Phone number</Text>
+                    <View style={styles.labelContainer}>
+                        <Text style={styles.inputLabel}>Phone number</Text>
+                        <Text style={styles.requiredText}>Required</Text>
+                    </View>
                     <View style={styles.phonePicker}>
                         <Pressable
                             onPress={() => setShow(true)}
@@ -144,7 +147,7 @@ const SignupScreen = () => {
                             <Text style={styles.countryCodeDigit}>
                                 {countryCode}
                             </Text>
-                            <Ionicons name="caret-down-outline" size={14} color="#00000080" />
+                            <Ionicons name="caret-down-outline" size={14} color="#072169" />
                         </Pressable>
                         <TextInput
                             style={styles.phoneNumberInput}
@@ -174,35 +177,83 @@ const SignupScreen = () => {
                         setShow(false);
                     }}
                 />
+                <Input
+                    label='First name'
+                    placeholder="Enter first name as it appears on your bank account"
+                    value={firstname}
+                    type="text"
+                    error={fNameErr && "First name can't have numbers"}
+                    onChangeText={setFirstname}
+                    isRequired={true}
+                />
+                <Input
+                    label='Last name'
+                    placeholder="Enter last name as it appears on your bank account"
+                    value={lastname}
+                    type="text"
+                    error={lNameErr && "Last name can't have numbers"}
+                    onChangeText={setLastname}
+                    isRequired={true}
+                />
+                <Input
+                    label='Email'
+                    placeholder="e.g john@example.com"
+                    value={email}
+                    type="email"
+                    error={emailErr && '*invalid email address'}
+                    onChangeText={text => onChangeEmail(text)}
+                    isRequired={true}
+                />
+                <Input
+                    label='Username'
+                    placeholder="input a username"
+                    value={username}
+                    type="text"
+                    error={usernameErr && '*username is invalid. It must start with an alphabet and have more than 2 characters'}
+                    onChangeText={text => onChangeUsername(text)}
+                    isRequired={true}
+                />
 
                 <Input
                     type="password"
                     label='Password'
                     value={password}
-                    placeholder="Enter password"
+                    placeholder="Password must not be less than 8 digits"
                     error={passErr && '*password must not be less than 8 digits'}
                     onChangeText={text => { onChangePassword(text) }}
                 />
                 <Input
+                    type="password"
+                    label='Confirm password'
+                    value={confirmPassword}
+                    error={confirmPassErr && '*passwords must match'}
+                    placeholder="Password must not be less than 8 digits"
+                    onChangeText={text => { onChangeConfirmPassword(text) }}
+                />
+                {/* <Input
                     label='Referral Code (optional)'
                     value={referrer}
                     onChangeText={setReferrer}
-                />
+                /> */}
             </View>
-
-            <CheckBox
-                containerStyle={styles.agreement}
-                checked={checked}
-                onPress={() => setChecked(!checked)}
-                title={
-                    <Text style={styles.permission}>I agree to the
-                        <Link style={styles.linkText} to={{ screen: 'Terms' }}> terms & condition </Link>and
-                        <Link style={styles.linkText} to={{ screen: 'Privacy' }}> privacy Policy</Link>
-                    </Text>
-                }
-            />
-            <AppButton text='Continue' onPress={onSend} disabled={!canSend || loading} />
-            <RenderCreateAccount />
+            <View style={styles.agreement}>
+                <Ionicons name={checked ? 'checkmark-circle' : "ellipse-outline"} size={30} color={checked ? '#00FFA3' : '#D9D9D9'} onPress={toggleAgreement} />
+                <Text style={styles.agreementText}>I agree to the
+                    <Link style={styles.linkText} to={{ screen: 'Terms' }}> Terms & condition, </Link>and
+                    <Link style={styles.linkText} to={{ screen: 'Privacy' }}> Privacy Policy </Link>
+                    of Cashingames. I also declare i am 18 years and above
+                </Text>
+            </View>
+            <View style={styles.agreementI}>
+                <Ionicons name={bonusChecked ? 'checkmark-circle' : "ellipse-outline"} size={30} color={bonusChecked ? '#00FFA3' : '#D9D9D9'} onPress={toggleBonusOffer} />
+                <Text style={styles.agreementText}> I would like to receive my sign up bonus</Text>
+            </View>
+            <View style={styles.buttonsContainer}>
+                <AppButton text='Create Account' onPress={onSend} disabled={!canSend || loading} style={styles.loginButton} textStyle={styles.buttonText}
+                    isIcon={true} iconColor="#FFF" disabledStyle={styles.disabled} />
+                <Text style={styles.orText}>Or</Text>
+                <RenderCreateAccount />
+            </View>
             <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
         </ScrollView>
     );
@@ -213,14 +264,8 @@ const RenderCreateAccount = () => {
     const navigation = useNavigation();
 
     return (
-        <View style={styles.signIn}>
-            <View style={styles.create}>
-                <Text style={styles.signInText}>Have an account already ?</Text>
-                <Pressable onPress={() => navigation.navigate('Login')}>
-                    <Text style={styles.linkText}> Sign in</Text>
-                </Pressable>
-            </View>
-        </View>
+        <AppButton text='Login to account' onPress={() => navigation.navigate('Login')}
+            style={styles.signupButton} textStyle={styles.signupText} isIcon={true} iconColor="#072169" />
     )
 }
 
@@ -230,90 +275,65 @@ const styles = EStyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        paddingHorizontal: responsiveScreenWidth(4),
-        paddingTop: responsiveScreenWidth(8)
+        backgroundColor: '#F9FBFF',
+        paddingHorizontal: normalize(22),
 
     },
     headerBox: {
-        marginTop: responsiveScreenWidth(13),
-        paddingTop: responsiveScreenWidth(3)
-    },
-    image: {
-        flex: 1,
-        justifyContent: "center",
-        position: 'absolute',
-        left: normalize(10),
-        top: normalize(10)
+        marginTop: Platform.OS === 'ios' ? responsiveScreenWidth(22) : responsiveScreenWidth(15),
     },
     inputContainer: {
-        marginTop: responsiveScreenWidth(27),
+        marginTop: responsiveScreenWidth(10),
     },
     linkText: {
-        color: '#EF2F55',
-        fontFamily: 'graphik-regular',
-        fontSize: '0.85rem'
+        fontFamily: 'sansation-regular',
+        fontSize: '0.85rem',
+        textDecorationLine: 'underline',
+    },
+    agreementText: {
+        fontFamily: 'sansation-regular',
+        fontSize: '0.9rem',
+        color: '#072169',
+        lineHeight: '1.2rem',
+        marginLeft: '.6rem',
+        textAlign: 'justify'
     },
 
     agreement: {
-        marginLeft: 0,
-        paddingLeft: 0,
-        backgroundColor: '#fff',
-        borderColor: '#fff'
-    },
-    permission: {
-        color: '#000000',
-        fontFamily: 'graphik-regular',
-        fontSize: '0.85rem'
-    },
-    divider: {
-        display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center'
+        alignItems: 'flex-start',
+        marginBottom: '.8rem',
+        paddingRight: '2rem'
     },
-    signIn: {
-        flexDirection: 'column',
-        // justifyContent: 'center',
+    agreementI: {
+        flexDirection: 'row',
         alignItems: 'center',
-        // marginTop: normalize(2),
-        marginBottom: normalize(25)
-    },
-    create: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        // marginBottom: normalize(5)
-    },
-    signInText: {
-        color: '#00000080',
-        fontFamily: 'graphik-medium',
-        fontSize: '0.87rem'
-    },
-    google: {
-        marginVertical: normalize(8)
+        marginBottom: '.8rem'
     },
     phonePicker: {
         flexDirection: 'row',
-        height: normalize(38),
+        height: normalize(52),
         borderWidth: 1,
         borderRadius: 10,
         paddingLeft: normalize(10),
         paddingRight: normalize(20),
-        borderColor: '#CDD4DF',
+        borderColor: '#D9D9D9',
         alignItems: 'center',
         marginBottom: normalize(15),
+        backgroundColor: '#fff'
 
     },
     phoneNumberInput: {
-        fontFamily: 'graphik-regular',
-        color: '#00000080',
-        fontSize: '0.75rem',
+        fontFamily: 'sansation-regular',
+        color: '#072169',
+        fontSize: '0.85rem',
         marginLeft: '.8rem',
         width: '8rem'
     },
     countryCodeDigit: {
-        fontFamily: 'graphik-regular',
-        color: '#00000080',
-        fontSize: '0.75rem',
+        fontFamily: 'sansation-regular',
+        color: '#072169',
+        fontSize: '0.85rem'
     },
     codeButton: {
         flexDirection: 'row',
@@ -321,17 +341,61 @@ const styles = EStyleSheet.create({
         borderColor: ' rgba(0, 0, 0, 0.1)',
         borderRightWidth: 1,
     },
+    labelContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '.6rem'
+    },
     inputLabel: {
-        fontFamily: 'graphik-medium',
-        color: '#000000B2',
-        fontSize: '0.76rem',
-        marginBottom: normalize(8)
+        fontFamily: 'gotham-medium',
+        color: '#072169',
+        fontSize: '0.98rem',
+    },
+    requiredText: {
+        fontFamily: 'sansation-regular',
+        color: '#E15220',
+        fontSize: '0.95rem',
     },
     contactUs: {
         fontSize: '.7rem',
-        fontFamily: 'graphik-medium',
-        color: '#EF2F55',
+        fontFamily: 'gotham-medium',
+        color: '#E15220',
         textAlign: 'center',
-        // marginTop:'.2rem'
+        marginTop: '1rem',
+        marginBottom: '1.2rem'
+    },
+    buttonsContainer: {
+        marginTop: '1rem'
+    },
+    loginButton: {
+        // backgroundColor: '#E15220',
+        marginVertical: 20,
+        paddingVertical: normalize(19),
+    },
+    buttonText: {
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem'
+    },
+    orText: {
+        fontFamily: 'sansation-bold',
+        fontSize: '1.1rem',
+        color: '#072169',
+        textAlign: 'center'
+    },
+    signupButton: {
+        backgroundColor: '#F9FBFF',
+        marginVertical: 20,
+        paddingVertical: normalize(19),
+        borderWidth: 2,
+        borderColor: '#072169'
+    },
+    signupText: {
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem',
+        color: '#072169'
+    },
+    disabled: {
+        backgroundColor: '#EA8663'
     }
 });

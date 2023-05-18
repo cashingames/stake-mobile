@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 export default function (props) {
-    const { label, type, error, editable, defaultValue } = props;
+    const { label, type, error, editable, defaultValue, isRequired } = props;
 
     const [hidden, setHidden] = useState(type === "password");
 
@@ -21,7 +21,7 @@ export default function (props) {
     return (
         <View style={styles.inputHeader}>
             <View style={styles.labelContainer}>
-                <Text style={styles.inputLabel} >{label}</Text>
+                <Text style={styles.inputLabel}>{label}</Text>
                 {type === "password" &&
                     <Text
                         onPress={toggleSecureText}
@@ -29,6 +29,9 @@ export default function (props) {
                     >
                         <Ionicons name={hidden ? 'eye-off' : "eye"} size={20} color="#072169" />
                     </Text>
+                }
+                {isRequired &&
+                <Text style={styles.requiredText}>Required</Text>
                 }
             </View>
             <View style={styles.inputContainer}>
@@ -54,7 +57,11 @@ const styles = EStyleSheet.create({
         fontFamily: 'gotham-medium',
         color: '#072169',
         fontSize: '0.98rem',
-        marginBottom: normalize(10)
+    },
+    requiredText: {
+        fontFamily: 'sansation-regular',
+        color: '#E15220',
+        fontSize: '0.95rem',
     },
     inputContainer: {
         marginBottom: normalize(30),
@@ -63,14 +70,14 @@ const styles = EStyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-between',
         alignItems:'center',
-        marginBottom:'.3rem'
+        marginBottom:'.6rem'
     },
     input: {
         height: normalize(52),
         borderWidth: 1,
         borderRadius: 10,
-        paddingLeft: normalize(18),
-        paddingRight: normalize(20),
+        paddingLeft: normalize(13),
+        paddingRight: normalize(13),
         borderColor: '#D9D9D9',
         fontFamily: 'sansation-regular',
         color: '#072169',

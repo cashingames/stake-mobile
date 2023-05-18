@@ -257,7 +257,7 @@ const styles = EStyleSheet.create({
     },
     contactUs: {
         fontSize: '.7rem',
-        fontFamily: 'graphik-medium',
+        fontFamily: 'gotham-medium',
         color: '#E15220',
         textAlign: 'center',
         marginTop: '1rem',
