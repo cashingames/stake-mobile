@@ -65,12 +65,6 @@ const NextButton = ({ ending, onEndGame }) => {
             >
                 <Text style={styles.btnText}>{isLastQuestion ? 'Finish' : 'Next'}</Text>
             </Pressable>
-            {/* <AppButton
-            disabled={ending}
-            text=
-            onPress={handleSubmission}
-            style={styles.nextButton}
-        /> */}
         </View>
     )
 }
@@ -83,8 +77,8 @@ const styles = EStyleSheet.create({
     nextButton: {
         backgroundColor: '#15397D',
         borderRadius: 20,
-        height: normalize(35),
-        paddingHorizontal: 60,
+        height: normalize(40),
+        paddingHorizontal: 150,
         justifyContent: 'center',
         borderBottomColor: '#0A1F45',
         borderBottomWidth: 4,
@@ -97,8 +91,8 @@ const styles = EStyleSheet.create({
     disabled: {
         backgroundColor: 'gray',
         borderRadius: 20,
-        height: normalize(35),
-        paddingHorizontal: 60,
+        height: normalize(40),
+        paddingHorizontal: 150,
         justifyContent: 'center',
         borderBottomColor: '#0A1F45',
         borderBottomWidth: 4,

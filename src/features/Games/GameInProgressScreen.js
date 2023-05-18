@@ -176,9 +176,9 @@ export default function GameInProgressScreen({ navigation, route }) {
             style={styles.image}
             resizeMode="cover" >
             <View style={styles.top}>
+            <TopIcons />
             </View>
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
-                <TopIcons />
                 <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
                 <GameQuestions />
                 <UniversalBottomSheet
@@ -197,8 +197,8 @@ export default function GameInProgressScreen({ navigation, route }) {
                 showModal={showModal}
                 setShowModal={setShowModal}
                 multipleBtn={true}
-                title='Exist Game?'
-                modalBody='You have an ongoing game. Do you want to submit this game ?'
+                title='Exit Game?'
+                modalBody='You have an ongoing game. Do you want to end this game ?'
                 btnText='Yes'
                 btnText_2='No'
                 btnHandler_2={() => setShowModal(false)}

@@ -21,11 +21,25 @@ const AvailableGameSessionBoosts = () => {
     const displayedOptions = useSelector(state => state.game.displayedOptions);
     const gameMode = useSelector(state => state.game.gameMode);
     const [showText, setShowText] = useState(true);
+    const [timeLeft, setTimeLeft] = useState(10);
+    const [timer, setTimer] = useState(false)
 
-    const freeze =  useSound(require('../../assets/sounds/sound.wav'))
-    const skip =  useSound(require('../../assets/sounds/achievement-unlocked2.wav'))
+    const freeze = useSound(require('../../assets/sounds/sound.wav'))
+    const skip = useSound(require('../../assets/sounds/achievement-unlocked2.wav'))
 
-
+    useEffect(() => {
+        if (timer) {
+            const time = setInterval(() => {
+                setTimeLeft((prevTime) => prevTime - 1);
+            }, 1000);
+            return () => clearInterval(time);
+        }
+    }, [timer]);
+    useEffect(() => {
+        if (timeLeft === 0) {
+          setTimeLeft(0)
+        }
+      }, [timeLeft]);
 
     const boostsToDisplay = () => {
         //  bomb is only applicable to multiple choices
@@ -38,14 +52,6 @@ const AvailableGameSessionBoosts = () => {
         return boosts;
     }
 
-    // useEffect(() => {
-    //     // Change the state every second or the time given by User.
-    //     const interval = setInterval(() => {
-    //         setShowText((showText) => !showText);
-    //     }, 1000);
-    //     return () => clearInterval(interval);
-    // }, []);
-
     const boostApplied = (data) => {
         dispatch(consumeBoost(data))
         dispatch(reduceBoostCount(data.id))
@@ -55,12 +61,15 @@ const AvailableGameSessionBoosts = () => {
         })
         const name = data.name.toUpperCase();
         if (name === 'TIME FREEZE') {
+            setTimer(true)
+            setTimeLeft(10)
             dispatch(pauseGame(true));
             freeze.playSound()
             setTimeout(() => {
+                setTimer(false)
                 dispatch(pauseGame(false))
                 dispatch(boostReleased())
-        }, 10000);
+            }, 12000);
 
         }
         if (name === 'SKIP') {
@@ -84,7 +93,7 @@ const AvailableGameSessionBoosts = () => {
                     {
                         boostsToDisplay().map((boost, index) =>
                             boost.count >= 1 &&
-                            <AvailableBoost boost={boost} key={index} onConsume={boostApplied} showText={showText} />
+                            <AvailableBoost boost={boost} key={index} onConsume={boostApplied} showText={showText} timer={timer} timeLeft={timeLeft} />
                         )
                     }
 
@@ -96,34 +105,13 @@ const AvailableGameSessionBoosts = () => {
     )
 }
 
-const AvailableBoost = ({ boost, onConsume, showText }) => {
-    const scaleValue = useRef(new Animated.Value(1)).current;
-    const zoomAnimation = {
-        transform: [{ scale: scaleValue }],
-    };
-
-    const zoom = useCallback(() => {
-        Animated.sequence([
-            Animated.timing(scaleValue, { toValue: 1.2, duration: 500, useNativeDriver: true }),
-            Animated.timing(scaleValue, { toValue: 1, duration: 500, useNativeDriver: true }),
-        ]).start(() => {
-            scaleValue.setValue(1);
-        });
-    }, [scaleValue]);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            zoom();
-        }, 1000);
-
-        return () => clearInterval(intervalId);
-    }, [zoom]);
-
-    useEffect(() => {
-        zoom();
-    }, []);
+const AvailableBoost = ({ boost, onConsume, timer, timeLeft }) => {
     const activeBoost = useSelector(state => state.game.activeBoost);
     const isActive = activeBoost.id === boost.id;
+    const name = boost.name.toUpperCase();
+    const seconds = timeLeft % 60;
+    const formattedTime = `00:${seconds.toString().padStart(2, '0')}`;
+  
 
     return (
         <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
@@ -135,7 +123,7 @@ const AvailableBoost = ({ boost, onConsume, showText }) => {
                     />
                     <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
                 </View>
-                <Text style={styles.name}>{boost.name}</Text>
+                <Text style={styles.name}>{boost.name} {timer && name === 'TIME FREEZE' ? <Text style={styles.name}>{formattedTime}</Text> : ''}</Text>
             </Animated.View>
         </Pressable>
     )
