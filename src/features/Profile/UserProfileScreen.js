@@ -22,7 +22,7 @@ import AppHeader from '../../shared/AppHeader';
 import TopIcons from '../../shared/TopIcons';
 import { Alert } from 'react-native';
 import GameModal from '../../shared/GameModal';
-
+import * as ImageManipulator from 'expo-image-manipulator'
 
 export default function UserProfileScreen({ navigation }) {
 
@@ -79,6 +79,7 @@ const UserAvatar = () => {
         }
 
         let localUri = result.assets[0].uri;
+        console.log(await compressImage(localUri))
         let filename = localUri.split('/').pop();
         let match = /\.(\w+)$/.exec(filename);
         let type = match ? `image/${match[1]}` : `image`;
@@ -106,6 +107,15 @@ const UserAvatar = () => {
             });
     }
 
+    const compressImage = async (uri) => {
+        const compressedImage = await ImageManipulator.manipulateAsync(
+          uri,
+          [{ resize: { width: 1024 } }],
+          { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG }
+        );
+      
+        return compressedImage.uri;
+      };
     return (
         <View style={styles.userAvatar}>
             <View style={styles.imageCircle}>
