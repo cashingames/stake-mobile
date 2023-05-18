@@ -21,7 +21,7 @@ const AvailableGameSessionBoosts = () => {
     const displayedOptions = useSelector(state => state.game.displayedOptions);
     const gameMode = useSelector(state => state.game.gameMode);
     const [showText, setShowText] = useState(true);
-    const [timeLeft, setTimeLeft] = useState(10);
+    const [timeLeft, setTimeLeft] = useState(15);
     const [timer, setTimer] = useState(false)
 
     const freeze = useSound(require('../../assets/sounds/sound.wav'))
@@ -62,14 +62,14 @@ const AvailableGameSessionBoosts = () => {
         const name = data.name.toUpperCase();
         if (name === 'TIME FREEZE') {
             setTimer(true)
-            setTimeLeft(10)
+            setTimeLeft(15)
             dispatch(pauseGame(true));
             freeze.playSound()
             setTimeout(() => {
                 setTimer(false)
                 dispatch(pauseGame(false))
                 dispatch(boostReleased())
-            }, 12000);
+            }, 17000);
 
         }
         if (name === 'SKIP') {

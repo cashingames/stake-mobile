@@ -176,7 +176,7 @@ export default function GameInProgressScreen({ navigation, route }) {
             style={styles.image}
             resizeMode="cover" >
             <View style={styles.top}>
-            <TopIcons />
+                <TopIcons />
             </View>
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
                 <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
@@ -188,7 +188,9 @@ export default function GameInProgressScreen({ navigation, route }) {
                 />
             </ScrollView>
             <View style={styles.buttonCase}>
-                <NextButton ending={ending} onEndGame={() => onEndGame()} />
+                <View style={styles.nextBtnCase}>
+                    <NextButton ending={ending} onEndGame={() => onEndGame()} />
+                </View>
                 <View style={styles.setting}>
                     <GameSettings navigationHandler={() => showExitConfirmation()} isDisabled={true} />
                 </View>
@@ -243,5 +245,8 @@ const styles = EStyleSheet.create({
     },
     buttonCase: {
         paddingBottom: normalize(20),
+    },
+    nextBtnCase: {
+        paddingHorizontal: responsiveScreenWidth(6),
     }
 });
