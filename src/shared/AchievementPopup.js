@@ -49,7 +49,7 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
                     <View style={styles.container}>
                         <View>
                             <ImageBackground style={styles.achievementBg} resizeMode="contain" source={require('./../../assets/images/invite-bg.png')}>
-                                <Text style={styles.modalTitle}>{achievement?.title || ""}</Text>
+                                <Text style={styles.modalTitle}>{achievement?.title || ""}Good starter</Text>
                                 <View style={styles.imgContainer}>
                                     <Image
                                         style={styles.achievementImage}
@@ -57,8 +57,12 @@ const AchievementPopup = ({ setAchievementPopup, achievementPopup }) => {
                                     />
                                 </View>
                                 <Text style={styles.congratulatoryText}>
-                                    Congratulations, you have unlocked an  achievement badge and earned {(achievement.rewardType === "POINTS") ? "" : ""}{achievement.reward}{(achievement.rewardType === "POINTS") ? "coins" : "coins"}. Unlock more badges and win other exciting rewards
+                                    Congrats on your new badge.
                                 </Text>
+                                <Text style={styles.congratulatoryText}> You've earned {(achievement.rewardType === "POINTS") ? "" : ""}
+                                    <Text style={styles.prize}>{achievement.reward}50 {(achievement.rewardType === "POINTS") ? "coins!" : "coins!"}</Text>
+                                </Text>
+
                                 <Pressable style={styles.closeBtn}
                                     onPress={() => setAchievementPopup(false)}
                                 >
@@ -90,22 +94,23 @@ const styles = EStyleSheet.create({
         paddingVertical: '2rem',
         paddingHorizontal: '2rem',
         alignItems: 'center',
-        height: responsiveHeight(55),
-        width: responsiveWidth(70)
+        height: responsiveHeight(35),
+        width: responsiveWidth(65)
     },
     modalTitle: {
         color: '#fff',
         fontSize: '1.4rem',
-        marginTop: responsiveHeight(100) * 0.05,
-        fontFamily: 'poppins',
+        marginTop: responsiveHeight(100) * 0.001,
+        fontFamily: 'blues-smile',
         textAlign: 'center'
     },
     imgContainer: {
         alignItems: 'center',
+        marginVertical: responsiveHeight(100) * 0.03
     },
     achievementImage: {
-        height: 150,
-        width: 150
+        height: 100,
+        width: 100
     },
     congratulatoryText: {
         fontFamily: 'poppins',
@@ -113,10 +118,14 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         color: '#fff'
     },
+    prize: {
+        color: '#FFD600',
+        fontFamily: 'blues-smile'
+    },
     closeBtn: {
         position: 'absolute',
-        left: responsiveWidth(62),
-        top: responsiveHeight(5),
+        left: responsiveWidth(55),
+        top: responsiveHeight(-1),
     },
     closeIcon: {
         width: 40,
