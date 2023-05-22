@@ -91,9 +91,10 @@ const styles = EStyleSheet.create({
         // transform: [{ translateY: normalize(-5) }],
     },
     error: {
-        fontFamily: 'graphik-regular',
+        fontFamily: 'gotham-medium',
         color: '#EF2F55',
-        fontSize: normalize(10)
+        fontSize: normalize(13),
+        marginTop:'.5rem'
     },
     disabled: {
         borderColor: '#fff',

@@ -169,9 +169,9 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(6),
         borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'gotham-light',
+        fontFamily: 'gotham-medium',
         color: '#EF2F55',
-        fontSize: normalize(10)
+        fontSize: normalize(13)
     },
     form: {
         marginTop: '4rem',

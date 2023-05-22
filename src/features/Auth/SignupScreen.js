@@ -249,7 +249,7 @@ const SignupScreen = () => {
                 <Text style={styles.agreementText}> I would like to receive my sign up bonus</Text>
             </View>
             <View style={styles.buttonsContainer}>
-                <AppButton text='Create Account' onPress={onSend} disabled={!canSend || loading} style={styles.loginButton} textStyle={styles.buttonText}
+                <AppButton text={loading ? 'Creating' : 'Create Account'} onPress={onSend} disabled={!canSend || loading} style={styles.loginButton} textStyle={styles.buttonText}
                     isIcon={true} iconColor="#FFF" disabledStyle={styles.disabled} />
                 <Text style={styles.orText}>Or</Text>
                 <RenderCreateAccount />

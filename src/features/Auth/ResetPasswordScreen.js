@@ -58,10 +58,10 @@ export default function ({ navigation }) {
     }
 
     useEffect(() => {
-        var invalid = passErr || confirmPassErr || password === ''|| confirmPassword === '' || confirmPassword !== password;
+        var invalid = passErr || confirmPassErr || password === '' || confirmPassword === '' || confirmPassword !== password;
         setCanSend(!invalid);
         setError('');
-    }, [passErr, confirmPassErr, password,confirmPassword]);
+    }, [passErr, confirmPassErr, password, confirmPassword]);
 
     return (
         <ScrollView style={styles.container}>
@@ -81,7 +81,7 @@ export default function ({ navigation }) {
                         value={password}
                         onChangeText={text => { onChangePassword(text) }}
                     />
-                       <Input
+                    <Input
                         label='Confirm password'
                         type="password"
                         error={confirmPassErr && '*passwords must match'}
@@ -93,7 +93,7 @@ export default function ({ navigation }) {
                 </View>
                 <View style={styles.button}>
                     <AppButton onPress={() => onSend()} text={loading ? 'Updating...' : 'Update password'} disabled={!canSend}
-                    style={styles.loginButton} textStyle={styles.buttonText} disabledStyle={styles.disabled} />
+                        style={styles.loginButton} textStyle={styles.buttonText} disabledStyle={styles.disabled} />
                 </View>
             </View>
         </ScrollView>
@@ -101,8 +101,11 @@ export default function ({ navigation }) {
 }
 
 const ForgotPasswordTitle = () => {
+    const navigation = useNavigation();
+
     return (
         <View style={styles.headerContainerStyle}>
+            <Ionicons name="close-sharp" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
             <Text style={styles.headerTextStyle}>Update your password</Text>
         </View>
     )
