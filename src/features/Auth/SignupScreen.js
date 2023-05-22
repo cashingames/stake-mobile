@@ -134,12 +134,12 @@ const SignupScreen = () => {
                 {allError.length > 0 &&
                     <Text>{allError}</Text>
                 }
-                <>
+                <View style={styles.phoneHeadContainer}>
                     <View style={styles.labelContainer}>
                         <Text style={styles.inputLabel}>Phone number</Text>
                         <Text style={styles.requiredText}>Required</Text>
                     </View>
-                    <View style={styles.phonePicker}>
+                    <View style={phoneErr ? styles.phonePickeri : styles.phonePicker}>
                         <Pressable
                             onPress={() => setShow(true)}
                             style={styles.codeButton}
@@ -161,7 +161,9 @@ const SignupScreen = () => {
 
                         />
                     </View>
-                </>
+                    {phoneErr && <Text style={styles.error} >*please input a correct phone number</Text>}
+
+                </View>
 
                 <CountryPicker
                     show={show}
@@ -310,6 +312,10 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         marginBottom: '.8rem'
     },
+    phoneHeadContainer: {
+        marginBottom: normalize(15),
+
+    },
     phonePicker: {
         flexDirection: 'row',
         height: normalize(52),
@@ -319,7 +325,19 @@ const styles = EStyleSheet.create({
         paddingRight: normalize(20),
         borderColor: '#D9D9D9',
         alignItems: 'center',
-        marginBottom: normalize(15),
+        backgroundColor: '#fff'
+
+    },
+    phonePickeri: {
+        flexDirection: 'row',
+        height: normalize(52),
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingLeft: normalize(10),
+        paddingRight: normalize(20),
+        borderColor: '#EF2F55',
+        alignItems: 'center',
+        // marginBottom: normalize(15),
         backgroundColor: '#fff'
 
     },
@@ -397,5 +415,11 @@ const styles = EStyleSheet.create({
     },
     disabled: {
         backgroundColor: '#EA8663'
-    }
+    },
+    error: {
+        fontFamily: 'gotham-medium',
+        color: '#EF2F55',
+        fontSize: normalize(13),
+        marginTop: '.5rem'
+    },
 });

@@ -36,7 +36,7 @@ export default function (props) {
             </View>
             <View style={styles.inputContainer}>
                 <TextInput
-                    style={[styles.input, shouldUseEditableStyle ? {} : styles.disabled]}
+                    style={[error ? styles.inputi : styles.input, shouldUseEditableStyle ? {} : styles.disabled]}
                     {...props}
                     secureTextEntry={hidden}
                 />
@@ -79,6 +79,18 @@ const styles = EStyleSheet.create({
         paddingLeft: normalize(13),
         paddingRight: normalize(13),
         borderColor: '#D9D9D9',
+        fontFamily: 'sansation-regular',
+        color: '#072169',
+        fontSize: '0.85rem',
+        backgroundColor: '#fff',
+    },
+    inputi: {
+        height: normalize(52),
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingLeft: normalize(13),
+        paddingRight: normalize(13),
+        borderColor: '#EF2F55',
         fontFamily: 'sansation-regular',
         color: '#072169',
         fontSize: '0.85rem',
