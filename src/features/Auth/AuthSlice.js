@@ -194,10 +194,20 @@ export const verifyPhoneOtp = createAsyncThunk(
     }
 )
 
-export const ResendPhoneOtp = createAsyncThunk(
-    'auth/ResendPhoneOtp',
+export const resendPhoneOtp = createAsyncThunk(
+    'auth/resendPhoneOtp',
     async (data, thunkAPI) => {
         const response = await axios.post('auth/register/token/resend', data);
+        console.log(response.data)
+        return response.data;
+    }
+)
+
+export const resendPasswordOtp = createAsyncThunk(
+    'auth/resendPasswordOtp',
+    async (data, thunkAPI) => {
+        const response = await axios.post('auth/password/token/resend', data);
+        console.log(response.data)
         return response.data;
     }
 )

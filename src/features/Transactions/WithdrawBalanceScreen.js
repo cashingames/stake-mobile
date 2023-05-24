@@ -8,7 +8,7 @@ import Input from "../../shared/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { formatCurrency } from "../../utils/stringUtl";
 import { Picker } from '@react-native-picker/picker';
-import { getBankData, withdrawWinnings } from "../CommonSlice";
+import { fetchUserTransactions, getBankData, withdrawWinnings } from "../CommonSlice";
 import AppButton from "../../shared/AppButton";
 import logToAnalytics from "../../utils/analytics";
 import { getUser } from "../Auth/AuthSlice";
@@ -19,12 +19,10 @@ const WithdrawBalanceScreen = ({navigation}) => {
     const user = useSelector(state => state.auth.user);
     const banks = useSelector(state => state.common.banks);
     const [accountNumber, setAccountNumber] = useState('');
-    const [accountName, setAccountName] = useState('Uwajimgba Deborah Nzubechi');
+    const [accountName, setAccountName] = useState(user.firstName + ' ' + user.lastName);
     const [accountNumberErr, setAccountNumberErr] = useState(false);
-    const [allError, setAllError] = useState('');
     const [amount, setAmount] = useState('');
     const [bankName, setBankName] = useState('');
-    console.log(accountName)
     const [loading, setLoading] = useState(false);
     const [withdraw, setWithdraw] = useState(false);
     const [withdrawAlert, setWithdrawAlert] = useState(false);
@@ -69,6 +67,7 @@ const WithdrawBalanceScreen = ({navigation}) => {
                 setLoading(false)
                 setWithdraw(false)
                 dispatch(getUser())
+                dispatch(fetchUserTransactions())
             },
                 err => {
                     if (!err || !err.response || err.response === undefined) {
@@ -103,9 +102,6 @@ const WithdrawBalanceScreen = ({navigation}) => {
             <View style={styles.containeri}>
             <WithdrawBalanceTitle />
             <View style={styles.inputContainer}>
-                {allError.length > 0 &&
-                    <Text>{allError}</Text>
-                }
                 <View>
                     <Input
                         label='Enter amount'

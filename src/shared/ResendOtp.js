@@ -4,15 +4,12 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from "../utils/normalize";
 
 
-const ResendOtp = ({ onPress, counter, isCountdownInProgress }) => {
+const ResendOtp = ({ onPress, isCountdownInProgress, countdowvnDone }) => {
 
 
     return (
-        <Pressable style={[styles.resendTimerContainer, isCountdownInProgress ? styles.disabled : {}]} onPress={onPress} disabled={isCountdownInProgress}>
-            <Text style={[styles.statusText, isCountdownInProgress ? styles.disabledText : {}]}>{!isCountdownInProgress ? 'Resend Otp code' : 'Resend Otp code in'}</Text>
-            {isCountdownInProgress &&
-                <Text style={styles.resendTimer}> {counter}</Text>
-            }
+        <Pressable style={[styles.resendTimerContainer, isCountdownInProgress || countdowvnDone ? styles.disabled : {}]} onPress={onPress} disabled={isCountdownInProgress || countdowvnDone}>
+            <Text style={[styles.statusText, isCountdownInProgress || countdowvnDone ? styles.disabledText : {}]}>Resend Otp code</Text>
         </Pressable>
     )
 }

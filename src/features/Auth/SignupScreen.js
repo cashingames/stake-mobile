@@ -92,6 +92,7 @@ const SignupScreen = () => {
             console.log(response)
             navigation.navigate('SignupVerifyPhone', {
                 phone_number: phone,
+                username: username,
                 next_resend_minutes: response.data.data.next_resend_minutes
             })
         }, err => {

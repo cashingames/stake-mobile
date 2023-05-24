@@ -1,17 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Text, View, ScrollView, Pressable, Alert, Image, RefreshControl, Platform, ImageBackground, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, ScrollView, Pressable, Image, RefreshControl, ImageBackground } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import normalize, { responsiveScreenWidth } from '../../utils/normalize';
+import normalize from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
-import WalletBalance from './WalletBalance';
-import { formatCurrency, formatNumber } from '../../utils/stringUtl';
+import { formatCurrency } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
-import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
-import { fetchUserTransactions, withdrawWinnings } from '../CommonSlice';
-import logToAnalytics from '../../utils/analytics';
+import { fetchUserTransactions } from '../CommonSlice';
 
 
 const wait = (timeout) => {
@@ -20,81 +17,21 @@ const wait = (timeout) => {
 
 export default function WalletScreen() {
     const dispatch = useDispatch();
-    const navigation = useNavigation();
     const user = useSelector(state => state.auth.user)
-    const [withdraw, setWithdraw] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
-    const [withdrawAlert, setWithdrawAlert] = useState(false);
     const [mainWalletActive, setMainWalletActive] = useState(true);
     const transactions = useSelector(state => state.common.userTransactions);
+    // console.log(transactions)
     const [bonusWalletActive, setBonusWalletActive] = useState(false);
 
-
-    const refRBSheet = useRef();
-
-    const openBottomSheet = () => {
-        refRBSheet.current.open()
-    }
-
-    const closeBottomSheet = () => {
-        dispatch(getUser());
-        refRBSheet.current.close()
-    }
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         dispatch(getUser());
+        dispatch(fetchUserTransactions())
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
-    const withdrawValidation = () => {
-        setWithdrawAlert(true)
-        Alert.alert(
-            "Withdrawal Notification",
-            `Fund kept in withdrawable balance for more than a month will be rendered invalid and non-withdrawable. Ensure you withdraw your winnings before the deadline. `,
-            [
-                { text: "Got it", onPress: () => withdrawBalance() }
-            ]
-        );
-    }
-
-    const withdrawBalance = () => {
-        setWithdrawAlert(false)
-        setWithdraw(true)
-        withdrawWinnings()
-            .then(response => {
-                logToAnalytics('winnings_withdrawn_successfully', {
-                    'product_id': user.username,
-                    'phone_number': user.phoneNumber,
-                    'email': user.email,
-                    'value': user.withdrawableBalance,
-                    'currency': 'NGN'
-                });
-                openBottomSheet();
-                setWithdraw(false)
-                dispatch(getUser())
-            },
-                err => {
-                    if (!err || !err.response || err.response === undefined) {
-                        Alert.alert("Your Network is Offline.");
-                        setWithdraw(false)
-                    }
-
-                    else if (err.response.data.errors.verifyEmailNavigation) {
-                        navigation.navigate('EditDetails')
-                        Alert.alert(err.response.data.message);
-                        setWithdraw(false)
-                    }
-                    else if (err.response.status === 400) {
-                        Alert.alert(err.response.data.message);
-                        setWithdraw(false)
-
-                    }
-                    console.log(err.response.data.errors.verifyEmailNavigation, 'hhhh')
-                }
-
-            )
-    }
 
     const toggleMainWallet = () => {
         setBonusWalletActive(false);
@@ -127,7 +64,7 @@ export default function WalletScreen() {
             <WalletsButtton toggleBonusWallet={toggleBonusWallet} toggleMainWallet={toggleMainWallet}
                 mainWalletActive={mainWalletActive} bonusWalletActive={bonusWalletActive} />
             <WalletBalanceDetails balance={user.walletBalance} bonusBalance={user.bonusBalance} bonusWalletActive={bonusWalletActive}
-                mainWalletActive={mainWalletActive} onPress={withdrawValidation} />
+                mainWalletActive={mainWalletActive} />
             <TransactionsContainer transactions={transactions} />
         </ScrollView>
     );
@@ -269,7 +206,6 @@ const TransactionsContainer = ({ transactions }) => {
             <ImageBackground source={transactions.length > 0 && allTransactions ? require('../../../assets/images/coins-background.png') : require('../../../assets/images/qr-code.png')}
                 style={{ flex: 1 }}
                 resizeMethod="resize">
-                <View>
                     {transactions.length > 0 && allTransactions ?
                         <View style={styles.transactionsSubContainer}>
                             {
@@ -290,7 +226,6 @@ const TransactionsContainer = ({ transactions }) => {
                         </View>
                     }
 
-                </View>
             </ImageBackground>
         </ScrollView>
 
@@ -503,7 +438,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'sansation-regular',
         fontSize: '1.5rem',
         textAlign: 'center',
-        marginTop: '5rem'
+        marginTop: '8rem'
     },
     transactionDetails: {
         flexDirection: 'row',

@@ -16,6 +16,7 @@ import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { Paystack } from "react-native-paystack-webview";
 import logToAnalytics from "../../utils/analytics";
 import { Ionicons } from "@expo/vector-icons";
+import { fetchUserTransactions } from "../CommonSlice";
 
 
 export default function FundWalletScreen() {
@@ -41,6 +42,7 @@ export default function FundWalletScreen() {
       'email': user.email
     });
     dispatch(getUser());
+    dispatch(fetchUserTransactions())
     setShowPayment(false);
     navigation.navigate("FundWalletCompleted");
   };
@@ -85,7 +87,7 @@ export default function FundWalletScreen() {
             placeholder={`Minimum of NGN ${minimumWalletFundableAmount}`}
             value={amount}
             type="text"
-            // error={fNameErr && "First name can't have numbers"}
+            error={amount < minimumWalletFundableAmount && `Minimum fundable amount is NGN ${minimumWalletFundableAmount}`}
             onChangeText={setAmount}
             isRequired={true}
             keyboardType="numeric"
