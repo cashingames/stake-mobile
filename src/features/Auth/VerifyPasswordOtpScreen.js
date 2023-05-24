@@ -73,7 +73,7 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
             clearInterval(countDown);
             setIsCountdownInProgress(false)
         }
-        let nextResendMinutes = 1;
+        let nextResendMinutes = 5;
         const futureDateStamp = new Date()
         futureDateStamp.setMinutes(futureDateStamp.getMinutes() + nextResendMinutes)
 
