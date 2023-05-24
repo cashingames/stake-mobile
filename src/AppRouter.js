@@ -59,6 +59,8 @@ import GamesListScreen from './features/Games/GamesListScreen';
 import VerifyPasswordOtpScreen from './features/Auth/VerifyPasswordOtpScreen';
 import logToAnalytics from './utils/analytics';
 import WalletScreen from './features/Transactions/WalletScreen';
+import WithdrawBalanceScreen from './features/Transactions/WithdrawBalanceScreen';
+import WithdrawalSuccessScreen from './features/Transactions/WithdrawalSuccessScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -163,13 +165,29 @@ function AppRouter() {
 						{/** wallet */}
 						<AppStack.Screen name="Wallet" component={WalletScreen} options={{
 							title: 'Wallet', headerStyle: {
-								backgroundColor: '#FAC502',
+								backgroundColor: '#F9FBFF',
 							},
-							headerTintColor: '#000000',
+							headerTintColor: '#072169',
+							headerTitleStyle: {
+								fontFamily: 'gotham-bold',
+								fontSize: 23
+							}
 						}} />
-						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Fund Wallet' }} />
+						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{
+							title: 'Deposit', headerStyle: {
+								backgroundColor: '#F9FBFF',
+							},
+							headerTintColor: '#072169',
+							headerTitleStyle: {
+								fontFamily: 'gotham-bold',
+								fontSize: 23
+							}
+						}} />
 						<AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
 						<AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
+						<AppStack.Screen name="WithdrawalSuccess" component={WithdrawalSuccessScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="WithdrawBalance" component={WithdrawBalanceScreen} options={{ headerShown: false }} />
+
 
 						{/* user profile */}
 						<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
@@ -208,7 +226,7 @@ function AppRouter() {
 						{/* <AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ title: 'Password reset', headerTintColor: '#072169', headerTitleStyle: {
 							fontFamily: 'gotham-bold',
 						}}} /> */}
-						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }}/>
+						<AppStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ResetPassword" component={ResetPasswordScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ResetPasswordSuccess" component={ResetPasswordSuccessScreen} />
 						<AppStack.Screen name="SignupVerifyPhone" component={SignupVerifyPhoneScreen} options={{ headerShown: false }} />

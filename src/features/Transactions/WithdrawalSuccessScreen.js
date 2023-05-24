@@ -7,7 +7,7 @@ import AppButton from '../../shared/AppButton';
 import { Image } from 'react-native';
 
 
-export default function FundWalletCompleted() {
+export default function WithdrawalSuccessScreen() {
     const navigation = useNavigation()
 
     return (
@@ -28,7 +28,7 @@ const TransactionSuccessful = () => {
                         style={styles.unavailable}
                         source={require('../../../assets/images/success-mark.png')}
                     />
-            <Text style={styles.successTitle}>Deposit successful</Text>
+            <Text style={styles.successTitle}>Withdrawal successful</Text>
         </View>
     )
 };
