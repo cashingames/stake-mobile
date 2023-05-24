@@ -30,22 +30,11 @@ function ExtendedLeaderboard(props) {
     const [leaderCategories, setLeaderCategories] = useState(['Global', 'Music', 'Football', 'General'])
     const [selectedLeaderboard, setSelectedLeaderboard] = useState('Global');
     const [category, setCategory] = useState()
-    const [forceRender, setForceRender] = useState(true);
-    const globalCount = useRef(0);
 
-    useEffect(() => {
-        dispatch(getGlobalLeaders());
-        dispatch(getCategoryLeaders()).then(() => setLoading(false))
-        setCategory(leaders)
-    }, []);
-
-    useEffect(() => {
-        setCategory(leaders)
-    }, [])
     useFocusEffect(
         React.useCallback(() => {
             dispatch(getGlobalLeaders());
-            dispatch(getCategoryLeaders());
+            dispatch(getCategoryLeaders()).then(() => setLoading(false));
             setCategory(leaders)
         }, [])
     );
@@ -112,9 +101,7 @@ function ExtendedLeaderboard(props) {
         </MixedContainerBackground>
     )
 }
-
-
-
+ 
 function GlobalLeaderboard({ leaders }) {
     return (
         <View style={styles.global}>
