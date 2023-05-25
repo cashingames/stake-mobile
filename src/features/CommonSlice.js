@@ -216,6 +216,7 @@ const initialState = {
     minimumWalletFundableAmount: 0,
     minimumBoostScore:0,
     periodBeforeChallengeStakingExpiry: '',
+    showUserPosition: false
 }
 
 const stakingGameMode =
@@ -241,6 +242,9 @@ export const CommonSlice = createSlice({
         setSound :(state, action) => {
             state.toogleSound = action.payload
             state.isSoundLoaded = true
+        },
+        setShowUserPosition: (state, action) => {
+            state.showUserPosition = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -315,6 +319,6 @@ export const CommonSlice = createSlice({
     },
 });
 
-export const { initialLoadingComplete, setToogleSound, setSound } = CommonSlice.actions
+export const { initialLoadingComplete, setToogleSound, setSound, setShowUserPosition } = CommonSlice.actions
 
 export default CommonSlice.reducer

@@ -20,6 +20,7 @@ import TopIcons from '../../shared/TopIcons';
 import { ImageBackground } from 'react-native';
 import GameSettings from '../../shared/GameSettings';
 import AchievementPopup from '../../shared/AchievementPopup';
+import { setShowUserPosition } from '../CommonSlice';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -105,7 +106,8 @@ export default function GameEndResultScreen({ navigation }) {
 		};
 		buttonSound.playSound()
 		logFreeGamesExhausted()
-		navigation.navigate('Dashboard')
+		dispatch(setShowUserPosition(true))
+		navigation.navigate('Leaderboard')
 	}
 
 	useFocusEffect(
