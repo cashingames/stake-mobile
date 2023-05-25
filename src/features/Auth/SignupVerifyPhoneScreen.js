@@ -4,10 +4,9 @@ import { useDispatch } from 'react-redux';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
-import LottieAnimations from '../../shared/LottieAnimations';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ResendOtp from '../../shared/ResendOtp';
-import { ResendPhoneOtp, verifyPhoneOtp } from './AuthSlice';
+import { resendPhoneOtp, verifyPhoneOtp } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { calculateTimeRemaining } from '../../utils/utils';
 import { triggerNotifierForReferral } from '../../shared/Notification';
@@ -35,6 +34,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     const [otp5, setOtp5] = useState('')
     const [counter, setCounter] = useState('');
     const [isCountdownInProgress, setIsCountdownInProgress] = useState(true);
+    const [countdowvnDone, setCountdowvnDone] = (useState(false))
     const [active, setActive] = useState(false);
     const [error, setError] = useState('');
 
@@ -55,7 +55,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
             clearInterval(countDown);
             setIsCountdownInProgress(false)
         }
-        let nextResendMinutes = 2;
+        let nextResendMinutes = 5;
 
         const futureDate = new Date()
         futureDate.setMinutes(futureDate.getMinutes() + nextResendMinutes)
@@ -71,10 +71,10 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     }, [])
 
     const resendButton = () => {
-        dispatch(ResendPhoneOtp({
+        dispatch(resendPhoneOtp({
             username: params.username
         }))
-        setIsCountdownInProgress(true)
+        setCountdowvnDone(true)
     }
 
     const goToDashboard = () => {
@@ -181,13 +181,17 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
             </View>
             <View style={styles.expireContainer}>
                 <Text style={styles.digitText}>Enter 5 digit OTP Code</Text>
+                {isCountdownInProgress &&
+                <Text style={styles.digitText}>Expires in {counter}</Text>
+            }
             </View>
             <AppButton text={loading ? 'Verifying...' : 'Login'} disabled={loading || !active} onPress={goToDashboard} disabledStyle={styles.disabled}
                 style={styles.loginButton} textStyle={styles.buttonText} />
             <View style={styles.reset}>
                 <ResendOtp counter={counter}
                     isCountdownInProgress={isCountdownInProgress}
-                    onPress={resendButton} />
+                    onPress={resendButton}
+                    countdowvnDone={countdowvnDone} />
             </View>
         </ScrollView>
     )
@@ -250,7 +254,10 @@ const styles = EStyleSheet.create({
         fontSize: '1.1rem'
     },
     expireContainer: {
-        marginTop: '2rem'
+        marginTop: '2rem',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center'
     },
     digitText: {
         fontFamily: 'sansation-bold',

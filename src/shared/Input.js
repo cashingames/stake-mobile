@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 export default function (props) {
-    const { label, type, error, editable, defaultValue, isRequired } = props;
+    const { label, type, error, editable, defaultValue, isRequired, extraText, extraTextWord } = props;
 
     const [hidden, setHidden] = useState(type === "password");
 
@@ -31,17 +31,24 @@ export default function (props) {
                     </Text>
                 }
                 {isRequired &&
-                <Text style={styles.requiredText}>Required</Text>
+                    <Text style={styles.requiredText}>Required</Text>
                 }
             </View>
             <View style={styles.inputContainer}>
-                <TextInput
+                {/* <TextInput
                     style={[error ? styles.inputi : styles.input, shouldUseEditableStyle ? {} : styles.disabled]}
+                    {...props}
+                    secureTextEntry={hidden}
+                /> */}
+                <TextInput
+                    style={[error ? styles.inputi : styles.input]}
                     {...props}
                     secureTextEntry={hidden}
                 />
 
                 {error && <Text style={styles.error} >{error}</Text>}
+                {extraText && <Text style={styles.extraWord} >{extraTextWord}</Text>}
+
             </View>
 
         </View>
@@ -67,10 +74,10 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(30),
     },
     labelContainer: {
-        flexDirection:'row',
-        justifyContent:'space-between',
-        alignItems:'center',
-        marginBottom:'.6rem'
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '.6rem'
     },
     input: {
         height: normalize(52),
@@ -106,7 +113,13 @@ const styles = EStyleSheet.create({
         fontFamily: 'gotham-medium',
         color: '#EF2F55',
         fontSize: normalize(13),
-        marginTop:'.5rem'
+        marginTop: '.5rem'
+    },
+    extraWord: {
+        fontFamily: 'sansation-regular',
+        color: '#072169',
+        fontSize: normalize(13),
+        marginTop: '.5rem'
     },
     disabled: {
         borderColor: '#fff',
