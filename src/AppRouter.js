@@ -253,12 +253,12 @@ export default AppRouter;
 const setupAxios = async function () {
 	axios.defaults.headers.common['x-request-env'] = Constants.expoConfig.extra.env;
 	axios.defaults.baseURL = Constants.expoConfig.extra.apiBaseUrl;
-	console.log('env', Constants.expoConfig.extra.env)
+	// console.log('env', Constants.expoConfig.extra.env)
 	//axios logout on 401
 	axios.interceptors.response.use(
 		response => response,
 		error => {
-			console.log(error.config.url, error.message);
+			// console.log(error.config.url, error.message);
 
 			if (error.response && error.response.status === 401) {
 				dispatch(logoutUser());

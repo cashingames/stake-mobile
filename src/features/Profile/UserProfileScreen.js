@@ -101,7 +101,7 @@ const ProfileTabs = () => {
             <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ChangePassword')} />
             {/* <ProfileTab tabName='Achievements' onPress={() => navigation.navigate('AchievementsMilestone')} /> */}
             {/* <ProfileTab tabName='Stats' onPress={() => navigation.navigate('UserStats')} /> */}
-            <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} />
+            {/* <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} /> */}
             {/* <Pressable onPress={onLogout}>
                 <Text style={styles.logoutText}>Logout</Text>
             </Pressable> */}
