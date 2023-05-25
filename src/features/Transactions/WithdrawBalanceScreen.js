@@ -12,6 +12,7 @@ import { fetchUserTransactions, getBankData, withdrawWinnings } from "../CommonS
 import AppButton from "../../shared/AppButton";
 import logToAnalytics from "../../utils/analytics";
 import { getUser } from "../Auth/AuthSlice";
+import { SelectList } from 'react-native-dropdown-select-list';
 
 
 const WithdrawBalanceScreen = ({navigation}) => {
@@ -121,19 +122,15 @@ const WithdrawBalanceScreen = ({navigation}) => {
                             <Text style={styles.requiredText}>Required</Text>
                         </View>
 
-                        <Picker
-                            style={styles.bankPicker}
-                            selectedValue={bankName}
-                            onValueChange={(itemValue, itemIndex) =>
-                                setBankName(itemValue)
-                            }
-                            mode='dropdown'
-
-                        >
-                            {banks && banks.map((bank, i) =>
-                                <Picker.Item label={bank.name} key={i} value={bank.name} style={styles.pickerItem} />
-                            )}
-                        </Picker>
+                        <SelectList
+                        setSelected={(bankName) => setBankName(bankName)}
+                        data={banks}
+                        save="value"
+                        placeholder="Select bank"
+                        fontFamily='sansation-regular'
+                        boxStyles={{height:normalize(52), alignItems:'center', borderColor:'#D9D9D9', backgroundColor:'#fff'}}
+                        inputStyles={{fontSize:18, color:'#072169'}}
+                    />
                     </View>
                     <Input
                         label='Account number'

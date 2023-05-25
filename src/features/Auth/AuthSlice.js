@@ -175,7 +175,7 @@ export const getChallengeScores = createAsyncThunk(
 export const verifyDeviceToken = createAsyncThunk(
     'auth/verifyDeviceToken',
     async (token, thunkAPI) => {
-        console.log(token)
+        // console.log(token)
         const response = await axios.post('v3/fcm/subscriptions', { token, device_token: token });
         return response.data;
     }
@@ -198,7 +198,6 @@ export const resendPhoneOtp = createAsyncThunk(
     'auth/resendPhoneOtp',
     async (data, thunkAPI) => {
         const response = await axios.post('auth/register/token/resend', data);
-        console.log(response.data)
         return response.data;
     }
 )
@@ -207,7 +206,6 @@ export const resendPasswordOtp = createAsyncThunk(
     'auth/resendPasswordOtp',
     async (data, thunkAPI) => {
         const response = await axios.post('auth/password/token/resend', data);
-        console.log(response.data)
         return response.data;
     }
 )
@@ -225,7 +223,6 @@ export const getUser = createAsyncThunk(
     'auth/user/get',
     async (thunkAPI) => {
         const response = await axios.get('v3/user/profile')
-        console.log(response)
             // .catch(error => {
             //     console.log(error);
 

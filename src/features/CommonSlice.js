@@ -239,7 +239,14 @@ export const CommonSlice = createSlice({
                 state.minimumBoostScore = data.minimumBoostScore;
             })
             .addCase(getBankData.fulfilled, (state, action) => {
-                state.banks = action.payload.data;
+                const banks = action.payload.data.map((bank, i)=> {
+                     return {
+                        key: i,
+                        value: bank.name
+                    }
+                });
+                // console.log(banks);
+                state.banks = banks;
             })
             .addCase(getGlobalLeaders.fulfilled, (state, action) => {
                 state.globalLeaders = action.payload.data

@@ -10,6 +10,7 @@ import normalize from '../../utils/normalize';
 import { useDispatch, useSelector } from 'react-redux';
 import AppButton from '../../shared/AppButton';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import { SelectList } from 'react-native-dropdown-select-list'
 
 export default function BankDetailsScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -17,8 +18,7 @@ export default function BankDetailsScreen({ navigation }) {
 
     const user = useSelector(state => state.auth.user)
     const banks = useSelector(state => state.common.banks)
-
-
+// console.log(banks, 'these are banks')
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
     const [accountNumber, setAccountNumber] = useState(user.accountNumber);
@@ -26,6 +26,8 @@ export default function BankDetailsScreen({ navigation }) {
     const [accountNumberErr, setAccountNumberError] = useState(false);
     const [accountNameErr, setAccountNameError] = useState(false);
     const [bankName, setBankName] = useState(user.bankName ?? '');
+    console.log(bankName, 'these are banks')
+
 
     const onChangeAccountNumber = (text) => {
         text.length > 0 && text.length < 10 ? setAccountNumberError(true) : setAccountNumberError(false);
@@ -91,7 +93,7 @@ export default function BankDetailsScreen({ navigation }) {
                         error={accountNameErr && '*account name must not be empty'}
                     />
                     <Text style={styles.nameNotice}>Note: The account name should be exactly as it was registered with your bank</Text>
-                    <View style={styles.banksContainer}>
+                    {/* <View style={styles.banksContainer}>
                         <Text style={styles.bankLabel}>Select Bank</Text>
 
                         <Picker
@@ -104,10 +106,17 @@ export default function BankDetailsScreen({ navigation }) {
 
                         >
                             {banks && banks.map((bank, i) =>
-                                <Picker.Item label={bank.name} key={i} value={bank.name} style={styles.pickerItem} />
+                                <Picker.Item label={bank.name} key={i} value={bank.value} style={styles.pickerItem} />
                             )}
                         </Picker>
-                    </View>
+                    </View> */}
+
+                    <SelectList
+                        setSelected={(bankName) => setBankName(bankName)}
+                        data={banks}
+                        save="value"
+                        placeholder="Select bank"
+                    />
                 </>
             </ScrollView>
             <AppButton text={saving ? 'Saving' : 'Save Changes'} onPress={onSaveBankDetails} disabled={!canSave} />
