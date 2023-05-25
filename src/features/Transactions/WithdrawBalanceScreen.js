@@ -25,7 +25,7 @@ const WithdrawBalanceScreen = ({navigation}) => {
     const [bankName, setBankName] = useState('');
     const [loading, setLoading] = useState(false);
     const [withdraw, setWithdraw] = useState(false);
-    const [withdrawAlert, setWithdrawAlert] = useState(false);
+    // const [withdrawAlert, setWithdrawAlert] = useState(false);
     const minimumWithdrawableAmount = Number.parseFloat(1000);
 
     const onChangeAccountNumber = (text) => {
@@ -33,20 +33,20 @@ const WithdrawBalanceScreen = ({navigation}) => {
         setAccountNumber(text)
     }
 
-    const withdrawValidation = () => {
-        setWithdrawAlert(true)
-        Alert.alert(
-            "Withdrawal Notification",
-            `Fund kept in withdrawable balance for more than a month will be rendered invalid and non-withdrawable. Ensure you withdraw your winnings before the deadline. `,
-            [
-                { text: "Got it", onPress: () => withdrawBalance() }
-            ]
-        );
-    }
+    // const withdrawValidation = () => {
+    //     setWithdrawAlert(true)
+    //     Alert.alert(
+    //         "Withdrawal Notification",
+    //         `Fund kept in withdrawable balance for more than a month will be rendered invalid and non-withdrawable. Ensure you withdraw your winnings before the deadline. `,
+    //         [
+    //             { text: "Got it", onPress: () => withdrawBalance() }
+    //         ]
+    //     );
+    // }
 
     const withdrawBalance = () => {
         setLoading(true)
-        setWithdrawAlert(false)
+        // setWithdrawAlert(false)
         setWithdraw(true)
         withdrawWinnings({
             account_number: accountNumber,
@@ -160,9 +160,9 @@ const WithdrawBalanceScreen = ({navigation}) => {
                     />
                 </View>
             </View>
-            <AppButton text={loading ? 'Processing' : 'Request withdrawal'} disabled={!withdraw || loading || withdrawAlert}
+            <AppButton text={loading ? 'Processing' : 'Request withdrawal'} disabled={!withdraw || loading}
             style={styles.loginButton} textStyle={styles.buttonText} disabledStyle={styles.disabled}
-            onPress={withdrawValidation}
+            onPress={withdrawBalance}
              />
             </View>
         </ScrollView>
