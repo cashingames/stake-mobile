@@ -258,26 +258,26 @@ const TransactionsContainer = ({ transactions, loading, mainWalletActive, bonusW
 
     return (
 
-            <ScrollView style={styles.transactionsContainer}>
-                <Text style={styles.transactionsHeader}>Transaction History</Text>
-                <View style={styles.walletsButtton}>
-                    <View style={styles.wallets}>
-                        <Pressable style={allTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleAllTransactions}>
-                            <Text style={[styles.mainText, allTransactions ? styles.walletText : styles.inactiveWalletTexta]}>All</Text>
-                        </Pressable>
-                        <Pressable style={creditTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleCreditTransactions}>
-                            <Text style={[styles.mainText, creditTransactions ? styles.walletText : styles.inactiveWalletTexti]}>Credit</Text>
-                        </Pressable>
-                        <Pressable style={debitTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleDebitTransactions}>
-                            <Text style={[styles.mainText, debitTransactions ? styles.walletText : styles.inactiveWalletTextd]}>Debit</Text>
-                        </Pressable>
-                    </View>
+        <ScrollView style={styles.transactionsContainer}>
+            <Text style={styles.transactionsHeader}>Transaction History</Text>
+            <View style={styles.walletsButtton}>
+                <View style={styles.wallets}>
+                    <Pressable style={allTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleAllTransactions}>
+                        <Text style={[styles.mainText, allTransactions ? styles.walletText : styles.inactiveWalletTexta]}>All</Text>
+                    </Pressable>
+                    <Pressable style={creditTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleCreditTransactions}>
+                        <Text style={[styles.mainText, creditTransactions ? styles.walletText : styles.inactiveWalletTexti]}>Credit</Text>
+                    </Pressable>
+                    <Pressable style={debitTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleDebitTransactions}>
+                        <Text style={[styles.mainText, debitTransactions ? styles.walletText : styles.inactiveWalletTextd]}>Debit</Text>
+                    </Pressable>
                 </View>
-                {loading ?
-                    <ActivityIndicator size="large" color='#072169' />
-                    :
-                    <>
-                        <ImageBackground source={transactions.mainTransactions.length > 0 || transactions.bonusTransactions.length > 0 ? require('../../../assets/images/coins-background.png') : require('../../../assets/images/qr-code.png')}
+            </View>
+            {loading ?
+                <ActivityIndicator size="large" color='#072169' />
+                :
+                <>
+                    <ImageBackground source={transactions.mainTransactions.length > 0 || transactions.bonusTransactions.length > 0 ? require('../../../assets/images/coins-background.png') : require('../../../assets/images/qr-code.png')}
                         style={{ flex: 1 }}
 
                         resizeMethod="resize">
@@ -415,12 +415,12 @@ const TransactionsContainer = ({ transactions, loading, mainWalletActive, bonusW
                                 }
                             </>
                         }
-                                        </ImageBackground>
+                    </ImageBackground>
 
-                    </>
-                }
+                </>
+            }
 
-            </ScrollView>
+        </ScrollView>
 
 
 
@@ -435,7 +435,7 @@ const FundTransactions = ({ transaction }) => {
                 <Ionicons name="ellipse" size={30} color={transaction.type === "DEBIT" ? '#EB2121' : '#00FFA3'} />
                 <View style={styles.typeAndDate}>
                     <Text style={styles.transactionType}>{transaction.description}</Text>
-                    {/* <Text style={styles.transactionDate}>{transaction.transactionDate}</Text> */}
+                    <Text style={styles.transactionDate}>{transaction.transactionDate}</Text>
                 </View>
             </View>
             <View>
