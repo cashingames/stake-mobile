@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView, Pressable, Image, RefreshControl, ImageBackground } from 'react-native';
+import { Text, View, ScrollView, Pressable, Image, RefreshControl, ImageBackground, ActivityIndicator, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -15,12 +15,14 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
-export default function WalletScreen() {
+export default function WalletScreen({ navigation }) {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     const [refreshing, setRefreshing] = useState(false);
+    const [loading, setLoading] = useState(true)
     const [mainWalletActive, setMainWalletActive] = useState(true);
     const transactions = useSelector(state => state.common.userTransactions);
+
     // console.log(transactions)
     const [bonusWalletActive, setBonusWalletActive] = useState(false);
 
@@ -51,6 +53,43 @@ export default function WalletScreen() {
                 setLoading(false)
             })
     }, []);
+
+    // const transactions = {
+    //     bonusTransactions: [
+    //         {
+    //             "id": 1,
+    //             "type": 'DEBIT',
+    //             "amount": '500',
+    //             "description": "Trivia challenge"
+    //         },
+    //         {
+    //             "id": 2,
+    //             "type": 'CREDIT',
+    //             "amount": '700',
+    //             "description": "Trivia challenge"
+    //         }
+
+    //     ],
+    //     mainTransactions: [
+    //         {
+    //             "id": 1,
+    //             "type": 'DEBIT',
+    //             "amount": '200',
+    //             "description": "Trivia challenge"
+    //         },
+    //         {
+    //             "id": 2,
+    //             "type": 'CREDIT',
+    //             "amount": '800',
+    //             "description": "Trivia challenge"
+    //         }
+    //     ]
+    // }
+
+    console.log(transactions)
+
+
+
     return (
         <ScrollView style={styles.container}
             refreshControl={
@@ -65,7 +104,13 @@ export default function WalletScreen() {
                 mainWalletActive={mainWalletActive} bonusWalletActive={bonusWalletActive} />
             <WalletBalanceDetails balance={user.walletBalance} bonusBalance={user.bonusBalance} bonusWalletActive={bonusWalletActive}
                 mainWalletActive={mainWalletActive} />
-            <TransactionsContainer transactions={transactions} />
+            <TransactionsContainer
+                loading={loading}
+                transactions={transactions}
+                mainWalletActive={mainWalletActive}
+                bonusWalletActive={bonusWalletActive}
+
+            />
         </ScrollView>
     );
 }
@@ -161,7 +206,7 @@ const WalletBalanceDetails = ({ balance, bonusWalletActive, mainWalletActive, bo
     )
 }
 
-const TransactionsContainer = ({ transactions }) => {
+const TransactionsContainer = ({ transactions, loading, mainWalletActive, bonusWalletActive }) => {
     const navigation = useNavigation();
     const [allTransactions, setAllTransactions] = useState(true);
     const [creditTransactions, setCreditTransactions] = useState(false);
@@ -186,48 +231,197 @@ const TransactionsContainer = ({ transactions }) => {
         setDebitTransactions(true);
     }
 
+    const mainCreditTransactions = () => {
+        if (mainWalletActive) {
+            return transactions.mainTransactions.filter(x => x.type.toUpperCase() !== "DEBIT");
+        }
+        return transactions.mainTransactions;
+    }
+    const mainDebitTransactions = () => {
+        if (mainWalletActive) {
+            return transactions.mainTransactions.filter(x => x.type.toUpperCase() !== "CREDIT");
+        }
+        return transactions.mainTransactions;
+    }
+    const bonusCreditTransactions = () => {
+        if (bonusWalletActive) {
+            return transactions.bonusTransactions.filter(x => x.type.toUpperCase() !== "DEBIT");
+        }
+        return transactions.bonusTransactions;
+    }
+    const bonusDebitTransactions = () => {
+        if (bonusWalletActive) {
+            return transactions.bonusTransactions.filter(x => x.type.toUpperCase() !== "CREDIT");
+        }
+        return transactions.bonusTransactions;
+    }
+
     return (
 
-        <ScrollView style={styles.transactionsContainer}>
-            <Text style={styles.transactionsHeader}>Transaction History</Text>
-            <View style={styles.walletsButtton}>
-                <View style={styles.wallets}>
-                    <Pressable style={allTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleAllTransactions}>
-                        <Text style={[styles.mainText, allTransactions ? styles.walletText : styles.inactiveWalletTexta]}>All</Text>
-                    </Pressable>
-                    <Pressable style={creditTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleCreditTransactions}>
-                        <Text style={[styles.mainText, creditTransactions ? styles.walletText : styles.inactiveWalletTexti]}>Credit</Text>
-                    </Pressable>
-                    <Pressable style={debitTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleDebitTransactions}>
-                        <Text style={[styles.mainText, debitTransactions ? styles.walletText : styles.inactiveWalletTextd]}>Debit</Text>
-                    </Pressable>
+            <ScrollView style={styles.transactionsContainer}>
+                <Text style={styles.transactionsHeader}>Transaction History</Text>
+                <View style={styles.walletsButtton}>
+                    <View style={styles.wallets}>
+                        <Pressable style={allTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleAllTransactions}>
+                            <Text style={[styles.mainText, allTransactions ? styles.walletText : styles.inactiveWalletTexta]}>All</Text>
+                        </Pressable>
+                        <Pressable style={creditTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleCreditTransactions}>
+                            <Text style={[styles.mainText, creditTransactions ? styles.walletText : styles.inactiveWalletTexti]}>Credit</Text>
+                        </Pressable>
+                        <Pressable style={debitTransactions ? styles.walletButton : styles.inactiveWalletButton} onPress={toggleDebitTransactions}>
+                            <Text style={[styles.mainText, debitTransactions ? styles.walletText : styles.inactiveWalletTextd]}>Debit</Text>
+                        </Pressable>
+                    </View>
                 </View>
-            </View>
-            <ImageBackground source={transactions.length > 0 && allTransactions ? require('../../../assets/images/coins-background.png') : require('../../../assets/images/qr-code.png')}
-                style={{ flex: 1 }}
-                resizeMethod="resize">
-                    {transactions.length > 0 && allTransactions ?
-                        <View style={styles.transactionsSubContainer}>
-                            {
-                                transactions.map((transaction, i) => <FundTransactions key={i} transaction={transaction}
-                                />)
-                            }
-                            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
-                        </View>
-                        :
-                        <View style={styles.noTransactionContainer}>
-                            {/* <Image
-                        style={styles.unavailable}
-                        source={require('../../../assets/images/cart-icon1.png')}
-                    /> */}
-                            <Text style={styles.noTransaction}>
-                                No transaction record
-                            </Text>
-                        </View>
-                    }
+                {loading ?
+                    <ActivityIndicator size="large" color='#072169' />
+                    :
+                    <>
+                        <ImageBackground source={transactions.mainTransactions.length > 0 || transactions.bonusTransactions.length > 0 ? require('../../../assets/images/coins-background.png') : require('../../../assets/images/qr-code.png')}
+                        style={{ flex: 1 }}
 
-            </ImageBackground>
-        </ScrollView>
+                        resizeMethod="resize">
+
+                        {mainWalletActive && allTransactions &&
+                            <>
+                                {
+                                    transactions.mainTransactions.length > 0 ?
+                                        <View style={styles.transactionsSubContainer}>
+                                            {
+                                                transactions.mainTransactions.map((transaction, i) => <FundTransactions key={i} transaction={transaction}
+                                                />)
+                                            }
+
+                                            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        </View>
+                                        :
+                                        <View style={styles.noTransactionContainer}>
+                                            <Text style={styles.noTransaction}>
+                                                No transaction records
+                                            </Text>
+                                        </View>
+
+                                }
+                            </>
+                        }
+                        {mainWalletActive && creditTransactions &&
+                            <>
+                                {
+                                    mainCreditTransactions().length > 0 ?
+                                        <View style={styles.transactionsSubContainer}>
+                                            {
+                                                mainCreditTransactions().map((transaction, i) => <FundTransactions key={i} transaction={transaction}
+                                                />)
+                                            }
+
+                                            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        </View>
+                                        :
+                                        <View style={styles.noTransactionContainer}>
+                                            <Text style={styles.noTransaction}>
+                                                No transaction records
+                                            </Text>
+                                        </View>
+
+                                }
+                            </>
+                        }
+                        {mainWalletActive && debitTransactions &&
+                            <>
+                                {
+                                    mainDebitTransactions().length > 0 ?
+                                        <View style={styles.transactionsSubContainer}>
+                                            {
+                                                mainDebitTransactions().map((transaction, i) => <FundTransactions key={i} transaction={transaction}
+                                                />)
+                                            }
+
+                                            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        </View>
+                                        :
+                                        <View style={styles.noTransactionContainer}>
+                                            <Text style={styles.noTransaction}>
+                                                No transaction records
+                                            </Text>
+                                        </View>
+
+                                }
+                            </>
+                        }
+
+                        {bonusWalletActive && allTransactions &&
+                            <>
+                                {
+                                    transactions.bonusTransactions.length > 0 ?
+                                        <View style={styles.transactionsSubContainer}>
+                                            {
+                                                transactions.bonusTransactions.map((transaction, i) => <FundTransactions key={i} transaction={transaction}
+                                                />)
+                                            }
+
+                                            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        </View>
+                                        :
+                                        <View style={styles.noTransactionContainer}>
+                                            <Text style={styles.noTransaction}>
+                                                No transaction records
+                                            </Text>
+                                        </View>
+
+                                }
+                            </>
+                        }
+                        {bonusWalletActive && creditTransactions &&
+                            <>
+                                {
+                                    bonusCreditTransactions().length > 0 ?
+                                        <View style={styles.transactionsSubContainer}>
+                                            {
+                                                bonusCreditTransactions().map((transaction, i) => <FundTransactions key={i} transaction={transaction}
+                                                />)
+                                            }
+
+                                            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        </View>
+                                        :
+                                        <View style={styles.noTransactionContainer}>
+                                            <Text style={styles.noTransaction}>
+                                                No transaction records
+                                            </Text>
+                                        </View>
+
+                                }
+                            </>
+                        }
+                        {bonusWalletActive && debitTransactions &&
+                            <>
+                                {
+                                    bonusDebitTransactions().length > 0 ?
+                                        <View style={styles.transactionsSubContainer}>
+                                            {
+                                                bonusDebitTransactions().map((transaction, i) => <FundTransactions key={i} transaction={transaction}
+                                                />)
+                                            }
+                                            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} style={styles.appButton} onPress={() => navigation.navigate('Transactions')} />
+                                        </View>
+
+                                        :
+                                        <View style={styles.noTransactionContainer}>
+                                            <Text style={styles.noTransaction}>
+                                                No transaction records
+                                            </Text>
+                                        </View>
+
+                                }
+                            </>
+                        }
+                                        </ImageBackground>
+
+                    </>
+                }
+
+            </ScrollView>
+
 
 
     )
@@ -241,7 +435,7 @@ const FundTransactions = ({ transaction }) => {
                 <Ionicons name="ellipse" size={30} color={transaction.type === "DEBIT" ? '#EB2121' : '#00FFA3'} />
                 <View style={styles.typeAndDate}>
                     <Text style={styles.transactionType}>{transaction.description}</Text>
-                    <Text style={styles.transactionDate}>{transaction.transactionDate}</Text>
+                    {/* <Text style={styles.transactionDate}>{transaction.transactionDate}</Text> */}
                 </View>
             </View>
             <View>
@@ -422,7 +616,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     transactionsContainer: {
-        // flex: 1,
+        flex: 1,
         marginHorizontal: normalize(18),
         marginBottom: '3rem'
     },
@@ -448,6 +642,8 @@ const styles = EStyleSheet.create({
 
     },
     transactionsSubContainer: {
+        // flex:1
+        // justifyContent: 'space-between',
         // marginBottom:'50rem'
     },
     narationDetails: {
@@ -490,4 +686,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'gotham-medium',
         fontSize: '1.1rem'
     },
+    // appButton: {
+    //     marginTop:'10rem'
+    // },
 });
