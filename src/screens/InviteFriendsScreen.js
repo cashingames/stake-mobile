@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/core';
 import { Image } from 'react-native';
 import TopIcons from '../shared/TopIcons';
 import { ImageBackground } from 'react-native';
+import logToAnalytics from '../utils/analytics';
 
 const InviteFriendsScreen = ({ showInviteFriends, setShowInviteFriends }) => {
 
@@ -48,7 +49,7 @@ const InviteFriendsScreen = ({ showInviteFriends, setShowInviteFriends }) => {
             await Share.share({
                 message: referralMsg,
             });
-            await analytics().logEvent("share_referral", {
+            logToAnalytics("share_referral", {
                 'id': user.username,
             })
 

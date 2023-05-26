@@ -19,6 +19,7 @@ import { Image } from 'react-native';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import GaButton from '../../shared/GaButton';
 import { Alert } from 'react-native';
+import logToAnalytics from '../../utils/analytics';
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState(Constants.manifest.extra.isStaging ? 'arunajoy2602@gmail.com' : '');
@@ -36,13 +37,12 @@ export default function LoginScreen({ navigation }) {
     }
     const onLogin = async () => {
         crashlytics().log('login clicked');
-        await analytics().logEvent('login_clicked')
+        logToAnalytics('login_clicked')
         setLoading(true);
         setCanLogin(false);
         setError("");
 
         dispatch(loginUser({ email, password })).unwrap().then((response) => {
-            console.info("login response 1", response);
             if (response?.isFirstTime || false) {
                 triggerTour(navigation)
                 triggerNotifierForReferral()

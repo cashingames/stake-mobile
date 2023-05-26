@@ -14,6 +14,7 @@ import { Dimensions } from 'react-native';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import GaButton from '../../shared/GaButton';
 import { unwrapResult } from '@reduxjs/toolkit';
+import logToAnalytics from '../../utils/analytics';
 
 
 
@@ -89,7 +90,10 @@ const SignupScreen = () => {
             password_confirmation: password,
         }))).then(unwrapResult)
             .then(async (response) => {
-                console.log(response, 'signup')
+                logToAnalytics('new_user_signed_up', {
+					'username': response.data.username,
+					'email': response.data.email
+				});
                 dispatch(setToken(response.data.token))
             })
             .catch((error) => {

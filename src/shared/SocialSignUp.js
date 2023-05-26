@@ -21,6 +21,7 @@ import PageLoading from './PageLoading';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import { triggerTour } from '../features/Tour/Index';
 import { triggerNotifierForReferral } from './Notification';
+import logToAnalytics from '../utils/analytics';
 
 
 
@@ -129,17 +130,8 @@ export default function SocialSignUp({ googleText }) {
                     })).then(unwrapResult)
                         .then((originalPromiseResult) => {
                             console.log(originalPromiseResult, "originalPromiseResul")
-                            // if (originalPromiseResult.data.isFirstTime ) {
-                            //     setEmail(originalPromiseResult.data.email)
-                            //     setFirstName(originalPromiseResult.data.firstName)
-                            //     setLastName(originalPromiseResult.data.lastName)
-                            //     setloading(false)
-                            //     openBottomSheet()
-                            //     return
-                            // }
-                            // console.log(originalPromiseResult);
                             saveToken(originalPromiseResult.data.token)
-                            analytics().logEvent('signin_with_Google', {
+                            logToAnalytics('signin_with_Google', {
                                 'id': userDetails.given_name,
                                 'email': userDetails.email,
                                 'username': user.username

@@ -21,6 +21,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import Loader from '../../shared/Loader';
 import GameSettings from '../../shared/GameSettings';
 import GameModal from '../../shared/GameModal';
+import logToAnalytics from '../../utils/analytics';
 
 const SubCategoryScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -98,7 +99,7 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
                 .then(unwrapResult)
                 .then(async result => {
                     crashlytics().log('User started exhibition game');
-                    await analytics().logEvent("exhibition_without_staking_game_started", {
+                    logToAnalytics("exhibition_game_started", {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
                         'email': user.email
