@@ -3,15 +3,20 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGameCategory, setGameType } from './GameSlice';
-import normalize from '../../utils/normalize';
+import normalize, { responsiveWidth } from '../../utils/normalize';
 import GameCategoryCard from './GameCategoryCard';
 import useSound from '../../utils/useSound';
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import { useState } from 'react';
 
 
 export default ({ navigation }) => {
     const dispatch = useDispatch();
 
     const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
+    const gameCategoryLength = currentGame.categories.length;
+    const firstCategorySlide = currentGame.categories.slice(0, 4);
+    const secondGameCategorySlide = currentGame.categories.slice(4);
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
     const onCategorySelected = (category) => {
@@ -25,15 +30,34 @@ export default ({ navigation }) => {
     }
 
     return (
-        <>
-            <View style={styles.cards}>
+        <View style={{ marginTop: -35 }}>
+
+            {gameCategoryLength <= 4 ? <View style={styles.categoryContainer}>
                 {currentGame.categories.map((category, i) => <GameCategoryCard key={i}
                     category={category}
                     onSelect={onCategorySelected}
                 />
                 )}
             </View>
-        </>
+                :
+                <SwiperFlatList showPagination paginationActiveColor='#15397D' renderAll={true} paginationDefaultColor="#fff" >
+                    <View style={styles.categoryContainer}>
+                        {firstCategorySlide.map((category, i) => <GameCategoryCard key={i}
+                            category={category}
+                            onSelect={onCategorySelected}
+                        />
+                        )}
+                    </View>
+                    <View style={styles.categoryContainer}>
+                        {secondGameCategorySlide.map((category, i) => <GameCategoryCard key={i}
+                            category={category}
+                            onSelect={onCategorySelected}
+                        />
+                        )}
+                    </View>
+                </SwiperFlatList>
+            }
+        </View >
 
     )
 };
@@ -48,6 +72,15 @@ const styles = EStyleSheet.create({
         backgroundColor: '#F8F9FD',
         paddingHorizontal: normalize(18),
         paddingBottom: normalize(40),
+    },
+    categoryContainer: {
+        flexDirection: 'row',
+        paddingHorizontal: responsiveWidth(5),
+        width: responsiveWidth(100),
+        flexWrap: 'wrap',
+        justifyContent:'center',
+        gap: responsiveWidth(2),
+        marginBottom: responsiveWidth(10)
     },
 
     createQuiz: {
