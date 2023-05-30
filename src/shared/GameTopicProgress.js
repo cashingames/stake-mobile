@@ -13,6 +13,7 @@ const GameTopicProgress = ({ onComplete, ending }) => {
     const isEnded = useSelector(state => state.game.isEnded);
     const gameCategoryName = useSelector(state => state.game.gameCategory.name);
     const gameSubCategoryName = useSelector(state => state.game.subGameCategory.name);
+    console.log(gameDuration)
 
     return (
         <View style={styles.topicProgress}>

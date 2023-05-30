@@ -25,12 +25,12 @@ export default function OtherLeaders({ leaders }) {
 
     React.useEffect(() => {
         // Scroll to the user's position when the component mounts
-        if (showUserPosition) {
+        if (showUserPosition && userIndex) {
             scrollToUserPosition();
             setTimeout(() => {
                 dispatch(setShowUserPosition(false))
                 navigation.navigate('Dashboard')
-            }, 3500);
+            }, 5000);
 
         } else {
             return
@@ -40,10 +40,9 @@ export default function OtherLeaders({ leaders }) {
     const ITEM_HEIGHT = 60;
     const scrollToUserPosition = () => {
         if (scrollViewRef.current) {
-           
             if (userIndex >= 0) {
                 const positionY = userIndex * ITEM_HEIGHT;
-                scrollViewRef.current.scrollToOffset({ offset: positionY, animated: true });
+                scrollViewRef.current.scrollToOffset({ offset: positionY, animated: true, duration: 1000 });
             }
         }
     };
@@ -60,6 +59,7 @@ export default function OtherLeaders({ leaders }) {
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ paddingBottom: responsiveHeight(2) }}
+                initialNumToRender={currentLeadedrs.length}
             />
             {currentLeadedrs.length === 0 &&
                 <View style={{ height: responsiveHeight(30), justifyContent: 'center' }}>
@@ -145,7 +145,7 @@ const otherLeaderStyles = EStyleSheet.create({
         borderBottomWidth: 1,
         paddingVertical: responsiveHeight(100) * 0.015,
         paddingHorizontal: 10,
-        height: 80
+        height: 75
     },
     profilePic: {
         width: normalize(48),

@@ -24,7 +24,6 @@ import analytics from '@react-native-firebase/analytics';
 import useSound from "../../utils/useSound";
 import NextButton from "../../shared/NextButton";
 import TopIcons from "../../shared/TopIcons";
-import DashboardSettings from "../../shared/DashboardSettings";
 import GameSettings from "../../shared/GameSettings";
 import GameModal from "../../shared/GameModal";
 import logToAnalytics from "../../utils/analytics";
