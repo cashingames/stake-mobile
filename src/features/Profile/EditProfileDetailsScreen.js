@@ -13,6 +13,7 @@ import normalize from '../../utils/normalize';
 import { isTrue } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
+import { SelectList } from 'react-native-dropdown-select-list';
 
 export default function EditProfileDetailsScreen({ navigation }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -87,6 +88,11 @@ export default function EditProfileDetailsScreen({ navigation }) {
         setCanSave(!invalid);
     }, [firstNameErr, firstName, lastNameErr, lastName, phoneNumber, phoneNumberErr, email, emailError, username, usernameErr])
 
+    const genderData = [
+        { key: '1', value: 'Male' },
+        { key: '2', value: 'Female' },
+    ]
+
     const onSavePersonalDetails = () => {
         setSaving(true);
         editPersonalDetails({
@@ -103,25 +109,25 @@ export default function EditProfileDetailsScreen({ navigation }) {
                 Alert.alert('Personal details updated successfully')
                 setSaving(false);
             },
-            err => {
-                if (!err || !err.response || err.response === undefined) {
-                    Alert.alert('Your Network is Offline.')
-                    setSaving(false);
+                err => {
+                    if (!err || !err.response || err.response === undefined) {
+                        Alert.alert('Your Network is Offline.')
+                        setSaving(false);
+                    }
+                    else if (err.response.status === 500) {
+                        Alert.alert('Service not currently available. Please contact support')
+                        setSaving(false);
+                    }
+                    else {
+                        const errors =
+                            err.response && err.response.data && err.response.data.errors;
+                        const firstError = Object.values(errors, {})[0];
+                        Alert.alert(firstError[0])
+                        setSaving(false);
+                    }
                 }
-                else if (err.response.status === 500) {
-                    Alert.alert('Service not currently available. Please contact support')
-                    setSaving(false);
-                }
-                else {
-                    const errors =
-                        err.response && err.response.data && err.response.data.errors;
-                    const firstError = Object.values(errors, {})[0];
-                    Alert.alert(firstError[0])
-                    setSaving(false);
-                }
-            }
             )
-           
+
     }
 
     return (
@@ -197,12 +203,14 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         value={firstName}
                         onChangeText={text => { onChangeFirstName(text) }}
                         error={firstNameErr && '*first name must not be empty'}
+                        editable={false}
                     />
                     <Input
                         label='Last name'
                         value={lastName}
                         onChangeText={text => { onChangeLastName(text) }}
                         error={lastNameErr && '*last name must not be empty'}
+                        editable={false}
                     />
 
 
@@ -229,21 +237,23 @@ export default function EditProfileDetailsScreen({ navigation }) {
                                 />
                             </>
                         }
+                        <View style={styles.genderContainer}>
+                            {/* <View style={styles.labelContainer}> */}
+                            <Text style={styles.bankLabel}>Choose gender</Text>
+                            {/* <Text style={styles.requiredText}>Required</Text> */}
+                            {/* </View> */}
 
-                        <View style={styles.detail}>
-                            <Text style={styles.inputLabel}>Select Gender</Text>
-                            <Picker
-                                selectedValue={gender}
-                                onValueChange={(itemValue, itemIndex) =>
-                                    setGender(itemValue)
-                                }
-                                mode='dropdown'
-                                style={styles.select}
-                            >
-                                <Picker.Item label="Male" value="male" style={styles.pickerItem} />
-                                <Picker.Item label="Female" value="female" style={styles.pickerItem} />
-                            </Picker>
+                            <SelectList
+                                setSelected={(gender) => setGender(gender)}
+                                data={genderData}
+                                save="value"
+                                placeholder="Select gender"
+                                fontFamily='sansation-regular'
+                                boxStyles={{ height: normalize(52), alignItems: 'center', borderColor: '#D9D9D9', backgroundColor: '#fff' }}
+                                inputStyles={{ fontSize: 18, color: '#072169' }}
+                            />
                         </View>
+
                     </View>
                 </View>
             </ScrollView>
@@ -344,5 +354,15 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         borderColor: ' rgba(0, 0, 0, 0.1)',
         borderRightWidth: 1,
-    }
+    },
+    genderContainer: {
+        marginBottom: normalize(35),
+        marginTop: normalize(10),
+    },
+    bankLabel: {
+        fontFamily: 'gotham-medium',
+        color: '#072169',
+        fontSize: '0.98rem',
+        marginBottom: '.6rem'
+    },
 });

@@ -62,7 +62,7 @@ export default function FundWalletScreen() {
       Alert.alert(`Amount cannot be less than ${minimumWalletFundableAmount} naira`);
       return false;
     }
-    if(paystackChecked) {
+    if (paystackChecked) {
       setShowPayment(true);
     } else Alert.alert('This payment gateway is not available now');
   };
@@ -197,9 +197,9 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-gatewayIcon: {
-  marginLeft:'.5rem'
-},
+  gatewayIcon: {
+    marginLeft: '.5rem'
+  },
   disabled: {
     backgroundColor: '#EA8663'
   },

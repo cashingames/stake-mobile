@@ -10,6 +10,7 @@ import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { sendUserFeedback } from "../CommonSlice";
 import { useNavigation } from '@react-navigation/native';
 import logToAnalytics from "../../utils/analytics";
+import { Ionicons } from "@expo/vector-icons";
 
 
 
@@ -18,6 +19,12 @@ const AuthContactUs = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container}>
+            <View style={styles.headerContainerStyle}>
+                <Ionicons name="chevron-back" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
+                <Text style={styles.headerTextStyle}>
+                    Support
+                </Text>
+            </View>
             <Text style={styles.title}>Do you have any question?</Text>
             <ContactForm />
         </ScrollView>
@@ -37,10 +44,6 @@ const ContactForm = () => {
     const [lastNameErr, setLastNameError] = useState(false);
     const [messageError, setMessageError] = useState(false);
     const [canSave, setCanSave] = useState(false);
-
-    const goBackButton = () => {
-        navigation.goBack()
-    }
 
 
     const sendFeedback = () => {
@@ -138,7 +141,6 @@ const ContactForm = () => {
                 onPress={sendFeedback}
                 disabled={!canSave || saving}
             />
-            <Text style={styles.goBack} onPress={goBackButton}>Go Back</Text>
         </View>
     )
 }
@@ -147,14 +149,29 @@ export default AuthContactUs;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
+        backgroundColor: '#F9FBFF',
         paddingHorizontal: normalize(20),
-        paddingTop: responsiveScreenWidth(40),
+        paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(22) : responsiveScreenWidth(15),
 
+    },
+    headerContainerStyle: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    headerTextStyle: {
+        fontSize: 26,
+        fontFamily: 'gotham-bold',
+        color: '#072169',
+        marginLeft: '2.5rem',
+        textAlign: 'center'
+        // paddingTop: normalize(10),
     },
     title: {
         fontSize: '1rem',
-        fontFamily: 'graphik-medium',
+        fontFamily: 'sansation-regular',
+        marginTop: normalize(40),
+        color: '#072169',
+
     },
     formContainer: {
         marginTop: '3rem'
@@ -164,17 +181,18 @@ const styles = EStyleSheet.create({
         paddingTop: '.8rem',
         paddingHorizontal: '.7rem',
         borderColor: '#CDD4DF',
-        fontFamily: 'graphik-regular',
+        fontFamily: 'sansation-regular',
         color: '#00000080',
-        fontSize: '0.75rem',
+        fontSize: '0.85rem',
         borderWidth: 1,
         borderRadius: 10,
-        textAlignVertical: 'top'
+        textAlignVertical: 'top',
+        backgroundColor:'#fff'
     },
     goBack: {
         fontSize: '.7rem',
         fontFamily: 'graphik-medium',
-        color:'#EF2F55',
-        textAlign:'center'
+        color: '#EF2F55',
+        textAlign: 'center'
     }
 })

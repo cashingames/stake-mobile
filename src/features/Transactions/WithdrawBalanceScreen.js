@@ -15,7 +15,7 @@ import { getUser } from "../Auth/AuthSlice";
 import { SelectList } from 'react-native-dropdown-select-list';
 
 
-const WithdrawBalanceScreen = ({navigation}) => {
+const WithdrawBalanceScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
     const banks = useSelector(state => state.common.banks);
@@ -63,10 +63,9 @@ const WithdrawBalanceScreen = ({navigation}) => {
                     'value': user.withdrawableBalance,
                     'currency': 'NGN'
                 });
-                console.log('success')
-                navigation.navigate('WithdrawalSuccess')
                 setLoading(false)
                 setWithdraw(false)
+                navigation.navigate('WithdrawalSuccess')
                 dispatch(getUser())
                 dispatch(fetchUserTransactions())
             },
@@ -101,66 +100,66 @@ const WithdrawBalanceScreen = ({navigation}) => {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.containeri}>
-            <WithdrawBalanceTitle />
-            <View style={styles.inputContainer}>
-                <View>
-                    <Input
-                        label='Enter amount'
-                        placeholder={`Minimum of NGN ${minimumWithdrawableAmount}`}
-                        value={amount}
-                        error={((amount < minimumWithdrawableAmount) && `Minimum withdrawable amount is NGN ${minimumWithdrawableAmount}`) ||
-                            ((amount > Number.parseFloat(user.withdrawableBalance)) && 'You cannot withdraw more than your available balance')}
-                        onChangeText={setAmount}
-                        isRequired={true}
-                        keyboardType="numeric"
-                        extraText={true}
-                        extraTextWord={`Available balance NGN ${formatCurrency(user.withdrawableBalance)}`}
-                    />
-                    <View style={styles.banksContainer}>
-                        <View style={styles.labelContainer}>
-                            <Text style={styles.bankLabel}>Choose bank</Text>
-                            <Text style={styles.requiredText}>Required</Text>
-                        </View>
+                <WithdrawBalanceTitle />
+                <View style={styles.inputContainer}>
+                    <View>
+                        <Input
+                            label='Enter amount'
+                            placeholder={`Minimum of NGN ${minimumWithdrawableAmount}`}
+                            value={amount}
+                            error={((amount < minimumWithdrawableAmount) && `Minimum withdrawable amount is NGN ${minimumWithdrawableAmount}`) ||
+                                ((amount > Number.parseFloat(user.withdrawableBalance)) && 'You cannot withdraw more than your available balance')}
+                            onChangeText={setAmount}
+                            isRequired={true}
+                            keyboardType="numeric"
+                            extraText={true}
+                            extraTextWord={`Available balance NGN ${formatCurrency(user.withdrawableBalance)}`}
+                        />
+                        <View style={styles.banksContainer}>
+                            <View style={styles.labelContainer}>
+                                <Text style={styles.bankLabel}>Choose bank</Text>
+                                <Text style={styles.requiredText}>Required</Text>
+                            </View>
 
-                        <SelectList
-                        setSelected={(bankName) => setBankName(bankName)}
-                        data={banks}
-                        save="value"
-                        placeholder="Select bank"
-                        fontFamily='sansation-regular'
-                        boxStyles={{height:normalize(52), alignItems:'center', borderColor:'#D9D9D9', backgroundColor:'#fff'}}
-                        inputStyles={{fontSize:18, color:'#072169'}}
-                    />
+                            <SelectList
+                                setSelected={(bankName) => setBankName(bankName)}
+                                data={banks}
+                                save="value"
+                                placeholder="Select bank"
+                                fontFamily='sansation-regular'
+                                boxStyles={{ height: normalize(52), alignItems: 'center', borderColor: '#D9D9D9', backgroundColor: '#fff' }}
+                                inputStyles={{ fontSize: 18, color: '#072169' }}
+                            />
+                        </View>
+                        <Input
+                            label='Account number'
+                            placeholder="0000xxxx28"
+                            value={accountNumber}
+                            keyboardType="numeric"
+                            extraText={true}
+                            extraTextWord='Enter 10 digit number'
+                            error={accountNumberErr && "Account number can not be less than 10 digits"}
+                            onChangeText={onChangeAccountNumber}
+                            isRequired={true}
+                            maxLength={10}
+                        />
+                        <Input
+                            label='Account name'
+                            placeholder="0000xxxx28"
+                            value={accountName}
+                            keyboardType="numeric"
+                            extraText={true}
+                            extraTextWord='Bank account name must tally with your cashingames first and last name'
+                            onChangeText={setAccountName}
+                            isRequired={true}
+                            editable={false}
+                        />
                     </View>
-                    <Input
-                        label='Account number'
-                        placeholder="0000xxxx28"
-                        value={accountNumber}
-                        keyboardType="numeric"
-                        extraText={true}
-                        extraTextWord='Enter 10 digit number'
-                        error={accountNumberErr && "Account number can not be less than 10 digits"}
-                        onChangeText={onChangeAccountNumber}
-                        isRequired={true}
-                        maxLength={10}
-                    />
-                    <Input
-                        label='Account name'
-                        placeholder="0000xxxx28"
-                        value={accountName}
-                        keyboardType="numeric"
-                        extraText={true}
-                        extraTextWord='Bank account name must tally with your cashingames first and last name'
-                        onChangeText={setAccountName}
-                        isRequired={true}
-                        editable={false}
-                    />
                 </View>
-            </View>
-            <AppButton text={loading ? 'Processing' : 'Request withdrawal'} disabled={!withdraw || loading}
-            style={styles.loginButton} textStyle={styles.buttonText} disabledStyle={styles.disabled}
-            onPress={withdrawBalance}
-             />
+                <AppButton text={loading ? 'Processing' : 'Request withdrawal'} disabled={!withdraw || loading}
+                    style={styles.loginButton} textStyle={styles.buttonText} disabledStyle={styles.disabled}
+                    onPress={withdrawBalance}
+                />
             </View>
         </ScrollView>
     )
@@ -240,7 +239,7 @@ const styles = EStyleSheet.create({
     },
     loginButton: {
         // backgroundColor: '#E15220',
-        marginVertical:20,
+        marginVertical: 20,
         // paddingVertical: normalize(19),
     },
     buttonText: {
