@@ -20,6 +20,8 @@ import TopIcons from '../../shared/TopIcons';
 import { ImageBackground } from 'react-native';
 import GameSettings from '../../shared/GameSettings';
 import AchievementPopup from '../../shared/AchievementPopup';
+import { setShowUserPosition } from '../CommonSlice';
+import logToAnalytics from '../../utils/analytics';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -47,14 +49,14 @@ export default function GameEndResultScreen({ navigation }) {
 		const currentDate = new Date().toLocaleDateString();
 		if (lastRunDate !== currentDate) {
 			if (formattedDate === newUserDate && bonusGame && bonusGame.game_count === 0) {
-				analytics().logEvent('new_user_FG_exhausted', {
+				logToAnalytics('new_user_FG_exhausted', {
 					'id': user.username,
 					'phone_number': user.phoneNumber,
 					'email': user.email
 				});
 			}
 			if (formattedDate !== newUserDate && bonusGame && bonusGame.game_count === 0) {
-				analytics().logEvent('free_game_exhausted', {
+				logToAnalytics('free_game_exhausted', {
 					'id': user.username,
 					'phone_number': user.phoneNumber,
 					'email': user.email
@@ -76,13 +78,13 @@ export default function GameEndResultScreen({ navigation }) {
 
 	const onPlayButtonClick = async () => {
 		setLoading(true);
-		analytics().logEvent('exhibition_play_again_clicked', {
+		logToAnalytics('exhibition_play_again_clicked', {
 			'id': user.username,
 			'phone_number': user.phoneNumber,
 			'email': user.email
 		});
 		if (bonusGame && bonusGame.game_count === 2) {
-			analytics().logEvent('two_free_games_left', {
+			logToAnalytics('two_free_games_left', {
 				'id': user.username,
 				'phone_number': user.phoneNumber,
 				'email': user.email
@@ -97,15 +99,21 @@ export default function GameEndResultScreen({ navigation }) {
 
 	const onHomeButtonClick = async () => {
 		if (bonusGame && bonusGame.game_count === 2) {
-			analytics().logEvent('two_free_games_left', {
+			logToAnalytics('two_free_games_left', {
 				'id': user.username,
 				'phone_number': user.phoneNumber,
 				'email': user.email
 			});
 		};
+		logToAnalytics('leaderboard_btn_clicked', {
+			'id': user.username,
+			'phone_number': user.phoneNumber,
+			'email': user.email
+		});
 		buttonSound.playSound()
 		logFreeGamesExhausted()
-		navigation.navigate('Dashboard')
+		dispatch(setShowUserPosition(true))
+		navigation.navigate('Leaderboard')
 	}
 
 	useFocusEffect(

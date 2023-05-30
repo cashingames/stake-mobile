@@ -17,6 +17,7 @@ import TopIcons from "../../shared/TopIcons";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAvoidingView } from "react-native";
 import GameModal from "../../shared/GameModal";
+import logToAnalytics from "../../utils/analytics";
 
 
 
@@ -63,14 +64,12 @@ const ContactForm = ({ user }) => {
         }))
             .then(unwrapResult)
             .then(async result => {
-                // Alert.alert('Thanks for your feedback', 'You would be responded to shortly',[{ text: 'Ok', onPress: () => navigation.goBack(null)}])
                 setShowModal(true)
-                await analytics().logEvent("user_sent_feedback", {
+                logToAnalytics("user_sent_feedback", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email
                 })
-                // navigation.navigate('Dashboard')
                 setMessage('')
                 setSaving(false)
             })

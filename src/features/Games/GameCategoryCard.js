@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image, Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import Animated, { BounceInRight, SlideInRight } from "react-native-reanimated";
-import normalize from "../../utils/normalize";
+import normalize, { responsiveWidth } from "../../utils/normalize";
 import { formatNumber, isTrue } from "../../utils/stringUtl";
 import { randomEnteringAnimation } from "../../utils/utils";
 import Constants from 'expo-constants';
@@ -13,11 +13,11 @@ export default ({ category, onSelect, isSelected, activeCategory, activeSubcateg
         <Animated.View style={styles.card} entering={BounceInRight.duration(2000)}>
             <Pressable onPress={() => onSelect(category)} >
                 <View style={styles.categoryCardTopRow}>
-                    <Text style={styles.cardTitle}>{category.name} Quiz</Text>
-                    <Image
+                <Image
                         style={styles.cardIcon}
                         source={{ uri: `${Constants.manifest.extra.assetBaseUrl}/${category.icon}` }}
                     />
+                    <Text style={styles.cardTitle}>{category.name} Quiz</Text>
                 </View>
             </Pressable>
         </Animated.View>
@@ -28,9 +28,9 @@ export default ({ category, onSelect, isSelected, activeCategory, activeSubcateg
 const styles = EStyleSheet.create({
 
     card: {
-        width: '100%',
+        width: responsiveWidth(43),
         padding: normalize(15),
-        borderRadius: normalize(20),
+        borderRadius: normalize(50),
         marginBottom: normalize(10),
         backgroundColor: '#15397D',
         borderBottomColor: '#0D2859',
@@ -42,7 +42,7 @@ const styles = EStyleSheet.create({
         borderRadius: normalize(10)
     },
     cardTitle: {
-        fontSize: '1.5rem',
+        fontSize: '1rem',
         color: '#FFFF',
         fontFamily: 'blues-smile',
         marginVertical: normalize(8),
@@ -62,7 +62,7 @@ const styles = EStyleSheet.create({
     },
     categoryCardTopRow: {
         display: 'flex',
-        flexDirection: 'row',
+        // flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
 

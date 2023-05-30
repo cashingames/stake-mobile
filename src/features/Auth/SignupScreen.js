@@ -14,6 +14,7 @@ import { Dimensions } from 'react-native';
 import MixedContainerBackground from '../../shared/ContainerBackground/MixedContainerBackground';
 import GaButton from '../../shared/GaButton';
 import { unwrapResult } from '@reduxjs/toolkit';
+import logToAnalytics from '../../utils/analytics';
 
 
 
@@ -30,6 +31,8 @@ const SignupScreen = () => {
     const [emailErr, setEmailError] = useState(false);
     const [checked, setChecked] = useState(false);
     const [show, setShow] = useState(false);
+    const [error, setError] = useState('');
+
 
     const onChangeEmail = (text) => {
         const rule = /^\S+@\S+\.\S+$/;
@@ -63,75 +66,44 @@ const SignupScreen = () => {
         setCanSend(!invalid);
     }, [emailErr, passErr, password, checked, uNameErr, username])
 
-    const generateNumber = (n = 11)=>{
+    const generateNumber = (n = 11) => {
         var add = 1, max = 12 - add;   // 12 is the min safe number Math.random() can generate without it starting to pad the end with zeros.   
-        
-        if ( n > max ) {
-                return generateNumber(max) + generateNumber(n - max);
+
+        if (n > max) {
+            return generateNumber(max) + generateNumber(n - max);
         }
-        
-        max        = Math.pow(10, n+add);
-        var min    = max/10; // Math.pow(10, n) basically
-        var number = Math.floor( Math.random() * (max - min + 1) ) + min;
-        
-        return ("" + number).substring(add); 
+
+        max = Math.pow(10, n + add);
+        var min = max / 10; // Math.pow(10, n) basically
+        var number = Math.floor(Math.random() * (max - min + 1)) + min;
+
+        return ("" + number).substring(add);
     }
 
-    const processReg = async ()=>{
+    const processReg = async () => {
         setCanSend(false);
-
-        // try{
-        //     const _payload = {
-        //         email,
-        //         username,
-        //         password,
-        //         password_confirmation: password,
-        //         // phone_number: generateNumber()
-        //     }
-
-        //     const res = await registerUser(_payload);
-
-        //     console.log(res?.data?.data?.token)
-
-        //     // process login 
-        //     if(res.data.success){
-        //         dispatch(setToken(res?.data?.data?.token || ""))
-        //     }
-    
-        // }catch(e){
-        //     console.log(e.response)
-        //     Alert.alert("Confirm information provided", e.response.data.message)
-        // }
+        setError('')
         dispatch((registerUser({
             email,
             username,
             password,
             password_confirmation: password,
         }))).then(unwrapResult)
-        .then(async(response)=>{
-            console.log(response, 'signup')
-            dispatch(setToken(response.data.token))
-        })
-        .catch((error) => {
-            console.log(error)
-            setCanSend(true);
-        })
-       
-
-        // dispatch(registerUserThunk({
-        //     email,
-        //     username,
-        //     password
-        // }))
-        // .unwrap()
-        // .then(response =>{
-        //     console.log(response)
-        // })
-        // .catch(err =>{
-        //     console.log(err)
-        //     setCanSend(true);
-        //     Alert.alert("Confirm information provided")
-        // });
+            .then(async (response) => {
+                logToAnalytics('new_user_signed_up', {
+					'username': response.data.username,
+					'email': response.data.email
+				});
+                dispatch(setToken(response.data.token))
+            })
+            .catch((error) => {
+                const firstErrorMessage = Object.values(error.errors).flatMap((arr) => arr)[0];
+                setTimeout(() => {
+                    setError('')
+                }, 5000);
+                setError(firstErrorMessage)
+                setCanSend(true);
+            })
     }
 
     return (
@@ -142,9 +114,11 @@ const SignupScreen = () => {
             </View>
             <View style={styles.container}>
                 <View style={styles.inputContainer}>
+                    {error.length > 0 &&
+                        <Text style={styles.errorText}>{error}</Text>
+                    }
                     <Input
                         label='Enter your email address'
-                        // placeholder="johndoe@example.com"
                         value={email}
                         type="email"
                         error={emailErr && '*email is not valid'}
@@ -185,7 +159,7 @@ const SignupScreen = () => {
                         </Text>
                     }
                 />
-                <GaButton onPress={()=> processReg()} text='Continue' disabled={!canSend} />
+                <GaButton onPress={() => processReg()} text='Continue' disabled={!canSend} />
             </View>
         </MixedContainerBackground>
     );
@@ -224,7 +198,7 @@ const styles = EStyleSheet.create({
 
     linkText: {
         color: '#fff',
-        fontFamily: 'graphik-regular',
+        fontFamily: 'poppins',
         fontSize: '0.85rem'
     },
 
@@ -246,15 +220,12 @@ const styles = EStyleSheet.create({
     },
     signIn: {
         flexDirection: 'column',
-        // justifyContent: 'center',
         alignItems: 'center',
-        // marginTop: normalize(2),
         marginBottom: normalize(25)
     },
     create: {
         flexDirection: 'row',
         justifyContent: 'center',
-        // marginBottom: normalize(5)
     },
     signInText: {
         color: '#00000000',
@@ -264,13 +235,16 @@ const styles = EStyleSheet.create({
     submitBtn: {
         backgroundColor: '#F1D818'
     },
-
     btnText: {
         color: '#2D53A0',
         fontFamily: 'blues-smile'
     },
-
     disabled: {
         backgroundColor: '#DFCBCF'
+    },
+    errorText: {
+        fontFamily: 'poppins',
+        fontSize: '0.65rem',
+        color: '#fff'
     }
 });

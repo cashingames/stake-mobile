@@ -5,7 +5,7 @@ import { View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet"
 import { useDispatch, useSelector } from "react-redux";
 import { nextQuestion, pauseGame, setSelectedOption, setShowCorrectAnswer, setSubmissionResult } from "../features/Games/GameSlice";
-import normalize from "../utils/normalize";
+import normalize, { responsiveScreenWidth } from "../utils/normalize";
 import useSound from "../utils/useSound";
 import AppButton from "./AppButton"
 
@@ -65,12 +65,6 @@ const NextButton = ({ ending, onEndGame }) => {
             >
                 <Text style={styles.btnText}>{isLastQuestion ? 'Finish' : 'Next'}</Text>
             </Pressable>
-            {/* <AppButton
-            disabled={ending}
-            text=
-            onPress={handleSubmission}
-            style={styles.nextButton}
-        /> */}
         </View>
     )
 }
@@ -83,9 +77,10 @@ const styles = EStyleSheet.create({
     nextButton: {
         backgroundColor: '#15397D',
         borderRadius: 20,
-        height: normalize(35),
-        paddingHorizontal: 60,
+        height: normalize(40),
+        width: '100%',
         justifyContent: 'center',
+        alignItems:'center',
         borderBottomColor: '#0A1F45',
         borderBottomWidth: 4,
     },
@@ -97,9 +92,10 @@ const styles = EStyleSheet.create({
     disabled: {
         backgroundColor: 'gray',
         borderRadius: 20,
-        height: normalize(35),
-        paddingHorizontal: 60,
+        height: normalize(40),
+        width: '100%',
         justifyContent: 'center',
+        alignItems:'center',
         borderBottomColor: '#0A1F45',
         borderBottomWidth: 4,
       },

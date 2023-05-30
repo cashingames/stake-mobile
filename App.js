@@ -88,14 +88,7 @@ const linking = {
 function App() {
 
   useEffect(() => {
-    Settings.initializeSDK();
-    
-  //   (async () => {
-  //     const { status } = await requestTrackingPermissionsAsync();
-  //     if (status === 'granted') {
-  //       console.log('Yay! I have user permission to track data');
-  //     }
-  //   })();
+    Settings.initializeSDK(602039508558226);
   }, []);
 
   useEffect(() => {

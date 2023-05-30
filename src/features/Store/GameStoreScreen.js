@@ -25,6 +25,7 @@ import AppHeader from "../../shared/AppHeader";
 import TopIcons from "../../shared/TopIcons";
 import SpecialOffer from "./SpecialOffer";
 import GameModal from "../../shared/GameModal";
+import logToAnalytics from "../../utils/analytics";
 
 export default function ({ navigation }) {
     const dispatch = useDispatch();
@@ -270,7 +271,7 @@ const GamePlanCard = ({ plan, user, purchaeStoreItem, getStorePrice }) => {
     const { playSound } = useSound(require('../../../assets/sounds/pop-up.wav'))
     const refRBSheet = useRef();
     const buyGamePlan = async () => {
-        await analytics().logEvent('initiate_plan_purchase', {
+        logToAnalytics('initiate_plan_purchase', {
             'transaction_id': user.username,
             'currency': 'NGN',
             'value': plan.price,
@@ -317,7 +318,7 @@ const BoostCard = ({ boost, user, purchaeStoreItem, getStorePrice }) => {
     const { playSound } = useSound(require('../../../assets/sounds/achievement-unlocked2.wav'))
     const refRBSheet = useRef();
     const buyBoost = async () => {
-        await analytics().logEvent('initiate_boost_purchase', {
+        logToAnalytics('initiate_boost_purchase', {
             'transaction_id': user.username,
             'currency': 'NGN',
             'value': boost.currency_value,

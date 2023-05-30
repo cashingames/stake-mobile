@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import useSound from '../../utils/useSound';
 import QuizContainerBackground from '../../shared/ContainerBackground/QuizContainerBackground';
 import TopIcons from '../../shared/TopIcons';
-import GameSettings from '../../shared/GameSettings';
+ import DashboardSettings from '../../shared/DashboardSettings';
 
 const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -47,9 +47,9 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
                 <View style={{height:responsiveHeight(20)}}>
                 <TopIcons />
                     <View style={styles.logo}>
-                        <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
-                            <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
-                        </Pressable>
+                    <Pressable style={styles.icons} onPress={() => navigation.goBack(null)}>
+                                    <Image style={styles.imageIcons} source={require('../../../assets/images/back-icon.png')} />
+                                </Pressable>
                         <Text style={styles.title}>Trivia Hub</Text>
                     </View>
                     </View>
@@ -63,7 +63,7 @@ const SelectGameCategoryScreen = ({ navigation, initialShowPlayButton = false })
                 </View>
 
                 <View style={styles.setting}>
-                    <GameSettings navigationHandler={() => navigation.goBack(null)} />
+                    <DashboardSettings />
                 </View>
             </View>
         </QuizContainerBackground>
@@ -99,7 +99,7 @@ const styles = EStyleSheet.create({
         // marginBottom: 40
     },
     imgContainer: {
-        alignItems: 'center'
+        alignItems: 'center',
     },
     quizImage: {
         width: normalize(300),
