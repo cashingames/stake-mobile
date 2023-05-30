@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Image, Pressable, StatusBar, Text, View } from 'react-native';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
+import normalize, { responsiveHeight, responsiveScreenHeight, responsiveScreenWidth, responsiveWidth } from '../../utils/normalize';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import useSound from '../../utils/useSound';
@@ -19,9 +19,10 @@ import { logActionToServer } from '../CommonSlice';
 import { useEffect } from 'react';
 import crashlytics from '@react-native-firebase/crashlytics';
 import Loader from '../../shared/Loader';
-import GameSettings from '../../shared/GameSettings';
 import GameModal from '../../shared/GameModal';
 import logToAnalytics from '../../utils/analytics';
+import SwiperFlatList from 'react-native-swiper-flatlist';
+import DashboardSettings from '../../shared/DashboardSettings';
 
 const SubCategoryScreen = ({ navigation, route }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -43,8 +44,8 @@ const SubCategoryScreen = ({ navigation, route }) => {
                         <View>
                             <TopIcons />
                             <View style={styles.logo}>
-                                <Pressable style={styles.icons} onPress={() => navigation.navigate('Dashboard')}>
-                                    <Image style={styles.imageIcons} source={require('../../../assets/images/home.png')} />
+                                <Pressable style={styles.icons} onPress={() => navigation.goBack(null)}>
+                                    <Image style={styles.imageIcons} source={require('../../../assets/images/back-icon.png')} />
                                 </Pressable>
                                 <Text style={styles.title}>Trivia Hub</Text>
                             </View>
@@ -57,7 +58,7 @@ const SubCategoryScreen = ({ navigation, route }) => {
                         </View>
                     </ScrollView>
                     <View style={styles.setting}>
-                        <GameSettings navigationHandler={() => navigation.goBack(null)} />
+                        <DashboardSettings />
                     </View>
                     <GameModal
                         showModal={showModal}
@@ -81,8 +82,13 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
     const gameTypeId = useSelector(state => state.game.gameType.id)
     const [subCategoryId, setSubCategoryId] = useState('')
     const user = useSelector(state => state.auth.user);
+    const gameSubCategoryLength = category.subcategories.length;
+    const firstCategorySlide = category.subcategories.slice(0, 5);
+    const secondGameCategorySlide = category.subcategories.slice(5);
     const activePlans = useSelector(state => state.auth.user.hasActivePlan);
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
+
+    console.log(gameSubCategoryLength)
 
     const onStartGame = () => {
         if (!activePlans) {
@@ -140,8 +146,8 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
 
     return (
 
-        <Animated.View entering={randomEnteringAnimation()}>
-            <View style={styles.subcategories}>
+        <Animated.View entering={randomEnteringAnimation()} style={styles.subcategoriesContainer}>
+            {gameSubCategoryLength <= 5 ? <View style={[styles.subcategories]}>
                 {category.subcategories.map((subcategory, i) => (
                     <GameSubcategoryCard
                         key={i}
@@ -151,7 +157,31 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
                     />
                 ))}
             </View>
-        </Animated.View>
+                :
+                <SwiperFlatList showPagination paginationActiveColor='#15397D'  paginationDefaultColor="#fff" renderAll={true} >
+                    <View style={styles.subcategories}>
+                        {firstCategorySlide.map((subcategory, i) => (
+                            <GameSubcategoryCard
+                                key={i}
+                                game={subcategory}
+                                onPress={() => onPressMe(subcategory)}
+                                loading={loading}
+                            />
+                        ))}
+                    </View>
+                    <View style={styles.subcategories}>
+                        {secondGameCategorySlide .map((subcategory, i) => (
+                            <GameSubcategoryCard
+                                key={i}
+                                game={subcategory}
+                                onPress={() => onPressMe(subcategory)}
+                                loading={loading}
+                            />
+                        ))}
+                    </View>
+                </SwiperFlatList>
+            }
+        </Animated.View> 
     )
 
 };
@@ -205,13 +235,17 @@ const styles = EStyleSheet.create({
         fontSize: '1.5rem',
         color: '#fff'
     },
+    subcategoriesContainer: {
+        marginTop: -35
+    },
     subcategories: {
-        flex: 1,
-        marginTop: -10,
         flexDirection: 'row',
-        flexWrap: 'wrap',
         justifyContent: 'center',
-        paddingHorizontal: responsiveScreenWidth(3),
+        paddingHorizontal: responsiveWidth(5),
+        width: responsiveWidth(100),
+        flexWrap: 'wrap',
+        gap: responsiveWidth(2),
+        marginBottom: responsiveHeight(10)
 
     },
     activeSubcategory: {

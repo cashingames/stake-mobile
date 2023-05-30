@@ -29,7 +29,6 @@ const GameScreen = ({ navigation }) => {
         playSound()
     }
 
-    console.log(currentGame);
     const goToGameCategory = () => {
         dispatch(setGameType(currentGame))
         if (!activePlans) {
