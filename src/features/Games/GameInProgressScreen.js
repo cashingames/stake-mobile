@@ -27,6 +27,7 @@ import TopIcons from "../../shared/TopIcons";
 import DashboardSettings from "../../shared/DashboardSettings";
 import GameSettings from "../../shared/GameSettings";
 import GameModal from "../../shared/GameModal";
+import logToAnalytics from "../../utils/analytics";
 
 
 
@@ -87,34 +88,19 @@ export default function GameInProgressScreen({ navigation, route }) {
             .then(async () => {
                 crashlytics().log('User completed exhibition game');
                 if (formattedDate !== newUserDate && !isStaking && !isPlayingTrivia) {
-                    await analytics().logEvent('exhibition_game_completed', {
+                    logToAnalytics('exhibition_game_completed', {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
                         'email': user.email
                     });
                 };
                 if (formattedDate === newUserDate && !isStaking && !isPlayingTrivia) {
-                    await analytics().logEvent('new_user_exhibition_completed', {
+                    logToAnalytics('new_user_exhibition_completed', {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
                         'email': user.email
                     });
                 };
-                if (formattedDate === newUserDate && isStaking) {
-                    await analytics().logEvent('new_user_staking_completed', {
-                        'id': user.username,
-                        'phone_number': user.phoneNumber,
-                        'email': user.email
-                    });
-                };
-                if (formattedDate !== newUserDate && isStaking) {
-                    crashlytics().log('User completed staking game');
-                    await analytics().logEvent('staking_game_completed', {
-                        'id': user.username,
-                        'phone_number': user.phoneNumber,
-                        'email': user.email
-                    });
-                }
                 dispatch(logActionToServer({
                     message: "Game session " + gameSessionToken + " chosen options for " + user.username,
                     data: chosenOptions
@@ -123,7 +109,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                 if (isPlayingTrivia) {
                     dispatch(setHasPlayedTrivia(true))
                     crashlytics().log('User completed live trivia');
-                    await analytics().logEvent('live_trivia_completed', {
+                    logToAnalytics('live_trivia_completed', {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
                         'email': user.email

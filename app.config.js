@@ -78,9 +78,12 @@ export default {
     [
       "react-native-fbsdk-next",
       {
-        "appID": "401438355501146",
-        "clientToken": "9762cebc572b557561423a9d6b1d9000",
-        "displayName": "Cashingames",
+        "appID": "602039508558226",
+        "clientToken": "672878b2096a866014092331a81f5a97",
+        "displayName": "Gameark",
+        "advertiserIDCollectionEnabled": false,
+        "autoLogAppEventsEnabled": false,
+        "isAutoInitEnabled": true,
       }
     ]
   ],

@@ -11,6 +11,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import analytics from '@react-native-firebase/analytics';
 import useSound from '../utils/useSound';
 import { useRef } from 'react';
+import logToAnalytics from '../utils/analytics';
 
 
 
@@ -55,7 +56,7 @@ const AvailableGameSessionBoosts = () => {
     const boostApplied = (data) => {
         dispatch(consumeBoost(data))
         dispatch(reduceBoostCount(data.id))
-        analytics().logEvent('boost_used', {
+        logToAnalytics('boost_used', {
             'id': user.username,
             'boostName': data.name
         })

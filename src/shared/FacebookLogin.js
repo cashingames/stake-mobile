@@ -15,6 +15,7 @@ import normalize, { responsiveScreenWidth } from '../utils/normalize';
 import FirstTimeUserDetails from './FirstTimeUserDetails';
 import UniversalBottomSheet from './UniversalBottomSheet';
 import { triggerNotifierForReferral } from './Notification';
+import logToAnalytics from '../utils/analytics';
 
 
 const Login = ({ text }) => {
@@ -75,6 +76,7 @@ const Login = ({ text }) => {
       referrer
     })).then(unwrapResult)
       .then((originalPromiseResult) => {
+        console.log(originalPromiseResult)
         triggerTour(navigation)
         triggerNotifierForReferral()
         console.log(originalPromiseResult, 'hitting');
@@ -111,27 +113,18 @@ const Login = ({ text }) => {
           email: userProfile.email
         })).then(unwrapResult)
         .then((originalPromiseResult) => {
-          // if (originalPromiseResult.data.isFirstTime) {
-          //   setEmail(originalPromiseResult.data.email)
-          //   setFirstName(originalPromiseResult.data.firstName)
-          //   setLastName(originalPromiseResult.data.lastName)
-          //   setLoading(false)
-          //   openBottomSheet()
-          //   return
-          // }
+          logToAnalytics('signin_with_facebook', {
+            'id': userProfile.first_name,
+            'email': userProfile.email,
+            'username': user.username
+          })
           saveToken(originalPromiseResult.data.token)
           setLoading(false)
-          // navigation.navigate('AppRouter')
         })
         .catch((error) => {
           Alert.alert('Network error. Please, try again later.')
           setLoading(false)
         })
-      await analytics().logEvent('signin_with_facebook', {
-        'id': userProfile.first_name,
-        'email': userProfile.email,
-        'username': user.username
-      })
     } catch (error) {
       logout()
       setLoginError(true)
