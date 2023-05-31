@@ -13,7 +13,7 @@ import { ScrollView } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { randomEnteringAnimation } from '../../utils/utils';
 import GameSubcategoryCard from './GameSubcategoryCard';
-import { setIsPlayingTrivia, setSubGameCategory, startGame } from './GameSlice';
+import { setGameDuration, setIsPlayingTrivia, setSubGameCategory, startGame } from './GameSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { logActionToServer } from '../CommonSlice';
 import { useEffect } from 'react';
@@ -83,12 +83,10 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
     const [subCategoryId, setSubCategoryId] = useState('')
     const user = useSelector(state => state.auth.user);
     const gameSubCategoryLength = category.subcategories.length;
-    const firstCategorySlide = category.subcategories.slice(0, 5);
-    const secondGameCategorySlide = category.subcategories.slice(5);
+    const firstCategorySlide = category.subcategories.slice(0, 8);
+    const secondGameCategorySlide = category.subcategories.slice(8);
     const activePlans = useSelector(state => state.auth.user.hasActivePlan);
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
-
-    console.log(gameSubCategoryLength)
 
     const onStartGame = () => {
         if (!activePlans) {
@@ -114,6 +112,7 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
                         message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
                         data: result.data.questions
                     }))
+                    dispatch(setGameDuration(120))
                     setLoading(false);
                     navigation.navigate("GameInProgress")
                     setSubCategoryId('')
@@ -147,7 +146,7 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
     return (
 
         <Animated.View entering={randomEnteringAnimation()} style={styles.subcategoriesContainer}>
-            {gameSubCategoryLength <= 5 ? <View style={[styles.subcategories]}>
+            {gameSubCategoryLength <= 8 ? <View style={[styles.subcategories]}>
                 {category.subcategories.map((subcategory, i) => (
                     <GameSubcategoryCard
                         key={i}
