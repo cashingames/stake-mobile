@@ -86,7 +86,7 @@ const SignupScreen = () => {
             first_name: firstname,
             last_name: lastname,
             country_code: countryCode,
-            // bonus_checked: bonusChecked,
+            bonus_checked: bonusChecked,
             referrer: referrer,
         }).then(response => {
             console.log(response)
