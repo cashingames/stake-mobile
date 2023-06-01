@@ -261,7 +261,9 @@ export default function EditProfileDetailsScreen({ navigation }) {
                 text={saving ? 'Saving' : 'Save Changes'}
                 onPress={onSavePersonalDetails}
                 disabled={!canSave || saving}
-                style={styles.saveButton} />
+                style={styles.saveButton}
+                disabledStyle={styles.disabled}
+            />
         </View>
     );
 }
@@ -364,5 +366,8 @@ const styles = EStyleSheet.create({
         color: '#072169',
         fontSize: '0.98rem',
         marginBottom: '.6rem'
+    },
+    disabled: {
+        backgroundColor: '#EA8663'
     },
 });
