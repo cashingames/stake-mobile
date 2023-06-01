@@ -174,7 +174,7 @@ const WalletBalanceDetails = ({ balance, bonusWalletActive, mainWalletActive, bo
                                 source={require('../../../assets/images/cost-benefit.png')}
                                 style={styles.avatari}
                             />
-                            <Text style={styles.fundingTexti}>Cash withdrawal</Text>
+                            <Text style={styles.fundingTexti}>Withdrawal</Text>
 
                         </Pressable>
                     </View>
@@ -523,12 +523,12 @@ const styles = EStyleSheet.create({
         marginRight: '.5rem'
     },
     avatar: {
-        width: '1.2rem',
-        height: '2.2rem'
+        width: '1.3rem',
+        height: '1.3rem'
     },
     avatari: {
-        width: '1rem',
-        height: '2rem',
+        width: '1.2rem',
+        height: '1.2rem',
         marginRight: '.3rem'
     },
     bonusText: {
@@ -562,7 +562,7 @@ const styles = EStyleSheet.create({
         color: '#072169',
         fontFamily: 'gotham-medium',
         fontSize: '1rem',
-        marginLeft: '.5rem'
+        marginLeft: '.4rem'
     },
     totalTitleTexti: {
         color: '#072169',
@@ -599,7 +599,8 @@ const styles = EStyleSheet.create({
         borderRadius: 13,
         borderWidth: 2,
         borderColor: '#072169',
-        paddingHorizontal: '.5rem'
+        paddingHorizontal: '.5rem',
+        paddingVertical:'.5rem'
     },
     fundingText: {
         color: '#072169',
@@ -611,7 +612,7 @@ const styles = EStyleSheet.create({
         color: '#072169',
         fontFamily: 'gotham-medium',
         fontSize: '.9rem',
-        width: '8rem',
+        // width: '8rem',
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -668,13 +669,13 @@ const styles = EStyleSheet.create({
     },
     amountDetails: {
         flexDirection: 'row',
-        alignItems: 'flex-start'
+        alignItems: 'center'
     },
     transactionAmount: {
         color: '#072169',
         fontFamily: 'sansation-regular',
         fontSize: '.9rem',
-        width: '4rem',
+        // width: '4rem',
     },
 
     walletTitle: {

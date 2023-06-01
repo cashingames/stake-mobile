@@ -4,6 +4,7 @@ import axios from 'axios'
 export const startChallengeRequest = createAsyncThunk(
     'game/createRealTimeChallenge',
     async (data, _thunkAPI) => {
+        console.log(data, 'this is the data')
         const response = await axios.post('v3/challenges/create', data)
         console.log(response.data, 'this is the challenge data')
         return response.data
