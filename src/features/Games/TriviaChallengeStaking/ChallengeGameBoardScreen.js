@@ -164,6 +164,7 @@ const RenderActionButton = ({ onEnd, submitting }) => {
             onPress={onPress}
             style={styles.nextButton}
             disabled={submitting}
+            disabledStyle={styles.disabled}
         />
 
     )
@@ -218,5 +219,8 @@ const styles = EStyleSheet.create({
     nextButton: {
         display: 'flex',
         // marginTop:'7rem'
-    }
+    },
+    disabled: {
+        backgroundColor: '#EA8663'
+    },
 })

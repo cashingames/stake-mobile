@@ -160,7 +160,8 @@ const InputStakeAmount = ({ balance, stakeAmount, loading, amount, setAmount }) 
                     min
                 />
             </View>
-            <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={stakeAmount} disabled={loading} style={styles.stakeButton} />
+            <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={stakeAmount} disabled={loading}
+                style={styles.stakeButton} disabledStyle={styles.disabled} />
 
         </View>
     )
@@ -326,5 +327,9 @@ const styles = EStyleSheet.create({
     },
     storeLink: {
         marginTop: '.6rem'
-    }
+    },
+    disabled: {
+        backgroundColor: '#EA8663'
+    },
+
 })

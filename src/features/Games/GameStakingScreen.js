@@ -146,7 +146,7 @@ const GameStakingScreen = ({ navigation }) => {
                 />
             </View>
             <View style={styles.buttonContainer}>
-                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate} disabled={loading} />
+                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate} disabled={loading} disabledStyle={styles.disabled} />
             </View>
             <View style={styles.stakeContainer}>
                 <Text style={styles.stakeHeading}>HOW TO WIN</Text>
@@ -302,5 +302,8 @@ const styles = EStyleSheet.create({
         fontSize: "1rem",
         color: "#006ac6",
         marginRight: '1rem',
+    },
+    disabled: {
+        backgroundColor: '#EA8663'
     },
 })

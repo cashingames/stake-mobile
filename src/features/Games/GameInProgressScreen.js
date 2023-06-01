@@ -215,6 +215,7 @@ const NextButton = ({ onPress, ending }) => {
             text={isLastQuestion ? 'Finish' : 'Next'}
             onPress={pressNext}
             style={styles.nextButton}
+            disabledStyle={styles.disabled}
         />
     )
 }
@@ -240,5 +241,8 @@ const styles = EStyleSheet.create({
     },
     nextButton: {
         marginVertical: 10,
-    }
+    },
+    disabled: {
+        backgroundColor: '#EA8663'
+    },
 });
