@@ -210,6 +210,7 @@ export const GameSlice = createSlice({
         },
         setAmountStaked: (state, action) => {
             state.amountStaked = action.payload;
+            console.log(action.payload)
         },
         setWithStaking: (state, action) => {
             state.withStaking = action.payload;

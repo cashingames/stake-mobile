@@ -28,8 +28,10 @@ const GameStakingScreen = ({ navigation }) => {
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
     const gameTypeId = useSelector(state => state.game.gameType.id);
     const gameMode = useSelector(state => state.game.gameMode);
-    const [amount, setAmount] = useState('500');
+    const [amount, setAmount] = useState('');
+    console.log(amount)
     const [loading, setLoading] = useState(false);
+    const [canSend, setCanSend] = useState(false);
     const dispatch = useDispatch();
     const refRBSheet = useRef();
 
@@ -54,6 +56,14 @@ const GameStakingScreen = ({ navigation }) => {
             setAmount(maximumExhibitionStakeAmount)
         }
     }, [maximumExhibitionStakeAmount, user.walletBalance])
+
+
+    useEffect(() => {
+
+        const invalid = amount === ''
+        setCanSend(!invalid);
+
+    }, [amount])
 
     const validate = () => {
         setLoading(true);
@@ -137,7 +147,6 @@ const GameStakingScreen = ({ navigation }) => {
                 <Input
                     style={styles.fundAmount}
                     value={amount}
-                    defaultValue="200"
                     keyboardType="numeric"
                     onChangeText={setAmount}
                     autoFocus={true}
@@ -146,7 +155,7 @@ const GameStakingScreen = ({ navigation }) => {
                 />
             </View>
             <View style={styles.buttonContainer}>
-                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate} disabled={loading} disabledStyle={styles.disabled} />
+                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate} disabled={loading || !canSend} disabledStyle={styles.disabled} />
             </View>
             <View style={styles.stakeContainer}>
                 <Text style={styles.stakeHeading}>HOW TO WIN</Text>
