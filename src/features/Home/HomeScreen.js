@@ -120,10 +120,10 @@ const UserProfile = ({ user }) => {
                         <Text style={styles.usernameText} onPress={() => navigation.navigate('UserProfile')}>{user.username}</Text>
                         <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
                     </View>
-                    {/* <Text style={styles.greetingText}>Welcome 🙌🏻</Text> */}
+                    <Text style={styles.greetingText}>Welcome 🙌🏻</Text>
                 </View>
             </View>
-            {/* <Pressable style={styles.notificationContainer} onPress={viewNotifications}>
+            <Pressable style={styles.notificationContainer} onPress={viewNotifications}>
                 {user.unreadNotificationsCount !== 0 ?
                     <Ionicons name='mail-unread' size={40} color='#072169' /> :
                     <Ionicons name='mail' size={40} color='#072169' />
@@ -133,12 +133,12 @@ const UserProfile = ({ user }) => {
                         <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
                     </View>
                 }
-            </Pressable> */}
-            <Pressable style={styles.walletContainer} onPress={viewNotifications}>
+            </Pressable>
+            {/* <Pressable style={styles.walletContainer} onPress={viewNotifications}>
                 <Text style={styles.balanceCurrency}>NGN </Text>
                 <Text style={styles.balanceDigit}>{formatCurrency(user.walletBalance ?? 0)}</Text>
                 <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
-            </Pressable>
+            </Pressable> */}
         </View>
     )
 }

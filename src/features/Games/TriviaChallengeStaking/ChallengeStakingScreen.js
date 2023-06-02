@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Text, View, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,8 +23,10 @@ const ChallengeStakingScreen = ({ navigation }) => {
     const minimumChallengeStakeAmount = useSelector(state => state.common.minimumChallengeStakeAmount);
     const maximumChallengeStakeAmount = useSelector(state => state.common.maximumChallengeStakeAmount);
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
-    const [amount, setAmount] = useState('200');
+    const [amount, setAmount] = useState('');
+    console.log(amount, 'main screen')
     const [loading, setLoading] = useState(false);
+    const [canSend, setCanSend] = useState(false);
 
     const goToStore = () => {
         logToAnalytics("trivia_challenge_get_boost_clicked")
@@ -77,6 +79,13 @@ const ChallengeStakingScreen = ({ navigation }) => {
             });
     }
 
+    useEffect(() => {
+
+        const invalid = amount === ''
+        setCanSend(!invalid);
+
+    }, [amount])
+
     return (
         <>
             <ImageBackground source={require('../../../../assets/images/quiz-stage.jpg')}
@@ -105,6 +114,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
                             loading={loading}
                             amount={amount}
                             setAmount={setAmount}
+                            canSend={canSend}
                         />
 
                     </ScrollView>
@@ -141,7 +151,7 @@ const SelectedPlayer = ({ playerName, playerAvatar }) => {
     )
 }
 
-const InputStakeAmount = ({ balance, stakeAmount, loading, amount, setAmount }) => {
+const InputStakeAmount = ({ balance, stakeAmount, loading, amount, setAmount, canSend }) => {
     return (
         <View
             style={styles.stakeAmountContainer}
@@ -160,7 +170,7 @@ const InputStakeAmount = ({ balance, stakeAmount, loading, amount, setAmount }) 
                     min
                 />
             </View>
-            <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={stakeAmount} disabled={loading}
+            <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={stakeAmount} disabled={loading || !canSend}
                 style={styles.stakeButton} disabledStyle={styles.disabled} />
 
         </View>
