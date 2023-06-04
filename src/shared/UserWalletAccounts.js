@@ -14,11 +14,11 @@ import { useSelector } from "react-redux";
 const UserWalletAccounts = ({ user }) => {
     return (
         <View style={styles.walletsContainer}>
-            <SwiperFlatList>
-                <StakingWallet user={user} />
-                <EarningsWallet user={user} />
-                <UserBoosts user={user} />
-            </SwiperFlatList>
+            {/* <SwiperFlatList> */}
+            {/* <StakingWallet user={user} /> */}
+            {/* <EarningsWallet user={user} /> */}
+            <UserBoosts user={user} />
+            {/* </SwiperFlatList> */}
         </View>
     )
 }
@@ -105,10 +105,15 @@ const UserBoosts = ({ user }) => {
                 <Text style={styles.boostHeaderText}>{user.username} you have</Text>
                 <View style={styles.boostSub}>
                     {Platform.OS !== 'ios' &&
-                        <View style={styles.addContainer}>
-                            <Ionicons name='card-outline' size={20} color='#072169' />
-                            <Text style={styles.addText}>Buy Boost</Text>
-                        </View>
+                    <View style={styles.addContainer}>
+                        <Text style={styles.addText}>Purchase Boost</Text>
+                        <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+                        {/* <Image
+                            style={styles.avatar}
+                            source={require("../../assets/images/caret-forward.png")}
+
+                        /> */}
+                    </View>
                     }
                 </View>
             </View>
@@ -129,7 +134,7 @@ const UserBoosts = ({ user }) => {
                     {Platform.OS !== 'ios' &&
                         <View style={styles.boostSub}>
                             <Text style={styles.boostSubText}>Purchase boost</Text>
-                            <Ionicons name='chevron-forward-sharp' size={20} color='#E3ECF2' />
+                            <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
                         </View>
                     }
                 </View>
@@ -157,7 +162,7 @@ const UserBoost = ({ boost }) => {
                     style={styles.boostIcon}
                 />
             </View>
-            <Text style={styles.boostAmount}> x{formatNumber(boost.count)} </Text>
+            <Text style={styles.boostAmount}> {formatNumber(boost.count)} </Text>
             <Text style={styles.boostAmount}>{boost.name}</Text>
         </Pressable>
     )
@@ -167,7 +172,7 @@ export default UserWalletAccounts;
 
 const styles = EStyleSheet.create({
     walletsContainer: {
-        marginTop: '2rem'
+        marginTop: '1.2rem'
     },
     stakingWalletContainer: {
         backgroundColor: '#6A5BE1',
@@ -188,12 +193,14 @@ const styles = EStyleSheet.create({
         marginRight: '1rem'
     },
     boostsContainer: {
-        backgroundColor: '#701F88',
+        backgroundColor: '#FFF',
         flexDirection: 'column',
         borderRadius: 13,
         paddingHorizontal: normalize(15),
         paddingVertical: normalize(20),
-        width: normalize(295),
+        borderColor: '#E5E5E5',
+        borderWidth: 1
+        // width: normalize(295),
     },
     walletHeader: {
         flexDirection: 'row',
@@ -210,7 +217,7 @@ const styles = EStyleSheet.create({
     },
     boostSubText: {
         fontSize: '.7rem',
-        color: '#E3ECF2',
+        color: '#072169',
         fontFamily: 'sansation-bold',
     },
     walletHeaderText: {
@@ -220,8 +227,8 @@ const styles = EStyleSheet.create({
         marginLeft: '.5rem'
     },
     boostHeaderText: {
-        fontSize: '1rem',
-        color: '#E3ECF2',
+        fontSize: '.8rem',
+        color: '#072169',
         fontFamily: 'sansation-bold',
     },
     amountContainer: {
@@ -245,27 +252,27 @@ const styles = EStyleSheet.create({
     boostContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderColor: '#EFF2F6',
-        borderWidth: 1,
+        borderColor:'#FF2A98',
+        borderWidth: 1.5,
         borderRadius: 20,
-        paddingHorizontal: '.3rem',
-        paddingVertical: '.2rem',
-        marginRight: '.5rem'
+        paddingHorizontal: '.5rem',
+        paddingVertical: '.4rem',
+        marginRight: '1rem'
     },
     boostIconContainer: {
-        backgroundColor: '#EFF2F6',
-        borderRadius: 50,
-        padding: '.15rem'
+        // backgroundColor: '#EFF2F6',
+        // borderRadius: 50,
+        // padding: '.15rem',
     },
     boostIcon: {
-        width: '.6rem',
-        height: '.6rem'
+        width: '1.2rem',
+        height: '1.2rem'
     },
     boostAmount: {
-        fontSize: '.6rem',
-        color: '#E3ECF2',
+        fontSize: '.7rem',
+        color: '#072169',
         marginLeft: '.1rem',
-        fontFamily: 'sansation-regular',
+        fontFamily: 'sansation-bold',
     },
     currencyContainer: {
         flexDirection: 'row',
@@ -279,20 +286,20 @@ const styles = EStyleSheet.create({
     addContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#E3ECF2',
-        borderRadius: 20,
-        paddingHorizontal: '.6rem',
-        paddingVertical: '.15rem'
+    },
+    avatar: {
+        width:'1rem',
+        // height:'1rem'
     },
     addText: {
-        fontSize: '.7rem',
+        fontSize: '.8rem',
         color: '#072169',
-        marginLeft: '.3rem',
         fontFamily: 'sansation-bold',
+        // marginRight: '.3rem',
     },
     noBoostText: {
         fontSize: '.7rem',
-        color: '#E3ECF2',
+        color: '#072169',
         marginLeft: '.3rem',
         fontFamily: 'sansation-bold',
     },

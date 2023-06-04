@@ -5,23 +5,36 @@ import SwiperFlatList from "react-native-swiper-flatlist";
 import normalize from "../../utils/normalize";
 import { useNavigation } from "@react-navigation/native";
 import logToAnalytics from "../../utils/analytics";
+import { Ionicons } from "@expo/vector-icons";
 
 const LeaderboardCards = () => {
 
 
     const RenderForAndroid = () => {
-        return <SwiperFlatList>
-            <BoostsCard />
-            <TopLeaderboards />
-            <ChallengeLeaderboard />
-        </SwiperFlatList>
+        return (
+            // <SwiperFlatList>
+            <>
+                {/* <BoostsCard /> */}
+                <TopLeaderboards />
+                <PromotionsBoard />
+
+                {/* <ChallengeLeaderboard /> */}
+            </>
+            // </SwiperFlatList>
+        )
     }
 
     const RenderForIOS = () => {
-        return <SwiperFlatList>
-            <TopLeaderboards />
-            <ChallengeLeaderboard />
-        </SwiperFlatList>
+        return (
+            // <SwiperFlatList>
+            <>
+                <TopLeaderboards />
+                <PromotionsBoard />
+
+                {/* <ChallengeLeaderboard /> */}
+            </>
+            // </SwiperFlatList>
+        )
     }
     return (
         <View style={styles.leadersContainer}>
@@ -34,17 +47,38 @@ const LeaderboardCards = () => {
 const TopLeaderboards = () => {
     return (
         <Pressable style={styles.topLeadersContainer}>
-            <Text style={styles.topLeadersHeader}>Leaderboard</Text>
-            <Image
-                source={require('../../../assets/images/leader-coin.png')}
-                style={styles.avatar}
-            />
-            <Text style={styles.topLeadersText}>Top leaders based on earnings</Text>
-            <View style={styles.playButton}>
-                <Text style={styles.playButtonText}>
-                    Coming Soon!!
-                </Text>
+            <View style={styles.topLeadersSubContainer}>
+                <View style={styles.imageAvatar}>
+                    <Image
+                        source={require('../../../assets/images/leader-coin.png')}
+                        style={styles.avatar}
+                    />
+                </View>
+                <View style={styles.leadersHeaderContainer}>
+                    <Text style={styles.topLeadersHeader}>Leaderboard</Text>
+                    <Text style={styles.topLeadersHeaderi}>Top gamersfor the week/month</Text>
+                </View>
             </View>
+            <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+        </Pressable>
+    )
+}
+const PromotionsBoard = () => {
+    return (
+        <Pressable style={styles.topLeadersContainer}>
+            <View style={styles.topLeadersSubContainer}>
+                <View style={styles.imageAvatari}>
+                    <Image
+                        source={require('../../../assets/images/promotion-gift.png')}
+                        style={styles.avatar}
+                    />
+                </View>
+                <View style={styles.leadersHeaderContainer}>
+                    <Text style={styles.topLeadersHeader}>Promotions</Text>
+                    <Text style={styles.topLeadersHeaderi}>Daily and weekly promottions</Text>
+                </View>
+            </View>
+            <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
         </Pressable>
     )
 }
@@ -94,21 +128,40 @@ export default LeaderboardCards;
 
 const styles = EStyleSheet.create({
     leadersContainer: {
-        marginTop: '1.5rem'
+        marginTop: '.7rem'
+    },
+    imageAvatar: {
+        backgroundColor: '#FEECE7',
+        borderRadius: 100,
+        width: 70,
+        height:70,
+        alignItems:'center',
+        justifyContent:'center'
+    },
+    imageAvatari: {
+        backgroundColor: '#EBFAED',
+        borderRadius: 100,
+        width: 70,
+        height:70,
+        alignItems:'center',
+        justifyContent:'center'
     },
     topLeadersContainer: {
-        backgroundColor: '#FEECE7',
-        borderColor: '#FA5F4A',
+        backgroundColor: '#FFF',
+        borderColor: '#E5E5E5',
         borderWidth: 2,
         borderRadius: 13,
-        width: normalize(208),
-        height: normalize(258),
+        flexDirection:'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: '1rem',
-        marginRight: '1rem',
-        opacity: 0.6,
-        paddingHorizontal: '1rem'
+        paddingVertical: '.5rem',
+        paddingHorizontal: '.8rem',
+        opacity:0.4,
+        marginBottom:'.6rem'
+    },
+    topLeadersSubContainer: {
+        flexDirection:'row',
+        alignItems:'center'
     },
     challengeContainer: {
         backgroundColor: '#EBFAED',
@@ -139,9 +192,19 @@ const styles = EStyleSheet.create({
 
     },
     topLeadersHeader: {
-        fontSize: '1.1rem',
+        fontSize: '.9rem',
         color: '#072169',
         fontFamily: 'sansation-bold',
+    },
+    leadersHeaderContainer: {
+        marginLeft:'.6rem'
+    },
+    topLeadersHeaderi: {
+        fontSize: '.8rem',
+        color: '#072169',
+        fontFamily: 'sansation-regular',
+        width:'10rem',
+        marginTop:'.2rem'
     },
     topLeadersText: {
         fontSize: '1rem',
@@ -151,8 +214,8 @@ const styles = EStyleSheet.create({
     },
     playButton: {
         backgroundColor: '#FA5F4A',
-        paddingVertical: '.7rem',
-        paddingHorizontal: '1.7rem',
+        paddingVertical: '.5rem',
+        paddingHorizontal: '.7rem',
         borderRadius: 20
     },
     challengeButton: {
@@ -168,7 +231,7 @@ const styles = EStyleSheet.create({
         borderRadius: 20
     },
     playButtonText: {
-        fontSize: '.95rem',
+        fontSize: '.7rem',
         color: '#E3ECF2',
         fontFamily: 'sansation-bold',
     },

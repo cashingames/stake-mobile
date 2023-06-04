@@ -116,14 +116,14 @@ const UserProfile = ({ user }) => {
                 />
                 <View style={styles.nameMainContainer}>
                     <View style={styles.nameContainer}>
-                        <Text style={styles.welcomeText}>Hi, </Text>
+                        <Text style={styles.welcomeText}>Hello, </Text>
                         <Text style={styles.usernameText} onPress={() => navigation.navigate('UserProfile')}>{user.username}</Text>
                         <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
                     </View>
-                    <Text style={styles.greetingText}>Welcome 🙌🏻</Text>
+                    {/* <Text style={styles.greetingText}>Welcome 🙌🏻</Text> */}
                 </View>
             </View>
-            <Pressable style={styles.notificationContainer} onPress={viewNotifications}>
+            {/* <Pressable style={styles.notificationContainer} onPress={viewNotifications}>
                 {user.unreadNotificationsCount !== 0 ?
                     <Ionicons name='mail-unread' size={40} color='#072169' /> :
                     <Ionicons name='mail' size={40} color='#072169' />
@@ -133,12 +133,12 @@ const UserProfile = ({ user }) => {
                         <Text style={styles.number}>{user.unreadNotificationsCount}</Text>
                     </View>
                 }
-            </Pressable>
-            {/* <Pressable style={styles.walletContainer} onPress={viewNotifications}>
+            </Pressable> */}
+            <Pressable style={styles.walletContainer} onPress={viewNotifications}>
                 <Text style={styles.balanceCurrency}>NGN </Text>
                 <Text style={styles.balanceDigit}>{formatCurrency(user.walletBalance ?? 0)}</Text>
                 <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
-            </Pressable> */}
+            </Pressable>
         </View>
     )
 }
@@ -164,15 +164,15 @@ const styles = EStyleSheet.create({
         paddingTop: responsiveScreenWidth(20),
         paddingHorizontal: normalize(18),
         backgroundColor: '#EFF2F6',
-        paddingBottom: responsiveScreenWidth(10)
+        paddingBottom: responsiveScreenWidth(3)
     },
     mainContainer: {
         backgroundColor: '#EFF2F6',
         flex: 1,
     },
     avatar: {
-        width: normalize(55),
-        height: normalize(55),
+        width: normalize(52),
+        height: normalize(52),
         backgroundColor: '#FFFF',
         borderRadius: 100,
         borderColor: ' rgba(0, 0, 0, 0.1)',
@@ -186,12 +186,12 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     welcomeText: {
-        fontSize: '1.1rem',
+        fontSize: '.95rem',
         color: '#072169',
-        fontFamily: 'sansation-regular',
+        fontFamily: 'sansation-bold',
     },
     usernameText: {
-        fontSize: '1.1rem',
+        fontSize: '.95rem',
         color: '#072169',
         fontFamily: 'sansation-bold',
     },
@@ -320,12 +320,12 @@ const styles = EStyleSheet.create({
         marginTop: '.5rem'
     },
     balanceCurrency: {
-        fontSize: '1rem',
+        fontSize: '.9rem',
         color: '#072169',
         fontFamily: 'gotham-medium',
     },
     balanceDigit: {
-        fontSize: '1rem',
+        fontSize: '.9rem',
         color: '#072169',
         fontFamily: 'sansation-regular',
     }
