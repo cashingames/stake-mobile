@@ -104,6 +104,8 @@ function App() {
     'gotham-book': require('./assets/fonts/GothamRoundedBook_21018.ttf'),
     'gotham-light': require('./assets/fonts/GothamRoundedLight_21020.ttf'),
     'gotham-medium': require('./assets/fonts/GothamRoundedMedium_21022.ttf'),
+    'bubble-regular': require('./assets/fonts/bubbleboddyneue-regular.ttf'),
+    'bubble-bold': require('./assets/fonts/BubbleboddyNeue-Bold.ttf'),
 
   });
 

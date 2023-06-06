@@ -194,7 +194,7 @@ const styles = EStyleSheet.create({
     topLeadersHeader: {
         fontSize: '.9rem',
         color: '#072169',
-        fontFamily: 'sansation-bold',
+        fontFamily: 'bubble-regular',
     },
     leadersHeaderContainer: {
         marginLeft:'.6rem'

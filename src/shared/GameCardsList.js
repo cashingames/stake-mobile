@@ -2,13 +2,13 @@ import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import SwiperFlatList from "react-native-swiper-flatlist";
-import normalize from "../../utils/normalize";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { setGameMode, setGameType } from "./GameSlice";
-import logToAnalytics from "../../utils/analytics";
+import { setGameMode, setGameType } from "../features/Games/GameSlice";
+import logToAnalytics from "../utils/analytics";
+import normalize from "../utils/normalize";
 
-const GamesCards = () => {
+const GamesCardsList = () => {
     return (
         <View style={styles.gamesContainer}>
             <SwiperFlatList>
@@ -19,7 +19,7 @@ const GamesCards = () => {
         </View>
     )
 }
-export default GamesCards;
+export default GamesCardsList;
 
 const TriviaBetCard = () => {
     const dispatch = useDispatch();
@@ -43,13 +43,13 @@ const TriviaBetCard = () => {
     return (
         <Pressable style={styles.triviaBetContainer} onPress={selectTriviaMode}>
             <Image
-                source={require('../../../assets/images/trivia-banner.png')}
+                source={require('../../assets/images/trivia-banner.png')}
                 style={styles.triviaAvatar}
             />
             <View style={styles.triviaActions}>
                 <View style={styles.subTriviaActions}>
                     <Image
-                        source={require('../../../assets/images/trivia-book.png')}
+                        source={require('../../assets/images/trivia-book.png')}
                         style={styles.bookAvatar}
                     />
                     <View style={styles.triviaActionsTexts}>
@@ -89,13 +89,13 @@ const TriviaChallengeCard = () => {
     return (
         <Pressable style={styles.triviaBetContainer} onPress={selectChallengeMode}>
             <Image
-                source={require('../../../assets/images/challenge-banner.png')}
+                source={require('../../assets/images/challenge-banner.png')}
                 style={styles.triviaAvatar}
             />
             <View style={styles.triviaActions}>
                 <View style={styles.subTriviaActions}>
                     <Image
-                        source={require('../../../assets/images/challenge-sword.png')}
+                        source={require('../../assets/images/challenge-sword.png')}
                         style={styles.avatar}
                     />
                     <View style={styles.triviaActionsTexts}>
@@ -116,13 +116,13 @@ const TriviaRoomsCard = () => {
     return (
         <Pressable style={styles.triviaRoomContainer}>
             <Image
-                source={require('../../../assets/images/rooms-banner.png')}
+                source={require('../../assets/images/rooms-banner.png')}
                 style={styles.triviaRoomAvatar}
             />
             <View style={styles.triviaActions}>
                 <View style={styles.subTriviaActions}>
                     <Image
-                        source={require('../../../assets/images/rooms-hat.png')}
+                        source={require('../../assets/images/rooms-hat.png')}
                         style={styles.roomAvatar}
                     />
                     <View style={styles.triviaActionsTexts}>
@@ -146,7 +146,11 @@ const styles = EStyleSheet.create({
     },
     triviaBetContainer: {
         width: normalize(300),
-        marginRight: '.8rem'
+        marginRight: '.8rem',
+        elevation: 2.5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0.5, height: 2 },
+        shadowOpacity: 0.2,
     },
     triviaAvatar: {
         borderTopLeftRadius: 13,
@@ -185,7 +189,11 @@ const styles = EStyleSheet.create({
     },
     triviaRoomContainer: {
         width: normalize(330),
-        marginRight: '.8rem'
+        marginRight: '.8rem',
+        elevation: 2.5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0.5, height: 2 },
+        shadowOpacity: 0.2,
     },
     triviaRoomAvatar: {
         borderTopLeftRadius: 13,
@@ -204,14 +212,14 @@ const styles = EStyleSheet.create({
 
 
     triviaBetHeader: {
-        fontSize: '.95rem',
+        fontSize: '1rem',
         color: '#072169',
-        fontFamily: 'sansation-bold',
+        fontFamily: 'bubble-regular',
     },
     triviaBetHeaderI: {
         fontSize: '.85rem',
         color: '#FF3B81',
-        fontFamily: 'sansation-regular',
+        fontFamily: 'bubble-regular',
     },
     triviaActionsTexts: {
         marginLeft: '.3rem'

@@ -131,12 +131,6 @@ const UserBoosts = ({ user }) => {
                 :
                 <View style={styles.noContainer}>
                     <Text style={styles.noBoostText}>No boost</Text>
-                    {Platform.OS !== 'ios' &&
-                        <View style={styles.boostSub}>
-                            <Text style={styles.boostSubText}>Purchase boost</Text>
-                            <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
-                        </View>
-                    }
                 </View>
             }
         </Pressable>
@@ -221,7 +215,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'sansation-bold',
     },
     walletHeaderText: {
-        fontSize: '1rem',
+        fontSize: '1.1rem',
         color: '#E3ECF2',
         fontFamily: 'sansation-bold',
         marginLeft: '.5rem'
@@ -229,7 +223,7 @@ const styles = EStyleSheet.create({
     boostHeaderText: {
         fontSize: '.8rem',
         color: '#072169',
-        fontFamily: 'sansation-bold',
+        fontFamily: 'bubble-regular',
     },
     amountContainer: {
         flexDirection: 'row',
@@ -294,7 +288,7 @@ const styles = EStyleSheet.create({
     addText: {
         fontSize: '.8rem',
         color: '#072169',
-        fontFamily: 'sansation-bold',
+        fontFamily: 'bubble-regular',
         // marginRight: '.3rem',
     },
     noBoostText: {
