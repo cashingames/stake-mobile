@@ -56,7 +56,7 @@ const TopLeaderboards = () => {
                 </View>
                 <View style={styles.leadersHeaderContainer}>
                     <Text style={styles.topLeadersHeader}>Leaderboard</Text>
-                    <Text style={styles.topLeadersHeaderi}>Top gamersfor the week/month</Text>
+                    <Text style={styles.topLeadersHeaderi}>Top gamers for the week/month</Text>
                 </View>
             </View>
             <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
