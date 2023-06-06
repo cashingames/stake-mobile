@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Text, View, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, Alert, ActivityIndicator, Image, Pressable } from 'react-native';
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +17,8 @@ import StakingPredictionsTable from "../../shared/StakingPredictionsTable";
 import LowWalletBalance from "../../shared/LowWalletBalance";
 import UserWalletBalance from "../../shared/UserWalletBalance";
 import logToAnalytics from "../../utils/analytics";
+import { formatCurrency } from "../../utils/stringUtl";
+import { Ionicons } from "@expo/vector-icons";
 
 
 const GameStakingScreen = ({ navigation }) => {
@@ -29,19 +31,13 @@ const GameStakingScreen = ({ navigation }) => {
     const gameTypeId = useSelector(state => state.game.gameType.id);
     const gameMode = useSelector(state => state.game.gameMode);
     const [amount, setAmount] = useState('');
-    console.log(amount)
     const [loading, setLoading] = useState(false);
     const [canSend, setCanSend] = useState(false);
+    const [hidden, setHidden] = useState(false);
     const dispatch = useDispatch();
-    const refRBSheet = useRef();
 
-    const openBottomSheet = async () => {
-        refRBSheet.current.open()
-    }
-
-    const closeBottomSheet = () => {
-        dispatch(getUser());
-        refRBSheet.current.close()
+    const toggleSecureText = () => {
+        setHidden(!hidden);
     }
 
     useEffect(() => {
@@ -49,45 +45,45 @@ const GameStakingScreen = ({ navigation }) => {
         dispatch(getUser())
     }, [])
 
-    useEffect(() => {
-        if (Number.parseFloat(maximumExhibitionStakeAmount) > Number.parseFloat(user.walletBalance)) {
-            setAmount(user.walletBalance)
-        } else {
-            setAmount(maximumExhibitionStakeAmount)
-        }
-    }, [maximumExhibitionStakeAmount, user.walletBalance])
+    // useEffect(() => {
+    //     if (Number.parseFloat(maximumExhibitionStakeAmount) > Number.parseFloat(user.walletBalance)) {
+    //         setAmount(user.walletBalance)
+    //     } else {
+    //         setAmount(maximumExhibitionStakeAmount)
+    //     }
+    // }, [maximumExhibitionStakeAmount, user.walletBalance])
 
 
     useEffect(() => {
 
-        const invalid = amount === ''
+        const invalid = amount === '' || amount < minimumExhibitionStakeAmount || amount > Number.parseFloat(user.walletBalance)
         setCanSend(!invalid);
 
-    }, [amount])
+    }, [amount, minimumExhibitionStakeAmount, user.walletBalance])
 
     const validate = () => {
         setLoading(true);
-        if (Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount)) {
-            Alert.alert(`Minimum stake amount is ${minimumExhibitionStakeAmount} naira`);
-            setLoading(false);
-            return false;
-        }
+        // if (Number.parseFloat(amount) < Number.parseFloat(minimumExhibitionStakeAmount)) {
+        //     Alert.alert(`Minimum stake amount is ${minimumExhibitionStakeAmount} naira`);
+        //     setLoading(false);
+        //     return false;
+        // }
 
-        if (Number.parseFloat(amount) > Number.parseFloat(maximumExhibitionStakeAmount)) {
-            Alert.alert(`Maximum stake amount is ${maximumExhibitionStakeAmount} naira`);
-            setLoading(false);
-            return false;
-        }
-        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-            logToAnalytics('exhibition_staking_low_balance', {
-                'id': user.username,
-                'phone_number': user.phoneNumber,
-                'email': user.email
-            });
-            openBottomSheet();
-            setLoading(false);
-            return
-        }
+        // if (Number.parseFloat(amount) > Number.parseFloat(maximumExhibitionStakeAmount)) {
+        //     Alert.alert(`Maximum stake amount is ${maximumExhibitionStakeAmount} naira`);
+        //     setLoading(false);
+        //     return false;
+        // }
+        // if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
+        //     logToAnalytics('exhibition_staking_low_balance', {
+        //         'id': user.username,
+        //         'phone_number': user.phoneNumber,
+        //         'email': user.email
+        //     });
+        //     openBottomSheet();
+        //     setLoading(false);
+        //     return
+        // }
         logToAnalytics('exhibition_staking_initiated', {
             'id': user.username,
             'phone_number': user.phoneNumber,
@@ -96,6 +92,23 @@ const GameStakingScreen = ({ navigation }) => {
         dispatch(setAmountStaked(amount))
         onStartGame()
 
+    }
+
+    const depositFunds = async () => {
+        logToAnalytics("deposit_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('Wallet')
+    }
+    const fundWallet = async () => {
+        logToAnalytics("insufficient_balance_fund_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('Wallet')
     }
 
     const onStartGame = () => {
@@ -142,21 +155,52 @@ const GameStakingScreen = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.amountContainer}>
-                <UserWalletBalance balance={user.walletBalance} />
-                <Input
-                    style={styles.fundAmount}
-                    value={amount}
-                    keyboardType="numeric"
-                    onChangeText={setAmount}
-                    autoFocus={true}
-                    placeholder="Enter Stake Amount"
-                    min
-                />
+            <View style={styles.detailsContainer}>
+                <View style={styles.totalHeader}>
+                    <View style={styles.totalTitleContainer}>
+                        <Image
+                            source={require('../../../assets/images/wallet-with-cash.png')}
+                            style={styles.avatar}
+                        />
+                        <Text style={styles.totalTitleText}>Total balance</Text>
+                    </View>
+                    <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} />
+                </View>
+                <View style={styles.currencyHeader}>
+                    <View style={styles.currencyHeaderLeft}>
+                        <Text style={styles.currencyText}>NGN</Text>
+                        {hidden ?
+                            <Text style={styles.currencyAmount}>***</Text>
+                            :
+                            <Text style={styles.currencyAmount}>{formatCurrency(user.walletBalance ?? 0)}</Text>
+                        }
+                    </View>
+                    <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
+                        <Text style={styles.depositText}>Deposit</Text>
+                        <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+                    </Pressable>
+                </View>
             </View>
-            <View style={styles.buttonContainer}>
-                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate} disabled={loading || !canSend} disabledStyle={styles.disabled} />
-            </View>
+            <Input
+                label='Enter stake amount'
+                placeholder={`Minimum stake amount must be NGN ${minimumExhibitionStakeAmount}`}
+                value={amount}
+                error={((amount < minimumExhibitionStakeAmount) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
+                ((amount > Number.parseFloat(user.walletBalance)))}
+                onChangeText={setAmount}
+                isRequired={true}
+                keyboardType="numeric"
+            />
+            {amount > Number.parseFloat(user.walletBalance) &&
+                <View style={styles.errorContainer}>
+                    <Text style={styles.error}>Insufficient wallet balance</Text>
+                    <Pressable style={styles.fundError} onPress={fundWallet}>
+                        <Text style={styles.fundText}>Fund wallet</Text>
+                    </Pressable>
+                </View>
+            }
+                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate} 
+                disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButton} />
             <View style={styles.stakeContainer}>
                 <Text style={styles.stakeHeading}>HOW TO WIN</Text>
                 <View style={styles.stakeHeaders}>
@@ -168,94 +212,23 @@ const GameStakingScreen = ({ navigation }) => {
                     amount={amount} />)}
             </View>
 
-            {Number.parseFloat(user.walletBalance) < Number.parseFloat(amount) &&
-                <UniversalBottomSheet
-                    refBottomSheet={refRBSheet}
-                    height={620}
-                    subComponent={
-                        <LowWalletBalance
-                            onClose={closeBottomSheet}
-                            errorDescription="You do not have enough balance to stake this amount"
-                        />}
-                />
-                // :
-                // <UniversalBottomSheet
-                //     refBottomSheet={refRBSheet}
-                //     height={460}
-                //     subComponent={<AvailableBoosts onClose={closeBottomSheet}
-                //         amount={amount}
-                //         user={user}
-                //     />}
-                // />
-            }
-
         </ScrollView>
     )
 
 }
 
-// const AvailableBoosts = ({ onClose, amount, user }) => {
-//     const dispatch = useDispatch();
-//     const navigation = useNavigation();
-//     const boosts = useSelector(state => state.auth.user.boosts);
-//     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
-//     const gameTypeId = useSelector(state => state.game.gameType.id);
-//     const gameMode = useSelector(state => state.game.gameMode);
-//     const [loading, setLoading] = useState(false);
 
-//     const onStartGame = () => {
-//         setLoading(true);
-//         dispatch(setIsPlayingTrivia(false))
-//         dispatch(startGame({
-//             category: gameCategoryId,
-//             type: gameTypeId,
-//             mode: gameMode.id,
-//             staking_amount: amount
-//         }))
-//             .then(unwrapResult)
-//             .then(result => {
-//                 dispatch(logActionToServer({
-//                     message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
-//                     data: result.data.questions
-//                 }))
-//                     .then(unwrapResult)
-//                     .then(async result => {
-//                         await analytics().logEvent("start_exhibition_game_with_staking", {
-//                             'id': user.username,
-//                             'phone_number': user.phoneNumber,
-//                             'email': user.email
-//                         })
-//                         // console.log('Action logged to server');
-//                     })
-//                     .catch((e) => {
-//                         // console.log('Failed to log to server');
-//                     });
-//                 setLoading(false);
-//                 onClose();
-//                 navigation.navigate("GameInProgress")
-//             })
-//             .catch((rejectedValueOrSerializedError) => {
-//                 // console.log(rejectedValueOrSerializedError);
-//                 Alert.alert('The selected category is not available for now, try again later.');
-//                 setLoading(false);
-//             });
-//     }
 
-//     return (
-//         <ExhibitionUserAvailableBoosts gameMode={gameMode}
-//             boosts={boosts} onStartGame={onStartGame}
-//             loading={loading} onClose={onClose}
-//         />
-//     )
-// }
 
 export default GameStakingScreen;
 
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8F9FD',
-        paddingBottom: normalize(10)
+        backgroundColor: '#F9FBFF',
+        paddingBottom: normalize(10),
+        paddingTop: normalize(20),
+        paddingHorizontal: normalize(18)
     },
     amountContainer: {
         borderTopWidth: 1,
@@ -281,38 +254,138 @@ const styles = EStyleSheet.create({
     stakeContainer: {
         paddingHorizontal: normalize(20),
         paddingVertical: normalize(6),
+        backgroundColor:'#FFF',
+        elevation: 2,
+        shadowColor: '#000000',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.1,
+        borderRadius: 13,
+        borderColor:'#E5E5E5',
+        borderWidth: 1,
+        marginTop:'1rem',
+        marginBottom:'3.5rem'
     },
     stakeHeading: {
         textAlign: 'center',
-        fontFamily: "graphik-medium",
-        fontSize: "1rem",
-        color: "#fab700",
-        marginVertical: '1rem',
+        fontFamily: "gotham-bold",
+        fontSize: ".95rem",
+        color: "#072169",
+        marginVertical: '1.1rem',
     },
     stakeHeaders: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginVertical: normalize(10),
+        borderBottomWidth: 1,
+        borderColor: '#E0E0E0',
+        paddingBottom:'1rem'
     },
     stakeScore: {
-        fontFamily: "graphik-medium",
-        fontSize: "1rem",
-        color: "#006ac6",
+        fontFamily: "gotham-bold",
+        fontSize: ".85rem",
+        color: "#072169",
         // marginLeft: '.3rem',
     },
     stakeHead: {
-        fontFamily: "graphik-medium",
-        fontSize: "1rem",
-        color: "#006ac6",
+        fontFamily: "gotham-bold",
+        fontSize: ".85rem",
+        color: "#072169",
         marginRight: '1rem',
     },
     stakePay: {
-        fontFamily: "graphik-medium",
-        fontSize: "1rem",
-        color: "#006ac6",
+        fontFamily: "gotham-bold",
+        fontSize: ".85rem",
+        color: "#072169",
         marginRight: '1rem',
     },
     disabled: {
         backgroundColor: '#EA8663'
     },
+    detailsContainer: {
+        backgroundColor: '#fff',
+        borderRadius: 13,
+        borderColor: '#E5E5E5',
+        borderWidth: 1,
+        paddingHorizontal: '1.3rem',
+        paddingVertical: '1.1rem',
+        marginBottom: '1.5rem',
+        elevation: 2,
+        shadowColor: '#000000',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.1,
+    },
+    totalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    totalTitleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    totalTitleText: {
+        color: '#072169',
+        fontFamily: 'gotham-medium',
+        fontSize: '.9rem',
+        marginLeft: '.4rem'
+    },
+    avatar: {
+        width: '1.35rem',
+        height: '1.35rem'
+    },
+    currencyText: {
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        fontSize: '1.1rem',
+        marginRight: '.3rem'
+    },
+    currencyAmount: {
+        color: '#072169',
+        fontFamily: 'sansation-regular',
+        fontSize: '1.1rem',
+    },
+    currencyHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: '.7rem',
+        justifyContent: 'space-between'
+    },
+    currencyHeaderLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    currencyHeaderRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    depositText: {
+        color: '#072169',
+        fontFamily: 'gotham-medium',
+        fontSize: '.9rem',
+    },
+    errorContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    error: {
+        fontFamily: 'gotham-medium',
+        color: '#EF2F55',
+        fontSize: normalize(13),
+    },
+    fundError: {
+        borderColor:'#072169',
+        borderWidth: 2,
+        borderRadius: 15,
+        paddingHorizontal:'.8rem',
+        paddingVertical:'.3rem'
+    },
+    fundText: {
+        color: '#072169',
+        fontFamily: 'gotham-medium',
+        fontSize: '.7rem',
+    }, 
+    stakeButton: {
+        marginVertical: 5,
+    }
 })

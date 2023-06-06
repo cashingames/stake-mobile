@@ -29,7 +29,8 @@ export default () => {
 const styles = EStyleSheet.create({
     cards: {
         display: 'flex',
-        flexDirection: 'row',
-        flexWrap:'wrap'
+        flexDirection: 'column',
+        marginBottom:'2.5rem'
+        // flexWrap:'wrap'
     },
 });

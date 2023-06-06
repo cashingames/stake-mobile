@@ -52,9 +52,9 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: normalize(20),
-        paddingTop:'3rem'
+        paddingTop:'1.8rem'
     },
     gamesContainer: {
-      marginTop: '2rem'
+    //   marginTop: '2rem'
     },
 })

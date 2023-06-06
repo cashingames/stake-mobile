@@ -8,6 +8,7 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGameCategory } from './GameSlice';
 import logToAnalytics from '../../utils/analytics';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
@@ -38,15 +39,17 @@ export default ({ subcategory }) => {
 
     return (
         <Pressable style={styles.card} onPress={clicked} >
-
-            <Image
-                style={[styles.cardIconBigger]}
-                source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${subcategory.icon}` }}
-                resizeMode='contain'
-            />
-            <View style={styles.cardContent}>
-                <Text style={styles.cardTitle}>{subcategory.name}</Text>
+            <View style={styles.cardImageContent}>
+                <Image
+                    style={[styles.cardIconBigger]}
+                    source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${subcategory.icon}` }}
+                    resizeMode='contain'
+                />
+                <View style={styles.cardContent}>
+                    <Text style={styles.cardTitle}>{subcategory.name}</Text>
+                </View>
             </View>
+            <Ionicons name='chevron-forward-sharp' size={24} color='#072169' />
         </Pressable >
     );
 }
@@ -58,20 +61,26 @@ const styles = EStyleSheet.create({
         backgroundColor: '#F8F9FD',
         borderRadius: normalize(11),
         alignItems: 'center',
+        justifyContent:'space-between',
+        flexDirection:'row',
         marginHorizontal: '.2rem',
         flexDirection: "row",
         borderWidth: Platform.OS === 'ios' ? normalize(0.5) : 1,
         borderColor: '#E0E0E0',
         paddingHorizontal: '.8rem',
-        paddingVertical: '.5rem',
+        paddingVertical: '.7rem',
         elevation: 3.5,
         shadowColor: '#000',
         shadowOffset: { width: 0.5, height: 2 },
         shadowOpacity: 0.1,
     },
+    cardImageContent: {
+        flexDirection: "row",
+        alignItems: 'center',
+    },
     cardIconBigger: {
-        width: normalize(20),
-        height: normalize(20),
+        width: normalize(50),
+        height: normalize(50),
         alignSelf: 'center',
     },
     cardContent: {
@@ -79,8 +88,9 @@ const styles = EStyleSheet.create({
         justifyContent: "space-evenly",
     },
     cardTitle: {
-        fontSize: '0.7rem',
-        color: '#151C2F',
-        fontFamily: 'graphik-medium',
+        fontSize: '0.9rem',
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        marginLeft:'.7rem'
     },
 });

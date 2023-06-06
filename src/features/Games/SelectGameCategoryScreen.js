@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, ScrollView, StatusBar, View } from 'react-native';
+import { ImageBackground, Platform, ScrollView, StatusBar, View } from 'react-native';
 import GamePicker from './GamePicker';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -29,20 +29,13 @@ const SelectGameCategoryScreen = ({ navigation }) => {
     );
 
     return (
-        <View style={styles.container}>
-            <ScrollView>
-                <View style={styles.animation}>
-                    <LottieAnimations
-                        animationView={require('../../../assets/select-game.json')}
-                        width={normalize(100)}
-                        height={normalize(100)}
-                    />
-                </View>
-                <View>
-                    <GamePicker />
-                </View>
+        <ImageBackground source={require('../../../assets/images/game-play-background.png')}
+            style={{ flex: 1 }}
+            resizeMethod="resize">
+            <ScrollView style={styles.container}>
+                <GamePicker />
             </ScrollView>
-        </View>
+        </ImageBackground>
     )
 }
 
@@ -52,8 +45,8 @@ export default SelectGameCategoryScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#5d5fef',
-        paddingHorizontal: normalize(18),
+        paddingHorizontal: normalize(14),
+        paddingTop: normalize(22)
     },
     animation: {
         alignItems: 'center',

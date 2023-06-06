@@ -11,14 +11,14 @@ const StakingPredictionsTable = ({ gameStake, amount, containerStyle }) => {
     return (
         <View style={[styles.stakeSub, containerStyle]}>
             <View style={styles.stakeScoreContainer}>
-                <Ionicons name="checkmark-circle-outline" size={16} color="#333333" />
+                <Ionicons name="checkmark-circle-outline" size={18} color="#333333" />
                 <Text style={styles.stakeScoreDigit}>{gameStake.score}</Text>
             </View>
             <View style={styles.stakeNumber}>
-                <Ionicons name="time-outline" size={16} color="#FF932F" />
+                <Ionicons name="time-outline" size={18} color="#FF932F" />
                 <Text style={styles.stakeOddDigit}>x{gameStake.odd}</Text>
             </View>
-            <Text style={styles.stakeWinnings}>&#8358;{formatCurrency(amount * gameStake.odd)}</Text>
+            <Text style={styles.stakeWinnings}>NGN {amount * gameStake.odd}</Text>
         </View>
     )
 }
@@ -35,22 +35,22 @@ const styles = EStyleSheet.create({
 
     },
     stakeOddDigit: {
-        fontFamily: "graphik-medium",
+        fontFamily: "sansation-bold",
         fontSize: ".8rem",
-        color: "#FF932F",
+        color: "#072169",
         marginLeft: '.3rem',
     },
     stakeScoreDigit: {
-        fontFamily: "graphik-medium",
+        fontFamily: "sansation-bold",
         fontSize: ".8rem",
-        color: "#333333",
+        color: "#072169",
         marginLeft: '.3rem',
-        opacity: 0.7
+        // opacity: 0.7
     },
     stakeWinnings: {
-        fontFamily: "graphik-medium",
+        fontFamily: "sansation-bold",
         fontSize: ".8rem",
-        color: "#333333",
+        color: "#072169",
         width: '4.8rem',
         alignItems:'flex-start'
     },

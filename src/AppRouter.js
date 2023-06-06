@@ -132,11 +132,15 @@ function AppRouter() {
 						<AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 						{/* game */}
 						<AppStack.Screen name="SelectGameCategory" component={SelectGameCategoryScreen} options={{
-							title: 'Select Game',
+							title: 'Select Category',
 							headerStyle: {
-								backgroundColor: '#5d5fef',
+								backgroundColor: '#F9FBFF',
 							},
-							headerTintColor: '#FFFF',
+							headerTitleStyle: {
+								fontFamily: 'gotham-bold',
+								fontSize: 23,
+							},
+							headerTintColor: '#072169',
 						}} />
 						<AppStack.Screen name="GamesList" component={GamesListScreen} options={{
 							title: 'Games',
@@ -145,7 +149,17 @@ function AppRouter() {
 							},
 							headerTintColor: '#FFF',
 						}} />
-						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ title: 'Game Staking' }} />
+						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{
+							title: 'Game Staking',
+							headerStyle: {
+								backgroundColor: '#F9FBFF',
+							},
+							headerTitleStyle: {
+								fontFamily: 'gotham-bold',
+								fontSize: 23,
+							},
+							headerTintColor: '#072169',
+						}} />
 						<AppStack.Screen name="GameLoading" component={GameLoadingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />

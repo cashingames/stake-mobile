@@ -35,7 +35,7 @@ const HomeRouter = () => {
                     fontFamily: 'bubble-regular',
                     fontSize: 23,
                 },
-                headerTransparent: true,
+                // headerTransparent: true,
                 headerTintColor: '#072169',
                 tabBarIcon: ({ color }) => (
                     <Ionicons name="game-controller" color={color} size={30} />
