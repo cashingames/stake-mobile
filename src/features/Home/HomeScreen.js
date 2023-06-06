@@ -105,6 +105,14 @@ const UserProfile = ({ user }) => {
         })
         navigation.navigate('Notifications')
     }
+    const viewWallet = async () => {
+        logToAnalytics("wallet_amount_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('Wallet')
+    }
 
     return (
         <View style={styles.userProfileContainer}>
@@ -134,7 +142,7 @@ const UserProfile = ({ user }) => {
                     </View>
                 }
             </Pressable> */}
-            <Pressable style={styles.walletContainer} onPress={viewNotifications}>
+            <Pressable style={styles.walletContainer} onPress={viewWallet}>
                 <Text style={styles.balanceCurrency}>NGN </Text>
                 <Text style={styles.balanceDigit}>{formatCurrency(user.walletBalance ?? 0)}</Text>
                 <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
