@@ -147,7 +147,7 @@ const styles = EStyleSheet.create({
     },
     amount: {
         color: '#121212',
-        fontFamily: 'graphik-bold',
+        fontFamily: 'gotham-bold',
         fontSize: '0.7rem',
     },
     name: {

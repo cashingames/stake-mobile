@@ -1,10 +1,7 @@
 import React from "react";
-import { Text, View } from "react-native";
-import { AnimatedCircularProgress } from "react-native-circular-progress";
+import { View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
-import { useSelector } from "react-redux";
 import normalize from "../utils/normalize";
-import { LinearProgress } from "react-native-elements";
 import * as Progress from 'react-native-progress';
 
 
@@ -23,10 +20,5 @@ export default AnsweredGameProgress;
 const styles = EStyleSheet.create({
     questionsAnsweredContainer: {
         marginVertical: normalize(12)
-    },
-    questionsAnswered: {
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        fontSize: '0.75rem',
     },
 })

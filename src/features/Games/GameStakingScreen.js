@@ -202,7 +202,7 @@ const GameStakingScreen = ({ navigation }) => {
                 <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate} 
                 disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButton} />
             <View style={styles.stakeContainer}>
-                <Text style={styles.stakeHeading}>HOW TO WIN</Text>
+                <Text style={styles.stakeHeading}>HOW to win</Text>
                 <View style={styles.stakeHeaders}>
                     <Text style={styles.stakeScore}>OUTCOME</Text>
                     <Text style={styles.stakeHead}>ODDS</Text>

@@ -116,7 +116,7 @@ const styles = EStyleSheet.create({
 
     },
     options: {
-        paddingBottom: normalize(45),
+        // paddingBottom: normalize(45),
     },
     questions: {
         color: '#072169',

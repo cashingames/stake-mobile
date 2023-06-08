@@ -42,7 +42,7 @@ export default GameTopicProgress;
 const styles = EStyleSheet.create({
     topicProgress: {
         borderBottomWidth: 1,
-        borderColor: '#939393',
+        borderColor: '#93939336',
         paddingVertical: normalize(18),
         paddingHorizontal:'1.3rem'
     },
