@@ -18,6 +18,7 @@ const styles = EStyleSheet.create({
     answer: {
         flexDirection: 'row',
         alignItems:'center',
+        marginBottom:'1.8rem'
         // backgroundColor: 'red',
         // marginBottom: normalize(8),
         // padding: normalize(12),
@@ -29,6 +30,6 @@ const styles = EStyleSheet.create({
         color: '#072169',
         fontFamily: 'sansation-regular',
         fontSize: '0.9rem',
-        marginTop:'.8rem'
+        // marginTop:'.8rem'
     },
 })

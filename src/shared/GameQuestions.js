@@ -134,7 +134,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.9rem',
         color: '#072169',
     },
-    disabled: {
+      disabled: {
         backgroundColor: '#EA8663'
     },
 
