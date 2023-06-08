@@ -25,6 +25,7 @@ import NetworkModal from '../shared/NetworkModal';
 import * as Updates from 'expo-updates';
 import crashlytics from '@react-native-firebase/crashlytics';
 import GameModal from '../shared/GameModal';
+import DailyReward from '../shared/DailyReward';
 
 const Dashboard = ({ navigation }) => {
     // const loading = useSelector(state => state.common.initialLoading);
@@ -34,6 +35,7 @@ const Dashboard = ({ navigation }) => {
     const [updateModal, setUpdateModal] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
     const [showModal, setShowModal] = useState(false)
+    const [showDailyRewardModal, setShowDailyRewardModal] = useState(true)
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
 
@@ -155,6 +157,7 @@ const Dashboard = ({ navigation }) => {
                     btnText='Restart'
                     btnHandler={updateApp}
                 />
+                <DailyReward showDailyRewardModal={showDailyRewardModal} setShowDailyRewardModal={setShowDailyRewardModal} />
             </MixedContainerBackground>
         </>
     )
