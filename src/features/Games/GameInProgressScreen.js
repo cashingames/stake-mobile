@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from "react";
-import { View, ScrollView, ImageBackground, Alert, StatusBar, BackHandler, Platform } from 'react-native';
-import normalize from "../../utils/normalize";
+import { View, ScrollView, ImageBackground, Alert, StatusBar, BackHandler, Platform, Image, Text } from 'react-native';
+import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -70,23 +70,23 @@ export default function GameInProgressScreen({ navigation, route }) {
             consumedBoosts
         }))
             .then(unwrapResult)
-            .then( () => {
+            .then(() => {
                 crashlytics().log('User completed exhibition game');
-                if(formattedDate !== newUserDate && !isStaking && !isPlayingTrivia){
+                if (formattedDate !== newUserDate && !isStaking && !isPlayingTrivia) {
                     logToAnalytics('exhibition_game_completed', {
-                    'id': user.username,
-                    'phone_number': user.phoneNumber,
-                    'email': user.email
-                });
-            };
-                if(formattedDate === newUserDate && !isStaking && !isPlayingTrivia){
+                        'id': user.username,
+                        'phone_number': user.phoneNumber,
+                        'email': user.email
+                    });
+                };
+                if (formattedDate === newUserDate && !isStaking && !isPlayingTrivia) {
                     logToAnalytics('new_user_exhibition_completed', {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
                         'email': user.email
                     });
                 };
-                if(formattedDate === newUserDate && isStaking){
+                if (formattedDate === newUserDate && isStaking) {
                     logToAnalytics('new_user_staking_completed', {
                         'id': user.username,
                         'phone_number': user.phoneNumber,
@@ -113,7 +113,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                     navigation.navigate('TriviaEndResult', {
                         triviaId: params.triviaId,
                     })
-                }else{
+                } else {
                     navigation.navigate('GameEndResult');
                 }
             })
@@ -161,8 +161,8 @@ export default function GameInProgressScreen({ navigation, route }) {
 
     useFocusEffect(
         React.useCallback(() => {
-            if(Platform.OS === "ios")
-            return;
+            if (Platform.OS === "ios")
+                return;
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
             StatusBar.setBarStyle('light-content');
@@ -177,67 +177,110 @@ export default function GameInProgressScreen({ navigation, route }) {
         // <View>
         //     <Text>me</Text>
         // </View>
-        <ImageBackground source={require('../../../assets/images/game_mode.png')} style={styles.image} resizeMode="contain">
+        <ImageBackground source={require('../../../assets/images/game-play-background.png')} style={styles.image} resizeMode="contain">
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
-                <PlayGameHeader onPress={showExitConfirmation} onPressBoost={openBottomSheet} />
-                <GameProgressAndBoosts onComplete={() => onEndGame()} ending={ending} />
-                <GameQuestions />
+                <PlayGameHeader onPress={showExitConfirmation} />
+                <StakeDetails />
+                <GameProgressAndBoosts  />
+                <GameQuestions onPress={() => onEndGame()} ending={ending} onComplete={() => onEndGame()} />
                 <UniversalBottomSheet
                     refBottomSheet={refRBSheet}
                     height={350}
                     subComponent={<UserAvailableBoosts onClose={closeBottomSheet} />}
                 />
             </ScrollView>
-            <NextButton onPress={() => onEndGame()} ending={ending} />
         </ImageBackground>
     );
 }
 
-const GameProgressAndBoosts = ({ onComplete, ending }) => {
+const StakeDetails = () => {
+    const amountStaked = useSelector(state => state.game.amountStaked);
+
+    return (
+        <View style={styles.stakeContainer}>
+            <View style={styles.stakeSubContainer}>
+                <Image
+                    source={require('../../../assets/images/wallet-with-cash.png')}
+                    style={styles.avatar}
+                />
+                <View>
+                    <Text style={styles.stakeHeader}>Stake</Text>
+                    <Text style={styles.stakeAmount}>NGN {amountStaked}</Text>
+                </View>
+            </View>
+
+            <View style={styles.stakeSubContainer}>
+                <Image
+                    source={require('../../../assets/images/wallet-with-cash.png')}
+                    style={styles.avatar}
+                />
+                <View>
+                    <Text style={styles.stakeHeader}>Pot. winnings</Text>
+                    <Text style={styles.stakeAmount}>NGN {amountStaked * 10}</Text>
+                </View>
+            </View>
+        </View>
+    )
+}
+
+const GameProgressAndBoosts = () => {
     return (
         <View style={styles.gameProgressAndBoost}>
-            <GameTopicProgress onComplete={onComplete} ending={ending} />
+            <GameTopicProgress />
             <AvailableGameSessionBoosts />
         </View>
     )
 }
 
-const NextButton = ({ onPress, ending }) => {
-    const dispatch = useDispatch()
-    const isLastQuestion = useSelector(state => state.game.isLastQuestion);
-    const pressNext = () => {
-        dispatch(isLastQuestion ? onPress : nextQuestion())
-    }
-
-    return (
-        <AppButton
-            disabled={ending}
-            text={isLastQuestion ? 'Finish' : 'Next'}
-            onPress={pressNext}
-            style={styles.nextButton}
-            disabledStyle={styles.disabled}
-        />
-    )
-}
 
 const styles = EStyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#9C3DB8',
-        paddingTop: normalize(45),
+        paddingHorizontal: normalize(18),
+        // backgroundColor: '#9C3DB8',
+        paddingTop: responsiveScreenWidth(15),
     },
     image: {
-        paddingHorizontal: normalize(18),
-        backgroundColor: '#9C3DB8',
+        // backgroundColor: '#9C3DB8',
         flex: 1,
+    },
+    stakeContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems:'center',
+        marginTop:'2rem'
+    },
+    stakeSubContainer: {
+        flexDirection:'row',
+        alignItems:'center'
+    },
+    avatar: {
+        width: '1.4rem',
+        height:'1.4rem'
+    },
+    stakeHeader: {
+        fontSize: '0.9rem',
+        fontFamily: 'gotham-medium',
+        color: '#072169',
+    },
+    stakeAmount: {
+        fontSize: '0.9rem',
+        fontFamily: 'sansation-regular',
+        color: '#072169',
     },
     gameProgressAndBoost: {
         display: 'flex',
-        backgroundColor: 'rgba(57, 15, 15, 0.4)',
-        shadowColor: 'inset 0px 4px 0px rgba(0, 0, 0, 0.05)',
+        backgroundColor: '#FFF',
+        elevation: 2.5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.1,
         borderRadius: 16,
-        marginVertical: normalize(18)
+        marginVertical: normalize(25),
+        borderWidth: 1,
+        borderColor: '#E5E5E5'
+        
     },
     nextButton: {
         marginVertical: 10,

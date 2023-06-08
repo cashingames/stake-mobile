@@ -3,7 +3,7 @@ import { Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import BoostsInfo from "./BoostInfo";
 
-const PlayGameHeader = ({ onPress, onPressBoost }) => {
+const PlayGameHeader = ({ onPress }) => {
 
     return (
         <View style={styles.header}>
@@ -25,8 +25,8 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between'
     },
     headerTitle: {
-        fontSize: '0.82rem',
-        fontFamily: 'graphik-medium',
-        color: '#FFFF',
+        fontSize: '0.9rem',
+        fontFamily: 'gotham-medium',
+        color: '#072169',
     },
 })

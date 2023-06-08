@@ -69,9 +69,6 @@ const AvailableGameSessionBoosts = () => {
         <>
             {boosts?.length > 0 ?
                 <View style={styles.availableBoosts}>
-                    <View style={styles.boostinfo}>
-                        <Text style={styles.title}>BOOST</Text>
-                    </View>
                     {
                         boostsToDisplay().map((boost, index) =>
                             boost.count >= 1 &&
@@ -94,14 +91,13 @@ const AvailableBoost = ({ boost, onConsume, showText }) => {
     return (
         <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
             <View style={styles.boostContainer}>
-                <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
+                <View style={[styles.availableBoost, isActive ? styles.boostActive : {}, { opacity: showText ? 0 : 1 }]}>
                     <Image
                         source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
-                        style={[styles.boostIcon, { opacity: showText ? 0 : 1 }]}
+                        style={styles.boostIcon}
                     />
                     <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
                 </View>
-                <Text style={styles.name}>{boost.name}</Text>
             </View>
         </Pressable>
     )
@@ -113,10 +109,9 @@ const styles = EStyleSheet.create({
     availableBoosts: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        paddingLeft: normalize(30),
         paddingVertical: normalize(18),
+        paddingHorizontal:'1.3rem'
     },
     boostinfo: {
         display: 'flex',
@@ -143,16 +138,17 @@ const styles = EStyleSheet.create({
         shadowOffset: { width: -1, height: 1 },
     },
     boostContainer: {
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        marginRight:'1.5rem'
     },
     boostIcon: {
         width: normalize(40),
         height: normalize(40)
     },
     amount: {
-        color: '#FFFF',
+        color: '#121212',
         fontFamily: 'graphik-bold',
-        fontSize: '0.6rem',
+        fontSize: '0.7rem',
     },
     name: {
         color: '#FFFF',

@@ -1,74 +1,38 @@
 import React from "react";
-import { View, Animated, Text } from "react-native";
-import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+import { View, Text } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import AnsweredGameProgress from "./AnsweredGameProgress";
-import LottieAnimations from "./LottieAnimations";
 
 
-const GameTopicProgress = ({ onComplete, ending }) => {
-    const countdownKey = useSelector(state => state.game.countdownKey);
-    const isGamePaused = useSelector(state => state.game.countdownFrozen);
-    const gameDuration = useSelector(state => state.game.gameDuration);
-    const isEnded = useSelector(state => state.game.isEnded);
+
+const GameTopicProgress = () => {
 
     return (
         <View style={styles.topicProgress}>
-            {/* <Text style={styles.title}>{gameCategory} {gameTopic}</Text> */}
-            <LottieAnimations
-                animationView={require('../../assets/game-board.json')}
-                width={normalize(110)}
-                height={normalize(110)}
-            />
-            <View style={styles.topicProgressRight}>
-                <AnsweredGameProgress />
-                <View style={styles.questionsAnsweredContainer}>
+                <GameTopicContainer />
+        </View>
+    )
+}
 
-                    {!isEnded &&
-                        <CountdownCircleTimer
-                            // isPlaying
-                            isPlaying={!isGamePaused && !ending}
-                            duration={gameDuration}
-                            colors={['#fff', '#F7B801', '#A30000']}
-                            colorsTime={[gameDuration/2, gameDuration/4, 0]}
-                            trailColor="#2D9CDB"
-                            size={60}
-                            strokeWidth={5}
-                            key={countdownKey}
-                            onComplete={onComplete}
-
-                        >
-                            {({ remainingTime, animatedColor }) => (
-                                <Animated.Text style={styles.timeText}>
-                                    {remainingTime}
-                                </Animated.Text>
-                            )}
-                        </CountdownCircleTimer>
-                    }
-                </View>
-
-                <View style={styles.questionsAnsweredContainer}>
-                    {/* {!isEnded &&
-                        <CountdownCircleTimer
-                            isPlaying={!isGamePaused && !ending}
-                            duration={gameDuration}
-                            // colors={[["#fff", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
-                            // trailColor="#2D9CDB"
-
-                            size={60}
-                            strokeWidth={5}
-                            key={countdownKey}
-                            onComplete={onComplete} >
-                            {({ remainingTime, animatedColor }) => (
-                                <Animated.Text style={styles.timeText}>
-                                    {remainingTime}
-                                </Animated.Text>
-                            )}
-                        </CountdownCircleTimer>
-                    } */}
-                </View>
+const GameTopicContainer = () => {
+    const gameCategory = useSelector(state => state.game.gameCategory.name);
+    const index = useSelector(state => state.game.currentQuestionPosition);
+    const total = useSelector(state => state.game.totalQuestionCount);
+    const highestOdd = 10
+    return (
+        <View style={styles.topicContainer}>
+            <View style={styles.categoryContainer}>
+                <Text style={styles.categoryName}>{gameCategory}</Text>
+                <AnsweredGameProgress index={index} total={total} />
+                <Text style={styles.questionsAnswered}>
+                    {`${index + 1}/${total}`}
+                </Text>
+            </View>
+            <View style={styles.oddContainer}>
+                <Text style={styles.oddTitle}>Odds</Text>
+                <Text style={styles.oddText}>{highestOdd}</Text>
             </View>
         </View>
     )
@@ -77,24 +41,47 @@ export default GameTopicProgress;
 
 const styles = EStyleSheet.create({
     topicProgress: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
         borderBottomWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.2)',
+        borderColor: '#939393',
+        paddingVertical: normalize(18),
+        paddingHorizontal:'1.3rem'
     },
     topicProgressRight: {
         flexDirection: 'row',
         alignItems: 'center',
     },
-    questionsAnsweredContainer: {
-        marginRight: normalize(20)
+    topicContainer: {
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'flex-start'
     },
-    timeText: {
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        fontSize: '0.7rem'
+    categoryContainer: {
+        flexDirection:'column'
+    },
+    categoryName: {
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        fontSize: '0.95rem'
+    },
+    questionsAnswered: {
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        fontSize: '0.8rem'
+    },
+    oddContainer: {
+        flexDirection:'row',
+        alignItems:'center'
+    },
+    oddTitle: {
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        fontSize: '0.8rem'
+    },
+    oddText: {
+        color: '#072169',
+        fontFamily: 'sansation-regular',
+        fontSize: '0.8rem',
+        marginLeft:'.3rem'
     },
 
 })
