@@ -1,14 +1,13 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, ScrollView, ImageBackground, Alert, StatusBar, BackHandler, Platform, Image, Text } from 'react-native';
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 import crashlytics from '@react-native-firebase/crashlytics';
 import {
-    endGame, nextQuestion, setHasPlayedTrivia
+    endGame, setHasPlayedTrivia
 } from "./GameSlice";
 
-import AppButton from "../../shared/AppButton";
 import EStyleSheet from "react-native-extended-stylesheet";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { useFocusEffect } from "@react-navigation/native";
@@ -16,8 +15,6 @@ import PlayGameHeader from "../../shared/PlayGameHeader";
 import GameTopicProgress from "../../shared/GameTopicProgress";
 import AvailableGameSessionBoosts from "../../shared/AvailableGameSessionBoosts";
 import GameQuestions from "../../shared/GameQuestions";
-import UserAvailableBoosts from "../../shared/UserAvailableBoosts";
-import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import logToAnalytics from "../../utils/analytics";
 
 
@@ -26,7 +23,6 @@ export default function GameInProgressScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     const dispatch = useDispatch();
-    const refRBSheet = useRef();
     const params = route.params;
 
     const gameSessionToken = useSelector(state => state.game.gameSessionToken);
@@ -40,13 +36,6 @@ export default function GameInProgressScreen({ navigation, route }) {
     const newUserDate = newUser.slice(0, 10);
     let formattedDate = new Date().toISOString().split('T')[0];
 
-    const openBottomSheet = () => {
-        refRBSheet.current.open()
-    }
-
-    const closeBottomSheet = () => {
-        refRBSheet.current.close()
-    }
 
     const [ending, setEnding] = useState(false);
 
@@ -174,20 +163,12 @@ export default function GameInProgressScreen({ navigation, route }) {
     }
 
     return (
-        // <View>
-        //     <Text>me</Text>
-        // </View>
         <ImageBackground source={require('../../../assets/images/game-play-background.png')} style={styles.image} resizeMode="contain">
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
                 <PlayGameHeader onPress={showExitConfirmation} />
                 <StakeDetails />
-                <GameProgressAndBoosts  />
+                <GameProgressAndBoosts />
                 <GameQuestions onPress={() => onEndGame()} ending={ending} onComplete={() => onEndGame()} />
-                <UniversalBottomSheet
-                    refBottomSheet={refRBSheet}
-                    height={350}
-                    subComponent={<UserAvailableBoosts onClose={closeBottomSheet} />}
-                />
             </ScrollView>
         </ImageBackground>
     );
@@ -238,26 +219,24 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: normalize(18),
-        // backgroundColor: '#9C3DB8',
-        paddingTop: responsiveScreenWidth(15),
+        paddingTop: responsiveScreenWidth(18),
     },
     image: {
-        // backgroundColor: '#9C3DB8',
         flex: 1,
     },
     stakeContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems:'center',
-        marginTop:'2rem'
+        alignItems: 'center',
+        marginTop: '2rem'
     },
     stakeSubContainer: {
-        flexDirection:'row',
-        alignItems:'center'
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     avatar: {
         width: '1.4rem',
-        height:'1.4rem'
+        height: '1.4rem'
     },
     stakeHeader: {
         fontSize: '0.9rem',
@@ -280,12 +259,7 @@ const styles = EStyleSheet.create({
         marginVertical: normalize(25),
         borderWidth: 1,
         borderColor: '#E5E5E5'
-        
+
     },
-    nextButton: {
-        marginVertical: 10,
-    },
-    disabled: {
-        backgroundColor: '#EA8663'
-    },
+
 });

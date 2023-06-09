@@ -47,7 +47,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     disabled: {
-        backgroundColor: '#DFCBCF'
+        backgroundColor: '#EA8663'
     }
 
 });

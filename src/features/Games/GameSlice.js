@@ -44,7 +44,6 @@ export const startChallengeGame = createAsyncThunk(
 export const createRealTimeChallenge = createAsyncThunk(
     'game/createRealTimeChallenge',
     async (data, thunkAPI) => {
-        console.log(data, 'this is the challenge data')
         const response = await axios.post('v3/challenges/create', data)
         return response.data
     }
@@ -70,7 +69,7 @@ export const endGame = createAsyncThunk(
 
         //make a network request to the server
         const response = await axios.post('v2/game/end/single-player', data)
-        console.log(response)
+        // console.log(response.data, 'game ended')
         return response.data;
     }
 )
@@ -167,6 +166,8 @@ let initialState = {
     withStaking: false,
     endedWithoutStaking:null,
     correctCount: 0,
+    totalCount:0,
+    wrongCount: 0,
 }
 
 
@@ -302,6 +303,8 @@ export const GameSlice = createSlice({
                 state.withStaking = action.payload.data.with_staking ?? false;
                 state.amountStaked = action.payload.data.amount_staked;
                 state.correctCount = action.payload.data.correct_count;
+                state.totalCount = action.payload.data.total_count;
+                state.wrongCount = action.payload.data.wrong_count;
                 resetState(state)
             })
             .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {

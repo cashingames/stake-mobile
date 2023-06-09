@@ -1,13 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
-import normalize from "../utils/normalize";
 
 
 const UserName = ({ userName }) => {
     return (
         <View style={styles.nameContainer}>
-            <Text style={styles.name}>{userName}</Text>
+            <Text style={styles.name}>Hello {userName}</Text>
         </View>
     )
 }
@@ -16,12 +15,12 @@ export default UserName;
 const styles = EStyleSheet.create({
     nameContainer: {
         alignItems: 'center',
-        marginBottom: normalize(8)
+        marginVertical: '1.3rem'
     },
     name: {
         textAlign: 'center',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        fontSize: '2.3rem',
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        fontSize: '1.5rem',
     },
 })

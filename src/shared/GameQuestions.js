@@ -100,23 +100,19 @@ const styles = EStyleSheet.create({
         marginBottom: '5.5rem'
     },
     timerContainer: {
-        flexDirection:'row',
-        justifyContent:'space-between',
-        alignItems:'center'
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     pickText: {
         color: '#072169',
         fontFamily: 'gotham-bold',
         fontSize: '1rem',
-        marginBottom:'.8rem'
+        marginBottom: '.8rem'
     },
     gameQuestions: {
-        // marginHorizontal: normalize(15),
         marginBottom: normalize(20)
 
-    },
-    options: {
-        // paddingBottom: normalize(45),
     },
     questions: {
         color: '#072169',
@@ -134,7 +130,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.9rem',
         color: '#072169',
     },
-      disabled: {
+    disabled: {
         backgroundColor: '#EA8663'
     },
 

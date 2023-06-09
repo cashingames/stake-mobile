@@ -2,7 +2,6 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
-import { formatCurrency } from "../utils/stringUtl";
 import normalize from "../utils/normalize";
 
 
@@ -45,7 +44,6 @@ const styles = EStyleSheet.create({
         fontSize: ".8rem",
         color: "#072169",
         marginLeft: '.3rem',
-        // opacity: 0.7
     },
     stakeWinnings: {
         fontFamily: "sansation-bold",

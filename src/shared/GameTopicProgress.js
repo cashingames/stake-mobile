@@ -46,10 +46,7 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(18),
         paddingHorizontal:'1.3rem'
     },
-    topicProgressRight: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
+
     topicContainer: {
         flexDirection:'row',
         justifyContent:'space-between',

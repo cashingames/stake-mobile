@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Pressable, View, Image, Text } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +7,6 @@ import normalize from "../utils/normalize";
 import { formatNumber } from '../utils/stringUtl';
 import { bombOptions, boostReleased, consumeBoost, pauseGame, skipQuestion } from "../features/Games/GameSlice";
 import { reduceBoostCount } from "../features/Auth/AuthSlice";
-import { unwrapResult } from '@reduxjs/toolkit';
 import logToAnalytics from '../utils/analytics';
 
 
@@ -18,7 +17,7 @@ const AvailableGameSessionBoosts = () => {
     const user = useSelector(state => state.auth.user)
     const displayedOptions = useSelector(state => state.game.displayedOptions);
     const gameMode = useSelector(state => state.game.gameMode);
-    const [showText, setShowText] = useState(true);
+    // const [showText, setShowText] = useState(true);
 
 
     const boostsToDisplay = () => {
@@ -32,13 +31,13 @@ const AvailableGameSessionBoosts = () => {
         return boosts;
     }
 
-    useEffect(() => {
-        // Change the state every second or the time given by User.
-        const interval = setInterval(() => {
-            setShowText((showText) => !showText);
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
+    // useEffect(() => {
+    //     // Change the state every second or the time given by User.
+    //     const interval = setInterval(() => {
+    //         setShowText((showText) => !showText);
+    //     }, 1000);
+    //     return () => clearInterval(interval);
+    // }, []);
 
     const boostApplied = (data) => {
         dispatch(consumeBoost(data))
@@ -72,7 +71,7 @@ const AvailableGameSessionBoosts = () => {
                     {
                         boostsToDisplay().map((boost, index) =>
                             boost.count >= 1 &&
-                            <AvailableBoost boost={boost} key={index} onConsume={boostApplied} showText={showText} />
+                            <AvailableBoost boost={boost} key={index} onConsume={boostApplied} />
                         )
                     }
 
@@ -84,14 +83,16 @@ const AvailableGameSessionBoosts = () => {
     )
 }
 
-const AvailableBoost = ({ boost, onConsume, showText }) => {
+const AvailableBoost = ({ boost, onConsume }) => {
     const activeBoost = useSelector(state => state.game.activeBoost);
     const isActive = activeBoost.id === boost.id;
 
     return (
         <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
             <View style={styles.boostContainer}>
-                <View style={[styles.availableBoost, isActive ? styles.boostActive : {}, { opacity: showText ? 0 : 1 }]}>
+                {/* <View style={[styles.availableBoost, isActive ? styles.boostActive : {}, { opacity: showText ? 0 : 1 }]}> */}
+                <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
+
                     <Image
                         source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
                         style={styles.boostIcon}
@@ -113,17 +114,7 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(18),
         paddingHorizontal:'1.3rem'
     },
-    boostinfo: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
 
-    title: {
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        fontSize: '.9rem'
-    },
     availableBoost: {
         display: 'flex',
         flexDirection: 'row',
@@ -139,7 +130,7 @@ const styles = EStyleSheet.create({
     },
     boostContainer: {
         alignItems: 'flex-end',
-        marginRight:'1.5rem'
+        marginRight:'1.3rem'
     },
     boostIcon: {
         width: normalize(40),
@@ -148,7 +139,7 @@ const styles = EStyleSheet.create({
     amount: {
         color: '#121212',
         fontFamily: 'gotham-bold',
-        fontSize: '0.7rem',
+        fontSize: '0.85rem',
     },
     name: {
         color: '#FFFF',

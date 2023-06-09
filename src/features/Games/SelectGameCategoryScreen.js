@@ -48,7 +48,4 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(14),
         paddingTop: normalize(22)
     },
-    animation: {
-        alignItems: 'center',
-    },
 })

@@ -1,19 +1,17 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar, Platform, ImageBackground } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import UserName from '../../shared/UserName';
-import NoGame from '../../shared/NoGame';
-import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import { getUser } from '../Auth/AuthSlice';
 import StakeWinnings from '../../shared/StakeWinnings';
-import Boostspopup from '../../shared/BoostPopUp';
-// import { PopGoogleReviewLogic } from '../../shared/GoogleReview';
-import { getAchievements } from '../Profile/AchievementSlice';
+import Constants from 'expo-constants';
 import logToAnalytics from '../../utils/analytics';
-import BoostPopUp from '../../shared/BoostPopUp';
+import { isTrue } from '../../utils/stringUtl';
+import { Ionicons } from '@expo/vector-icons';
+import AppButton from '../../shared/AppButton';
 
 
 export default function GameEndResultScreen({ navigation }) {
@@ -23,44 +21,12 @@ export default function GameEndResultScreen({ navigation }) {
 	const amountWon = useSelector(state => state.game.amountWon);
 	const withStaking = useSelector(state => state.game.withStaking);
 	const correctCount = useSelector(state => state.game.correctCount);
-	// const minimumBoostScore = useSelector(state => state.common.minimumBoostScore)
+	const totalCount = useSelector(state => state.game.totalCount);
+	const wrongCount = useSelector(state => state.game.wrongCount);
+
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
-	// const [lastRunDate, setLastRunDate] = useState();
-	// const [modalVisible, setModalVisible] = useState(false);
-	// const [sumOfPlans, setSumOfPlans] = useState(0);
-	// const activePlan = useSelector(state => state.auth.user.activePlans ?? []);
-	// const bonusGame = activePlan?.find((item) => item.name === 'Bonus Games')
-	const newUser = useSelector(state => state.auth.user.joinedOn);
-	// const newUserDate = newUser.slice(0, 10);
-	// let formattedDate = new Date().toISOString().split('T')[0];
 
-	// const logFreeGamesExhausted = () => {
-	// 	const currentDate = new Date().toLocaleDateString();
-	// 	if (lastRunDate !== currentDate) {
-	// 		if (formattedDate === newUserDate && bonusGame && bonusGame.game_count === 0) {
-	// 			analytics().logEvent('new_user_FG_exhausted', {
-	// 				'id': user.username,
-	// 				'phone_number': user.phoneNumber,
-	// 				'email': user.email
-	// 			});
-	// 		}
-	// 		if (formattedDate !== newUserDate && bonusGame && bonusGame.game_count === 0) {
-	// 			analytics().logEvent('free_game_exhausted', {
-	// 				'id': user.username,
-	// 				'phone_number': user.phoneNumber,
-	// 				'email': user.email
-	// 			});
-	// 		}
-	// 		setLastRunDate(currentDate);
-	// 	}
-	// };
-
-	const refRBSheet = useRef();
-
-	const closeBottomSheet = () => {
-		refRBSheet.current.close()
-	}
 
 	const onPlayButtonClick = () => {
 		setLoading(true);
@@ -116,65 +82,32 @@ export default function GameEndResultScreen({ navigation }) {
 	}
 
 	// useEffect(() => {
-	// 	if (pointsGained <= minimumBoostScore) {
-	// 		setModalVisible(true)
-	// 	} else {
-	// 		setModalVisible(false)
-	// 	}
-	// }, [pointsGained])
-
-	// useEffect(() => {
-	// 	const reducer = (accumulator, curr) => accumulator + curr;
-	// 	var x = activePlan && activePlan.filter(a => a.name === "Bonus Games")
-	// 	var y = x.map(b => b.game_count).reduce(reducer, 0)
-	// 	setSumOfPlans(y ?? 0);
-	// }, [activePlan]);
-
-	// useEffect(() => {
-	// 	(async () => {
-	// 		// this is the trigger
-	// 		const isReviewed = await PopGoogleReviewLogic(sumOfPlans, user.email)
-	// 	})()
-	// }, [sumOfPlans])
-
-	// update achievement after game session
-	useEffect(() => {
-		// update recent in background
-		dispatch(getAchievements());
-	}, [])
+	// 	// update recent in background
+	// 	dispatch(getAchievements());
+	// }, [])
 
 	return (
-		<ScrollView style={styles.container}>
-			<View style={styles.trophy}>
-				<Image
-					source={require('../../../assets/images/point-trophy.png')}
-				/>
-			</View>
-			<UserName userName={user.firstName} />
-			{withStaking &&
-				<Winnings amountWon={amountWon} onPress={reviewStaking} />
-			}
-			<View style={styles.correctContainer}>
-				<Text style={styles.correctPoint}>{correctCount}</Text>
-				<Text style={styles.correctText}>Correct answers</Text>
-			</View>
-			<FinalScore pointsGained={pointsGained} />
-			<View style={styles.gameButtons}>
-				<GameButton buttonText='Return to Home'
-					onPress={onHomeButtonClick}
-				/>
-				<GameButton buttonText={loading ? 'loading...' : 'Play Again'}
-					onPress={onPlayButtonClick}
-					disabled={loading}
-				/>
-			</View>
-			{/* <BoostPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} /> */}
-			<UniversalBottomSheet
-				refBottomSheet={refRBSheet}
-				height={Platform.OS === 'ios' ? 400 : 350}
-				subComponent={<NoGame onClose={closeBottomSheet} />}
-			/>
-		</ScrollView>
+		<ImageBackground source={require('../../../assets/images/success-background.png')} style={{ flex: 1 }} resizeMethod="resize">
+			<ScrollView style={styles.container}>
+				<View style={styles.trophy}>
+					<Image
+						style={styles.emoji}
+						source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+
+					/>
+				</View>
+				<UserName userName={user.firstName} />
+				{withStaking &&
+					<Winnings amountWon={amountWon} onPress={reviewStaking} />
+				}
+
+				<FinalScore pointsGained={pointsGained} correctCount={correctCount} wrongCount={wrongCount} totalCount={totalCount} />
+				<View style={styles.gameButtons}>
+					<AppButton onPress={onPlayButtonClick} text='Stake again' disabled={loading} textStyle={styles.againText} style={styles.stakeButton} disabledStyle={styles.disabled} />
+					<AppButton onPress={onHomeButtonClick} text='Return to home' style={styles.homeButton} textStyle={styles.buttonText} />
+				</View>
+			</ScrollView>
+		</ImageBackground>
 
 	);
 }
@@ -183,163 +116,149 @@ const Winnings = ({ amountWon, onPress }) => {
 	return (
 		<View style={styles.winningsContainer}>
 			<StakeWinnings amountWon={amountWon} />
-			<Pressable onPress={onPress}>
+			<Pressable onPress={onPress} style={styles.reviewButton}>
 				<Text style={styles.reviewStake}>Review Stake</Text>
+				<Ionicons name="chevron-forward" size={22} color='#E05C28' />
 			</Pressable>
 		</View>
 	)
 }
 
-const FinalScore = ({ pointsGained }) => {
+const FinalScore = ({ pointsGained, correctCount, totalCount, wrongCount }) => {
 	return (
 		<View style={styles.finalScore}>
-			<Text style={styles.finalScoreText}>Points earned</Text>
-			<Text style={styles.point}>{pointsGained} pts</Text>
+			<Text style={styles.finalScoreText}>Game play statistics</Text>
+			<View style={styles.scoreContainer}>
+				<Text style={styles.pointTitle}>Questions answered</Text>
+				<Text style={styles.point}>{totalCount}</Text>
+			</View>
+			<View style={styles.scoreContainer}>
+				<Text style={styles.pointTitle}>Answered correctly</Text>
+				<Text style={styles.point}>{correctCount}</Text>
+			</View>
+			<View style={styles.scoreContainer}>
+				<Text style={styles.pointTitle}>Answered wrongly</Text>
+				<Text style={styles.point}>{wrongCount}</Text>
+			</View>
+			<View style={styles.scoreContainer}>
+				<Text style={styles.pointTitle}>Points earned</Text>
+				<Text style={styles.point}>{pointsGained} pts</Text>
+			</View>
 		</View>
 	)
 }
 
-const GameButton = ({ buttonText, onPress, disabled }) => {
-	return (
-		<Pressable onPress={onPress} style={[styles.gameButton, disabled ? styles.gameButtonDisabled : {}]} >
-			<Text style={styles.buttonText}>{buttonText}</Text>
-		</Pressable>
-	)
-}
 
 
 const styles = EStyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#9C3DB8',
-		paddingTop: responsiveScreenWidth(15),
+		paddingTop: responsiveScreenWidth(25),
 		paddingHorizontal: normalize(18),
 		paddingBottom: normalize(20),
 	},
-	image: {
-		flex: 1,
-	},
-	emojiContainer: {
+	trophy: {
 		alignItems: 'center',
+		justifyContent: 'center'
 	},
 	emoji: {
-		width: normalize(66),
-		height: normalize(70)
+		width: normalize(90),
+		height: normalize(90),
+		borderRadius: 50,
+		borderWidth:1,
+		borderColor:'#072169',
+		backgroundColor:'#fff'
 	},
-	infoContainer: {
-		alignItems: 'center',
-		textAlign: 'center',
-		marginHorizontal: normalize(25),
-		marginBottom: responsiveScreenWidth(5)
-	},
-	info: {
-		textAlign: 'center',
-		color: '#FFFF',
-		fontFamily: 'graphik-regular',
-		fontSize: '1rem',
-		lineHeight: '1.5rem'
-	},
-	seeRank: {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-	},
-	seeRankText: {
-		color: '#FFFF',
-		fontFamily: 'graphik-medium',
-		fontSize: '0.7rem',
-	},
-	goToLeaderboard: {
-		backgroundColor: '#701F88',
-		borderRadius: 8,
-		padding: normalize(15),
-		marginBottom: normalize(15)
-	},
+
 	finalScore: {
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: '#F9E821',
+		backgroundColor: '#fff',
 		borderRadius: 16,
 		marginBottom: responsiveScreenWidth(12),
 		padding: Platform.OS === 'ios' ? normalize(25) : normalize(20),
+		borderWidth: 1,
+		borderColor: '#E5E5E5',
+		elevation: 2,
+		shadowColor: 'rgba(0, 0, 0, 0.25)',
+		shadowOffset: { width: 0.5, height: 1 },
+		shadowOpacity: 0.1,
 	},
 	finalScoreText: {
-		color: '#9236AD',
-		fontFamily: 'graphik-medium',
+		color: '#072169',
+		fontFamily: 'gotham-bold',
 		fontSize: '1.3rem',
+		marginBottom: '.7rem'
+	},
+	scoreContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginVertical: '1rem'
+	},
+	pointTitle: {
+		color: '#072169',
+		fontSize: '1.1rem',
+		fontFamily: 'gotham-medium',
 	},
 	point: {
-		color: '#9236AD',
-		fontFamily: 'graphik-bold',
-		fontSize: '1.3rem',
-		marginTop: '1rem'
+		color: '#072169',
+		fontFamily: 'sansation-regular',
+		fontSize: '1.1rem',
+		marginLeft: '.7rem'
 	},
-	gameButton: {
-		borderColor: '#FFFF',
-		borderWidth: 1,
-		width: responsiveScreenWidth(35),
-		height: responsiveScreenHeight(6.5),
-		borderRadius: 8,
-		justifyContent: 'center',
-		alignItems: 'center',
-		display: 'flex',
+	homeButton: {
+		marginVertical: 5,
+		backgroundColor: 'transparent',
+		borderWidth: 2,
+		borderColor: '#072169',
+		paddingVertical: normalize(19),
 	},
-	gameButtonDisabled: {
-		backgroundColor: '#DFCBCF'
+	stakeButton: {
+		marginBottom: 20,
+		marginTop: 0,
+		paddingVertical: normalize(19),
+	},
+	buttonText: {
+		fontFamily: 'gotham-medium',
+		fontSize: '1.1rem',
+		color: '#072169'
+	},
+	againText: {
+		fontFamily: 'gotham-medium',
+		fontSize: '1.1rem',
+	},
+	disabled: {
+		backgroundColor: '#EA8663'
 	},
 	gameButtons: {
 		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		marginBottom: normalize(50),
-	},
-	buttonText: {
-		textAlign: 'center',
-		color: '#FFFF',
-		fontFamily: 'graphik-medium',
-		fontSize: '0.72rem',
+		flexDirection: 'column',
+		marginBottom: responsiveScreenHeight(18),
+		paddingHorizontal: '2rem'
 	},
 	winningsContainer: {
 		alignItems: 'center',
 		backgroundColor: '#FFFF',
-		paddingVertical: normalize(10),
+		paddingVertical: Platform.OS === 'ios' ? normalize(24) : normalize(20),
 		marginBottom: normalize(20),
 		borderRadius: 13,
+		borderWidth: 1,
+		borderColor: '#E5E5E5',
+		elevation: 2,
+		shadowColor: 'rgba(0, 0, 0, 0.25)',
+		shadowOffset: { width: 0.5, height: 1 },
+		shadowOpacity: 0.1,
+	},
+	reviewButton: {
+		flexDirection: 'row',
+		alignItems: 'center'
 	},
 	reviewStake: {
-		textAlign: 'center',
-		color: '#EF2F55',
-		fontFamily: 'graphik-regular',
-		fontSize: '.8rem',
-		textDecorationLine: 'underline',
-		// lineHeight: '1.5rem'
+		color: '#E05C28',
+		fontFamily: 'gotham-bold',
+		fontSize: '1.1rem',
 	},
-	correctContainer: {
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		marginTop: '1rem',
-		marginBottom: '2rem'
-	},
-	correctPoint: {
-		textAlign: 'center',
-		color: '#FFFF',
-		fontFamily: 'graphik-medium',
-		fontSize: '1.4rem',
-	},
-	correctText: {
-		textAlign: 'center',
-		color: '#FFFF',
-		fontFamily: 'graphik-medium',
-		fontSize: '1.4rem',
-		marginTop: '.8rem'
-	},
-	trophy: {
-		alignItems: 'center',
-		justifyContent: 'center'
-	}
+
 });
