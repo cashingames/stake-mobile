@@ -186,6 +186,11 @@ const styles = EStyleSheet.create({
         marginTop: '1rem',
         marginBottom: '3.5rem'
     },
+    stakeScoreContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '3rem'
+    },
     stakeHeading: {
         textAlign: 'center',
         fontFamily: "gotham-bold",

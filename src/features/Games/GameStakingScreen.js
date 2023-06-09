@@ -149,7 +149,7 @@ const GameStakingScreen = ({ navigation }) => {
             </View>
             <Input
                 label='Enter stake amount'
-                placeholder={`Minimum stake amount must be NGN ${minimumExhibitionStakeAmount}`}
+                placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`}
                 value={amount}
                 error={((amount < minimumExhibitionStakeAmount) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
                     ((amount > Number.parseFloat(user.walletBalance)))}
@@ -168,7 +168,7 @@ const GameStakingScreen = ({ navigation }) => {
             <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
                 disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButton} />
             <View style={styles.stakeContainer}>
-                <Text style={styles.stakeHeading}>HOW to win</Text>
+                <Text style={styles.stakeHeading}>How To Win</Text>
                 <View style={styles.stakeHeaders}>
                     <Text style={styles.stakeScore}>OUTCOME</Text>
                     <Text style={styles.stakeHead}>ODDS</Text>

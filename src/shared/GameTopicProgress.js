@@ -30,10 +30,10 @@ const GameTopicContainer = () => {
                     {`${index + 1}/${total}`}
                 </Text>
             </View>
-            <View style={styles.oddContainer}>
+            {/* <View style={styles.oddContainer}>
                 <Text style={styles.oddTitle}>Odds</Text>
                 <Text style={styles.oddText}>{highestOdd}</Text>
-            </View>
+            </View> */}
         </View>
     )
 }
@@ -41,16 +41,16 @@ export default GameTopicProgress;
 
 const styles = EStyleSheet.create({
     topicProgress: {
-        borderBottomWidth: 1,
-        borderColor: '#93939336',
-        paddingVertical: normalize(18),
-        paddingHorizontal:'1.3rem'
+        // borderBottomWidth: 1,
+        // borderColor: '#93939336',
+        // paddingVertical: normalize(18),
+        // paddingHorizontal:'1.3rem'
     },
 
     topicContainer: {
-        flexDirection:'row',
-        justifyContent:'space-between',
-        alignItems:'flex-start'
+        // flexDirection:'row',
+        // justifyContent:'space-between',
+        // alignItems:'flex-start'
     },
     categoryContainer: {
         flexDirection:'column'

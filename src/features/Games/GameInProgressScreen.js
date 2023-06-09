@@ -250,7 +250,7 @@ const styles = EStyleSheet.create({
     },
     gameProgressAndBoost: {
         display: 'flex',
-        backgroundColor: '#FFF',
+        backgroundColor: '#AAD880',
         elevation: 2.5,
         shadowColor: '#000',
         shadowOffset: { width: 0.5, height: 1 },
@@ -258,7 +258,13 @@ const styles = EStyleSheet.create({
         borderRadius: 16,
         marginVertical: normalize(25),
         borderWidth: 1,
-        borderColor: '#E5E5E5'
+        borderColor: '#E5E5E5',
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'space-between',
+        paddingHorizontal:'1.2rem',
+        paddingVertical:'1rem'
+
 
     },
 

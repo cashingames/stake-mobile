@@ -111,14 +111,14 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: normalize(18),
-        paddingHorizontal:'1.3rem'
+        // paddingVertical: normalize(18),
+        // paddingHorizontal:'1.3rem'
     },
 
     availableBoost: {
         display: 'flex',
         flexDirection: 'row',
-        marginRight: normalize(20)
+        // marginRight: normalize(1)
     },
     boostActive: {
         borderWidth: 1,
@@ -133,8 +133,8 @@ const styles = EStyleSheet.create({
         marginRight:'1.3rem'
     },
     boostIcon: {
-        width: normalize(40),
-        height: normalize(40)
+        width: normalize(30),
+        height: normalize(30)
     },
     amount: {
         color: '#121212',
