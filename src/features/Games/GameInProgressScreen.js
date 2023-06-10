@@ -176,6 +176,8 @@ export default function GameInProgressScreen({ navigation, route }) {
 
 const StakeDetails = () => {
     const amountStaked = useSelector(state => state.game.amountStaked);
+    const gameStakes = useSelector(state => state.game.gameStakes[0]);
+
 
     return (
         <View style={styles.stakeContainer}>
@@ -197,7 +199,7 @@ const StakeDetails = () => {
                 />
                 <View>
                     <Text style={styles.stakeHeader}>Pot. winnings</Text>
-                    <Text style={styles.stakeAmount}>NGN {amountStaked * 10}</Text>
+                    <Text style={styles.stakeAmount}>NGN {amountStaked * (gameStakes.odd)}</Text>
                 </View>
             </View>
         </View>
