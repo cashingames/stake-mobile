@@ -34,8 +34,9 @@ const Dashboard = ({ navigation }) => {
     const [achievementPopup, setAchievementPopup] = useState(false);
     const [updateModal, setUpdateModal] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
+    const user = useSelector(state => state.auth.user);
     const [showModal, setShowModal] = useState(false)
-    const [showDailyRewardModal, setShowDailyRewardModal] = useState(true)
+    const [showDailyRewardModal, setShowDailyRewardModal] = useState(false)
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
 
@@ -157,7 +158,7 @@ const Dashboard = ({ navigation }) => {
                     btnText='Restart'
                     btnHandler={updateApp}
                 />
-                <DailyReward showDailyRewardModal={showDailyRewardModal} setShowDailyRewardModal={setShowDailyRewardModal} />
+                <DailyReward showDailyRewardModal={showDailyRewardModal} setShowDailyRewardModal={setShowDailyRewardModal} user={user}/>
             </MixedContainerBackground>
         </>
     )

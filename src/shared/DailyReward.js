@@ -1,32 +1,68 @@
 import * as React from 'react';
-import { Text, View, ScrollView, Pressable, Modal, Platform } from 'react-native';
+import { Text, View, ScrollView, Pressable, Modal, Platform, ActivityIndicator } from 'react-native';
 import normalize, { responsiveHeight, responsiveWidth } from '../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
 import LottieAnimations from '../shared/LottieAnimations';
 import { Image } from 'react-native';
 import { ImageBackground } from 'react-native';
-import { dailyRewardPayload } from '../utils/DailyRewardPayload';
+// import { dailyRewardPayload } from '../utils/DailyRewardPayload';
 import { useEffect } from 'react';
 import SingleDailyRewards from './SingleDailyRewards';
+import { claimDailyReward, dismissDailyReward } from '../features/CommonSlice';
+import { useState } from 'react';
+import { unwrapResult } from '@reduxjs/toolkit';
+import Constants from 'expo-constants';
+import DoubleDailyRewards from './DoubleDailyRewards';
 
-const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal }) => {
-    const { shouldShowPopup, rewards } = dailyRewardPayload
 
-    const singleDailyRewards = rewards.slice(0, 4);
-    const fifthDay = rewards.filter((item) => item.day == 5)
-    const sixthDailyReward = rewards.filter((item) => item.day == 6)
-    const seventhDailyReward = rewards.filter((item) => item.day == 7)
+const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal, user }) => {
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
+    const rewards = user.dailyReward?.reward ?? [];
 
-    // console.log(fifthDay[0])
+    const singleDailyRewards = rewards?.slice(0, 4) ?? [];
+    const fifthDailyRewards = rewards?.filter((item) => item.day == 5) ?? []
+    const sixthDailyRewards = rewards?.filter((item) => item.day == 6) ?? []
+    const seventhDailyRewards = rewards?.filter((item) => item.day == 7) ?? []
+    console.log(user.dailyReward)
+    const claimReward = (day) => {
+        console.log(day)
+        setLoading(true)
+        try {
+            dispatch(claimDailyReward(day))
+                .then(unwrapResult)
+                .then((result) => {
+                    console.log(result)
+                    setShowDailyRewardModal(false)
+                    setLoading(false)
+                })
+        } catch (error) {
+            setLoading(false)
+        }
+    }
+
+    const dismissReward = () => {
+        try {
+            dispatch(dismissDailyReward())
+                .then(unwrapResult)
+                .then((result) => {
+                    setShowDailyRewardModal(false);
+                    setLoading(false)
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     useEffect(() => {
-        if (shouldShowPopup) {
+        if (user.dailyReward.shouldShowPopup) {
             setShowDailyRewardModal(true)
         } else {
             setShowDailyRewardModal(false)
         }
-    }, [rewards])
+    }, [])  
+
     return (
         <View>
             <Modal
@@ -42,7 +78,7 @@ const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal }) => {
                         <View style={styles.container}>
                             <View style={styles.closedBtnContainer}>
                                 <Pressable style={styles.closeBtn}
-                                    onPress={() => setShowDailyRewardModal(false)}
+                                    onPress={dismissReward}
                                 >
                                     <Image style={styles.closeIcon} source={require('./../../assets/images/close-icon.png')} />
                                 </Pressable>
@@ -54,10 +90,16 @@ const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal }) => {
                             </View>
                             <ScrollView>
                                 <View style={styles.dailyRewards}>
-                                    {singleDailyRewards.map((x, i) => <SingleDailyRewards x={x} key={i} />)}
-                                    <DoubleDailyRewards x={fifthDay} />
-                                    <DoubleDailyRewards x={sixthDailyReward} />
-                                    <DoubleDailyRewards x={seventhDailyReward} />
+                                    {singleDailyRewards.map((myDailyReward, i) => <SingleDailyRewards
+                                        myDailyReward={myDailyReward}
+                                        key={i}
+                                        claimReward={claimReward} loading={loading} />)}
+                                    {fifthDailyRewards.length > 0 ? <DoubleDailyRewards myDailyReward={fifthDailyRewards}
+                                        rewardText1='Bomb x3 +' rewardText2='30 coins' loading={loading}  claimReward={claimReward} /> : null}
+                                    {sixthDailyRewards.length > 0 ? <DoubleDailyRewards myDailyReward={sixthDailyRewards}
+                                        rewardText1='60 coins +' rewardText2='x3 skips' loading={loading}  claimReward={claimReward} /> : null}
+                                    {seventhDailyRewards.length > 0 ? <DoubleDailyRewards myDailyReward={seventhDailyRewards}
+                                        rewardText1='80 coins +' rewardText2='x5 Freeze' loading={loading}  claimReward={claimReward} /> : null}
                                 </View>
                             </ScrollView>
                         </View>
@@ -66,37 +108,6 @@ const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal }) => {
             </Modal>
         </View>
     );
-}
-
-const DoubleDailyRewards = ({x}) => {
-    const [disabled] = React.useState(!x[0].can_claim)
-    console.log(disabled)
-
-    return (
-        <ImageBackground style={styles.cardBackground} source={require('./../../assets/images/reward.png')}>
-        <View style={styles.cardBody}>
-            <Text style={styles.days}>Day {x[0].day}</Text>
-            <Image style={styles.closeIcon} resizeMode='contain' source={require('./../../assets/images/store-icon.png')} />
-                <Text style={styles.reward}>hello</Text>           
-                <Pressable disabled={disabled}>
-                {x[0].is_claimed ?
-                    <Image style={styles.closeIcon} resizeMode='contain' source={require('./../../assets/images/claimed.png')} />
-                    :
-                    <View>
-                        {!disabled ?
-                            <ImageBackground style={styles.buttonCase} resizeMode='contain' source={require('./../../assets/images/button-case.png')}>
-                                <Text>claim</Text>
-                            </ImageBackground> :
-                            <ImageBackground style={styles.buttonCase} resizeMode='contain' source={require('./../../assets/images/disabled_reward.png')}>
-                                <Text>claim</Text>
-                            </ImageBackground>
-                        }
-                    </View>
-                }
-            </Pressable>
-        </View>
-    </ImageBackground>
-    )
 }
 export default DailyReward;
 
@@ -169,7 +180,7 @@ const styles = EStyleSheet.create({
         // paddingHorizontal: responsiveWidth(), 
         justifyContent: 'space-between',
         width: 126,
-        height: Platform.OS === "ios" ? responsiveHeight(22.5) : 151,
+        height: 151,
         marginHorizontal: '1rem',
     },
     cardBody: {
@@ -180,10 +191,15 @@ const styles = EStyleSheet.create({
         fontSize: '1rem',
         fontFamily: 'poppins'
     },
+    doubleRewardImageCase: {
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
     reward: {
         color: '#fff',
-        fontSize: '0.75rem',
-        fontFamily: 'poppins'
+        fontSize: '0.65rem',
+        fontFamily: 'poppins',
+        textAlign: 'center'
     },
     buttonCase: {
         height: responsiveHeight(9),
@@ -191,4 +207,12 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    rewardIcon: {
+        width: 27,
+        height: 40,
+        margin: 0
+    },
+    rewardTextCase: {
+        marginTop: 5
+    }
 });
