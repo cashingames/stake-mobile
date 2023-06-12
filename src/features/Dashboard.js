@@ -10,7 +10,7 @@ import { useEffect } from 'react'
 import { fetchFeatureFlags, getCommonData, initialLoadingComplete, loadSoundPrefernce, setSound } from './CommonSlice'
 import { getUser } from './Auth/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux'
-import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import Loader from '../shared/Loader'
 import useSound from '../utils/useSound'
 import { setGameMode } from './Games/GameSlice';
@@ -34,8 +34,14 @@ const Dashboard = ({ navigation }) => {
     const [updateModal, setUpdateModal] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
     const [showModal, setShowModal] = useState(false)
+    const [showReferralModal, setShowReferralModal] = useState(true)
+    const [referralUpdate, setReferralUpdate] = useState(false)
+    const [updateSuccessful, setUpdateSuccessful] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('');
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
+    const route = useRoute();
+const { socialSignUp } = route.params;
 
     const isFocused = useIsFocused();
     const { playSound, toogle, handleToggle, stopSound } = useSound(require('./../../assets/sounds/dashboard.mp3'));
@@ -50,7 +56,6 @@ const Dashboard = ({ navigation }) => {
 
         const { responseCode, results } = await InAppPurchases.getProductsAsync(items);
         if (responseCode === InAppPurchases.IAPResponseCode.OK) {
-            // console.error(results, "results")
             dispatch(setItems(results.length !== 0 ? results : PRODUCTS))
         } else {
 
@@ -79,6 +84,12 @@ const Dashboard = ({ navigation }) => {
         // get achievements badges
         dispatch(getAchievements());
     }
+
+    useEffect(()=>{
+        if(socialSignUp && showReferralModal){
+            setShowReferralModal(true)
+        }
+    }, [showReferralModal])
 
     useFocusEffect(
         React.useCallback(() => {
@@ -153,7 +164,24 @@ const Dashboard = ({ navigation }) => {
                     title='Updates Available'
                     modalBody='Please reload the app to enjoy the new experience we just added to Gameark!'
                     btnText='Restart'
+                    inputBox = {true}
                     btnHandler={updateApp}
+                />
+                 <GameModal
+                    setShowModal={setShowReferralModal}
+                    showModal={showReferralModal}
+                    modalBody='Please input referral code (if reffered)'
+                    multipleBtn={true}
+                    btnText='Submit'
+                    btnText_2='Close'
+                    inputBox = {true}
+                />
+                 <GameModal
+                    setShowModal={setReferralUpdate}
+                    showModal={referralUpdate}
+                    title={updateSuccessful ? 'Update Successful!' : 'Update Failed😥'}
+                    modalBody={updateSuccessful ? 'Received. Thank You' : errorMessage}
+                    btnText='Ok'
                 />
             </MixedContainerBackground>
         </>

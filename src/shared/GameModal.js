@@ -15,11 +15,17 @@ import { useNavigation } from '@react-navigation/core';
 import { Image } from 'react-native';
 import TopIcons from '../shared/TopIcons';
 import { ImageBackground } from 'react-native';
+import Input from './Input';
+import { useState } from 'react';
 
-const GameModal = ({ showModal, setShowModal, title, modalBody, btnText, multipleBtn = false, btnHandler, btnHandler_2, btnText_2 }) => {
+const GameModal = ({ showModal, setShowModal, title, modalBody, btnText, multipleBtn = false, btnHandler, btnHandler_2, btnText_2, inputBox = false }) => {
 
     const navigation = useNavigation()
     const user = useSelector(state => state.auth.user);
+    const [referrer, setReferrer] = useState('');
+    const onChangeReferral = (text) => {
+        setReferrer(text)
+    }
 
     const dispatch = useDispatch()
 
@@ -40,15 +46,27 @@ const GameModal = ({ showModal, setShowModal, title, modalBody, btnText, multipl
                     <View style={styles.container}>
                         <View>
                             <ImageBackground style={styles.inviteBg} resizeMode="contain" source={require('./../../assets/images/invite-bg.png')}>
-                                <Text style={styles.modalTitle}>{title}</Text>
-                                <Text style={styles.modalBody}>{modalBody}</Text>
+                                {title && <Text style={styles.modalTitle}>{title}</Text>}
+                                <View style={styles.modalBodyContainer}>
+                                    <Text style={styles.modalBody}>{modalBody}</Text>
+                                </View>
+                               {inputBox && <View style={styles.inputContainer}>
+                                <Input
+                                    label='Referral'
+                                    value={referrer}
+                                    type="text"
+                                    // error={uNameErr && 'username is not valid'}
+                                    labelStyle={styles.label}
+                                    onChangeText={text => onChangeReferral(text)}
+                                />
+                                </View>}
                                 <View style={styles.btnContainer}>
                                     <Pressable style={styles.btn} onPress={btnHandler}>
                                         <ImageBackground style={styles.btnBg} resizeMode="contain" source={require('./../../assets/images/button-case.png')} >
                                             <Text style={styles.btnText}>{btnText}</Text>
                                         </ImageBackground>
                                     </Pressable>
-                                   {multipleBtn && <Pressable style={styles.btn} onPress={btnHandler_2}>
+                                    {multipleBtn && <Pressable style={styles.btn} onPress={btnHandler_2}>
                                         <ImageBackground style={styles.btnBg} resizeMode="contain" source={require('./../../assets/images/button-case.png')} >
                                             <Text style={styles.btnText}>{btnText_2}</Text>
                                         </ImageBackground>
@@ -86,7 +104,7 @@ const styles = EStyleSheet.create({
     inviteBg: {
         paddingVertical: normalize(15),
         paddingHorizontal: '2rem',
-        alignItems: 'center',
+        // alignItems: 'center',
         height: responsiveHeight(35),
         width: responsiveWidth(80)
     },
@@ -95,6 +113,10 @@ const styles = EStyleSheet.create({
         fontSize: '1.4rem',
         marginTop: responsiveHeight(100) * 0.02,
         fontFamily: 'poppins',
+        textAlign: 'center'
+    },
+    modalBodyContainer:{
+        alignItems: 'center',
     },
     modalBody: {
         color: '#fff',
@@ -103,7 +125,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         marginVertical: '1rem',
         lineHeight: '1.5rem',
-        width:responsiveWidth(50)
+        width: responsiveWidth(50),
     },
     gift: {
         color: '#FFBB4F',
@@ -140,4 +162,10 @@ const styles = EStyleSheet.create({
         width: 40,
         height: 40,
     },
+    inputContainer:{
+        paddingHorizontal: '2rem',
+    },
+    label:{
+        textAlign:'center'
+    }
 });
