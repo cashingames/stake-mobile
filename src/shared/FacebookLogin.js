@@ -119,6 +119,7 @@ const Login = ({ text }) => {
             'username': user.username
           })
           saveToken(originalPromiseResult.data.token)
+          navigation.navigate('Dashboard', { socialSignUp: true })
           setLoading(false)
         })
         .catch((error) => {

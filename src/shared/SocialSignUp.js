@@ -43,6 +43,7 @@ export default function SocialSignUp({ googleText }) {
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
     const [loading, setloading] = useState(false)
+    const [socialSignUp, setSocialSignup] = useState(true)
 
     const openBottomSheet = () => {
         refRBSheet.current.open()
@@ -137,7 +138,7 @@ export default function SocialSignUp({ googleText }) {
                                 'username': user.username
                             })
                             setloading(false)
-                            // navigation.navigate('AppRouter')
+                            navigation.navigate('Dashboard', { socialSignUp: true })
                         })
                         .catch((error)=> {
                             Alert.alert('Network error. Please, try again later.')

@@ -24,6 +24,7 @@ const SignupScreen = () => {
 
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
+    const [referrer, setReferrer] = useState('');
     const [password, setPassword] = useState('');
     const [canSend, setCanSend] = useState(true);
     const [passErr, setPassError] = useState(false);
@@ -49,12 +50,16 @@ const SignupScreen = () => {
         setPassword(text)
     }
 
+    const onChangeReferral = (text) => {
+        setReferrer(text)
+    }
+
     useEffect(() => {
         const usernameRule = /^[a-zA-Z][a-zA-Z0-9]+$/;
         const validUsername = !usernameRule.test(username)
         if (username) {
-            const validUsername = !usernameRule.test(username)
-            setUnameErr(validUsername);
+            const invalidUsername = !usernameRule.test(username)
+            setUnameErr(invalidUsername);
         } else {
             setUnameErr('')
         }
@@ -88,12 +93,13 @@ const SignupScreen = () => {
             username,
             password,
             password_confirmation: password,
+            referrer
         }))).then(unwrapResult)
             .then(async (response) => {
                 logToAnalytics('new_user_signed_up', {
-					'username': response.data.username,
-					'email': response.data.email
-				});
+                    'username': response.data.username,
+                    'email': response.data.email
+                });
                 dispatch(setToken(response.data.token))
             })
             .catch((error) => {
@@ -141,6 +147,13 @@ const SignupScreen = () => {
                         onChangeText={text => { onChangePassword(text) }}
                     />
 
+                    <Input
+                        label='Referral'
+                        value={referrer}
+                        type="text"
+                        error={uNameErr && 'username is not valid'}
+                        onChangeText={text => onChangeReferral(text)}
+                    />
                 </View>
 
                 <CheckBox
