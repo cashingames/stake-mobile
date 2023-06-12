@@ -148,7 +148,7 @@ const SignupScreen = () => {
                     />
 
                     <Input
-                        label='Referral'
+                        label='Referral Code'
                         value={referrer}
                         type="text"
                         error={uNameErr && 'username is not valid'}
