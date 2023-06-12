@@ -18,14 +18,11 @@ import { ImageBackground } from 'react-native';
 import Input from './Input';
 import { useState } from 'react';
 
-const GameModal = ({ showModal, setShowModal, title, modalBody, btnText, multipleBtn = false, btnHandler, btnHandler_2, btnText_2, inputBox = false }) => {
+const GameModal = ({ showModal, setShowModal, title, modalBody, btnText, multipleBtn = false, btnHandler, btnHandler_2, btnText_2, inputBox = false, onChange, value }) => {
 
     const navigation = useNavigation()
     const user = useSelector(state => state.auth.user);
-    const [referrer, setReferrer] = useState('');
-    const onChangeReferral = (text) => {
-        setReferrer(text)
-    }
+    
 
     const dispatch = useDispatch()
 
@@ -52,12 +49,11 @@ const GameModal = ({ showModal, setShowModal, title, modalBody, btnText, multipl
                                 </View>
                                {inputBox && <View style={styles.inputContainer}>
                                 <Input
-                                    label='Referral'
-                                    value={referrer}
+                                    label='Referral Code'
+                                    value={value}
                                     type="text"
-                                    // error={uNameErr && 'username is not valid'}
                                     labelStyle={styles.label}
-                                    onChangeText={text => onChangeReferral(text)}
+                                    onChangeText={onChange}
                                 />
                                 </View>}
                                 <View style={styles.btnContainer}>
@@ -166,6 +162,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: '2rem',
     },
     label:{
-        textAlign:'center'
+        textAlign:'center',
+        fontFamily:'poppins'
     }
 });

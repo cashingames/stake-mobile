@@ -138,7 +138,7 @@ export default function SocialSignUp({ googleText }) {
                                 'username': user.username
                             })
                             setloading(false)
-                            navigation.navigate('Dashboard', { socialSignUp: 'yes' })
+                            navigation.navigate('Dashboard', { socialSignUp: true })
                         })
                         .catch((error)=> {
                             Alert.alert('Network error. Please, try again later.')

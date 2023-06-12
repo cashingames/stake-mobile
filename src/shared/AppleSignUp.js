@@ -102,7 +102,7 @@ const AppleSignUp = () => {
                     // }
                     console.log(originalPromiseResult);
                     saveToken(originalPromiseResult.data.token)
-                    navigation.navigate('AppRouter')
+                    navigation.navigate('Dashboard', { socialSignUp: true })
                 })
             // signed in
         } catch (e) {
@@ -119,8 +119,9 @@ const AppleSignUp = () => {
                 buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
                 buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
                 cornerRadius={20}
-                style={{ width: responsiveScreenWidth(70), height: normalize(38), marginVertical: 7, paddingHorizontal:normalize(12), paddingVertical:normalize(11)
-            }}
+                style={{
+                    width: responsiveScreenWidth(70), height: normalize(38), marginVertical: 7, paddingHorizontal: normalize(12), paddingVertical: normalize(11)
+                }}
                 onPress={loginWithApple}
             />
             <UniversalBottomSheet

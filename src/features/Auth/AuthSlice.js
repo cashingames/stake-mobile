@@ -140,7 +140,7 @@ export const editPersonalDetails = createAsyncThunk(
     async (data, thunkAPI) => {
         const response = await axios.post('v2/profile/me/edit-personal', data)
         return response.data
-    }
+    } 
 )
 export const editBankDetails = createAsyncThunk(
     'auth/user/editBankDetails',
@@ -193,9 +193,18 @@ export const verifyPhoneOtp = createAsyncThunk(
             return thunkAPI.rejectWithValue(err.response.data);
         }
     }
+)   
+
+export const userUpdateReferralCode = createAsyncThunk(
+    'auth/updateReferral',
+    async (data, thunkAPI) => {
+        const response = await axios.post('v3/referrer/update', data);
+        console.log(response)
+        return response.data;
+    }
 )
 
-export const ResendPhoneOtp = createAsyncThunk(
+export const ResendPhoneOtp  = createAsyncThunk(
     'auth/ResendPhoneOtp',
     async (data, thunkAPI) => {
         const response = await axios.post('auth/register/token/resend', data);
