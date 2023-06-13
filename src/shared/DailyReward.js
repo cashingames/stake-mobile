@@ -14,10 +14,12 @@ import { useState } from 'react';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Constants from 'expo-constants';
 import DoubleDailyRewards from './DoubleDailyRewards';
+import GameModal from './GameModal';
 
 
 const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal, user }) => {
     const dispatch = useDispatch();
+    const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const rewards = user.dailyReward?.reward ?? [];
 
@@ -27,7 +29,6 @@ const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal, user }) =>
     const seventhDailyRewards = rewards?.filter((item) => item.day == 7) ?? []
     console.log(user.dailyReward)
     const claimReward = (day) => {
-        console.log(day)
         setLoading(true)
         try {
             dispatch(claimDailyReward(day))
@@ -36,6 +37,7 @@ const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal, user }) =>
                     console.log(result)
                     setShowDailyRewardModal(false)
                     setLoading(false)
+                    setShowModal(true)
                 })
         } catch (error) {
             setLoading(false)
@@ -61,7 +63,7 @@ const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal, user }) =>
         } else {
             setShowDailyRewardModal(false)
         }
-    }, [])  
+    }, [])
 
     return (
         <View>
@@ -95,17 +97,25 @@ const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal, user }) =>
                                         key={i}
                                         claimReward={claimReward} loading={loading} />)}
                                     {fifthDailyRewards.length > 0 ? <DoubleDailyRewards myDailyReward={fifthDailyRewards}
-                                        rewardText1='Bomb x3 +' rewardText2='30 coins' loading={loading}  claimReward={claimReward} /> : null}
+                                        rewardText1='Bomb x3 +' rewardText2='30 coins' loading={loading} claimReward={claimReward} /> : null}
                                     {sixthDailyRewards.length > 0 ? <DoubleDailyRewards myDailyReward={sixthDailyRewards}
-                                        rewardText1='60 coins +' rewardText2='x3 skips' loading={loading}  claimReward={claimReward} /> : null}
+                                        rewardText1='60 coins +' rewardText2='x3 skips' loading={loading} claimReward={claimReward} /> : null}
                                     {seventhDailyRewards.length > 0 ? <DoubleDailyRewards myDailyReward={seventhDailyRewards}
-                                        rewardText1='80 coins +' rewardText2='x5 Freeze' loading={loading}  claimReward={claimReward} /> : null}
+                                        rewardText1='80 coins +' rewardText2='x5 Freeze' loading={loading} claimReward={claimReward} /> : null}
                                 </View>
                             </ScrollView>
                         </View>
                     </View>
                 </ScrollView>
             </Modal>
+            <GameModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+                title='Reward Claimed🕺'
+                modalBody='You have successfully claimed your daily reward'
+                btnText='Ok'
+                btnHandler={() => setShowModal(false)}
+            />
         </View>
     );
 }
