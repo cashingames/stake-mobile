@@ -15,6 +15,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import Constants from 'expo-constants';
 import DoubleDailyRewards from './DoubleDailyRewards';
 import GameModal from './GameModal';
+import { getUser } from '../features/Auth/AuthSlice';
 
 
 const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal, user }) => {
@@ -28,19 +29,19 @@ const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal, user }) =>
     const sixthDailyRewards = rewards?.filter((item) => item.day == 6) ?? []
     const seventhDailyRewards = rewards?.filter((item) => item.day == 7) ?? []
     const shouldShowPopup = user.dailyReward?.shouldShowPopup ?? null
-    // console.log(user.dailyReward)
     const claimReward = (day) => {
         setLoading(true)
         try {
             dispatch(claimDailyReward(day))
                 .then(unwrapResult)
-                .then((result) => {
-                    console.log(result)
+                .then(result => {
+                        dispatch(getUser()).then(x => {
                     setShowDailyRewardModal(false)
                     setLoading(false)
                     setShowModal(true)
                 })
-        } catch (error) {
+            })
+            }catch (error) {
             setLoading(false)
         }
     }
@@ -125,7 +126,7 @@ export default DailyReward;
 const styles = EStyleSheet.create({
     centeredView: {
         flex: 1,
-        paddingVertical: responsiveHeight(2),
+        paddingVertical: responsiveHeight(1.5),
         height: responsiveHeight(100),
         backgroundColor: 'rgba(17, 41, 103, 0.77)'
     },
@@ -146,15 +147,6 @@ const styles = EStyleSheet.create({
         marginTop: responsiveHeight(100) * 0.02,
         fontFamily: 'poppins',
     },
-    modalBody: {
-        color: '#fff',
-        textAlign: 'center',
-        fontSize: '0.95rem',
-        fontFamily: 'graphik-medium',
-        marginVertical: '1rem',
-        lineHeight: '1.5rem',
-        width: responsiveWidth(50)
-    },
     header: {
         flexDirection: 'row',
         backgroundColor: '#2D53A0',
@@ -163,7 +155,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-around',
         height: 50,
         alignItems: 'center',
-        marginVertical: normalize(20)
+        marginVertical: normalize(10)
     },
     headerText: {
         fontFamily: 'blues-smile',
@@ -175,8 +167,8 @@ const styles = EStyleSheet.create({
         padding: responsiveWidth(3),
     },
     closeIcon: {
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
     },
     dailyRewards: {
         display: 'flex',
