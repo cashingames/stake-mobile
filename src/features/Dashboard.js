@@ -27,6 +27,7 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import GameModal from '../shared/GameModal';
 import { unwrapResult } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DailyReward from '../shared/DailyReward';
 
 const Dashboard = ({ navigation, route }) => {
     // const loading = useSelector(state => state.common.initialLoading);
@@ -35,10 +36,12 @@ const Dashboard = ({ navigation, route }) => {
     const [achievementPopup, setAchievementPopup] = useState(false);
     const [updateModal, setUpdateModal] = useState(false)
     const gameModes = useSelector(state => state.common.gameModes);
+    const user = useSelector(state => state.auth.user);
     const [showModal, setShowModal] = useState(false)
     const [showReferralModal, setShowReferralModal] = useState(true)
     const [referralUpdate, setReferralUpdate] = useState(false)
     const [updateSuccessful, setUpdateSuccessful] = useState(true)
+    const [showDailyRewardModal, setShowDailyRewardModal] = useState(false)
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
     const params = route.params;
@@ -232,6 +235,7 @@ const Dashboard = ({ navigation, route }) => {
                     btnText='Ok'
                     btnHandler={() => setReferralUpdate(false)}
                 />
+                <DailyReward showDailyRewardModal={showDailyRewardModal} setShowDailyRewardModal={setShowDailyRewardModal} user={user}/>
             </MixedContainerBackground>
         </>
     )

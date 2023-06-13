@@ -161,6 +161,22 @@ export const sendUserFeedback = createAsyncThunk(
     }
 )
 
+export const dismissDailyReward = createAsyncThunk(
+    'common/claimDailyReward',
+    async (thunkAPI) => {
+        const response = await axios.post('v3/user-reward/miss')
+        return response.data;
+    }
+)
+
+export const claimDailyReward = createAsyncThunk(
+    'common/claimDailyReward',
+    async (data, thunkAPI) => {
+        const response = await axios.post(`v3/user-reward/claim?day=${data}`)
+        return response.data;
+    }
+)
+
 export const fetchFeatureFlags = createAsyncThunk(
     'common/fetchFeatureFlags',
     async () => {
