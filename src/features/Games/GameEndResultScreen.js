@@ -99,7 +99,7 @@ export default function GameEndResultScreen({ navigation }) {
 				</View>
 				<UserName userName={user.firstName} />
 				{withStaking &&
-					<Winnings amountWon={amountWon} onPress={reviewStaking} />
+					<Winnings amountWon={amountWon} onPress={reviewStaking} user={user} />
 				}
 
 				<FinalScore pointsGained={pointsGained} correctCount={correctCount} wrongCount={wrongCount} totalCount={totalCount} />
@@ -113,14 +113,16 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 }
 
-const Winnings = ({ amountWon, onPress }) => {
+const Winnings = ({ amountWon, onPress, user }) => {
 	return (
 		<View style={styles.winningsContainer}>
 			<StakeWinnings amountWon={amountWon} />
-			<Pressable onPress={onPress} style={styles.reviewButton}>
-				<Text style={styles.reviewStake}>Review Stake</Text>
-				<Ionicons name="chevron-forward" size={22} color='#E05C28' />
-			</Pressable>
+			{user.hasBonus === false &&
+				<Pressable onPress={onPress} style={styles.reviewButton}>
+					<Text style={styles.reviewStake}>Review Stake</Text>
+					<Ionicons name="chevron-forward" size={22} color='#E05C28' />
+				</Pressable>
+			}
 		</View>
 	)
 }
@@ -166,9 +168,9 @@ const styles = EStyleSheet.create({
 		width: normalize(90),
 		height: normalize(90),
 		borderRadius: 50,
-		borderWidth:1,
-		borderColor:'#072169',
-		backgroundColor:'#fff'
+		borderWidth: 1,
+		borderColor: '#072169',
+		backgroundColor: '#fff'
 	},
 
 	finalScore: {

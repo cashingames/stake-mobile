@@ -19,6 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 const GameStakingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector((state) => state.auth.user);
+    console.log(user)
     const gameStakes = useSelector(state => state.game.gameStakes);
     const minimumExhibitionStakeAmount = useSelector(state => state.common.minimumExhibitionStakeAmount);
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
@@ -138,7 +139,7 @@ const GameStakingScreen = ({ navigation }) => {
                         {hidden ?
                             <Text style={styles.currencyAmount}>***</Text>
                             :
-                            <Text style={styles.currencyAmount}>{formatCurrency(user.walletBalance ?? 0)}</Text>
+                            <Text style={styles.currencyAmount}>{user.hasBonus === false ? formatCurrency(user.walletBalance ?? 0) : formatCurrency(user.bonusBalance ?? 0)}</Text>
                         }
                     </View>
                     <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
@@ -151,7 +152,7 @@ const GameStakingScreen = ({ navigation }) => {
                 label='Enter stake amount'
                 placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`}
                 value={amount}
-                error={((amount < minimumExhibitionStakeAmount) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
+                error={((amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
                     ((amount > Number.parseFloat(user.walletBalance)))}
                 onChangeText={setAmount}
                 isRequired={true}
@@ -167,6 +168,8 @@ const GameStakingScreen = ({ navigation }) => {
             }
             <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
                 disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButton} />
+                {user.hasBonus === true &&
+                <Text style={styles.note}>Note that the predictions table below does not apply on bonus stakes</Text>}
             <View style={styles.stakeContainer}>
                 <Text style={styles.stakeHeading}>How To Win</Text>
                 <View style={styles.stakeHeaders}>
@@ -241,6 +244,13 @@ const styles = EStyleSheet.create({
         fontSize: ".85rem",
         color: "#072169",
         marginRight: '1rem',
+    },
+    note: {
+        fontFamily: "gotham-medium",
+        fontSize: ".8rem",
+        color: "#DF5921",
+        lineHeight:'1.2rem',
+        marginTop:'1rem'
     },
     disabled: {
         backgroundColor: '#EA8663'

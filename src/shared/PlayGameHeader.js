@@ -2,12 +2,12 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 
-const PlayGameHeader = ({ onPress }) => {
+const PlayGameHeader = ({ onPress, challengeGame }) => {
 
     return (
         <View style={styles.header}>
             <View></View>
-            <Text style={styles.headerTextStyle}>Trivia game</Text>
+            <Text style={styles.headerTextStyle}>{challengeGame ?'Challenge Player' : 'Trivia game'}</Text>
             <Pressable onPress={onPress}>
                 <Text style={styles.headerTitle}>Exit</Text>
             </Pressable>

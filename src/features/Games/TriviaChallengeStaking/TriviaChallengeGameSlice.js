@@ -24,7 +24,7 @@ export const submitGameSession = createAsyncThunk(
         // console.log('submitting game session')
 
         const response = await axios.post('v3/challenges/submit', data);
-        // console.log(response.data)
+        console.log(response,'blabla')
         return response.data
     }
 )

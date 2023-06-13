@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { BackHandler, Image, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
+import { BackHandler, Image, ImageBackground, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { formatCurrency, isTrue } from "../../../utils/stringUtl";
 import EStyleSheet from "react-native-extended-stylesheet";
@@ -10,6 +10,7 @@ import { clearSession } from "./TriviaChallengeGameSlice";
 import { useState } from "react";
 import BoostPopUp from "../../../shared/BoostPopUp";
 import logToAnalytics from "../../../utils/analytics";
+import AppButton from "../../../shared/AppButton";
 
 
 const ChallengeEndGameScreen = ({ navigation }) => {
@@ -88,10 +89,10 @@ const ChallengeEndGameScreen = ({ navigation }) => {
         useCallback(() => {
             if (Platform.OS === "android") {
                 StatusBar.setTranslucent(true);
-                StatusBar.setBackgroundColor("transparent");
+                StatusBar.setBackgroundColor("dark-content");
                 return;
             }
-            StatusBar.setBarStyle('light-content');
+            StatusBar.setBarStyle('dark-content');
         }, [])
     );
 
@@ -107,33 +108,32 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     );
 
     return (
-        <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.content}>
+        <ImageBackground source={require('../../../../assets/images/success-background.png')}
+            style={{ flex: 1 }}
+            resizeMethod="resize">
+            <ScrollView style={styles.container}>
+
+                <SelectedPlayers challengeDetails={challengeDetails} />
                 {Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score) &&
-                    <Text style={styles.headText}>Congrats {user.username}</Text>
+                    <Text style={styles.headText}>You won the challenge</Text>
                 }
                 {Number.parseFloat(challengeDetails.score) < Number.parseFloat(challengeDetails.opponent.score) &&
-                    <Text style={styles.headText}>Sorry {user.username}</Text>
+                    <Text style={styles.headText}>You lost the challenge</Text>
                 }
                 {Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score) &&
                     <Text style={styles.headText}>Draw, you can try again</Text>
                 }
-                <ChallengePlayers challengeDetails={challengeDetails} />
                 <WinningAmount challengeDetails={challengeDetails} />
-                <FinalScoreBoard challengeDetails={challengeDetails} />
+                <FinalScore challengeDetails={challengeDetails} />
                 <BoostPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                <View style={styles.gameButtons}>
+                    <AppButton onPress={onPlayButtonClick} text='Stake again' disabled={loading} textStyle={styles.againText} style={styles.stakeButton} disabledStyle={styles.disabled} />
+                    <AppButton onPress={goHome} text='Return to home' style={styles.homeButton} textStyle={styles.buttonText} />
+                </View>
             </ScrollView>
-            <View style={styles.gameButtons}>
-                <GameButton buttonText='Return to Home'
-                    onPress={goHome}
-                />
-                <GameButton buttonText={loading ? 'loading...' : 'Play Again'}
-                    onPress={onPlayButtonClick}
-                    disabled={loading}
-                />
-            </View>
-        </View>
 
+
+        </ImageBackground>
     )
 }
 
@@ -141,130 +141,121 @@ const WinningAmount = ({ challengeDetails }) => {
     const amount = useSelector(state => state.triviaChallenge.challengeDetails.amount_won);
     return (
         <View style={styles.winningsContainer}>
+            <Text style={styles.winningsHeader}>Scores</Text>
+            <View style={styles.scoreCountContainer}>
+                <View style={styles.userCountContainer}>
+                    <Text style={styles.countName}>You</Text>
+                    <Text style={styles.scoreCount}>{challengeDetails.score}</Text>
+                </View>
+                <View style={styles.userCountContainer}>
+                    <Text style={styles.countName}>{challengeDetails.opponent.username}</Text>
+                    <Text style={styles.scoreCount}>{challengeDetails.opponent.score}</Text>
+                </View>
+            </View>
             {Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score) &&
                 <Text style={styles.winningsText}>You have won <Text style={styles.winningsAmount}> &#8358;{formatCurrency(amount)}!</Text></Text>
             }
-            {Number.parseFloat(challengeDetails.score) < Number.parseFloat(challengeDetails.opponent.score) &&
-                <Text style={styles.winningsText}>You can try again</Text>
-            }
-            {Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score) &&
-                <Text style={styles.winningsText}>You have been refunded</Text>
-            }
         </View>
     )
 }
 
-const ChallengePlayers = ({ challengeDetails }) => {
-
-    console.log("challenge",)
+const SelectedPlayers = ({ challengeDetails }) => {
     return (
-        <View style={styles.playersContainer}>
-            {Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score) &&
-                <>
-                    <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                    <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                </>
-            }
-            {Number.parseFloat(challengeDetails.score) < Number.parseFloat(challengeDetails.opponent.score) &&
-                <>
-                    <ChallengeLoser playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                    <ChallengeWinner playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                </>
-            }
-            {Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score) &&
-                <>
-                    <ChallengeWinner playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                    <ChallengeLoser playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-                </>
-            }
+        <View style={styles.playerImage}>
+            <SelectedPlayer playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+
+            <Image
+                source={require('../../../../assets/images/versus.png')}
+            />
+            <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
         </View>
     )
 }
 
-const ChallengeWinner = ({ playerName, playerAvatar }) => {
+const SelectedPlayer = ({ playerName, playerAvatar }) => {
     return (
-        <View style={styles.playerInfoContainer}>
-            <Text style={styles.username}>{playerName}</Text>
-            <View style={styles.avatarContainer}>
-                <Image
-                    source={playerAvatar}
-                    style={styles.winnerAvatar}
-                />
-            </View>
-        </View>
-    )
-}
-
-const ChallengeLoser = ({ playerName, playerAvatar }) => {
-    return (
-        <View style={styles.playerInfoContainer}>
-            <Text style={styles.username}>{playerName}</Text>
+        <View style={styles.avatarBackground}>
             <Image
                 source={playerAvatar}
                 style={styles.avatar}
             />
+            <Text style={styles.username}>@{playerName}</Text>
         </View>
     )
 }
 
-const FinalScoreBoard = ({ challengeDetails }) => {
+
+const FinalScore = ({ challengeDetails }) => {
     return (
-        <View style={styles.scoreContainer}>
-            <Text style={styles.scoreText}>Final score</Text>
-            <View style={styles.scoreCountContainer}>
-                <Text style={styles.winnerScoreCount}>{challengeDetails.score}</Text>
-                <Text style={styles.colon}>:</Text>
-                <Text style={styles.loserScoreCount}>{challengeDetails.opponent.score}</Text>
+        <View style={styles.finalScore}>
+            <Text style={styles.finalScoreText}>Game play statistics</Text>
+            <View style={styles.scoreContainer}>
+                <Text style={styles.pointTitle}>Questions answered</Text>
+                <Text style={styles.point}>{challengeDetails.questions?.length / 2}</Text>
+            </View>
+            <View style={styles.scoreContainer}>
+                <Text style={styles.pointTitle}>Answered correctly</Text>
+                <Text style={styles.point}>{challengeDetails.score}</Text>
+            </View>
+            <View style={styles.scoreContainer}>
+                <Text style={styles.pointTitle}>Points earned</Text>
+                <Text style={styles.point}>{challengeDetails.score} pts</Text>
             </View>
         </View>
     )
 }
 
-const GameButton = ({ buttonText, onPress, disabled }) => {
-    return (
-        <Pressable onPress={onPress} style={[styles.gameButton, disabled ? styles.gameButtonDisabled : {}]} >
-            <Text style={styles.buttonText}>{buttonText}</Text>
-        </Pressable>
-    )
-}
 
 export default ChallengeEndGameScreen;
 const styles = EStyleSheet.create({
-
-    head: {
-        backgroundColor: '#000',
-        opacity: 0.2,
-        flex: 1,
-        paddingBottom: normalize(15),
-        paddingHorizontal: normalize(18),
-        paddingTop: normalize(45),
-    },
     container: {
         flex: 1,
         paddingHorizontal: normalize(18),
         paddingTop: normalize(45),
-        backgroundColor: '#9C3DB8',
         paddingBottom: normalize(15),
-    },
-    content: {
-        flex: 1,
-        justifyContent: 'center'
-
     },
     headText: {
         fontSize: '1.2rem',
-        fontFamily: 'graphik-medium',
-        color: '#FFFF',
+        fontFamily: 'gotham-bold',
+        color: '#072169',
         textAlign: 'center',
         lineHeight: '2rem'
     },
     winningsContainer: {
-        backgroundColor: '#FFF',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingVertical: '2rem',
+        backgroundColor: '#AAD880',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        paddingVertical: '1.5rem',
+        paddingHorizontal: '3rem',
         marginVertical: '.5rem',
         borderRadius: 10
+    },
+    winningsHeader: {
+        fontSize: '.9rem',
+        fontFamily: 'gotham-bold',
+        color: '#072169',
+        textAlign: 'center',
+    },
+    scoreCountContainer: {
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        marginTop: '1rem'
+    },
+    userCountContainer: {
+        alignItems: 'center'
+    },
+    countName: {
+        fontSize: '.85rem',
+        fontFamily: 'sansation-regular',
+        color: '#072169',
+        // width:'5rem',
+        textAlign: 'center'
+    },
+    scoreCount: {
+        fontSize: '1.5rem',
+        fontFamily: 'gotham-bold',
+        color: '#072169',
+
     },
     winningsText: {
         fontSize: '.9rem',
@@ -275,27 +266,6 @@ const styles = EStyleSheet.create({
     winningsAmount: {
         color: '#EB7474',
     },
-    avatar: {
-        width: normalize(65),
-        height: normalize(65),
-        backgroundColor: '#FFFF',
-        borderRadius: 100,
-        borderWidth: 4,
-        borderColor: '#FF716C'
-    },
-    winnerAvatar: {
-        width: normalize(120),
-        height: normalize(120),
-        backgroundColor: '#FFFF',
-        borderRadius: 100,
-        borderWidth: 8,
-        borderColor: '#6895FF'
-    },
-    avatarContainer: {
-        borderRadius: 100,
-        borderWidth: 6,
-        borderColor: '#FFF'
-    },
     username: {
         fontSize: '0.75rem',
         fontFamily: 'graphik-medium',
@@ -304,85 +274,99 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         marginBottom: '.4rem'
     },
-    playersContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginVertical: '1rem',
-
-    },
-    playerInfoContainer: {
-        alignItems: 'center'
-    },
-    scoreContainer: {
-        backgroundColor: '#F9E821',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: '.8rem',
-        paddingHorizontal: '1rem',
-        marginTop: '.3rem',
-        borderRadius: 16
-
-    },
-    scoreCountContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    winnerScoreCount: {
-        fontSize: '5.5rem',
-        fontFamily: 'graphik-bold',
-        color: '#6895FF',
-        textAlign: 'center',
-    },
-    loserScoreCount: {
-        fontSize: '5.5rem',
-        fontFamily: 'graphik-bold',
-        color: '#FF716C',
-        textAlign: 'center',
-
-    },
-    colon: {
-        fontSize: '5.5rem',
-        fontFamily: 'graphik-bold',
-        color: '#9236AD',
-        textAlign: 'center',
-        marginHorizontal: '1rem'
-    },
-    scoreText: {
-        fontSize: '.8rem',
-        fontFamily: 'graphik-medium',
-        color: '#9236AD',
-        textAlign: 'center',
-    },
-    button: {
-        marginBottom: 10,
-        marginTop: 0
-    },
-    gameButton: {
-        borderColor: '#FFFF',
-        borderWidth: 1,
-        width: responsiveScreenWidth(35),
-        height: responsiveScreenHeight(6.5),
-        borderRadius: 8,
-        justifyContent: 'center',
-        alignItems: 'center',
-        display: 'flex',
-    },
-    gameButtonDisabled: {
-        backgroundColor: '#DFCBCF'
+    disabled: {
+        backgroundColor: '#EA8663'
     },
     gameButtons: {
         display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: normalize(50),
+        flexDirection: 'column',
+        marginBottom: responsiveScreenHeight(18),
+        // paddingHorizontal: '2rem'
+    },
+    homeButton: {
+        marginVertical: 5,
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderColor: '#072169',
+        paddingVertical: normalize(19),
+    },
+    stakeButton: {
+        marginBottom: 20,
+        marginTop: 0,
+        paddingVertical: normalize(19),
     },
     buttonText: {
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem',
+        color: '#072169'
+    },
+    againText: {
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem',
+    },
+    playerImage: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: normalize(15),
+        paddingHorizontal: normalize(20),
+        alignItems: 'center',
+        borderRadius: 13,
+        marginBottom: '1rem',
+    },
+    avatarBackground: {
+        alignItems: 'center'
+    },
+    avatar: {
+        width: normalize(65),
+        height: normalize(65),
+        backgroundColor: '#F6F4FF',
+        borderRadius: 50,
+    },
+    username: {
+        fontSize: '0.9rem',
+        fontFamily: 'gotham-bold',
+        color: '#072169',
+        width: responsiveScreenWidth(25),
         textAlign: 'center',
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        fontSize: '0.72rem',
+        marginTop: '.8rem'
+    },
+    finalScore: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        marginBottom: responsiveScreenWidth(12),
+        padding: Platform.OS === 'ios' ? normalize(25) : normalize(20),
+        borderWidth: 1,
+        borderColor: '#E5E5E5',
+        elevation: 2,
+        shadowColor: 'rgba(0, 0, 0, 0.25)',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.1,
+    },
+    finalScoreText: {
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        fontSize: '1.3rem',
+        marginBottom: '.7rem'
+    },
+    scoreContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: '1rem'
+    },
+    pointTitle: {
+        color: '#072169',
+        fontSize: '1.1rem',
+        fontFamily: 'gotham-medium',
+    },
+    point: {
+        color: '#072169',
+        fontFamily: 'sansation-regular',
+        fontSize: '1.1rem',
+        marginLeft: '.7rem'
     },
 })

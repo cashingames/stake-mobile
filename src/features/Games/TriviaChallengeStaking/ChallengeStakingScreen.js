@@ -8,10 +8,11 @@ import UserWalletBalance from '../../../shared/UserWalletBalance';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../../utils/normalize';
 import useApplyHeaderWorkaround from '../../../utils/useApplyHeaderWorkaround';
 import Constants from 'expo-constants';
-import { isTrue } from '../../../utils/stringUtl';
+import { formatCurrency, formatNumber, isTrue } from '../../../utils/stringUtl';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { startChallengeRequest } from './TriviaChallengeGameSlice';
 import logToAnalytics from '../../../utils/analytics';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
@@ -19,12 +20,11 @@ const ChallengeStakingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
-    const boosts = useSelector(state => state.common.boosts);
+    const boosts = useSelector(state => state.auth.user.boosts);
     const minimumChallengeStakeAmount = useSelector(state => state.common.minimumChallengeStakeAmount);
     const maximumChallengeStakeAmount = useSelector(state => state.common.maximumChallengeStakeAmount);
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
     const [amount, setAmount] = useState('');
-    console.log(amount, 'main screen')
     const [loading, setLoading] = useState(false);
     const [canSend, setCanSend] = useState(false);
 
@@ -37,17 +37,17 @@ const ChallengeStakingScreen = ({ navigation }) => {
     const stakeAmount = async () => {
         setLoading(true);
 
-        if (Number.parseFloat(amount) < Number.parseFloat(minimumChallengeStakeAmount)) {
-            Alert.alert(`Minimum stake amount is ${minimumChallengeStakeAmount} naira`);
-            setLoading(false);
-            return false;
-        }
+        // if (Number.parseFloat(amount) < Number.parseFloat(minimumChallengeStakeAmount)) {
+        //     Alert.alert(`Minimum stake amount is ${minimumChallengeStakeAmount} naira`);
+        //     setLoading(false);
+        //     return false;
+        // }
 
-        if (Number.parseFloat(amount) > Number.parseFloat(maximumChallengeStakeAmount)) {
-            Alert.alert(`Maximum stake amount is ${maximumChallengeStakeAmount} naira`);
-            setLoading(false);
-            return false;
-        }
+        // if (Number.parseFloat(amount) > Number.parseFloat(maximumChallengeStakeAmount)) {
+        //     Alert.alert(`Maximum stake amount is ${maximumChallengeStakeAmount} naira`);
+        //     setLoading(false);
+        //     return false;
+        // }
 
         // if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
         //     Alert.alert(`Your demo wallet has been exhausted. Fund your wallet now`);
@@ -55,11 +55,11 @@ const ChallengeStakingScreen = ({ navigation }) => {
         //     return false;
         // }
 
-        if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-            Alert.alert(`Insufficient balance in your wallet. Please fund your wallet`);
-            setLoading(false);
-            return false;
-        }
+        // if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
+        //     Alert.alert(`Insufficient balance in your wallet. Please fund your wallet`);
+        //     setLoading(false);
+        //     return false;
+        // }
 
 
         dispatch(startChallengeRequest({
@@ -79,16 +79,35 @@ const ChallengeStakingScreen = ({ navigation }) => {
             });
     }
 
+    const depositFunds = async () => {
+        logToAnalytics("challenge_deposit_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('Wallet')
+    }
+
+    const fundWallet = async () => {
+        logToAnalytics("insufficient_challenge_balance_fund_clicked", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email
+        })
+        navigation.navigate('Wallet')
+    }
+
     useEffect(() => {
 
-        const invalid = amount === ''
+        const invalid = amount === '' || amount < Number.parseFloat(minimumChallengeStakeAmount) || amount > Number.parseFloat(maximumChallengeStakeAmount) 
+        || amount > Number.parseFloat(user.walletBalance)
         setCanSend(!invalid);
 
     }, [amount])
 
     return (
         <>
-            <ImageBackground source={require('../../../../assets/images/quiz-stage.jpg')}
+            <ImageBackground source={require('../../../../assets/images/game-play-background.png')}
                 style={{ flex: 1 }}
                 resizeMethod="resize">
                 <KeyboardAvoidingView
@@ -96,11 +115,19 @@ const ChallengeStakingScreen = ({ navigation }) => {
                     style={styles.headContainer}
                 >
 
-                    <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', flex: 1 }}>
+                    {/* <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', flex: 1 }}> */}
+                    <ScrollView style={styles.container}>
+
                         <View style={styles.purchaseBoost}>
-                            <Text style={styles.boostText}>Score higher with boosts</Text>
-                            <View style={styles.boostContainer}>
-                                {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
+                            <Text style={styles.boostText}>{user.username}, score higher with boosts</Text>
+                            <View>
+                                {boosts?.length > 0 ?
+                                    <View style={styles.boostContainer}>
+                                        {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
+                                    </View>
+                                    :
+                                    <Text>You dont have any available boost</Text>
+                                }
                             </View>
                             {Platform.OS === "android" &&
                                 <Pressable onPress={goToStore} style={styles.storeLink}>
@@ -109,13 +136,30 @@ const ChallengeStakingScreen = ({ navigation }) => {
                             }
                         </View>
                         <SelectedPlayers user={user} />
-                        <InputStakeAmount balance={user.walletBalance}
-                            stakeAmount={stakeAmount}
-                            loading={loading}
-                            amount={amount}
-                            setAmount={setAmount}
-                            canSend={canSend}
+                        <WalletDetails user={user} depositFunds={depositFunds} />
+                        <Input
+                            label='Enter stake amount'
+                            placeholder={`Minimum amount is NGN ${minimumChallengeStakeAmount}`}
+                            value={amount}
+                            error={((amount < Number.parseFloat(minimumChallengeStakeAmount)) && `Minimum amount is NGN ${minimumChallengeStakeAmount}`) ||
+                                ((amount > Number.parseFloat(maximumChallengeStakeAmount)) && `Maximum amount is NGN ${maximumChallengeStakeAmount}`) ||
+                                ((amount > Number.parseFloat(user.walletBalance)))}
+                            onChangeText={setAmount}
+                            isRequired={true}
+                            keyboardType="numeric"
                         />
+
+                        {amount > Number.parseFloat(user.walletBalance) &&
+                            <View style={styles.errorContainer}>
+                                <Text style={styles.error}>Insufficient wallet balance</Text>
+                                <Pressable style={styles.fundError} onPress={fundWallet}>
+                                    <Text style={styles.fundText}>Fund wallet</Text>
+                                </Pressable>
+                            </View>
+                        }
+
+                        <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake amount"} onPress={stakeAmount} disabled={loading || !canSend}
+                            style={styles.stakeButton} disabledStyle={styles.disabled}  isIcon={true} iconColor="#FFF" />
 
                     </ScrollView>
                 </KeyboardAvoidingView>
@@ -126,16 +170,14 @@ const ChallengeStakingScreen = ({ navigation }) => {
 
 const SelectedPlayers = ({ user }) => {
     return (
-        <>
-            <ImageBackground source={require('../../../../assets/images/challenge-stage.png')}
-                style={styles.playerImage} imageStyle={{ borderRadius: 20 }} resizeMode="cover">
-                <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+        <View style={styles.playerImage}>
+            <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
 
-                <Image
-                    source={require('../../../../assets/images/versus.png')}
-                />
-                <SelectedPlayer playerName="...." playerAvatar={require("../../../../assets/images/question.png")} />
-            </ImageBackground></>
+            <Image
+                source={require('../../../../assets/images/versus.png')}
+            />
+            <SelectedPlayer playerName="...." playerAvatar={require("../../../../assets/images/question.png")} />
+        </View>
     )
 }
 
@@ -151,31 +193,42 @@ const SelectedPlayer = ({ playerName, playerAvatar }) => {
     )
 }
 
-const InputStakeAmount = ({ balance, stakeAmount, loading, amount, setAmount, canSend }) => {
-    return (
-        <View
-            style={styles.stakeAmountContainer}
-        >
-            <UserWalletBalance balance={balance} style={styles.walletContainer} textstyle={styles.walletText} />
-            <View style={styles.fundContainer}
-            >
-                <Input
-                    style={styles.fundAmount}
-                    value={amount}
-                    defaultValue="Enter Amount"
-                    keyboardType="numeric"
-                    onChangeText={setAmount}
-                    autoFocus={true}
-                    placeholder="Enter Stake Amount"
-                    min
-                />
-            </View>
-            <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={stakeAmount} disabled={loading || !canSend}
-                style={styles.stakeButton} disabledStyle={styles.disabled} />
+const WalletDetails = ({ user, depositFunds }) => {
+    const [hidden, setHidden] = useState(false);
 
+    const toggleSecureText = () => {
+        setHidden(!hidden);
+    }
+    return (
+        <View style={styles.detailsContainer}>
+            <View style={styles.totalHeader}>
+                <View style={styles.totalTitleContainer}>
+                    <Image
+                        source={require('../../../../assets/images/wallet-with-cash.png')}
+                        style={styles.cashAvatar}
+                    />
+                    <Text style={styles.totalTitleText}>Total balance</Text>
+                </View>
+                <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} />
+            </View>
+            <View style={styles.currencyHeader}>
+                <View style={styles.currencyHeaderLeft}>
+                    <Text style={styles.currencyText}>NGN</Text>
+                    {hidden ?
+                        <Text style={styles.currencyAmount}>***</Text>
+                        :
+                        <Text style={styles.currencyAmount}>{formatCurrency(user.walletBalance ?? 0)}</Text>
+                    }
+                </View>
+                <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
+                    <Text style={styles.depositText}>Deposit</Text>
+                    <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+                </Pressable>
+            </View>
         </View>
     )
 }
+
 
 const BoostCardDetails = ({ boost }) => {
     return (
@@ -184,11 +237,7 @@ const BoostCardDetails = ({ boost }) => {
                 source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
                 style={styles.boostIcon}
             />
-            <View style={styles.boostDetailsContainer}>
-                <View style={styles.boostNameCount}>
-                    <Text style={styles.storeItemName}>{boost.name}</Text>
-                </View>
-            </View>
+            <Text style={styles.storeItemName}>x{formatNumber(boost.count)}</Text>
         </View>
     )
 }
@@ -201,9 +250,7 @@ const styles = EStyleSheet.create({
     },
     container: {
         paddingHorizontal: normalize(18),
-        // justifyContent: 'center',
-        // backgroundColor: '#EDDA74',
-        // flex: 1,
+        flex: 1
     },
     playerImage: {
         display: 'flex',
@@ -212,61 +259,40 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(15),
         paddingHorizontal: normalize(20),
         alignItems: 'center',
-        borderRadius: 20,
+        borderRadius: 13,
         marginBottom: '1rem',
+        borderWidth: 1,
+        borderColor: '#E5E5E5',
+        elevation: 2.5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.1,
+        backgroundColor: '#fff'
     },
     avatarBackground: {
         alignItems: 'center'
     },
     avatar: {
-        width: normalize(45),
-        height: normalize(45),
-        backgroundColor: '#FFFF',
+        width: normalize(65),
+        height: normalize(65),
+        backgroundColor: '#F6F4FF',
         borderRadius: 50,
     },
     username: {
-        fontSize: '0.75rem',
-        fontFamily: 'graphik-regular',
-        color: '#FFFF',
+        fontSize: '0.9rem',
+        fontFamily: 'gotham-bold',
+        color: '#072169',
         width: responsiveScreenWidth(25),
         textAlign: 'center',
         marginTop: '.8rem'
     },
-    stakeAmountContainer: {
-        backgroundColor: '#EDDA74',
-        // paddingHorizontal: normalize(18),
-        paddingTop: normalize(20),
-        borderRadius: 15,
-    },
-    walletContainer: {
-        backgroundColor: '#301934',
-        color: "#FFFF",
-        marginHorizontal: normalize(18),
-    },
-    walletText: {
-        color: "#FFFF",
-    },
-    fundContainer: {
-        borderBottomColor: 'rgba(0, 0, 0, 0.1)',
-        borderBottomWidth: 1,
-    },
-    fundAmount: {
-        fontFamily: "graphik-medium",
-        fontSize: "1.5rem",
-        color: "#333333",
-        marginVertical: normalize(2),
-        opacity: 0.65,
-        textAlign: "center",
-    },
     stakeButton: {
-        marginHorizontal: normalize(18),
         marginTop: 20,
     },
     boostDetailsHead: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: '1rem',
-        marginHorizontal: '1rem'
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginHorizontal: '.5rem'
     },
     boostDetailsContainer: {
         flexDirection: 'column',
@@ -275,9 +301,9 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
     },
     storeItemName: {
-        fontFamily: 'graphik-medium',
-        fontSize: '0.7rem',
-        color: '#EF2F55',
+        fontFamily: 'graphik-bold',
+        fontSize: '0.8rem',
+        color: '#FFF',
     },
     cardDescription: {
         fontFamily: 'graphik-medium',
@@ -288,26 +314,27 @@ const styles = EStyleSheet.create({
         textAlign: 'center'
     },
     boostText: {
-        fontSize: '.8rem',
-        fontFamily: 'graphik-medium',
-        color: '#FFFF',
+        fontSize: '.85rem',
+        fontFamily: 'gotham-bold',
+        color: '#072169',
         textAlign: 'center',
-        lineHeight: '1.2rem',
     },
     boostIcon: {
-        marginBottom: normalize(5),
-        width: responsiveScreenWidth(7),
-        height: responsiveScreenWidth(7),
+        width: '2rem',
+        height: '2rem',
+    },
+    noBoost: {
+        fontSize: '.75rem',
+        fontFamily: 'gotham-medium',
+        color: '#072169',
+        textAlign: 'center',
+        marginTop: '.5rem'
     },
     boostContainer: {
         flexDirection: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'center'
-    },
-    storeItemName: {
-        fontFamily: 'graphik-medium',
-        fontSize: '0.7rem',
-        color: '#FFFF',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: '.8rem'
     },
     cardDescription: {
         fontFamily: 'graphik-medium',
@@ -319,27 +346,116 @@ const styles = EStyleSheet.create({
     },
     matchingText: {
         fontSize: '.8rem',
-        fontFamily: 'graphik-regular',
-        color: '#FFF',
+        fontFamily: 'gotham-medium',
+        color: '#E15220',
         textAlign: 'center',
-        lineHeight: '2rem',
-        textDecorationStyle: 'dashed',
-        textDecorationColor: '#fff',
+        textDecorationColor: '#E15220',
         textDecorationLine: 'underline',
     },
     purchaseBoost: {
-        backgroundColor: '#301934',
+        backgroundColor: '#AAD880',
         marginVertical: normalize(15),
-        paddingVertical: normalize(12),
+        paddingVertical: normalize(15),
         paddingHorizontal: normalize(18),
-        borderRadius: 15,
-        alignItems: 'center'
+        borderRadius: 13,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#E5E5E5',
+        elevation: 2.5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.1,
     },
     storeLink: {
         marginTop: '.6rem'
     },
     disabled: {
         backgroundColor: '#EA8663'
+    },
+
+    detailsContainer: {
+        backgroundColor: '#fff',
+        borderRadius: 13,
+        borderColor: '#E5E5E5',
+        borderWidth: 1,
+        paddingHorizontal: '1.3rem',
+        paddingVertical: '1.1rem',
+        marginBottom: '1.5rem',
+        elevation: 2,
+        shadowColor: '#000000',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.1,
+    },
+    totalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    totalTitleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    totalTitleText: {
+        color: '#072169',
+        fontFamily: 'gotham-medium',
+        fontSize: '.9rem',
+        marginLeft: '.4rem'
+    },
+    cashAvatar: {
+        width: '1.35rem',
+        height: '1.35rem'
+    },
+    currencyText: {
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        fontSize: '1.1rem',
+        marginRight: '.3rem'
+    },
+    currencyAmount: {
+        color: '#072169',
+        fontFamily: 'sansation-regular',
+        fontSize: '1.1rem',
+    },
+    currencyHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: '.7rem',
+        justifyContent: 'space-between'
+    },
+    currencyHeaderLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    currencyHeaderRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    depositText: {
+        color: '#072169',
+        fontFamily: 'gotham-medium',
+        fontSize: '.9rem',
+    },
+    errorContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    error: {
+        fontFamily: 'gotham-medium',
+        color: '#EF2F55',
+        fontSize: normalize(13),
+    },
+    fundError: {
+        borderColor: '#072169',
+        borderWidth: 2,
+        borderRadius: 15,
+        paddingHorizontal: '.8rem',
+        paddingVertical: '.3rem'
+    },
+    fundText: {
+        color: '#072169',
+        fontFamily: 'gotham-medium',
+        fontSize: '.7rem',
     },
 
 })

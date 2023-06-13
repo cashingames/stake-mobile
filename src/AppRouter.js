@@ -166,10 +166,15 @@ function AppRouter() {
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Select Player' }} />
 						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{
-							title: 'Play Challenge', headerStyle: {
-								backgroundColor: '#EDDA74',
+							title: 'Challenge Player', 
+							headerStyle: {
+								backgroundColor: '#F9FBFF',
 							},
-							headerTintColor: '#000000',
+							headerTitleStyle: {
+								fontFamily: 'gotham-bold',
+								fontSize: 23,
+							},
+							headerTintColor: '#072169',
 						}} />
 						<AppStack.Screen name="ChallengeMatching" component={ChallengeMatchingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameBoard" component={ChallengeGameBoardScreen} options={{ headerShown: false }} />
