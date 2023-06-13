@@ -84,7 +84,8 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
     const user = useSelector(state => state.auth.user);
     const gameSubCategoryLength = category.subcategories.length;
     const firstCategorySlide = category.subcategories.slice(0, 8);
-    const secondGameCategorySlide = category.subcategories.slice(8);
+    const secondGameCategorySlide = category.subcategories.slice(8, 16);
+    const thirdGameCategorySlide = category.subcategories.slice(16);
     const activePlans = useSelector(state => state.auth.user.hasActivePlan);
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
@@ -169,7 +170,17 @@ const SubCategories = ({ category, loading, setLoading, setShowModal }) => {
                         ))}
                     </View>
                     <View style={styles.subcategories}>
-                        {secondGameCategorySlide .map((subcategory, i) => (
+                        {secondGameCategorySlide.map((subcategory, i) => (
+                            <GameSubcategoryCard
+                                key={i}
+                                game={subcategory}
+                                onPress={() => onPressMe(subcategory)}
+                                loading={loading}
+                            />
+                        ))}
+                    </View>
+                    <View style={styles.subcategories}>
+                        {thirdGameCategorySlide.map((subcategory, i) => (
                             <GameSubcategoryCard
                                 key={i}
                                 game={subcategory}

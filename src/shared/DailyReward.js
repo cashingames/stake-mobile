@@ -27,7 +27,8 @@ const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal, user }) =>
     const fifthDailyRewards = rewards?.filter((item) => item.day == 5) ?? []
     const sixthDailyRewards = rewards?.filter((item) => item.day == 6) ?? []
     const seventhDailyRewards = rewards?.filter((item) => item.day == 7) ?? []
-    console.log(user.dailyReward)
+    const shouldShowPopup = user.dailyReward?.shouldShowPopup ?? null
+    // console.log(user.dailyReward)
     const claimReward = (day) => {
         setLoading(true)
         try {
@@ -58,7 +59,7 @@ const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal, user }) =>
     }
 
     useEffect(() => {
-        if (user.dailyReward.shouldShowPopup) {
+        if (shouldShowPopup) {
             setShowDailyRewardModal(true)
         } else {
             setShowDailyRewardModal(false)
@@ -70,7 +71,7 @@ const DailyReward = ({ showDailyRewardModal, setShowDailyRewardModal, user }) =>
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={showDailyRewardModal}
+                visible={showDailyRewardModal && shouldShowPopup}
                 onRequestClose={() => {
                     setShowDailyRewardModal(!showDailyRewardModal);
                 }}

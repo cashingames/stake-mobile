@@ -231,7 +231,7 @@ const Dashboard = ({ navigation, route }) => {
                     setShowModal={setReferralUpdate}
                     showModal={referralUpdate}
                     title={updateSuccessful ? 'Update Successful!' : 'Update Failed😥'}
-                    modalBody={updateSuccessful ? 'Received. Thank You' : 'Username does not exist'}
+                    modalBody={updateSuccessful ? 'Received. Thank You' : 'Referral code is invalid'}
                     btnText='Ok'
                     btnHandler={() => setReferralUpdate(false)}
                 />
