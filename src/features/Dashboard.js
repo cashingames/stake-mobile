@@ -8,9 +8,9 @@ import DashboardSettings from '../shared/DashboardSettings'
 import GameArkLogo from '../shared/GameArkLogo'
 import { useEffect } from 'react'
 import { fetchFeatureFlags, getCommonData, initialLoadingComplete, loadSoundPrefernce, setSound } from './CommonSlice'
-import { getUser } from './Auth/AuthSlice';
+import { getUser, userUpdateReferralCode } from './Auth/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux'
-import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import Loader from '../shared/Loader'
 import useSound from '../utils/useSound'
 import { setGameMode } from './Games/GameSlice';
@@ -25,9 +25,11 @@ import NetworkModal from '../shared/NetworkModal';
 import * as Updates from 'expo-updates';
 import crashlytics from '@react-native-firebase/crashlytics';
 import GameModal from '../shared/GameModal';
+import { unwrapResult } from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import DailyReward from '../shared/DailyReward';
 
-const Dashboard = ({ navigation }) => {
+const Dashboard = ({ navigation, route }) => {
     // const loading = useSelector(state => state.common.initialLoading);
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(true)
@@ -36,10 +38,20 @@ const Dashboard = ({ navigation }) => {
     const gameModes = useSelector(state => state.common.gameModes);
     const user = useSelector(state => state.auth.user);
     const [showModal, setShowModal] = useState(false)
+    const [showReferralModal, setShowReferralModal] = useState(true)
+    const [referralUpdate, setReferralUpdate] = useState(false)
+    const [updateSuccessful, setUpdateSuccessful] = useState(true)
     const [showDailyRewardModal, setShowDailyRewardModal] = useState(false)
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
+    const params = route.params;
+    const socialSignUp = params?.socialSignUp ?? null
+    const [referrer, setReferrer] = useState('');
+    const onChangeReferral = (text) => {
+        setReferrer(text)
+    }
 
+    // console.log(socialSignUp)
     const isFocused = useIsFocused();
     const { playSound, toogle, handleToggle, stopSound } = useSound(require('./../../assets/sounds/dashboard.mp3'));
 
@@ -53,7 +65,6 @@ const Dashboard = ({ navigation }) => {
 
         const { responseCode, results } = await InAppPurchases.getProductsAsync(items);
         if (responseCode === InAppPurchases.IAPResponseCode.OK) {
-            // console.error(results, "results")
             dispatch(setItems(results.length !== 0 ? results : PRODUCTS))
         } else {
 
@@ -78,10 +89,29 @@ const Dashboard = ({ navigation }) => {
             });
         loadSoundPrefernce(dispatch, setSound)
         getStoreItems();
-        console.log('hey')
         // get achievements badges
         dispatch(getAchievements());
     }
+
+    useEffect(() => {
+        if (socialSignUp && showReferralModal) {
+            setShowReferralModal(true)
+        }
+    }, [])
+
+    useEffect(() => {
+        const checkReferralCodeUpdated = async () => {
+          const referralCode = await AsyncStorage.getItem('referralCodeUpdated');
+          if (referralCode !== 'true') {
+            console.log('if')
+            setShowReferralModal(true)
+          }else{
+            console.log('if again')
+            setShowReferralModal(false)
+          }
+        }
+        checkReferralCodeUpdated();
+      }, []);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -114,7 +144,6 @@ const Dashboard = ({ navigation }) => {
         }
     }
 
-
     if (loading) {
         return <Loader />
     }
@@ -123,6 +152,33 @@ const Dashboard = ({ navigation }) => {
         handleToggle();
         stopSound()
     };
+
+    const updateReferralCode = () => {
+        setShowReferralModal(false)
+        try{
+        dispatch(userUpdateReferralCode({
+           referrer
+        }))
+            .then(unwrapResult)
+            .then( async result => {
+                setReferralUpdate(true)
+                await AsyncStorage.setItem('referralCodeUpdated', 'true');                
+                setUpdateSuccessful(true)
+            })
+            .catch((error) => {
+                setUpdateSuccessful(false)
+
+                 setReferralUpdate(true)
+            })
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+    const dismissReferalCode = async () => {
+        setShowReferralModal(false)
+        await AsyncStorage.setItem('referralCodeUpdated', 'true'); 
+    }
 
     return (
         <>
@@ -157,6 +213,27 @@ const Dashboard = ({ navigation }) => {
                     modalBody='Please reload the app to enjoy the new experience we just added to Gameark!'
                     btnText='Restart'
                     btnHandler={updateApp}
+                />
+                <GameModal
+                    setShowModal={setShowReferralModal}
+                    showModal={showReferralModal && socialSignUp}
+                    modalBody='Please input referral code (if referred)'
+                    multipleBtn={true}
+                    btnText='Submit'
+                    btnText_2='Close'
+                    inputBox={true}
+                    btnHandler={updateReferralCode}
+                    btnHandler_2={dismissReferalCode}
+                    onChange={onChangeReferral}
+                    value={referrer}
+                />
+                <GameModal
+                    setShowModal={setReferralUpdate}
+                    showModal={referralUpdate}
+                    title={updateSuccessful ? 'Update Successful!' : 'Update Failed😥'}
+                    modalBody={updateSuccessful ? 'Received. Thank You' : 'Username does not exist'}
+                    btnText='Ok'
+                    btnHandler={() => setReferralUpdate(false)}
                 />
                 <DailyReward showDailyRewardModal={showDailyRewardModal} setShowDailyRewardModal={setShowDailyRewardModal} user={user}/>
             </MixedContainerBackground>
@@ -199,7 +276,6 @@ const styles = EStyleSheet.create({
         fontFamily: 'blues-smile',
         color: '#fff',
     },
-
     welcomeBtn: {
         marginTop: '.3rem',
         backgroundColor: '#15397D',

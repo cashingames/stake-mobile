@@ -37,7 +37,7 @@ export default function OtherLeaders({ leaders }) {
         }
     }, [leaders]);
 
-    const ITEM_HEIGHT = 60;
+    const ITEM_HEIGHT = 75;
     const scrollToUserPosition = () => {
         if (scrollViewRef.current) {
             if (userIndex >= 0) {
@@ -59,7 +59,7 @@ export default function OtherLeaders({ leaders }) {
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ paddingBottom: responsiveHeight(2) }}
-                initialNumToRender={currentLeadedrs.length}
+                initialNumToRender={100}
             />
             {currentLeadedrs.length === 0 &&
                 <View style={{ height: responsiveHeight(30), justifyContent: 'center' }}>
@@ -145,7 +145,7 @@ const otherLeaderStyles = EStyleSheet.create({
         borderBottomWidth: 1,
         paddingVertical: responsiveHeight(100) * 0.015,
         paddingHorizontal: 10,
-        height: 75
+        height: 80
     },
     profilePic: {
         width: normalize(48),
