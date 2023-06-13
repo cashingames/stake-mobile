@@ -199,7 +199,6 @@ export const userUpdateReferralCode = createAsyncThunk(
     'auth/updateReferral',
     async (data, thunkAPI) => {
         const response = await axios.post('v3/referrer/update', data);
-        console.log(response)
         return response.data;
     }
 )

@@ -38,7 +38,7 @@ const Dashboard = ({ navigation, route }) => {
     const [showModal, setShowModal] = useState(false)
     const [showReferralModal, setShowReferralModal] = useState(true)
     const [referralUpdate, setReferralUpdate] = useState(false)
-    const [updateSuccessful, setUpdateSuccessful] = useState(false)
+    const [updateSuccessful, setUpdateSuccessful] = useState(true)
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
     const params = route.params;
@@ -48,7 +48,7 @@ const Dashboard = ({ navigation, route }) => {
         setReferrer(text)
     }
 
-    console.log(socialSignUp)
+    // console.log(socialSignUp)
     const isFocused = useIsFocused();
     const { playSound, toogle, handleToggle, stopSound } = useSound(require('./../../assets/sounds/dashboard.mp3'));
 
@@ -91,22 +91,24 @@ const Dashboard = ({ navigation, route }) => {
     }
 
     useEffect(() => {
+        if (socialSignUp && showReferralModal) {
+            setShowReferralModal(true)
+        }
+    }, [])
+
+    useEffect(() => {
         const checkReferralCodeUpdated = async () => {
           const referralCode = await AsyncStorage.getItem('referralCodeUpdated');
           if (referralCode !== 'true') {
+            console.log('if')
             setShowReferralModal(true)
           }else{
+            console.log('if again')
             setShowReferralModal(false)
           }
         }
         checkReferralCodeUpdated();
       }, []);
-
-    useEffect(() => {
-        if (socialSignUp && showReferralModal) {
-            setShowReferralModal(true)
-        }
-    }, [showReferralModal])
 
     useFocusEffect(
         React.useCallback(() => {
@@ -161,11 +163,18 @@ const Dashboard = ({ navigation, route }) => {
                 setUpdateSuccessful(true)
             })
             .catch((error) => {
+                setUpdateSuccessful(false)
+
                  setReferralUpdate(true)
             })
         }catch(error){
             console.log(error)
         }
+    }
+
+    const dismissReferalCode = async () => {
+        setShowReferralModal(false)
+        await AsyncStorage.setItem('referralCodeUpdated', 'true'); 
     }
 
     return (
@@ -200,19 +209,18 @@ const Dashboard = ({ navigation, route }) => {
                     title='Updates Available'
                     modalBody='Please reload the app to enjoy the new experience we just added to Gameark!'
                     btnText='Restart'
-                    inputBox={true}
                     btnHandler={updateApp}
                 />
                 <GameModal
                     setShowModal={setShowReferralModal}
-                    showModal={showReferralModal}
+                    showModal={showReferralModal && socialSignUp}
                     modalBody='Please input referral code (if referred)'
                     multipleBtn={true}
                     btnText='Submit'
                     btnText_2='Close'
                     inputBox={true}
                     btnHandler={updateReferralCode}
-                    btnHandler_2={() => setShowReferralModal(false)}
+                    btnHandler_2={dismissReferalCode}
                     onChange={onChangeReferral}
                     value={referrer}
                 />
@@ -264,7 +272,6 @@ const styles = EStyleSheet.create({
         fontFamily: 'blues-smile',
         color: '#fff',
     },
-
     welcomeBtn: {
         marginTop: '.3rem',
         backgroundColor: '#15397D',
