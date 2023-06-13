@@ -40,7 +40,7 @@ let initialState = {
     countdownFrozen: false,
     consumedBoosts: [],
     activeBoost: [],
-    gameDuration: 60,
+    gameDuration: 600,
     countdownKey: 0,
     challengeDetails: {},
     isEnded: false,

@@ -73,7 +73,7 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                 setSubmitting(false);
                 navigation.navigate(
                     status === 'MATCHED' ?
-                    'ChallengeGameEndWaiting' : 'ChallengeEndGame'
+                        'ChallengeGameEndWaiting' : 'ChallengeEndGame'
                 );
             });
     }
@@ -114,7 +114,7 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                 <PlayGameHeader onPress={showExitConfirmation} challengeGame={true} />
                 <ChallengeGameBoardWidgets />
                 <SelectedPlayers user={user} challengeDetails={challengeDetails} />
-                <RenderQuestion onComplete={gameEnded} onEnd={gameEnded} submitting={submitting}  />
+                <RenderQuestion onComplete={gameEnded} onEnd={gameEnded} submitting={submitting} />
             </ScrollView>
         </ImageBackground>
 
@@ -146,7 +146,7 @@ const SelectedPlayer = ({ playerName, playerAvatar }) => {
     )
 }
 
-const RenderQuestion = ({ onComplete, onEnd, submitting}) => {
+const RenderQuestion = ({ onComplete, onEnd, submitting }) => {
     const dispatch = useDispatch();
     const currentQuestion = useSelector(state => state.triviaChallenge.currentQuestion || []);
     const options = currentQuestion.options;
@@ -253,18 +253,13 @@ const styles = EStyleSheet.create({
     options: {
         paddingBottom: normalize(45),
     },
-    optionText: {
-        color: '#151C2F',
-        fontFamily: 'graphik-medium',
-        fontSize: '0.75rem',
-        textAlign: 'center',
-    },
+
     activeOption: {
         backgroundColor: '#F5D2FF'
     },
     nextButton: {
         display: 'flex',
-        // marginTop:'7rem'
+        marginTop: 0
     },
     disabled: {
         backgroundColor: '#EA8663'
@@ -353,10 +348,11 @@ const styles = EStyleSheet.create({
     answer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: '1.8rem',
-        height: responsiveScreenWidth(7)
+        marginBottom: '1.5rem',
+        height: responsiveScreenWidth(10),
+        // backgroundColor: 'red',
     },
-    answerText: {
+    optionText: {
         color: '#072169',
         fontFamily: 'sansation-regular',
         fontSize: '0.9rem',
