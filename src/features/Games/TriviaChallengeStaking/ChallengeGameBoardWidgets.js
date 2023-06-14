@@ -199,8 +199,8 @@ const styles = EStyleSheet.create({
     },
 
     title: {
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
+        color: '#072169',
+        fontFamily: 'gotham-bold',
         fontSize: '.85rem'
     },
 
@@ -242,7 +242,7 @@ const styles = EStyleSheet.create({
         height: '2rem',
     },
     storeItemName: {
-        fontFamily: 'graphik-bold',
+        fontFamily: 'gotham-bold',
         fontSize: '0.8rem',
         color: '#FFF',
     },

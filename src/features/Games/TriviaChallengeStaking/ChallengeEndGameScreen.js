@@ -152,9 +152,9 @@ const WinningAmount = ({ challengeDetails }) => {
                     <Text style={styles.scoreCount}>{challengeDetails.opponent.score}</Text>
                 </View>
             </View>
-            {Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score) &&
+            {/* {Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score) &&
                 <Text style={styles.winningsText}>You have won <Text style={styles.winningsAmount}> &#8358;{formatCurrency(amount)}!</Text></Text>
-            }
+            } */}
         </View>
     )
 }
