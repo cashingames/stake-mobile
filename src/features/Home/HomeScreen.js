@@ -120,7 +120,7 @@ const UserProfile = ({ user }) => {
             <View style={styles.userProfileLeft}>
                 <Image
                     style={styles.avatar}
-                    source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/home-avatar.png")}
+                    source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
 
                 />
                 <View style={styles.nameMainContainer}>
