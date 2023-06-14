@@ -10,7 +10,7 @@ import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 import logToAnalytics from '../utils/analytics';
 
 
-const InviteFriendsScreen = ({navigation}) => {
+const InviteFriendsScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
 
     return (
@@ -42,8 +42,7 @@ const Instructions = () => {
     return (
         <>
             <Text style={styles.instructions}>
-                Refer your friends to us and get 2 bonus games for each friend referred, and has played at least 1 game,
-                and also stand a chance of winning exciting prizes.
+                Share the fun! Refer your friends to us so they can participate in our exciting games.
             </Text>
         </>
     )
