@@ -17,7 +17,7 @@ import Constants from 'expo-constants';
 const DoubleDailyRewards = ({ myDailyReward, rewardText2, rewardText1, loading, claimReward }) => {
     const [disabled] = React.useState(!myDailyReward[0].can_claim)
     return (
-        <ImageBackground style={styles.cardBackground} source={require('./../../assets/images/reward.png')}>
+        <ImageBackground style={styles.cardBackground} resizeMode="contain" source={require('./../../assets/images/reward.png')}>
             <View style={styles.cardBody}>
                 <Text style={styles.days}>Day {myDailyReward[0].day}</Text>
                 <View style={styles.doubleRewardImageCase}>
@@ -36,10 +36,10 @@ const DoubleDailyRewards = ({ myDailyReward, rewardText2, rewardText1, loading, 
                         <View>
                             {!disabled ?
                                 <ImageBackground style={styles.buttonCase} resizeMode='contain' source={require('./../../assets/images/button-case.png')}>
-                                    {loading ? <ActivityIndicator size="small" color="#FFFF" /> : <Text>claim</Text>}
+                                    {loading ? <ActivityIndicator size="small" color="#FFFF" /> : <Text>Claim</Text>}
                                 </ImageBackground> :
                                 <ImageBackground style={styles.buttonCase} resizeMode='contain' source={require('./../../assets/images/disabled_reward.png')}>
-                                    <Text>claim</Text>
+                                    <Text>Claim</Text>
                                 </ImageBackground>
                             }
                         </View>
@@ -117,10 +117,9 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         marginBottom: responsiveHeight(5),
         paddingVertical: responsiveHeight(2),
-        // paddingHorizontal: responsiveWidth(), 
         justifyContent: 'space-between',
         width: 126,
-        height: 151,
+        height: 120,
         marginHorizontal: '1rem',
     },
     cardBody: {
@@ -128,7 +127,7 @@ const styles = EStyleSheet.create({
     },
     days: {
         color: '#fff',
-        fontSize: '1rem',
+        fontSize: '0.6rem',
         fontFamily: 'poppins'
     },
     doubleRewardImageCase: {
@@ -137,13 +136,13 @@ const styles = EStyleSheet.create({
     },
     reward: {
         color: '#fff',
-        fontSize: '0.65rem',
+        fontSize: '0.45rem',
         fontFamily: 'poppins',
         textAlign: 'center'
     },
     buttonCase: {
-        height: responsiveHeight(9),
-        width: responsiveWidth(18),
+        height: 50,
+        width: 50,
         alignItems: 'center',
         justifyContent: 'center',
     },
