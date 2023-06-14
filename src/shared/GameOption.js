@@ -18,8 +18,8 @@ const styles = EStyleSheet.create({
     answer: {
         flexDirection: 'row',
         alignItems:'center',
-        marginBottom:'1.8rem',
-        height: responsiveScreenWidth(7)
+        marginBottom:'1rem',
+        height: responsiveScreenWidth(8)
     },
     answerText: {
         color: '#072169',

@@ -192,7 +192,7 @@ const StakeDetails = () => {
                 </View>
             </View>
 
-            <View style={styles.stakeSubContainer}>
+            {/* <View style={styles.stakeSubContainer}>
                 <Image
                     source={require('../../../assets/images/wallet-with-cash.png')}
                     style={styles.avatar}
@@ -201,7 +201,7 @@ const StakeDetails = () => {
                     <Text style={styles.stakeHeader}>Pot. winnings</Text>
                     <Text style={styles.stakeAmount}>NGN {amountStaked * (gameStakes.odd)}</Text>
                 </View>
-            </View>
+            </View> */}
         </View>
     )
 }
@@ -221,7 +221,7 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: normalize(18),
-        paddingTop: responsiveScreenWidth(18),
+        paddingTop: responsiveScreenWidth(13),
     },
     image: {
         flex: 1,
@@ -230,7 +230,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: '2rem'
+        marginTop: '1.5rem'
     },
     stakeSubContainer: {
         flexDirection: 'row',

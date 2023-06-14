@@ -250,9 +250,9 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(18),
         paddingTop: responsiveScreenWidth(18),
     },
-    options: {
-        paddingBottom: normalize(45),
-    },
+    // options: {
+    //     paddingBottom: normalize(45),
+    // },
 
     activeOption: {
         backgroundColor: '#F5D2FF'
@@ -348,8 +348,8 @@ const styles = EStyleSheet.create({
     answer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: '1.5rem',
-        height: responsiveScreenWidth(10),
+        marginBottom: '1rem',
+        height: responsiveScreenWidth(8),
         // backgroundColor: 'red',
     },
     optionText: {

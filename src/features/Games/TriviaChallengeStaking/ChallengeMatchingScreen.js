@@ -80,7 +80,7 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                     setTimeout(() => {
                         console.log("game loading", "navigating after 5 seconds")
                         navigation.navigate('ChallengeGameBoard');
-                    }, 10000);
+                    }, 5000);
                 }
             }, error => {
                 console.log('listening and got updated: ', "error", error);
