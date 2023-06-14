@@ -4,7 +4,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from 'react-redux';
 import AppButton from '../../../shared/AppButton';
 import Input from '../../../shared/Input';
-import UserWalletBalance from '../../../shared/UserWalletBalance';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../../utils/normalize';
 import useApplyHeaderWorkaround from '../../../utils/useApplyHeaderWorkaround';
 import Constants from 'expo-constants';

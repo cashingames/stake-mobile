@@ -19,7 +19,6 @@ import { Ionicons } from "@expo/vector-icons";
 const GameStakingScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
     const user = useSelector((state) => state.auth.user);
-    console.log(user)
     const gameStakes = useSelector(state => state.game.gameStakes);
     const minimumExhibitionStakeAmount = useSelector(state => state.common.minimumExhibitionStakeAmount);
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);

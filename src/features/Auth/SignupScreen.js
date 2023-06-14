@@ -182,7 +182,7 @@ const SignupScreen = () => {
                 />
                 <Input
                     label='First name'
-                    placeholder="Enter first name as it appears on your bank account"
+                    placeholder="Enter first name on your bank account"
                     value={firstname}
                     type="text"
                     error={fNameErr && "First name can't have numbers"}
@@ -191,7 +191,7 @@ const SignupScreen = () => {
                 />
                 <Input
                     label='Last name'
-                    placeholder="Enter last name as it appears on your bank account"
+                    placeholder="Enter last name on your bank account"
                     value={lastname}
                     type="text"
                     error={lNameErr && "Last name can't have numbers"}
@@ -233,11 +233,12 @@ const SignupScreen = () => {
                     placeholder="Password must not be less than 8 digits"
                     onChangeText={text => { onChangeConfirmPassword(text) }}
                 />
-                {/* <Input
+                <Input
                     label='Referral Code (optional)'
                     value={referrer}
                     onChangeText={setReferrer}
-                /> */}
+                    placeholder="Enter referral code"
+                />
             </View>
             <View style={styles.agreement}>
                 <Ionicons name={checked ? 'checkmark-circle' : "ellipse-outline"} size={30} color={checked ? '#00FFA3' : '#D9D9D9'} onPress={toggleAgreement} />
