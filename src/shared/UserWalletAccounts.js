@@ -223,7 +223,7 @@ const styles = EStyleSheet.create({
     boostHeaderText: {
         fontSize: '.8rem',
         color: '#072169',
-        fontFamily: 'bubble-regular',
+        fontFamily: 'sansation-bold',
     },
     amountContainer: {
         flexDirection: 'row',
