@@ -12,6 +12,8 @@ import { getGlobalLeaders, setModalOpen } from '../features/CommonSlice'
 import { useRef } from 'react'
 import { Animated } from 'react-native'
 import { useEffect } from 'react'
+import logToAnalytics from '../utils/analytics'
+
 
 const GameSettings = ({navigationHandler, isDisabled}) => {
    const dispatch = useDispatch()
@@ -43,7 +45,9 @@ const GameSettings = ({navigationHandler, isDisabled}) => {
     return (
         <>
             <View style={styles.setting}>
-                <Pressable onPress={() => navigation.navigate('IconSettings')}>
+                <Pressable onPress={() => {
+                     logToAnalytics('shortcut_icon')
+                    navigation.navigate('IconSettings')}}>
                 <Animated.View style={[styles.circle, { transform: [{ rotate: spinAnimation }] }]}>
                     <Image style={styles.settingIcon} source={require('./../../assets/images/setting-icon.png')} />
                     </Animated.View>
@@ -51,7 +55,9 @@ const GameSettings = ({navigationHandler, isDisabled}) => {
                 <Pressable onPress={navigationHandler}>
                     <Image style={styles.settingIcon} source={require('../../assets/images/close-icon.png')} />    
                 </Pressable>
-                <Pressable onPress={() => navigation.navigate('GameStore')} disabled={isDisabled}>
+                <Pressable onPress={() => {
+                      logToAnalytics('store_button')
+                     navigation.navigate('GameStore')}} disabled={isDisabled}>
                     <Image style={styles.storeIcon} source={require('../../assets/images/store-icon.png')} />
                     
                 </Pressable>

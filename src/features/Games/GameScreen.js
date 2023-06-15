@@ -16,6 +16,7 @@ import useSound from '../../utils/useSound';
 import Animated from 'react-native-reanimated'
 import GameScreenHeader from '../../shared/GameScreenHeader'
 import { gamesType } from '../../utils/GameTypes'
+import logToAnalytics from '../../utils/analytics'
 
 const GameScreen = ({ navigation }) => {
     const dispatch = useDispatch()
@@ -25,6 +26,7 @@ const GameScreen = ({ navigation }) => {
     const currentGame = useSelector(state => state.common.gameTypes ? state.common.gameTypes[0] : null);
 
     const goToGameInstruction = () => {
+        logToAnalytics('how_to_play')
         navigation.navigate('GameInstructions')
         playSound()
     }

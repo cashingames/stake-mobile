@@ -41,7 +41,7 @@ const Dashboard = ({ navigation, route }) => {
     const [showReferralModal, setShowReferralModal] = useState(true)
     const [referralUpdate, setReferralUpdate] = useState(false)
     const [updateSuccessful, setUpdateSuccessful] = useState(true)
-    const [showDailyRewardModal, setShowDailyRewardModal] = useState(false)
+    // const [showDailyRewardModal, setShowDailyRewardModal] = useState(false)
     const isSoundLoaded = useSelector(state => state.common.isSoundLoaded);
     const exhibitionSelected = gameModes.find(item => item.name === 'EXHIBITION')
     const params = route.params;
@@ -54,6 +54,16 @@ const Dashboard = ({ navigation, route }) => {
     // console.log(socialSignUp)
     const isFocused = useIsFocused();
     const { playSound, toogle, handleToggle, stopSound } = useSound(require('./../../assets/sounds/dashboard.mp3'));
+
+    useEffect(() => {
+        const _2 = dispatch(getCommonData());
+        const _3 = dispatch(fetchFeatureFlags())
+        const _4 = dispatch(getUser())
+
+        Promise.all([_2, _3, _4]).then(() => {
+            setLoading(false)
+        })
+    }, [])
 
     useEffect(() => {
         if (isFocused && isSoundLoaded) {
@@ -235,7 +245,7 @@ const Dashboard = ({ navigation, route }) => {
                     btnText='Ok'
                     btnHandler={() => setReferralUpdate(false)}
                 />
-                <DailyReward showDailyRewardModal={showDailyRewardModal} setShowDailyRewardModal={setShowDailyRewardModal} user={user}/>
+                {/* <DailyReward showDailyRewardModal={showDailyRewardModal} setShowDailyRewardModal={setShowDailyRewardModal} user={user}/> */}
             </MixedContainerBackground>
         </>
     )

@@ -55,6 +55,7 @@ export default function ({ navigation }) {
                     //   InAppPurchases.finishTransactionAsync(purchase, true);
                     itemBought(purchase.productId)
                     // Alert.alert('successfully purchased product',purchase.productId)
+                    logToAnalytics(`${purchase.productId}_bought`)
                 }
             });
         } else if (responseCode === InAppPurchases.IAPResponseCode.USER_CANCELED) {

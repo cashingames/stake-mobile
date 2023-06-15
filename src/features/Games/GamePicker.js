@@ -8,6 +8,7 @@ import GameCategoryCard from './GameCategoryCard';
 import useSound from '../../utils/useSound';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import { useState } from 'react';
+import logToAnalytics from '../../utils/analytics';
 
 
 export default ({ navigation }) => {
@@ -20,6 +21,7 @@ export default ({ navigation }) => {
     const { playSound } = useSound(require('../../../assets/sounds/open.wav'))
 
     const onCategorySelected = (category) => {
+        logToAnalytics(`${category.name}_quiz`)
         dispatch(setGameCategory(category));
         navigation.navigate('SelectSubCategory', { category: category })
         playSound()
