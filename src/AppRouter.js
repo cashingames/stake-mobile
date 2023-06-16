@@ -184,7 +184,7 @@ useEffect(() => {
 		}
 
 		registerForPushNotificationsAsync().then(deviceToken => {
-			console.info('verify device token', deviceToken)
+			// console.info('verify device token', deviceToken)
 			dispatch(verifyDeviceToken(deviceToken))
 		});
 
@@ -425,7 +425,7 @@ const setupAxios = async function () {
 		});
 
 	axios.interceptors.request.use(request => {
-		console.log('Starting Request', JSON.stringify(request.url, null, 2))
+		// console.log('Starting Request', JSON.stringify(request.url, null, 2))
 		return request
 	})
 

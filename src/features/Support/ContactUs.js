@@ -65,7 +65,7 @@ const ContactForm = ({ user }) => {
             .then(unwrapResult)
             .then(async result => {
                 setShowModal(true)
-                logToAnalytics("user_sent_feedback", {
+                logToAnalytics("support_message_sent", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
                     'email': user.email

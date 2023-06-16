@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Text, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useNavigation, Link } from '@react-navigation/native';
 import Input from '../../shared/Input';
@@ -113,7 +113,9 @@ const SignupScreen = () => {
     }
 
     return (
+        <ScrollView>
         <MixedContainerBackground>
+             <KeyboardAvoidingView style={styles.container}>
             <View style={styles.headerBox}>
                 <AuthTitle text='Welcome'
                     style={styles.headerTitle} />
@@ -174,7 +176,9 @@ const SignupScreen = () => {
                 />
                 <GaButton onPress={() => processReg()} text='Continue' disabled={!canSend} />
             </View>
+            </KeyboardAvoidingView>
         </MixedContainerBackground>
+        </ScrollView>
     );
 }
 

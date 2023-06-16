@@ -17,6 +17,7 @@ import InviteFriendsScreen from '../../screens/InviteFriendsScreen'
 import { useDispatch } from 'react-redux'
 import { logoutUser } from '../Auth/AuthSlice'
 import GameModal from '../../shared/GameModal'
+import logToAnalytics from '../../utils/analytics'
 
 const IconSettings = () => {
     const navigation = useNavigation()
@@ -28,30 +29,19 @@ const IconSettings = () => {
 
     const dispatch = useDispatch()
     const handleToggleSwitch = () => {
+        logToAnalytics('sound_button')
         handleToggle();
         stopSound()
     };
 
     const showInvite = () => {
+        logToAnalytics('invite_friends')
         setShowInviteFriends(true)
     }
 
     const logoutHandler = () => {
+        logToAnalytics('log_out')
         setShowModal(true)
-        // Alert.alert(
-        //     'Log Out?',
-        //     'Are you sure you want to log out?',
-        //     [
-        //         {
-        //             text: "No",
-
-        //         },
-        //         {
-        //             text: 'Yes',
-        //             onPress: () => dispatch(logoutUser())
-        //         },
-        //     ]
-        // )
     }
 
     useEffect(() => {
@@ -88,6 +78,7 @@ const IconSettings = () => {
                         </Pressable>
                         <Pressable style={styles.icons}
                             onPress={() => {
+                                logToAnalytics('leaderboard')
                                 playSound()
                                 navigation.navigate('Leaderboard')
                             }}
@@ -97,6 +88,7 @@ const IconSettings = () => {
                         </Pressable>
                         <Pressable style={styles.icons}
                             onPress={() => {
+                                logToAnalytics('profile_button')
                                 playSound()
                                 navigation.navigate('UserProfile')
                             }}>
@@ -106,6 +98,7 @@ const IconSettings = () => {
                         <Pressable style={styles.icons}
                             onPress={() => {
                                 playSound()
+                                logToAnalytics('contact_us')
                                 navigation.navigate('ContactUs')
                             }}
                         >

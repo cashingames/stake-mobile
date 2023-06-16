@@ -43,10 +43,12 @@ export default function LoginScreen({ navigation }) {
         setError("");
 
         dispatch(loginUser({ email, password })).unwrap().then((response) => {
-            if (response?.isFirstTime || false) {
+            logToAnalytics('email_sign_in', {
+                'username': response.data.username,
+            });
                 triggerTour(navigation)
                 triggerNotifierForReferral()
-            }
+            
         }).catch((err) => {
             processLoginError(err)
         }).finally(() => {
@@ -126,7 +128,9 @@ export default function LoginScreen({ navigation }) {
 const RenderForgotPassword = () => {
     const navigation = useNavigation();
     return (
-        <Pressable onPress={() => navigation.navigate('ForgotPassword')}>
+        <Pressable onPress={() => {
+            logToAnalytics('forgot_password')
+            navigation.navigate('ForgotPassword')}}>
         <Text
             style={styles.forgotPassword}
         >

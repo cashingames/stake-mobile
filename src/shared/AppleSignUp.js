@@ -10,6 +10,7 @@ import FirstTimeUserDetails from './FirstTimeUserDetails';
 import { triggerTour } from '../features/Tour/Index';
 import { triggerNotifierForReferral } from './Notification';
 import normalize, { responsiveScreenWidth } from '../utils/normalize';
+import logToAnalytics from '../utils/analytics';
 
 const AppleSignUp = () => {
     const navigation = useNavigation();
@@ -92,15 +93,7 @@ const AppleSignUp = () => {
             })).then(unwrapResult)
 
                 .then((originalPromiseResult) => {
-
-                    // if (originalPromiseResult.data.isFirstTime) {
-                    //     setEmail(originalPromiseResult.data.email)
-                    //     setFirstName(originalPromiseResult.data.firstName)
-                    //     setLastName(originalPromiseResult.data.lastName)
-                    //     openBottomSheet()
-                    //     return
-                    // }
-                    console.log(originalPromiseResult);
+                    logToAnalytics('signin_with_Apple')
                     saveToken(originalPromiseResult.data.token)
                     navigation.navigate('Dashboard', { socialSignUp: true })
                 })
