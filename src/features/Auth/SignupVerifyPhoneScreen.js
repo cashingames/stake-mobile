@@ -94,6 +94,9 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                 logToAnalytics("verified", {
                     'id': params.username,
                     'phone_number': params.phone_number,
+                    'device_brand': params.device_brand,
+                    'device_model': params.device_model,
+                    'device_token': params.device_token
                 })
                 setLoading(false);
                 triggerNotifierForReferral()

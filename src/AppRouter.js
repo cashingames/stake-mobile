@@ -166,7 +166,7 @@ function AppRouter() {
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Select Player' }} />
 						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{
-							title: 'Challenge Player', 
+							title: 'Challenge Player',
 							headerStyle: {
 								backgroundColor: '#F9FBFF',
 							},
@@ -313,6 +313,11 @@ const appendAxiosAuthHeader = function (token) {
 
 async function registerForPushNotificationsAsync() {
 	let deviceToken;
+	// const deviceBrand = Device.brand;
+	// console.log(deviceBrand, 'kkkkkhhh')
+	// const deviceModelName = Device.modelName;
+	// console.log(deviceModelName, 'nameeeeeee')
+
 	if (!Device.isDevice) {
 		Alert.alert('Must use physical device for Push Notifications')
 		return;
@@ -328,6 +333,8 @@ async function registerForPushNotificationsAsync() {
 		return;
 	}
 	deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
+		// console.log(deviceToken, 'nameeeeeee')
+
 
 
 
