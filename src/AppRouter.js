@@ -61,6 +61,8 @@ import logToAnalytics from './utils/analytics';
 import WalletScreen from './features/Transactions/WalletScreen';
 import WithdrawBalanceScreen from './features/Transactions/WithdrawBalanceScreen';
 import WithdrawalSuccessScreen from './features/Transactions/WithdrawalSuccessScreen';
+import PromotionsScreen from './features/Promotions/PromotionsScreen';
+import PromotionScreen from './features/Promotions/PromotionScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -183,7 +185,8 @@ function AppRouter() {
 
 						{/** wallet */}
 						<AppStack.Screen name="Wallet" component={WalletScreen} options={{
-							title: 'Wallet', headerStyle: {
+							title: 'Wallet',
+							headerStyle: {
 								backgroundColor: '#F9FBFF',
 							},
 							headerTintColor: '#072169',
@@ -221,6 +224,21 @@ function AppRouter() {
 						<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ title: 'Store', headerShadowVisible: false }} />
 						<AppStack.Screen name="GameBoostPurchaseSuccessful" component={GameBoostPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
+
+						{/* promotions */}
+						<AppStack.Screen name="Promotions" component={PromotionsScreen} options={{
+							title: 'Promotions',
+							headerStyle: {
+								backgroundColor: '#F9FBFF',
+							},
+							headerTintColor: '#072169',
+							headerTitleStyle: {
+								fontFamily: 'gotham-bold',
+								fontSize: 23
+							}
+						}} />
+						<AppStack.Screen name="Promotion" component={PromotionScreen} options={{ headerShown: false }} />
+
 
 						<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{
 							title: 'Notifications',
@@ -333,7 +351,7 @@ async function registerForPushNotificationsAsync() {
 		return;
 	}
 	deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
-		// console.log(deviceToken, 'nameeeeeee')
+	// console.log(deviceToken, 'nameeeeeee')
 
 
 

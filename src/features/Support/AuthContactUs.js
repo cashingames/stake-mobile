@@ -136,10 +136,11 @@ const ContactForm = () => {
                 />
                 {messageError && <Text>Please input your message</Text>}
             </View>
-            <AppButton
+             <AppButton
                 text={saving ? 'Sending' : 'Send'}
                 onPress={sendFeedback}
                 disabled={!canSave || saving}
+                style={styles.buttonStyle}
             />
         </View>
     )
@@ -194,5 +195,8 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-medium',
         color: '#EF2F55',
         textAlign: 'center'
+    },
+    buttonStyle: {
+        marginBottom: responsiveScreenWidth(40)
     }
 })

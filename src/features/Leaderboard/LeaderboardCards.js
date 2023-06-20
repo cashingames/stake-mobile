@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, Platform, Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import SwiperFlatList from "react-native-swiper-flatlist";
@@ -6,17 +6,31 @@ import normalize from "../../utils/normalize";
 import { useNavigation } from "@react-navigation/native";
 import logToAnalytics from "../../utils/analytics";
 import { Ionicons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
 const LeaderboardCards = () => {
+    const navigation = useNavigation();
+    const user = useSelector(state => state.auth.user);
+
+    const [isNewPromotion, setIsNewPromotion] = useState(true);
+    const [isLeaderboard, setIsLeaderboard] = useState(false);
 
 
     const RenderForAndroid = () => {
+        const checkAvailablePromotions = () => {
+            logToAnalytics("promotions_button_clicked", {
+                'id': user.username,
+                'phone_number': user.phoneNumber,
+                'email': user.email
+            })
+            navigation.navigate('Promotions')
+        }
         return (
             // <SwiperFlatList>
             <>
                 {/* <BoostsCard /> */}
-                <TopLeaderboards />
-                <PromotionsBoard />
+                <TopLeaderboards isLeaderboard={isLeaderboard} />
+                <PromotionsBoard isNewPromotion={isNewPromotion} onPress={checkAvailablePromotions} />
 
                 {/* <ChallengeLeaderboard /> */}
             </>
@@ -25,11 +39,19 @@ const LeaderboardCards = () => {
     }
 
     const RenderForIOS = () => {
+        const checkAvailablePromotions = () => {
+            logToAnalytics("promotions_button_clicked", {
+                'id': user.username,
+                'phone_number': user.phoneNumber,
+                'email': user.email
+            })
+            navigation.navigate('Promotions')
+        }
         return (
             // <SwiperFlatList>
             <>
-                <TopLeaderboards />
-                <PromotionsBoard />
+                <TopLeaderboards isLeaderboard={isLeaderboard} />
+                <PromotionsBoard isNewPromotion={isNewPromotion} onPress={checkAvailablePromotions} />
 
                 {/* <ChallengeLeaderboard /> */}
             </>
@@ -44,9 +66,9 @@ const LeaderboardCards = () => {
     )
 }
 
-const TopLeaderboards = () => {
+const TopLeaderboards = ({ isLeaderboard }) => {
     return (
-        <Pressable style={styles.topLeadersContainer}>
+        <Pressable style={[styles.topLeadersContainer, { opacity: !isLeaderboard ? 0.4 : 1 }]}>
             <View style={styles.topLeadersSubContainer}>
                 <View style={styles.imageAvatar}>
                     <Image
@@ -63,9 +85,9 @@ const TopLeaderboards = () => {
         </Pressable>
     )
 }
-const PromotionsBoard = () => {
+const PromotionsBoard = ({ isNewPromotion, onPress }) => {
     return (
-        <Pressable style={styles.topLeadersContainer}>
+        <Pressable style={[styles.topLeadersContainer, { opacity: !isNewPromotion ? 0.4 : 1 }]} onPress={onPress}>
             <View style={styles.topLeadersSubContainer}>
                 <View style={styles.imageAvatari}>
                     <Image
@@ -75,7 +97,7 @@ const PromotionsBoard = () => {
                 </View>
                 <View style={styles.leadersHeaderContainer}>
                     <Text style={styles.topLeadersHeader}>Promotions</Text>
-                    <Text style={styles.topLeadersHeaderi}>Daily and weekly promottions</Text>
+                    <Text style={styles.topLeadersHeaderi}>Daily and weekly promotions</Text>
                 </View>
             </View>
             <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
@@ -134,34 +156,34 @@ const styles = EStyleSheet.create({
         backgroundColor: '#FEECE7',
         borderRadius: 100,
         width: 70,
-        height:70,
-        alignItems:'center',
-        justifyContent:'center'
+        height: 70,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     imageAvatari: {
         backgroundColor: '#EBFAED',
         borderRadius: 100,
         width: 70,
-        height:70,
-        alignItems:'center',
-        justifyContent:'center'
+        height: 70,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     topLeadersContainer: {
         backgroundColor: '#FFF',
         borderColor: '#E5E5E5',
         borderWidth: 2,
         borderRadius: 13,
-        flexDirection:'row',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: '.5rem',
         paddingHorizontal: '.8rem',
-        opacity:0.4,
-        marginBottom:'.6rem'
+        // opacity: 0.4,
+        marginBottom: '.6rem'
     },
     topLeadersSubContainer: {
-        flexDirection:'row',
-        alignItems:'center'
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     challengeContainer: {
         backgroundColor: '#EBFAED',
@@ -197,14 +219,14 @@ const styles = EStyleSheet.create({
         fontFamily: 'bubble-regular',
     },
     leadersHeaderContainer: {
-        marginLeft:'.6rem'
+        marginLeft: '.6rem'
     },
     topLeadersHeaderi: {
         fontSize: '.8rem',
         color: '#072169',
         fontFamily: 'sansation-regular',
-        width:'10rem',
-        marginTop:'.2rem'
+        width: '10rem',
+        marginTop: '.2rem'
     },
     topLeadersText: {
         fontSize: '1rem',
