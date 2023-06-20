@@ -30,7 +30,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DailyReward from '../shared/DailyReward';
 
 const Dashboard = ({ navigation, route }) => {
-    // const loading = useSelector(state => state.common.initialLoading);
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(true)
     const [achievementPopup, setAchievementPopup] = useState(false);

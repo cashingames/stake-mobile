@@ -15,6 +15,7 @@ import MixedContainerBackground from '../../shared/ContainerBackground/MixedCont
 import GaButton from '../../shared/GaButton';
 import { unwrapResult } from '@reduxjs/toolkit';
 import logToAnalytics from '../../utils/analytics';
+import { saveToken } from '../../utils/ApiHelper';
 
 
 
@@ -100,7 +101,9 @@ const SignupScreen = () => {
                     'username': response.data.username,
                     'email': response.data.email
                 });
+                // console.log(response.data.token, 'new user')
                 dispatch(setToken(response.data.token))
+                saveToken(response.data.token)
             })
             .catch((error) => {
                 const firstErrorMessage = Object.values(error.errors).flatMap((arr) => arr)[0];
