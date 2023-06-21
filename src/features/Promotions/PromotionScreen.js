@@ -6,7 +6,7 @@ import normalize from "../../utils/normalize";
 import AppButton from "../../shared/AppButton";
 import { useNavigation } from "@react-navigation/native";
 
-const PromotionScreen = ({route}) => {
+const PromotionScreen = ({ route }) => {
     const navigation = useNavigation();
     const params = route.params;
 
@@ -18,13 +18,13 @@ const PromotionScreen = ({route}) => {
         <ImageBackground source={require('../../../assets/images/game-play-background.png')}
             style={{ flex: 1 }}
             resizeMethod="resize">
+            <View style={styles.headerContainer}>
+                <Ionicons name='chevron-back-sharp' size={29} color='#072169' style={{ marginLeft: 10 }} onPress={goBack} />
+                <Text style={styles.headerText}>{params.promotion_title}</Text>
+                {/* <Text style={styles.headerText}>Weekly</Text> */}
+                <View></View>
+            </View>
             <ScrollView style={styles.container}>
-                <View style={styles.headerContainer}>
-                    <Ionicons name='chevron-back-sharp' size={29} color='#072169' style={{ marginLeft: 10 }} onPress={goBack} />
-                    <Text style={styles.headerText}>{params.promotion_title}</Text>
-                    {/* <Text style={styles.headerText}>Weekly</Text> */}
-                    <View></View>
-                </View>
                 <Image
                     source={require('../../../assets/images/trivia-banner.png')}
                     style={styles.banner}
@@ -58,14 +58,14 @@ export default PromotionScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: normalize(60),
         paddingBottom: normalize(14)
     },
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: '1.5rem',
-        alignItems:'center'
+        alignItems: 'center',
+        paddingTop: normalize(60),
     },
     banner: {
         width: '100%',
@@ -77,7 +77,7 @@ const styles = EStyleSheet.create({
         fontFamily: 'gotham-bold',
     },
     detailsMainContainer: {
-        marginVertical:'2rem'
+        marginVertical: '2rem'
     },
     detailsContainer: {
         alignItems: 'center',

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Text, View, ScrollView, Pressable, StatusBar, ImageBackground, Dimensions, Platform, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, Pressable, StatusBar, ImageBackground, Platform, ActivityIndicator, Image } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser} from "../Auth/AuthSlice";
+import { getUser } from "../Auth/AuthSlice";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import LottieAnimations from "../../shared/LottieAnimations";
 import PageLoading from "../../shared/PageLoading";
 import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,7 +14,7 @@ import { getUserNotifications, markNotificationRead } from "../CommonSlice";
 
 const NotificationsScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
-    
+
 
     const notifications = useSelector(state => state.common.userNotifications)
     const dispatch = useDispatch();
@@ -41,8 +40,8 @@ const NotificationsScreen = ({ navigation }) => {
 
     useFocusEffect(
         React.useCallback(() => {
-            if(Platform.OS === "ios")
-            return;
+            if (Platform.OS === "ios")
+                return;
             StatusBar.setTranslucent(true)
             StatusBar.setBackgroundColor("transparent")
             StatusBar.setBarStyle('dark-content');
@@ -55,47 +54,49 @@ const NotificationsScreen = ({ navigation }) => {
 
     if (loading) {
         return <PageLoading
-            backgroundColor='#FFE900'
-            spinnerColor="000000"
+            backgroundColor='#FFF'
+            spinnerColor="072169"
         />
     }
 
 
     return (
-        <ImageBackground source={require('../../../assets/images/studio-illustration.jpg')}
-            style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height }}
-            resizeMethod="resize">
-            <ScrollView style={styles.container}
-            >
-                <Pressable style={styles.markAllButton} onPress={markAllAsRead}>
-                    <Text style={styles.markText}>Mark all as read</Text>
-                    {clicking &&
-                        <ActivityIndicator size="small" color="#072169" />
-                    }
-                    {!clicking &&
-                        <Ionicons name='checkmark-circle' color="#072169" size={18} />
-                    }
-                </Pressable>
+        <ImageBackground source={require('../../../assets/images/game-play-background.png')}
+            style={{ flex: 1 }} resizeMethod="resize">
 
-                <View style={styles.emojiContainer}>
-                    <LottieAnimations
-                        animationView={require('../../../assets/bell.json')}
-                        height={normalize(150)}
-                    />
-                </View>
+            <ScrollView style={notifications.length > 0  ? styles.container : {}} contentContainerStyle={notifications.length < 0 ? styles.noContainer : {}}>
+
+
                 {notifications.length > 0 ?
-                    <View style={styles.notificationsContainer}>
-                        {/* <> */}
-                        {notifications.map((notification, i) => <Notification key={i} notification={notification}
-                            // index={i + 1}
-                            moment={moment}
-                            readAll={readAll}
-                        />)}
-                    </View>
+                    <>
+                        <Pressable style={styles.markAllButton} onPress={markAllAsRead}>
+                            <Text style={styles.markText}>Mark all as read</Text>
+                            {clicking &&
+                                <ActivityIndicator size="small" color="#FFF" />
+                            }
+                            {!clicking &&
+                                <Ionicons name='checkmark-circle' color="#FFF" size={18} />
+                            }
+                        </Pressable>
+                        <View style={styles.notificationsContainer}>
+                            {/* <> */}
+                            {notifications.map((notification, i) => <Notification key={i} notification={notification}
+                                // index={i + 1}
+                                moment={moment}
+                                readAll={readAll}
+                            />)}
+                        </View>
+                    </>
                     :
+
                     <View style={styles.noNotificationContainer}>
-                        <Text style={styles.noNotification}>No Notification available</Text>
+                        <Image
+                            source={require('../../../assets/images/bell-dynamic-color.png')}
+                            style={styles.noAvatar}
+                        />
+                        <Text style={styles.noNotification}>Nothing yet, check back later</Text>
                     </View>
+
                 }
             </ScrollView>
 
@@ -119,26 +120,16 @@ const Notification = ({ notification, moment, readAll }) => {
         dispatch(getUser());
     }
     return (
-        <View style={styles.headNotificationContainer}>
-            {notification.read_at !== null || clicked || readAll ?
-                <View style={styles.checkContainer}>
-                    <Ionicons name='checkmark-circle' color="#072169" size={22} />
-
-                </View>
-                :
-                <View style={styles.bellContainer}>
-                    <Ionicons name='notifications-circle' color="#EF2F55" size={22} />
-                </View>
-            }
-            <View style={styles.notificationContainer}>
-                <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked || readAll ? styles.clicked : {}]} onPress={notificationAction}>
-                    <Text style={[styles.notificationTitle, notification.read_at !== null || clicked || readAll ? styles.clickedText : {}]}>{notification.data.title}</Text>
-                </Pressable>
-                <View style={styles.notificationTimeContainer}>
-                    <Text style={styles.notificationTime}>From {moment(notification.created_at).fromNow()}</Text>
-                </View>
+        <Pressable style={[styles.notificationTitleContainer, notification.read_at !== null || clicked || readAll ? styles.clicked : {}]} onPress={notificationAction}>
+            <View style={styles.imageAvatar}>
+                <Image
+                    source={require('../../../assets/images/bell-dynamic-color.png')}
+                    style={styles.avatar}
+                />
             </View>
-        </View>
+            <Text style={[styles.notificationTitle, notification.read_at !== null || clicked || readAll ? styles.clickedText : {}]}>{notification.data.title}</Text>
+            <Text style={styles.notificationTime}>{moment(notification.created_at).fromNow()}</Text>
+        </Pressable>
     )
 }
 export default NotificationsScreen;
@@ -146,22 +137,40 @@ export default NotificationsScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        // paddingBottom: normalize(18),
-        paddingHorizontal: normalize(18),
+        paddingHorizontal: normalize(14),
         paddingVertical: responsiveScreenWidth(3)
+    },
+    noContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: normalize(14),
+
     },
     imageContainer: {
         flex: 1,
+    },
+    imageAvatar: {
+        backgroundColor: '#FEECE7',
+        borderRadius: 100,
+        width: 55,
+        height: 55,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    avatar: {
+        width: 30,
+        height: 30
+    },
+    noAvatar: {
+        width: 120,
+        height: 120
     },
     emojiContainer: {
         alignItems: 'center',
     },
     notificationsContainer: {
-        // backgroundColor: '#072169',
-        // marginHorizontal: normalize(18),
-        // paddingRight: normalize(50),
-        // paddingLeft: normalize(13),
-        alignItems: 'center',
+        // alignItems: 'center',
         marginBottom: responsiveScreenWidth(40),
         borderRadius: 15,
     },
@@ -187,42 +196,44 @@ const styles = EStyleSheet.create({
         opacity: 0.6
     },
     notificationTime: {
-        fontFamily: 'graphik-medium',
-        fontSize: '.65rem',
-        color: '#FFFF',
+        fontFamily: 'sansation-bold',
+        fontSize: '.75rem',
+        color: '#E05C28',
         textAlign: 'center',
         fontStyle: 'italic',
         // opacity: 0.8
     },
     notificationTitleContainer: {
-        width: '16rem',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         borderWidth: 1,
-        borderColor: '#FAC502',
-        paddingVertical: Platform.OS === 'ios' ? normalize(10) : normalize(9),
-        borderRadius: 30,
+        borderColor: '#E5E5E5',
+        paddingVertical: Platform.OS === 'ios' ? normalize(13) : normalize(12),
+        borderRadius: 13,
         paddingHorizontal: normalize(15),
         backgroundColor: '#FFFF',
+        marginBottom: '1rem'
 
     },
     notificationTitle: {
-        fontFamily: 'graphik-medium',
-        fontSize: '.75rem',
-        color: '#000000',
+        fontFamily: 'sansation-regular',
+        fontSize: '.9rem',
+        color: '#072169',
         textAlign: 'center',
         lineHeight: '1.1rem',
+        width: '10rem'
     },
     clickedText: {
-        fontFamily: 'graphik-medium',
-        fontWeight: '700',
-        fontSize: '.75rem',
-        color: '#000000',
+        fontFamily: 'sansation-regular',
+        fontSize: '.9rem',
+        color: '#072169',
         textAlign: 'center',
         lineHeight: '1.1rem',
-        fontStyle: 'italic',
-        opacity: 0.7
+        width: '10rem'
     },
     clicked: {
-        opacity: 0.75,
+        opacity: 0.5,
         backgroundColor: "#FFFF"
     },
     noNotificationContainer: {
@@ -231,9 +242,9 @@ const styles = EStyleSheet.create({
 
     },
     noNotification: {
-        fontFamily: 'graphik-medium',
-        fontSize: '1rem',
-        color: '#FFFF',
+        fontFamily: 'gotham-medium',
+        fontSize: '1.3rem',
+        color: '#072169',
         textAlign: 'center',
 
     },
@@ -256,16 +267,16 @@ const styles = EStyleSheet.create({
         borderRadius: 15,
         width: Platform.OS === 'ios' ? '6.5rem' : '7rem',
         marginLeft: 'auto',
-        marginTop: '1rem',
-        backgroundColor: '#FFE900',
+        marginVertical: '.7rem',
+        backgroundColor: '#072169',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'
     },
     markText: {
         fontSize: '.65rem',
-        color: '#000000',
-        fontFamily: 'graphik-medium',
+        color: '#FFF',
+        fontFamily: 'gotham-medium',
         marginRight: normalize(4)
 
     },
