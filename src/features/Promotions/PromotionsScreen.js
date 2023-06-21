@@ -56,7 +56,7 @@ const PromotionsScreen = () => {
 const PromotionBanner = ({ promotion, user }) => {
     const navigation = useNavigation();
 
-    const ViewPromotion = () => {
+    const viewPromotion = () => {
         logToAnalytics("promotions_button_clicked", {
             'id': user.username,
             'phone_number': user.phoneNumber,
@@ -68,7 +68,7 @@ const PromotionBanner = ({ promotion, user }) => {
         })
     }
     return (
-        <Pressable style={styles.bannerContainer} onPress={ViewPromotion}>
+        <Pressable style={styles.bannerContainer} onPress={viewPromotion}>
             <Image
                 source={promotion.bannerImage}
                 style={styles.triviaAvatar}
