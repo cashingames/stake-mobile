@@ -1,6 +1,6 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
-import { Alert, Platform, ScrollView, Text, TextInput, View } from "react-native";
+import { Alert, Platform, Pressable, ScrollView, Text, TextInput, View, Linking } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch } from "react-redux";
 import AppButton from "../../shared/AppButton";
@@ -10,7 +10,7 @@ import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { sendUserFeedback } from "../CommonSlice";
 import { useNavigation } from '@react-navigation/native';
 import logToAnalytics from "../../utils/analytics";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 
 
 
@@ -142,6 +142,11 @@ const ContactForm = () => {
                 disabled={!canSave || saving}
                 style={styles.buttonStyle}
             />
+                <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
+                <Text style={styles.whatsappTitle}>Live chat with a support agent on Whatsapp</Text>
+                <FontAwesome5 name="whatsapp" size={30} color="#25D366" style={styles.icon}
+                     />
+            </Pressable>
         </View>
     )
 }
@@ -197,6 +202,22 @@ const styles = EStyleSheet.create({
         textAlign: 'center'
     },
     buttonStyle: {
+        marginBottom: 0
+    },
+    whatsappChat: {
+        display:"flex",
+        flexDirection:'row',
+        alignItems:'center',
         marginBottom: responsiveScreenWidth(40)
+
+    },
+    whatsappTitle: {
+        fontSize: '0.85rem',
+        fontFamily: 'graphik-medium',
+        marginTop: normalize(9),
+        marginRight:'.5rem'
+    },
+    icon: {
+        marginTop:'.5rem'
     }
 })

@@ -23,19 +23,6 @@ const PromotionsScreen = () => {
             "bannerImage": require('../../../assets/images/trivia-banner.png'),
             "name": 'Wise weekly trivia'
         },
-
-        // {
-        //     "id": 1,
-        //     "type": 'DEBIT',
-        //     "amount": '200',
-        //     "description": "Trivia challenge"
-        // },
-        // {
-        //     "id": 2,
-        //     "type": 'CREDIT',
-        //     "amount": '800',
-        //     "description": "Trivia challenge"
-        // }
     ]
 
     return (

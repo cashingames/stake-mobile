@@ -43,23 +43,23 @@ const SignupScreen = () => {
     const [loading, setLoading] = useState(false);
 
     //check for device ids
-    const deviceBrand = Device.brand;
-    const deviceModelName = Device.modelName;
-    const [deviceId, setDeviceId] = useState('');
+    // const deviceBrand = Device.brand;
+    // const deviceModelName = Device.modelName;
+    // const [deviceId, setDeviceId] = useState('');
 
-    const deviceTokenNumber = async () => {
-        const deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
-        setDeviceId(deviceToken)
-    }
-    deviceTokenNumber;
-    // console.log(deviceId, 'device id o')
+    // const deviceTokenNumber = async () => {
+    //     const deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
+    //     setDeviceId(deviceToken)
+    // }
+    // deviceTokenNumber;
+    // // console.log(deviceId, 'device id o')
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        deviceTokenNumber()
+    //     deviceTokenNumber()
 
-    }, []);
+    // }, []);
 
 
     const contactUs = () => {
@@ -110,17 +110,17 @@ const SignupScreen = () => {
             country_code: countryCode,
             bonus_checked: bonusChecked,
             referrer: referrer,
-            device_brand: deviceBrand,
-            device_model: deviceModelName,
-            device_token: deviceId
+            // device_brand: deviceBrand,
+            // device_model: deviceModelName,
+            // device_token: deviceId
         }).then(response => {
             console.log(response)
             navigation.navigate('SignupVerifyPhone', {
                 phone_number: phone,
                 username: username,
-                device_brand: deviceBrand,
-                device_model: deviceModelName,
-                device_token: deviceId,
+                // device_brand: deviceBrand,
+                // device_model: deviceModelName,
+                // device_token: deviceId,
                 next_resend_minutes: response.data.data.next_resend_minutes
             })
         }, err => {
