@@ -12,7 +12,7 @@ const LeaderboardCards = () => {
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
 
-    const [isNewPromotion, setIsNewPromotion] = useState(false);
+    const [isNewPromotion, setIsNewPromotion] = useState(true);
     const [isLeaderboard, setIsLeaderboard] = useState(false);
 
 
@@ -87,7 +87,7 @@ const TopLeaderboards = ({ isLeaderboard }) => {
 }
 const PromotionsBoard = ({ isNewPromotion, onPress }) => {
     return (
-        <Pressable style={[styles.topLeadersContainer, { opacity: !isNewPromotion ? 0.4 : 1 }]} onPress={onPress} disabled>
+        <Pressable style={[styles.topLeadersContainer, { opacity: !isNewPromotion ? 0.4 : 1 }]} onPress={onPress}>
             <View style={styles.topLeadersSubContainer}>
                 <View style={styles.imageAvatari}>
                     <Image
