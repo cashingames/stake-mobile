@@ -25,6 +25,11 @@ const AuthContactUs = ({ navigation }) => {
                     Support
                 </Text>
             </View>
+            <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
+                <Text style={styles.whatsappTitle}>Live chat with a support agent on Whatsapp</Text>
+                <FontAwesome5 name="whatsapp" size={30} color="#25D366" style={styles.icon}
+                />
+            </Pressable>
             <Text style={styles.title}>Do you have any question?</Text>
             <ContactForm />
         </ScrollView>
@@ -38,12 +43,15 @@ const ContactForm = () => {
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [message_body, setMessage] = useState('');
     const [emailErr, setEmailError] = useState(false);
     const [firstNameErr, setFirstNameError] = useState(false);
     const [lastNameErr, setLastNameError] = useState(false);
+    const [phoneErr, setPhoneError] = useState(false);
     const [messageError, setMessageError] = useState(false);
     const [canSave, setCanSave] = useState(false);
+
 
 
     const sendFeedback = () => {
@@ -96,13 +104,17 @@ const ContactForm = () => {
         text.length > 0 && text.length < 3 ? setMessageError(true) : setMessageError(false);
         setMessage(text)
     }
+    const onChangePhone = (text) => {
+        text.length > 0 && text.length < 10 ? setPhoneError(true) : setPhoneError(false);
+        setPhone(text)
+    }
 
 
     useEffect(() => {
         const invalid = messageError || message_body === '' || firstNameErr || first_name === '' ||
-            lastNameErr || last_name === '' || emailErr || email === ''
+            lastNameErr || last_name === '' || emailErr || email === '' || phoneErr || phone === ''
         setCanSave(!invalid);
-    }, [messageError, message_body])
+    }, [messageError, message_body, phoneErr, phone])
 
     return (
         <View style={styles.formContainer}>
@@ -125,6 +137,13 @@ const ContactForm = () => {
                 error={emailErr && '*please input a valid email'}
 
             />
+            <Input
+                label='Phone number'
+                value={phone}
+                onChangeText={text => { onChangePhone(text) }}
+                error={phoneErr && '*please input a valid phone number'}
+
+            />
             <View>
                 <TextInput
                     placeholder="Your message"
@@ -136,17 +155,13 @@ const ContactForm = () => {
                 />
                 {messageError && <Text>Please input your message</Text>}
             </View>
-             <AppButton
+            <AppButton
                 text={saving ? 'Sending' : 'Send'}
                 onPress={sendFeedback}
                 disabled={!canSave || saving}
                 style={styles.buttonStyle}
             />
-                <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
-                <Text style={styles.whatsappTitle}>Live chat with a support agent on Whatsapp</Text>
-                <FontAwesome5 name="whatsapp" size={30} color="#25D366" style={styles.icon}
-                     />
-            </Pressable>
+           
         </View>
     )
 }
@@ -175,12 +190,13 @@ const styles = EStyleSheet.create({
     title: {
         fontSize: '1rem',
         fontFamily: 'sansation-regular',
-        marginTop: normalize(40),
+        marginTop: normalize(15),
         color: '#072169',
 
     },
     formContainer: {
-        marginTop: '3rem'
+        marginTop: '1rem',
+        marginBottom:responsiveScreenWidth(40)
     },
     messageBox: {
         paddingBottom: Platform.OS === 'ios' ? '5rem' : '3rem',
@@ -193,7 +209,7 @@ const styles = EStyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         textAlignVertical: 'top',
-        backgroundColor:'#fff'
+        backgroundColor: '#fff'
     },
     goBack: {
         fontSize: '.7rem',
@@ -205,19 +221,20 @@ const styles = EStyleSheet.create({
         marginBottom: 0
     },
     whatsappChat: {
-        display:"flex",
-        flexDirection:'row',
-        alignItems:'center',
-        marginBottom: responsiveScreenWidth(40)
+        display: "flex",
+        flexDirection: 'row',
+        alignItems: 'center',
 
     },
     whatsappTitle: {
         fontSize: '0.85rem',
-        fontFamily: 'graphik-medium',
+        fontFamily: 'gotham-bold',
         marginTop: normalize(9),
-        marginRight:'.5rem'
+        marginRight: '.5rem',
+        textAlign: 'center',
+        color:'#072169'
     },
     icon: {
-        marginTop:'.5rem'
+        marginTop: '.8rem'
     }
 })

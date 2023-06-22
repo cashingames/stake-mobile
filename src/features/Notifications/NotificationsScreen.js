@@ -10,6 +10,7 @@ import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { getUserNotifications, markNotificationRead } from "../CommonSlice";
+import AppButton from "../../shared/AppButton";
 
 
 const NotificationsScreen = ({ navigation }) => {
@@ -69,15 +70,6 @@ const NotificationsScreen = ({ navigation }) => {
 
                 {notifications.length > 0 ?
                     <>
-                        <Pressable style={styles.markAllButton} onPress={markAllAsRead}>
-                            <Text style={styles.markText}>Mark all as read</Text>
-                            {clicking &&
-                                <ActivityIndicator size="small" color="#FFF" />
-                            }
-                            {!clicking &&
-                                <Ionicons name='checkmark-circle' color="#FFF" size={18} />
-                            }
-                        </Pressable>
                         <View style={styles.notificationsContainer}>
                             {/* <> */}
                             {notifications.map((notification, i) => <Notification key={i} notification={notification}
@@ -99,6 +91,8 @@ const NotificationsScreen = ({ navigation }) => {
 
                 }
             </ScrollView>
+            <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFF" /> : 'Mark all as read'} onPress={markAllAsRead} disabled={clicking} style={styles.markButton} textStyle={styles.buttonText}
+                    disabledStyle={styles.disabled} />
 
         </ImageBackground>
 
@@ -279,5 +273,18 @@ const styles = EStyleSheet.create({
         fontFamily: 'gotham-medium',
         marginRight: normalize(4)
 
+    },
+    markButton: {
+        // backgroundColor: '#E15220',
+        marginVertical: 20,
+        marginHorizontal:'1rem',
+        paddingVertical: normalize(19),
+    },
+    buttonText: {
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem'
+    },
+    disabled: {
+        backgroundColor: '#EA8663'
     },
 })
