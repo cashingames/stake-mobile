@@ -12,6 +12,7 @@ import { registerUser } from './AuthSlice';
 import logToAnalytics from '../../utils/analytics';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import CustomAlert from '../../shared/CustomAlert';
 
 
 
@@ -41,6 +42,17 @@ const SignupScreen = () => {
     const [countryCode, setCountryCode] = useState('+234');
     const [referrer, setReferrer] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
+
+    // const startModal = () => {
+    //     if(allError.length > 0) {
+    //         setVisible(true)
+    //         setModalVisible(true)
+    //     }
+
+    // }
 
     //check for device ids
     const deviceBrand = Device.brand;
@@ -126,15 +138,21 @@ const SignupScreen = () => {
         }, err => {
             if (!err || !err.response || err.response === undefined) {
                 setAllError("Your Network is Offline.");
+                setVisible(true)
+                setModalVisible(true)
             }
             else if (err.response.status === 500) {
                 setAllError("Service not currently available. Please contact support");
+                setVisible(true)
+                setModalVisible(true)
             }
             else {
                 const errors =
                     err.response && err.response.data && err.response.data.errors;
                 const firstError = Object.values(errors, {})[0];
                 setAllError(firstError[0])
+                setVisible(true)
+                setModalVisible(true)
             }
             setLoading(false);
         })
@@ -160,9 +178,9 @@ const SignupScreen = () => {
                 <AuthTitle text='Create Account' />
             </View>
             <View style={styles.inputContainer}>
-                {allError.length > 0 &&
+                {/* {allError.length > 0 &&
                     <Text>{allError}</Text>
-                }
+                } */}
                 <View style={styles.phoneHeadContainer}>
                     <View style={styles.labelContainer}>
                         <Text style={styles.inputLabel}>Phone number</Text>
@@ -287,6 +305,9 @@ const SignupScreen = () => {
                 <RenderCreateAccount />
             </View>
             <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
+            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                visible={visible} setVisible={setVisible} textLabel={allError} buttonLabel='Ok, got it'
+                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
         </ScrollView>
     );
 }
