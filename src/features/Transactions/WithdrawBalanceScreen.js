@@ -13,6 +13,7 @@ import AppButton from "../../shared/AppButton";
 import logToAnalytics from "../../utils/analytics";
 import { getUser } from "../Auth/AuthSlice";
 import { SelectList } from 'react-native-dropdown-select-list';
+import CustomAlert from "../../shared/CustomAlert";
 
 
 const WithdrawBalanceScreen = ({ navigation }) => {
@@ -26,8 +27,21 @@ const WithdrawBalanceScreen = ({ navigation }) => {
     const [bankName, setBankName] = useState('');
     const [loading, setLoading] = useState(false);
     const [withdraw, setWithdraw] = useState(false);
+    const [networkError, setNetworkError] = useState(false);
+    const [responseError, setResponseError] = useState(false);
+
+
     // const [withdrawAlert, setWithdrawAlert] = useState(false);
     const minimumWithdrawableAmount = Number.parseFloat(1000);
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
+
+
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
 
     const onChangeAccountNumber = (text) => {
         text.length > 0 && text.length < 10 ? setAccountNumberErr(true) : setAccountNumberErr(false);
@@ -71,12 +85,16 @@ const WithdrawBalanceScreen = ({ navigation }) => {
             },
                 err => {
                     if (!err || !err.response || err.response === undefined) {
-                        Alert.alert("Your Network is Offline.");
+                        setNetworkError(true);
+                        startModal()
+                        // Alert.alert("Your Network is Offline.");
                         setWithdraw(false)
                         setLoading(false)
                     }
                     else if (err.response.status === 400) {
-                        Alert.alert(err.response.data.message);
+                        setResponseError(true);
+                        startModal()
+                        // Alert.alert(err.response.data.message);
                         setWithdraw(false)
                         setLoading(false)
 
@@ -156,6 +174,18 @@ const WithdrawBalanceScreen = ({ navigation }) => {
                         />
                     </View>
                 </View>
+                {responseError &&
+                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                 visible={visible} setVisible={setVisible} textLabel='Account is not valid' buttonLabel='Ok, got it'
+                 alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                }
+                  {networkError &&
+                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                 visible={visible} setVisible={setVisible} textLabel='Your network is offline' buttonLabel='Ok, got it'
+                 alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true}
+                  />
+                }
+               
                 <AppButton text={loading ? 'Processing' : 'Request withdrawal'} disabled={!withdraw || loading}
                     style={styles.loginButton} textStyle={styles.buttonText} disabledStyle={styles.disabled}
                     onPress={withdrawBalance}

@@ -8,22 +8,40 @@ import { useSelector } from 'react-redux';
 import LottieAnimations from '../shared/LottieAnimations';
 import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 import logToAnalytics from '../utils/analytics';
+import { useState } from 'react';
+import CustomAlert from '../shared/CustomAlert';
+import BoostPopUp from '../shared/BoostPopUp';
 
 
 const InviteFriendsScreen = ({ navigation }) => {
     useApplyHeaderWorkaround(navigation.setOptions);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
+
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
+
 
     return (
-        <ScrollView style={styles.container}>
-            <LottieAnimations
-                animationView={require('../../assets/friends.json')}
-                width={normalize(160)}
-                height={normalize(160)}
-            />
-            <Heading />
-            <Instructions />
-            <InviteLink />
-        </ScrollView>
+        <View style={styles.container}>
+
+            <ScrollView contentContainerStyle={styles.content}>
+                <LottieAnimations
+                    animationView={require('../../assets/friends.json')}
+                    width={normalize(160)}
+                    height={normalize(160)}
+                />
+                <Heading />
+                <Instructions />
+                <InviteLink startModal={startModal} />
+                <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    visible={visible} setVisible={setVisible} textLabel='Copied to clipboard' buttonLabel='Ok, got it'
+                    alertImage={require('../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+
+            </ScrollView>
+        </View>
 
 
     );
@@ -48,7 +66,7 @@ const Instructions = () => {
     )
 }
 
-const InviteLink = () => {
+const InviteLink = ({ startModal }) => {
     const user = useSelector(state => state.auth.user);
 
     const referralUrl = (user.referralCode)
@@ -70,7 +88,8 @@ const InviteLink = () => {
 
     const copyToClipboard = () => {
         Clipboard.setStringAsync(referralUrl).then(() => {
-            Alert.alert('Copied to clipboard')
+            startModal()
+            // Alert.alert('Copied to clipboard')
         });
     };
 
@@ -102,8 +121,14 @@ export default InviteFriendsScreen;
 
 const styles = EStyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: '#F8F9FD',
         paddingHorizontal: normalize(18)
+    },
+    content: {
+        flex: 1,
+        justifyContent: 'center'
+
     },
 
     heading: {

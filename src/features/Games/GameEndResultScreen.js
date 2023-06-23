@@ -19,7 +19,6 @@ export default function GameEndResultScreen({ navigation }) {
 	const user = useSelector(state => state.auth.user);
 	const pointsGained = useSelector(state => state.game.pointsGained);
 	const amountWon = useSelector(state => state.game.amountWon);
-	console.log(amountWon)
 	const withStaking = useSelector(state => state.game.withStaking);
 	const correctCount = useSelector(state => state.game.correctCount);
 	const totalCount = useSelector(state => state.game.totalCount);

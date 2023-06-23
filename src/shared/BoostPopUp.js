@@ -12,10 +12,10 @@ import logToAnalytics from '../utils/analytics';
 
 
 
-const BoostPopUp = ({ setModalVisible, modalVisible }) => {
+const BoostPopUp = ({ setModalVisible, modalVisible, visible, setVisible }) => {
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
-    const [visible, setVisible] = React.useState(true);
+    // const [visible, setVisible] = React.useState(true);
 
     const toggleOverlay = () => {
         setVisible(!visible);
@@ -85,7 +85,7 @@ const BoostPopUp = ({ setModalVisible, modalVisible }) => {
                     </View>
                 </Modal>
             </View>
-        </Overlay>
+         </Overlay>
 
     )
 }
