@@ -1,42 +1,46 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
-import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { Alert, Linking, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import AppButton from "../../shared/AppButton";
 import Input from "../../shared/Input";
 import normalize from "../../utils/normalize";
-import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { sendUserFeedback } from "../CommonSlice";
 import logToAnalytics from "../../utils/analytics";
+import CustomAlert from "../../shared/CustomAlert";
 
 
 
-const ContactUs = ({ navigation }) => {
-    useApplyHeaderWorkaround(navigation.setOptions);
+const ContactUs = () => {
     const user = useSelector(state => state.auth.user);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
 
 
-
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
 
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.title}>Do you have any question?</Text>
-            <ContactForm user={user} />
+            <ContactForm user={user} setAlertMessage={setAlertMessage} startModal={startModal} />
+            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
         </ScrollView>
     )
 }
 
-const ContactForm = ({ user }) => {
+const ContactForm = ({ user, setAlertMessage, startModal }) => {
     const dispatch = useDispatch();
     const [saving, setSaving] = useState(false);
-    // const [first_name, setFirstName] = useState('');
-    // const [last_name, setLastName] = useState('');
     const [email, setEmail] = useState(user.email);
     const [message_body, setMessage] = useState('');
-    // const [firstNameErr, setFirstNameError] = useState(false);
-    // const [lastNameErr, setLastNameError] = useState(false);
     const [messageError, setMessageError] = useState(false);
     const [canSave, setCanSave] = useState(false);
     const first_name = user.firstName
@@ -53,7 +57,8 @@ const ContactForm = ({ user }) => {
         }))
             .then(unwrapResult)
             .then(result => {
-                Alert.alert('Thanks for your feedback. You would be responded to shortly')
+                startModal()
+                setAlertMessage('Thanks for your feedback. You would be responded to shortly');
                 logToAnalytics("user_sent_feedback", {
                     'id': user.username,
                     'phone_number': user.phoneNumber,
@@ -65,20 +70,11 @@ const ContactForm = ({ user }) => {
             .catch((rejectedValueOrSerializedError) => {
                 setMessage('')
                 setSaving(false)
-                Alert.alert(rejectedValueOrSerializedError.message)
+                startModal()
+                setAlertMessage(rejectedValueOrSerializedError.message);
             });
 
     }
-
-    // const onChangeFirstName = (text) => {
-    //     text.length > 0 && text.length < 3 ? setFirstNameError(true) : setFirstNameError(false);
-    //     setFirstName(text)
-    // }
-
-    // const onChangeLastName = (text) => {
-    //     text.length > 0 && text.length < 3 ? setLastNameError(true) : setLastNameError(false);
-    //     setLastName(text)
-    // }
 
     const onChangeMessage = (text) => {
         text.length > 0 && text.length < 3 ? setMessageError(true) : setMessageError(false);
@@ -93,18 +89,6 @@ const ContactForm = ({ user }) => {
 
     return (
         <View style={styles.formContainer}>
-            {/* <Input
-                label='First name'
-                value={first_name}
-                onChangeText={text => { onChangeFirstName(text) }}
-                error={firstNameErr && '*first name must not be empty'}
-            /> */}
-            {/* <Input
-                label='Last name'
-                value={last_name}
-                onChangeText={text => { onChangeLastName(text) }}
-                error={lastNameErr && '*last name must not be empty'}
-            /> */}
             <Input
                 label='Email'
                 value={email}
@@ -130,7 +114,7 @@ const ContactForm = ({ user }) => {
             <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
                 <Text style={styles.whatsappTitle}>Live chat with a support agent on Whatsapp</Text>
                 <FontAwesome5 name="whatsapp" size={30} color="#25D366" style={styles.icon}
-                     />
+                />
             </Pressable>
         </View>
     )
@@ -164,17 +148,17 @@ const styles = EStyleSheet.create({
         textAlignVertical: 'top'
     },
     whatsappChat: {
-        display:"flex",
-        flexDirection:'row',
-        alignItems:'center'
+        display: "flex",
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     whatsappTitle: {
         fontSize: '0.85rem',
         fontFamily: 'graphik-medium',
         marginTop: normalize(9),
-        marginRight:'.5rem'
+        marginRight: '.5rem'
     },
     icon: {
-        marginTop:'.5rem'
+        marginTop: '.5rem'
     }
 })

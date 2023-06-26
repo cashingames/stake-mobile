@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, ScrollView, TextInput, Alert } from 'react-native';
+import { Text, View, ScrollView, TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
-import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ResendOtp from '../../shared/ResendOtp';
 import { resendPhoneOtp, verifyPhoneOtp } from './AuthSlice';
@@ -15,7 +14,6 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 const SignupVerifyPhoneScreen = ({ navigation, route }) => {
-    useApplyHeaderWorkaround(navigation.setOptions);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
 
@@ -37,6 +35,15 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     const [countdowvnDone, setCountdowvnDone] = (useState(false))
     const [active, setActive] = useState(false);
     const [error, setError] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
 
 
     const token = `${otp1}${otp2}${otp3}${otp4}${otp5}`
@@ -103,7 +110,8 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError)
-                Alert.alert("Invalid authentication code provided");
+                startModal()
+                setAlertMessage("Invalid authentication code provided");
                 setLoading(false);
             })
     }
@@ -196,6 +204,9 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                     onPress={resendButton}
                     countdowvnDone={countdowvnDone} />
             </View>
+            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
         </ScrollView>
     )
 }

@@ -1,21 +1,28 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
-import { Alert, Platform, Pressable, ScrollView, Text, TextInput, View, Linking } from "react-native";
+import { Platform, Pressable, ScrollView, Text, TextInput, View, Linking } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch } from "react-redux";
 import AppButton from "../../shared/AppButton";
 import Input from "../../shared/Input";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
-import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { sendUserFeedback } from "../CommonSlice";
-import { useNavigation } from '@react-navigation/native';
 import logToAnalytics from "../../utils/analytics";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import CustomAlert from "../../shared/CustomAlert";
 
 
 
 const AuthContactUs = ({ navigation }) => {
-    useApplyHeaderWorkaround(navigation.setOptions);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -31,13 +38,15 @@ const AuthContactUs = ({ navigation }) => {
                 />
             </Pressable>
             <Text style={styles.title}>Do you have any question?</Text>
-            <ContactForm />
+            <ContactForm startModal={startModal} setAlertMessage={setAlertMessage} />
+            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
         </ScrollView>
     )
 }
 
-const ContactForm = () => {
-    const navigation = useNavigation();
+const ContactForm = ({startModal, setAlertMessage}) => {
     const dispatch = useDispatch();
     const [saving, setSaving] = useState(false);
     const [first_name, setFirstName] = useState('');
@@ -64,7 +73,8 @@ const ContactForm = () => {
         }))
             .then(unwrapResult)
             .then(result => {
-                Alert.alert('Thanks for your feedback. You would be responded to shortly')
+                startModal()
+                setAlertMessage('Thanks for your feedback. You would be responded to shortly');
                 logToAnalytics("user_sent_feedback_from_auth_screens", {
                     'id': first_name,
                     'email': email
@@ -79,7 +89,8 @@ const ContactForm = () => {
                 setFirstName('')
                 setLastName('')
                 setSaving(false)
-                Alert.alert(rejectedValueOrSerializedError.message)
+                startModal()
+                setAlertMessage(rejectedValueOrSerializedError.message);
             });
 
     }

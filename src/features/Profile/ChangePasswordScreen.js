@@ -8,14 +8,13 @@ import normalize from '../../utils/normalize';
 import AppButton from '../../shared/AppButton';
 import Input from '../../shared/Input';
 import { changePassword, deleteUserAccount, logoutUser } from '../Auth/AuthSlice';
-import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import UniversalBottomSheet from '../../shared/UniversalBottomSheet';
 import DeleteAccount from '../../shared/DeleteAccount';
+import CustomAlert from '../../shared/CustomAlert';
 
 
 export default function ChangePasswordScreen({ navigation }) {
     const dispatch = useDispatch();
-    useApplyHeaderWorkaround(navigation.setOptions);
 
     const [saving, setSaving] = useState(false);
     const [canSave, setCanSave] = useState(false);
@@ -23,23 +22,32 @@ export default function ChangePasswordScreen({ navigation }) {
     const [new_password, setNewPassword] = useState(Constants.expoConfig.extra.isStaging ? '12345678' : '');
     const [new_password_confirmation, setConfirmPassword] = useState(Constants.expoConfig.extra.isStaging ? '12345678' : '');
     const [passErr, setPassError] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
 
     const refRBSheet = useRef();
 
-	const openBottomSheet = () => {
-		refRBSheet.current.open()
-	}
+    const openBottomSheet = () => {
+        refRBSheet.current.open()
+    }
 
-	const closeBottomSheet = () => {
-		refRBSheet.current.close()
-	}
+    const closeBottomSheet = () => {
+        refRBSheet.current.close()
+    }
 
 
     const deleteAccount = () => {
         dispatch(deleteUserAccount())
-        .then(() => {
-            dispatch(logoutUser())
-        }) 
+            .then(() => {
+                dispatch(logoutUser())
+            })
     }
 
     const onChangePassword = (text) => {
@@ -63,23 +71,18 @@ export default function ChangePasswordScreen({ navigation }) {
 
         setSaving(true);
         setCanSave(false);
-        // console.log(new_password + 'fish')
         dispatch(changePassword({ password, new_password, new_password_confirmation }))
             .then(unwrapResult)
             .then(result => {
-                // console.log(result);
-                // dispatch(getUser())
-                Alert.alert('Password changed successfully')
-                navigation.navigate("Home")
+                startModal()
+                setAlertMessage('Password changed successfully');
+                // navigation.navigate("Home")
             })
             .catch((rejectedValueOrSerializedError) => {
-                // console.log(rejectedValueOrSerializedError);
                 setSaving(false);
                 setCanSave(true);
-                Alert.alert('Invalid data provided')
-                // after login eager get commond data for the whole app
-                // console.log("failed");
-                // console.log(rejectedValueOrSerializedError)
+                startModal()
+                setAlertMessage('Invalid data provided');
             });
     }
     return (
@@ -116,13 +119,16 @@ export default function ChangePasswordScreen({ navigation }) {
                     <Text style={styles.deleteText}>Delete Account</Text>
                 </Pressable>
                 <UniversalBottomSheet
-				refBottomSheet={refRBSheet}
-				height={Platform.OS === 'ios' ? 300 : 250}
-				subComponent={<DeleteAccount 
-                    onClose={closeBottomSheet} 
-                    onPressYes ={deleteAccount}
+                    refBottomSheet={refRBSheet}
+                    height={Platform.OS === 'ios' ? 300 : 250}
+                    subComponent={<DeleteAccount
+                        onClose={closeBottomSheet}
+                        onPressYes={deleteAccount}
                     />}
-			/>
+                />
+                <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
             </ScrollView>
             <AppButton
                 text={saving ? 'Saving' : 'Change Password'}
@@ -237,7 +243,7 @@ const styles = EStyleSheet.create({
     deleteText: {
         fontSize: '0.75rem',
         fontFamily: 'graphik-regular',
-        color: '#EF2F55', 
+        color: '#EF2F55',
     },
     saveButton: {
         marginVertical: 10,

@@ -13,7 +13,7 @@ export const getCommonData = createAsyncThunk(
 export const getBankData = createAsyncThunk(
     'common/bank/get',
     async () => {
-        const response = await axios.get('v2/wallet/banks')
+        const response = await axios.get('v3/wallet/banks')
         return response.data
     }
 )
@@ -21,7 +21,7 @@ export const getBankData = createAsyncThunk(
 export const getGlobalLeaders = createAsyncThunk(
     'common/globalLeaders/get',
     async () => {
-        const response = await axios.post('v2/leaders/global');
+        const response = await axios.post('v3/leaders/global');
         return response.data
     }
 )
@@ -29,7 +29,7 @@ export const getGlobalLeaders = createAsyncThunk(
 export const getGlobalLeadersByDate = createAsyncThunk(
     'common/globalLeadersByDate/get',
     async (data) => {
-        const response = await axios.post('v2/leaders/global', data);
+        const response = await axios.post('v3/leaders/global', data);
         return response.data
     }
 )
@@ -37,7 +37,7 @@ export const getGlobalLeadersByDate = createAsyncThunk(
 export const getCategoryLeaders = createAsyncThunk(
     'common/categoryLeaders/get',
     async () => {
-        const response = await axios.post('v2/leaders/categories');
+        const response = await axios.post('v3/leaders/categories');
         return response.data
     }
 )
@@ -45,7 +45,7 @@ export const getCategoryLeaders = createAsyncThunk(
 export const getCategoryLeadersByDate = createAsyncThunk(
     'common/categoryLeadersByDate/get',
     async (data) => {
-        const response = await axios.post('v2/leaders/categories', data);
+        const response = await axios.post('v3/leaders/categories', data);
         return response.data
     }
 )
@@ -60,7 +60,7 @@ export const getWeeklyLeadersByDate = createAsyncThunk(
 export const fetchFaqAndAnswers = createAsyncThunk(
     'common/faq/get',
     async () => {
-        const response = await axios.get('v2/faq/fetch');
+        const response = await axios.get('v3/faq/fetch');
         return response.data.data
     }
 )
@@ -84,7 +84,7 @@ export const fetchRecentLiveTrivia = createAsyncThunk(
 export const fetchUserTransactions = createAsyncThunk(
     'common/fetchUserTransactions',
     async (data, thunkAPI) => {
-        const response = await axios.get(`v2/wallet/me/transactions`)
+        const response = await axios.get(`v3/wallet/me/transactions`)
         return response.data;
     }
 )
@@ -132,7 +132,7 @@ export const sendUserFeedback = createAsyncThunk(
     'common/sendUserFeedback',
     async (data, thunkAPI) => {
         console.log(data)
-        const response = await axios.post('v2/client/feedback', data)
+        const response = await axios.post('v3/client/feedback', data)
         return response.data;
     }
 )

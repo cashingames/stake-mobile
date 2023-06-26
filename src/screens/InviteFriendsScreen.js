@@ -1,22 +1,21 @@
 import * as React from 'react';
-import { Text, View, ScrollView, Share, Alert, Pressable, Platform } from 'react-native';
+import { Text, View, ScrollView, Share, Pressable, Platform } from 'react-native';
 import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useSelector } from 'react-redux';
 import LottieAnimations from '../shared/LottieAnimations';
-import useApplyHeaderWorkaround from '../utils/useApplyHeaderWorkaround';
 import logToAnalytics from '../utils/analytics';
 import { useState } from 'react';
 import CustomAlert from '../shared/CustomAlert';
-import BoostPopUp from '../shared/BoostPopUp';
 
 
-const InviteFriendsScreen = ({ navigation }) => {
-    useApplyHeaderWorkaround(navigation.setOptions);
+const InviteFriendsScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [visible, setVisible] = React.useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
 
     const startModal = () => {
         setVisible(true)
@@ -35,9 +34,9 @@ const InviteFriendsScreen = ({ navigation }) => {
                 />
                 <Heading />
                 <Instructions />
-                <InviteLink startModal={startModal} />
+                <InviteLink startModal={startModal} setAlertMessage={setAlertMessage} />
                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    visible={visible} setVisible={setVisible} textLabel='Copied to clipboard' buttonLabel='Ok, got it'
+                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
                     alertImage={require('../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
 
             </ScrollView>
@@ -66,7 +65,7 @@ const Instructions = () => {
     )
 }
 
-const InviteLink = ({ startModal }) => {
+const InviteLink = ({ startModal, setAlertMessage }) => {
     const user = useSelector(state => state.auth.user);
 
     const referralUrl = (user.referralCode)
@@ -82,14 +81,15 @@ const InviteLink = ({ startModal }) => {
             })
 
         } catch (error) {
-            Alert.alert("Notice", error.message);
+            startModal()
+            setAlertMessage("Notice", error.message);
         }
     };
 
     const copyToClipboard = () => {
         Clipboard.setStringAsync(referralUrl).then(() => {
             startModal()
-            // Alert.alert('Copied to clipboard')
+            setAlertMessage("Copied to clipboard.");
         });
     };
 

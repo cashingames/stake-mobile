@@ -12,11 +12,11 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { startChallengeRequest } from './TriviaChallengeGameSlice';
 import logToAnalytics from '../../../utils/analytics';
 import { Ionicons } from '@expo/vector-icons';
+import CustomAlert from '../../../shared/CustomAlert';
 
 
 
 const ChallengeStakingScreen = ({ navigation }) => {
-    useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
     const boosts = useSelector(state => state.auth.user.boosts);
@@ -26,6 +26,15 @@ const ChallengeStakingScreen = ({ navigation }) => {
     const [amount, setAmount] = useState('');
     const [loading, setLoading] = useState(false);
     const [canSend, setCanSend] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
 
     const goToStore = () => {
         logToAnalytics("trivia_challenge_get_boost_clicked")
@@ -35,32 +44,6 @@ const ChallengeStakingScreen = ({ navigation }) => {
 
     const stakeAmount = async () => {
         setLoading(true);
-
-        // if (Number.parseFloat(amount) < Number.parseFloat(minimumChallengeStakeAmount)) {
-        //     Alert.alert(`Minimum stake amount is ${minimumChallengeStakeAmount} naira`);
-        //     setLoading(false);
-        //     return false;
-        // }
-
-        // if (Number.parseFloat(amount) > Number.parseFloat(maximumChallengeStakeAmount)) {
-        //     Alert.alert(`Maximum stake amount is ${maximumChallengeStakeAmount} naira`);
-        //     setLoading(false);
-        //     return false;
-        // }
-
-        // if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-        //     Alert.alert(`Your demo wallet has been exhausted. Fund your wallet now`);
-        //     setLoading(false);
-        //     return false;
-        // }
-
-        // if (Number.parseFloat(user.walletBalance) < Number.parseFloat(amount)) {
-        //     Alert.alert(`Insufficient balance in your wallet. Please fund your wallet`);
-        //     setLoading(false);
-        //     return false;
-        // }
-
-
         dispatch(startChallengeRequest({
             category: gameCategoryId,
             amount: amount
@@ -73,7 +56,8 @@ const ChallengeStakingScreen = ({ navigation }) => {
                 navigation.navigate('ChallengeMatching')
             })
             .catch((rejectedValueOrSerializedError) => {
-                Alert.alert("Something went wrong. Please try again or contact support")
+                startModal()
+                setAlertMessage("Something went wrong. Please try again or contact support");
                 setLoading(false)
             });
     }
@@ -98,8 +82,8 @@ const ChallengeStakingScreen = ({ navigation }) => {
 
     useEffect(() => {
 
-        const invalid = amount === '' || amount < Number.parseFloat(minimumChallengeStakeAmount) || amount > Number.parseFloat(maximumChallengeStakeAmount) 
-        || amount > Number.parseFloat(user.walletBalance)
+        const invalid = amount === '' || amount < Number.parseFloat(minimumChallengeStakeAmount) || amount > Number.parseFloat(maximumChallengeStakeAmount)
+            || amount > Number.parseFloat(user.walletBalance)
         setCanSend(!invalid);
 
     }, [amount])
@@ -114,7 +98,6 @@ const ChallengeStakingScreen = ({ navigation }) => {
                     style={styles.headContainer}
                 >
 
-                    {/* <ScrollView style={styles.container} contentContainerStyle={{ justifyContent: 'center', flex: 1 }}> */}
                     <ScrollView style={styles.container}>
 
                         <View style={styles.purchaseBoost}>
@@ -158,7 +141,10 @@ const ChallengeStakingScreen = ({ navigation }) => {
                         }
 
                         <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake amount"} onPress={stakeAmount} disabled={loading || !canSend}
-                            style={styles.stakeButton} disabledStyle={styles.disabled}  isIcon={true} iconColor="#FFF" />
+                            style={styles.stakeButton} disabledStyle={styles.disabled} isIcon={true} iconColor="#FFF" />
+                        <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                            visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                            alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
 
                     </ScrollView>
                 </KeyboardAvoidingView>

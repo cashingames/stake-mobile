@@ -18,7 +18,6 @@ import PrivacyPolicyScreen from './screens/PrivacyPolicyScreen';
 import InviteFriendsScreen from './screens/InviteFriendsScreen';
 import UserProfileScreen from './features/Profile/UserProfileScreen';
 import ChangePasswordScreen from './features/Profile/ChangePasswordScreen';
-import BankDetailsScreen from './features/Profile/BankDetailsScreen';
 import EditProfileDetailsScreen from './features/Profile/EditProfileDetailsScreen';
 import SupportQuestionsScreen from './features/Support/SupportQuestionsScreen';
 import SupportAnswerScreen from './features/Support/SupportAnswerScreen';
@@ -49,7 +48,6 @@ import ContactUs from './features/Support/ContactUs';
 import AuthContactUs from './features/Support/AuthContactUs';
 import EmailVerificationScreen from './features/Auth/EmailVerificationScreen';
 import GameLoadingScreen from './features/Games/GameLoadingScreen';
-import ChallengeSelectPlayerScreen from './features/Games/TriviaChallengeStaking/ChallengeSelectPlayerScreen';
 import ChallengeStakingScreen from './features/Games/TriviaChallengeStaking/ChallengeStakingScreen';
 import ChallengeEndGameScreen from './features/Games/TriviaChallengeStaking/ChallengeEndGameScreen';
 import ChallengeGameEndWaitingScreen from './features/Games/TriviaChallengeStaking/ChallengeGameEndWaitingScreen';
@@ -166,7 +164,9 @@ function AppRouter() {
 						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
-						<AppStack.Screen name="ChallengeSelectPlayer" component={ChallengeSelectPlayerScreen} options={{ title: 'Select Player' }} />
+
+						
+						{/* challenge */}
 						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{
 							title: 'Challenge Player',
 							headerStyle: {
@@ -216,7 +216,6 @@ function AppRouter() {
 						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Edit Details' }} />
 						<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Change Password' }} />
 						<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
-						<AppStack.Screen name="BankDetails" component={BankDetailsScreen} options={{ title: 'Bank Details' }} />
 						<AppStack.Screen name="EmailVerification" component={EmailVerificationScreen} options={{ title: 'Email Verification' }} />
 
 

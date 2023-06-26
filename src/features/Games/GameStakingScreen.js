@@ -14,10 +14,11 @@ import StakingPredictionsTable from "../../shared/StakingPredictionsTable";
 import logToAnalytics from "../../utils/analytics";
 import { formatCurrency } from "../../utils/stringUtl";
 import { Ionicons } from "@expo/vector-icons";
+import CustomAlert from "../../shared/CustomAlert";
 
 
 const GameStakingScreen = ({ navigation }) => {
-    useApplyHeaderWorkaround(navigation.setOptions);
+    const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
     const minimumExhibitionStakeAmount = useSelector(state => state.common.minimumExhibitionStakeAmount);
@@ -28,7 +29,15 @@ const GameStakingScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [canSend, setCanSend] = useState(false);
     const [hidden, setHidden] = useState(false);
-    const dispatch = useDispatch();
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
 
     const toggleSecureText = () => {
         setHidden(!hidden);
@@ -99,7 +108,6 @@ const GameStakingScreen = ({ navigation }) => {
                             'phone_number': user.phoneNumber,
                             'email': user.email
                         })
-                        // console.log('Action logged to server');
                     })
                 setLoading(false);
                 navigation.navigate("GameInProgress")
@@ -113,10 +121,12 @@ const GameStakingScreen = ({ navigation }) => {
 
     const processStartGameError = async (err) => {
         const errors = err.message;
-        Alert.alert(errors)
+        startModal()
+        setAlertMessage(errors);
 
         const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
-        Alert.alert(firstError)
+        startModal()
+        setAlertMessage(firstError);
     }
 
     return (
@@ -167,7 +177,7 @@ const GameStakingScreen = ({ navigation }) => {
             }
             <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
                 disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButton} />
-                {user.hasBonus === true &&
+            {user.hasBonus === true &&
                 <Text style={styles.note}>Note that the predictions table below does not apply on bonus stakes</Text>}
             <View style={styles.stakeContainer}>
                 <Text style={styles.stakeHeading}>How To Win</Text>
@@ -179,6 +189,9 @@ const GameStakingScreen = ({ navigation }) => {
                 {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
                     amount={amount} />)}
             </View>
+            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
 
         </ScrollView>
     )
@@ -248,8 +261,8 @@ const styles = EStyleSheet.create({
         fontFamily: "gotham-medium",
         fontSize: ".8rem",
         color: "#DF5921",
-        lineHeight:'1.2rem',
-        marginTop:'1rem'
+        lineHeight: '1.2rem',
+        marginTop: '1rem'
     },
     disabled: {
         backgroundColor: '#EA8663'

@@ -1,48 +1,40 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Alert, BackHandler, ImageBackground, Platform, StatusBar, Image, Text, View, ScrollView } from "react-native";
+import {  BackHandler, ImageBackground, Platform, StatusBar, Image, Text, View, ScrollView } from "react-native";
 import { isTrue } from "../../../utils/stringUtl";
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from "react-redux";
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../../utils/normalize";
-import LottieAnimations from "../../../shared/LottieAnimations";
 import { useFocusEffect } from "@react-navigation/native";
 import AppButton from "../../../shared/AppButton";
 import firestore from '@react-native-firebase/firestore';
 import { setChallengeDetails } from "./TriviaChallengeGameSlice";
 import logToAnalytics from "../../../utils/analytics";
+import DoubleButtonAlert from "../../../shared/DoubleButtonAlert";
 
 const ChallengeMatchingScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
     const boosts = useSelector(state => state.common.boosts);
     const documentId = useSelector(state => state.triviaChallenge.documentId);
-    const [cancelling, setCancelling] = useState(false);
     const [dataUpdated, setDataUpdated] = useState(false);
     const [challengeInfo, setChallengeInfo] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
 
     const cancelChallenge = () => {
-        setCancelling(true);
-        Alert.alert(
-            "Challenge Notification",
-            `Are you sure you want to cancel this challenge?`,
-            [
-                {
-                    text: "Dismiss",
-                    onPress: () => abortCancel(),
-                    style: "cancel"
-                },
-                { text: "Yes, cancel", onPress: () => proceedWithCancel() }
-            ]
-        );
-
-    }
-    const abortCancel = () => {
-        setCancelling(false);
+        startModal()
+        setAlertMessage("Are you sure you want to cancel this challenge?");
     }
 
     const proceedWithCancel = () => {
-        setCancelling(false);
         navigation.navigate('Home');
     }
 
@@ -144,8 +136,11 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                 </View>
 
                 {!dataUpdated &&
-                    <AppButton text="Cancel" onPress={cancelChallenge} disabled={cancelling} style={styles.stakeButton} />
+                    <AppButton text="Cancel" onPress={cancelChallenge} style={styles.stakeButton} />
                 }
+                  <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Dismiss' actionLabel='Yes, cancel'
+                    alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={proceedWithCancel} />
 
             </ScrollView>
         </ImageBackground>

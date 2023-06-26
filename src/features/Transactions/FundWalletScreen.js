@@ -17,6 +17,7 @@ import { Paystack } from "react-native-paystack-webview";
 import logToAnalytics from "../../utils/analytics";
 import { Ionicons } from "@expo/vector-icons";
 import { fetchUserTransactions } from "../CommonSlice";
+import CustomAlert from "../../shared/CustomAlert";
 
 
 export default function FundWalletScreen() {
@@ -30,6 +31,15 @@ export default function FundWalletScreen() {
   const minimumWalletFundableAmount = useSelector(state => state.common.minimumWalletFundableAmount);
   const [paystackChecked, setPaystackChecked] = useState(false);
   const [flutterChecked, setFlutterChecked] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [visible, setVisible] = React.useState(false);
+
+
+  const startModal = () => {
+    setVisible(true)
+    setModalVisible(true)
+  }
 
   const transactionCompleted = (res) => {
     // verifyFunding(res.reference); for local testing
@@ -59,12 +69,16 @@ export default function FundWalletScreen() {
     });
 
     if (cleanedAmount < minimumWalletFundableAmount) {
-      Alert.alert(`Amount cannot be less than ${minimumWalletFundableAmount} naira`);
+      startModal()
+      setAlertMessage(`Amount cannot be less than ${minimumWalletFundableAmount} naira`);
       return false;
     }
     if (paystackChecked) {
       setShowPayment(true);
-    } else Alert.alert('This payment gateway is not available now');
+    } else {
+      startModal()
+      setAlertMessage('This payment gateway is not available now');
+    }
   };
 
 
@@ -115,6 +129,10 @@ export default function FundWalletScreen() {
               </View>
             </View>
           </View>
+          <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+            visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+            alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true}
+          />
         </ScrollView>
       )}
 
@@ -134,7 +152,8 @@ export default function FundWalletScreen() {
           activityIndicatorColor="green"
           onCancel={(e) => {
             setShowPayment(false);
-            Alert.alert("Failed...");
+            startModal()
+            setAlertMessage('Failed...');
           }}
           onSuccess={transactionCompleted}
           autoStart={true}

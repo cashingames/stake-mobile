@@ -27,11 +27,10 @@ const WithdrawBalanceScreen = ({ navigation }) => {
     const [bankName, setBankName] = useState('');
     const [loading, setLoading] = useState(false);
     const [withdraw, setWithdraw] = useState(false);
-    const [networkError, setNetworkError] = useState(false);
-    const [responseError, setResponseError] = useState(false);
+    const [allError, setAllError] = useState('');
 
 
-    // const [withdrawAlert, setWithdrawAlert] = useState(false);
+
     const minimumWithdrawableAmount = Number.parseFloat(1000);
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -48,20 +47,9 @@ const WithdrawBalanceScreen = ({ navigation }) => {
         setAccountNumber(text)
     }
 
-    // const withdrawValidation = () => {
-    //     setWithdrawAlert(true)
-    //     Alert.alert(
-    //         "Withdrawal Notification",
-    //         `Fund kept in withdrawable balance for more than a month will be rendered invalid and non-withdrawable. Ensure you withdraw your winnings before the deadline. `,
-    //         [
-    //             { text: "Got it", onPress: () => withdrawBalance() }
-    //         ]
-    //     );
-    // }
 
     const withdrawBalance = () => {
         setLoading(true)
-        // setWithdrawAlert(false)
         setWithdraw(true)
         withdrawWinnings({
             account_number: accountNumber,
@@ -85,16 +73,14 @@ const WithdrawBalanceScreen = ({ navigation }) => {
             },
                 err => {
                     if (!err || !err.response || err.response === undefined) {
-                        setNetworkError(true);
                         startModal()
-                        // Alert.alert("Your Network is Offline.");
+                        setAllError("Your Network is Offline.");
                         setWithdraw(false)
                         setLoading(false)
                     }
                     else if (err.response.status === 400) {
-                        setResponseError(true);
                         startModal()
-                        // Alert.alert(err.response.data.message);
+                        setAllError(err.response.data.message)
                         setWithdraw(false)
                         setLoading(false)
 
@@ -174,18 +160,11 @@ const WithdrawBalanceScreen = ({ navigation }) => {
                         />
                     </View>
                 </View>
-                {responseError &&
-                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                 visible={visible} setVisible={setVisible} textLabel='Account is not valid' buttonLabel='Ok, got it'
-                 alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
-                }
-                  {networkError &&
-                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                 visible={visible} setVisible={setVisible} textLabel='Your network is offline' buttonLabel='Ok, got it'
-                 alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true}
-                  />
-                }
-               
+                <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    visible={visible} setVisible={setVisible} textLabel={allError} buttonLabel='Ok, got it'
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true}
+                />
+
                 <AppButton text={loading ? 'Processing' : 'Request withdrawal'} disabled={!withdraw || loading}
                     style={styles.loginButton} textStyle={styles.buttonText} disabledStyle={styles.disabled}
                     onPress={withdrawBalance}

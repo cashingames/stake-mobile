@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, ScrollView, Alert, Platform } from 'react-native';
+import { View, Text, ScrollView, Platform } from 'react-native';
 import Constants from 'expo-constants';
 
 import AppButton from '../../shared/AppButton';
@@ -8,23 +8,23 @@ import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import Input from '../../shared/Input';
 import { resetPassword } from './AuthSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
-import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import CustomAlert from '../../shared/CustomAlert';
 
 export default function ({ navigation }) {
-    useApplyHeaderWorkaround(navigation.setOptions);
     const dispatch = useDispatch();
 
     const [password, setPassword] = useState(Constants.expoConfig.extra.isStaging ? 'zubby1234' : '');
     const [confirmPassword, setConfirmPassword] = useState(Constants.expoConfig.extra.isStaging ? 'zubby1234' : '');
     const [canSend, setCanSend] = useState(false);
-    const [error, setError] = useState('');
     const [passErr, setPassError] = useState(false);
     const [confirmPassErr, setConfirmPassError] = useState(false);
     const [loading, setLoading] = useState(false);
-
+    const [allError, setAllError] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
     const phone = useSelector(state => state.auth.passwordReset.userPhone);
     const code = useSelector(state => state.auth.passwordReset.userCode);
 
@@ -40,19 +40,23 @@ export default function ({ navigation }) {
     const onSend = async () => {
         setLoading(true);
         setCanSend(false);
-        setError('');
+        setAllError('');
 
         dispatch(resetPassword({ password, phone, code, password_confirmation: password }))
             .then(unwrapResult)
             .then((originalPromiseResult) => {
                 setLoading(false);
                 setCanSend(true);
-                Alert.alert('Password reset successful')
+                setAllError("Password reset successful");
+                setVisible(true)
+                setModalVisible(true)
                 navigation.navigate('Login');
             })
             .catch((rejectedValueOrSerializedError) => {
                 // console.log(rejectedValueOrSerializedError)
-                setError("Password reset failed, try again");
+                setAllError("Password reset failed, try again");
+                setVisible(true)
+                setModalVisible(true)
                 setLoading(false);
             })
     }
@@ -60,7 +64,7 @@ export default function ({ navigation }) {
     useEffect(() => {
         var invalid = passErr || confirmPassErr || password === '' || confirmPassword === '' || confirmPassword !== password;
         setCanSend(!invalid);
-        setError('');
+        setAllError('');
     }, [passErr, confirmPassErr, password, confirmPassword]);
 
     return (
@@ -68,10 +72,6 @@ export default function ({ navigation }) {
             <View style={styles.content}>
                 <ForgotPasswordTitle />
                 <View style={styles.form}>
-
-                    {error.length > 0 &&
-                        <Text style={styles.errorBox}>{error}</Text>
-                    }
 
                     <Input
                         label='Enter new password'
@@ -96,6 +96,9 @@ export default function ({ navigation }) {
                         style={styles.loginButton} textStyle={styles.buttonText} disabledStyle={styles.disabled} />
                 </View>
             </View>
+            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                visible={visible} setVisible={setVisible} textLabel={allError} buttonLabel='Ok, got it'
+                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
         </ScrollView>
     );
 }

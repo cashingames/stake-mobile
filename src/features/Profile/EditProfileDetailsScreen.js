@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Alert, Pressable, TextInput } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { CountryPicker } from "react-native-country-codes-picker";
 
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -12,19 +11,15 @@ import { editPersonalDetails, getUser, sendEmailOTP } from '../Auth/AuthSlice';
 import normalize from '../../utils/normalize';
 import { isTrue } from '../../utils/stringUtl';
 import AppButton from '../../shared/AppButton';
-import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import { SelectList } from 'react-native-dropdown-select-list';
+import CustomAlert from '../../shared/CustomAlert';
 
 export default function EditProfileDetailsScreen({ navigation }) {
-    useApplyHeaderWorkaround(navigation.setOptions);
 
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user);
     const isEmailVerified = user.isEmailVerified;
-
-    // console.log(user)
-
     const [saving, setSaving] = useState(false);
     const [email, setEmail] = useState(user.email);
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
@@ -42,6 +37,15 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [show, setShow] = useState(false);
     const [countryCode, setCountryCode] = useState(user.countryCode);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
 
     const onChangeDateOfBirth = (event, selectedDate) => {
         const currentDate = selectedDate || dateOfBirth;
@@ -105,24 +109,28 @@ export default function EditProfileDetailsScreen({ navigation }) {
             gender
         })
             .then(result => {
-                dispatch(getUser())
-                Alert.alert('Personal details updated successfully')
+                dispatch(getUser());
+                startModal()
+                setAlertMessage('Personal details updated successfully');
                 setSaving(false);
             },
                 err => {
                     if (!err || !err.response || err.response === undefined) {
-                        Alert.alert('Your Network is Offline.')
+                        startModal()
+                        setAlertMessage('Your Network is Offline.');
                         setSaving(false);
                     }
                     else if (err.response.status === 500) {
-                        Alert.alert('Service not currently available. Please contact support')
+                        startModal()
+                        setAlertMessage('Service not currently available. Please contact support');
                         setSaving(false);
                     }
                     else {
                         const errors =
                             err.response && err.response.data && err.response.data.errors;
                         const firstError = Object.values(errors, {})[0];
-                        Alert.alert(firstError[0])
+                        startModal()
+                        setAlertMessage(firstError[0]);
                         setSaving(false);
                     }
                 }
@@ -238,11 +246,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                             </>
                         }
                         <View style={styles.genderContainer}>
-                            {/* <View style={styles.labelContainer}> */}
                             <Text style={styles.bankLabel}>Choose gender</Text>
-                            {/* <Text style={styles.requiredText}>Required</Text> */}
-                            {/* </View> */}
-
                             <SelectList
                                 setSelected={(gender) => setGender(gender)}
                                 data={genderData}
@@ -256,6 +260,9 @@ export default function EditProfileDetailsScreen({ navigation }) {
 
                     </View>
                 </View>
+                <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
             </ScrollView>
             <AppButton
                 text={saving ? 'Saving' : 'Save Changes'}

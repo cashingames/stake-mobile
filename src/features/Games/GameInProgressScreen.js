@@ -16,11 +16,12 @@ import GameTopicProgress from "../../shared/GameTopicProgress";
 import AvailableGameSessionBoosts from "../../shared/AvailableGameSessionBoosts";
 import GameQuestions from "../../shared/GameQuestions";
 import logToAnalytics from "../../utils/analytics";
+import DoubleButtonAlert from "../../shared/DoubleButtonAlert";
+
 
 
 
 export default function GameInProgressScreen({ navigation, route }) {
-    useApplyHeaderWorkaround(navigation.setOptions);
 
     const dispatch = useDispatch();
     const params = route.params;
@@ -35,6 +36,15 @@ export default function GameInProgressScreen({ navigation, route }) {
     const newUser = useSelector(state => state.auth.user.joinedOn);
     const newUserDate = newUser.slice(0, 10);
     let formattedDate = new Date().toISOString().split('T')[0];
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
 
 
     const [ending, setEnding] = useState(false);
@@ -111,30 +121,14 @@ export default function GameInProgressScreen({ navigation, route }) {
                 crashlytics().log('failed to end exhibition game');
                 setEnding(false);
                 // console.log(rejectedValueOrSerializedError);
-                Alert.alert('failed to end game')
+                startModal()
+                setAlertMessage("failed to end game");
             });
     }
 
     const showExitConfirmation = () => {
-        // onEndGame();
-        Alert.alert(
-            'Exit Game?',
-            'You have an ongoing game. Do you want to submit this game ?',
-            [
-                {
-                    text: "Continue playing",
-                    style: 'cancel',
-                    onPress: () => setEnding(false)
-                },
-                {
-                    text: 'Exit',
-                    onPress: () => {
-                        // console.log("show exit from exit button")
-                        onEndGame();
-                    },
-                },
-            ]
-        );
+        startModal()
+        setAlertMessage("You have an ongoing game. Do you want to submit this game ?");
     }
 
     //disable back button
@@ -169,6 +163,9 @@ export default function GameInProgressScreen({ navigation, route }) {
                 <StakeDetails />
                 <GameProgressAndBoosts />
                 <GameQuestions onPress={() => onEndGame()} ending={ending} onComplete={() => onEndGame()} />
+                <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Continue playing' actionLabel='Exit'
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={onEndGame} />
             </ScrollView>
         </ImageBackground>
     );

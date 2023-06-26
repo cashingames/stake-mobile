@@ -42,7 +42,6 @@ const SignupScreen = () => {
     const [countryCode, setCountryCode] = useState('+234');
     const [referrer, setReferrer] = useState('');
     const [loading, setLoading] = useState(false);
-
     const [modalVisible, setModalVisible] = useState(false);
     const [visible, setVisible] = React.useState(false);
 

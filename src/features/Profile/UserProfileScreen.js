@@ -60,6 +60,7 @@ const UserAvatar = () => {
         formData.append('avatar', { uri: localUri, name: filename, type });
 
         dispatch(editProfileAvatar(formData)).then(result => {
+            // console.log("changed");
             dispatch(getUser()).then(x => {
                 setLoading(false)
             });
@@ -101,7 +102,6 @@ const ProfileTabs = () => {
             <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ChangePassword')} />
             <ProfileTab tabName='Invite Friends' onPress={() => navigation.navigate('Invite')} />
             {/* <ProfileTab tabName='Stats' onPress={() => navigation.navigate('UserStats')} /> */}
-            {/* <ProfileTab tabName='Bank Details' onPress={() => navigation.navigate('BankDetails')} /> */}
             {/* <Pressable onPress={onLogout}>
                 <Text style={styles.logoutText}>Logout</Text>
             </Pressable> */}

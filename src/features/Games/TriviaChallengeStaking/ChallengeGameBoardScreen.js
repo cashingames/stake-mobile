@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Alert, BackHandler, Image, ImageBackground, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
+import { BackHandler, Image, ImageBackground, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useFocusEffect } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,7 @@ import Constants from 'expo-constants';
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { Animated } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import DoubleButtonAlert from "../../../shared/DoubleButtonAlert";
 
 
 const ChallengeGameBoardScreen = ({ navigation }) => {
@@ -26,6 +27,15 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     const isEnded = useSelector(state => state.triviaChallenge.isEnded);
     const [submitting, setSubmitting] = useState(false);
     const user = useSelector(state => state.auth.user);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visible, setVisible] = React.useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+
+    const startModal = () => {
+        setVisible(true)
+        setModalVisible(true)
+    }
 
 
     useEffect(() => {
@@ -78,24 +88,8 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
             });
     }
     const showExitConfirmation = () => {
-        Alert.alert(
-            'Exit Game?',
-            'You have an ongoing game. Do you want to submit this game ?',
-            [
-                {
-                    text: "Continue playing",
-                    style: 'cancel',
-                    onPress: () => setSubmitting(false)
-                },
-                {
-                    text: 'Exit',
-                    onPress: () => {
-                        // console.log("show exit from exit button")
-                        gameEnded();
-                    },
-                },
-            ]
-        );
+        startModal()
+        setAlertMessage("You have an ongoing game. Do you want to submit this game ?");
     }
 
     const getOpponentStatus = async () => {
@@ -115,6 +109,9 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                 <ChallengeGameBoardWidgets />
                 <SelectedPlayers user={user} challengeDetails={challengeDetails} />
                 <RenderQuestion onComplete={gameEnded} onEnd={gameEnded} submitting={submitting} />
+                <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Continue playing' actionLabel='Exit'
+                    alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={gameEnded} />
             </ScrollView>
         </ImageBackground>
 
