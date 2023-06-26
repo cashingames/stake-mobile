@@ -6,15 +6,12 @@ import { getUser } from "../Auth/AuthSlice";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import PageLoading from "../../shared/PageLoading";
-import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
-import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { getUserNotifications, markNotificationRead } from "../CommonSlice";
 import AppButton from "../../shared/AppButton";
 
 
 const NotificationsScreen = ({ navigation }) => {
-    useApplyHeaderWorkaround(navigation.setOptions);
 
 
     const notifications = useSelector(state => state.common.userNotifications)
@@ -70,6 +67,7 @@ const NotificationsScreen = ({ navigation }) => {
 
                 {notifications.length > 0 ?
                     <>
+
                         <View style={styles.notificationsContainer}>
                             {/* <> */}
                             {notifications.map((notification, i) => <Notification key={i} notification={notification}
@@ -132,7 +130,7 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: normalize(14),
-        paddingVertical: responsiveScreenWidth(3)
+        paddingTop: responsiveScreenWidth(8)
     },
     noContainer: {
         flex: 1,
