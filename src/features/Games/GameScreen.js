@@ -41,6 +41,16 @@ const GameScreen = ({ navigation }) => {
         playSound()
 
     }
+    const goToBubbleCategory = () => {
+        dispatch(setGameType(currentGame))
+        if (!activePlans) {
+            navigation.navigate('NoGame')
+        } else {
+            navigation.navigate('BubbleGameLoading')
+        }
+        playSound()
+
+    }
     return (
         <ScrollView>
             <MixedContainerBackground>
@@ -50,35 +60,10 @@ const GameScreen = ({ navigation }) => {
                         <GameScreenHeader />
                     </View>
                     <ScrollView horizontal={true} style={styles.gameContainer} contentContainerStyle={styles.scrollview}
-                    showsHorizontalScrollIndicator={false}>
-                        {gamesType.map((game) => {
-                            const { id, gameName, backgroundImage, gameImage, unlocked } = game;
-                            return (
-                                <Animated.View entering={randomEnteringAnimation().duration(1000)} key={id}>
-                                    <ImageBackground resizeMode="contain" style={styles.gameCard} source={backgroundImage}>
-                                        {!unlocked &&
-                                            <View style={styles.gameCover}>
-                                                <Image style={styles.lockImage} source={require('../../../assets/images/game-lock.png')} />
-                                            </View>
-                                        }
-                                        <View>
-                                            <Text style={styles.gameText}>{gameName}</Text>
-                                        </View>
-                                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                            <Image resizeMode='contain' style={styles.cardImage} source={gameImage} />
-                                        </View>
-                                        <View style={styles.cardBtnContainer}>
-                                            <Pressable style={styles.playBtn} onPress={goToGameCategory}>
-                                                <Text style={styles.playText}>Play</Text>
-                                            </Pressable>
-                                            <Pressable style={styles.instructionBtn} onPress={goToGameInstruction}>
-                                                <Text style={styles.instructionText}>How to play</Text>
-                                            </Pressable>
-                                        </View>
-                                    </ImageBackground>
-                                </Animated.View>
-                            )
-                        })}
+                        showsHorizontalScrollIndicator={false}>
+                        {gamesType.map((game, i) => <GameCard key={i} game={game}
+                            goToGameCategory={game.gameName === 'Bubble blitz' ? goToBubbleCategory : goToGameCategory} goToGameInstruction={goToGameInstruction} />
+                        )}
                     </ScrollView>
 
                     <View style={styles.setting}>
@@ -87,6 +72,34 @@ const GameScreen = ({ navigation }) => {
                 </View >
             </MixedContainerBackground>
         </ScrollView>
+    )
+}
+
+const GameCard = ({ game, goToGameCategory, goToGameInstruction }) => {
+    return (
+        <Animated.View entering={randomEnteringAnimation().duration(1000)}>
+            <ImageBackground resizeMode="contain" style={styles.gameCard} source={game.backgroundImage}>
+                {!game.unlocked &&
+                    <View style={styles.gameCover}>
+                        <Image style={styles.lockImage} source={require('../../../assets/images/game-lock.png')} />
+                    </View>
+                }
+                <View>
+                    <Text style={styles.gameText}>{game.gameName}</Text>
+                </View>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <Image resizeMode='contain' style={styles.cardImage} source={game.gameImage} />
+                </View>
+                <View style={styles.cardBtnContainer}>
+                    <Pressable style={styles.playBtn} onPress={goToGameCategory}>
+                        <Text style={styles.playText}>Play</Text>
+                    </Pressable>
+                    <Pressable style={styles.instructionBtn} onPress={goToGameInstruction}>
+                        <Text style={styles.instructionText}>How to play</Text>
+                    </Pressable>
+                </View>
+            </ImageBackground>
+        </Animated.View>
     )
 }
 
@@ -99,8 +112,8 @@ const styles = EStyleSheet.create({
     games: {
         flexDirection: 'row'
     },
-    scrollview:{
-        paddingRight:15
+    scrollview: {
+        paddingRight: 15
     },
     top: {
         // height:responsiveHeight(20)
@@ -142,8 +155,8 @@ const styles = EStyleSheet.create({
         zIndex: 10
     },
     cardImage: {
-        height: Platform.OS === "ios" ? responsiveHeight(27) : responsiveHeight(29),
-        width: responsiveWidth(30),
+        height: Platform.OS === "ios" ? responsiveHeight(28) : responsiveHeight(30),
+        width: responsiveWidth(36),
         marginTop: 10
     },
 

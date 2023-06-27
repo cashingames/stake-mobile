@@ -118,7 +118,9 @@ function App() {
     'graphik-italic': require('./assets/fonts/GraphikRegularItalic.otf'),
     'graphik-medium': require('./assets/fonts/GraphikMedium.otf'),
     'blues-smile': require('./assets/fonts/Blues-Smile.otf'),
-    'poppins': require('./assets/fonts/Poppins-Bold.ttf')
+    'poppins': require('./assets/fonts/Poppins-Bold.ttf'),
+    'pacifico-regular': require('./assets/fonts/Pacifico-Regular.ttf')
+
   });
 
   const onRouteChange = async () => {

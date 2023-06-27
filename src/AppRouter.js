@@ -92,6 +92,7 @@ import { View } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import NetworkModal from './shared/NetworkModal';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import GameLoadingScreen from './features/Games/BubbleBlitzGame/GameLoadingScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -112,17 +113,17 @@ function AppRouter() {
 	appendAxiosAuthHeader(token);
 
 
-	
-useEffect(() => {
-	// Lock screen orientation to portrait mode
-	ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-  
-	// Unlock screen orientation when component unmounts
-	return () => {
-	  ScreenOrientation.unlockAsync();
-	};
-  }, []); 
-	
+
+	useEffect(() => {
+		// Lock screen orientation to portrait mode
+		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+
+		// Unlock screen orientation when component unmounts
+		return () => {
+			ScreenOrientation.unlockAsync();
+		};
+	}, []);
+
 	useEffect(() => {
 		// Subscribe to network state updates
 		const unsubscribe = NetInfo.addEventListener((state) => {
@@ -142,7 +143,7 @@ useEffect(() => {
 	useEffect(() => {
 		if (!connected && isTrue(token)) {
 			setShowModal(true)
-		}else{
+		} else {
 			setShowModal(false)
 		}
 	}, [connected])
@@ -157,10 +158,10 @@ useEffect(() => {
 		});
 	}, []);
 
-	 const networkNavigationHandler = () => {
-        navigation.navigate('Dashboard')
-        setShowModal(false)
-    }
+	const networkNavigationHandler = () => {
+		navigation.navigate('Dashboard')
+		setShowModal(false)
+	}
 
 	//handling the notification when it's called
 	Notifications.setNotificationHandler({
@@ -321,6 +322,10 @@ useEffect(() => {
 								headerTintColor: '#FFFF',
 							}} />
 
+							{/** bubble blitz */}
+							<AppStack.Screen name="BubbleGameLoading" component={GameLoadingScreen} options={{ headerShown: false }} />
+
+
 
 
 							{/** wallet */}
@@ -393,7 +398,7 @@ useEffect(() => {
 			</AppStack.Navigator >
 
 			<AchievementPopup setAchievementPopup={setAchievementPopup} achievementPopup={achievementPopup} />
-			<NetworkModal showModal={showModal} setShowModal={setShowModal} onPress={networkNavigationHandler}/>
+			<NetworkModal showModal={showModal} setShowModal={setShowModal} onPress={networkNavigationHandler} />
 
 		</View>
 	)
