@@ -8,7 +8,7 @@ import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../
 import { useFocusEffect } from "@react-navigation/native";
 import { clearSession } from "./TriviaChallengeGameSlice";
 import { useState } from "react";
-import BoostPopUp from "../../../shared/BoostPopUp";
+// import BoostPopUp from "../../../shared/BoostPopUp";
 import logToAnalytics from "../../../utils/analytics";
 import AppButton from "../../../shared/AppButton";
 
@@ -19,7 +19,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     // console.log(challengeDetails)
-    const [modalVisible, setModalVisible] = useState(false);
+    // const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
 
@@ -77,11 +77,11 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     }, [])
 
-    useEffect(() => {
-        if ((Number.parseFloat(challengeDetails.score) < Number.parseFloat(challengeDetails.opponent.score)) || (Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score))) {
-            setModalVisible(true)
-        }
-    }, [challengeDetails])
+    // useEffect(() => {
+    //     if ((Number.parseFloat(challengeDetails.score) < Number.parseFloat(challengeDetails.opponent.score)) || (Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score))) {
+    //         setModalVisible(true)
+    //     }
+    // }, [challengeDetails])
 
 
 
@@ -125,7 +125,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
                 }
                 <WinningAmount challengeDetails={challengeDetails} />
                 <FinalScore challengeDetails={challengeDetails} />
-                <BoostPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                {/* <BoostPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} /> */}
                 <View style={styles.gameButtons}>
                     <AppButton onPress={onPlayButtonClick} text='Stake again' disabled={loading} textStyle={styles.againText} style={styles.stakeButton} disabledStyle={styles.disabled} />
                     <AppButton onPress={goHome} text='Return to home' style={styles.homeButton} textStyle={styles.buttonText} />

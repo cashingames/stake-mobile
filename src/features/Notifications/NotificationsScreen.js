@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, ScrollView, Pressable, StatusBar, ImageBackground, Platform, ActivityIndicator, Image } from 'react-native';
+import { Text, View, ScrollView, Pressable, ImageBackground, Platform, ActivityIndicator, Image } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../Auth/AuthSlice";
@@ -11,7 +11,7 @@ import { getUserNotifications, markNotificationRead } from "../CommonSlice";
 import AppButton from "../../shared/AppButton";
 
 
-const NotificationsScreen = ({ navigation }) => {
+const NotificationsScreen = () => {
 
 
     const notifications = useSelector(state => state.common.userNotifications)
@@ -36,20 +36,6 @@ const NotificationsScreen = ({ navigation }) => {
         }, [])
     );
 
-    useFocusEffect(
-        React.useCallback(() => {
-            if (Platform.OS === "ios")
-                return;
-            StatusBar.setTranslucent(true)
-            StatusBar.setBackgroundColor("transparent")
-            StatusBar.setBarStyle('dark-content');
-            return () => {
-                StatusBar.setTranslucent(true)
-                StatusBar.setBarStyle('dark-content');
-            }
-        }, [])
-    );
-
     if (loading) {
         return <PageLoading
             backgroundColor='#FFF'
@@ -62,21 +48,17 @@ const NotificationsScreen = ({ navigation }) => {
         <ImageBackground source={require('../../../assets/images/game-play-background.png')}
             style={{ flex: 1 }} resizeMethod="resize">
 
-            <ScrollView style={notifications.length > 0  ? styles.container : {}} contentContainerStyle={notifications.length < 0 ? styles.noContainer : {}}>
+            <ScrollView style={notifications?.length > 0 ? styles.container : {}} contentContainerStyle={notifications?.length <= 0 ? styles.noContainer : {}}>
 
-
-                {notifications.length > 0 ?
-                    <>
-
-                        <View style={styles.notificationsContainer}>
-                            {/* <> */}
-                            {notifications.map((notification, i) => <Notification key={i} notification={notification}
-                                // index={i + 1}
-                                moment={moment}
-                                readAll={readAll}
-                            />)}
-                        </View>
-                    </>
+                {notifications?.length > 0 ?
+                    <View style={styles.notificationsContainer}>
+                        {/* <> */}
+                        {notifications.map((notification, i) => <Notification key={i} notification={notification}
+                            // index={i + 1}
+                            moment={moment}
+                            readAll={readAll}
+                        />)}
+                    </View>
                     :
 
                     <View style={styles.noNotificationContainer}>
@@ -90,7 +72,7 @@ const NotificationsScreen = ({ navigation }) => {
                 }
             </ScrollView>
             <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFF" /> : 'Mark all as read'} onPress={markAllAsRead} disabled={clicking} style={styles.markButton} textStyle={styles.buttonText}
-                    disabledStyle={styles.disabled} />
+                disabledStyle={styles.disabled} />
 
         </ImageBackground>
 
@@ -275,7 +257,7 @@ const styles = EStyleSheet.create({
     markButton: {
         // backgroundColor: '#E15220',
         marginVertical: 20,
-        marginHorizontal:'1rem',
+        marginHorizontal: '1rem',
         paddingVertical: normalize(19),
     },
     buttonText: {

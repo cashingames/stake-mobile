@@ -63,7 +63,7 @@ const TriviaBetCard = () => {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
-            'gamemode': gameMode.displayName,
+            // 'gamemode': gameMode.displayName,
         })
         navigation.navigate('SelectGameCategory')
 
@@ -109,7 +109,7 @@ const TriviaChallengeCard = () => {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
-            'gamemode': gameMode.displayName,
+            // 'gamemode': gameMode.displayName,
         })
         navigation.navigate('SelectGameCategory')
 

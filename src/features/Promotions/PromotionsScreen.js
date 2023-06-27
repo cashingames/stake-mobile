@@ -31,15 +31,13 @@ const PromotionsScreen = () => {
             resizeMethod="resize">
             <ScrollView style={isNewPromotion ? styles.container : {}} contentContainerStyle={!isNewPromotion ? styles.noContainer : {}}>
                 {!isNewPromotion ?
-                    <View>
-                        <View style={styles.imageAvatar}>
-                            <Image
-                                source={require('../../../assets/images/gift-dynamic.png')}
-                                style={styles.avatar}
-                            />
-                        </View>
+                    <>
+                        <Image
+                            source={require('../../../assets/images/gift-dynamic.png')}
+                            style={styles.avatar}
+                        />
                         <Text style={styles.noPromotionsText}>No promotions yet, check back later</Text>
-                    </View>
+                    </>
                     :
                     <View>
                         {
@@ -61,7 +59,7 @@ const PromotionBanner = ({ promotion, user }) => {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
-            'promotion_title':promotion.name,
+            'promotion_title': promotion.name,
         })
         navigation.navigate('Promotion', {
             promotion_title: promotion.name,
@@ -92,13 +90,9 @@ const styles = EStyleSheet.create({
         paddingHorizontal: normalize(14),
 
     },
-    imageAvatar: {
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     avatar: {
-        width: '8rem',
-        height: '8rem',
+        width: '6rem',
+        height: '6rem',
     },
     noPromotionsText: {
         fontSize: '1.4rem',
@@ -108,8 +102,8 @@ const styles = EStyleSheet.create({
         lineHeight: '1.8rem'
     },
     bannerContainer: {
-        alignItems:'center',
-        marginBottom:'1.1rem'
+        alignItems: 'center',
+        marginBottom: '1.1rem'
     },
     triviaAvatar: {
         borderRadius: 13,

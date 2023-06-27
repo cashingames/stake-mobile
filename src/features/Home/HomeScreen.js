@@ -14,7 +14,6 @@ import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../Com
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import { Ionicons } from '@expo/vector-icons';
 import UserWalletAccounts from '../../shared/UserWalletAccounts';
-import GamesCards from '../Games/GamesCards';
 import LeaderboardCards from '../Leaderboard/LeaderboardCards';
 import logToAnalytics from '../../utils/analytics';
 import GamesCardsList from '../../shared/GameCardsList';
