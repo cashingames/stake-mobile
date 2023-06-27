@@ -35,7 +35,7 @@ export default function TransactionScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            {transactions.mainTransactions.length > 0 || transactions.bonusTransactions.length > 0  ?
+            {transactions?.mainTransactions.length > 0 || transactions.bonusTransactions.length > 0  ?
                 <>
                     {
                         transactions.mainTransactions.map((transaction, i) => <FundTransactions key={i} transaction={transaction}
