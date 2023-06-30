@@ -25,13 +25,6 @@ export const buyBoostFromWallet = createAsyncThunk(
     }
 )
 
-export const buyPlanFromWallet = createAsyncThunk(
-    'store/wallet/purchaseGamePlan',
-    async (planId, thunkAPI) => {
-        const response = await axios.post(`v3/plan/subscribe/${planId}`)
-        return response.data;
-    }
-)
 
 export const StoreSlice = createSlice({
     name: 'store',
@@ -40,12 +33,9 @@ export const StoreSlice = createSlice({
         fetchAchievements: (state, action) => {
             state.achievements = action.payload.achievements;
         },
-        fetchPlans: (state, action) => {
-            state.plans = action.payload.plans;
-        },
     }
 });
 
-export const { fetchAchievements, fetchPlans } = StoreSlice.actions
+export const { fetchAchievements } = StoreSlice.actions
 
 export default StoreSlice.reducer

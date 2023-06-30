@@ -199,7 +199,7 @@ const styles = EStyleSheet.create({
         // flex: 1,
         // backgroundColor: '#F9FBFF',
         paddingBottom: 30,
-        paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(22) : responsiveScreenWidth(15),
+        paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(15) : responsiveScreenWidth(8),
         paddingHorizontal: normalize(22),
 
     },

@@ -8,20 +8,18 @@ import Animated from "react-native-reanimated";
 import { Ionicons } from '@expo/vector-icons';
 import { unwrapResult } from "@reduxjs/toolkit";
 import EStyleSheet from "react-native-extended-stylesheet";
-import { buyBoostFromWallet, buyPlanFromWallet } from "./StoreSlice";
+import { buyBoostFromWallet } from "./StoreSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 import AppButton from "../../shared/AppButton";
 import UserItems from "../../shared/UserItems";
-import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
 import { randomEnteringAnimation } from "../../utils/utils";
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import logToAnalytics from "../../utils/analytics";
 
 
-export default function ({ navigation }) {
+export default function () {
     const dispatch = useDispatch();
-    useApplyHeaderWorkaround(navigation.setOptions);
 
     const user = useSelector(state => state.auth.user)
 
@@ -33,159 +31,11 @@ export default function ({ navigation }) {
     return (
         <ScrollView contentContainerStyle={styles.container} >
             <UserItems />
-            {/* <GamePlans user={user} /> */}
             <GameBoosts user={user} />
         </ScrollView>
     );
 }
 
-const GamePlans = ({ user }) => {
-    const plans = useSelector(state => state.common.plans);
-    return (
-        <View style={styles.storeItems}>
-            <Text style={styles.title}>Get Games</Text>
-            <Text style={styles.storeItemsDescription}>
-                You can only play 5 free games daily, Get Games to enjoy
-                playing without interruptons
-            </Text>
-            <View style={styles.storeCards}>
-                {plans.map((plan, i) => <GamePlanCard key={i} plan={plan} user={user} />)}
-            </View>
-        </View>
-    )
-}
-
-const GamePlanCard = ({ plan, user }) => {
-    const refRBSheet = useRef();
-    const buyGamePlan = () => {
-        logToAnalytics('initiate_plan_purchase', {
-            'transaction_id': user.username,
-            'currency': 'NGN',
-            'value': plan.price,
-            'item_id': user.username,
-            'item_name': plan.name,
-            'item_category': 'ecommerce',
-            'price': plan.price
-        })
-        refRBSheet.current.open()
-    }
-    return (
-        <Pressable activeOpacity={0.8} onPress={buyGamePlan}>
-            <Animated.View style={styles.storeItemContainer} entering={randomEnteringAnimation().duration(1000)}>
-                <PlanCardDetails plan={plan} />
-            </Animated.View>
-
-            <RBSheet
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={true}
-                height={440}
-                customStyles={{
-                    wrapper: {
-                        backgroundColor: "rgba(0, 0, 0, 0.5)"
-                    },
-                    draggableIcon: {
-                        backgroundColor: "#000",
-                    },
-                    container: {
-                        borderTopStartRadius: 25,
-                        borderTopEndRadius: 25,
-                    }
-                }}
-            >
-                <BuyGamePlan plan={plan} onClose={() => refRBSheet.current.close()} user={user} />
-            </RBSheet>
-        </Pressable>
-
-    )
-}
-
-const PlanCardDetails = ({ plan }) => {
-    return (
-        <>
-            <Text style={styles.planCount}>{plan.game_count}</Text>
-            <View style={styles.boostDetailsContainer}>
-                <Text style={styles.storeItemName}>{plan.name}</Text>
-                <Text style={styles.cardDescription}>{plan.description}</Text>
-            </View>
-            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(plan.price)}</Text>
-        </>
-    )
-}
-
-const BuyGamePlan = ({ plan, onClose, user }) => {
-    const [loading, setLoading] = useState(false);
-    const userBalance = useSelector(state => state.auth.user.walletBalance);
-    const newUser = useSelector(state => state.auth.user.joinedOn);
-    const newUserDate = newUser.slice(0, 10);
-    let formattedDate = new Date().toISOString().split('T')[0];
-
-    const canPay = Number(userBalance) >= Number(plan.price);
-
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
-
-    const buyPlanWallet = () => {
-        setLoading(true);
-        dispatch(buyPlanFromWallet(plan.id))
-            .then(unwrapResult)
-            .then(async () => {
-                if (formattedDate === newUserDate) {
-                    logToAnalytics('new_user_plan_purchased', {
-                        'transaction_id': user.username,
-                        'currency': 'NGN',
-                        'value': plan.price,
-                        'item_id': user.username,
-                        'item_name': plan.name,
-                        'item_category': 'ecommerce',
-                        'price': plan.price
-                    })
-                } else {
-                    logToAnalytics('plan_purchase', {
-                        'transaction_id': user.username,
-                        'currency': 'NGN',
-                        'value': plan.price,
-                        'item_id': user.username,
-                        'item_name': plan.name,
-                        'item_category': 'ecommerce',
-                        'price': plan.price
-                    })
-                }
-            })
-            .then(result => {
-                // console.log(result);
-                dispatch(getUser())
-                onClose()
-                navigation.navigate("GamePlanPurchaseSuccessful")
-            })
-            .catch(rejectedValueOrSerializedError => {
-                setLoading(false);
-                // Alert.alert("Notice", "Operation could not be completed, please try again");
-                logToAnalytics('game_plan_purchased_failed', {
-                    'id': user.username,
-                    'phone_number': user.phoneNumber,
-                    'email': user.email,
-                    'item_name': plan.name,
-                })
-                navigation.navigate("GameStoreItemsPurchaseFailed")
-            });
-    }
-
-    return (
-        <View style={styles.buyBoost}>
-            <View style={styles.buyItemHeader}>
-                <Text style={styles.buyItemTitle}>Get Game</Text>
-                <Ionicons name="close-outline" size={20} color="#292D32" onPress={onClose} />
-            </View>
-            <View style={styles.buyItemCard}>
-                <PlanCardDetails plan={plan} />
-            </View>
-            <UserWalletBalance />
-            <AppButton text={loading ? 'Buying...' : 'Confirm'} onPress={buyPlanWallet} disabled={!canPay || loading} style={styles.actionButton} />
-        </View>
-    )
-
-}
 
 const GameBoosts = (user) => {
     const boosts = useSelector(state => state.common.boosts);

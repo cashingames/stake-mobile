@@ -32,6 +32,7 @@ const GameStakingScreen = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [visible, setVisible] = React.useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const totalBalance = user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? formatCurrency(user.bonusBalance ?? 0) : formatCurrency(user.walletBalance ?? 0)
 
 
     const startModal = () => {
@@ -52,7 +53,7 @@ const GameStakingScreen = ({ navigation }) => {
 
     useEffect(() => {
 
-        const invalid = amount === '' || amount < minimumExhibitionStakeAmount || amount > Number.parseFloat(user.walletBalance)
+        const invalid = amount === '' || amount < Number.parseFloat(minimumExhibitionStakeAmount) || amount > Number.parseFloat(totalBalance)
         setCanSend(!invalid);
 
     }, [amount, minimumExhibitionStakeAmount, user.walletBalance])
@@ -75,7 +76,7 @@ const GameStakingScreen = ({ navigation }) => {
             'phone_number': user.phoneNumber,
             'email': user.email
         })
-        navigation.navigate('Wallet')
+        navigation.navigate('FundWallet')
     }
     const fundWallet = async () => {
         logToAnalytics("insufficient_balance_fund_clicked", {
@@ -83,7 +84,7 @@ const GameStakingScreen = ({ navigation }) => {
             'phone_number': user.phoneNumber,
             'email': user.email
         })
-        navigation.navigate('Wallet')
+        navigation.navigate('FundWallet')
     }
 
     const onStartGame = () => {
@@ -138,18 +139,20 @@ const GameStakingScreen = ({ navigation }) => {
                             source={require('../../../assets/images/wallet-with-cash.png')}
                             style={styles.avatar}
                         />
-                        <Text style={styles.totalTitleText}>Total balance</Text>
+                        <Text style={styles.totalTitleText}>{user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? 'Bonus balance' : 'Total balance'}</Text>
                     </View>
-                    <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} />
+                    {/* <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} /> */}
                 </View>
                 <View style={styles.currencyHeader}>
                     <View style={styles.currencyHeaderLeft}>
                         <Text style={styles.currencyText}>NGN</Text>
-                        {hidden ?
+                        <Text style={styles.currencyAmount}>{totalBalance}</Text>
+
+                        {/* {hidden ?
                             <Text style={styles.currencyAmount}>***</Text>
                             :
-                            <Text style={styles.currencyAmount}>{user.hasBonus === false ? formatCurrency(user.walletBalance ?? 0) : formatCurrency(user.bonusBalance ?? 0)}</Text>
-                        }
+                            <Text style={styles.currencyAmount}>{totalBalance}</Text>
+                        } */}
                     </View>
                     <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
                         <Text style={styles.depositText}>Deposit</Text>
@@ -177,7 +180,7 @@ const GameStakingScreen = ({ navigation }) => {
             }
             <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
                 disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButton} />
-            {user.hasBonus === true &&
+            {user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) &&
                 <Text style={styles.note}>Note that the predictions table below does not apply on bonus stakes</Text>}
             <View style={styles.stakeContainer}>
                 <Text style={styles.stakeHeading}>How To Win</Text>

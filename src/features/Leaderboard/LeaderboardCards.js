@@ -29,9 +29,8 @@ const LeaderboardCards = () => {
             // <SwiperFlatList>
             <>
                 {/* <BoostsCard /> */}
-                <TopLeaderboards isLeaderboard={isLeaderboard} />
                 <PromotionsBoard isNewPromotion={isNewPromotion} onPress={checkAvailablePromotions} />
-
+                <TopLeaderboards isLeaderboard={isLeaderboard} />
                 {/* <ChallengeLeaderboard /> */}
             </>
             // </SwiperFlatList>
@@ -50,9 +49,8 @@ const LeaderboardCards = () => {
         return (
             // <SwiperFlatList>
             <>
-                <TopLeaderboards isLeaderboard={isLeaderboard} />
                 <PromotionsBoard isNewPromotion={isNewPromotion} onPress={checkAvailablePromotions} />
-
+                <TopLeaderboards isLeaderboard={isLeaderboard} />
                 {/* <ChallengeLeaderboard /> */}
             </>
             // </SwiperFlatList>

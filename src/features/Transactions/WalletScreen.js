@@ -15,7 +15,7 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
-export default function WalletScreen({ navigation }) {
+export default function WalletScreen() {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user)
     const [refreshing, setRefreshing] = useState(false);
@@ -23,7 +23,6 @@ export default function WalletScreen({ navigation }) {
     const [mainWalletActive, setMainWalletActive] = useState(true);
     const transactions = useSelector(state => state.common.userTransactions);
 
-    // console.log(transactions)
     const [bonusWalletActive, setBonusWalletActive] = useState(false);
 
 
@@ -86,7 +85,6 @@ export default function WalletScreen({ navigation }) {
     //     ]
     // }
 
-    console.log(transactions)
 
 
 
@@ -150,15 +148,17 @@ const WalletBalanceDetails = ({ balance, bonusWalletActive, mainWalletActive, bo
                             />
                             <Text style={styles.totalTitleText}>Total balance</Text>
                         </View>
-                        <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} />
+                        {/* <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} /> */}
                     </View>
                     <View style={styles.currencyHeader}>
                         <Text style={styles.currencyText}>NGN</Text>
+                        <Text style={styles.currencyAmount}>{formatCurrency(balance)}</Text>
+                        {/* 
                         {hidden ?
                             <Text style={styles.currencyAmount}>***</Text>
                             :
                             <Text style={styles.currencyAmount}>{formatCurrency(balance)}</Text>
-                        }
+                        } */}
                     </View>
                     <View style={styles.fundingContainer}>
                         <Pressable style={styles.fundingButton} onPress={() => navigation.navigate('FundWallet')}>
@@ -190,15 +190,17 @@ const WalletBalanceDetails = ({ balance, bonusWalletActive, mainWalletActive, bo
                             />
                             <Text style={styles.totalTitleTexti}>Bonus balance</Text>
                         </View>
-                        <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} />
+                        {/* <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} /> */}
                     </View>
                     <View style={styles.currencyHeader}>
                         <Text style={styles.currencyText}>NGN</Text>
-                        {hidden ?
+                        <Text style={styles.currencyAmount}>{formatCurrency(bonusBalance)}</Text>
+
+                        {/* {hidden ?
                             <Text style={styles.currencyAmount}>***</Text>
                             :
                             <Text style={styles.currencyAmount}>{formatCurrency(bonusBalance)}</Text>
-                        }
+                        } */}
                     </View>
                 </View>
             }
@@ -600,7 +602,7 @@ const styles = EStyleSheet.create({
         borderWidth: 2,
         borderColor: '#072169',
         paddingHorizontal: '.5rem',
-        paddingVertical:'.5rem'
+        paddingVertical: '.5rem'
     },
     fundingText: {
         color: '#072169',

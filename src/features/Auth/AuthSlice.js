@@ -163,15 +163,6 @@ export const editProfileAvatar = createAsyncThunk(
 )
 
 
-
-export const getChallengeScores = createAsyncThunk(
-    'auth/getChallengeScores',
-    async (data, thunkAPI) => {
-        const response = await axios.get(`v3/challenge/${data}/leaderboard`);
-        return response.data;
-    }
-)
-
 export const verifyDeviceToken = createAsyncThunk(
     'auth/verifyDeviceToken',
     async (token, thunkAPI) => {
@@ -256,7 +247,6 @@ const initialState = {
         // email: 'oyekunmi@gmail.com'
     },
     createAccount: {},
-    challengeScores: {},
     firstTimeUserReward: [],
     loginError: "",
 }
@@ -340,9 +330,6 @@ export const AuthSlice = createSlice({
             })
             .addCase(registerWithSocialLink.fulfilled, (state, action) => {
                 state.token = action.payload.data;
-            })
-            .addCase(getChallengeScores.fulfilled, (state, action) => {
-                state.challengeScores = action.payload;
             })
             .addCase(getFirstTimeUserReward.fulfilled, (state, action) => {
                 state.firstTimeUserReward = action.payload.data;

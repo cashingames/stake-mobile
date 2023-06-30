@@ -32,32 +32,6 @@ export const startGame = createAsyncThunk(
     }
 )
 
-export const startChallengeGame = createAsyncThunk(
-    'game/startChallengeGame',
-    async (data, thunkAPI) => {
-        const response = await axios.post('v3/challenge/start/game', data)
-        return response.data
-    }
-
-)
-
-export const createRealTimeChallenge = createAsyncThunk(
-    'game/createRealTimeChallenge',
-    async (data, thunkAPI) => {
-        const response = await axios.post('v3/challenges/create', data)
-        return response.data
-    }
-
-)
-
-
-export const challengeEndGame = createAsyncThunk(
-    'game/challengeEndGame',
-    async (data, thunkAPI) => {
-        const response = await axios.post('v3/challenge/end/game', data)
-        return response.data
-    }
-)
 
 export const endGame = createAsyncThunk(
     'game/endGame',
@@ -73,50 +47,7 @@ export const endGame = createAsyncThunk(
         return response.data;
     }
 )
-export const getLiveTriviaLeaders = createAsyncThunk(
-    'game/getTriviaData',
-    async (data, thunkAPI) => {
-        //make a network request to the server
-        const response = await axios.get(`v3/live-trivia/${data}/leaderboard`);
-        return response.data;
-    }
-)
-export const challengeTopLeaders = createAsyncThunk(
-    'game/challengeTopLeaders',
-    async (data, sthunkAPI) => {
-        //make a network request to the server
-        const response = await axios.post('v3/challenge/leaders/global');
-        // console.log(response.data, 'this is response')
-        return response.data;
-    }
-)
 
-export const sendFriendInvite = createAsyncThunk(
-    'game/sendFriendInvite',
-    async (data, thunkAPI) => {
-        //make a network request to the server
-        const response = await axios.post('v3/challenge/send-invite', data)
-        return response.data;
-    }
-)
-
-export const getChallengeDetails = createAsyncThunk(
-    'game/getChallengeDetails',
-    async (data, thunkAPI) => {
-        //make a network request to the server
-        const response = await axios.get(`v3/challenge/${data}/details`)
-        return response.data;
-    }
-)
-
-export const acceptDeclineChallengeInivite = createAsyncThunk(
-    'game/acceptChallengeInivite ',
-    async (data, thunkAPI) => {
-        //make a network request to the server
-        const response = await axios.post('v3/challenge/invite/respond', data)
-        return response.data;
-    }
-)
 
 export const getGameStakes = createAsyncThunk(
     'game/getGameStakes',
@@ -150,18 +81,9 @@ let initialState = {
     isEnded: true,
     displayedOptions: [],
     displayedQuestion: {},
-    selectedFriend: null,
     isPlayingTrivia: false,
-    triviaLeaders: [],
-    challengeLeaders: [],
-    triviaPosition: '',
-    triviaCategory: '',
-    triviaType: '',
-    triviaMode: '',
-    triviaId: '',
     hasPlayedTrivia: false,
     gameDuration: 60,
-    challengeDetails: {},
     gameStakes: [],
     withStaking: false,
     endedWithoutStaking:null,
@@ -187,16 +109,6 @@ export const GameSlice = createSlice({
             // console.log("here")
             state.gameMode = action.payload;
         },
-        setSelectedFriend: (state, action) => {
-            // console.log("seeting")
-            state.selectedFriend = action.payload;
-        },
-        unselectFriend: (state) => {
-            state.selectedFriend = null;
-        },
-        // showStakingPopup: (state) => {
-        //     state.endedWithoutStaking = true;
-        // },
         setGameDuration: (state, action) => {
             state.gameDuration = action.payload;
         },
@@ -307,37 +219,6 @@ export const GameSlice = createSlice({
                 state.wrongCount = action.payload.data.wrong_count;
                 resetState(state)
             })
-            .addCase(getLiveTriviaLeaders.fulfilled, (state, action) => {
-                state.triviaLeaders = action.payload;
-            })
-            .addCase(challengeTopLeaders.fulfilled, (state, action) => {
-                state.challengeLeaders = action.payload;
-            })
-            .addCase(getChallengeDetails.fulfilled, (state, action) => {
-                state.challengeDetails = action.payload;
-                state.gameMode = {
-                    name: action.payload.gameModeName,
-                    id: action.payload.gameModeId,
-                };
-                state.gameCategory = {
-                    id: action.payload.categoryId
-                };
-                state.gameType = {
-                    id: 2
-                }
-            })
-            .addCase(startChallengeGame.fulfilled, (state, action) => {
-                state.questions = action.payload.data.questions;
-                state.displayedQuestion = state.questions[state.currentQuestionPosition]
-                state.displayedOptions = state.displayedQuestion.options
-                // state.gameSessionToken = action.payload.data.game.token
-                state.isEnded = false
-            })
-            .addCase(challengeEndGame.fulfilled, (state, action) => {
-                state.isEnded = true;
-                state.pointsGained = action.payload.data.points_gained;
-                resetState(state)
-            })
             .addCase(getGameStakes.fulfilled, (state, action) => {
                 state.gameStakes = action.payload.data;
             })
@@ -351,7 +232,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, setAmountWon, setCorrectCount, setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, unselectFriend, setWithStaking,showStakingPopup
+    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, setWithStaking,showStakingPopup
 } = GameSlice.actions
 
 
@@ -378,19 +259,8 @@ function resetState(state) {
     state.activeBoost = [];
     state.displayedOptions = [];
     state.displayedQuestion = {};
-    state.selectedFriend = null;
     state.isPlayingTrivia = false;
-    state.triviaLeaders = [];
-    state.triviaPosition = '';
-    state.triviaCategory = '';
-    state.triviaType = '';
-    state.triviaMode = '';
-    state.triviaId = '';
-    state.hasPlayedTrivia = false;
     state.gameDuration = 60;
-    state.challengeDetails = {};
-    state.userChallenges = [];
-    state.challengeScores = {};
 
     return state;
 }

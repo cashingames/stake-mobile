@@ -73,14 +73,6 @@ export const logActionToServer = createAsyncThunk(
     }
 )
 
-export const fetchRecentLiveTrivia = createAsyncThunk(
-    'common/fetchRecentLiveTrivia',
-    async (data, thunkAPI) => {
-        const response = await axios.get(`v3/live-trivia/recent?page=${data}`)
-        return response.data;
-    }
-)
-
 export const fetchUserTransactions = createAsyncThunk(
     'common/fetchUserTransactions',
     async (data, thunkAPI) => {
@@ -89,29 +81,6 @@ export const fetchUserTransactions = createAsyncThunk(
     }
 )
 
-export const fetchUserFriends = createAsyncThunk(
-    'common/fetchUserFriends',
-    async (thunkAPI) => {
-        const response = await axios.get('v3/user/search/friends')
-        return response.data;
-    }
-)
-
-export const searchUserFriends = createAsyncThunk(
-    'common/searchUserFriends',
-    async (data, thunkAPI) => {
-        const response = await axios.get(`v3/user/search/friends?search=${data}`)
-        return response.data;
-    }
-)
-
-export const getUserChallenges = createAsyncThunk(
-    'common/getUserChallenges  ',
-    async (data, thunkAPI) => {
-        const response = await axios.get(`v3/user/challenges?page=${data}`)
-        return response.data;
-    }
-)
 
 export const getUserNotifications = createAsyncThunk(
     'common/getUserNotifications',
@@ -179,10 +148,8 @@ const initialState = {
         userRank: {}
     },
     faqAndAnswers: [],
-    trivias: [],
     minVersionCode: '',
     minVersionForce: false,
-    userFriends: [],
     userChallenges: [],
     userNotifications: [],
     featureFlags: [],
@@ -268,21 +235,6 @@ export const CommonSlice = createSlice({
             })
             .addCase(fetchFaqAndAnswers.fulfilled, (state, action) => {
                 state.faqAndAnswers = action.payload
-            })
-            .addCase(fetchRecentLiveTrivia.fulfilled, (state, action) => {
-                // state.loadMoreLiveTrivias = action.payload.length >= 10;
-                // state.trivias = state.trivias.concat(action.payload);
-                state.trivias = action.payload;
-            })
-            .addCase(fetchUserFriends.fulfilled, (state, action) => {
-                state.userFriends = action.payload
-            })
-            .addCase(searchUserFriends.fulfilled, (state, action) => {
-                state.userFriends = action.payload
-            })
-            .addCase(getUserChallenges.fulfilled, (state, action) => {
-                state.loadMoreChallenges = action.payload.length >= 10;
-                state.userChallenges = state.userChallenges.concat(action.payload);
             })
             .addCase(getUserNotifications.fulfilled, (state, action) => {
                 state.userNotifications = action.payload.data.data;

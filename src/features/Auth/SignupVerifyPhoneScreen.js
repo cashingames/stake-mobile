@@ -11,6 +11,7 @@ import { calculateTimeRemaining } from '../../utils/utils';
 import { triggerNotifierForReferral } from '../../shared/Notification';
 import logToAnalytics from '../../utils/analytics';
 import { Ionicons } from '@expo/vector-icons';
+import CustomAlert from '../../shared/CustomAlert';
 
 
 const SignupVerifyPhoneScreen = ({ navigation, route }) => {

@@ -13,25 +13,7 @@ import { Image } from "react-native";
 
 
 
-const GamesListScreen = ({ navigation }) => {
-
-    useFocusEffect(
-        React.useCallback(() => {
-            if (Platform.OS === "android") {
-                StatusBar.setTranslucent(true);
-                StatusBar.setBackgroundColor("transparent");
-                return;
-            }
-            StatusBar.setBarStyle('dark-content');
-            return () => {
-                if (Platform.OS === "android") {
-                    StatusBar.setTranslucent(true)
-                    return;
-                }
-                StatusBar.setBarStyle('dark-content');
-            }
-        }, [])
-    );
+const GamesListScreen = () => {
 
 
     return (
@@ -40,8 +22,8 @@ const GamesListScreen = ({ navigation }) => {
             resizeMethod="resize">
             <ScrollView style={styles.contentContainer}>
                 <View style={styles.gamesContainer}>
-                    <TriviaBetCard />
                     <TriviaChallengeCard />
+                    <TriviaBetCard />
                     <TriviaRoomsCard />
                 </View>
             </ScrollView>

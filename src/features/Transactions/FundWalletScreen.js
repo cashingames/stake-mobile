@@ -75,22 +75,19 @@ export default function FundWalletScreen() {
     }
     if (paystackChecked) {
       setShowPayment(true);
-    } else {
-      startModal()
-      setAlertMessage('This payment gateway is not available now');
     }
   };
 
 
   const togglePaystack = () => {
-    setFlutterChecked(false);
+    // setFlutterChecked(false);
     setPaystackChecked(true);
   }
 
-  const toggleFlutter = () => {
-    setPaystackChecked(false);
-    setFlutterChecked(true);
-  }
+  // const toggleFlutter = () => {
+  //   setPaystackChecked(false);
+  //   setFlutterChecked(true);
+  // }
 
   return (
     <View style={styles.headContainer}>
@@ -120,13 +117,13 @@ export default function FundWalletScreen() {
                   source={require('../../../assets/images/paystack-icon.png')}
                 />
               </View>
-              <View style={styles.gatewayContainer}>
+              {/* <View style={styles.gatewayContainer}>
                 <Ionicons name={flutterChecked ? 'checkmark-circle' : "ellipse-outline"} size={30} color={flutterChecked ? '#00FFA3' : '#D9D9D9'} onPress={toggleFlutter} />
                 <Image
                   style={styles.gatewayIcon}
                   source={require('../../../assets/images/flutter-icon.png')}
                 />
-              </View>
+              </View> */}
             </View>
           </View>
           <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}

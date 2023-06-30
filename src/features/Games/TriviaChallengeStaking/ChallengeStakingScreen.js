@@ -68,7 +68,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
             'phone_number': user.phoneNumber,
             'email': user.email
         })
-        navigation.navigate('Wallet')
+        navigation.navigate('FundWallet')
     }
 
     const fundWallet = async () => {
@@ -77,7 +77,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
             'phone_number': user.phoneNumber,
             'email': user.email
         })
-        navigation.navigate('Wallet')
+        navigation.navigate('FundWallet')
     }
 
     useEffect(() => {
@@ -108,7 +108,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
                                         {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
                                     </View>
                                     :
-                                    <Text>You dont have any available boost</Text>
+                                    <Text style={styles.noBoostText}>You dont have any available boost</Text>
                                 }
                             </View>
                             {Platform.OS === "android" &&
@@ -309,6 +309,13 @@ const styles = EStyleSheet.create({
         height: '2rem',
     },
     noBoost: {
+        fontSize: '.75rem',
+        fontFamily: 'gotham-medium',
+        color: '#072169',
+        textAlign: 'center',
+        marginTop: '.5rem'
+    },
+    noBoostText: {
         fontSize: '.75rem',
         fontFamily: 'gotham-medium',
         color: '#072169',

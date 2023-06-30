@@ -53,21 +53,6 @@ const HomeScreen = () => {
     );
 
 
-    useFocusEffect(
-        React.useCallback(() => {
-            if (Platform.OS === "ios") {
-                return
-            }
-            StatusBar.setTranslucent(true)
-            StatusBar.setBackgroundColor("#ffff")
-            StatusBar.setBarStyle('dark-content');
-            return () => {
-                StatusBar.setTranslucent(true)
-                StatusBar.setBackgroundColor("#ffff")
-            }
-        }, [])
-    );
-
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
     }
@@ -157,7 +142,7 @@ function RenderUpdateChecker() {
 const styles = EStyleSheet.create({
     container: {
         // flex: 1,
-        paddingTop: responsiveScreenWidth(20),
+        paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(13) : responsiveScreenWidth(8),
         paddingHorizontal: normalize(18),
         backgroundColor: '#EFF2F6',
         paddingBottom: responsiveScreenWidth(3)

@@ -7,7 +7,6 @@ import { Ionicons } from "@expo/vector-icons";
 
 const CustomAlert = ({ setModalVisible, modalVisible, visible, setVisible,
     textLabel, alertImageVisible, buttonLabel, alertImage }) => {
-    // const [visible, setVisible] = React.useState(true);
 
     const toggleOverlay = () => {
         setVisible(!visible);

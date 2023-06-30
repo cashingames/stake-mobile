@@ -12,8 +12,8 @@ const GamesCardsList = () => {
     return (
         <View style={styles.gamesContainer}>
             <SwiperFlatList>
-                <TriviaBetCard />
                 <TriviaChallengeCard />
+                <TriviaBetCard />
                 <TriviaRoomsCard />
             </SwiperFlatList>
         </View>

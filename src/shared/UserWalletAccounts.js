@@ -102,7 +102,7 @@ const UserBoosts = ({ user }) => {
         // onPress={goToStore}
         >
             <View style={styles.boostHeader}>
-                <Text style={styles.boostHeaderText}>{user.username} you have</Text>
+                <Text style={styles.boostHeaderText}>You have</Text>
                 <View style={styles.boostSub}>
                     {Platform.OS !== 'ios' &&
                     <View style={styles.addContainer}>
