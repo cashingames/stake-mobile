@@ -20,12 +20,10 @@ const ChallengeMatchingScreen = ({ navigation }) => {
     const [dataUpdated, setDataUpdated] = useState(false);
     const [challengeInfo, setChallengeInfo] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = React.useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
 
     const startModal = () => {
-        setVisible(true)
         setModalVisible(true)
     }
 
@@ -139,7 +137,7 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                     <AppButton text="Cancel" onPress={cancelChallenge} style={styles.stakeButton} />
                 }
                   <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Dismiss' actionLabel='Yes, cancel'
+                     textLabel={alertMessage} buttonLabel='Dismiss' actionLabel='Yes, cancel'
                     alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={proceedWithCancel} />
 
             </ScrollView>

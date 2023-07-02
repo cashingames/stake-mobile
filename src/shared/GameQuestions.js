@@ -10,7 +10,7 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
 
 
-const GameQuestions = ({ onPress, ending, onComplete }) => {
+const GameQuestions = ({ onPress, ending, onComplete, exiting }) => {
     const dispatch = useDispatch();
     const displayedQuestion = useSelector(state => state.game.displayedQuestion);
     const displayedOptions = useSelector(state => state.game.displayedOptions);
@@ -60,13 +60,13 @@ const GameQuestions = ({ onPress, ending, onComplete }) => {
                 <View style={styles.options}>
                     {displayedOptions.map((option, i) => <GameOption option={option} key={i} onSelected={() => optionSelected(option)} />)}
                 </View>
-                <NextButton onPress={onPress} ending={ending} />
+                <NextButton onPress={onPress} ending={ending} exiting={exiting} />
             </ImageBackground>
         </View>
     )
 }
 
-const NextButton = ({ onPress, ending }) => {
+const NextButton = ({ onPress, ending, exiting }) => {
     const dispatch = useDispatch()
     const isLastQuestion = useSelector(state => state.game.isLastQuestion);
     const pressNext = () => {
@@ -75,7 +75,7 @@ const NextButton = ({ onPress, ending }) => {
 
     return (
         <AppButton
-            disabled={ending}
+            disabled={ending || exiting}
             text={isLastQuestion ? 'Finish' : 'Next'}
             onPress={pressNext}
             style={styles.nextButton}

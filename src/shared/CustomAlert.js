@@ -1,23 +1,15 @@
 import React from "react";
 import { Image, Modal, Pressable, Text, View } from "react-native";
-import { Overlay } from "react-native-elements";
 import EStyleSheet from "react-native-extended-stylesheet";
-import normalize from "../utils/normalize";
-import { Ionicons } from "@expo/vector-icons";
+import normalize, { responsiveHeight } from "../utils/normalize";
 
-const CustomAlert = ({ setModalVisible, modalVisible, visible, setVisible,
+const CustomAlert = ({ setModalVisible, modalVisible,
     textLabel, alertImageVisible, buttonLabel, alertImage }) => {
 
-    const toggleOverlay = () => {
-        setVisible(!visible);
-    };
-
     const closeModal = () => {
-        setVisible(false)
         setModalVisible(false)
     }
     return (
-        <Overlay isVisible={visible} onBackdropPress={toggleOverlay} backdropStyle={{ backgroundColor: 'rgba(7, 33, 105, .74)' }}>
             <View style={styles.onView}>
                 <Modal
                     animationType="slide"
@@ -53,17 +45,17 @@ const CustomAlert = ({ setModalVisible, modalVisible, visible, setVisible,
                     </View>
                 </Modal>
             </View>
-        </Overlay>
     )
 }
 export default CustomAlert;
 
 const styles = EStyleSheet.create({
     centeredView: {
-        flex: 1,
         justifyContent: "center",
         // alignItems: "center",
-        marginTop: 22,
+        flex: 1,
+        // paddingVertical: responsiveHeight(2),
+        backgroundColor: 'rgba(17, 41, 103, 0.77)'
     },
     modalView: {
         margin: 20,

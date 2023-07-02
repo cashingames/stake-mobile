@@ -1,30 +1,22 @@
 import React from "react";
 import { Image, Modal, Pressable, Text, View } from "react-native";
-import { Overlay } from "react-native-elements";
 import EStyleSheet from "react-native-extended-stylesheet";
 import normalize from "../utils/normalize";
-import { Ionicons } from "@expo/vector-icons";
 
-const DoubleButtonAlert = ({ setModalVisible, modalVisible, visible, setVisible,
+const DoubleButtonAlert = ({ setModalVisible, modalVisible,
     textLabel, alertImageVisible, buttonLabel, alertImage, actionLabel, onPress }) => {
 
-    const toggleOverlay = () => {
-        setVisible(!visible);
-    };
 
     const closeModal = () => {
-        setVisible(false)
         setModalVisible(false)
     }
     return (
-        <Overlay isVisible={visible} onBackdropPress={toggleOverlay} backdropStyle={{ backgroundColor: 'rgba(7, 33, 105, .74)' }}>
-            <View style={styles.onView}>
+            <View>
                 <Modal
                     animationType="slide"
                     transparent={true}
                     visible={modalVisible}
                     onRequestClose={() => {
-                        // Alert.alert("Modal has been closed.");
                         setModalVisible(!modalVisible);
                     }}
                 >
@@ -62,17 +54,17 @@ const DoubleButtonAlert = ({ setModalVisible, modalVisible, visible, setVisible,
                     </View>
                 </Modal>
             </View>
-        </Overlay>
     )
 }
 export default DoubleButtonAlert;
 
 const styles = EStyleSheet.create({
     centeredView: {
-        flex: 1,
         justifyContent: "center",
         // alignItems: "center",
-        marginTop: 22,
+        flex: 1,
+        // paddingVertical: responsiveHeight(2),
+        backgroundColor: 'rgba(17, 41, 103, 0.77)'
     },
     modalView: {
         margin: 20,

@@ -3,7 +3,7 @@ import { Text, View, ScrollView, Pressable, Image, RefreshControl, ImageBackgrou
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
 import { formatCurrency } from '../../utils/stringUtl';
@@ -46,12 +46,21 @@ export default function WalletScreen() {
 
     useEffect(() => {
         // setLoading(true)
+        dispatch(getUser())
         dispatch(fetchUserTransactions())
             .then(() => {
                 console.log("fetching page ",)
                 setLoading(false)
             })
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            dispatch(getUser());
+            dispatch(fetchUserTransactions());
+        }, [])
+    );
+
 
     // const transactions = {
     //     bonusTransactions: [

@@ -15,12 +15,10 @@ import CustomAlert from "../../shared/CustomAlert";
 
 const AuthContactUs = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
 
     const startModal = () => {
-        setVisible(true)
         setModalVisible(true)
     }
 
@@ -40,13 +38,13 @@ const AuthContactUs = ({ navigation }) => {
             <Text style={styles.title}>Do you have any question?</Text>
             <ContactForm startModal={startModal} setAlertMessage={setAlertMessage} />
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
-                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                textLabel={alertMessage} buttonLabel='Ok, got it'
+                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
         </ScrollView>
     )
 }
 
-const ContactForm = ({startModal, setAlertMessage}) => {
+const ContactForm = ({ startModal, setAlertMessage }) => {
     const dispatch = useDispatch();
     const [saving, setSaving] = useState(false);
     const [first_name, setFirstName] = useState('');
@@ -172,7 +170,7 @@ const ContactForm = ({startModal, setAlertMessage}) => {
                 disabled={!canSave || saving}
                 style={styles.buttonStyle}
             />
-           
+
         </View>
     )
 }
@@ -207,7 +205,7 @@ const styles = EStyleSheet.create({
     },
     formContainer: {
         marginTop: '1rem',
-        marginBottom:responsiveScreenWidth(40)
+        marginBottom: responsiveScreenWidth(40)
     },
     messageBox: {
         paddingBottom: Platform.OS === 'ios' ? '5rem' : '3rem',
@@ -243,7 +241,7 @@ const styles = EStyleSheet.create({
         marginTop: normalize(9),
         marginRight: '.5rem',
         textAlign: 'center',
-        color:'#072169'
+        color: '#072169'
     },
     icon: {
         marginTop: '.8rem'

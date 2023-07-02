@@ -23,14 +23,8 @@ export default function ChangePasswordScreen({ navigation }) {
     const [new_password_confirmation, setConfirmPassword] = useState(Constants.expoConfig.extra.isStaging ? '12345678' : '');
     const [passErr, setPassError] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = React.useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
-
-    const startModal = () => {
-        setVisible(true)
-        setModalVisible(true)
-    }
 
     const refRBSheet = useRef();
 
@@ -74,14 +68,14 @@ export default function ChangePasswordScreen({ navigation }) {
         dispatch(changePassword({ password, new_password, new_password_confirmation }))
             .then(unwrapResult)
             .then(result => {
-                startModal()
+                setModalVisible(true)
                 setAlertMessage('Password changed successfully');
                 // navigation.navigate("Home")
             })
             .catch((rejectedValueOrSerializedError) => {
                 setSaving(false);
                 setCanSave(true);
-                startModal()
+                setModalVisible(true)
                 setAlertMessage('Invalid data provided');
             });
     }
@@ -127,7 +121,7 @@ export default function ChangePasswordScreen({ navigation }) {
                     />}
                 />
                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                     textLabel={alertMessage} buttonLabel='Ok, got it'
                     alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
             </ScrollView>
             <AppButton

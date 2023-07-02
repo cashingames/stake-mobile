@@ -17,6 +17,7 @@ import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { Animated } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import DoubleButtonAlert from "../../../shared/DoubleButtonAlert";
+import CustomAlert from "../../../shared/CustomAlert";
 
 
 const ChallengeGameBoardScreen = ({ navigation }) => {
@@ -28,12 +29,12 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     const [submitting, setSubmitting] = useState(false);
     const user = useSelector(state => state.auth.user);
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = React.useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const [exiting, setExiting] = useState(false);
+    const [exitClicked, setExitClicked] = useState(false);
 
 
     const startModal = () => {
-        setVisible(true)
         setModalVisible(true)
     }
 
@@ -87,7 +88,29 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                 );
             });
     }
+    const onExitGame = () => {
+        setExiting(true)
+        setModalVisible(false)
+        if (isEnded) {
+            console.log("game already ended", "timer bug is trying to submit again");
+            return;
+        };
+
+        setSubmitting(true);
+        dispatch(setIsEnded(true));
+        dispatch(submitGameSession())
+            .then(unwrapResult)
+            .then(async () => {
+                const status = await getOpponentStatus();
+                setSubmitting(false);
+                navigation.navigate(
+                    status === 'MATCHED' ?
+                        'ChallengeGameEndWaiting' : 'ChallengeEndGame'
+                );
+            });
+    }
     const showExitConfirmation = () => {
+        setExitClicked(true);
         startModal()
         setAlertMessage("You have an ongoing game. Do you want to submit this game ?");
     }
@@ -108,10 +131,16 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                 <PlayGameHeader onPress={showExitConfirmation} challengeGame={true} />
                 <ChallengeGameBoardWidgets />
                 <SelectedPlayers user={user} challengeDetails={challengeDetails} />
-                <RenderQuestion onComplete={gameEnded} onEnd={gameEnded} submitting={submitting} />
-                <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Continue playing' actionLabel='Exit'
-                    alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={gameEnded} />
+                <RenderQuestion onComplete={gameEnded} onEnd={gameEnded} submitting={submitting} exiting={exiting} />
+                {exitClicked ?
+                    <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                        textLabel={alertMessage} buttonLabel='Continue playing' actionLabel='Exit'
+                        alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={() => onExitGame()} />
+                    :
+                    <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                        textLabel={alertMessage} buttonLabel='Ok, got it'
+                        alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                }
             </ScrollView>
         </ImageBackground>
 
@@ -143,7 +172,7 @@ const SelectedPlayer = ({ playerName, playerAvatar }) => {
     )
 }
 
-const RenderQuestion = ({ onComplete, onEnd, submitting }) => {
+const RenderQuestion = ({ onComplete, onEnd, submitting, exiting }) => {
     const dispatch = useDispatch();
     const currentQuestion = useSelector(state => state.triviaChallenge.currentQuestion || []);
     const options = currentQuestion.options;
@@ -191,7 +220,7 @@ const RenderQuestion = ({ onComplete, onEnd, submitting }) => {
                 <View style={styles.options}>
                     {options.map((option, i) => <RenderOption option={option} key={option.id} onSelect={optionSelected} />)}
                 </View>
-                <RenderActionButton onEnd={onEnd} submitting={submitting} />
+                <RenderActionButton onEnd={onEnd} submitting={submitting} exiting={exiting} />
             </ImageBackground>
         </View>
     )
@@ -209,7 +238,7 @@ const RenderOption = ({ option, onSelect }) => {
     )
 }
 
-const RenderActionButton = ({ onEnd, submitting }) => {
+const RenderActionButton = ({ onEnd, submitting, exiting }) => {
     const dispatch = useDispatch();
     const totalQuestions = useSelector(state => state.triviaChallenge.totalQuestions);
     const currentQuestionIndex = useSelector(state => state.triviaChallenge.currentQuestionIndex);
@@ -230,7 +259,7 @@ const RenderActionButton = ({ onEnd, submitting }) => {
             text={isLastQuestion ? 'Finish' : 'Next'}
             onPress={onPress}
             style={styles.nextButton}
-            disabled={submitting}
+            disabled={submitting || exiting}
             disabledStyle={styles.disabled}
         />
 
@@ -239,13 +268,13 @@ const RenderActionButton = ({ onEnd, submitting }) => {
 export default ChallengeGameBoardScreen;
 
 const styles = EStyleSheet.create({
-    image: {
-        flex: 1,
-    },
     container: {
         flex: 1,
+    },
+    image: {
+        flex: 1,
         paddingHorizontal: normalize(18),
-        paddingTop: responsiveScreenWidth(18),
+        paddingTop: responsiveScreenWidth(13),
     },
     // options: {
     //     paddingBottom: normalize(45),

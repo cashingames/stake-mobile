@@ -33,13 +33,7 @@ export default function FundWalletScreen() {
   const [flutterChecked, setFlutterChecked] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [visible, setVisible] = React.useState(false);
 
-
-  const startModal = () => {
-    setVisible(true)
-    setModalVisible(true)
-  }
 
   const transactionCompleted = (res) => {
     // verifyFunding(res.reference); for local testing
@@ -55,6 +49,7 @@ export default function FundWalletScreen() {
     dispatch(fetchUserTransactions())
     setShowPayment(false);
     navigation.navigate("FundWalletCompleted");
+
   };
   const cleanedAmount =
     amount.trim().length === 0 ? 0 : Number.parseFloat(amount);
@@ -69,25 +64,30 @@ export default function FundWalletScreen() {
     });
 
     if (cleanedAmount < minimumWalletFundableAmount) {
-      startModal()
+      setModalVisible(true)
       setAlertMessage(`Amount cannot be less than ${minimumWalletFundableAmount} naira`);
       return false;
     }
     if (paystackChecked) {
       setShowPayment(true);
+    } else {
+      setAlertMessage(`This payment gateway is not available now`);
+      setModalVisible(true)
     }
   };
 
 
   const togglePaystack = () => {
-    // setFlutterChecked(false);
+    setFlutterChecked(false);
     setPaystackChecked(true);
   }
 
-  // const toggleFlutter = () => {
-  //   setPaystackChecked(false);
-  //   setFlutterChecked(true);
-  // }
+  const toggleFlutter = () => {
+    setPaystackChecked(false);
+    setFlutterChecked(true);
+    setAlertMessage(`This payment gateway is not available now`);
+    setModalVisible(true)
+  }
 
   return (
     <View style={styles.headContainer}>
@@ -117,17 +117,17 @@ export default function FundWalletScreen() {
                   source={require('../../../assets/images/paystack-icon.png')}
                 />
               </View>
-              {/* <View style={styles.gatewayContainer}>
+              <View style={styles.gatewayContainer}>
                 <Ionicons name={flutterChecked ? 'checkmark-circle' : "ellipse-outline"} size={30} color={flutterChecked ? '#00FFA3' : '#D9D9D9'} onPress={toggleFlutter} />
                 <Image
                   style={styles.gatewayIcon}
                   source={require('../../../assets/images/flutter-icon.png')}
                 />
-              </View> */}
+              </View>
             </View>
           </View>
           <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-            visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+            textLabel={alertMessage} buttonLabel='Ok, got it'
             alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true}
           />
         </ScrollView>
@@ -149,7 +149,7 @@ export default function FundWalletScreen() {
           activityIndicatorColor="green"
           onCancel={(e) => {
             setShowPayment(false);
-            startModal()
+            setModalVisible(true)
             setAlertMessage('Failed...');
           }}
           onSuccess={transactionCompleted}

@@ -43,15 +43,6 @@ const SignupScreen = () => {
     const [referrer, setReferrer] = useState('');
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = React.useState(false);
-
-    // const startModal = () => {
-    //     if(allError.length > 0) {
-    //         setVisible(true)
-    //         setModalVisible(true)
-    //     }
-
-    // }
 
     //check for device ids
     const deviceBrand = Device.brand;
@@ -125,7 +116,6 @@ const SignupScreen = () => {
             device_model: deviceModelName,
             device_token: deviceId
         }).then(response => {
-            console.log(response)
             navigation.navigate('SignupVerifyPhone', {
                 phone_number: phone,
                 username: username,
@@ -137,12 +127,10 @@ const SignupScreen = () => {
         }, err => {
             if (!err || !err.response || err.response === undefined) {
                 setAllError("Your Network is Offline.");
-                setVisible(true)
                 setModalVisible(true)
             }
             else if (err.response.status === 500) {
                 setAllError("Service not currently available. Please contact support");
-                setVisible(true)
                 setModalVisible(true)
             }
             else {
@@ -150,7 +138,6 @@ const SignupScreen = () => {
                     err.response && err.response.data && err.response.data.errors;
                 const firstError = Object.values(errors, {})[0];
                 setAllError(firstError[0])
-                setVisible(true)
                 setModalVisible(true)
             }
             setLoading(false);
@@ -305,7 +292,7 @@ const SignupScreen = () => {
             </View>
             <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                visible={visible} setVisible={setVisible} textLabel={allError} buttonLabel='Ok, got it'
+                 textLabel={allError} buttonLabel='Ok, got it'
                 alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
         </ScrollView>
     );

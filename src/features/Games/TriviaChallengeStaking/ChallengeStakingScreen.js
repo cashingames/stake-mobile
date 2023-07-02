@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import AppButton from '../../../shared/AppButton';
 import Input from '../../../shared/Input';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../../utils/normalize';
-import useApplyHeaderWorkaround from '../../../utils/useApplyHeaderWorkaround';
 import Constants from 'expo-constants';
 import { formatCurrency, formatNumber, isTrue } from '../../../utils/stringUtl';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -27,14 +26,8 @@ const ChallengeStakingScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [canSend, setCanSend] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = React.useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
-
-    const startModal = () => {
-        setVisible(true)
-        setModalVisible(true)
-    }
 
     const goToStore = () => {
         logToAnalytics("trivia_challenge_get_boost_clicked")
@@ -56,7 +49,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
                 navigation.navigate('ChallengeMatching')
             })
             .catch((rejectedValueOrSerializedError) => {
-                startModal()
+                setModalVisible(true)
                 setAlertMessage("Something went wrong. Please try again or contact support");
                 setLoading(false)
             });
@@ -143,7 +136,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
                         <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake amount"} onPress={stakeAmount} disabled={loading || !canSend}
                             style={styles.stakeButton} disabledStyle={styles.disabled} isIcon={true} iconColor="#FFF" />
                         <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                            visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                             textLabel={alertMessage} buttonLabel='Ok, got it'
                             alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
 
                     </ScrollView>

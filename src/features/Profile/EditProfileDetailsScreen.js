@@ -38,14 +38,9 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const [show, setShow] = useState(false);
     const [countryCode, setCountryCode] = useState(user.countryCode);
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = React.useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
 
-    const startModal = () => {
-        setVisible(true)
-        setModalVisible(true)
-    }
 
     const onChangeDateOfBirth = (event, selectedDate) => {
         const currentDate = selectedDate || dateOfBirth;
@@ -110,18 +105,18 @@ export default function EditProfileDetailsScreen({ navigation }) {
         })
             .then(result => {
                 dispatch(getUser());
-                startModal()
+                setModalVisible(true)
                 setAlertMessage('Personal details updated successfully');
                 setSaving(false);
             },
                 err => {
                     if (!err || !err.response || err.response === undefined) {
-                        startModal()
+                        setModalVisible(true)
                         setAlertMessage('Your Network is Offline.');
                         setSaving(false);
                     }
                     else if (err.response.status === 500) {
-                        startModal()
+                        setModalVisible(true)
                         setAlertMessage('Service not currently available. Please contact support');
                         setSaving(false);
                     }
@@ -129,7 +124,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                         const errors =
                             err.response && err.response.data && err.response.data.errors;
                         const firstError = Object.values(errors, {})[0];
-                        startModal()
+                        setModalVisible(true)
                         setAlertMessage(firstError[0]);
                         setSaving(false);
                     }
@@ -261,7 +256,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                     </View>
                 </View>
                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                    textLabel={alertMessage} buttonLabel='Ok, got it'
                     alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
             </ScrollView>
             <AppButton

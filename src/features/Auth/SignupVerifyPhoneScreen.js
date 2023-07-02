@@ -37,14 +37,8 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     const [active, setActive] = useState(false);
     const [error, setError] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = React.useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
-
-    const startModal = () => {
-        setVisible(true)
-        setModalVisible(true)
-    }
 
 
     const token = `${otp1}${otp2}${otp3}${otp4}${otp5}`
@@ -111,7 +105,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
             })
             .catch((rejectedValueOrSerializedError) => {
                 console.log(rejectedValueOrSerializedError)
-                startModal()
+                setModalVisible(true)
                 setAlertMessage("Invalid authentication code provided");
                 setLoading(false);
             })
@@ -206,7 +200,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                     countdowvnDone={countdowvnDone} />
             </View>
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                    textLabel={alertMessage} buttonLabel='Ok, got it'
                     alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
         </ScrollView>
     )

@@ -13,12 +13,10 @@ import CustomAlert from '../shared/CustomAlert';
 
 const InviteFriendsScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = React.useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
 
     const startModal = () => {
-        setVisible(true)
         setModalVisible(true)
     }
 
@@ -36,7 +34,7 @@ const InviteFriendsScreen = () => {
                 <Instructions />
                 <InviteLink startModal={startModal} setAlertMessage={setAlertMessage} />
                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                    textLabel={alertMessage} buttonLabel='Ok, got it'
                     alertImage={require('../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
 
             </ScrollView>

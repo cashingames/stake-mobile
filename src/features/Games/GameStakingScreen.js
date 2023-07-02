@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Text, View, ScrollView, Alert, ActivityIndicator, Image, Pressable } from 'react-native';
-import useApplyHeaderWorkaround from "../../utils/useApplyHeaderWorkaround";
+import React, { useEffect, useState } from "react";
+import { Text, View, ScrollView, ActivityIndicator, Image, Pressable } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import normalize from "../../utils/normalize";
@@ -30,15 +29,10 @@ const GameStakingScreen = ({ navigation }) => {
     const [canSend, setCanSend] = useState(false);
     const [hidden, setHidden] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = React.useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const totalBalance = user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? formatCurrency(user.bonusBalance ?? 0) : formatCurrency(user.walletBalance ?? 0)
 
 
-    const startModal = () => {
-        setVisible(true)
-        setModalVisible(true)
-    }
 
     const toggleSecureText = () => {
         setHidden(!hidden);
@@ -122,11 +116,11 @@ const GameStakingScreen = ({ navigation }) => {
 
     const processStartGameError = async (err) => {
         const errors = err.message;
-        startModal()
+        setModalVisible(true)
         setAlertMessage(errors);
 
         const firstError = Array.isArray(errors) ? Object.values(errors, {})[0][0] : errors;
-        startModal()
+        setModalVisible(true)
         setAlertMessage(firstError);
     }
 
@@ -193,7 +187,7 @@ const GameStakingScreen = ({ navigation }) => {
                     amount={amount} />)}
             </View>
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                visible={visible} setVisible={setVisible} textLabel={alertMessage} buttonLabel='Ok, got it'
+                textLabel={alertMessage} buttonLabel='Ok, got it'
                 alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
 
         </ScrollView>

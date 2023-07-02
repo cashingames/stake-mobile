@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { Text, View, ScrollView, StatusBar, Platform, RefreshControl, Image, Pressable } from 'react-native';
+import { Text, View, ScrollView, Platform, RefreshControl, Image, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import normalize, {
@@ -142,7 +142,7 @@ function RenderUpdateChecker() {
 const styles = EStyleSheet.create({
     container: {
         // flex: 1,
-        paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(13) : responsiveScreenWidth(8),
+        paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(15) : responsiveScreenWidth(13),
         paddingHorizontal: normalize(18),
         backgroundColor: '#EFF2F6',
         paddingBottom: responsiveScreenWidth(3)

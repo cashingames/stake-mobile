@@ -34,11 +34,9 @@ const WithdrawBalanceScreen = ({ navigation }) => {
     const minimumWithdrawableAmount = Number.parseFloat(1000);
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = React.useState(false);
 
 
     const startModal = () => {
-        setVisible(true)
         setModalVisible(true)
     }
 
@@ -161,7 +159,7 @@ const WithdrawBalanceScreen = ({ navigation }) => {
                     </View>
                 </View>
                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    visible={visible} setVisible={setVisible} textLabel={allError} buttonLabel='Ok, got it'
+                     textLabel={allError} buttonLabel='Ok, got it'
                     alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true}
                 />
 

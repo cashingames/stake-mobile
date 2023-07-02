@@ -24,7 +24,6 @@ export default function ({ navigation }) {
     const [loading, setLoading] = useState(false);
     const [allError, setAllError] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
-    const [visible, setVisible] = React.useState(false);
     const phone = useSelector(state => state.auth.passwordReset.userPhone);
     const code = useSelector(state => state.auth.passwordReset.userCode);
 
@@ -48,14 +47,12 @@ export default function ({ navigation }) {
                 setLoading(false);
                 setCanSend(true);
                 setAllError("Password reset successful");
-                setVisible(true)
                 setModalVisible(true)
                 navigation.navigate('Login');
             })
             .catch((rejectedValueOrSerializedError) => {
                 // console.log(rejectedValueOrSerializedError)
                 setAllError("Password reset failed, try again");
-                setVisible(true)
                 setModalVisible(true)
                 setLoading(false);
             })
@@ -97,7 +94,7 @@ export default function ({ navigation }) {
                 </View>
             </View>
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                visible={visible} setVisible={setVisible} textLabel={allError} buttonLabel='Ok, got it'
+                 textLabel={allError} buttonLabel='Ok, got it'
                 alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
         </ScrollView>
     );
