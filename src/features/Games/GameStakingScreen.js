@@ -46,11 +46,9 @@ const GameStakingScreen = ({ navigation }) => {
 
 
     useEffect(() => {
-
-        const invalid = amount === '' || amount < Number.parseFloat(minimumExhibitionStakeAmount) || amount > Number.parseFloat(totalBalance)
+        const invalid = amount === '' || amount < Number.parseFloat(minimumExhibitionStakeAmount) || amount > totalBalance
         setCanSend(!invalid);
-
-    }, [amount, minimumExhibitionStakeAmount, user.walletBalance])
+    }, [amount, minimumExhibitionStakeAmount])
 
     const validate = () => {
         setLoading(true);
