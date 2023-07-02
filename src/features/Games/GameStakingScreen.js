@@ -30,8 +30,7 @@ const GameStakingScreen = ({ navigation }) => {
     const [hidden, setHidden] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-    const totalBalance = user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? formatCurrency(user.bonusBalance ?? 0) : formatCurrency(user.walletBalance ?? 0)
-
+    const totalBalance = user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? Number.parseFloat(user.bonusBalance) ?? 0 : Number.parseFloat(user.walletBalance) ?? 0
 
 
     const toggleSecureText = () => {
@@ -46,8 +45,8 @@ const GameStakingScreen = ({ navigation }) => {
 
 
     useEffect(() => {
-        const invalid = amount === '' || amount < Number.parseFloat(minimumExhibitionStakeAmount) || amount > totalBalance
-        setCanSend(!invalid);
+        const canSend = amount !== '' && (amount > Number.parseFloat(minimumExhibitionStakeAmount) && amount <= totalBalance);
+        setCanSend(canSend);
     }, [amount, minimumExhibitionStakeAmount])
 
     const validate = () => {
@@ -138,7 +137,7 @@ const GameStakingScreen = ({ navigation }) => {
                 <View style={styles.currencyHeader}>
                     <View style={styles.currencyHeaderLeft}>
                         <Text style={styles.currencyText}>NGN</Text>
-                        <Text style={styles.currencyAmount}>{totalBalance}</Text>
+                        <Text style={styles.currencyAmount}>{formatCurrency(totalBalance)}</Text>
 
                         {/* {hidden ?
                             <Text style={styles.currencyAmount}>***</Text>
@@ -172,6 +171,7 @@ const GameStakingScreen = ({ navigation }) => {
             }
             <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
                 disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButton} />
+                
             {user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) &&
                 <Text style={styles.note}>Note that the predictions table below does not apply on bonus stakes</Text>}
             <View style={styles.stakeContainer}>
