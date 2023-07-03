@@ -8,20 +8,24 @@ import { useSelector } from "react-redux";
 
 
 const PromotionsScreen = () => {
-    const [isNewPromotion, setIsNewPromotion] = useState(false);
+    const [isNewPromotion, setIsNewPromotion] = useState(true);
     const user = useSelector(state => state.auth.user);
 
 
     const promotions = [
         {
             "id": 1,
-            "bannerImage": require('../../../assets/images/trivia-banner.png'),
-            "name": 'Weekly trivia'
+            "bannerImage": require('../../../assets/images/bonus-banner1.png'),
+            "innerBanner": require('../../../assets/images/bonus-banner2.png'),
+            "name": 'Welcome Bonus',
+            "description" : 'Get an instant 100% Cashback bonus on your first deposit to a limit of N10,000! You can use your bonus amount to stake and earn cash. Bonus expires in 7 days. Terms and conditions apply.'
         },
         {
             "id": 2,
-            "bannerImage": require('../../../assets/images/trivia-banner.png'),
-            "name": 'Wise weekly trivia'
+            "bannerImage": require('../../../assets/images/cashback-banner1.png'),
+            "innerBanner": require('../../../assets/images/cashback-banner2.png'),
+            "name": 'Saturday 10% Cashback',
+            "description" : "Get 10% cashback on your losses by the end of every week! We've got you covered. The higher your stakes, the bigger your bonus! Bonus expires in 3 Days. Terms and conditions apply."
         },
     ]
 
@@ -63,6 +67,8 @@ const PromotionBanner = ({ promotion, user }) => {
         })
         navigation.navigate('Promotion', {
             promotion_title: promotion.name,
+            inner_banner: promotion.innerBanner,
+            promotion_description: promotion.description,
         })
     }
     return (

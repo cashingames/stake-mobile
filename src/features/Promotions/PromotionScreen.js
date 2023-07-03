@@ -26,28 +26,24 @@ const PromotionScreen = ({ route }) => {
             </View>
             <ScrollView style={styles.container}>
                 <Image
-                    source={require('../../../assets/images/trivia-banner.png')}
+                    source={params.inner_banner}
                     style={styles.banner}
                 />
                 <View style={styles.detailsMainContainer}>
-                    <View style={styles.detailsContainer}>
+                    {/* <View style={styles.detailsContainer}>
                         <Text style={styles.detailsHeader}>About</Text>
                         <Text style={styles.detailsText}>
                             The Company has the right to cancel the bets, wins, bonuses, Jackpots, or any
                             other prizes displayed or provided to the Player due to
                             any technical, mechanical, or software bug or error.
                         </Text>
-                    </View>
+                    </View> */}
                     <View style={styles.detailsContainer}>
-                        <Text style={styles.detailsHeader}>How to participate</Text>
-                        <Text style={styles.detailsText}>
-                            The Company has the right to cancel the bets, wins, bonuses, Jackpots, or any
-                            other prizes displayed or provided to the Player due to
-                            any technical, mechanical, or software bug or error.
-                        </Text>
+                        <Text style={styles.detailsHeader}>Description</Text>
+                        <Text style={styles.detailsText}>{params.promotion_description}</Text>
                     </View>
                 </View>
-                <AppButton text='Activate offer' style={styles.activateButton} textStyle={styles.buttonText} />
+                {/* <AppButton text='Activate offer' style={styles.activateButton} textStyle={styles.buttonText} /> */}
 
             </ScrollView>
         </ImageBackground>
@@ -89,6 +85,7 @@ const styles = EStyleSheet.create({
         fontSize: '1.3rem',
         color: '#072169',
         fontFamily: 'bubble-regular',
+        marginBottom:'.5rem'
     },
     detailsText: {
         fontSize: '1rem',
