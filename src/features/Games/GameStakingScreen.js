@@ -45,7 +45,7 @@ const GameStakingScreen = ({ navigation }) => {
 
 
     useEffect(() => {
-        const canSend = amount !== '' && (amount > Number.parseFloat(minimumExhibitionStakeAmount) && amount <= totalBalance);
+        const canSend = amount !== '' && (amount > Number.parseFloat(minimumExhibitionStakeAmount) && amount < totalBalance);
         setCanSend(canSend);
     }, [amount, minimumExhibitionStakeAmount])
 
