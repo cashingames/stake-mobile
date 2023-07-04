@@ -285,7 +285,7 @@ const styles = EStyleSheet.create({
     },
     homeButton: {
         marginVertical: 5,
-        backgroundColor: 'transparent',
+        backgroundColor: 'none',
         borderWidth: 2,
         borderColor: '#072169',
         paddingVertical: normalize(19),

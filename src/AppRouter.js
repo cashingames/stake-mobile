@@ -35,7 +35,7 @@ import GameBoostPurchaseSuccessfulScreen from './features/Store/GameBoostPurchas
 import GameStoreScreen from './features/Store/GameStoreScreen';
 import GameStoreItemsPurchaseFailed from './features/Store/GameStoreItemsPurchaseFailedScreen';
 import SelectGameCategoryScreen from './features/Games/SelectGameCategoryScreen';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import routeDecider from './utils/notificationRouteDecider';
 import GameStakingScreen from './features/Games/GameStakingScreen';
@@ -125,7 +125,7 @@ function AppRouter() {
 	}
 
 	return (
-		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' } }} >
+		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' }, headerTitleAlign: 'center', headerBackTitleVisible: false, headerBackImageSource: require('../assets/images/chevron.png') }} >
 			{isTrue(token) ?
 				(
 					<>

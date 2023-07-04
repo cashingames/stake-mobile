@@ -27,6 +27,7 @@ const HomeScreen = () => {
     const loading = useSelector(state => state.common.initialLoading);
     const [refreshing, setRefreshing] = useState(false);
     const user = useSelector(state => state.auth.user);
+    const username = user.username?.charAt(0)
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
@@ -69,7 +70,7 @@ const HomeScreen = () => {
                     />
                 }
             >
-                <UserProfile user={user} />
+                <UserProfile user={user} username={username} />
                 <UserWalletAccounts user={user} />
                 <GamesCardsList />
                 <LeaderboardCards />
@@ -79,7 +80,7 @@ const HomeScreen = () => {
 }
 export default HomeScreen;
 
-const UserProfile = ({ user }) => {
+const UserProfile = ({ user, username }) => {
     const navigation = useNavigation();
 
     const viewNotifications = async () => {
@@ -102,11 +103,9 @@ const UserProfile = ({ user }) => {
     return (
         <View style={styles.userProfileContainer}>
             <View style={styles.userProfileLeft}>
-                <Image
-                    style={styles.avatar}
-                    source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
-
-                />
+                <View style={styles.avatar}>
+                    <Text style={styles.avatarText}>{username}</Text>
+                </View>
                 <View style={styles.nameMainContainer}>
                     <View style={styles.nameContainer}>
                         <Text style={styles.welcomeText}>Hello, </Text>
@@ -152,12 +151,20 @@ const styles = EStyleSheet.create({
         flex: 1,
     },
     avatar: {
-        width: normalize(52),
-        height: normalize(52),
-        backgroundColor: '#FFFF',
+        width: normalize(50),
+        height: normalize(50),
+        backgroundColor: '#FDCCD4',
         borderRadius: 100,
         borderColor: ' rgba(0, 0, 0, 0.1)',
         borderWidth: 1,
+        alignItems: 'center',
+        justifyContent:'center',
+    },
+    avatarText: {
+        fontSize: '1.5rem',
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        textTransform:'capitalize'
     },
     nameMainContainer: {
         marginLeft: '.3rem'

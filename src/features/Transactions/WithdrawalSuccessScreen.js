@@ -12,7 +12,7 @@ export default function WithdrawalSuccessScreen() {
 
     return (
         <ImageBackground source={require('../../../assets/images/success-background.png')}
-            style={{ width: Dimensions.get("screen").width, height: Dimensions.get("screen").height, paddingHorizontal: 20}}
+            style={styles.mainContainer}
             resizeMethod="resize">
             <View style={styles.container}>
                 <TransactionSuccessful />
@@ -36,9 +36,13 @@ const TransactionSuccessful = () => {
 
 
 const styles = EStyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        justifyContent:'center',
+        paddingHorizontal: normalize(20)
+    },
     container: {
         flex: 1,
-        justifyContent:'center'
     },
     success: {
         alignItems:'center',

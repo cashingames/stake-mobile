@@ -102,11 +102,11 @@ const UserBoosts = ({ user }) => {
         // onPress={goToStore}
         >
             <View style={styles.boostHeader}>
-                <Text style={styles.boostHeaderText}>You have</Text>
+                <Text style={styles.boostHeaderText}>Available boosts</Text>
                 <View style={styles.boostSub}>
                     {Platform.OS !== 'ios' &&
                     <View style={styles.addContainer}>
-                        <Text style={styles.addText}>Purchase Boost</Text>
+                        <Text style={styles.addText}>Get Boost</Text>
                         <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
                         {/* <Image
                             style={styles.avatar}
