@@ -86,7 +86,7 @@ export default PromotionsScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: normalize(14),
+        // paddingHorizontal: normalize(14),
         paddingTop: normalize(22)
     },
     noContainer: {
@@ -113,8 +113,8 @@ const styles = EStyleSheet.create({
     },
     triviaAvatar: {
         borderRadius: 13,
-        width: normalize(320),
-        height: normalize(245),
+        width: normalize(330),
+        height: normalize(240),
 
     }
 })

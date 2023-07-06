@@ -105,15 +105,10 @@ const UserBoosts = ({ user }) => {
                 <Text style={styles.boostHeaderText}>Available boosts</Text>
                 <View style={styles.boostSub}>
                     {Platform.OS !== 'ios' &&
-                    <View style={styles.addContainer}>
-                        <Text style={styles.addText}>Get Boost</Text>
-                        <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
-                        {/* <Image
-                            style={styles.avatar}
-                            source={require("../../assets/images/caret-forward.png")}
-
-                        /> */}
-                    </View>
+                        <View style={styles.addContainer}>
+                            <Text style={styles.addText}>Get Boost</Text>
+                            <Ionicons name='chevron-forward-sharp' size={15} color='#F9FBFF' />
+                        </View>
                     }
                 </View>
             </View>
@@ -130,7 +125,24 @@ const UserBoosts = ({ user }) => {
                 </View>
                 :
                 <View style={styles.noContainer}>
-                    <Text style={styles.noBoostText}>No boost</Text>
+                    <View style={styles.boostContainer}>
+                        <View style={styles.boostIconContainer}>
+                            <Image
+                                source={require('../../assets/images/timefreeze-boost.png')}
+                                style={styles.boostIcon}
+                            />
+                        </View>
+                        <Text style={styles.boostAmount}>x0</Text>
+                    </View>
+                    <View style={styles.boostContainer}>
+                        <View style={styles.boostIconContainer}>
+                            <Image
+                                source={require('../../assets/images/skip-boost.png')}
+                                style={styles.boostIcon}
+                            />
+                        </View>
+                        <Text style={styles.boostAmount}>x0</Text>
+                    </View>
                 </View>
             }
         </Pressable>
@@ -149,16 +161,14 @@ const UserBoost = ({ boost }) => {
 
     }
     return (
-        <Pressable style={styles.boostContainer} onPress={Platform.OS !== 'ios' ? goToStore : doNothing}>
-            <View style={styles.boostIconContainer}>
+        <View style={styles.boostContainer}>
                 <Image
                     source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
                     style={styles.boostIcon}
                 />
-            </View>
-            <Text style={styles.boostAmount}> {formatNumber(boost.count)} </Text>
-            <Text style={styles.boostAmount}>{boost.name}</Text>
-        </Pressable>
+            <Text style={styles.boostAmount}>x{formatNumber(boost.count)}</Text>
+            {/* <Text style={styles.boostAmount}>{boost.name}</Text> */}
+        </View>
     )
 }
 
@@ -191,7 +201,7 @@ const styles = EStyleSheet.create({
         flexDirection: 'column',
         borderRadius: 13,
         paddingHorizontal: normalize(15),
-        paddingVertical: normalize(20),
+        paddingTop: normalize(20),
         borderColor: '#E5E5E5',
         borderWidth: 1
         // width: normalize(295),
@@ -223,7 +233,7 @@ const styles = EStyleSheet.create({
     boostHeaderText: {
         fontSize: '.8rem',
         color: '#072169',
-        fontFamily: 'sansation-bold',
+        fontFamily: 'gotham-bold',
     },
     amountContainer: {
         flexDirection: 'row',
@@ -233,40 +243,35 @@ const styles = EStyleSheet.create({
     },
     noContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: '1rem'
+        marginTop: '.3rem'
     },
     itemsContainer: {
         flexDirection: 'row',
-        // justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: '1rem'
+        marginTop: '.3rem'
     },
     boostContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
-        borderColor:'#FF2A98',
-        borderWidth: 1.5,
-        borderRadius: 20,
-        paddingHorizontal: '.5rem',
-        paddingVertical: '.4rem',
+        alignItems: 'flex-start',
         marginRight: '1rem'
     },
-    boostIconContainer: {
-        // backgroundColor: '#EFF2F6',
-        // borderRadius: 50,
-        // padding: '.15rem',
-    },
     boostIcon: {
-        width: '1.2rem',
-        height: '1.2rem'
+        width: '3.2rem',
+        height: '3.2rem'
     },
     boostAmount: {
-        fontSize: '.7rem',
-        color: '#072169',
-        marginLeft: '.1rem',
-        fontFamily: 'sansation-bold',
+        fontSize: '.85rem',
+        color: '#fff',
+        fontFamily: 'gotham-bold',
+        textShadowColor: '#121212',
+        textShadowRadius: 1,
+        textShadowOffset: {
+            width: 1,
+            height: 1,
+        },
+        position:'absolute',
+        left: 35,
+        top: 10
     },
     currencyContainer: {
         flexDirection: 'row',
@@ -280,16 +285,19 @@ const styles = EStyleSheet.create({
     addContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        backgroundColor: '#FA5F4A',
+        borderRadius: 30,
+        paddingHorizontal: '.5rem',
+        paddingVertical: '.2rem'
     },
     avatar: {
-        width:'1rem',
+        width: '1rem',
         // height:'1rem'
     },
     addText: {
-        fontSize: '.8rem',
-        color: '#072169',
-        fontFamily: 'bubble-regular',
-        // marginRight: '.3rem',
+        fontSize: '.7rem',
+        color: '#F9FBFF',
+        fontFamily: 'gotham-medium',
     },
     noBoostText: {
         fontSize: '.7rem',

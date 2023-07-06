@@ -12,9 +12,9 @@ const GamesCardsList = () => {
     return (
         <View style={styles.gamesContainer}>
             <SwiperFlatList>
-                <TriviaChallengeCard />
                 <TriviaBetCard />
-                <TriviaRoomsCard />
+                <FundWalletCard />
+                <PlayEarnCard />
             </SwiperFlatList>
         </View>
     )
@@ -25,19 +25,16 @@ const TriviaBetCard = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const gameMode = useSelector(state => state.common.gameModes[0]);
-    const gameType = useSelector(state => state.common.gameTypes[0]);
     const user = useSelector(state => state.auth.user);
 
     const selectTriviaMode = () => {
         dispatch(setGameMode(gameMode));
-        dispatch(setGameType(gameType));
-        logToAnalytics("trivia_staking_selected", {
+        logToAnalytics("play_banner_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
-            // 'gamemode': gameType.displayName,
         })
-        navigation.navigate('SelectGameCategory')
+        navigation.navigate('Games')
 
     }
     return (
@@ -48,13 +45,15 @@ const TriviaBetCard = () => {
             />
             <View style={styles.triviaActions}>
                 <View style={styles.subTriviaActions}>
-                    <Image
-                        source={require('../../assets/images/trivia-book.png')}
-                        style={styles.bookAvatar}
-                    />
+                    <View style={styles.avatarContainer}>
+                        <Image
+                            source={require('../../assets/images/trivia-chess.png')}
+                            style={styles.bookAvatar}
+                        />
+                    </View>
                     <View style={styles.triviaActionsTexts}>
-                        <Text style={styles.triviaBetHeaderI}>Discover</Text>
-                        <Text style={styles.triviaBetHeader}>Trivia Bet</Text>
+                        <Text style={styles.triviaBetHeaderI}>Games</Text>
+                        <Text style={styles.triviaBetHeader}>Stake on games</Text>
                     </View>
                 </View>
                 <View style={styles.playButton}>
@@ -67,72 +66,85 @@ const TriviaBetCard = () => {
         </Pressable>
     )
 }
-const TriviaChallengeCard = () => {
-    const dispatch = useDispatch();
+const FundWalletCard = () => {
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
-    const gameMode = useSelector(state => state.common.gameModes[1]);
-    const gameType = useSelector(state => state.common.gameTypes[0]);
 
-    const selectChallengeMode = () => {
-        dispatch(setGameMode(gameMode));
-        dispatch(setGameType(gameType));
+    const fundMode = () => {
         logToAnalytics("trivia_challenge_staking_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
-            // 'gamemode': gameMode.displayName,
         })
-        navigation.navigate('SelectGameCategory')
+        navigation.navigate('FundWallet')
 
     }
     return (
-        <Pressable style={styles.triviaBetContainer} onPress={selectChallengeMode}>
+        <Pressable style={styles.triviaBetContainer} onPress={fundMode}>
             <Image
-                source={require('../../assets/images/challenge-banner.png')}
+                source={require('../../assets/images/fund-banner.png')}
                 style={styles.triviaAvatar}
             />
             <View style={styles.triviaActions}>
                 <View style={styles.subTriviaActions}>
-                    <Image
-                        source={require('../../assets/images/challenge-sword.png')}
-                        style={styles.avatar}
-                    />
+                    <View style={styles.avatarContainer}>
+                        <Image
+                            source={require('../../assets/images/megaphone.png')}
+                            style={styles.bookAvatar}
+                        />
+                    </View>
                     <View style={styles.triviaActionsTexts}>
-                        <Text style={styles.triviaBetHeaderI}>Challenge</Text>
-                        <Text style={styles.triviaBetHeader}>A Player</Text>
+                        <Text style={styles.triviaBetHeaderI}>Let's cashout</Text>
+                        <Text style={styles.triviaBetHeader}>Play and win big</Text>
                     </View>
                 </View>
                 <View style={styles.playButton}>
                     <Text style={styles.playButtonText}>
-                        Play Now
+                        Fund Now
                     </Text>
                 </View>
             </View>
         </Pressable>
     )
 }
-const TriviaRoomsCard = () => {
+const PlayEarnCard = () => {
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
+    const gameMode = useSelector(state => state.common.gameModes[0]);
+    const user = useSelector(state => state.auth.user);
+
+    const selectTriviaMode = () => {
+        dispatch(setGameMode(gameMode));
+        logToAnalytics("playearn_banner_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+        })
+        navigation.navigate('Games')
+
+    }
     return (
-        <Pressable style={styles.triviaRoomContainer}>
+        <Pressable style={styles.triviaRoomContainer} onPress={selectTriviaMode}>
             <Image
                 source={require('../../assets/images/rooms-banner.png')}
                 style={styles.triviaRoomAvatar}
             />
             <View style={styles.triviaActions}>
                 <View style={styles.subTriviaActions}>
-                    <Image
-                        source={require('../../assets/images/rooms-hat.png')}
-                        style={styles.roomAvatar}
-                    />
+                    <View style={styles.avatarContainer}>
+                        <Image
+                            source={require('../../assets/images/megaphone.png')}
+                            style={styles.bookAvatar}
+                        />
+                    </View>
                     <View style={styles.triviaActionsTexts}>
                         <Text style={styles.triviaBetHeaderI}>Discover</Text>
                         <Text style={styles.triviaBetHeader}>Trivia Rooms</Text>
                     </View>
                 </View>
-                <View style={styles.playButtonI}>
-                    <Text style={styles.playButtonTextI}>
-                        Coming soon
+                <View style={styles.playButton}>
+                    <Text style={styles.playButtonText}>
+                        Play & earn
                     </Text>
                 </View>
             </View>
@@ -159,8 +171,8 @@ const styles = EStyleSheet.create({
         height: normalize(230),
     },
     bookAvatar: {
-        width: '3rem',
-        height: '3.9rem',
+        width: '2.3rem',
+        height: '2.3rem',
     },
     triviaActions: {
         flexDirection: 'row',
@@ -170,6 +182,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: '.7rem',
         borderBottomLeftRadius: 13,
         borderBottomRightRadius: 13,
+        paddingVertical: '.75rem'
     },
     subTriviaActions: {
         flexDirection: 'row',
@@ -201,25 +214,25 @@ const styles = EStyleSheet.create({
         width: normalize(330),
         height: normalize(230),
     },
-    avatar: {
-        width: '4rem',
-        height: '3.9rem',
-    },
-    roomAvatar: {
-        width: '4.2rem',
-        height: '3.9rem',
+    avatarContainer: {
+        backgroundColor: '(rgba(178, 229, 227, 0.49))',
+        borderRadius: 100,
+        width: 65,
+        height: 65,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
 
     triviaBetHeader: {
-        fontSize: '1rem',
+        fontSize: '.8rem',
         color: '#072169',
-        fontFamily: 'bubble-regular',
+        fontFamily: 'sansation-regular',
     },
     triviaBetHeaderI: {
         fontSize: '.85rem',
-        color: '#FF3B81',
-        fontFamily: 'bubble-regular',
+        color: '#072169',
+        fontFamily: 'gotham-medium',
     },
     triviaActionsTexts: {
         marginLeft: '.3rem'
@@ -227,8 +240,8 @@ const styles = EStyleSheet.create({
 
     playButton: {
         backgroundColor: '#E15220',
-        paddingVertical: '.6rem',
-        paddingHorizontal: '.5rem',
+        paddingVertical: '.45rem',
+        paddingHorizontal: '.8rem',
         borderRadius: 20
     },
     playButtonI: {
