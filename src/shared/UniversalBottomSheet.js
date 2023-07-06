@@ -19,6 +19,7 @@ const UniversalBottomSheet = ({ refBottomSheet,subComponent,height }) => {
                 container: {
                     borderTopStartRadius: 25,
                     borderTopEndRadius: 25,
+                    backgroundColor:'#F9FBFF'
                 }
             }}
         >

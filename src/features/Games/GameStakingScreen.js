@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, ScrollView, ActivityIndicator, Image, Pressable } from 'react-native';
+import { Text, View, ScrollView, ActivityIndicator, Image, Pressable, TextInput } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
-import normalize from "../../utils/normalize";
+import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import Input from "../../shared/Input";
 import AppButton from "../../shared/AppButton";
 import { getGameStakes, setAmountStaked, setIsPlayingTrivia, startGame } from "./GameSlice";
@@ -24,6 +24,8 @@ const GameStakingScreen = ({ navigation }) => {
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
     const gameTypeId = useSelector(state => state.game.gameType.id);
     const gameMode = useSelector(state => state.game.gameMode);
+    const cashMode = useSelector(state => state.game.cashMode);
+    const practiceMode = useSelector(state => state.game.practiceMode);
     const [amount, setAmount] = useState('');
     const [loading, setLoading] = useState(false);
     const [canSend, setCanSend] = useState(false);
@@ -123,58 +125,77 @@ const GameStakingScreen = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.detailsContainer}>
-                <View style={styles.totalHeader}>
-                    <View style={styles.totalTitleContainer}>
-                        <Image
-                            source={require('../../../assets/images/wallet-with-cash.png')}
-                            style={styles.avatar}
-                        />
-                        <Text style={styles.totalTitleText}>{user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? 'Bonus balance' : 'Total balance'}</Text>
+            {cashMode &&
+                <View style={styles.detailsContainer}>
+                    <View style={styles.totalHeader}>
+                        <View style={styles.totalTitleContainer}>
+                            <Image
+                                source={require('../../../assets/images/wallet-with-cash.png')}
+                                style={styles.avatar}
+                            />
+                            <Text style={styles.totalTitleText}>{user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? 'Bonus balance' : 'Total balance'}</Text>
+                        </View>
+                        {/* <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} /> */}
                     </View>
-                    {/* <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} /> */}
-                </View>
-                <View style={styles.currencyHeader}>
-                    <View style={styles.currencyHeaderLeft}>
-                        <Text style={styles.currencyText}>NGN</Text>
-                        <Text style={styles.currencyAmount}>{formatCurrency(totalBalance)}</Text>
+                    <View style={styles.currencyHeader}>
+                        <View style={styles.currencyHeaderLeft}>
+                            <Text style={styles.currencyText}>NGN</Text>
+                            <Text style={styles.currencyAmount}>{formatCurrency(totalBalance)}</Text>
 
-                        {/* {hidden ?
+                            {/* {hidden ?
                             <Text style={styles.currencyAmount}>***</Text>
                             :
                             <Text style={styles.currencyAmount}>{totalBalance}</Text>
                         } */}
+                        </View>
+                        <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
+                            <Text style={styles.depositText}>Deposit</Text>
+                            <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+                        </Pressable>
                     </View>
-                    <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
-                        <Text style={styles.depositText}>Deposit</Text>
-                        <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
-                    </Pressable>
-                </View>
-            </View>
-            <Input
-                label='Enter stake amount'
-                placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`}
-                value={amount}
-                error={((amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
-                    ((amount > Number.parseFloat(user.walletBalance)))}
-                onChangeText={setAmount}
-                isRequired={true}
-                keyboardType="numeric"
-            />
-            {amount > Number.parseFloat(user.walletBalance) &&
-                <View style={styles.errorContainer}>
-                    <Text style={styles.error}>Insufficient wallet balance</Text>
-                    <Pressable style={styles.fundError} onPress={fundWallet}>
-                        <Text style={styles.fundText}>Fund wallet</Text>
-                    </Pressable>
                 </View>
             }
-            <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
-                disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButton} />
-                
-            {user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) &&
-                <Text style={styles.note}>Note that the predictions table below does not apply on bonus stakes</Text>}
-            <View style={styles.stakeContainer}>
+            {cashMode &&
+                <>
+                    <Input
+                        label='Enter stake amount'
+                        placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`}
+                        value={amount}
+                        error={((amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
+                            ((amount > Number.parseFloat(user.walletBalance)))}
+                        onChangeText={setAmount}
+                        isRequired={true}
+                        keyboardType="numeric"
+                    />
+                    {amount > Number.parseFloat(user.walletBalance) &&
+                        <View style={styles.errorContainer}>
+                            <Text style={styles.error}>Insufficient wallet balance</Text>
+                            <Pressable style={styles.fundError} onPress={fundWallet}>
+                                <Text style={styles.fundText}>Fund wallet</Text>
+                            </Pressable>
+                        </View>
+                    }
+                </>
+            }
+            {practiceMode &&
+                <View style={styles.inputContainer}>
+                    <Text style={styles.inputLabel}>Staked amount</Text>
+                    <TextInput style={styles.input} placeholder="Enter amount" value={amount}
+                        onChangeText={setAmount}
+                        keyboardType="numeric" />
+                </View>
+            }
+            {cashMode &&
+                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
+                    disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButton} />
+            }
+            {cashMode &&
+                <>
+                    {user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) &&
+                        <Text style={styles.note}>Note that the predictions table below does not apply on bonus stakes</Text>}
+                </>
+            }
+            <View style={[styles.stakeContainer, { marginBottom: cashMode ? 50 : 0 }]}>
                 <Text style={styles.stakeHeading}>How To Win</Text>
                 <View style={styles.stakeHeaders}>
                     <Text style={styles.stakeScore}>OUTCOME</Text>
@@ -184,6 +205,10 @@ const GameStakingScreen = ({ navigation }) => {
                 {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
                     amount={amount} />)}
             </View>
+            {practiceMode &&
+                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
+                    disabled={loading || amount === ''} style={styles.stakeButtoni} />
+            }
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                 textLabel={alertMessage} buttonLabel='Ok, got it'
                 alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
@@ -218,7 +243,9 @@ const styles = EStyleSheet.create({
         borderColor: '#E5E5E5',
         borderWidth: 1,
         marginTop: '1rem',
-        marginBottom: '3.5rem'
+    },
+    inputContainer: {
+        marginTop: '.5rem'
     },
     stakeHeading: {
         textAlign: 'center',
@@ -348,5 +375,27 @@ const styles = EStyleSheet.create({
     },
     stakeButton: {
         marginVertical: 5,
-    }
+    },
+    stakeButtoni: {
+        marginBottom: responsiveScreenWidth(20),
+    },
+    input: {
+        height: normalize(52),
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingLeft: normalize(13),
+        paddingRight: normalize(13),
+        borderColor: '#000000',
+        fontFamily: 'sansation-regular',
+        color: '#072169',
+        fontSize: '0.85rem',
+        backgroundColor: '#fff',
+    },
+    inputLabel: {
+        fontFamily: 'gotham-medium',
+        color: '#072169',
+        fontSize: '0.98rem',
+        marginBottom: normalize(12),
+
+    },
 })

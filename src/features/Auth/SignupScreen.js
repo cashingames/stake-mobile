@@ -286,7 +286,7 @@ const SignupScreen = () => {
             </View>
             <View style={styles.buttonsContainer}>
                 <AppButton text={loading ? 'Creating' : 'Create Account'} onPress={onSend} disabled={!canSend || loading} style={styles.loginButton} textStyle={styles.buttonText}
-                    isIcon={true} iconColor="#FFF" disabledStyle={styles.disabled} />
+                    isIcon={true} iconColor="#FFF" />
                 <Text style={styles.orText}>Or</Text>
                 <RenderCreateAccount />
             </View>
@@ -449,9 +449,6 @@ const styles = EStyleSheet.create({
         fontFamily: 'gotham-medium',
         fontSize: '1.1rem',
         color: '#072169'
-    },
-    disabled: {
-        backgroundColor: '#EA8663'
     },
     error: {
         fontFamily: 'gotham-medium',

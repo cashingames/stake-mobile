@@ -37,7 +37,7 @@ const PromotionsScreen = () => {
                 {!isNewPromotion ?
                     <>
                         <Image
-                            source={require('../../../assets/images/gift-dynamic.png')}
+                            source={require('../../../assets/images/promotion-gift.png')}
                             style={styles.avatar}
                         />
                         <Text style={styles.noPromotionsText}>No promotions yet, check back later</Text>
@@ -97,8 +97,8 @@ const styles = EStyleSheet.create({
 
     },
     avatar: {
-        width: '6rem',
-        height: '6rem',
+        width: '7rem',
+        height: '7rem',
     },
     noPromotionsText: {
         fontSize: '1.4rem',
