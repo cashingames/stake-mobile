@@ -125,7 +125,7 @@ function AppRouter() {
 	}
 
 	return (
-		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' }, headerTitleAlign: 'center', headerBackTitleVisible: false, headerBackImageSource: require('../assets/images/chevron.png') }} >
+		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' }, headerTitleAlign: 'center' }} >
 			{isTrue(token) ?
 				(
 					<>
