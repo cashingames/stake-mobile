@@ -10,6 +10,7 @@ import { useState } from "react";
 // import BoostPopUp from "../../../shared/BoostPopUp";
 import logToAnalytics from "../../../utils/analytics";
 import AppButton from "../../../shared/AppButton";
+import { isTrue } from "../../../utils/stringUtl";
 
 
 const ChallengeEndGameScreen = ({ navigation }) => {
