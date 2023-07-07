@@ -18,9 +18,9 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     const user = useSelector(state => state.auth.user);
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
-    // console.log(challengeDetails)
-    // const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+    const cashMode = useSelector(state => state.game.cashMode);
+    const practiceMode = useSelector(state => state.game.practiceMode);
 
 
 
@@ -36,7 +36,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
         logToAnalytics('trivia_challenge_play_again_clicked', {
             'id': user.username,
         });
-        navigation.navigate("SelectGameCategory")
+        navigation.navigate("Games")
         setLoading(false);
 
     }
@@ -84,18 +84,6 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     // }, [challengeDetails])
 
 
-
-    useFocusEffect(
-        useCallback(() => {
-            if (Platform.OS === "android") {
-                StatusBar.setTranslucent(true);
-                StatusBar.setBackgroundColor("dark-content");
-                return;
-            }
-            StatusBar.setBarStyle('dark-content');
-        }, [])
-    );
-
     //disable back button
     useFocusEffect(
         useCallback(() => {
@@ -123,8 +111,8 @@ const ChallengeEndGameScreen = ({ navigation }) => {
                 {Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score) &&
                     <Text style={styles.headText}>Draw, you can try again</Text>
                 }
-                <WinningAmount challengeDetails={challengeDetails} />
-                <FinalScore challengeDetails={challengeDetails} />
+                <WinningAmount challengeDetails={challengeDetails} practiceMode={practiceMode} cashMode={cashMode} />
+                <FinalScore challengeDetails={challengeDetails} cashMode={cashMode} practiceMode={practiceMode} />
                 {/* <BoostPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} /> */}
                 <View style={styles.gameButtons}>
                     <AppButton onPress={onPlayButtonClick} text='Stake again' disabled={loading} textStyle={styles.againText} style={styles.stakeButton} disabledStyle={styles.disabled} />
@@ -137,11 +125,16 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     )
 }
 
-const WinningAmount = ({ challengeDetails }) => {
+const WinningAmount = ({ challengeDetails, cashMode, practiceMode }) => {
     const amount = useSelector(state => state.triviaChallenge.challengeDetails.amount_won);
     return (
         <View style={styles.winningsContainer}>
-            <Text style={styles.winningsHeader}>Scores</Text>
+            {practiceMode &&
+                <Text style={styles.winningsHeader}>Demo scores</Text>
+            }
+            {cashMode &&
+                <Text style={styles.winningsHeader}>Scores</Text>
+            }
             <View style={styles.scoreCountContainer}>
                 <View style={styles.userCountContainer}>
                     <Text style={styles.countName}>You</Text>
@@ -185,10 +178,15 @@ const SelectedPlayer = ({ playerName, playerAvatar }) => {
 }
 
 
-const FinalScore = ({ challengeDetails }) => {
+const FinalScore = ({ challengeDetails, practiceMode, cashMode }) => {
     return (
         <View style={styles.finalScore}>
-            <Text style={styles.finalScoreText}>Game play statistics</Text>
+            {cashMode &&
+                <Text style={styles.finalScoreText}>Game play statistics</Text>
+            }
+            {practiceMode &&
+                <Text style={styles.finalScoreText}>Demo game statistics</Text>
+            }
             <View style={styles.scoreContainer}>
                 <Text style={styles.pointTitle}>Questions answered</Text>
                 <Text style={styles.point}>{challengeDetails.questions?.length / 2}</Text>

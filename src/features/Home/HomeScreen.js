@@ -37,10 +37,11 @@ const HomeScreen = () => {
     }, []);
 
     useEffect(() => {
+        const _1 = dispatch(getUser());
         const _2 = dispatch(getCommonData());
         const _3 = dispatch(fetchFeatureFlags())
 
-        Promise.all([_2, _3]).then(() => {
+        Promise.all([_1, _2, _3]).then(() => {
             dispatch(initialLoadingComplete());
         });
 

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
+import { Alert, ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize from "../../utils/normalize";
 import { useNavigation } from "@react-navigation/native";
@@ -10,6 +10,7 @@ import { Image } from "react-native";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import { Ionicons } from "@expo/vector-icons";
 import AppButton from "../../shared/AppButton";
+import CustomAlert from "../../shared/CustomAlert";
 
 
 
@@ -27,7 +28,7 @@ const GamesListScreen = ({ navigation }) => {
     const closeBottomSheet = () => {
         refRBSheet.current.close()
     }
-    const playForCash = () => {
+    const playTriviaForCash = () => {
         dispatch(setPracticeMode(false));
         dispatch(setCashMode(true));
         logToAnalytics("trivia_play_with_cash_selected", {
@@ -39,16 +40,42 @@ const GamesListScreen = ({ navigation }) => {
         navigation.navigate('SelectGameCategory')
     }
 
-    const playForFree = () => {
-        dispatch(setCashMode(false));
-        dispatch(setPracticeMode(true));
-        logToAnalytics("trivia_play_for_free_selected", {
+    const playChallengeForCash = () => {
+        dispatch(setPracticeMode(false));
+        dispatch(setCashMode(true));
+        logToAnalytics("challenge_play_with_cash_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
         })
         closeBottomSheet()
         navigation.navigate('SelectGameCategory')
+    }
+
+    const playChallengeForFree = () => {
+        dispatch(setCashMode(false));
+        dispatch(setPracticeMode(true));
+        logToAnalytics("challenge_play_for_free_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+        })
+        closeBottomSheet()
+        navigation.navigate('SelectGameCategory')
+    }
+
+    const playTriviaForFree = () => {
+        closeBottomSheet()
+        Alert.alert('This mode is unavailable')
+        // dispatch(setCashMode(false));
+        // dispatch(setPracticeMode(true));
+        // logToAnalytics("trivia_play_for_free_selected", {
+        //     'id': user.username,
+        //     'phone_number': user.phoneNumber,
+        //     'email': user.email,
+        // })
+
+        // navigation.navigate('SelectGameCategory')
     }
 
     return (
@@ -58,7 +85,7 @@ const GamesListScreen = ({ navigation }) => {
             <ScrollView style={styles.contentContainer}>
                 <View style={styles.gamesContainer}>
                     <TriviaBetCard openBottomSheet={openBottomSheet} />
-                    <TriviaChallengeCard />
+                    <TriviaChallengeCard openBottomSheet={openBottomSheet} />
                     <JackpotBetCard />
                     <TriviaRoomsCard />
                 </View>
@@ -67,8 +94,10 @@ const GamesListScreen = ({ navigation }) => {
                 refBottomSheet={refRBSheet}
                 height={560}
                 subComponent={<SelectGameMode
-                    playForCash={playForCash}
-                    playForFree={playForFree}
+                    playTriviaForCash={playTriviaForCash}
+                    playTriviaForFree={playTriviaForFree}
+                    playChallengeForCash={playChallengeForCash}
+                    playChallengeForFree={playChallengeForFree}
                 />}
             />
         </ImageBackground>
@@ -112,9 +141,8 @@ const TriviaBetCard = ({ openBottomSheet }) => {
         </Pressable>
     )
 }
-const TriviaChallengeCard = () => {
+const TriviaChallengeCard = ({ openBottomSheet }) => {
     const dispatch = useDispatch();
-    const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
     const gameMode = useSelector(state => state.common.gameModes[1]);
     const gameType = useSelector(state => state.common.gameTypes[0]);
@@ -122,13 +150,12 @@ const TriviaChallengeCard = () => {
     const selectChallengeMode = () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
+        openBottomSheet()
         logToAnalytics("trivia_challenge_staking_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
-            // 'gamemode': gameMode.displayName,
         })
-        navigation.navigate('SelectGameCategory')
 
     }
     return (
@@ -185,9 +212,12 @@ const TriviaRoomsCard = () => {
     )
 }
 
-const SelectGameMode = ({ playForFree, playForCash }) => {
+const SelectGameMode = ({ playTriviaForFree, playTriviaForCash,playChallengeForFree, playChallengeForCash}) => {
     const [earn, setEarn] = useState(false);
     const [practice, setPractice] = useState(false);
+    const gameMode = useSelector(state => state.game.gameMode);
+    const gameModeName = gameMode?.name
+    console.log(gameModeName)
 
     const toggleFreeMode = () => {
         setEarn(false);
@@ -200,17 +230,28 @@ const SelectGameMode = ({ playForFree, playForCash }) => {
     }
 
     const chooseMode = () => {
-        if (earn) {
-            playForCash()
+        if (earn && gameModeName === 'EXHIBITION') {
+            playTriviaForCash()
         }
-        if (practice) {
-            playForFree()
+        if (practice && gameModeName === 'EXHIBITION') {
+            playTriviaForFree()
+        }
+        if (earn && gameModeName === 'CHALLENGE') {
+            playChallengeForCash()
+        }
+        if (practice && gameModeName === 'CHALLENGE') {
+            playChallengeForFree()
         }
     }
 
     return (
         <View style={styles.modeContainer}>
-            <Text style={styles.modeTitle}>Single player trivia bet </Text>
+            {gameModeName === 'EXHIBITION' &&
+                <Text style={styles.modeTitle}>Single player trivia bet</Text>
+            }
+            {gameModeName === 'CHALLENGE' &&
+                <Text style={styles.modeTitle}>Challenge a player</Text>
+            }
             <View style={styles.mainContainer}>
                 <View style={styles.modeSubContainer}>
                     <Ionicons name={practice ? 'checkmark-circle' : "ellipse-outline"} size={30} color={practice ? '#00FFA3' : '#D9D9D9'} onPress={toggleFreeMode} />

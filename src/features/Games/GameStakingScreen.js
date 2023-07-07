@@ -180,7 +180,7 @@ const GameStakingScreen = ({ navigation }) => {
             {practiceMode &&
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputLabel}>Staked amount</Text>
-                    <TextInput style={styles.input} placeholder="Enter amount" value={amount}
+                    <TextInput style={styles.input} placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`} value={amount}
                         onChangeText={setAmount}
                         keyboardType="numeric" />
                 </View>

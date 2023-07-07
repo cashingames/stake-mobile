@@ -5,7 +5,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit';
 import firestore from "@react-native-firebase/firestore";
-import { getNextQuestion, selectedOption, setChallengeDetails, submitGameSession, setIsEnded } from "./TriviaChallengeGameSlice";
+import { getNextQuestion, selectedOption, setChallengeDetails, submitGameSession, setIsEnded, submitPracticeGameSession } from "./TriviaChallengeGameSlice";
 import ChallengeGameBoardWidgets from "./ChallengeGameBoardWidgets";
 import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import PlayGameHeader from "../../../shared/PlayGameHeader";
@@ -32,6 +32,8 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     const [alertMessage, setAlertMessage] = useState('');
     const [exiting, setExiting] = useState(false);
     const [exitClicked, setExitClicked] = useState(false);
+    const cashMode = useSelector(state => state.game.cashMode);
+    const practiceMode = useSelector(state => state.game.practiceMode);
 
 
     const startModal = () => {
@@ -77,16 +79,32 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
 
         setSubmitting(true);
         dispatch(setIsEnded(true));
-        dispatch(submitGameSession())
-            .then(unwrapResult)
-            .then(async () => {
-                const status = await getOpponentStatus();
-                setSubmitting(false);
-                navigation.navigate(
-                    status === 'MATCHED' ?
-                        'ChallengeGameEndWaiting' : 'ChallengeEndGame'
-                );
-            });
+        if (cashMode) {
+            console.log('cash mode')
+            dispatch(submitGameSession())
+                .then(unwrapResult)
+                .then(async () => {
+                    const status = await getOpponentStatus();
+                    setSubmitting(false);
+                    navigation.navigate(
+                        status === 'MATCHED' ?
+                            'ChallengeGameEndWaiting' : 'ChallengeEndGame'
+                    );
+                });
+        }
+        if (practiceMode) {
+            console.log('practice mode')
+            dispatch(submitPracticeGameSession())
+                .then(unwrapResult)
+                .then(async () => {
+                    const status = await getOpponentStatus();
+                    setSubmitting(false);
+                    navigation.navigate(
+                        status === 'MATCHED' ?
+                            'ChallengeGameEndWaiting' : 'ChallengeEndGame'
+                    );
+                });
+        }
     }
     const onExitGame = () => {
         setExiting(true)
@@ -98,16 +116,31 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
 
         setSubmitting(true);
         dispatch(setIsEnded(true));
-        dispatch(submitGameSession())
-            .then(unwrapResult)
-            .then(async () => {
-                const status = await getOpponentStatus();
-                setSubmitting(false);
-                navigation.navigate(
-                    status === 'MATCHED' ?
-                        'ChallengeGameEndWaiting' : 'ChallengeEndGame'
-                );
-            });
+        if (cashMode) {
+            dispatch(submitGameSession())
+                .then(unwrapResult)
+                .then(async () => {
+                    const status = await getOpponentStatus();
+                    setSubmitting(false);
+                    navigation.navigate(
+                        status === 'MATCHED' ?
+                            'ChallengeGameEndWaiting' : 'ChallengeEndGame'
+                    );
+                });
+        }
+        if (practiceMode) {
+            dispatch(submitPracticeGameSession())
+                .then(unwrapResult)
+                .then(async () => {
+                    const status = await getOpponentStatus();
+                    setSubmitting(false);
+                    navigation.navigate(
+                        status === 'MATCHED' ?
+                            'ChallengeGameEndWaiting' : 'ChallengeEndGame'
+                    );
+                });
+        }
+
     }
     const showExitConfirmation = () => {
         setExitClicked(true);
