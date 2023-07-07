@@ -262,10 +262,10 @@ const SelectGameMode = ({ playTriviaForFree, playTriviaForCash,playChallengeForF
                     <Text style={styles.modeName}>Play to earn</Text>
                 </View>
             </View>
-            <Pressable style={styles.instructionsContainer}>
+            {/* <Pressable style={styles.instructionsContainer}>
                 <Text style={styles.instructionsTitle}>Game instructions</Text>
                 <Ionicons name="chevron-forward" size={30} color='#072169' onPress={toggleEarn} />
-            </Pressable>
+            </Pressable> */}
             <AppButton text='Click to continue' style={styles.continueButton} textStyle={styles.buttonText} disabled={!earn && !practice} onPress={chooseMode} />
         </View>
     )
