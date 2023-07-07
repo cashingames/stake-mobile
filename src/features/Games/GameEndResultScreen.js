@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Image, ScrollView, Pressable, BackHandler, StatusBar, Platform, ImageBackground } from 'react-native';
+import { Text, View, Image, ScrollView, Pressable, BackHandler, Platform, ImageBackground } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -59,19 +59,6 @@ export default function GameEndResultScreen({ navigation }) {
 		}, [isGameEnded])
 	);
 
-	useFocusEffect(
-		React.useCallback(() => {
-			if (Platform.OS === "ios")
-				return;
-			StatusBar.setTranslucent(true)
-			StatusBar.setBackgroundColor("transparent")
-			StatusBar.setBarStyle('light-content');
-			return () => {
-				StatusBar.setTranslucent(true)
-				StatusBar.setBarStyle('dark-content');
-			}
-		}, [])
-	);
 	const reviewStaking = () => {
 		logToAnalytics('review_staking', {
 			'id': user.username,

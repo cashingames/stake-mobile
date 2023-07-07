@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from "react";
-import { BackHandler, Image, ImageBackground, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
+import { BackHandler, Image, ImageBackground, Platform, ScrollView, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { formatCurrency, isTrue } from "../../../utils/stringUtl";
 import EStyleSheet from "react-native-extended-stylesheet";
 import Constants from 'expo-constants';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from "../../../utils/normalize";

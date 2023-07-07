@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {  BackHandler, ImageBackground, Platform, StatusBar, Image, Text, View, ScrollView } from "react-native";
+import {  BackHandler, ImageBackground, Image, Text, View, ScrollView } from "react-native";
 import { isTrue } from "../../../utils/stringUtl";
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -80,16 +80,6 @@ const ChallengeMatchingScreen = ({ navigation }) => {
         return () => subscriber();
     }, [documentId]);
 
-    useFocusEffect(
-        useCallback(() => {
-            if (Platform.OS === "android") {
-                StatusBar.setTranslucent(true);
-                StatusBar.setBackgroundColor("transparent");
-                return;
-            }
-            StatusBar.setBarStyle('light-content');
-        }, [])
-    );
     //disable back button
     useFocusEffect(
         useCallback(() => {

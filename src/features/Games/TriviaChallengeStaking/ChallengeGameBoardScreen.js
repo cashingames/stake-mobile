@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { BackHandler, Image, ImageBackground, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
+import { BackHandler, Image, ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useFocusEffect } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,17 +48,6 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
             'username': challengeDetails.username,
         })
     }, [])
-
-    useFocusEffect(
-        useCallback(() => {
-            if (Platform.OS === "android") {
-                StatusBar.setTranslucent(true);
-                StatusBar.setBackgroundColor("transparent");
-                return;
-            }
-            StatusBar.setBarStyle('light-content');
-        }, [])
-    );
 
     //disable back button
     useFocusEffect(

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { BackHandler, Image, ImageBackground, Platform, StatusBar, Text, View } from "react-native";
+import { BackHandler, Image, ImageBackground, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import LottieAnimations from "../../../shared/LottieAnimations";
@@ -37,18 +37,6 @@ const ChallengeGameEndWaitingScreen = ({ navigation }) => {
             subscriber();
         };
     }, [documentId]);
-
-
-    useFocusEffect(
-        useCallback(() => {
-            if (Platform.OS === "android") {
-                StatusBar.setTranslucent(true);
-                StatusBar.setBackgroundColor("transparent");
-                return;
-            }
-            StatusBar.setBarStyle('light-content');
-        }, [])
-    );
 
     //disable back button
     useFocusEffect(
