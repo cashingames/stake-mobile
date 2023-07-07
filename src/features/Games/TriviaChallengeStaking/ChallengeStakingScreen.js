@@ -121,20 +121,23 @@ const ChallengeStakingScreen = ({ navigation }) => {
                                 <DemoBoostCardDetails />
                             }
                             {cashMode &&
-                                <View>
-                                    {boosts?.length > 0 ?
-                                        <View style={styles.boostContainer}>
-                                            {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
-                                        </View>
-                                        :
-                                        <Text style={styles.noBoostText}>You dont have any available boost</Text>
+                                <>
+                                    <View>
+                                        {boosts?.length > 0 ?
+                                            <View style={styles.boostContainer}>
+                                                {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
+                                            </View>
+                                            :
+                                            <Text style={styles.noBoostText}>You dont have any available boost</Text>
+                                        }
+                                    </View>
+
+                                    {Platform.OS === "android" &&
+                                        <Pressable onPress={goToStore} style={styles.storeLink}>
+                                            <Text style={styles.matchingText} onPress={goToStore}>Get boosts</Text>
+                                        </Pressable>
                                     }
-                                </View>
-                            }
-                            {Platform.OS === "android" &&
-                                <Pressable onPress={goToStore} style={styles.storeLink}>
-                                    <Text style={styles.matchingText} onPress={goToStore}>Get boosts</Text>
-                                </Pressable>
+                                </>
                             }
                         </View>
                         <SelectedPlayers user={user} />
@@ -290,14 +293,14 @@ const DemoBoostCardDetails = () => {
                     source={require('../../../../assets/images/timefreeze-boost.png')}
                     style={styles.boostIcon}
                 />
-                <Text style={styles.storeItemName}>x{formatNumber(10)}</Text>
+                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
             </View>
             <View style={styles.boostDetailsHead}>
                 <Image
                     source={require('../../../../assets/images/skip-boost.png')}
                     style={styles.boostIcon}
                 />
-                <Text style={styles.storeItemName}>x{formatNumber(10)}</Text>
+                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
             </View>
         </View>
     )

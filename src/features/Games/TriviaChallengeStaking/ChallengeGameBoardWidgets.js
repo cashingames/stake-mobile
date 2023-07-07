@@ -18,8 +18,8 @@ const ChallengeGameBoardWidgets = () => {
     const documentId = useSelector(state => state.triviaChallenge.documentId);
     const cashMode = useSelector(state => state.game.cashMode);
     const practiceMode = useSelector(state => state.game.practiceMode);
-    const [updatepracticeFreezeCount, setUpdatePracticeFreezeCount] = useState(10);
-    const [updatepracticeSkipCount, setUpdatePracticeSkipCount] = useState(10);
+    const [updatepracticeFreezeCount, setUpdatePracticeFreezeCount] = useState(20);
+    const [updatepracticeSkipCount, setUpdatePracticeSkipCount] = useState(20);
     const [clicked, setClicked] = useState(false);
 
 

@@ -51,7 +51,7 @@ export const submitPracticeGameSession = createAsyncThunk(
         // console.log('submitting game session')
 
         const response = await axios.post('v3/challenges/practice/submit', data);
-        console.log(response,'blabla')
+        // console.log(response,'blabla')
         return response.data
     }
 )
@@ -67,7 +67,7 @@ let initialState = {
     countdownFrozen: false,
     consumedBoosts: [],
     activeBoost: [],
-    gameDuration: 6000,
+    gameDuration: 60,
     countdownKey: 0,
     challengeDetails: {},
     isEnded: false,
