@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useCallback } from "react";
-import { View, Image, Pressable, Animated } from "react-native";
+import React, { useEffect, useRef, useCallback, useState } from "react";
+import { View, Image, Pressable, Animated, Alert } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,29 @@ const ChallengeGameBoardWidgets = () => {
     const boosts = useSelector(state => state.auth.user.boosts);
     const gameMode = useSelector(state => state.game.gameMode);
     const documentId = useSelector(state => state.triviaChallenge.documentId);
+    const cashMode = useSelector(state => state.game.cashMode);
+    const practiceMode = useSelector(state => state.game.practiceMode);
+    const [updatepracticeFreezeCount, setUpdatePracticeFreezeCount] = useState(10);
+    const [updatepracticeSkipCount, setUpdatePracticeSkipCount] = useState(10);
+    const [clicked, setClicked] = useState(false);
 
+
+
+
+    const practiceBoosts = [
+        {
+            "id": 1,
+            "icon": require('../../../../assets/images/timefreeze-boost.png'),
+            "count": updatepracticeFreezeCount,
+            "boostName": 'TIME FREEZE'
+        },
+        {
+            "id": 2,
+            "icon": require('../../../../assets/images/skip-boost.png'),
+            "count": updatepracticeSkipCount,
+            "boostName": 'SKIP'
+        }
+    ]
 
 
     const boostApplied = (data) => {
@@ -55,6 +77,27 @@ const ChallengeGameBoardWidgets = () => {
         // }
     }
 
+
+    const practiceBoostApplied = (data) => {
+        const boostName = data.boostName.toUpperCase();
+        if (boostName === 'TIME FREEZE') {
+            // setClicked(true)
+            setUpdatePracticeFreezeCount(data.count - 1)
+            dispatch(pauseGame(true));
+            setTimeout(() => {
+                dispatch(pauseGame(false))
+                dispatch(boostReleased())
+                // setClicked(false)
+
+            }, 10000);
+        }
+        if (boostName === 'SKIP') {
+            setUpdatePracticeSkipCount(data.count - 1)
+            dispatch(skipQuestion());
+            dispatch(boostReleased());
+        }
+    }
+
     const boostsToDisplay = () => {
         //  bomb is only applicable to multiple choices
         if (gameMode.name === "CHALLENGE") {
@@ -65,7 +108,12 @@ const ChallengeGameBoardWidgets = () => {
 
     return (
         <View style={styles.gameProgressAndBoost}>
-            <ChallengeStakingBoosts boosts={boosts} boostsToDisplay={boostsToDisplay} boostApplied={boostApplied} />
+            {practiceMode &&
+                <ChallengePracticeBoosts practiceBoosts={practiceBoosts} boostApplied={practiceBoostApplied} clicked={clicked} />
+            }
+            {cashMode &&
+                <ChallengeStakingBoosts boosts={boosts} boostsToDisplay={boostsToDisplay} boostApplied={boostApplied} />
+            }
         </View>
     )
 }
@@ -95,6 +143,24 @@ const ChallengeStakingBoosts = ({ boosts, boostsToDisplay, boostApplied }) => {
                 <></>
             }
         </>
+    )
+}
+const ChallengePracticeBoosts = ({ practiceBoosts, boostApplied, clicked }) => {
+    const user = useSelector(state => state.auth.user);
+    return (
+        <View style={styles.availableBoosts}>
+            <View style={styles.boostinfo}>
+                <Text style={styles.title}>{user.username}, score higher with boost</Text>
+            </View>
+            <View style={styles.availableBoostsIcons}>
+                {
+                    practiceBoosts.map((practiceBoost, index) =>
+                        <ChallengePracticeBoost practiceBoost={practiceBoost} key={index} onConsume={boostApplied} clicked={clicked} />
+                    )
+                }
+            </View>
+
+        </View>
     )
 }
 
@@ -130,19 +196,65 @@ const ChallengeStakingBoost = ({ boost, onConsume }) => {
     const activeBoost = useSelector(state => state.triviaChallenge.activeBoost);
     const isActive = activeBoost.id === boost.id;
     return (
-        <Pressable style={styles.boostContainer}  onPress={() => isActive ? {} : onConsume(boost)}>
+        <Pressable style={styles.boostContainer} onPress={() => isActive ? {} : onConsume(boost)}>
             <Animated.View style={zoomAnimation}>
-            <View style={styles.boostDetailsHead}>
-                <Image
-                    source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
-                    style={styles.boostIcon}
-                />
-                <Text style={styles.storeItemName}>x{formatNumber(boost.count)}</Text>
-            </View>
-            {/* <Text style={styles.storeItemName}>{boost.name}</Text> */}
+                <View style={styles.boostDetailsHead}>
+                    <Image
+                        source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
+                        style={styles.boostIcon}
+                    />
+                    <Text style={styles.storeItemName}>x{formatNumber(boost.count)}</Text>
+                </View>
+                {/* <Text style={styles.storeItemName}>{boost.name}</Text> */}
             </Animated.View>
 
         </Pressable>
+    )
+}
+
+const ChallengePracticeBoost = ({ practiceBoost, onConsume, clicked }) => {
+
+    const scaleValue = useRef(new Animated.Value(1)).current;
+    const zoomAnimation = {
+        transform: [{ scale: scaleValue }],
+    };
+
+    const zoom = useCallback(() => {
+        Animated.sequence([
+            Animated.timing(scaleValue, { toValue: 1.2, duration: 500, useNativeDriver: true }),
+            Animated.timing(scaleValue, { toValue: 1, duration: 500, useNativeDriver: true }),
+        ]).start(() => {
+            scaleValue.setValue(1);
+        });
+    }, [scaleValue]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            zoom();
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [zoom]);
+
+    useEffect(() => {
+        zoom();
+    }, []);
+
+
+
+    return (
+        <Animated.View style={zoomAnimation}>
+            <Pressable style={styles.boostContainer} onPress={() => onConsume(practiceBoost)}>
+                <View style={styles.boostDetailsHead}>
+                    <Image
+                        source={practiceBoost.icon}
+                        style={styles.boostIcon}
+                    />
+                    <Text style={styles.storeItemName}>x{formatNumber(practiceBoost.count)}</Text>
+                </View>
+                {/* <Text style={styles.storeItemName}>{boost.name}</Text> */}
+            </Pressable>
+        </Animated.View>
     )
 }
 
@@ -189,7 +301,7 @@ const styles = EStyleSheet.create({
     },
     availableBoostsIcons: {
         flexDirection: 'row',
-        marginTop:'1rem'
+        marginTop: '1rem'
 
     },
     boostinfo: {
@@ -245,6 +357,14 @@ const styles = EStyleSheet.create({
         fontFamily: 'gotham-bold',
         fontSize: '0.8rem',
         color: '#FFF',
+    },
+    boostActive: {
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: normalize(5),
+        padding: normalize(7),
+        shadowColor: 'rgba(0, 0, 0, 0.75)',
+        shadowOffset: { width: -1, height: 1 },
     },
 
 

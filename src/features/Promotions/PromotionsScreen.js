@@ -37,7 +37,7 @@ const PromotionsScreen = () => {
                 {!isNewPromotion ?
                     <>
                         <Image
-                            source={require('../../../assets/images/gift-dynamic.png')}
+                            source={require('../../../assets/images/promotion-gift.png')}
                             style={styles.avatar}
                         />
                         <Text style={styles.noPromotionsText}>No promotions yet, check back later</Text>
@@ -86,7 +86,7 @@ export default PromotionsScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: normalize(14),
+        // paddingHorizontal: normalize(14),
         paddingTop: normalize(22)
     },
     noContainer: {
@@ -97,8 +97,8 @@ const styles = EStyleSheet.create({
 
     },
     avatar: {
-        width: '6rem',
-        height: '6rem',
+        width: '7rem',
+        height: '7rem',
     },
     noPromotionsText: {
         fontSize: '1.4rem',
@@ -113,8 +113,8 @@ const styles = EStyleSheet.create({
     },
     triviaAvatar: {
         borderRadius: 13,
-        width: normalize(320),
-        height: normalize(245),
+        width: normalize(330),
+        height: normalize(240),
 
     }
 })

@@ -8,7 +8,7 @@ import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../
 import Constants from 'expo-constants';
 import { formatCurrency, formatNumber, isTrue } from '../../../utils/stringUtl';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { startChallengeRequest } from './TriviaChallengeGameSlice';
+import { startChallengeRequest, startPracticeChallengeRequest } from './TriviaChallengeGameSlice';
 import logToAnalytics from '../../../utils/analytics';
 import { Ionicons } from '@expo/vector-icons';
 import CustomAlert from '../../../shared/CustomAlert';
@@ -27,6 +27,8 @@ const ChallengeStakingScreen = ({ navigation }) => {
     const [canSend, setCanSend] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const cashMode = useSelector(state => state.game.cashMode);
+    const practiceMode = useSelector(state => state.game.practiceMode);
 
 
     const goToStore = () => {
@@ -43,7 +45,27 @@ const ChallengeStakingScreen = ({ navigation }) => {
         })).then(unwrapResult)
             .then(async result => {
                 setLoading(false)
-                logToAnalytics("trivia_challenge_stake_now_clicked", {
+                logToAnalytics("cash_challenge_stake_now_clicked", {
+                    'amount': amount,
+                })
+                navigation.navigate('ChallengeMatching')
+            })
+            .catch((rejectedValueOrSerializedError) => {
+                setModalVisible(true)
+                setAlertMessage("Something went wrong. Please try again or contact support");
+                setLoading(false)
+            });
+    }
+
+    const stakePracticeAmount = async () => {
+        setLoading(true);
+        dispatch(startPracticeChallengeRequest({
+            category: gameCategoryId,
+            amount: amount
+        })).then(unwrapResult)
+            .then(async result => {
+                setLoading(false)
+                logToAnalytics("practice_challenge_stake_now_clicked", {
                     'amount': amount,
                 })
                 navigation.navigate('ChallengeMatching')
@@ -95,15 +117,20 @@ const ChallengeStakingScreen = ({ navigation }) => {
 
                         <View style={styles.purchaseBoost}>
                             <Text style={styles.boostText}>{user.username}, score higher with boosts</Text>
-                            <View>
-                                {boosts?.length > 0 ?
-                                    <View style={styles.boostContainer}>
-                                        {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
-                                    </View>
-                                    :
-                                    <Text style={styles.noBoostText}>You dont have any available boost</Text>
-                                }
-                            </View>
+                            {practiceMode &&
+                                <DemoBoostCardDetails />
+                            }
+                            {cashMode &&
+                                <View>
+                                    {boosts?.length > 0 ?
+                                        <View style={styles.boostContainer}>
+                                            {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
+                                        </View>
+                                        :
+                                        <Text style={styles.noBoostText}>You dont have any available boost</Text>
+                                    }
+                                </View>
+                            }
                             {Platform.OS === "android" &&
                                 <Pressable onPress={goToStore} style={styles.storeLink}>
                                     <Text style={styles.matchingText} onPress={goToStore}>Get boosts</Text>
@@ -111,32 +138,51 @@ const ChallengeStakingScreen = ({ navigation }) => {
                             }
                         </View>
                         <SelectedPlayers user={user} />
-                        <WalletDetails user={user} depositFunds={depositFunds} />
-                        <Input
-                            label='Enter stake amount'
-                            placeholder={`Minimum amount is NGN ${minimumChallengeStakeAmount}`}
-                            value={amount}
-                            error={((amount < Number.parseFloat(minimumChallengeStakeAmount)) && `Minimum amount is NGN ${minimumChallengeStakeAmount}`) ||
-                                ((amount > Number.parseFloat(maximumChallengeStakeAmount)) && `Maximum amount is NGN ${maximumChallengeStakeAmount}`) ||
-                                ((amount > Number.parseFloat(user.walletBalance)))}
-                            onChangeText={setAmount}
-                            isRequired={true}
-                            keyboardType="numeric"
-                        />
-
-                        {amount > Number.parseFloat(user.walletBalance) &&
-                            <View style={styles.errorContainer}>
-                                <Text style={styles.error}>Insufficient wallet balance</Text>
-                                <Pressable style={styles.fundError} onPress={fundWallet}>
-                                    <Text style={styles.fundText}>Fund wallet</Text>
-                                </Pressable>
-                            </View>
+                        <WalletDetails user={user} depositFunds={depositFunds} cashMode={cashMode} practiceMode={practiceMode} />
+                        {cashMode &&
+                            <>
+                                <Input
+                                    label='Enter stake amount'
+                                    placeholder={`Minimum amount is NGN ${minimumChallengeStakeAmount}`}
+                                    value={amount}
+                                    error={((amount < Number.parseFloat(minimumChallengeStakeAmount)) && `Minimum amount is NGN ${minimumChallengeStakeAmount}`) ||
+                                        ((amount > Number.parseFloat(maximumChallengeStakeAmount)) && `Maximum amount is NGN ${maximumChallengeStakeAmount}`) ||
+                                        ((amount > Number.parseFloat(user.walletBalance)))}
+                                    onChangeText={setAmount}
+                                    isRequired={true}
+                                    keyboardType="numeric"
+                                />
+                                {amount > Number.parseFloat(user.walletBalance) &&
+                                    <View style={styles.errorContainer}>
+                                        <Text style={styles.error}>Insufficient wallet balance</Text>
+                                        <Pressable style={styles.fundError} onPress={fundWallet}>
+                                            <Text style={styles.fundText}>Fund wallet</Text>
+                                        </Pressable>
+                                    </View>
+                                }
+                            </>
+                        }
+                        {practiceMode &&
+                            <Input
+                                label='Enter stake amount'
+                                placeholder={`Minimum amount is NGN ${minimumChallengeStakeAmount}`}
+                                value={amount}
+                                onChangeText={setAmount}
+                                isRequired={true}
+                                keyboardType="numeric"
+                            />
                         }
 
-                        <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake amount"} onPress={stakeAmount} disabled={loading || !canSend}
-                            style={styles.stakeButton} disabledStyle={styles.disabled} isIcon={true} iconColor="#FFF" />
+                        {cashMode &&
+                            <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake amount"} onPress={stakeAmount} disabled={loading || !canSend}
+                                style={styles.stakeButton} disabledStyle={styles.disabled} isIcon={true} iconColor="#FFF" />
+                        }
+                        {practiceMode &&
+                            <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake amount"} onPress={stakePracticeAmount} disabled={loading || amount === ''}
+                                style={styles.stakeButton} disabledStyle={styles.disabled} isIcon={true} iconColor="#FFF" />
+                        }
                         <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                             textLabel={alertMessage} buttonLabel='Ok, got it'
+                            textLabel={alertMessage} buttonLabel='Ok, got it'
                             alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
 
                     </ScrollView>
@@ -171,7 +217,7 @@ const SelectedPlayer = ({ playerName, playerAvatar }) => {
     )
 }
 
-const WalletDetails = ({ user, depositFunds }) => {
+const WalletDetails = ({ user, depositFunds, practiceMode, cashMode }) => {
     const [hidden, setHidden] = useState(false);
 
     const toggleSecureText = () => {
@@ -185,23 +231,39 @@ const WalletDetails = ({ user, depositFunds }) => {
                         source={require('../../../../assets/images/wallet-with-cash.png')}
                         style={styles.cashAvatar}
                     />
-                    <Text style={styles.totalTitleText}>Total balance</Text>
+                    {practiceMode &&
+                        <Text style={styles.totalTitleText}>Demo balance</Text>
+                    }
+                    {cashMode &&
+                        <Text style={styles.totalTitleText}>Total balance</Text>
+                    }
+
                 </View>
-                <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} />
+                {/* <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} /> */}
             </View>
             <View style={styles.currencyHeader}>
                 <View style={styles.currencyHeaderLeft}>
                     <Text style={styles.currencyText}>NGN</Text>
+                    {cashMode &&
+                        <Text style={styles.currencyAmount}>{formatCurrency(user.walletBalance ?? 0)}</Text>
+                    }
+                    {practiceMode &&
+                        <Text style={styles.currencyAmount}>{formatCurrency(100000)}</Text>
+                    }
+
+                    {/* 
                     {hidden ?
                         <Text style={styles.currencyAmount}>***</Text>
                         :
                         <Text style={styles.currencyAmount}>{formatCurrency(user.walletBalance ?? 0)}</Text>
-                    }
+                    } */}
                 </View>
-                <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
-                    <Text style={styles.depositText}>Deposit</Text>
-                    <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
-                </Pressable>
+                {cashMode &&
+                    <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
+                        <Text style={styles.depositText}>Deposit</Text>
+                        <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+                    </Pressable>
+                }
             </View>
         </View>
     )
@@ -216,6 +278,27 @@ const BoostCardDetails = ({ boost }) => {
                 style={styles.boostIcon}
             />
             <Text style={styles.storeItemName}>x{formatNumber(boost.count)}</Text>
+        </View>
+    )
+}
+
+const DemoBoostCardDetails = () => {
+    return (
+        <View style={styles.boostContainer}>
+            <View style={styles.boostDetailsHead}>
+                <Image
+                    source={require('../../../../assets/images/timefreeze-boost.png')}
+                    style={styles.boostIcon}
+                />
+                <Text style={styles.storeItemName}>x{formatNumber(10)}</Text>
+            </View>
+            <View style={styles.boostDetailsHead}>
+                <Image
+                    source={require('../../../../assets/images/skip-boost.png')}
+                    style={styles.boostIcon}
+                />
+                <Text style={styles.storeItemName}>x{formatNumber(10)}</Text>
+            </View>
         </View>
     )
 }

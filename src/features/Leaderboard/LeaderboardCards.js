@@ -70,13 +70,13 @@ const TopLeaderboards = ({ isLeaderboard }) => {
             <View style={styles.topLeadersSubContainer}>
                 <View style={styles.imageAvatar}>
                     <Image
-                        source={require('../../../assets/images/leader-coin.png')}
+                        source={require('../../../assets/images/cash-locker.png')}
                         style={styles.avatar}
                     />
                 </View>
                 <View style={styles.leadersHeaderContainer}>
-                    <Text style={styles.topLeadersHeader}>Leaderboard</Text>
-                    <Text style={styles.topLeadersHeaderi}>Top gamers for the week/month</Text>
+                    <Text style={styles.topLeadersHeader}>Cash drop</Text>
+                    <Text style={styles.topLeadersHeaderi}>Lucky winners win the pools</Text>
                 </View>
             </View>
             <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
@@ -95,7 +95,7 @@ const PromotionsBoard = ({ isNewPromotion, onPress }) => {
                 </View>
                 <View style={styles.leadersHeaderContainer}>
                     <Text style={styles.topLeadersHeader}>Promotions</Text>
-                    <Text style={styles.topLeadersHeaderi}>Daily and weekly promotions</Text>
+                    <Text style={styles.topLeadersHeaderi}>Daily & weekly cashbag</Text>
                 </View>
             </View>
             <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
@@ -158,6 +158,10 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    avatar: {
+        width: '2.3rem',
+        height: '2.3rem',
+    },
     imageAvatari: {
         backgroundColor: '#EBFAED',
         borderRadius: 100,
@@ -212,18 +216,18 @@ const styles = EStyleSheet.create({
 
     },
     topLeadersHeader: {
-        fontSize: '.9rem',
+        fontSize: '.95rem',
         color: '#072169',
-        fontFamily: 'bubble-regular',
+        fontFamily: 'gotham-medium',
     },
     leadersHeaderContainer: {
         marginLeft: '.6rem'
     },
     topLeadersHeaderi: {
-        fontSize: '.8rem',
+        fontSize: '.85rem',
         color: '#072169',
         fontFamily: 'sansation-regular',
-        width: '10rem',
+        width: '11rem',
         marginTop: '.2rem'
     },
     topLeadersText: {

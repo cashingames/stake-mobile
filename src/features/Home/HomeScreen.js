@@ -37,10 +37,11 @@ const HomeScreen = () => {
     }, []);
 
     useEffect(() => {
+        const _1 = dispatch(getUser());
         const _2 = dispatch(getCommonData());
         const _3 = dispatch(fetchFeatureFlags())
 
-        Promise.all([_2, _3]).then(() => {
+        Promise.all([_1, _2, _3]).then(() => {
             dispatch(initialLoadingComplete());
         });
 
@@ -108,15 +109,14 @@ const UserProfile = ({ user, username }) => {
                 </View>
                 <View style={styles.nameMainContainer}>
                     <View style={styles.nameContainer}>
-                        <Text style={styles.welcomeText}>Hello, </Text>
-                        <Text style={styles.usernameText} onPress={() => navigation.navigate('UserProfile')}>{user.username}</Text>
+                        <Text style={styles.welcomeText}>Hello </Text>
+                        <Text style={styles.usernameText} onPress={() => navigation.navigate('UserProfile')} numberOfLines={1}>{user.username}</Text>
                         <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
                     </View>
                 </View>
             </View>
             <Pressable style={styles.walletContainer} onPress={viewWallet}>
-                <Text style={styles.balanceCurrency}>NGN </Text>
-                <Text style={styles.balanceDigit}>{formatCurrency(user.walletBalance ?? 0)}</Text>
+                <Text style={styles.balanceCurrency}>My Wallet</Text>
                 <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
             </Pressable>
         </View>
@@ -176,12 +176,13 @@ const styles = EStyleSheet.create({
     welcomeText: {
         fontSize: '.95rem',
         color: '#072169',
-        fontFamily: 'sansation-bold',
+        fontFamily: 'gotham-bold',
     },
     usernameText: {
         fontSize: '.95rem',
         color: '#072169',
-        fontFamily: 'sansation-bold',
+        fontFamily: 'gotham-bold',
+        width: responsiveScreenWidth(22.3),
     },
     greetingText: {
         fontSize: '1rem',
@@ -310,7 +311,7 @@ const styles = EStyleSheet.create({
     balanceCurrency: {
         fontSize: '.9rem',
         color: '#072169',
-        fontFamily: 'bubble-regular',
+        fontFamily: 'gotham-bold',
     },
     balanceDigit: {
         fontSize: '.9rem',

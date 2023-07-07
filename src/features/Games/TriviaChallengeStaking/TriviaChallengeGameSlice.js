@@ -11,6 +11,16 @@ export const startChallengeRequest = createAsyncThunk(
     }
 )
 
+export const startPracticeChallengeRequest = createAsyncThunk(
+    'game/createRealTimeChallenge',
+    async (data, _thunkAPI) => {
+        console.log(data, 'this is the data')
+        const response = await axios.post('v3/challenges/create', data)
+        console.log(response.data, 'this is the challenge data')
+        return response.data
+    }
+)
+
 export const submitGameSession = createAsyncThunk(
     'game/submitGameSession',
     async (_data, { getState }) => {
@@ -29,6 +39,23 @@ export const submitGameSession = createAsyncThunk(
     }
 )
 
+export const submitPracticeGameSession = createAsyncThunk(
+    'game/submitGameSession',
+    async (_data, { getState }) => {
+
+        const state = getState().triviaChallenge;
+        const data = {
+            challenge_request_id: state.challengeDetails.challenge_request_id,
+            selected_options: state.selectedOptions,
+        }
+        // console.log('submitting game session')
+
+        const response = await axios.post('v3/challenges/practice/submit', data);
+        console.log(response,'blabla')
+        return response.data
+    }
+)
+
 //This is to store the currently ongoing active game
 let initialState = {
     questions: [],
@@ -40,7 +67,7 @@ let initialState = {
     countdownFrozen: false,
     consumedBoosts: [],
     activeBoost: [],
-    gameDuration: 60,
+    gameDuration: 6000,
     countdownKey: 0,
     challengeDetails: {},
     isEnded: false,

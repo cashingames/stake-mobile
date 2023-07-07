@@ -5,12 +5,12 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import { Ionicons } from "@expo/vector-icons";
 
 
-export default function AppButton({ onPress, text, disabled, style, textStyle, isIcon, iconColor, disabledStyle }) {
+export default function AppButton({ onPress, text, disabled, style, textStyle, isIcon, iconColor }) {
     return (
 
         <Pressable
             onPress={onPress}
-            style={[styles.button, disabled ? disabledStyle : {}, style]}
+            style={[styles.button, disabled ? styles.disabled : {}, style]}
             disabled={disabled}
         >
             <View style={styles.textContainer}>

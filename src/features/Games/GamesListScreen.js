@@ -1,20 +1,82 @@
-import React from "react";
-import { ImageBackground, Platform, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
+import React, { useRef, useState } from "react";
+import { Alert, ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize, { responsiveScreenWidth } from "../../utils/normalize";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import GamesCardsList from "../../shared/GameCardsList";
+import normalize from "../../utils/normalize";
+import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { setGameMode, setGameType } from "./GameSlice";
+import { setCashMode, setGameMode, setGameType, setPracticeMode } from "./GameSlice";
 import logToAnalytics from "../../utils/analytics";
 import { Image } from "react-native";
+import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
+import { Ionicons } from "@expo/vector-icons";
+import AppButton from "../../shared/AppButton";
+import CustomAlert from "../../shared/CustomAlert";
 
 
 
 
 
-const GamesListScreen = () => {
+const GamesListScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user);
+    const refRBSheet = useRef();
 
+    const openBottomSheet = () => {
+        refRBSheet.current.open()
+    }
+
+    const closeBottomSheet = () => {
+        refRBSheet.current.close()
+    }
+    const playTriviaForCash = () => {
+        dispatch(setPracticeMode(false));
+        dispatch(setCashMode(true));
+        logToAnalytics("trivia_play_with_cash_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+        })
+        closeBottomSheet()
+        navigation.navigate('SelectGameCategory')
+    }
+
+    const playChallengeForCash = () => {
+        dispatch(setPracticeMode(false));
+        dispatch(setCashMode(true));
+        logToAnalytics("challenge_play_with_cash_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+        })
+        closeBottomSheet()
+        navigation.navigate('SelectGameCategory')
+    }
+
+    const playChallengeForFree = () => {
+        dispatch(setCashMode(false));
+        dispatch(setPracticeMode(true));
+        logToAnalytics("challenge_play_for_free_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+        })
+        closeBottomSheet()
+        navigation.navigate('SelectGameCategory')
+    }
+
+    const playTriviaForFree = () => {
+        closeBottomSheet()
+        Alert.alert('This mode is unavailable')
+        // dispatch(setCashMode(false));
+        // dispatch(setPracticeMode(true));
+        // logToAnalytics("trivia_play_for_free_selected", {
+        //     'id': user.username,
+        //     'phone_number': user.phoneNumber,
+        //     'email': user.email,
+        // })
+
+        // navigation.navigate('SelectGameCategory')
+    }
 
     return (
         <ImageBackground source={require('../../../assets/images/game-play-background.png')}
@@ -22,16 +84,27 @@ const GamesListScreen = () => {
             resizeMethod="resize">
             <ScrollView style={styles.contentContainer}>
                 <View style={styles.gamesContainer}>
-                    <TriviaChallengeCard />
-                    <TriviaBetCard />
+                    <TriviaBetCard openBottomSheet={openBottomSheet} />
+                    <TriviaChallengeCard openBottomSheet={openBottomSheet} />
+                    <JackpotBetCard />
                     <TriviaRoomsCard />
                 </View>
             </ScrollView>
+            <UniversalBottomSheet
+                refBottomSheet={refRBSheet}
+                height={560}
+                subComponent={<SelectGameMode
+                    playTriviaForCash={playTriviaForCash}
+                    playTriviaForFree={playTriviaForFree}
+                    playChallengeForCash={playChallengeForCash}
+                    playChallengeForFree={playChallengeForFree}
+                />}
+            />
         </ImageBackground>
     )
 }
 
-const TriviaBetCard = () => {
+const TriviaBetCard = ({ openBottomSheet }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const gameMode = useSelector(state => state.common.gameModes[0]);
@@ -41,45 +114,35 @@ const TriviaBetCard = () => {
     const selectTriviaMode = () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
+        openBottomSheet()
         logToAnalytics("trivia_staking_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
             // 'gamemode': gameMode.displayName,
         })
-        navigation.navigate('SelectGameCategory')
 
     }
     return (
         <Pressable style={styles.triviaBetContainer} onPress={selectTriviaMode}>
-            <Image
-                source={require('../../../assets/images/trivia-banner.png')}
-                style={styles.triviaAvatar}
-            />
-            <View style={styles.triviaActions}>
-                <View style={styles.subTriviaActions}>
-                    <Image
-                        source={require('../../../assets/images/trivia-book.png')}
-                        style={styles.bookAvatar}
-                    />
-                    <View style={styles.triviaActionsTexts}>
-                        <Text style={styles.triviaBetHeaderI}>Discover</Text>
-                        <Text style={styles.triviaBetHeader}>Trivia Bet</Text>
-                    </View>
-                </View>
-                <View style={styles.playButton}>
-                    <Text style={styles.playButtonText}>
-                        Play Now
-                    </Text>
-                </View>
+            <View style={[styles.subTriviaActions, { backgroundColor: '#EBFAED' }]}>
+                <Image
+                    source={require('../../../assets/images/single-player.png')}
+                    style={styles.avatar}
+                />
+            </View>
+            <Text style={styles.gameTitle}>Single Player</Text>
+            <View style={styles.playButton}>
+                <Text style={styles.playButtonText}>
+                    Play now
+                </Text>
             </View>
 
         </Pressable>
     )
 }
-const TriviaChallengeCard = () => {
+const TriviaChallengeCard = ({ openBottomSheet }) => {
     const dispatch = useDispatch();
-    const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
     const gameMode = useSelector(state => state.common.gameModes[1]);
     const gameType = useSelector(state => state.common.gameTypes[0]);
@@ -87,66 +150,124 @@ const TriviaChallengeCard = () => {
     const selectChallengeMode = () => {
         dispatch(setGameMode(gameMode));
         dispatch(setGameType(gameType));
+        openBottomSheet()
         logToAnalytics("trivia_challenge_staking_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
-            // 'gamemode': gameMode.displayName,
         })
-        navigation.navigate('SelectGameCategory')
 
     }
     return (
         <Pressable style={styles.triviaBetContainer} onPress={selectChallengeMode}>
-            <Image
-                source={require('../../../assets/images/challenge-banner.png')}
-                style={styles.triviaAvatar}
-            />
-            <View style={styles.triviaActions}>
-                <View style={styles.subTriviaActions}>
-                    <Image
-                        source={require('../../../assets/images/challenge-sword.png')}
-                        style={styles.avatar}
-                    />
-                    <View style={styles.triviaActionsTexts}>
-                        <Text style={styles.triviaBetHeaderI}>Challenge</Text>
-                        <Text style={styles.triviaBetHeader}>A Player</Text>
-                    </View>
-                </View>
-                <View style={styles.playButton}>
-                    <Text style={styles.playButtonText}>
-                        Play Now
-                    </Text>
-                </View>
+            <View style={[styles.subTriviaActions, { backgroundColor: '#F6F4FF' }]}>
+                <Image
+                    source={require('../../../assets/images/challenge-player.png')}
+                    style={styles.avatari}
+                />
+            </View>
+            <Text style={styles.gameTitle}>Challenge a player</Text>
+            <View style={styles.playButton}>
+                <Text style={styles.playButtonText}>
+                    Play now
+                </Text>
+            </View>
+        </Pressable>
+    )
+}
+const JackpotBetCard = () => {
+    return (
+        <Pressable style={styles.triviaBetContainer}>
+            <View style={[styles.subTriviaActions, { backgroundColor: '#FEECE7' }]}>
+                <Image
+                    source={require('../../../assets/images/money-jackpot.png')}
+                    style={styles.avatar}
+                />
+            </View>
+            <Text style={styles.gameTitle}>Jackpot Bet</Text>
+            <View style={styles.playButtonI}>
+                <Text style={styles.playButtonTextI}>
+                    Coming soon
+                </Text>
             </View>
         </Pressable>
     )
 }
 const TriviaRoomsCard = () => {
     return (
-        <Pressable style={styles.triviaRoomContainer}>
-            <Image
-                source={require('../../../assets/images/rooms-banner.png')}
-                style={styles.triviaRoomAvatar}
-            />
-            <View style={styles.triviaActions}>
-                <View style={styles.subTriviaActions}>
-                    <Image
-                        source={require('../../../assets/images/rooms-hat.png')}
-                        style={styles.roomAvatar}
-                    />
-                    <View style={styles.triviaActionsTexts}>
-                        <Text style={styles.triviaBetHeaderI}>Discover</Text>
-                        <Text style={styles.triviaBetHeader}>Trivia Rooms</Text>
-                    </View>
-                </View>
-                <View style={styles.playButtonI}>
-                    <Text style={styles.playButtonTextI}>
-                        Coming soon
-                    </Text>
-                </View>
+        <Pressable style={styles.triviaBetContainer}>
+            <View style={[styles.subTriviaActions, { backgroundColor: '#ECF7FF' }]}>
+                <Image
+                    source={require('../../../assets/images/rooms-hat.png')}
+                    style={styles.avatar}
+                />
+            </View>
+            <Text style={styles.gameTitle}>Trivia rooms</Text>
+            <View style={styles.playButtonI}>
+                <Text style={styles.playButtonTextI}>
+                    Coming soon
+                </Text>
             </View>
         </Pressable>
+    )
+}
+
+const SelectGameMode = ({ playTriviaForFree, playTriviaForCash,playChallengeForFree, playChallengeForCash}) => {
+    const [earn, setEarn] = useState(false);
+    const [practice, setPractice] = useState(false);
+    const gameMode = useSelector(state => state.game.gameMode);
+    const gameModeName = gameMode?.name
+    console.log(gameModeName)
+
+    const toggleFreeMode = () => {
+        setEarn(false);
+        setPractice(true);
+    }
+
+    const toggleEarn = () => {
+        setEarn(true);
+        setPractice(false);
+    }
+
+    const chooseMode = () => {
+        if (earn && gameModeName === 'EXHIBITION') {
+            playTriviaForCash()
+        }
+        if (practice && gameModeName === 'EXHIBITION') {
+            playTriviaForFree()
+        }
+        if (earn && gameModeName === 'CHALLENGE') {
+            playChallengeForCash()
+        }
+        if (practice && gameModeName === 'CHALLENGE') {
+            playChallengeForFree()
+        }
+    }
+
+    return (
+        <View style={styles.modeContainer}>
+            {gameModeName === 'EXHIBITION' &&
+                <Text style={styles.modeTitle}>Single player trivia bet</Text>
+            }
+            {gameModeName === 'CHALLENGE' &&
+                <Text style={styles.modeTitle}>Challenge a player</Text>
+            }
+            <View style={styles.mainContainer}>
+                <View style={styles.modeSubContainer}>
+                    <Ionicons name={practice ? 'checkmark-circle' : "ellipse-outline"} size={30} color={practice ? '#00FFA3' : '#D9D9D9'} onPress={toggleFreeMode} />
+                    <Text style={styles.modeName}>Practice for free</Text>
+                </View>
+                <View style={styles.modeSubContainer}>
+                    <Ionicons name={earn ? 'checkmark-circle' : "ellipse-outline"} size={30} color={earn ? '#00FFA3' : '#D9D9D9'} onPress={toggleEarn} />
+                    <Text style={styles.modeName}>Play to earn</Text>
+                </View>
+            </View>
+            <Pressable style={styles.instructionsContainer}>
+                <Text style={styles.instructionsTitle}>Game instructions</Text>
+                <Ionicons name="chevron-forward" size={30} color='#072169' onPress={toggleEarn} />
+            </Pressable>
+            <AppButton text='Click to continue' style={styles.continueButton} textStyle={styles.buttonText} disabled={!earn && !practice} onPress={chooseMode} />
+        </View>
     )
 }
 
@@ -160,14 +281,20 @@ const styles = EStyleSheet.create({
         paddingTop: '1rem'
     },
     gamesContainer: {
-        marginBottom: '3rem'
+        marginBottom: '3rem',
+        marginTop: '1.5rem',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between'
+        // alignItems:'center'
     },
     triviaBetContainer: {
-        marginBottom: '1rem',
-        elevation: 2.5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.5, height: 2 },
-        shadowOpacity: 0.2,
+        marginBottom: '2rem',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: normalize(193),
+        // marginHorizontal:'.5rem'
     },
     triviaAvatar: {
         borderTopLeftRadius: 13,
@@ -175,9 +302,20 @@ const styles = EStyleSheet.create({
         width: normalize(335),
         height: normalize(245),
     },
-    bookAvatar: {
+    avatar: {
         width: '3rem',
         height: '3.9rem',
+    },
+    avatari: {
+        width: '4.2rem',
+        height: '3.9rem',
+    },
+    gameTitle: {
+        fontSize: '1rem',
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        width: '8rem',
+        textAlign: 'center'
     },
     triviaActions: {
         flexDirection: 'row',
@@ -189,16 +327,19 @@ const styles = EStyleSheet.create({
         borderBottomRightRadius: 13,
     },
     subTriviaActions: {
-        flexDirection: 'row',
+        borderRadius: 100,
+        width: 120,
+        height: 120,
         alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: '#E5E5E5',
+        borderWidth: 1,
     },
     triviaChallengeContainer: {
         backgroundColor: '#FDCCD4',
         borderColor: '#EF2F55',
         borderWidth: 2,
         borderRadius: 13,
-        // width: normalize(208),
-        // height: normalize(190),
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: '1rem',
@@ -216,10 +357,6 @@ const styles = EStyleSheet.create({
         borderTopRightRadius: 13,
         width: normalize(335),
         height: normalize(245),
-    },
-    avatar: {
-        width: '4rem',
-        height: '3.9rem',
     },
     roomAvatar: {
         width: '4.2rem',
@@ -241,15 +378,16 @@ const styles = EStyleSheet.create({
 
     playButton: {
         backgroundColor: '#E15220',
-        paddingVertical: '.6rem',
-        paddingHorizontal: '.5rem',
+        paddingVertical: '.5rem',
+        paddingHorizontal: '1rem',
         borderRadius: 20
     },
     playButtonI: {
-        backgroundColor: '#F9FBFF',
-        paddingVertical: '.6rem',
-        paddingHorizontal: '.5rem',
-        borderRadius: 20
+        backgroundColor: '#E15220',
+        paddingVertical: '.5rem',
+        paddingHorizontal: '1rem',
+        borderRadius: 20,
+        opacity: 0.6
     },
     challengePlayButton: {
         backgroundColor: '#EF2F55',
@@ -270,8 +408,60 @@ const styles = EStyleSheet.create({
     },
     playButtonTextI: {
         fontSize: '.8rem',
-        color: '#072169',
+        color: '#E3ECF2',
         fontFamily: 'sansation-bold',
+    },
+    modeContainer: {
+        paddingHorizontal: normalize(18),
+        paddingVertical: normalize(15),
+    },
+    modeTitle: {
+        fontSize: '1.2rem',
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        textAlign: 'center'
+    },
+    mainContainer: {
+        marginTop: '1.2rem'
+    },
+    modeSubContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderColor: '#EEEEEE',
+        paddingVertical: '1rem'
+    },
+    modeName: {
+        fontSize: '.9rem',
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        marginLeft: '.5rem'
+    },
+    instructionsContainer: {
+        backgroundColor: '#FFFFFF',
+        borderColor: '#E5E5E5',
+        borderWidth: 1,
+        borderRadius: 13,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: '1rem',
+        paddingHorizontal: '.9rem',
+        marginTop: '.9rem',
+        marginBottom: '4.5rem'
+    },
+    instructionsTitle: {
+        fontSize: '.85rem',
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+    },
+    continueButton: {
+        // marginVertical: 20,
+        paddingVertical: normalize(19),
+    },
+    buttonText: {
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem'
     },
 
 })

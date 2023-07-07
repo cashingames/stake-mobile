@@ -150,7 +150,7 @@ function AppRouter() {
 							headerTintColor: '#FFF',
 						}} />
 						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{
-							title: 'Game Staking',
+							title: 'Winning Odds',
 							headerStyle: {
 								backgroundColor: '#F9FBFF',
 							},

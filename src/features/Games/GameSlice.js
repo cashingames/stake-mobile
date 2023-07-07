@@ -90,6 +90,8 @@ let initialState = {
     correctCount: 0,
     totalCount:0,
     wrongCount: 0,
+    practiceMode: false,
+    cashMode: false
 }
 
 
@@ -108,6 +110,14 @@ export const GameSlice = createSlice({
         setGameMode: (state, action) => {
             // console.log("here")
             state.gameMode = action.payload;
+        },
+        setPracticeMode: (state, action) => {
+            // console.log("here")
+            state.practiceMode = action.payload;
+        },
+        setCashMode: (state, action) => {
+            // console.log("here")
+            state.cashMode = action.payload;
         },
         setGameDuration: (state, action) => {
             state.gameDuration = action.payload;
@@ -232,7 +242,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, setAmountWon, setCorrectCount, setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, setWithStaking,showStakingPopup
+    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, setWithStaking,showStakingPopup, setPracticeMode, setCashMode
 } = GameSlice.actions
 
 
