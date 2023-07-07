@@ -12,10 +12,10 @@ export const startChallengeRequest = createAsyncThunk(
 )
 
 export const startPracticeChallengeRequest = createAsyncThunk(
-    'game/createRealTimeChallenge',
+    'game/createPracticeChallenge',
     async (data, _thunkAPI) => {
         console.log(data, 'this is the data')
-        const response = await axios.post('v3/challenges/create', data)
+        const response = await axios.post('v3/challenges/practice/create', data)
         console.log(response.data, 'this is the challenge data')
         return response.data
     }
@@ -153,6 +153,9 @@ export const TriviaChallengeStakeGameSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(startChallengeRequest.fulfilled, (state, action) => {
+                state.documentId = action.payload.data.challenge_request_id;
+            })
+            .addCase(startPracticeChallengeRequest.fulfilled, (state, action) => {
                 state.documentId = action.payload.data.challenge_request_id;
             })
     },

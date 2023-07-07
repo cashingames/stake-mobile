@@ -23,6 +23,7 @@ const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
 const HomeScreen = () => {
     const dispatch = useDispatch();
+    
 
     const loading = useSelector(state => state.common.initialLoading);
     const [refreshing, setRefreshing] = useState(false);
@@ -53,6 +54,7 @@ const HomeScreen = () => {
             dispatch(getCommonData());
         }, [])
     );
+    
 
 
     if (loading) {
@@ -73,7 +75,7 @@ const HomeScreen = () => {
             >
                 <UserProfile user={user} username={username} />
                 <UserWalletAccounts user={user} />
-                <GamesCardsList />
+                    <GamesCardsList />
                 <LeaderboardCards />
             </ScrollView>
         </>
@@ -158,13 +160,13 @@ const styles = EStyleSheet.create({
         borderColor: ' rgba(0, 0, 0, 0.1)',
         borderWidth: 1,
         alignItems: 'center',
-        justifyContent:'center',
+        justifyContent: 'center',
     },
     avatarText: {
         fontSize: '1.5rem',
         color: '#072169',
         fontFamily: 'gotham-bold',
-        textTransform:'capitalize'
+        textTransform: 'capitalize'
     },
     nameMainContainer: {
         marginLeft: '.3rem'

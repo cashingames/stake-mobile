@@ -1,5 +1,5 @@
-import React from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { Alert, Image, Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import SwiperFlatList from "react-native-swiper-flatlist";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,11 +8,13 @@ import { setGameMode, setGameType } from "../features/Games/GameSlice";
 import logToAnalytics from "../utils/analytics";
 import normalize from "../utils/normalize";
 
+
 const GamesCardsList = () => {
+
     return (
         <View style={styles.gamesContainer}>
             <SwiperFlatList>
-                <TriviaBetCard />
+                    <TriviaBetCard />
                 <FundWalletCard />
                 <PlayEarnCard />
             </SwiperFlatList>
