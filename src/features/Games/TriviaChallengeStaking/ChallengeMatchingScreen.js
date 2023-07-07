@@ -21,6 +21,8 @@ const ChallengeMatchingScreen = ({ navigation }) => {
     const [challengeInfo, setChallengeInfo] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const cashMode = useSelector(state => state.game.cashMode);
+    const practiceMode = useSelector(state => state.game.practiceMode);
 
 
     const startModal = () => {
@@ -69,7 +71,12 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                     setDataUpdated(true)
                     setTimeout(() => {
                         console.log("game loading", "navigating after 5 seconds")
-                        navigation.navigate('ChallengeGameBoard');
+                        if(cashMode) {
+                            navigation.navigate('ChallengeGameBoard');
+                        }
+                        if(practiceMode) {
+                            navigation.navigate('ChallengePracticeTour');
+                        }
                     }, 5000);
                 }
             }, error => {

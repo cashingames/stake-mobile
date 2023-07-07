@@ -61,6 +61,7 @@ import WithdrawBalanceScreen from './features/Transactions/WithdrawBalanceScreen
 import WithdrawalSuccessScreen from './features/Transactions/WithdrawalSuccessScreen';
 import PromotionsScreen from './features/Promotions/PromotionsScreen';
 import PromotionScreen from './features/Promotions/PromotionScreen';
+import ChallengePracticeTourScreen from './features/Games/TriviaChallengeStaking/ChallengePracticeTourScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -179,6 +180,7 @@ function AppRouter() {
 							headerTintColor: '#072169',
 						}} />
 						<AppStack.Screen name="ChallengeMatching" component={ChallengeMatchingScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="ChallengePracticeTour" component={ChallengePracticeTourScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameBoard" component={ChallengeGameBoardScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameEndWaiting" component={ChallengeGameEndWaitingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeEndGame" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
