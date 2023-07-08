@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { Text, View, ScrollView, Platform, RefreshControl, Image, Pressable } from 'react-native';
+import { Text, View, ScrollView, Platform, RefreshControl, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import normalize, {
     responsiveHeight, responsiveScreenWidth
 } from '../../utils/normalize';
-import { formatCurrency, isTrue } from '../../utils/stringUtl';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../CommonSlice';
@@ -17,18 +16,19 @@ import UserWalletAccounts from '../../shared/UserWalletAccounts';
 import LeaderboardCards from '../Leaderboard/LeaderboardCards';
 import logToAnalytics from '../../utils/analytics';
 import GamesCardsList from '../../shared/GameCardsList';
+import { formatCurrency } from '../../utils/stringUtl';
 
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
 const HomeScreen = () => {
     const dispatch = useDispatch();
-    
+
 
     const loading = useSelector(state => state.common.initialLoading);
     const [refreshing, setRefreshing] = useState(false);
     const user = useSelector(state => state.auth.user);
-    const username = user.username?.charAt(0)
+    const username = user.firstName === '' ? user.username?.charAt(0) : (user.firstName?.charAt(0) + user.lastName?.charAt(0))
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
@@ -54,7 +54,7 @@ const HomeScreen = () => {
             dispatch(getCommonData());
         }, [])
     );
-    
+
 
 
     if (loading) {
@@ -75,7 +75,7 @@ const HomeScreen = () => {
             >
                 <UserProfile user={user} username={username} />
                 <UserWalletAccounts user={user} />
-                    <GamesCardsList />
+                <GamesCardsList />
                 <LeaderboardCards />
             </ScrollView>
         </>
@@ -85,6 +85,7 @@ export default HomeScreen;
 
 const UserProfile = ({ user, username }) => {
     const navigation = useNavigation();
+    const totalWalletBalance = Number.parseFloat(user.walletBalance) + Number.parseFloat(user.bonusBalance)
 
     const viewNotifications = async () => {
         logToAnalytics("notification_button_clicked", {
@@ -109,17 +110,17 @@ const UserProfile = ({ user, username }) => {
                 <View style={styles.avatar}>
                     <Text style={styles.avatarText}>{username}</Text>
                 </View>
-                <View style={styles.nameMainContainer}>
+                <Pressable style={styles.nameMainContainer} onPress={() => navigation.navigate('UserProfile')}>
                     <View style={styles.nameContainer}>
                         <Text style={styles.welcomeText}>Hello </Text>
-                        <Text style={styles.usernameText} onPress={() => navigation.navigate('UserProfile')} numberOfLines={1}>{user.username}</Text>
-                        <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+                        <Text style={styles.usernameText} numberOfLines={1}>{user.firstName}</Text>
+                        <Ionicons name='chevron-forward-sharp' size={20} color='#072169' style={{marginTop:4}} />
                     </View>
-                </View>
+                </Pressable>
             </View>
             <Pressable style={styles.walletContainer} onPress={viewWallet}>
-                <Text style={styles.balanceCurrency}>My Wallet</Text>
-                <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+                <Text style={styles.balanceCurrency}>NGN {formatCurrency(totalWalletBalance)}</Text>
+                <Ionicons name='chevron-forward-sharp' size={20} color='#072169' style={{marginTop:0.5}} />
             </Pressable>
         </View>
     )
@@ -166,14 +167,15 @@ const styles = EStyleSheet.create({
         fontSize: '1.5rem',
         color: '#072169',
         fontFamily: 'gotham-bold',
-        textTransform: 'capitalize'
+        textTransform: 'uppercase'
     },
     nameMainContainer: {
         marginLeft: '.3rem'
     },
     nameContainer: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: responsiveScreenWidth(20),
     },
     welcomeText: {
         fontSize: '.95rem',
@@ -184,7 +186,6 @@ const styles = EStyleSheet.create({
         fontSize: '.95rem',
         color: '#072169',
         fontFamily: 'gotham-bold',
-        width: responsiveScreenWidth(22.3),
     },
     greetingText: {
         fontSize: '1rem',

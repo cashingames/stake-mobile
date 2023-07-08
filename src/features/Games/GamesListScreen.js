@@ -53,19 +53,20 @@ const GamesListScreen = ({ navigation }) => {
     }
 
     const playChallengeForFree = () => {
-        dispatch(setCashMode(false));
-        dispatch(setPracticeMode(true));
-        logToAnalytics("challenge_play_for_free_selected", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email,
-        })
-        closeBottomSheet()
-        navigation.navigate('SelectGameCategory')
+        Alert.alert('This mode is unavailable')
+        // dispatch(setCashMode(false));
+        // dispatch(setPracticeMode(true));
+        // logToAnalytics("challenge_play_for_free_selected", {
+        //     'id': user.username,
+        //     'phone_number': user.phoneNumber,
+        //     'email': user.email,
+        // })
+        // closeBottomSheet()
+        // navigation.navigate('SelectGameCategory')
     }
 
     const playTriviaForFree = () => {
-        closeBottomSheet()
+        // closeBottomSheet()
         Alert.alert('This mode is unavailable')
         // dispatch(setCashMode(false));
         // dispatch(setPracticeMode(true));
@@ -212,7 +213,7 @@ const TriviaRoomsCard = () => {
     )
 }
 
-const SelectGameMode = ({ playTriviaForFree, playTriviaForCash,playChallengeForFree, playChallengeForCash}) => {
+const SelectGameMode = ({ playTriviaForFree, playTriviaForCash, playChallengeForFree, playChallengeForCash }) => {
     const [earn, setEarn] = useState(false);
     const [practice, setPractice] = useState(false);
     const gameMode = useSelector(state => state.game.gameMode);
@@ -253,14 +254,14 @@ const SelectGameMode = ({ playTriviaForFree, playTriviaForCash,playChallengeForF
                 <Text style={styles.modeTitle}>Challenge a player</Text>
             }
             <View style={styles.mainContainer}>
-                <View style={styles.modeSubContainer}>
-                    <Ionicons name={practice ? 'checkmark-circle' : "ellipse-outline"} size={30} color={practice ? '#00FFA3' : '#D9D9D9'} onPress={toggleFreeMode} />
-                    <Text style={styles.modeName}>Practice for free</Text>
-                </View>
-                <View style={styles.modeSubContainer}>
-                    <Ionicons name={earn ? 'checkmark-circle' : "ellipse-outline"} size={30} color={earn ? '#00FFA3' : '#D9D9D9'} onPress={toggleEarn} />
+                <Pressable style={styles.modeSubContainerDisabled} onPress={toggleFreeMode} disabled>
+                    <Ionicons name={practice ? 'checkmark-circle' : "ellipse-outline"} size={30} color={practice ? '#00FFA3' : '#D9D9D9'} />
+                    <Text style={styles.modeName}>Practice for free (Coming soon)</Text>
+                </Pressable>
+                <Pressable style={styles.modeSubContainer} onPress={toggleEarn}>
+                    <Ionicons name={earn ? 'checkmark-circle' : "ellipse-outline"} size={30} color={earn ? '#00FFA3' : '#D9D9D9'} />
                     <Text style={styles.modeName}>Play to earn</Text>
-                </View>
+                </Pressable>
             </View>
             {/* <Pressable style={styles.instructionsContainer}>
                 <Text style={styles.instructionsTitle}>Game instructions</Text>
@@ -430,6 +431,14 @@ const styles = EStyleSheet.create({
         borderBottomWidth: 1,
         borderColor: '#EEEEEE',
         paddingVertical: '1rem'
+    },
+    modeSubContainerDisabled: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderColor: '#EEEEEE',
+        paddingVertical: '1rem',
+        opacity: 0.4
     },
     modeName: {
         fontSize: '.9rem',

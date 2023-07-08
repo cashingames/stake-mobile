@@ -140,8 +140,8 @@ const PlayEarnCard = () => {
                         />
                     </View>
                     <View style={styles.triviaActionsTexts}>
-                        <Text style={styles.triviaBetHeaderI}>Discover</Text>
-                        <Text style={styles.triviaBetHeader}>Trivia Rooms</Text>
+                        <Text style={styles.triviaBetHeaderI}>Everyday cash</Text>
+                        <Text style={styles.triviaBetHeader}>Play and win big</Text>
                     </View>
                 </View>
                 <View style={styles.playButton}>

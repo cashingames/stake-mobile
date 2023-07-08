@@ -32,7 +32,8 @@ const GameStakingScreen = ({ navigation }) => {
     const [hidden, setHidden] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-    const totalBalance = user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? Number.parseFloat(user.bonusBalance) ?? 0 : Number.parseFloat(user.walletBalance) ?? 0
+    const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
+    const totalBalance = user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? Number.parseFloat(user.bonusBalance) ?? 0 : Number.parseFloat(depositBalance) ?? 0
 
 
     const toggleSecureText = () => {
@@ -133,7 +134,7 @@ const GameStakingScreen = ({ navigation }) => {
                                 source={require('../../../assets/images/wallet-with-cash.png')}
                                 style={styles.avatar}
                             />
-                            <Text style={styles.totalTitleText}>{user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? 'Bonus balance' : 'Total balance'}</Text>
+                            <Text style={styles.totalTitleText}>{user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? 'Bonus balance' : 'Deposit balance'}</Text>
                         </View>
                         {/* <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} /> */}
                     </View>
@@ -162,12 +163,12 @@ const GameStakingScreen = ({ navigation }) => {
                         placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`}
                         value={amount}
                         error={((amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
-                            ((amount > Number.parseFloat(user.walletBalance)))}
+                            ((amount > Number.parseFloat(totalBalance)))}
                         onChangeText={setAmount}
                         isRequired={true}
                         keyboardType="numeric"
                     />
-                    {amount > Number.parseFloat(user.walletBalance) &&
+                    {amount > Number.parseFloat(totalBalance) &&
                         <View style={styles.errorContainer}>
                             <Text style={styles.error}>Insufficient wallet balance</Text>
                             <Pressable style={styles.fundError} onPress={fundWallet}>
