@@ -29,6 +29,7 @@ const HomeScreen = () => {
     const [refreshing, setRefreshing] = useState(false);
     const user = useSelector(state => state.auth.user);
     const username = user.firstName === '' ? user.username?.charAt(0) : (user.firstName?.charAt(0) + user.lastName?.charAt(0))
+    const firstname = user.firstName === '' ? user?.username : user.firstName
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
@@ -73,7 +74,7 @@ const HomeScreen = () => {
                     />
                 }
             >
-                <UserProfile user={user} username={username} />
+                <UserProfile user={user} username={username} firstname={firstname} />
                 <UserWalletAccounts user={user} />
                 <GamesCardsList />
                 <LeaderboardCards />
@@ -83,7 +84,7 @@ const HomeScreen = () => {
 }
 export default HomeScreen;
 
-const UserProfile = ({ user, username }) => {
+const UserProfile = ({ user, username, firstname }) => {
     const navigation = useNavigation();
     const totalWalletBalance = Number.parseFloat(user.walletBalance) + Number.parseFloat(user.bonusBalance)
 
@@ -113,7 +114,7 @@ const UserProfile = ({ user, username }) => {
                 <Pressable style={styles.nameMainContainer} onPress={() => navigation.navigate('UserProfile')}>
                     <View style={styles.nameContainer}>
                         <Text style={styles.welcomeText}>Hello </Text>
-                        <Text style={styles.usernameText} numberOfLines={1}>{user.firstName}</Text>
+                        <Text style={styles.usernameText} numberOfLines={1}>{firstname}</Text>
                         <Ionicons name='chevron-forward-sharp' size={20} color='#072169' style={{marginTop:4}} />
                     </View>
                 </Pressable>
