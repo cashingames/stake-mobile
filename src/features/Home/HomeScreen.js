@@ -165,7 +165,7 @@ const styles = EStyleSheet.create({
         justifyContent: 'center',
     },
     avatarText: {
-        fontSize: '1.5rem',
+        fontSize: '1.1rem',
         color: '#072169',
         fontFamily: 'gotham-bold',
         textTransform: 'uppercase'

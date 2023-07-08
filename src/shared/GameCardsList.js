@@ -14,8 +14,9 @@ const GamesCardsList = () => {
     return (
         <View style={styles.gamesContainer}>
             <SwiperFlatList>
-                    <TriviaBetCard />
+                <TriviaBetCard />
                 <FundWalletCard />
+                <WelcomeCard />
                 <PlayEarnCard />
             </SwiperFlatList>
         </View>
@@ -73,7 +74,7 @@ const FundWalletCard = () => {
     const user = useSelector(state => state.auth.user);
 
     const fundMode = () => {
-        logToAnalytics("trivia_challenge_staking_selected", {
+        logToAnalytics("fund_banner_selected", {
             'id': user.username,
             'phone_number': user.phoneNumber,
             'email': user.email,
@@ -98,6 +99,47 @@ const FundWalletCard = () => {
                     <View style={styles.triviaActionsTexts}>
                         <Text style={styles.triviaBetHeaderI}>Let's cashout</Text>
                         <Text style={styles.triviaBetHeader}>Play and win big</Text>
+                    </View>
+                </View>
+                <View style={styles.playButton}>
+                    <Text style={styles.playButtonText}>
+                        Fund Now
+                    </Text>
+                </View>
+            </View>
+        </Pressable>
+    )
+}
+const WelcomeCard = () => {
+    const navigation = useNavigation();
+    const user = useSelector(state => state.auth.user);
+
+    const fundMode = () => {
+        logToAnalytics("welcome_bonus_banner_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+        })
+        navigation.navigate('FundWallet')
+
+    }
+    return (
+        <Pressable style={styles.triviaBetContainer} onPress={fundMode}>
+            <Image
+                source={require('../../assets/images/bonus-banner1.png')}
+                style={styles.triviaAvatar}
+            />
+            <View style={styles.triviaActions}>
+                <View style={styles.subTriviaActions}>
+                    <View style={styles.avatarContainer}>
+                        <Image
+                            source={require('../../assets/images/megaphone.png')}
+                            style={styles.bookAvatar}
+                        />
+                    </View>
+                    <View style={styles.triviaActionsTexts}>
+                        <Text style={styles.triviaBetHeaderI}>Let's cashout</Text>
+                        <Text style={styles.triviaBetHeader}>Fund & win</Text>
                     </View>
                 </View>
                 <View style={styles.playButton}>
