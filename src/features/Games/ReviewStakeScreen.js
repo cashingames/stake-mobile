@@ -22,6 +22,8 @@ const ReviewStakeScreen = ({ navigation }) => {
     const correctCount = useSelector(state => state.game.correctCount);
     const dispatch = useDispatch();
     const [hidden, setHidden] = useState(false);
+    const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
+
 
     const toggleSecureText = () => {
         setHidden(!hidden);
@@ -54,16 +56,18 @@ const ReviewStakeScreen = ({ navigation }) => {
                         />
                         <Text style={styles.totalTitleText}>Total balance</Text>
                     </View>
-                    <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} />
+                    {/* <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} /> */}
                 </View>
                 <View style={styles.currencyHeader}>
                     <View style={styles.currencyHeaderLeft}>
                         <Text style={styles.currencyText}>NGN</Text>
+                        <Text style={styles.currencyAmount}>{formatCurrency(depositBalance ?? 0)}</Text>
+{/* 
                         {hidden ?
                             <Text style={styles.currencyAmount}>***</Text>
                             :
                             <Text style={styles.currencyAmount}>{formatCurrency(user.walletBalance ?? 0)}</Text>
-                        }
+                        } */}
                     </View>
                     <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
                         <Text style={styles.depositText}>Deposit</Text>

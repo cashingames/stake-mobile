@@ -214,7 +214,7 @@ const TriviaRoomsCard = () => {
 }
 
 const SelectGameMode = ({ playTriviaForFree, playTriviaForCash, playChallengeForFree, playChallengeForCash }) => {
-    const [earn, setEarn] = useState(false);
+    const [earn, setEarn] = useState(true);
     const [practice, setPractice] = useState(false);
     const gameMode = useSelector(state => state.game.gameMode);
     const gameModeName = gameMode?.name

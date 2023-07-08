@@ -30,6 +30,8 @@ const ChallengeStakingScreen = ({ navigation }) => {
     const [alertMessage, setAlertMessage] = useState('');
     const cashMode = useSelector(state => state.game.cashMode);
     const practiceMode = useSelector(state => state.game.practiceMode);
+    const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
+
 
 
     const goToStore = () => {
@@ -99,7 +101,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
     useEffect(() => {
 
         const invalid = amount === '' || amount < Number.parseFloat(minimumChallengeStakeAmount) || amount > Number.parseFloat(maximumChallengeStakeAmount)
-            || amount > Number.parseFloat(user.walletBalance)
+            || amount > Number.parseFloat(depositBalance)
         setCanSend(!invalid);
 
     }, [amount])
@@ -142,7 +144,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
                             }
                         </View>
                         <SelectedPlayers user={user} />
-                        <WalletDetails user={user} depositFunds={depositFunds} cashMode={cashMode} practiceMode={practiceMode} />
+                        <WalletDetails user={user} depositFunds={depositFunds} cashMode={cashMode} practiceMode={practiceMode} depositBalance={depositBalance} />
                         {cashMode &&
                             <>
                                 <Input
@@ -151,12 +153,12 @@ const ChallengeStakingScreen = ({ navigation }) => {
                                     value={amount}
                                     error={((amount < Number.parseFloat(minimumChallengeStakeAmount)) && `Minimum amount is NGN ${minimumChallengeStakeAmount}`) ||
                                         ((amount > Number.parseFloat(maximumChallengeStakeAmount)) && `Maximum amount is NGN ${maximumChallengeStakeAmount}`) ||
-                                        ((amount > Number.parseFloat(user.walletBalance)))}
+                                        ((amount > Number.parseFloat(depositBalance)))}
                                     onChangeText={setAmount}
                                     isRequired={true}
                                     keyboardType="numeric"
                                 />
-                                {amount > Number.parseFloat(user.walletBalance) &&
+                                {amount > Number.parseFloat(depositBalance) &&
                                     <View style={styles.errorContainer}>
                                         <Text style={styles.error}>Insufficient wallet balance</Text>
                                         <Pressable style={styles.fundError} onPress={fundWallet}>
@@ -221,7 +223,7 @@ const SelectedPlayer = ({ playerName, playerAvatar }) => {
     )
 }
 
-const WalletDetails = ({ user, depositFunds, practiceMode, cashMode }) => {
+const WalletDetails = ({ user, depositFunds, practiceMode, cashMode, depositBalance }) => {
     const [hidden, setHidden] = useState(false);
 
     const toggleSecureText = () => {
@@ -239,7 +241,7 @@ const WalletDetails = ({ user, depositFunds, practiceMode, cashMode }) => {
                         <Text style={styles.totalTitleText}>Demo balance</Text>
                     }
                     {cashMode &&
-                        <Text style={styles.totalTitleText}>Total balance</Text>
+                        <Text style={styles.totalTitleText}>Deposit balance</Text>
                     }
 
                 </View>
@@ -249,7 +251,7 @@ const WalletDetails = ({ user, depositFunds, practiceMode, cashMode }) => {
                 <View style={styles.currencyHeaderLeft}>
                     <Text style={styles.currencyText}>NGN</Text>
                     {cashMode &&
-                        <Text style={styles.currencyAmount}>{formatCurrency(user.walletBalance ?? 0)}</Text>
+                        <Text style={styles.currencyAmount}>{formatCurrency(depositBalance ?? 0)}</Text>
                     }
                     {practiceMode &&
                         <Text style={styles.currencyAmount}>{formatCurrency(100000)}</Text>
