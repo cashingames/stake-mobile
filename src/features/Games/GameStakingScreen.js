@@ -34,16 +34,10 @@ const GameStakingScreen = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [selected, setSelected] = useState('');
-    console.log(selected)
-
     const [walletType, setWalletType] = useState('');
-    console.log(walletType)
-
     const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
     const depositBalanceSelected = selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && Number.parseFloat(depositBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
-    console.log(depositBalanceSelected)
     const bonusSelected = selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && Number.parseFloat(user.bonusBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
-    console.log(bonusSelected)
     const totalBalance = user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? Number.parseFloat(user.bonusBalance) ?? 0 : Number.parseFloat(depositBalance) ?? 0
 
 
