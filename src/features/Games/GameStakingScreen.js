@@ -33,8 +33,11 @@ const GameStakingScreen = ({ navigation }) => {
     const [hidden, setHidden] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-    const [selected, setSelected] = useState('')
+    const [selected, setSelected] = useState('');
     console.log(selected)
+
+    const [walletType, setWalletType] = useState('');
+    console.log(walletType)
 
     const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
     const depositBalanceSelected = selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && Number.parseFloat(depositBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
@@ -47,7 +50,14 @@ const GameStakingScreen = ({ navigation }) => {
     const toggleSecureText = () => {
         setHidden(!hidden);
     }
-
+    useEffect(() => {
+        if(selected === `Deposit (NGN ${formatCurrency(depositBalance)})`) {
+            setWalletType('Deposit Balance')
+        }
+        if(selected === `Deposit (NGN ${formatCurrency(user.bonusBalance)})`) {
+            setWalletType('Bonus Balance')
+        }
+    }, [selected])
     useEffect(() => {
         dispatch(getGameStakes())
         dispatch(getUser())
@@ -105,7 +115,7 @@ const GameStakingScreen = ({ navigation }) => {
                             })
                         })
                     setLoading(false);
-                    navigation.navigate("GameInProgress")
+                    navigation.navigate("GamePracticeTour")
                 })
                 .catch((err) => {
                     processStartGameError(err)
@@ -119,7 +129,8 @@ const GameStakingScreen = ({ navigation }) => {
                 category: gameCategoryId,
                 type: gameTypeId,
                 mode: gameMode.id,
-                staking_amount: amount
+                staking_amount: amount,
+                wallet_type: walletType
             }))
                 .then(unwrapResult)
                 .then(result => {
@@ -213,10 +224,10 @@ const GameStakingScreen = ({ navigation }) => {
                 {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
                     amount={amount} />)}
             </View>
-            <Pressable style={styles.instructionsContainer}>
+            {/* <Pressable style={styles.instructionsContainer}>
                 <Text style={styles.instructionsTitle}>Odds instructions</Text>
                 <Ionicons name="chevron-forward" size={30} color='#072169' />
-            </Pressable>
+            </Pressable> */}
             {cashMode &&
                 <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
                     disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButtoni} />
@@ -240,13 +251,11 @@ const StakingBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, s
             key: '1',
             value: `Deposit (NGN ${formatCurrency(depositBalance)})`,
             disabled: depositBalance < minimumExhibitionStakeAmount,
-            amount: depositBalance
         },
         {
             key: '2',
             value: `Bonus (NGN ${formatCurrency(user.bonusBalance)})`,
             disabled: user.bonusBalance < minimumExhibitionStakeAmount,
-            amount: user.bonusBalance
         }
     ]
     const [balanceName, setBalanceName] = useState('')
@@ -311,7 +320,7 @@ const styles = EStyleSheet.create({
     },
     inputContainer: {
         marginTop: '.5rem',
-        marginBottom:'.8rem'
+        marginBottom: '.8rem'
     },
     stakeHeading: {
         textAlign: 'center',

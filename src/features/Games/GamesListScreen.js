@@ -53,16 +53,16 @@ const GamesListScreen = ({ navigation }) => {
     }
 
     const playChallengeForFree = () => {
-        Alert.alert('This mode is unavailable')
-        // dispatch(setCashMode(false));
-        // dispatch(setPracticeMode(true));
-        // logToAnalytics("challenge_play_for_free_selected", {
-        //     'id': user.username,
-        //     'phone_number': user.phoneNumber,
-        //     'email': user.email,
-        // })
-        // closeBottomSheet()
-        // navigation.navigate('SelectGameCategory')
+        // Alert.alert('This mode is unavailable')
+        dispatch(setCashMode(false));
+        dispatch(setPracticeMode(true));
+        logToAnalytics("challenge_play_for_free_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+        })
+        closeBottomSheet()
+        navigation.navigate('SelectGameCategory')
     }
 
     const playTriviaForFree = () => {

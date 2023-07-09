@@ -62,6 +62,7 @@ import WithdrawalSuccessScreen from './features/Transactions/WithdrawalSuccessSc
 import PromotionsScreen from './features/Promotions/PromotionsScreen';
 import PromotionScreen from './features/Promotions/PromotionScreen';
 import ChallengePracticeTourScreen from './features/Games/TriviaChallengeStaking/ChallengePracticeTourScreen';
+import GamePracticeTourScreen from './features/Games/GamePracticeTourScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -165,6 +166,8 @@ function AppRouter() {
 						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
+						<AppStack.Screen name="GamePracticeTour" component={GamePracticeTourScreen} options={{ headerShown: false }} />
+
 
 						
 						{/* challenge */}

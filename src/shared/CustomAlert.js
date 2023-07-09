@@ -4,9 +4,10 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import normalize, { responsiveHeight } from "../utils/normalize";
 
 const CustomAlert = ({ setModalVisible, modalVisible,
-    textLabel, alertImageVisible, buttonLabel, alertImage }) => {
+    textLabel, alertImageVisible, buttonLabel, alertImage, doAction }) => {
 
     const closeModal = () => {
+        doAction()
         setModalVisible(false)
     }
     return (

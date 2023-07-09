@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, View, Image, Text } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +17,46 @@ const AvailableGameSessionBoosts = () => {
     const user = useSelector(state => state.auth.user)
     const displayedOptions = useSelector(state => state.game.displayedOptions);
     const gameMode = useSelector(state => state.game.gameMode);
+    const cashMode = useSelector(state => state.game.cashMode);
+    const practiceMode = useSelector(state => state.game.practiceMode);
+    const [updatepracticeFreezeCount, setUpdatePracticeFreezeCount] = useState(20);
+    const [updatepracticeSkipCount, setUpdatePracticeSkipCount] = useState(20);
     // const [showText, setShowText] = useState(true);
+
+    const practiceBoosts = [
+        {
+            "id": 1,
+            "icon": require('../../assets/images/timefreeze-boost.png'),
+            "count": updatepracticeFreezeCount,
+            "boostName": 'TIME FREEZE'
+        },
+        {
+            "id": 2,
+            "icon": require('../../assets/images/skip-boost.png'),
+            "count": updatepracticeSkipCount,
+            "boostName": 'SKIP'
+        }
+    ]
+
+    const practiceBoostApplied = (data) => {
+        const boostName = data.boostName.toUpperCase();
+        if (boostName === 'TIME FREEZE') {
+            // setClicked(true)
+            setUpdatePracticeFreezeCount(data.count - 1)
+            dispatch(pauseGame(true));
+            setTimeout(() => {
+                dispatch(pauseGame(false))
+                dispatch(boostReleased())
+                // setClicked(false)
+
+            }, 10000);
+        }
+        if (boostName === 'SKIP') {
+            setUpdatePracticeSkipCount(data.count - 1)
+            dispatch(skipQuestion());
+            dispatch(boostReleased());
+        }
+    }
 
 
     const boostsToDisplay = () => {
@@ -66,18 +105,26 @@ const AvailableGameSessionBoosts = () => {
 
     return (
         <>
-            {boosts?.length > 0 ?
-                <View style={styles.availableBoosts}>
-                    {
-                        boostsToDisplay().map((boost, index) =>
-                            boost.count >= 1 &&
-                            <AvailableBoost boost={boost} key={index} onConsume={boostApplied} />
-                        )
-                    }
+            {cashMode &&
+                <>
+                    {boosts?.length > 0 ?
+                        <View style={styles.availableBoosts}>
+                            {
+                                boostsToDisplay().map((boost, index) =>
+                                    boost.count >= 1 &&
+                                    <AvailableBoost boost={boost} key={index} onConsume={boostApplied} />
+                                )
+                            }
 
-                </View>
-                :
-                <></>
+                        </View>
+                        :
+                        <></>
+                    }
+                </>
+            }
+
+            {practiceMode &&
+                <GamePracticeBoosts practiceBoosts={practiceBoosts} boostApplied={practiceBoostApplied} />
             }
         </>
     )
@@ -91,14 +138,41 @@ const AvailableBoost = ({ boost, onConsume }) => {
         <Pressable onPress={() => isActive ? {} : onConsume(boost)}>
             <View style={styles.boostContainer}>
                 {/* <View style={[styles.availableBoost, isActive ? styles.boostActive : {}, { opacity: showText ? 0 : 1 }]}> */}
-                <View style={[styles.availableBoost, isActive ? styles.boostActive : {}]}>
+                <View style={[styles.boostDetailsHead, isActive ? styles.boostActive : {}]}>
 
                     <Image
                         source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
                         style={styles.boostIcon}
                     />
-                    <Text style={styles.amount}>x{formatNumber(boost.count)}</Text>
+                    <Text style={styles.storeItemName}>x{formatNumber(boost.count)}</Text>
                 </View>
+            </View>
+        </Pressable>
+    )
+}
+
+const GamePracticeBoosts = ({ practiceBoosts, boostApplied, clicked }) => {
+    return (
+        <View style={styles.boostItems}>
+            {
+                practiceBoosts.map((practiceBoost, index) =>
+                    <GamePracticeBoost practiceBoost={practiceBoost} key={index} onConsume={boostApplied} clicked={clicked} />
+                )
+            }
+        </View>
+    )
+}
+
+const GamePracticeBoost = ({ practiceBoost, onConsume }) => {
+
+    return (
+        <Pressable style={styles.boostContainer} onPress={() => onConsume(practiceBoost)}>
+            <View style={styles.boostDetailsHead}>
+                <Image
+                    source={practiceBoost.icon}
+                    style={styles.boostIcon}
+                />
+                <Text style={styles.storeItemName}>x{formatNumber(practiceBoost.count)}</Text>
             </View>
         </Pressable>
     )
@@ -129,17 +203,30 @@ const styles = EStyleSheet.create({
         shadowOffset: { width: -1, height: 1 },
     },
     boostContainer: {
-        alignItems: 'flex-end',
-        marginRight:'1.3rem'
+     
+    },
+    boostDetailsHead: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginRight: '1rem'
     },
     boostIcon: {
-        width: normalize(30),
-        height: normalize(30)
+        width: '3.2rem',
+        height: '3.2rem',
     },
-    amount: {
-        color: '#121212',
+    storeItemName: {
+        fontSize: '.85rem',
+        color: '#fff',
         fontFamily: 'gotham-bold',
-        fontSize: '0.85rem',
+        textShadowColor: '#121212',
+        textShadowRadius: 1,
+        textShadowOffset: {
+            width: 1,
+            height: 1,
+        },
+        position: 'absolute',
+        left: 35,
+        top: 10
     },
     name: {
         color: '#FFFF',
@@ -147,6 +234,12 @@ const styles = EStyleSheet.create({
         fontSize: '0.65rem',
         marginTop: '.5rem',
         width: "4rem"
+    },
+    boostItems: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: '1rem',
+        paddingVertical: '.7rem'
     },
 
 })

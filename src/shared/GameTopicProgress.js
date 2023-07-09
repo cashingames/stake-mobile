@@ -4,6 +4,7 @@ import EStyleSheet from "react-native-extended-stylesheet";
 import { useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import AnsweredGameProgress from "./AnsweredGameProgress";
+import { Image } from "react-native";
 
 
 
@@ -11,7 +12,7 @@ const GameTopicProgress = () => {
 
     return (
         <View style={styles.topicProgress}>
-                <GameTopicContainer />
+            <GameTopicContainer />
         </View>
     )
 }
@@ -21,15 +22,26 @@ const GameTopicContainer = () => {
     const index = useSelector(state => state.game.currentQuestionPosition);
     const total = useSelector(state => state.game.totalQuestionCount);
     const highestOdd = 10
+    const practiceMode = useSelector(state => state.game.practiceMode);
+
     return (
         <View style={styles.topicContainer}>
             <View style={styles.categoryContainer}>
                 <Text style={styles.categoryName}>{gameCategory}</Text>
-                <AnsweredGameProgress index={index} total={total} />
+                {practiceMode &&
+                    <View style={styles.demoContainer}>
+                        <Image
+                            source={require('../../assets/images/star.png')}
+                            style={styles.starIcon}
+                        />
+                        <Text style={styles.demoText}>Demo game</Text>
+                    </View>
+                }
+            </View>
+            <AnsweredGameProgress index={index} total={total} />
                 <Text style={styles.questionsAnswered}>
                     {`${index + 1}/${total}`}
                 </Text>
-            </View>
             {/* <View style={styles.oddContainer}>
                 <Text style={styles.oddTitle}>Odds</Text>
                 <Text style={styles.oddText}>{highestOdd}</Text>
@@ -41,19 +53,18 @@ export default GameTopicProgress;
 
 const styles = EStyleSheet.create({
     topicProgress: {
-        // borderBottomWidth: 1,
-        // borderColor: '#93939336',
-        // paddingVertical: normalize(18),
+        borderBottomWidth: 1,
+        borderColor: '#93939336',
+        paddingVertical: normalize(18),
         // paddingHorizontal:'1.3rem'
     },
 
     topicContainer: {
-        // flexDirection:'row',
-        // justifyContent:'space-between',
-        // alignItems:'flex-start'
+        paddingHorizontal: '1rem'
     },
     categoryContainer: {
-        flexDirection:'column'
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     categoryName: {
         color: '#072169',
@@ -66,8 +77,8 @@ const styles = EStyleSheet.create({
         fontSize: '0.8rem'
     },
     oddContainer: {
-        flexDirection:'row',
-        alignItems:'center'
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     oddTitle: {
         color: '#072169',
@@ -78,7 +89,24 @@ const styles = EStyleSheet.create({
         color: '#072169',
         fontFamily: 'sansation-regular',
         fontSize: '0.8rem',
-        marginLeft:'.3rem'
+        marginLeft: '.3rem'
+    },
+    demoContainer: {
+        backgroundColor: '#E15220',
+        borderRadius: 30,
+        paddingHorizontal: '.5rem',
+        paddingVertical: '.1rem',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    demoText: {
+        color: '#F9FBFF',
+        fontFamily: 'gotham-medium',
+        fontSize: '0.6rem'
+    },
+    starIcon: {
+        width: '.7rem',
+        height: '.7rem'
     },
 
 })

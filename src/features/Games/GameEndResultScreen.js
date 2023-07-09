@@ -23,6 +23,8 @@ export default function GameEndResultScreen({ navigation }) {
 	const correctCount = useSelector(state => state.game.correctCount);
 	const totalCount = useSelector(state => state.game.totalCount);
 	const wrongCount = useSelector(state => state.game.wrongCount);
+	const practiceMode = useSelector(state => state.game.practiceMode);
+	const cashMode = useSelector(state => state.game.cashMode);
 
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
@@ -35,7 +37,7 @@ export default function GameEndResultScreen({ navigation }) {
 			'phone_number': user.phoneNumber,
 			'email': user.email
 		});
-		navigation.navigate("SelectGameCategory")
+		navigation.navigate("Games")
 		setLoading(false);
 
 	}
@@ -84,8 +86,11 @@ export default function GameEndResultScreen({ navigation }) {
 					/>
 				</View>
 				<UserName userName={user.firstName} />
-				{withStaking &&
+				{withStaking && cashMode &&
 					<Winnings amountWon={amountWon} onPress={reviewStaking} user={user} />
+				}
+				{practiceMode &&
+					<DemoWinnings amountWon={amountWon} />
 				}
 
 				<FinalScore pointsGained={pointsGained} correctCount={correctCount} wrongCount={wrongCount} totalCount={totalCount} />
@@ -112,6 +117,15 @@ const Winnings = ({ amountWon, onPress, user }) => {
 		</View>
 	)
 }
+
+const DemoWinnings = ({ amountWon }) => {
+	return (
+		<View style={styles.winningsContainer}>
+			<StakeWinnings amountWon={amountWon} />
+		</View>
+	)
+}
+
 
 const FinalScore = ({ pointsGained, correctCount, totalCount, wrongCount }) => {
 	return (

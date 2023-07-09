@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { View, ScrollView, ImageBackground, Alert, BackHandler, Image, Text } from 'react-native';
+import { View, ScrollView, ImageBackground, Alert, BackHandler, Image, Text, Pressable } from 'react-native';
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
@@ -17,6 +17,7 @@ import GameQuestions from "../../shared/GameQuestions";
 import logToAnalytics from "../../utils/analytics";
 import DoubleButtonAlert from "../../shared/DoubleButtonAlert";
 import CustomAlert from "../../shared/CustomAlert";
+import { formatNumber } from "../../utils/stringUtl";
 
 
 
@@ -134,7 +135,7 @@ export default function GameInProgressScreen({ navigation, route }) {
         if (practiceMode) {
             console.log('ending practice')
             dispatch(endPracticeGame({
-                chosen_options : chosenOptions,
+                chosen_options: chosenOptions,
             }))
                 .then(unwrapResult)
                 .then(() => {
@@ -293,7 +294,9 @@ export default function GameInProgressScreen({ navigation, route }) {
         <ImageBackground source={require('../../../assets/images/game-play-background.png')} style={styles.image} resizeMode="cover">
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
                 <PlayGameHeader onPress={showExitConfirmation} />
-                <StakeDetails />
+                {cashMode &&
+                    <StakeDetails />
+                }
                 <GameProgressAndBoosts />
                 <GameQuestions onPress={() => onEndGame()} ending={ending} onComplete={() => onEndGame()} exiting={exiting} />
                 {exitClicked ?
@@ -344,10 +347,42 @@ const StakeDetails = () => {
 
 const GameProgressAndBoosts = () => {
     return (
-        <View style={styles.gameProgressAndBoost}>
+        <View style={styles.gameProgressAndBoosti}>
             <GameTopicProgress />
             <AvailableGameSessionBoosts />
         </View>
+
+    )
+}
+
+
+
+const ChallengePracticeFreeze = () => {
+
+    return (
+        <Pressable style={styles.boostContainer}>
+            <View style={styles.boostDetailsHead}>
+                <Image
+                    source={require('../../../assets/images/timefreeze-boost.png')}
+                    style={styles.boostIcon}
+                />
+                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
+            </View>
+        </Pressable>
+    )
+}
+const ChallengePracticeSkip = () => {
+
+    return (
+        <Pressable style={styles.boostContainer}>
+            <View style={styles.boostDetailsHead}>
+                <Image
+                    source={require('../../../assets/images/skip-boost.png')}
+                    style={styles.boostIcon}
+                />
+                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
+            </View>
+        </Pressable>
     )
 }
 
@@ -402,8 +437,43 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: '1.2rem',
         paddingVertical: '1rem'
-
-
+    },
+    gameProgressAndBoosti: {
+        borderWidth: 1,
+        borderColor: '#93939336',
+        borderRadius: 13,
+        marginTop: '1.5rem',
+        backgroundColor: '#fff',
+        marginBottom: '1rem'
+    },
+    boostItems: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: '1rem',
+        paddingVertical: '.7rem'
+    },
+    boostIcon: {
+        width: '3.2rem',
+        height: '3.2rem',
+    },
+    boostDetailsHead: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginRight: '1rem'
+    },
+    storeItemName: {
+        fontSize: '.85rem',
+        color: '#fff',
+        fontFamily: 'gotham-bold',
+        textShadowColor: '#121212',
+        textShadowRadius: 1,
+        textShadowOffset: {
+            width: 1,
+            height: 1,
+        },
+        position: 'absolute',
+        left: 35,
+        top: 10
     },
 
 });

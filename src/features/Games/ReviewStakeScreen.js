@@ -47,7 +47,7 @@ const ReviewStakeScreen = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.detailsContainer}>
+            {/* <View style={styles.detailsContainer}>
                 <View style={styles.totalHeader}>
                     <View style={styles.totalTitleContainer}>
                         <Image
@@ -56,25 +56,25 @@ const ReviewStakeScreen = ({ navigation }) => {
                         />
                         <Text style={styles.totalTitleText}>Total balance</Text>
                     </View>
-                    {/* <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} /> */}
+                    <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} />
                 </View>
                 <View style={styles.currencyHeader}>
                     <View style={styles.currencyHeaderLeft}>
                         <Text style={styles.currencyText}>NGN</Text>
                         <Text style={styles.currencyAmount}>{formatCurrency(depositBalance ?? 0)}</Text>
-{/* 
+                        
                         {hidden ?
                             <Text style={styles.currencyAmount}>***</Text>
                             :
                             <Text style={styles.currencyAmount}>{formatCurrency(user.walletBalance ?? 0)}</Text>
-                        } */}
+                        }
                     </View>
                     <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
                         <Text style={styles.depositText}>Deposit</Text>
                         <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
                     </Pressable>
                 </View>
-            </View>
+            </View> */}
             <Input
                 label='Enter stake amount'
                 value={amountStaked}

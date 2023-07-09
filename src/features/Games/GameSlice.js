@@ -108,7 +108,7 @@ let initialState = {
     displayedQuestion: {},
     isPlayingTrivia: false,
     hasPlayedTrivia: false,
-    gameDuration: 6000,
+    gameDuration: 60,
     gameStakes: [],
     withStaking: false,
     endedWithoutStaking:null,
@@ -264,13 +264,11 @@ export const GameSlice = createSlice({
             })
             .addCase(endPracticeGame.fulfilled, (state, action) => {
                 state.isEnded = true;
-                // state.pointsGained = action.payload.data.points_gained;
-                // state.amountWon = action.payload.data.amount_won;
-                // state.withStaking = action.payload.data.with_staking ?? false;
-                // state.amountStaked = action.payload.data.amount_staked;
-                // state.correctCount = action.payload.data.correct_count;
-                // state.totalCount = action.payload.data.total_count;
-                // state.wrongCount = action.payload.data.wrong_count;
+                state.pointsGained = action.payload.data.points_gained;
+                state.amountWon = action.payload.data.amount_won;
+                state.correctCount = action.payload.data.correct_count;
+                state.totalCount = action.payload.data.total_count;
+                state.wrongCount = action.payload.data.wrong_count;
                 resetState(state)
             })
             .addCase(getGameStakes.fulfilled, (state, action) => {
@@ -314,7 +312,7 @@ function resetState(state) {
     state.displayedOptions = [];
     state.displayedQuestion = {};
     state.isPlayingTrivia = false;
-    state.gameDuration = 6000;
+    state.gameDuration = 60;
 
     return state;
 }
