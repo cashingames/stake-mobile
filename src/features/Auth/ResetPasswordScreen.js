@@ -57,6 +57,9 @@ export default function ({ navigation }) {
                 setLoading(false);
             })
     }
+    const close = () => {
+
+    }
 
     useEffect(() => {
         var invalid = passErr || confirmPassErr || password === '' || confirmPassword === '' || confirmPassword !== password;
@@ -95,7 +98,7 @@ export default function ({ navigation }) {
             </View>
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                  textLabel={allError} buttonLabel='Ok, got it'
-                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close}  />
         </ScrollView>
     );
 }

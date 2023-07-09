@@ -10,7 +10,6 @@ import { Image } from "react-native";
 import UniversalBottomSheet from "../../shared/UniversalBottomSheet";
 import { Ionicons } from "@expo/vector-icons";
 import AppButton from "../../shared/AppButton";
-import CustomAlert from "../../shared/CustomAlert";
 
 
 
@@ -256,13 +255,13 @@ const SelectGameMode = ({ playTriviaForFree, playTriviaForCash, playChallengeFor
                     <Ionicons name={practice ? 'checkmark-circle' : "ellipse-outline"} size={30} color={practice ? '#00FFA3' : '#D9D9D9'} />
                     <Text style={styles.modeName}>Practice for free (Coming soon)</Text>
                 </Pressable> */}
+                 <Pressable style={styles.modeSubContainer} onPress={toggleEarn}>
+                    <Ionicons name={earn ? 'checkmark-circle' : "ellipse-outline"} size={30} color={earn ? '#00FFA3' : '#D9D9D9'} />
+                    <Text style={styles.modeName}>Play to earn</Text>
+                </Pressable>
                 <Pressable style={styles.modeSubContainer} onPress={toggleFreeMode}>
                     <Ionicons name={practice ? 'checkmark-circle' : "ellipse-outline"} size={30} color={practice ? '#00FFA3' : '#D9D9D9'} />
                     <Text style={styles.modeName}>Practice for free</Text>
-                </Pressable>
-                <Pressable style={styles.modeSubContainer} onPress={toggleEarn}>
-                    <Ionicons name={earn ? 'checkmark-circle' : "ellipse-outline"} size={30} color={earn ? '#00FFA3' : '#D9D9D9'} />
-                    <Text style={styles.modeName}>Play to earn</Text>
                 </Pressable>
             </View>
             {/* <Pressable style={styles.instructionsContainer}>

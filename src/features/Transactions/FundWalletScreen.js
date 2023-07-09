@@ -89,6 +89,10 @@ export default function FundWalletScreen() {
     setModalVisible(true)
   }
 
+  const close = () => {
+
+  }
+
   return (
     <View style={styles.headContainer}>
       {!showPayment && (
@@ -128,7 +132,7 @@ export default function FundWalletScreen() {
           </View>
           <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
             textLabel={alertMessage} buttonLabel='Ok, got it'
-            alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true}
+            alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} 
           />
         </ScrollView>
       )}

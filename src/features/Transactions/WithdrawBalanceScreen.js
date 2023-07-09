@@ -88,6 +88,10 @@ const WithdrawBalanceScreen = ({ navigation }) => {
             )
     }
 
+    const close = () => {
+
+    }
+
     useEffect(() => {
         const invalid = accountNumberErr || amount < minimumWithdrawableAmount || amount > Number.parseFloat(user.withdrawableBalance) || amount === '' || accountNumber === ''
         setWithdraw(!invalid);
@@ -160,7 +164,7 @@ const WithdrawBalanceScreen = ({ navigation }) => {
                 </View>
                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                      textLabel={allError} buttonLabel='Ok, got it'
-                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true}
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} 
                 />
 
                 <AppButton text={loading ? 'Processing' : 'Request withdrawal'} disabled={!withdraw || loading}

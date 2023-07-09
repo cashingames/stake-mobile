@@ -23,13 +23,17 @@ const ContactUs = () => {
         setModalVisible(true)
     }
 
+    const close = () => {
+
+    }
+
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.title}>Do you have any question?</Text>
             <ContactForm user={user} setAlertMessage={setAlertMessage} startModal={startModal} />
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                  textLabel={alertMessage} buttonLabel='Ok, got it'
-                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
         </ScrollView>
     )
 }

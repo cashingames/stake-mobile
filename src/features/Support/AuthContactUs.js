@@ -22,6 +22,10 @@ const AuthContactUs = ({ navigation }) => {
         setModalVisible(true)
     }
 
+    const close = () => {
+
+    }
+
     return (
         <ScrollView style={styles.container}>
             <View style={styles.headerContainerStyle}>
@@ -39,7 +43,7 @@ const AuthContactUs = ({ navigation }) => {
             <ContactForm startModal={startModal} setAlertMessage={setAlertMessage} />
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                 textLabel={alertMessage} buttonLabel='Ok, got it'
-                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
         </ScrollView>
     )
 }

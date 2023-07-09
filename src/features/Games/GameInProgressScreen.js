@@ -269,6 +269,10 @@ export default function GameInProgressScreen({ navigation, route }) {
 
     }
 
+    const close = () => {
+
+    }
+
     const showExitConfirmation = () => {
         setExitClicked(true)
         startModal()
@@ -306,7 +310,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                     :
                     <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                         textLabel={alertMessage} buttonLabel='Ok, got it'
-                        alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                        alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
                 }
             </ScrollView>
         </ImageBackground>

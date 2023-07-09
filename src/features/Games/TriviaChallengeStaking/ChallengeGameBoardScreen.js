@@ -146,6 +146,9 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
         dispatch(setChallengeDetails(data));
         return data.opponent.status;
     }
+    const close = () => {
+
+    }
 
     return (
         <ImageBackground source={require('../../../../assets/images/game-play-background.png')} style={styles.image} resizeMode="contain">
@@ -161,7 +164,7 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                     :
                     <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                         textLabel={alertMessage} buttonLabel='Ok, got it'
-                        alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                        alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
                 }
             </ScrollView>
         </ImageBackground>

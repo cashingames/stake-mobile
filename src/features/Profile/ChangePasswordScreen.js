@@ -79,6 +79,9 @@ export default function ChangePasswordScreen({ navigation }) {
                 setAlertMessage('Invalid data provided');
             });
     }
+    const close = () => {
+
+    }
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -122,7 +125,7 @@ export default function ChangePasswordScreen({ navigation }) {
                 />
                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                      textLabel={alertMessage} buttonLabel='Ok, got it'
-                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close}  />
             </ScrollView>
             <AppButton
                 text={saving ? 'Saving' : 'Change Password'}

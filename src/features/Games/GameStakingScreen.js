@@ -48,7 +48,7 @@ const GameStakingScreen = ({ navigation }) => {
         if(selected === `Deposit (NGN ${formatCurrency(depositBalance)})`) {
             setWalletType('Deposit Balance')
         }
-        if(selected === `Deposit (NGN ${formatCurrency(user.bonusBalance)})`) {
+        if(selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})`) {
             setWalletType('Bonus Balance')
         }
     }, [selected])
@@ -162,6 +162,10 @@ const GameStakingScreen = ({ navigation }) => {
         setAlertMessage(firstError);
     }
 
+    const close = () => {
+
+    }
+
     return (
         <ScrollView style={styles.container}>
             {cashMode &&
@@ -174,7 +178,7 @@ const GameStakingScreen = ({ navigation }) => {
                         placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`}
                         value={amount}
                         error={((selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
-                            ((selected === `Deposit (NGN ${formatCurrency(user.bonusBalance)})` && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`)}
+                            ((selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`)}
                         onChangeText={setAmount}
                         isRequired={true}
                         keyboardType="numeric"
@@ -187,7 +191,7 @@ const GameStakingScreen = ({ navigation }) => {
                             </Pressable>
                         </View>
                     }
-                    {(selected === `Deposit (NGN ${formatCurrency(user.bonusBalance)})` && amount > Number.parseFloat(user.bonusBalance)) &&
+                    {(selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && amount > Number.parseFloat(user.bonusBalance)) &&
                         <View style={styles.errorContainer}>
                             <Text style={styles.error}>Insufficient bonus balance, stake from another balance</Text>
                         </View>
@@ -232,7 +236,7 @@ const GameStakingScreen = ({ navigation }) => {
             }
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                 textLabel={alertMessage} buttonLabel='Ok, got it'
-                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
 
         </ScrollView>
     )

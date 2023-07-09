@@ -143,6 +143,9 @@ const SignupScreen = () => {
             setLoading(false);
         })
     }
+    const close = () => {
+
+    }
 
     useEffect(() => {
         const nameRule = /\d/;
@@ -293,7 +296,7 @@ const SignupScreen = () => {
             <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                  textLabel={allError} buttonLabel='Ok, got it'
-                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close}  />
         </ScrollView>
     );
 }

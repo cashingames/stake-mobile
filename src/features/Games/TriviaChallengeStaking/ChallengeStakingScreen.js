@@ -98,6 +98,10 @@ const ChallengeStakingScreen = ({ navigation }) => {
         navigation.navigate('FundWallet')
     }
 
+    const close = () => {
+
+    }
+
     useEffect(() => {
 
         const invalid = amount === '' || amount < Number.parseFloat(minimumChallengeStakeAmount) || amount > Number.parseFloat(maximumChallengeStakeAmount)
@@ -189,7 +193,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
                         }
                         <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                             textLabel={alertMessage} buttonLabel='Ok, got it'
-                            alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} />
+                            alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
 
                     </ScrollView>
                 </KeyboardAvoidingView>
@@ -223,12 +227,7 @@ const SelectedPlayer = ({ playerName, playerAvatar }) => {
     )
 }
 
-const WalletDetails = ({ user, depositFunds, practiceMode, cashMode, depositBalance }) => {
-    const [hidden, setHidden] = useState(false);
-
-    const toggleSecureText = () => {
-        setHidden(!hidden);
-    }
+const WalletDetails = ({ depositFunds, practiceMode, cashMode, depositBalance }) => {
     return (
         <View style={styles.detailsContainer}>
             <View style={styles.totalHeader}>
@@ -245,7 +244,6 @@ const WalletDetails = ({ user, depositFunds, practiceMode, cashMode, depositBala
                     }
 
                 </View>
-                {/* <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} /> */}
             </View>
             <View style={styles.currencyHeader}>
                 <View style={styles.currencyHeaderLeft}>
@@ -257,12 +255,6 @@ const WalletDetails = ({ user, depositFunds, practiceMode, cashMode, depositBala
                         <Text style={styles.currencyAmount}>{formatCurrency(100000)}</Text>
                     }
 
-                    {/* 
-                    {hidden ?
-                        <Text style={styles.currencyAmount}>***</Text>
-                        :
-                        <Text style={styles.currencyAmount}>{formatCurrency(user.walletBalance ?? 0)}</Text>
-                    } */}
                 </View>
                 {cashMode &&
                     <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
