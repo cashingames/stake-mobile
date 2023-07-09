@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, ScrollView, ActivityIndicator, Image, Pressable, TextInput } from 'react-native';
+import { Text, View, ScrollView, ActivityIndicator, Image, Pressable, TextInput, Alert } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import Input from "../../shared/Input";
 import AppButton from "../../shared/AppButton";
-import { getGameStakes, setAmountStaked, setIsPlayingTrivia, startGame } from "./GameSlice";
+import { getGameStakes, setAmountStaked, setIsPlayingTrivia, startGame, startPracticeGame } from "./GameSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { logActionToServer } from "../CommonSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -14,6 +14,7 @@ import logToAnalytics from "../../utils/analytics";
 import { formatCurrency } from "../../utils/stringUtl";
 import { Ionicons } from "@expo/vector-icons";
 import CustomAlert from "../../shared/CustomAlert";
+import { SelectList } from "react-native-dropdown-select-list";
 
 
 const GameStakingScreen = ({ navigation }) => {
@@ -32,7 +33,14 @@ const GameStakingScreen = ({ navigation }) => {
     const [hidden, setHidden] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const [selected, setSelected] = useState('')
+    console.log(selected)
+
     const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
+    const depositBalanceSelected = selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && Number.parseFloat(depositBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
+    console.log(depositBalanceSelected)
+    const bonusSelected = selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && Number.parseFloat(user.bonusBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
+    console.log(bonusSelected)
     const totalBalance = user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? Number.parseFloat(user.bonusBalance) ?? 0 : Number.parseFloat(depositBalance) ?? 0
 
 
@@ -46,11 +54,11 @@ const GameStakingScreen = ({ navigation }) => {
     }, [])
 
 
-
     useEffect(() => {
-        const canSend = amount !== '' && (amount >= Number.parseFloat(minimumExhibitionStakeAmount) && amount <= totalBalance);
+        const canSend = selected !== '' && (depositBalanceSelected === true || bonusSelected === true) && amount !== ''
+        // const canSend = amount !== '' && (amount >= Number.parseFloat(minimumExhibitionStakeAmount) && amount <= totalBalance);
         setCanSend(canSend);
-    }, [amount, minimumExhibitionStakeAmount])
+    }, [amount, minimumExhibitionStakeAmount, selected, depositBalance, user.bonusBalance])
 
     const validate = () => {
         setLoading(true);
@@ -64,14 +72,6 @@ const GameStakingScreen = ({ navigation }) => {
 
     }
 
-    const depositFunds = async () => {
-        logToAnalytics("deposit_clicked", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email
-        })
-        navigation.navigate('FundWallet')
-    }
     const fundWallet = async () => {
         logToAnalytics("insufficient_balance_fund_clicked", {
             'id': user.username,
@@ -84,34 +84,67 @@ const GameStakingScreen = ({ navigation }) => {
     const onStartGame = () => {
         setLoading(true);
         dispatch(setIsPlayingTrivia(false))
-        dispatch(startGame({
-            category: gameCategoryId,
-            type: gameTypeId,
-            mode: gameMode.id,
-            staking_amount: amount
-        }))
-            .then(unwrapResult)
-            .then(result => {
-                dispatch(logActionToServer({
-                    message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
-                    data: result.data.questions
-                }))
-                    .then(unwrapResult)
-                    .then(result => {
-                        logToAnalytics("start_trivia_staking_game", {
-                            'id': user.username,
-                            'phone_number': user.phoneNumber,
-                            'email': user.email
+        if (practiceMode) {
+            console.log('started practice')
+            dispatch(startPracticeGame({
+                category: gameCategoryId,
+                amount: amount
+            }))
+                .then(unwrapResult)
+                .then(result => {
+                    dispatch(logActionToServer({
+                        message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
+                        data: result.data.questions
+                    }))
+                        .then(unwrapResult)
+                        .then(result => {
+                            logToAnalytics("start_trivia_practice_game", {
+                                'id': user.username,
+                                'phone_number': user.phoneNumber,
+                                'email': user.email
+                            })
                         })
-                    })
-                setLoading(false);
-                navigation.navigate("GameInProgress")
-            })
-            .catch((err) => {
-                processStartGameError(err)
-            }).finally(() => {
-                setLoading(false);
-            });
+                    setLoading(false);
+                    navigation.navigate("GameInProgress")
+                })
+                .catch((err) => {
+                    processStartGameError(err)
+                }).finally(() => {
+                    setLoading(false);
+                });
+        }
+        if (cashMode) {
+            console.log('started normal')
+            dispatch(startGame({
+                category: gameCategoryId,
+                type: gameTypeId,
+                mode: gameMode.id,
+                staking_amount: amount
+            }))
+                .then(unwrapResult)
+                .then(result => {
+                    dispatch(logActionToServer({
+                        message: "Game session " + result.data.game.token + " questions recieved for " + user.username,
+                        data: result.data.questions
+                    }))
+                        .then(unwrapResult)
+                        .then(result => {
+                            logToAnalytics("start_trivia_staking_game", {
+                                'id': user.username,
+                                'phone_number': user.phoneNumber,
+                                'email': user.email
+                            })
+                        })
+                    setLoading(false);
+                    navigation.navigate("GameInProgress")
+                })
+                .catch((err) => {
+                    processStartGameError(err)
+                }).finally(() => {
+                    setLoading(false);
+                });
+        }
+
     }
 
     const processStartGameError = async (err) => {
@@ -127,34 +160,7 @@ const GameStakingScreen = ({ navigation }) => {
     return (
         <ScrollView style={styles.container}>
             {cashMode &&
-                <View style={styles.detailsContainer}>
-                    <View style={styles.totalHeader}>
-                        <View style={styles.totalTitleContainer}>
-                            <Image
-                                source={require('../../../assets/images/wallet-with-cash.png')}
-                                style={styles.avatar}
-                            />
-                            <Text style={styles.totalTitleText}>{user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? 'Bonus balance' : 'Deposit balance'}</Text>
-                        </View>
-                        {/* <Ionicons name={hidden ? 'eye-off-outline' : "eye-outline"} size={22} color="#072169" onPress={toggleSecureText} /> */}
-                    </View>
-                    <View style={styles.currencyHeader}>
-                        <View style={styles.currencyHeaderLeft}>
-                            <Text style={styles.currencyText}>NGN</Text>
-                            <Text style={styles.currencyAmount}>{formatCurrency(totalBalance)}</Text>
-
-                            {/* {hidden ?
-                            <Text style={styles.currencyAmount}>***</Text>
-                            :
-                            <Text style={styles.currencyAmount}>{totalBalance}</Text>
-                        } */}
-                        </View>
-                        <Pressable style={styles.currencyHeaderRight} onPress={depositFunds}>
-                            <Text style={styles.depositText}>Deposit</Text>
-                            <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
-                        </Pressable>
-                    </View>
-                </View>
+                <StakingBalances depositBalance={depositBalance} user={user} minimumExhibitionStakeAmount={minimumExhibitionStakeAmount} setSelected={setSelected} />
             }
             {cashMode &&
                 <>
@@ -162,13 +168,13 @@ const GameStakingScreen = ({ navigation }) => {
                         label='Enter stake amount'
                         placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`}
                         value={amount}
-                        error={((amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
-                            ((amount > Number.parseFloat(totalBalance)))}
+                        error={((selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
+                            ((selected === `Deposit (NGN ${formatCurrency(user.bonusBalance)})` && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`)}
                         onChangeText={setAmount}
                         isRequired={true}
                         keyboardType="numeric"
                     />
-                    {amount > Number.parseFloat(totalBalance) &&
+                    {(selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && amount > Number.parseFloat(depositBalance)) &&
                         <View style={styles.errorContainer}>
                             <Text style={styles.error}>Insufficient wallet balance</Text>
                             <Pressable style={styles.fundError} onPress={fundWallet}>
@@ -176,19 +182,20 @@ const GameStakingScreen = ({ navigation }) => {
                             </Pressable>
                         </View>
                     }
+                    {(selected === `Deposit (NGN ${formatCurrency(user.bonusBalance)})` && amount > Number.parseFloat(user.bonusBalance)) &&
+                        <View style={styles.errorContainer}>
+                            <Text style={styles.error}>Insufficient bonus balance, stake from another balance</Text>
+                        </View>
+                    }
                 </>
             }
             {practiceMode &&
                 <View style={styles.inputContainer}>
-                    <Text style={styles.inputLabel}>Staked amount</Text>
+                    <Text style={styles.inputLabel}>Enter stake amount</Text>
                     <TextInput style={styles.input} placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`} value={amount}
                         onChangeText={setAmount}
                         keyboardType="numeric" />
                 </View>
-            }
-            {cashMode &&
-                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
-                    disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButton} />
             }
             {cashMode &&
                 <>
@@ -196,8 +203,8 @@ const GameStakingScreen = ({ navigation }) => {
                         <Text style={styles.note}>Note that the predictions table below does not apply on bonus stakes</Text>}
                 </>
             }
-            <View style={[styles.stakeContainer, { marginBottom: cashMode ? 50 : 0 }]}>
-                <Text style={styles.stakeHeading}>How To Win</Text>
+            <View style={[styles.stakeContainer, { marginBottom: 0 }]}>
+                <Text style={styles.stakeHeading}>Winning Odds</Text>
                 <View style={styles.stakeHeaders}>
                     <Text style={styles.stakeScore}>OUTCOME</Text>
                     <Text style={styles.stakeHead}>ODDS</Text>
@@ -206,6 +213,14 @@ const GameStakingScreen = ({ navigation }) => {
                 {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
                     amount={amount} />)}
             </View>
+            <Pressable style={styles.instructionsContainer}>
+                <Text style={styles.instructionsTitle}>Odds instructions</Text>
+                <Ionicons name="chevron-forward" size={30} color='#072169' />
+            </Pressable>
+            {cashMode &&
+                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
+                    disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButtoni} />
+            }
             {practiceMode &&
                 <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
                     disabled={loading || amount === ''} style={styles.stakeButtoni} />
@@ -217,6 +232,46 @@ const GameStakingScreen = ({ navigation }) => {
         </ScrollView>
     )
 
+}
+
+const StakingBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, setSelected }) => {
+    const balanceAccounts = [
+        {
+            key: '1',
+            value: `Deposit (NGN ${formatCurrency(depositBalance)})`,
+            disabled: depositBalance < minimumExhibitionStakeAmount,
+            amount: depositBalance
+        },
+        {
+            key: '2',
+            value: `Bonus (NGN ${formatCurrency(user.bonusBalance)})`,
+            disabled: user.bonusBalance < minimumExhibitionStakeAmount,
+            amount: user.bonusBalance
+        }
+    ]
+    const [balanceName, setBalanceName] = useState('')
+    return (
+        <View style={styles.balancesContainer}>
+            <View style={styles.labelContainer}>
+                <Text style={styles.balanceLabel}>Where are you staking from ?</Text>
+                <Text style={styles.requiredText}>Required</Text>
+            </View>
+            <SelectList
+                setSelected={(balanceName) => setBalanceName(balanceName)}
+                data={balanceAccounts}
+                save="value"
+                onSelect={() => setSelected(balanceName)}
+                placeholder="Select Wallet"
+                fontFamily='sansation-regular'
+                boxStyles={{ height: normalize(52), alignItems: 'center', borderColor: '#D9D9D9', backgroundColor: '#fff' }}
+                inputStyles={{ fontSize: 18, color: '#072169' }}
+                dropdownTextStyles={{ fontSize: 18, color: '#072169' }}
+                dropdownItemStyles={{ borderBottomWidth: 1, borderBottomColor: '#D9D9D9' }}
+                disabledTextStyles={{ fontSize: 18 }}
+                disabledItemStyles={{ backgroundColor: '#F9FBFF' }}
+            />
+        </View>
+    )
 }
 
 
@@ -232,6 +287,15 @@ const styles = EStyleSheet.create({
         paddingTop: normalize(20),
         paddingHorizontal: normalize(18)
     },
+    balancesContainer: {
+        marginBottom: '1rem'
+    },
+    labelContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '.6rem'
+    },
     stakeContainer: {
         paddingHorizontal: normalize(20),
         paddingVertical: normalize(6),
@@ -243,10 +307,11 @@ const styles = EStyleSheet.create({
         borderRadius: 13,
         borderColor: '#E5E5E5',
         borderWidth: 1,
-        marginTop: '1rem',
+        marginTop: 0,
     },
     inputContainer: {
-        marginTop: '.5rem'
+        marginTop: '.5rem',
+        marginBottom:'.8rem'
     },
     stakeHeading: {
         textAlign: 'center',
@@ -379,6 +444,7 @@ const styles = EStyleSheet.create({
     },
     stakeButtoni: {
         marginBottom: responsiveScreenWidth(20),
+        marginTop: '.7rem'
     },
     input: {
         height: normalize(52),
@@ -396,7 +462,35 @@ const styles = EStyleSheet.create({
         fontFamily: 'gotham-medium',
         color: '#072169',
         fontSize: '0.98rem',
-        marginBottom: normalize(12),
+        marginBottom: normalize(7),
 
+    },
+    balanceLabel: {
+        fontFamily: 'gotham-medium',
+        color: '#072169',
+        fontSize: '0.85rem',
+
+    },
+    requiredText: {
+        fontFamily: 'sansation-regular',
+        color: '#E15220',
+        fontSize: '0.85rem',
+    },
+    instructionsContainer: {
+        backgroundColor: '#FFFFFF',
+        borderColor: '#E5E5E5',
+        borderWidth: 1,
+        borderRadius: 13,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: '1rem',
+        paddingHorizontal: '.9rem',
+        marginTop: '.9rem',
+    },
+    instructionsTitle: {
+        fontSize: '.85rem',
+        color: '#072169',
+        fontFamily: 'gotham-bold',
     },
 })

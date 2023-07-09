@@ -66,17 +66,16 @@ const GamesListScreen = ({ navigation }) => {
     }
 
     const playTriviaForFree = () => {
-        // closeBottomSheet()
-        Alert.alert('This mode is unavailable')
-        // dispatch(setCashMode(false));
-        // dispatch(setPracticeMode(true));
-        // logToAnalytics("trivia_play_for_free_selected", {
-        //     'id': user.username,
-        //     'phone_number': user.phoneNumber,
-        //     'email': user.email,
-        // })
-
-        // navigation.navigate('SelectGameCategory')
+        // Alert.alert('This mode is unavailable')
+        dispatch(setCashMode(false));
+        dispatch(setPracticeMode(true));
+        logToAnalytics("trivia_play_for_free_selected", {
+            'id': user.username,
+            'phone_number': user.phoneNumber,
+            'email': user.email,
+        })
+        closeBottomSheet()
+        navigation.navigate('SelectGameCategory')
     }
 
     return (
@@ -218,7 +217,6 @@ const SelectGameMode = ({ playTriviaForFree, playTriviaForCash, playChallengeFor
     const [practice, setPractice] = useState(false);
     const gameMode = useSelector(state => state.game.gameMode);
     const gameModeName = gameMode?.name
-    console.log(gameModeName)
 
     const toggleFreeMode = () => {
         setEarn(false);
@@ -254,9 +252,13 @@ const SelectGameMode = ({ playTriviaForFree, playTriviaForCash, playChallengeFor
                 <Text style={styles.modeTitle}>Challenge a player</Text>
             }
             <View style={styles.mainContainer}>
-                <Pressable style={styles.modeSubContainerDisabled} onPress={toggleFreeMode} disabled>
+                {/* <Pressable style={styles.modeSubContainerDisabled} onPress={toggleFreeMode} disabled>
                     <Ionicons name={practice ? 'checkmark-circle' : "ellipse-outline"} size={30} color={practice ? '#00FFA3' : '#D9D9D9'} />
                     <Text style={styles.modeName}>Practice for free (Coming soon)</Text>
+                </Pressable> */}
+                <Pressable style={styles.modeSubContainer} onPress={toggleFreeMode}>
+                    <Ionicons name={practice ? 'checkmark-circle' : "ellipse-outline"} size={30} color={practice ? '#00FFA3' : '#D9D9D9'} />
+                    <Text style={styles.modeName}>Practice for free</Text>
                 </Pressable>
                 <Pressable style={styles.modeSubContainer} onPress={toggleEarn}>
                     <Ionicons name={earn ? 'checkmark-circle' : "ellipse-outline"} size={30} color={earn ? '#00FFA3' : '#D9D9D9'} />

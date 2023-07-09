@@ -32,6 +32,19 @@ export const startGame = createAsyncThunk(
     }
 )
 
+export const startPracticeGame = createAsyncThunk(
+    'game/startPracticeGame',
+    async (data, thunkAPI) => {
+        try {
+            const response = await axios.post('v3/single-player/practice/start', data);
+            console.log(data.amount, 'stake amount');
+            return response.data;
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err.response.data);
+        }
+    }
+)
+
 
 export const endGame = createAsyncThunk(
     'game/endGame',
@@ -43,6 +56,18 @@ export const endGame = createAsyncThunk(
 
         //make a network request to the server
         const response = await axios.post('v3/game/end/single-player', data)
+        console.log(response.data, 'game ended')
+        return response.data;
+    }
+)
+
+export const endPracticeGame = createAsyncThunk(
+    'game/endPracticeGame',
+    async (data, thunkAPI) => {
+        data.chosenOptions.forEach(x => {
+        });
+
+        const response = await axios.post('v3/single-player/practice/end', data)
         console.log(response.data, 'game ended')
         return response.data;
     }
@@ -83,7 +108,7 @@ let initialState = {
     displayedQuestion: {},
     isPlayingTrivia: false,
     hasPlayedTrivia: false,
-    gameDuration: 60,
+    gameDuration: 6000,
     gameStakes: [],
     withStaking: false,
     endedWithoutStaking:null,
@@ -218,6 +243,14 @@ export const GameSlice = createSlice({
                 state.isEnded = false
                 state.pointsGained = 0;
             })
+            .addCase(startPracticeGame.fulfilled, (state, action) => {
+                state.questions = action.payload.data.questions;
+                state.displayedQuestion = state.questions[state.currentQuestionPosition]
+                state.displayedOptions = state.displayedQuestion.options
+                state.gameSessionToken = action.payload.data.game.token
+                state.isEnded = false
+                state.pointsGained = 0;
+            })
             .addCase(endGame.fulfilled, (state, action) => {
                 state.isEnded = true;
                 state.pointsGained = action.payload.data.points_gained;
@@ -227,6 +260,17 @@ export const GameSlice = createSlice({
                 state.correctCount = action.payload.data.correct_count;
                 state.totalCount = action.payload.data.total_count;
                 state.wrongCount = action.payload.data.wrong_count;
+                resetState(state)
+            })
+            .addCase(endPracticeGame.fulfilled, (state, action) => {
+                state.isEnded = true;
+                // state.pointsGained = action.payload.data.points_gained;
+                // state.amountWon = action.payload.data.amount_won;
+                // state.withStaking = action.payload.data.with_staking ?? false;
+                // state.amountStaked = action.payload.data.amount_staked;
+                // state.correctCount = action.payload.data.correct_count;
+                // state.totalCount = action.payload.data.total_count;
+                // state.wrongCount = action.payload.data.wrong_count;
                 resetState(state)
             })
             .addCase(getGameStakes.fulfilled, (state, action) => {
@@ -270,7 +314,7 @@ function resetState(state) {
     state.displayedOptions = [];
     state.displayedQuestion = {};
     state.isPlayingTrivia = false;
-    state.gameDuration = 60;
+    state.gameDuration = 6000;
 
     return state;
 }
