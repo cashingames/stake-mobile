@@ -69,7 +69,8 @@ const styles = EStyleSheet.create({
     categoryName: {
         color: '#072169',
         fontFamily: 'gotham-bold',
-        fontSize: '0.95rem'
+        fontSize: '0.9rem',
+        width: '10rem'
     },
     questionsAnswered: {
         color: '#072169',

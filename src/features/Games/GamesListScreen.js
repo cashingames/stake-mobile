@@ -83,8 +83,8 @@ const GamesListScreen = ({ navigation }) => {
             resizeMethod="resize">
             <ScrollView style={styles.contentContainer}>
                 <View style={styles.gamesContainer}>
-                    <TriviaBetCard openBottomSheet={openBottomSheet} />
                     <TriviaChallengeCard openBottomSheet={openBottomSheet} />
+                    <TriviaBetCard openBottomSheet={openBottomSheet} />
                     <JackpotBetCard />
                     <TriviaRoomsCard />
                 </View>
@@ -255,7 +255,7 @@ const SelectGameMode = ({ playTriviaForFree, playTriviaForCash, playChallengeFor
                     <Ionicons name={practice ? 'checkmark-circle' : "ellipse-outline"} size={30} color={practice ? '#00FFA3' : '#D9D9D9'} />
                     <Text style={styles.modeName}>Practice for free (Coming soon)</Text>
                 </Pressable> */}
-                 <Pressable style={styles.modeSubContainer} onPress={toggleEarn}>
+                <Pressable style={styles.modeSubContainer} onPress={toggleEarn}>
                     <Ionicons name={earn ? 'checkmark-circle' : "ellipse-outline"} size={30} color={earn ? '#00FFA3' : '#D9D9D9'} />
                     <Text style={styles.modeName}>Play to earn</Text>
                 </Pressable>

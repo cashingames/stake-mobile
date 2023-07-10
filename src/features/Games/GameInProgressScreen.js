@@ -52,9 +52,10 @@ export default function GameInProgressScreen({ navigation, route }) {
 
     const [ending, setEnding] = useState(false);
 
-    const onExitGame = (confirm = false) => {
-        setExiting(true)
+    const onEndGame = () => {
+        setExitClicked(false)
         setModalVisible(false)
+
         if (ending) {
             //do not delete
             // console.log("Trying to end second time. If this happens, please notify Oye")
@@ -62,10 +63,6 @@ export default function GameInProgressScreen({ navigation, route }) {
         }
 
         setEnding(true);
-        if (confirm) {
-            showExitConfirmation()
-            return;
-        }
         if (cashMode) {
             console.log('ending normal')
             dispatch(endGame({
@@ -133,113 +130,6 @@ export default function GameInProgressScreen({ navigation, route }) {
         }
 
         if (practiceMode) {
-            console.log('ending practice')
-            dispatch(endPracticeGame({
-                chosen_options: chosenOptions,
-            }))
-                .then(unwrapResult)
-                .then(() => {
-                    console.log('practice')
-                    crashlytics().log('User completed practice exhibition game');
-                    logToAnalytics('practice_stake_game_completed', {
-                        'id': user.username,
-                        'phone_number': user.phoneNumber,
-                        'email': user.email
-                    });
-                    setEnding(false);
-                    navigation.navigate('GameEndResult');
-                })
-                .catch((error, rejectedValueOrSerializedError) => {
-                    crashlytics().recordError(error);
-                    crashlytics().log('failed to end practice exhibition game');
-                    setEnding(false);
-                    startModal()
-                    setAlertMessage("failed to end demo game");
-                });
-        }
-    }
-    const onEndGame = (confirm = false) => {
-        console.log('hit')
-
-        if (ending) {
-            //do not delete
-            // console.log("Trying to end second time. If this happens, please notify Oye")
-            return;
-        }
-
-        setEnding(true);
-        if (confirm) {
-            showExitConfirmation()
-            return;
-        }
-        if (cashMode) {
-            console.log('ending normal')
-            dispatch(endGame({
-                token: gameSessionToken,
-                chosenOptions,
-                consumedBoosts
-            }))
-                .then(unwrapResult)
-                .then(() => {
-                    console.log('hidddt')
-                    crashlytics().log('User completed exhibition game');
-                    if (formattedDate !== newUserDate && !isStaking && !isPlayingTrivia) {
-                        logToAnalytics('exhibition_game_completed', {
-                            'id': user.username,
-                            'phone_number': user.phoneNumber,
-                            'email': user.email
-                        });
-                    };
-                    if (formattedDate === newUserDate && !isStaking && !isPlayingTrivia) {
-                        logToAnalytics('new_user_exhibition_completed', {
-                            'id': user.username,
-                            'phone_number': user.phoneNumber,
-                            'email': user.email
-                        });
-                    };
-                    if (formattedDate === newUserDate && isStaking) {
-                        logToAnalytics('new_user_staking_completed', {
-                            'id': user.username,
-                            'phone_number': user.phoneNumber,
-                            'email': user.email
-                        });
-                    };
-                    if (formattedDate !== newUserDate && isStaking) {
-                        crashlytics().log('User completed staking game');
-                        logToAnalytics('staking_game_completed', {
-                            'id': user.username,
-                            'phone_number': user.phoneNumber,
-                            'email': user.email
-                        });
-                    }
-                    setEnding(false);
-                    if (isPlayingTrivia) {
-                        dispatch(setHasPlayedTrivia(true))
-                        crashlytics().log('User completed live trivia');
-                        logToAnalytics('live_trivia_completed', {
-                            'id': user.username,
-                            'phone_number': user.phoneNumber,
-                            'email': user.email
-                        })
-                        navigation.navigate('TriviaEndResult', {
-                            triviaId: params.triviaId,
-                        })
-                    } else {
-                        navigation.navigate('GameEndResult');
-                    }
-                })
-                .catch((error, rejectedValueOrSerializedError) => {
-                    crashlytics().recordError(error);
-                    crashlytics().log('failed to end exhibition game');
-                    setEnding(false);
-                    // console.log(rejectedValueOrSerializedError);
-                    startModal()
-                    setAlertMessage("failed to end game");
-                });
-        }
-
-        if (practiceMode) {
-            console.log('ending practice')
             dispatch(endPracticeGame({
                 chosenOptions,
             }))
@@ -270,7 +160,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     }
 
     const close = () => {
-
+        navigation.navigate('Home');
     }
 
     const showExitConfirmation = () => {
@@ -306,7 +196,7 @@ export default function GameInProgressScreen({ navigation, route }) {
                 {exitClicked ?
                     <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                         textLabel={alertMessage} buttonLabel='Continue playing' actionLabel='Exit'
-                        alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={() => onExitGame()} />
+                        alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={() => onEndGame()} />
                     :
                     <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                         textLabel={alertMessage} buttonLabel='Ok, got it'
@@ -359,36 +249,6 @@ const GameProgressAndBoosts = () => {
     )
 }
 
-
-
-const ChallengePracticeFreeze = () => {
-
-    return (
-        <Pressable style={styles.boostContainer}>
-            <View style={styles.boostDetailsHead}>
-                <Image
-                    source={require('../../../assets/images/timefreeze-boost.png')}
-                    style={styles.boostIcon}
-                />
-                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
-            </View>
-        </Pressable>
-    )
-}
-const ChallengePracticeSkip = () => {
-
-    return (
-        <Pressable style={styles.boostContainer}>
-            <View style={styles.boostDetailsHead}>
-                <Image
-                    source={require('../../../assets/images/skip-boost.png')}
-                    style={styles.boostIcon}
-                />
-                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
-            </View>
-        </Pressable>
-    )
-}
 
 
 const styles = EStyleSheet.create({

@@ -35,8 +35,6 @@ const styles = EStyleSheet.create({
         backgroundColor: '#E15220',
     },
     text: {
-
-        lineHeight: '1rem',
         letterSpacing: 0.25,
         color: 'white',
         fontFamily: 'graphik-medium',
@@ -44,7 +42,8 @@ const styles = EStyleSheet.create({
     },
     textContainer: {
         flexDirection: "row",
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor:'none'
     },
     disabled: {
         backgroundColor: '#EA8663'

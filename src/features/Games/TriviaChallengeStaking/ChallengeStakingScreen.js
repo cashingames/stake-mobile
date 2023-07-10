@@ -209,6 +209,7 @@ const SelectedPlayers = ({ user }) => {
 
             <Image
                 source={require('../../../../assets/images/versus.png')}
+                style={styles.versus}
             />
             <SelectedPlayer playerName="...." playerAvatar={require("../../../../assets/images/question.png")} />
         </View>
@@ -341,7 +342,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.9rem',
         fontFamily: 'gotham-bold',
         color: '#072169',
-        width: responsiveScreenWidth(25),
+        width: '5rem',
         textAlign: 'center',
         marginTop: '.8rem'
     },
@@ -470,6 +471,10 @@ const styles = EStyleSheet.create({
     cashAvatar: {
         width: '1.35rem',
         height: '1.35rem'
+    },
+    versus: {
+        width: '3rem',
+        height: '5rem'
     },
     currencyText: {
         color: '#072169',

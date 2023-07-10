@@ -10,7 +10,7 @@ import { useState } from "react";
 // import BoostPopUp from "../../../shared/BoostPopUp";
 import logToAnalytics from "../../../utils/analytics";
 import AppButton from "../../../shared/AppButton";
-import { isTrue } from "../../../utils/stringUtl";
+import { formatCurrency, isTrue } from "../../../utils/stringUtl";
 
 
 const ChallengeEndGameScreen = ({ navigation }) => {
@@ -111,7 +111,8 @@ const ChallengeEndGameScreen = ({ navigation }) => {
                 {Number.parseFloat(challengeDetails.score) === Number.parseFloat(challengeDetails.opponent.score) &&
                     <Text style={styles.headText}>Draw, you can try again</Text>
                 }
-                <WinningAmount challengeDetails={challengeDetails} practiceMode={practiceMode} cashMode={cashMode} />
+                <Winnings />
+                <ScoreDetails challengeDetails={challengeDetails} practiceMode={practiceMode} cashMode={cashMode} />
                 <FinalScore challengeDetails={challengeDetails} cashMode={cashMode} practiceMode={practiceMode} />
                 {/* <BoostPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} /> */}
                 <View style={styles.gameButtons}>
@@ -125,8 +126,17 @@ const ChallengeEndGameScreen = ({ navigation }) => {
     )
 }
 
-const WinningAmount = ({ challengeDetails, cashMode, practiceMode }) => {
+const Winnings = () => {
     const amount = useSelector(state => state.triviaChallenge.challengeDetails.amount_won);
+    return (
+        <View style={styles.winningsAmountCont}> 
+            <Text style={styles.winningsHeaderI}>Winnings</Text>
+            <Text style={styles.scoreCountI}>NGN {formatCurrency(amount)}</Text>
+        </View>
+    )
+}
+
+const ScoreDetails = ({ challengeDetails, cashMode, practiceMode }) => {
     return (
         <View style={styles.winningsContainer}>
             {practiceMode &&
@@ -159,6 +169,7 @@ const SelectedPlayers = ({ challengeDetails }) => {
 
             <Image
                 source={require('../../../../assets/images/versus.png')}
+                style={styles.versus}
             />
             <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
         </View>
@@ -219,14 +230,34 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         lineHeight: '2rem'
     },
-    winningsContainer: {
+    winningsAmountCont: {
         backgroundColor: '#AAD880',
         // justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: '.7rem',
+        marginVertical: '.5rem',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#E5E5E5',
+        elevation: 2,
+        shadowColor: 'rgba(0, 0, 0, 0.25)',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.1,
+    },
+    winningsContainer: {
+        backgroundColor: '#fff',
+        // justifyContent: 'center',
         // alignItems: 'center',
-        paddingVertical: '1.5rem',
+        paddingVertical: '.5rem',
         paddingHorizontal: '3rem',
         marginVertical: '.5rem',
-        borderRadius: 10
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#E5E5E5',
+        elevation: 2,
+        shadowColor: 'rgba(0, 0, 0, 0.25)',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.1,
     },
     winningsHeader: {
         fontSize: '.9rem',
@@ -234,23 +265,35 @@ const styles = EStyleSheet.create({
         color: '#072169',
         textAlign: 'center',
     },
+    winningsHeaderI: {
+        fontSize: '1rem',
+        fontFamily: 'gotham-bold',
+        color: '#072169',
+        textAlign: 'center',
+    },
     scoreCountContainer: {
         justifyContent: 'space-between',
         flexDirection: 'row',
-        marginTop: '1rem'
+        marginTop: '.5rem'
     },
     userCountContainer: {
         alignItems: 'center'
     },
     countName: {
-        fontSize: '.85rem',
+        fontSize: '.8rem',
         fontFamily: 'sansation-regular',
         color: '#072169',
         // width:'5rem',
         textAlign: 'center'
     },
+    scoreCountI: {
+        fontSize: '0.95rem',
+        fontFamily: 'gotham-bold',
+        color: '#072169',
+
+    },
     scoreCount: {
-        fontSize: '1.5rem',
+        fontSize: '1.3rem',
         fontFamily: 'gotham-bold',
         color: '#072169',
 
@@ -268,7 +311,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.75rem',
         fontFamily: 'graphik-medium',
         color: '#FFFF',
-        width: responsiveScreenWidth(25),
+        width: '5rem',
         textAlign: 'center',
         marginBottom: '.4rem'
     },
@@ -301,6 +344,10 @@ const styles = EStyleSheet.create({
     againText: {
         fontFamily: 'gotham-medium',
         fontSize: '1.1rem',
+    },
+    versus: {
+        width: '3rem',
+        height: '5rem'
     },
     playerImage: {
         display: 'flex',
@@ -348,13 +395,14 @@ const styles = EStyleSheet.create({
     finalScoreText: {
         color: '#072169',
         fontFamily: 'gotham-bold',
-        fontSize: '1.3rem',
-        marginBottom: '.7rem'
+        fontSize: '1.2rem',
+        marginBottom: '.3rem',
+        textAlign: 'center'
     },
     scoreContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: '1rem'
+        marginVertical: '.5rem'
     },
     pointTitle: {
         color: '#072169',

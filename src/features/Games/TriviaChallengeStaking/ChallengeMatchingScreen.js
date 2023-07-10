@@ -150,6 +150,7 @@ const SelectedPlayers = ({ user, dataUpdated, challengeDetails }) => {
 
             <Image
                 source={require('../../../../assets/images/versus.png')}
+                style={styles.versus}
             />
             {dataUpdated ?
                 <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
@@ -234,9 +235,13 @@ const styles = EStyleSheet.create({
         fontSize: '0.9rem',
         fontFamily: 'gotham-bold',
         color: '#072169',
-        width: responsiveScreenWidth(25),
+        width: '6rem',
         textAlign: 'center',
         marginTop: '.8rem'
+    },
+    versus: {
+        width: '3rem',
+        height: '6rem'
     },
     message: {
         fontSize: '1rem',

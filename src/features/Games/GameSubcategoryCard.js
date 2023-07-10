@@ -88,7 +88,8 @@ const styles = EStyleSheet.create({
         justifyContent: "space-evenly",
     },
     cardTitle: {
-        fontSize: '0.9rem',
+        fontSize: '0.87rem',
+        width:'11rem',
         color: '#072169',
         fontFamily: 'gotham-bold',
         marginLeft:'.7rem'

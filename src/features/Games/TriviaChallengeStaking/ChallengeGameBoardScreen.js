@@ -61,6 +61,8 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     );
 
     const gameEnded = () => {
+        setExitClicked(false)
+        setModalVisible(false)
         if (isEnded) {
             console.log("game already ended", "timer bug is trying to submit again");
             return;
@@ -95,42 +97,6 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                 });
         }
     }
-    const onExitGame = () => {
-        setExiting(true)
-        setModalVisible(false)
-        if (isEnded) {
-            console.log("game already ended", "timer bug is trying to submit again");
-            return;
-        };
-
-        setSubmitting(true);
-        dispatch(setIsEnded(true));
-        if (cashMode) {
-            dispatch(submitGameSession())
-                .then(unwrapResult)
-                .then(async () => {
-                    const status = await getOpponentStatus();
-                    setSubmitting(false);
-                    navigation.navigate(
-                        status === 'MATCHED' ?
-                            'ChallengeGameEndWaiting' : 'ChallengeEndGame'
-                    );
-                });
-        }
-        if (practiceMode) {
-            dispatch(submitPracticeGameSession())
-                .then(unwrapResult)
-                .then(async () => {
-                    const status = await getOpponentStatus();
-                    setSubmitting(false);
-                    navigation.navigate(
-                        status === 'MATCHED' ?
-                            'ChallengeGameEndWaiting' : 'ChallengeEndGame'
-                    );
-                });
-        }
-
-    }
     const showExitConfirmation = () => {
         setExitClicked(true);
         startModal()
@@ -160,7 +126,7 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                 {exitClicked ?
                     <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                         textLabel={alertMessage} buttonLabel='Continue playing' actionLabel='Exit'
-                        alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={() => onExitGame()} />
+                        alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={() => gameEnded()} />
                     :
                     <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                         textLabel={alertMessage} buttonLabel='Ok, got it'
@@ -179,6 +145,7 @@ const SelectedPlayers = ({ user, challengeDetails }) => {
 
             <Image
                 source={require('../../../../assets/images/versus.png')}
+                style={styles.versus}
             />
             <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
         </View>
@@ -314,6 +281,10 @@ const styles = EStyleSheet.create({
     },
     disabled: {
         backgroundColor: '#EA8663'
+    },
+    versus: {
+        width: '3rem',
+        height: '5rem'
     },
     playerImage: {
         display: 'flex',

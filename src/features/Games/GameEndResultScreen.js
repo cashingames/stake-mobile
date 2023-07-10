@@ -96,7 +96,9 @@ export default function GameEndResultScreen({ navigation }) {
 				<FinalScore pointsGained={pointsGained} correctCount={correctCount} wrongCount={wrongCount} totalCount={totalCount} />
 				<View style={styles.gameButtons}>
 					<AppButton onPress={onPlayButtonClick} text='Stake again' disabled={loading} textStyle={styles.againText} style={styles.stakeButton} disabledStyle={styles.disabled} />
-					<AppButton onPress={onHomeButtonClick} text='Return to home' style={styles.homeButton} textStyle={styles.buttonText} />
+					<Pressable style={styles.homeButton} onPress={onHomeButtonClick}>
+						<Text style= {styles.buttonText}>Return to home</Text>
+					</Pressable>
 				</View>
 			</ScrollView>
 		</ImageBackground>
@@ -217,6 +219,8 @@ const styles = EStyleSheet.create({
 		borderWidth: 2,
 		borderColor: '#072169',
 		paddingVertical: normalize(19),
+		borderRadius:13,
+		alignItems:'center'
 	},
 	stakeButton: {
 		marginBottom: 20,
