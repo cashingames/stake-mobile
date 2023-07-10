@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Animated, Pressable, Text, View } from "react-native";
+import { Animated, Platform, Pressable, Text, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import * as Progress from 'react-native-progress';
@@ -35,19 +35,33 @@ const GamePracticeTourScreen = () => {
         setAlertMessage("Click to start tutorial");
     }, [])
 
- 
+
 
     return (
-        <View style={styles.image}>
-            <CopilotProvider>
-                <Practice alertMessage={alertMessage} modalVisible={modalVisible} setModalVisible={setModalVisible} />
-            </CopilotProvider>
-   
-        </View>
+        <>
+            {
+                Platform.OS === 'ios' &&
+                <View style={styles.image}>
+                    <CopilotProvider overlay="svg" >
+                        <Practice alertMessage={alertMessage} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                    </CopilotProvider>
+                </View>
+            }
+
+
+            {
+                Platform.OS === 'android' &&
+                <View style={styles.image}>
+                    <CopilotProvider verticalOffset={32} overlay="svg" margin={10}>
+                        <Practice alertMessage={alertMessage} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                    </CopilotProvider>
+                </View>
+            }
+        </>
     )
 }
 
-const Practice = ({modalVisible, setModalVisible, alertMessage}) => {
+const Practice = ({ modalVisible, setModalVisible, alertMessage }) => {
 
     const navigation = useNavigation();
 
@@ -107,29 +121,25 @@ const PlayGameHeader = () => {
 const ChallengePracticeFreeze = ({ copilot }) => {
 
     return (
-        <Pressable style={styles.boostContainer} {...copilot}>
-            <View style={styles.boostDetailsHead}>
-                <Image
-                    source={require('../../../assets/images/timefreeze-boost.png')}
-                    style={styles.boostIcon}
-                />
-                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
-            </View>
-        </Pressable>
+        <View style={styles.boostDetailsHead} {...copilot}>
+            <Image
+                source={require('../../../assets/images/timefreeze-boost.png')}
+                style={styles.boostIcon}
+            />
+            <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
+        </View>
     )
 }
 const ChallengePracticeSkip = ({ copilot }) => {
 
     return (
-        <Pressable style={styles.boostContainer} {...copilot}>
-            <View style={styles.boostDetailsHead}>
-                <Image
-                    source={require('../../../assets/images/skip-boost.png')}
-                    style={styles.boostIcon}
-                />
-                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
-            </View>
-        </Pressable>
+        <View style={styles.boostDetailsHead} {...copilot}>
+            <Image
+                source={require('../../../assets/images/skip-boost.png')}
+                style={styles.boostIcon}
+            />
+            <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
+        </View>
     )
 }
 

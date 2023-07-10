@@ -15,8 +15,7 @@ import {
     useCopilot,
 } from "react-native-copilot";
 import CustomAlert from "../../../shared/CustomAlert";
-
-
+import { Platform } from "react-native";
 
 
 
@@ -37,16 +36,32 @@ const ChallengePracticeTourScreen = () => {
     }, [])
 
 
+
     return (
-        <View style={styles.image}>
-            <CopilotProvider>
-                <Practice alertMessage={alertMessage} modalVisible={modalVisible} setModalVisible={setModalVisible}  />
-            </CopilotProvider>
-        </View>
+        <>
+            {
+                Platform.OS === 'ios' &&
+                <View style={styles.image}>
+                    <CopilotProvider overlay="svg" >
+                        <Practice alertMessage={alertMessage} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                    </CopilotProvider>
+                </View>
+            }
+
+
+            {
+                Platform.OS === 'android' &&
+                <View style={styles.image}>
+                    <CopilotProvider verticalOffset={32} overlay="svg" margin={10}>
+                        <Practice alertMessage={alertMessage} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                    </CopilotProvider>
+                </View>
+            }
+        </>
     )
 }
 
-const Practice = ({modalVisible, setModalVisible, alertMessage}) => {
+const Practice = ({ modalVisible, setModalVisible, alertMessage }) => {
     const navigation = useNavigation();
 
     const { start } = useCopilot();
@@ -116,29 +131,27 @@ const PlayGameHeader = () => {
 const ChallengePracticeFreeze = ({ copilot }) => {
 
     return (
-        <Pressable style={styles.boostContainer} {...copilot}>
-            <View style={styles.boostDetailsHead}>
-                <Image
-                    source={require('../../../../assets/images/timefreeze-boost.png')}
-                    style={styles.boostIcon}
-                />
-                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
-            </View>
-        </Pressable>
+        <View style={styles.boostDetailsHead} {...copilot}>
+
+            <Image {...copilot}
+                source={require('../../../../assets/images/timefreeze-boost.png')}
+                style={styles.boostIcon}
+            />
+                        <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
+        </View>
+
     )
 }
 const ChallengePracticeSkip = ({ copilot }) => {
 
     return (
-        <Pressable style={styles.boostContainer} {...copilot}>
-            <View style={styles.boostDetailsHead}>
-                <Image
-                    source={require('../../../../assets/images/skip-boost.png')}
-                    style={styles.boostIcon}
-                />
-                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
-            </View>
-        </Pressable>
+        <View style={styles.boostDetailsHead} {...copilot}>
+            <Image
+                source={require('../../../../assets/images/skip-boost.png')}
+                style={styles.boostIcon}
+            />
+            <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
+        </View>
     )
 }
 
@@ -232,6 +245,8 @@ const RenderOption = ({ option }) => {
         </Pressable>
     )
 }
+
+
 
 export default ChallengePracticeTourScreen;
 

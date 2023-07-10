@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { BackHandler, Image, ImageBackground, Platform, ScrollView, Text, View } from "react-native";
+import { BackHandler, Image, ImageBackground, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import EStyleSheet from "react-native-extended-stylesheet";
 import Constants from 'expo-constants';
@@ -117,7 +117,9 @@ const ChallengeEndGameScreen = ({ navigation }) => {
                 {/* <BoostPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} /> */}
                 <View style={styles.gameButtons}>
                     <AppButton onPress={onPlayButtonClick} text='Stake again' disabled={loading} textStyle={styles.againText} style={styles.stakeButton} disabledStyle={styles.disabled} />
-                    <AppButton onPress={goHome} text='Return to home' style={styles.homeButton} textStyle={styles.buttonText} />
+                    <Pressable style={styles.homeButton} onPress={goHome}>
+						<Text style= {styles.buttonText}>Return to home</Text>
+					</Pressable>
                 </View>
             </ScrollView>
 
@@ -259,6 +261,20 @@ const styles = EStyleSheet.create({
         shadowOffset: { width: 0.5, height: 1 },
         shadowOpacity: 0.1,
     },
+    homeButton: {
+		marginVertical: 5,
+		backgroundColor: 'none',
+		borderWidth: 2,
+		borderColor: '#072169',
+		paddingVertical: normalize(19),
+		borderRadius:13,
+		alignItems:'center'
+	},
+    buttonText: {
+		fontFamily: 'gotham-medium',
+		fontSize: '1.1rem',
+		color: '#072169'
+	},
     winningsHeader: {
         fontSize: '.9rem',
         fontFamily: 'gotham-bold',
@@ -266,10 +282,11 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
     },
     winningsHeaderI: {
-        fontSize: '1rem',
+        fontSize: '1.2rem',
         fontFamily: 'gotham-bold',
         color: '#072169',
         textAlign: 'center',
+        marginBottom:'.5rem'
     },
     scoreCountContainer: {
         justifyContent: 'space-between',
@@ -287,7 +304,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center'
     },
     scoreCountI: {
-        fontSize: '0.95rem',
+        fontSize: '1rem',
         fontFamily: 'gotham-bold',
         color: '#072169',
 
@@ -324,22 +341,10 @@ const styles = EStyleSheet.create({
         marginBottom: responsiveScreenHeight(18),
         // paddingHorizontal: '2rem'
     },
-    homeButton: {
-        marginVertical: 5,
-        backgroundColor: 'none',
-        borderWidth: 2,
-        borderColor: '#072169',
-        paddingVertical: normalize(19),
-    },
     stakeButton: {
         marginBottom: 20,
         marginTop: 0,
         paddingVertical: normalize(19),
-    },
-    buttonText: {
-        fontFamily: 'gotham-medium',
-        fontSize: '1.1rem',
-        color: '#072169'
     },
     againText: {
         fontFamily: 'gotham-medium',
