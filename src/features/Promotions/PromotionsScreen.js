@@ -24,8 +24,8 @@ const PromotionsScreen = () => {
             "id": 2,
             "bannerImage": require('../../../assets/images/cashback-banner1.png'),
             "innerBanner": require('../../../assets/images/cashback-banner2.png'),
-            "name": 'Saturday 10% Cashback',
-            "description" : "Get 10% cashback on your losses by the end of every week! We've got you covered. The higher your stakes, the bigger your bonus! Bonus expires in 3 Days. Terms and conditions apply."
+            "name": 'Daily 10% Cashback',
+            "description" : "Get 10% cashback on your losses daily! We've got you covered. The higher your stakes, the bigger your bonus! Bonus expires in 3 Days. Terms and conditions apply."
         },
     ]
 
