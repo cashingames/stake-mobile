@@ -46,10 +46,10 @@ const GameStakingScreen = ({ navigation }) => {
     }
     useEffect(() => {
         if(selected === `Deposit (NGN ${formatCurrency(depositBalance)})`) {
-            setWalletType('Deposit Balance')
+            setWalletType('deposit_balance')
         }
         if(selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})`) {
-            setWalletType('Bonus Balance')
+            setWalletType('bonus_balance')
         }
     }, [selected])
     useEffect(() => {
