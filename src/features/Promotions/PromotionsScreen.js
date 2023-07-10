@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 
 
 const PromotionsScreen = () => {
-    const [isNewPromotion, setIsNewPromotion] = useState(false);
+    const [isNewPromotion, setIsNewPromotion] = useState(true);
     const user = useSelector(state => state.auth.user);
 
 
