@@ -185,8 +185,8 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        // paddingVertical: normalize(18),
-        // paddingHorizontal:'1.3rem'
+        paddingVertical: normalize(10),
+        paddingHorizontal:'.5rem'
     },
 
     availableBoost: {

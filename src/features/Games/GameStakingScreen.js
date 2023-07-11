@@ -33,17 +33,24 @@ const GameStakingScreen = ({ navigation }) => {
     const [alertMessage, setAlertMessage] = useState('');
     const [selected, setSelected] = useState('');
     const [walletType, setWalletType] = useState('');
+    console.log(walletType)
     const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
     const depositBalanceSelected = selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && Number.parseFloat(depositBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
     const bonusSelected = selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && Number.parseFloat(user.bonusBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
     const totalBalance = user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? Number.parseFloat(user.bonusBalance) ?? 0 : Number.parseFloat(depositBalance) ?? 0
 
     useEffect(() => {
-        if(selected === `Deposit (NGN ${formatCurrency(depositBalance)})`) {
+        if (cashMode && selected === `Deposit (NGN ${formatCurrency(depositBalance)})`) {
             setWalletType('deposit_balance')
         }
-        if(selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})`) {
+        if ( cashMode && selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})`) {
             setWalletType('bonus_balance')
+        }
+        if (practiceMode && selected === `Deposit (NGN ${formatCurrency(100000)})`) {
+            setWalletType('demo_deposit_balance')
+        }
+        if ( cashMode && selected === `Bonus (NGN ${formatCurrency(100000)})`) {
+            setWalletType('demo_bonus_balance')
         }
     }, [selected])
     useEffect(() => {
@@ -84,9 +91,11 @@ const GameStakingScreen = ({ navigation }) => {
         dispatch(setIsPlayingTrivia(false))
         if (practiceMode) {
             console.log('started practice')
+            dispatch(setWalletSource(walletType))
             dispatch(startPracticeGame({
                 category: gameCategoryId,
-                amount: amount
+                amount: amount,
+                wallet_type: walletType
             }))
                 .then(unwrapResult)
                 .then(result => {
@@ -165,7 +174,10 @@ const GameStakingScreen = ({ navigation }) => {
     return (
         <ScrollView style={styles.container}>
             {cashMode &&
-                <StakingBalances depositBalance={depositBalance} user={user} minimumExhibitionStakeAmount={minimumExhibitionStakeAmount} setSelected={setSelected} />
+                <StakingBalances setSelected={setSelected}  depositBalance={depositBalance} user={user} minimumExhibitionStakeAmount={minimumExhibitionStakeAmount} />
+            }
+            {practiceMode &&
+                <PracticeStakingBalances setSelected={setSelected} />
             }
             {cashMode &&
                 <>
@@ -228,7 +240,7 @@ const GameStakingScreen = ({ navigation }) => {
             }
             {practiceMode &&
                 <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
-                    disabled={loading || amount === ''} style={styles.stakeButtoni} />
+                    disabled={loading || amount === '' || selected === ''} style={styles.stakeButtoni} />
             }
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                 textLabel={alertMessage} buttonLabel='Ok, got it'
@@ -250,6 +262,42 @@ const StakingBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, s
             key: '2',
             value: `Bonus (NGN ${formatCurrency(user.bonusBalance)})`,
             disabled: user.bonusBalance < minimumExhibitionStakeAmount,
+        }
+    ]
+    const [balanceName, setBalanceName] = useState('')
+    return (
+        <View style={styles.balancesContainer}>
+            <View style={styles.labelContainer}>
+                <Text style={styles.balanceLabel}>Where are you staking from ?</Text>
+                <Text style={styles.requiredText}>Required</Text>
+            </View>
+            <SelectList
+                setSelected={(balanceName) => setBalanceName(balanceName)}
+                data={balanceAccounts}
+                save="value"
+                onSelect={() => setSelected(balanceName)}
+                placeholder="Select Wallet"
+                fontFamily='sansation-regular'
+                boxStyles={{ height: normalize(52), alignItems: 'center', borderColor: '#D9D9D9', backgroundColor: '#fff' }}
+                inputStyles={{ fontSize: 18, color: '#072169' }}
+                dropdownTextStyles={{ fontSize: 18, color: '#072169' }}
+                dropdownItemStyles={{ borderBottomWidth: 1, borderBottomColor: '#D9D9D9' }}
+                disabledTextStyles={{ fontSize: 18 }}
+                disabledItemStyles={{ backgroundColor: '#F9FBFF' }}
+            />
+        </View>
+    )
+}
+
+const PracticeStakingBalances = ({setSelected }) => {
+    const balanceAccounts = [
+        {
+            key: '1',
+            value: `Deposit (NGN ${formatCurrency(100000)})`,
+        },
+        {
+            key: '2',
+            value: `Bonus (NGN ${formatCurrency(100000)})`,
         }
     ]
     const [balanceName, setBalanceName] = useState('')

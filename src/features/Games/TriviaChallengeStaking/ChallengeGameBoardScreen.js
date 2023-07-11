@@ -81,6 +81,14 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                         status === 'MATCHED' ?
                             'ChallengeGameEndWaiting' : 'ChallengeEndGame'
                     );
+                })
+                .catch((error, rejectedValueOrSerializedError) => {
+                    console.log(error, rejectedValueOrSerializedError)
+                    crashlytics().recordError(error);
+                    crashlytics().log('failed to end challenge game');
+                    setEnding(false);
+                    startModal()
+                    setAlertMessage("failed to end game");
                 });
         }
         if (practiceMode) {
@@ -94,7 +102,16 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                         status === 'MATCHED' ?
                             'ChallengeGameEndWaiting' : 'ChallengeEndGame'
                     );
+                })
+                .catch((error, rejectedValueOrSerializedError) => {
+                    console.log(error, rejectedValueOrSerializedError)
+                    crashlytics().recordError(error);
+                    crashlytics().log('failed to end demo challenge game');
+                    setEnding(false);
+                    startModal()
+                    setAlertMessage("failed to end demo game");
                 });
+
         }
     }
     const showExitConfirmation = () => {
@@ -113,7 +130,7 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
         return data.opponent.status;
     }
     const close = () => {
-
+        navigation.navigate('Home');
     }
 
     return (

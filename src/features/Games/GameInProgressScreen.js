@@ -17,9 +17,6 @@ import GameQuestions from "../../shared/GameQuestions";
 import logToAnalytics from "../../utils/analytics";
 import DoubleButtonAlert from "../../shared/DoubleButtonAlert";
 import CustomAlert from "../../shared/CustomAlert";
-import { formatNumber } from "../../utils/stringUtl";
-
-
 
 
 export default function GameInProgressScreen({ navigation, route }) {
@@ -188,9 +185,6 @@ export default function GameInProgressScreen({ navigation, route }) {
         <ImageBackground source={require('../../../assets/images/game-play-background.png')} style={styles.image} resizeMode="cover">
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
                 <PlayGameHeader onPress={showExitConfirmation} />
-                {cashMode &&
-                    <StakeDetails />
-                }
                 <GameProgressAndBoosts />
                 <GameQuestions onPress={() => onEndGame()} ending={ending} onComplete={() => onEndGame()} exiting={exiting} />
                 {exitClicked ?
@@ -207,37 +201,7 @@ export default function GameInProgressScreen({ navigation, route }) {
     );
 }
 
-const StakeDetails = () => {
-    const amountStaked = useSelector(state => state.game.amountStaked);
-    const gameStakes = useSelector(state => state.game.gameStakes[0]);
 
-
-    return (
-        <View style={styles.stakeContainer}>
-            <View style={styles.stakeSubContainer}>
-                <Image
-                    source={require('../../../assets/images/wallet-with-cash.png')}
-                    style={styles.avatar}
-                />
-                <View>
-                    <Text style={styles.stakeHeader}>Stake</Text>
-                    <Text style={styles.stakeAmount}>NGN {amountStaked}</Text>
-                </View>
-            </View>
-
-            {/* <View style={styles.stakeSubContainer}>
-                <Image
-                    source={require('../../../assets/images/wallet-with-cash.png')}
-                    style={styles.avatar}
-                />
-                <View>
-                    <Text style={styles.stakeHeader}>Pot. winnings</Text>
-                    <Text style={styles.stakeAmount}>NGN {amountStaked * (gameStakes.odd)}</Text>
-                </View>
-            </View> */}
-        </View>
-    )
-}
 
 const GameProgressAndBoosts = () => {
     return (

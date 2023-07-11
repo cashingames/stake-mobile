@@ -60,13 +60,13 @@ const GameQuestions = ({ onPress, ending, onComplete, exiting }) => {
                 <View style={styles.options}>
                     {displayedOptions.map((option, i) => <GameOption option={option} key={i} onSelected={() => optionSelected(option)} />)}
                 </View>
-                <NextButton onPress={onPress} ending={ending} exiting={exiting} />
+                <NextButton onPress={onPress} ending={ending} exiting={exiting} index={index} />
             </ImageBackground>
         </View>
     )
 }
 
-const NextButton = ({ onPress, ending, exiting }) => {
+const NextButton = ({ onPress, ending, exiting, index }) => {
     const dispatch = useDispatch()
     const isLastQuestion = useSelector(state => state.game.isLastQuestion);
     const pressNext = () => {
@@ -76,7 +76,7 @@ const NextButton = ({ onPress, ending, exiting }) => {
     return (
         <AppButton
             disabled={ending || exiting}
-            text={isLastQuestion ? 'Finish' : 'Next'}
+            text={isLastQuestion ? 'Finish' : `Next Q${index + 2}`}
             onPress={pressNext}
             style={styles.nextButton}
             disabledStyle={styles.disabled}
