@@ -373,7 +373,6 @@ const TransactionsContainer = ({ transactions, loading, mainWalletActive, bonusW
                             </>
                         }
 
-
                         {winningsWalletActive && allTransactions &&
                             <>
                                 {
@@ -396,6 +395,7 @@ const TransactionsContainer = ({ transactions, loading, mainWalletActive, bonusW
                                 }
                             </>
                         }
+
                         {winningsWalletActive && creditTransactions &&
                             <>
                                 {
@@ -418,7 +418,8 @@ const TransactionsContainer = ({ transactions, loading, mainWalletActive, bonusW
                                 }
                             </>
                         }
-                        {winningsWalletActive && winningsDebitTransactions &&
+
+                        {winningsWalletActive && debitTransactions &&
                             <>
                                 {
                                     winningsDebitTransactions().length > 0 ?
@@ -427,9 +428,9 @@ const TransactionsContainer = ({ transactions, loading, mainWalletActive, bonusW
                                                 winningsDebitTransactions().map((transaction, i) => <FundTransactions key={i} transaction={transaction}
                                                 />)
                                             }
-                                            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} style={styles.appButton} onPress={() => navigation.navigate('Transactions')} />
-                                        </View>
 
+                                            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        </View>
                                         :
                                         <View style={styles.noTransactionContainer}>
                                             <Text style={styles.noTransaction}>

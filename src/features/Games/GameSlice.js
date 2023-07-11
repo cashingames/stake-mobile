@@ -116,7 +116,8 @@ let initialState = {
     totalCount:0,
     wrongCount: 0,
     practiceMode: false,
-    cashMode: false
+    cashMode: false,
+    walletSource:''
 }
 
 
@@ -143,6 +144,10 @@ export const GameSlice = createSlice({
         setCashMode: (state, action) => {
             // console.log("here")
             state.cashMode = action.payload;
+        },
+        setWalletSource: (state, action) => {
+            // console.log("here")
+            state.walletSource = action.payload;
         },
         setGameDuration: (state, action) => {
             state.gameDuration = action.payload;
@@ -284,7 +289,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, setAmountWon, setCorrectCount, setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, setWithStaking,showStakingPopup, setPracticeMode, setCashMode
+    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, setWithStaking,showStakingPopup, setPracticeMode, setCashMode, setWalletSource
 } = GameSlice.actions
 
 

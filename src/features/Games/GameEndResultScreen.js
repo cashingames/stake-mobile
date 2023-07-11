@@ -25,6 +25,7 @@ export default function GameEndResultScreen({ navigation }) {
 	const wrongCount = useSelector(state => state.game.wrongCount);
 	const practiceMode = useSelector(state => state.game.practiceMode);
 	const cashMode = useSelector(state => state.game.cashMode);
+	const walletSource = useSelector(state => state.game.walletSource);
 
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
@@ -87,7 +88,7 @@ export default function GameEndResultScreen({ navigation }) {
 				</View>
 				<UserName userName={user.firstName} />
 				{withStaking && cashMode &&
-					<Winnings amountWon={amountWon} onPress={reviewStaking} user={user} />
+					<Winnings amountWon={amountWon} onPress={reviewStaking} walletSource={walletSource} />
 				}
 				{practiceMode &&
 					<DemoWinnings amountWon={amountWon} />
@@ -106,11 +107,11 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 }
 
-const Winnings = ({ amountWon, onPress, user }) => {
+const Winnings = ({ amountWon, onPress }) => {
 	return (
 		<View style={styles.winningsContainer}>
 			<StakeWinnings amountWon={amountWon} />
-			{user.hasBonus === false &&
+			{walletSource === 'deposit_balance' &&
 				<Pressable onPress={onPress} style={styles.reviewButton}>
 					<Text style={styles.reviewStake}>Review Stake</Text>
 					<Ionicons name="chevron-forward" size={22} color='#E05C28' />

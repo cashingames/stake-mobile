@@ -5,14 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import Input from "../../shared/Input";
 import AppButton from "../../shared/AppButton";
-import { getGameStakes, setAmountStaked, setIsPlayingTrivia, startGame, startPracticeGame } from "./GameSlice";
+import { getGameStakes, setAmountStaked, setIsPlayingTrivia, setWalletSource, startGame, startPracticeGame } from "./GameSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { logActionToServer } from "../CommonSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import StakingPredictionsTable from "../../shared/StakingPredictionsTable";
 import logToAnalytics from "../../utils/analytics";
 import { formatCurrency } from "../../utils/stringUtl";
-import { Ionicons } from "@expo/vector-icons";
 import CustomAlert from "../../shared/CustomAlert";
 import { SelectList } from "react-native-dropdown-select-list";
 
@@ -30,7 +29,6 @@ const GameStakingScreen = ({ navigation }) => {
     const [amount, setAmount] = useState('');
     const [loading, setLoading] = useState(false);
     const [canSend, setCanSend] = useState(false);
-    const [hidden, setHidden] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [selected, setSelected] = useState('');
@@ -40,10 +38,6 @@ const GameStakingScreen = ({ navigation }) => {
     const bonusSelected = selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && Number.parseFloat(user.bonusBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
     const totalBalance = user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? Number.parseFloat(user.bonusBalance) ?? 0 : Number.parseFloat(depositBalance) ?? 0
 
-
-    const toggleSecureText = () => {
-        setHidden(!hidden);
-    }
     useEffect(() => {
         if(selected === `Deposit (NGN ${formatCurrency(depositBalance)})`) {
             setWalletType('deposit_balance')
@@ -119,6 +113,8 @@ const GameStakingScreen = ({ navigation }) => {
         }
         if (cashMode) {
             console.log('started normal')
+            dispatch(setWalletSource(walletType))
+
             dispatch(startGame({
                 category: gameCategoryId,
                 type: gameTypeId,
