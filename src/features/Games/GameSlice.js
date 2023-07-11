@@ -108,7 +108,7 @@ let initialState = {
     displayedQuestion: {},
     isPlayingTrivia: false,
     hasPlayedTrivia: false,
-    gameDuration: 60,
+    gameDuration: 6000,
     gameStakes: [],
     withStaking: false,
     endedWithoutStaking:null,
@@ -317,7 +317,7 @@ function resetState(state) {
     state.displayedOptions = [];
     state.displayedQuestion = {};
     state.isPlayingTrivia = false;
-    state.gameDuration = 60;
+    state.gameDuration = 6000;
 
     return state;
 }

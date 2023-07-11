@@ -26,7 +26,7 @@ export default function GameEndResultScreen({ navigation }) {
 	const practiceMode = useSelector(state => state.game.practiceMode);
 	const cashMode = useSelector(state => state.game.cashMode);
 	const walletSource = useSelector(state => state.game.walletSource);
-
+    const username = user.firstName === '' ? user.username?.charAt(0) : (user.firstName?.charAt(0) + user.lastName?.charAt(0))
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
 
@@ -80,11 +80,18 @@ export default function GameEndResultScreen({ navigation }) {
 		<ImageBackground source={require('../../../assets/images/success-background.png')} style={{ flex: 1 }} resizeMethod="resize">
 			<ScrollView style={styles.container}>
 				<View style={styles.trophy}>
-					<Image
-						style={styles.emoji}
-						source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+					{isTrue(user.avatar) ?
+						<Image
+							style={styles.emoji}
+							source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` }}
 
-					/>
+						/>
+						:
+						<View style={styles.avatar}>
+							<Text style={styles.avatarText}>{username}</Text>
+						</View>
+
+					}
 				</View>
 				<UserName userName={user.firstName} />
 				{withStaking && cashMode &&
@@ -98,7 +105,7 @@ export default function GameEndResultScreen({ navigation }) {
 				<View style={styles.gameButtons}>
 					<AppButton onPress={onPlayButtonClick} text='Stake again' disabled={loading} textStyle={styles.againText} style={styles.stakeButton} disabledStyle={styles.disabled} />
 					<Pressable style={styles.homeButton} onPress={onHomeButtonClick}>
-						<Text style= {styles.buttonText}>Return to home</Text>
+						<Text style={styles.buttonText}>Return to home</Text>
 					</Pressable>
 				</View>
 			</ScrollView>
@@ -168,14 +175,29 @@ const styles = EStyleSheet.create({
 		justifyContent: 'center'
 	},
 	emoji: {
-		width: normalize(90),
-		height: normalize(90),
+		width: normalize(80),
+		height: normalize(80),
 		borderRadius: 50,
 		borderWidth: 1,
 		borderColor: '#072169',
 		backgroundColor: '#fff'
 	},
-
+	avatar: {
+        width: normalize(80),
+        height: normalize(80),
+        backgroundColor: '#FDCCD4',
+        borderRadius: 100,
+        borderColor: ' rgba(0, 0, 0, 0.1)',
+        borderWidth: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    avatarText: {
+        fontSize: '1.7rem',
+        color: '#072169',
+        fontFamily: 'gotham-bold',
+        textTransform: 'uppercase'
+    },
 	finalScore: {
 		display: 'flex',
 		flexDirection: 'column',
@@ -220,8 +242,8 @@ const styles = EStyleSheet.create({
 		borderWidth: 2,
 		borderColor: '#072169',
 		paddingVertical: normalize(19),
-		borderRadius:13,
-		alignItems:'center'
+		borderRadius: 13,
+		alignItems: 'center'
 	},
 	stakeButton: {
 		marginBottom: 20,

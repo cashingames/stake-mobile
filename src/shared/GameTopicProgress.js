@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import AnsweredGameProgress from "./AnsweredGameProgress";
 import { Image } from "react-native";
+import { formatCurrency } from "../utils/stringUtl";
 
 
 
@@ -21,13 +22,16 @@ const GameTopicContainer = () => {
     const gameCategory = useSelector(state => state.game.gameCategory.name);
     const index = useSelector(state => state.game.currentQuestionPosition);
     const total = useSelector(state => state.game.totalQuestionCount);
-    const highestOdd = 10
     const practiceMode = useSelector(state => state.game.practiceMode);
+    const cashMode = useSelector(state => state.game.cashMode);
 
     return (
         <View style={styles.topicContainer}>
             <View style={styles.categoryContainer}>
-                <Text style={styles.categoryName}>{gameCategory}</Text>
+                <Text style={styles.categoryName} numberOfLines={1}>{gameCategory}</Text>
+                {cashMode &&
+                    <StakeDetails />
+                }
                 {practiceMode &&
                     <View style={styles.demoContainer}>
                         <Image
@@ -42,10 +46,18 @@ const GameTopicContainer = () => {
                 <Text style={styles.questionsAnswered}>
                     {`${index + 1}/${total}`}
                 </Text>
-            {/* <View style={styles.oddContainer}>
-                <Text style={styles.oddTitle}>Odds</Text>
-                <Text style={styles.oddText}>{highestOdd}</Text>
-            </View> */}
+        </View>
+    )
+}
+const StakeDetails = () => {
+    const amountStaked = useSelector(state => state.game.amountStaked);
+
+
+    return (
+        <View style={styles.stakeContainer}>
+            <Text style={styles.stakeHeader}>STK.</Text>
+            <Text style={styles.stakeHeader}>&#8358;{amountStaked}</Text>
+
         </View>
     )
 }
@@ -56,7 +68,7 @@ const styles = EStyleSheet.create({
         borderBottomWidth: 1,
         borderColor: '#93939336',
         paddingVertical: normalize(18),
-        // paddingHorizontal:'1.3rem'
+        paddingHorizontal:'.3rem'
     },
 
     topicContainer: {
@@ -66,11 +78,24 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
+    stakeContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor:'#FA5F4A',
+        borderRadius: 30,
+        paddingHorizontal:'.4rem',
+        paddingVertical:'.2rem'
+    },
+    stakeHeader: {
+        fontSize: '0.65rem',
+        fontFamily: 'gotham-medium',
+        color: '#FFF',
+    },
     categoryName: {
         color: '#072169',
         fontFamily: 'gotham-bold',
         fontSize: '0.9rem',
-        width: '10rem'
+        width: '8rem'
     },
     questionsAnswered: {
         color: '#072169',

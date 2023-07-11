@@ -23,7 +23,7 @@ const styles = EStyleSheet.create({
     },
     answerText: {
         color: '#072169',
-        fontFamily: 'sansation-regular',
+        fontFamily: 'gotham-bold',
         fontSize: '0.9rem',
     },
 })

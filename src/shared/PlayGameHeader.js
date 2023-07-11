@@ -6,11 +6,11 @@ const PlayGameHeader = ({ onPress, challengeGame }) => {
 
     return (
         <View style={styles.header}>
-            <View></View>
-            <Text style={styles.headerTextStyle}>{challengeGame ?'Challenge Player' : 'Trivia game'}</Text>
-            <Pressable onPress={onPress}>
-                <Text style={styles.headerTitle}>Exit</Text>
+            <Pressable onPress={onPress} style={styles.exitContainer}>
+                <Text style={styles.headerTitle}>X</Text>
             </Pressable>
+            <Text style={styles.headerTextStyle}>{challengeGame ?'Challenge Player' : 'Trivia game'}</Text>
+            <View></View>
         </View>
     )
 };
@@ -23,6 +23,14 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between'
     },
+    exitContainer: {
+        width:'2rem',
+        height:'2rem',
+        borderRadius:50,
+        backgroundColor:'#EEEEEE',
+        alignItems:'center',
+        justifyContent:'center'
+    },
     headerTextStyle: {
         textAlign: 'center',
         fontSize: '1.2rem',
@@ -30,8 +38,8 @@ const styles = EStyleSheet.create({
         color: '#072169',
     },
     headerTitle: {
-        fontSize: '0.9rem',
-        fontFamily: 'gotham-medium',
+        fontSize: '1.5rem',
+        fontFamily: 'sansation-regular',
         color: '#072169',
     },
 
