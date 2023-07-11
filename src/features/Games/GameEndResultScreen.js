@@ -107,7 +107,7 @@ export default function GameEndResultScreen({ navigation }) {
 	);
 }
 
-const Winnings = ({ amountWon, onPress }) => {
+const Winnings = ({ amountWon, onPress, walletSource }) => {
 	return (
 		<View style={styles.winningsContainer}>
 			<StakeWinnings amountWon={amountWon} />
