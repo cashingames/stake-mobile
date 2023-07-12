@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Text, View, ImageBackground, Dimensions, Alert } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import normalize from '../../utils/normalize';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AppButton from '../../shared/AppButton';
 import { Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +19,12 @@ export default function FundWalletCompleted() {
     useEffect(() => {
         dispatch(getUser())
     }, [])
+
+    useFocusEffect(
+        React.useCallback(() => {
+            dispatch(getUser());
+        }, [])
+    );
 
     return (
         <ImageBackground source={require('../../../assets/images/success-background.png')}
