@@ -214,12 +214,6 @@ const GameStakingScreen = ({ navigation }) => {
                         keyboardType="numeric" />
                 </View>
             }
-            {cashMode &&
-                <>
-                    {user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) &&
-                        <Text style={styles.note}>Note that the predictions table below does not apply on bonus stakes</Text>}
-                </>
-            }
             <View style={[styles.stakeContainer, { marginBottom: 0 }]}>
                 <Text style={styles.stakeHeading}>Winning Odds</Text>
                 <View style={styles.stakeHeaders}>
