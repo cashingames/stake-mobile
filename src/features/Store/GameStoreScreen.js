@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Text, View, Image, Pressable, ScrollView, Platform } from 'react-native';
+import { Text, View, Image, Pressable, ScrollView, Platform, ImageBackground } from 'react-native';
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -29,10 +29,14 @@ export default function () {
     }, []);
 
     return (
-        <ScrollView contentContainerStyle={styles.container} >
-            <UserItems />
-            <GameBoosts user={user} />
-        </ScrollView>
+        <ImageBackground source={require('../../../assets/images/game-play-background.png')}
+            style={{ flex: 1 }}
+            resizeMethod="resize">
+            <ScrollView contentContainerStyle={styles.container} >
+                {/* <UserItems /> */}
+                <GameBoosts user={user} />
+            </ScrollView>
+        </ImageBackground>
     );
 }
 
@@ -41,11 +45,11 @@ const GameBoosts = (user) => {
     const boosts = useSelector(state => state.common.boosts);
     return (
         <View style={styles.storeItems}>
-            <Text style={styles.title}>Get Boosts</Text>
+            {/* <Text style={styles.title}>Get Boosts</Text>
             <Text style={styles.storeItemsDescription}>
                 Boost gives you super powers when you’re playing quizes.
                 Get boosts to win more games
-            </Text>
+            </Text> */}
             <View style={styles.storeCards}>
                 {boosts.map((boost, i) => <BoostCard key={i} boost={boost} user={user} />)}
             </View>
@@ -100,18 +104,20 @@ const BoostCard = ({ boost, user }) => {
 const BoostCardDetails = ({ boost }) => {
     return (
         <>
-            <Image
-                source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
-                style={styles.boostIcon}
-            />
             <View style={styles.boostDetailsContainer}>
-                <View style={styles.boostNameCount}>
-                    <Text style={styles.storeItemName}>{boost.name}</Text>
-                    <Text style={styles.number}>x{formatNumber(boost.pack_count)}</Text>
-                </View>
+                <Image
+                    source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
+                    style={styles.boostIcon}
+                />
+                <Text style={styles.number}>x{formatNumber(boost.pack_count)}</Text>
+            </View>
+            <View style={styles.boostNameCount}>
+                <Text style={styles.storeItemName}>{boost.name}</Text>
                 <Text style={styles.cardDescription}>{boost.description}</Text>
             </View>
-            <Text style={styles.buyWithCash}>&#8358;{formatCurrency(boost.currency_value)}</Text>
+            <View style={styles.amountContainer}>
+                <Text style={styles.buyWithCash}>Buy &#8358;{boost.currency_value}</Text>
+            </View>
         </>
     )
 }
@@ -205,13 +211,12 @@ const UserWalletBalance = () => {
 const styles = EStyleSheet.create({
 
     container: {
-        backgroundColor: '#F8F9FD',
         paddingVertical: normalize(20),
         paddingHorizontal: normalize(20),
-        flex:1
+        flex: 1
     },
     storeItems: {
-        marginTop: normalize(20),
+        // marginTop: normalize(20),
         flexDirection: 'column',
     },
     title: {
@@ -273,21 +278,21 @@ const styles = EStyleSheet.create({
         color: '#2F80ED',
     },
     storeItemName: {
-        fontFamily: 'graphik-medium',
-        fontSize: '0.78rem',
-        color: '#EF2F55',
+        fontFamily: 'gotham-bold',
+        fontSize: '0.85rem',
+        color: '#072169',
     },
     cardDescription: {
-        fontFamily: 'graphik-medium',
-        fontSize: '0.73rem',
-        color: '#828282',
-        lineHeight: responsiveScreenHeight(2.5),
+        fontFamily: 'gotham-medium',
+        fontSize: '0.65rem',
+        color: '#072169',
+        lineHeight: responsiveScreenHeight(2),
         width: responsiveScreenWidth(38)
     },
     buyWithCash: {
-        fontFamily: 'graphik-bold',
-        fontSize: '0.69rem',
-        color: '#151C2F',
+        fontFamily: 'gotham-medium',
+        fontSize: '0.63rem',
+        color: '#F9FBFF',
     },
     buyBoost: {
         paddingHorizontal: normalize(18),
@@ -308,23 +313,36 @@ const styles = EStyleSheet.create({
         marginTop: responsiveScreenHeight(5)
     },
     boostIcon: {
-        marginTop: normalize(12),
-        width: responsiveScreenHeight(6),
-        height: responsiveScreenHeight(6),
+        width: '3.2rem',
+        height: '3.2rem'
     },
     boostDetailsContainer: {
-        flexDirection: 'column'
+        flexDirection: 'row',
+        alignItems: 'flex-start',
     },
     boostNameCount: {
-        flexDirection: 'row',
-        alignItems: 'center'
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+    },
+    amountContainer: {
+        backgroundColor:'#FA5F4A',
+        borderRadius: 30,
+        paddingHorizontal:'.3rem',
+        paddingVertical:'.2rem'
     },
     number: {
-        fontFamily: 'graphik-bold',
-        fontSize: '0.6rem',
-        color: '#FF932F',
-        marginTop: normalize(4),
-        marginLeft: normalize(10)
+        fontSize: '.85rem',
+        color: '#fff',
+        fontFamily: 'gotham-bold',
+        textShadowColor: '#000000',
+        textShadowRadius: 1,
+        textShadowOffset: {
+            width: 0.5,
+            height: 0.5,
+        },
+        position:'absolute',
+        left: 35,
+        top: 10
     },
     walletBalance: {
         flexDirection: 'row',
