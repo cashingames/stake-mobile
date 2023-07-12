@@ -279,11 +279,12 @@ export default ChallengeGameBoardScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
+        paddingHorizontal: normalize(18),
+        paddingTop: responsiveScreenWidth(13),
     },
     image: {
         flex: 1,
-        paddingHorizontal: normalize(18),
-        paddingTop: responsiveScreenWidth(13),
+ 
     },
     // options: {
     //     paddingBottom: normalize(45),

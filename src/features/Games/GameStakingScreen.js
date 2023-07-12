@@ -242,7 +242,7 @@ const GameStakingScreen = ({ navigation }) => {
                         }
                     </>
                 }
-                {walletType === 'bonus_balance'&&
+                {walletType === 'bonus_balance' &&
                     <>
                         {bonusStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
                             amount={amount} />)
