@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import Input from "../../shared/Input";
 import AppButton from "../../shared/AppButton";
-import { getGameStakes, setAmountStaked, setIsPlayingTrivia, setWalletSource, startGame, startPracticeGame } from "./GameSlice";
+import { geBonusStakes, getGameStakes, setAmountStaked, setIsPlayingTrivia, setWalletSource, startGame, startPracticeGame } from "./GameSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { logActionToServer } from "../CommonSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -20,6 +20,7 @@ const GameStakingScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
     const gameStakes = useSelector(state => state.game.gameStakes);
+    const bonusStakes = useSelector(state => state.game.bonusStakes);
     const minimumExhibitionStakeAmount = useSelector(state => state.common.minimumExhibitionStakeAmount);
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
     const gameTypeId = useSelector(state => state.game.gameType.id);
@@ -33,28 +34,27 @@ const GameStakingScreen = ({ navigation }) => {
     const [alertMessage, setAlertMessage] = useState('');
     const [selected, setSelected] = useState('');
     const [walletType, setWalletType] = useState('');
-    console.log(walletType)
     const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
     const depositBalanceSelected = selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && Number.parseFloat(depositBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
     const bonusSelected = selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && Number.parseFloat(user.bonusBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
-    const totalBalance = user.hasBonus === true && (Number.parseFloat(user.bonusBalance) >= Number.parseFloat(minimumExhibitionStakeAmount)) ? Number.parseFloat(user.bonusBalance) ?? 0 : Number.parseFloat(depositBalance) ?? 0
 
     useEffect(() => {
         if (cashMode && selected === `Deposit (NGN ${formatCurrency(depositBalance)})`) {
             setWalletType('deposit_balance')
         }
-        if ( cashMode && selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})`) {
+        if (cashMode && selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})`) {
             setWalletType('bonus_balance')
         }
         if (practiceMode && selected === `Deposit (NGN ${formatCurrency(100000)})`) {
             setWalletType('demo_deposit_balance')
         }
-        if ( cashMode && selected === `Bonus (NGN ${formatCurrency(100000)})`) {
+        if (practiceMode && selected === `Bonus (NGN ${formatCurrency(100000)})`) {
             setWalletType('demo_bonus_balance')
         }
     }, [selected])
     useEffect(() => {
         dispatch(getGameStakes())
+        dispatch(geBonusStakes())
         dispatch(getUser())
     }, [])
 
@@ -174,7 +174,7 @@ const GameStakingScreen = ({ navigation }) => {
     return (
         <ScrollView style={styles.container}>
             {cashMode &&
-                <StakingBalances setSelected={setSelected}  depositBalance={depositBalance} user={user} minimumExhibitionStakeAmount={minimumExhibitionStakeAmount} />
+                <StakingBalances setSelected={setSelected} depositBalance={depositBalance} user={user} minimumExhibitionStakeAmount={minimumExhibitionStakeAmount} />
             }
             {practiceMode &&
                 <PracticeStakingBalances setSelected={setSelected} />
@@ -227,8 +227,41 @@ const GameStakingScreen = ({ navigation }) => {
                     <Text style={styles.stakeHead}>ODDS</Text>
                     <Text style={styles.stakePay}>PAYOUT</Text>
                 </View>
-                {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
-                    amount={amount} />)}
+                {walletType === 'demo_deposit_balance' &&
+                    <>
+                        {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
+                            amount={amount} />)
+                        }
+                    </>
+                }
+                {walletType === 'deposit_balance' &&
+                    <>
+                        {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
+                            amount={amount} />)
+                        }
+                    </>
+                }
+                {walletType === '' &&
+                    <>
+                        {gameStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
+                            amount={amount} />)
+                        }
+                    </>
+                }
+                {walletType === 'bonus_balance'&&
+                    <>
+                        {bonusStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
+                            amount={amount} />)
+                        }
+                    </>
+                }
+                 {walletType === 'demo_bonus_balance' &&
+                    <>
+                        {bonusStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
+                            amount={amount} />)
+                        }
+                    </>
+                }
             </View>
             {/* <Pressable style={styles.instructionsContainer}>
                 <Text style={styles.instructionsTitle}>Odds instructions</Text>
@@ -289,7 +322,7 @@ const StakingBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, s
     )
 }
 
-const PracticeStakingBalances = ({setSelected }) => {
+const PracticeStakingBalances = ({ setSelected }) => {
     const balanceAccounts = [
         {
             key: '1',

@@ -21,7 +21,6 @@ const AvailableGameSessionBoosts = () => {
     const practiceMode = useSelector(state => state.game.practiceMode);
     const [updatepracticeFreezeCount, setUpdatePracticeFreezeCount] = useState(20);
     const [updatepracticeSkipCount, setUpdatePracticeSkipCount] = useState(20);
-    // const [showText, setShowText] = useState(true);
 
     const practiceBoosts = [
         {
