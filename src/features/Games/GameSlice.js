@@ -49,12 +49,6 @@ export const startPracticeGame = createAsyncThunk(
 export const endGame = createAsyncThunk(
     'game/endGame',
     async (data, thunkAPI) => {
-        //log if question_count exist more than once in the array
-        data.chosenOptions.forEach(x => {
-            // console.log("loggind submitted question id", x.question_id);
-        });
-
-        //make a network request to the server
         const response = await axios.post('v3/game/end/single-player', data)
         console.log(response.data, 'game ended')
         return response.data;
@@ -64,9 +58,6 @@ export const endGame = createAsyncThunk(
 export const endPracticeGame = createAsyncThunk(
     'game/endPracticeGame',
     async (data, thunkAPI) => {
-        data.chosenOptions.forEach(x => {
-        });
-
         const response = await axios.post('v3/single-player/practice/end', data)
         console.log(response.data, 'game ended')
         return response.data;

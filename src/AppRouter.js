@@ -299,8 +299,6 @@ const setupAxios = async function () {
 	axios.interceptors.response.use(
 		response => response,
 		error => {
-			// console.log(error.config.url, error.message);
-
 			if (error.response && error.response.status === 401) {
 				dispatch(logoutUser());
 			} else if (error.request) {
@@ -334,11 +332,6 @@ const appendAxiosAuthHeader = function (token) {
 };
 
 async function registerForPushNotificationsAsync() {
-	let deviceToken;
-	// const deviceBrand = Device.brand;
-	// console.log(deviceBrand, 'kkkkkhhh')
-	// const deviceModelName = Device.modelName;
-	// console.log(deviceModelName, 'nameeeeeee')
 
 	if (!Device.isDevice) {
 		Alert.alert('Must use physical device for Push Notifications')
@@ -354,11 +347,7 @@ async function registerForPushNotificationsAsync() {
 		Alert.alert('Failed to get push token for push notification!');
 		return;
 	}
-	deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
-	// console.log(deviceToken, 'nameeeeeee')
-
-
-
+	const deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
 
 	if (Platform.OS === 'android') {
 		Notifications.setNotificationChannelAsync('default', {

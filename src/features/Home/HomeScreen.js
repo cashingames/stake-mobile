@@ -88,14 +88,6 @@ const UserProfile = ({ user, username, firstname }) => {
     const navigation = useNavigation();
     const totalWalletBalance = Number.parseFloat(user.walletBalance) + Number.parseFloat(user.bonusBalance)
 
-    const viewNotifications = async () => {
-        logToAnalytics("notification_button_clicked", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email
-        })
-        navigation.navigate('Notifications')
-    }
     const viewWallet = async () => {
         logToAnalytics("wallet_amount_clicked", {
             'id': user.username,
@@ -132,13 +124,18 @@ function RenderUpdateChecker() {
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
 
-    if (minVersionCode && Constants.expoConfig.extra.isDevelopment !== "true") {
+    if (minVersionCode && Constants.expoConfig.extra.isDevelopment !== true) {
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }
 
-    notifyOfPublishedUpdates();
+    console.log("Checking for published updates", Constants.expoConfig.extra.isDevelopment);
 
-    return null;
+    if (Constants.expoConfig.extra.isDevelopment === true) {
+        console.log("Skipping published updates check in development mode");
+        return null;
+    }
+
+    notifyOfPublishedUpdates();
 }
 
 

@@ -128,7 +128,9 @@ export default function GameInProgressScreen({ navigation, route }) {
 
         if (practiceMode) {
             dispatch(endPracticeGame({
+                token: gameSessionToken,
                 chosenOptions,
+                consumedBoosts
             }))
                 .then(unwrapResult)
                 .then(() => {

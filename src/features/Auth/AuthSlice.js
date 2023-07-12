@@ -3,11 +3,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import {
-    verifyOtp as verifyOtpApi,
-    verifyAccount as verifyAccountApi,
-    resetPassword as resetPasswordApi,
-} from '../../utils/ApiHelper';
 import { isTrue } from '../../utils/stringUtl';
 
 export const registerUser = async (data) => {
@@ -34,10 +29,6 @@ export const loginUser = createAsyncThunk(
         }
     }
 )
-
-// export const loginUser = async (data) => {
-//     return axios.post(`auth/login`, data);
-// }
 
 export const loginWithSocialLink = createAsyncThunk(
     'auth/loginWithSocialLink',
