@@ -14,73 +14,11 @@ import { useSelector } from "react-redux";
 const UserWalletAccounts = ({ user }) => {
     return (
         <View style={styles.walletsContainer}>
-            {/* <SwiperFlatList> */}
-            {/* <StakingWallet user={user} /> */}
-            {/* <EarningsWallet user={user} /> */}
             <UserBoosts user={user} />
-            {/* </SwiperFlatList> */}
         </View>
     )
 }
 
-const StakingWallet = ({ user }) => {
-    const navigation = useNavigation();
-    const viewWallet = async () => {
-        logToAnalytics("add_fund_button_clicked", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email
-        })
-        navigation.navigate('Wallet')
-    }
-    return (
-        <Pressable style={styles.stakingWalletContainer} onPress={viewWallet}>
-            <View style={styles.walletHeader}>
-                <Ionicons name='wallet-outline' size={20} color='#E3ECF2' />
-                <Text style={styles.walletHeaderText}>Staking Balance</Text>
-            </View>
-            <View style={styles.amountContainer}>
-                <View style={styles.currencyContainer}>
-                    <Text style={styles.balanceDigit}>NGN {formatCurrency(user.walletBalance ?? 0)}</Text>
-                    <Ionicons name='chevron-forward-sharp' size={20} color='#E3ECF2' />
-                </View>
-                <View style={styles.addContainer} >
-                    <Ionicons name='add' size={20} color='#072169' />
-                    <Text style={styles.addText}>Add funds</Text>
-                </View>
-            </View>
-        </Pressable>
-    )
-}
-const EarningsWallet = ({ user }) => {
-    const navigation = useNavigation();
-    const viewWallet = async () => {
-        logToAnalytics("earnings_button_clicked", {
-            'id': user.username,
-            'phone_number': user.phoneNumber,
-            'email': user.email
-        })
-        navigation.navigate('Wallet')
-    }
-    return (
-        <Pressable style={styles.earningsWalletContainer} onPress={viewWallet}>
-            <View style={styles.walletHeader}>
-                <Ionicons name='wallet-outline' size={20} color='#E3ECF2' />
-                <Text style={styles.walletHeaderText}>Earnings</Text>
-            </View>
-            <View style={styles.amountContainer}>
-                <View style={styles.currencyContainer}>
-                    <Text style={styles.balanceDigit}>NGN {formatCurrency(user.withdrawableBalance ?? 0)}</Text>
-                    <Ionicons name='chevron-forward-sharp' size={20} color='#E3ECF2' />
-                </View>
-                <View style={styles.addContainer} >
-                    <Ionicons name='card-outline' size={20} color='#072169' />
-                    <Text style={styles.addText}>Withdraw</Text>
-                </View>
-            </View>
-        </Pressable>
-    )
-}
 const UserBoosts = ({ user }) => {
     const boosts = useSelector(state => state.auth.user.boosts);
 
