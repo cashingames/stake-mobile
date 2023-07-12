@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-
+import Constants from 'expo-constants';
 import AppButton from '../../shared/AppButton';
 import { getUser } from '../Auth/AuthSlice';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import LottieAnimations from '../../shared/LottieAnimations';
 
-const GameBoostPurchaseSuccessfulScreen = () => {
+const GameBoostPurchaseSuccessfulScreen = ({ route }) => {
+    const params = route.params;
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
@@ -19,23 +19,25 @@ const GameBoostPurchaseSuccessfulScreen = () => {
     }, []);
 
     return (
-        <View style={styles.topContainer}>
-            <View style={styles.container}>
-                <View style={styles.image}>
-                    <LottieAnimations
-                        animationView={require('../../../assets/transaction-successful.json')}
-                        width={normalize(100)}
-                        height={normalize(100)}
-                    />
+        <ImageBackground source={require('../../../assets/images/success-background.png')}
+            style={{ flex: 1, justifyContent:'center' }}
+            resizeMethod="resize">
+            <View style={styles.topContainer}>
+                <View style={styles.container}>
+                    <Text style={styles.paymentHeader}>Payment Successful....</Text>
+                    <View style={styles.image}>
+                        <Image
+                            source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${params.boost_image}` }}
+                            style={styles.boostIcon}
+                        />
+                    </View>
+                    <Text style={styles.message}>{params.boost_name} was purchased successfully for NGN {params.boost_price}</Text>
                 </View>
-                <Text style={styles.paymentHeader}>Payment Successful</Text>
-                <Text style={styles.message}>You successfully purchased a boost to continue playing games, climb up the leaderboard and win great prizes</Text>
+                <View style={styles.congratsButtons}>
+                    <AppButton text="Okay, got it" onPress={() => navigation.navigate('Home')} style={styles.actionButton} />
+                </View>
             </View>
-            <View style={styles.congratsButtons}>
-                <AppButton text={"Play a Game"} onPress={() => navigation.navigate('Home')} style={styles.actionButton} />
-                <AppButton text={"Store"} onPress={() => navigation.navigate('GameStore')} style={styles.actionButton} />
-            </View>
-        </View>
+        </ImageBackground>
     )
 }
 export default GameBoostPurchaseSuccessfulScreen;
@@ -43,18 +45,18 @@ export default GameBoostPurchaseSuccessfulScreen;
 
 const styles = EStyleSheet.create({
     topContainer: {
-        flex: 1,
-        backgroundColor: '#FFFF',
-        paddingTop: responsiveScreenWidth(20),
-        paddingHorizontal: responsiveScreenWidth(5),
+        paddingHorizontal: responsiveScreenWidth(8),
     },
     container: {
-        marginBottom: responsiveScreenWidth(25),
-        paddingHorizontal: responsiveScreenWidth(5),
+        marginBottom: responsiveScreenWidth(15),
     },
     image: {
         alignItems: 'center',
-        marginVertical: normalize(15)
+        marginVertical: normalize(8)
+    },
+    boostIcon: {
+        width: normalize(115),
+        height: normalize(115),
     },
     success: {
         width: normalize(65),
@@ -62,27 +64,22 @@ const styles = EStyleSheet.create({
         marginVertical: normalize(10),
     },
     paymentHeader: {
-        fontFamily: 'graphik-medium',
-        fontSize: '1rem',
+        fontFamily: 'gotham-bold',
+        fontSize: '1.5rem',
         textAlign: 'center',
-        color: '#151C2F',
+        color: '#072169',
     },
     message: {
-        fontFamily: 'graphik-regular',
-        fontSize: normalize(15),
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem',
         textAlign: 'center',
-        color: '#535761',
+        color: '#072169',
         lineHeight: '1.6rem',
-        marginTop: normalize(35)
     },
     congratsButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: responsiveScreenWidth(40)
+ 
     },
     actionButton: {
-        // marginHorizontal: normalize(15),
-        marginTop: normalize(10),
-        width: '9rem'
+        marginTop: normalize(5),
     },
 });

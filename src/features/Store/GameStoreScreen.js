@@ -5,17 +5,17 @@ import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useDispatch, useSelector } from 'react-redux';
 import Animated from "react-native-reanimated";
-import { Ionicons } from '@expo/vector-icons';
 import { unwrapResult } from "@reduxjs/toolkit";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { buyBoostFromWallet } from "./StoreSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 import AppButton from "../../shared/AppButton";
-import UserItems from "../../shared/UserItems";
 import { randomEnteringAnimation } from "../../utils/utils";
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import logToAnalytics from "../../utils/analytics";
+import { SelectList } from "react-native-dropdown-select-list";
+import { setWalletSource } from "../Games/GameSlice";
 
 
 export default function () {
@@ -43,6 +43,7 @@ export default function () {
 
 const GameBoosts = (user) => {
     const boosts = useSelector(state => state.common.boosts);
+    console.log(boosts)
     return (
         <View style={styles.storeItems}>
             {/* <Text style={styles.title}>Get Boosts</Text>
@@ -80,7 +81,7 @@ const BoostCard = ({ boost, user }) => {
                     ref={refRBSheet}
                     closeOnDragDown={true}
                     closeOnPressMask={true}
-                    height={440}
+                    height={500}
                     customStyles={{
                         wrapper: {
                             backgroundColor: "rgba(0, 0, 0, 0.5)"
@@ -94,7 +95,7 @@ const BoostCard = ({ boost, user }) => {
                         }
                     }}
                 >
-                    <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} user={user} />
+                    <BuyBoost boost={boost} onClose={() => refRBSheet.current.close()} />
                 </RBSheet>
             </Animated.View>
         </Pressable>
@@ -122,19 +123,35 @@ const BoostCardDetails = ({ boost }) => {
     )
 }
 
-const BuyBoost = ({ boost, onClose, user }) => {
+const BuyBoost = ({ boost, onClose }) => {
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
+    const user = useSelector((state) => state.auth.user);
     const userBalance = useSelector(state => state.auth.user.walletBalance);
     const newUser = useSelector(state => state.auth.user.joinedOn);
     const newUserDate = newUser.slice(0, 10);
     let formattedDate = new Date().toISOString().split('T')[0];
     const canPay = Number(userBalance) >= Number(boost.currency_value);
+    const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
+    const minimumExhibitionStakeAmount = useSelector(state => state.common.minimumExhibitionStakeAmount);
+    const [selected, setSelected] = useState('');
+    const [walletType, setWalletType] = useState('');
+    console.log(walletType)
 
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (selected === `Deposit (NGN ${formatCurrency(depositBalance)})`) {
+            setWalletType('deposit_balance')
+        }
+        if (selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})`) {
+            setWalletType('bonus_balance')
+        }
+    }, [selected])
 
     const buyBoostWallet = () => {
         setLoading(true);
+        dispatch(setWalletSource(walletType))
         dispatch(buyBoostFromWallet(boost.id))
             .then(unwrapResult)
             .then(async () => {
@@ -163,7 +180,12 @@ const BuyBoost = ({ boost, onClose, user }) => {
             .then(result => {
                 dispatch(getUser())
                 onClose()
-                navigation.navigate("GameBoostPurchaseSuccessful")
+                navigation.navigate("GameBoostPurchaseSuccessful",
+                    {
+                        boost_name: boost.name,
+                        boost_price: boost.currency_value,
+                        boost_image: boost.icon
+                    })
             })
             .catch(rejectedValueOrSerializedError => {
                 setLoading(false);
@@ -173,37 +195,66 @@ const BuyBoost = ({ boost, onClose, user }) => {
                     'phone_number': user.phoneNumber,
                     'email': user.email
                 })
-                navigation.navigate("GameStoreItemsPurchaseFailed")
+                onClose()
+                navigation.navigate("GameStoreItemsPurchaseFailed",
+                    {
+                        boost_name: boost.name,
+                        boost_price: boost.currency_value,
+                        boost_image: boost.icon
+                    }
+                )
             });
     }
 
     return (
         <View style={styles.buyBoost}>
             <View style={styles.buyItemHeader}>
-                <Text style={styles.buyItemTitle}>Buy Boost</Text>
-                <Ionicons name="close-outline" size={20} color="#292D32" onPress={onClose} />
+                <Text style={styles.buyItemTitle}>Purchase {boost.name}</Text>
             </View>
             <View style={styles.buyItemCard}>
                 <BoostCardDetails boost={boost} />
             </View>
-            <UserWalletBalance />
-            <AppButton text={loading ? 'Buying...' : 'Confirm'} onPress={buyBoostWallet} disabled={!canPay || loading} style={styles.actionButton} />
+            <WalletBalances depositBalance={depositBalance} user={user} minimumExhibitionStakeAmount={minimumExhibitionStakeAmount} setSelected={setSelected} />
+            <AppButton text={loading ? 'Buying...' : 'Purchase Boost'} onPress={buyBoostWallet} disabled={!canPay || loading || selected === ''} style={styles.actionButton} />
         </View>
     )
 }
 
-const UserWalletBalance = () => {
-    const userBalance = useSelector(state => state.auth.user.walletBalance);
+
+const WalletBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, setSelected }) => {
+    const balanceAccounts = [
+        {
+            key: '1',
+            value: `Deposit (NGN ${formatCurrency(depositBalance)})`,
+            disabled: depositBalance < minimumExhibitionStakeAmount,
+        },
+        {
+            key: '2',
+            value: `Bonus (NGN ${formatCurrency(user.bonusBalance)})`,
+            disabled: user.bonusBalance < minimumExhibitionStakeAmount,
+        }
+    ]
+    const [balanceName, setBalanceName] = useState('')
     return (
-        <View style={styles.walletBalance}>
-            <Image
-                style={styles.purseIcon}
-                source={require('../../../assets/images/store-purse.png')}
-            />
-            <View style={styles.userBalance}>
-                <Text style={styles.balanceText}>Wallet Balance</Text>
-                <Text style={styles.balance}>&#8358;{formatCurrency(userBalance)}</Text>
+        <View style={styles.balancesContainer}>
+            <View style={styles.labelContainer}>
+                <Text style={styles.balanceLabel}>Purchase boost from from ?</Text>
+                <Text style={styles.requiredText}>Required</Text>
             </View>
+            <SelectList
+                setSelected={(balanceName) => setBalanceName(balanceName)}
+                data={balanceAccounts}
+                save="value"
+                onSelect={() => setSelected(balanceName)}
+                placeholder="Select Wallet"
+                fontFamily='sansation-regular'
+                boxStyles={{ height: normalize(52), alignItems: 'center', borderColor: '#D9D9D9', backgroundColor: '#fff' }}
+                inputStyles={{ fontSize: 18, color: '#072169' }}
+                dropdownTextStyles={{ fontSize: 18, color: '#072169' }}
+                dropdownItemStyles={{ borderBottomWidth: 1, borderBottomColor: '#D9D9D9' }}
+                disabledTextStyles={{ fontSize: 18 }}
+                disabledItemStyles={{ backgroundColor: '#F9FBFF' }}
+            />
         </View>
     )
 }
@@ -258,7 +309,7 @@ const styles = EStyleSheet.create({
     },
     buyItemCard: {
         alignItems: 'center',
-        backgroundColor: '#F8F9FD',
+        backgroundColor: '#FFF',
         borderRadius: 11,
         marginVertical: normalize(22),
         borderWidth: Platform.OS === 'ios' ? normalize(1) : normalize(2.4),
@@ -284,7 +335,7 @@ const styles = EStyleSheet.create({
     },
     cardDescription: {
         fontFamily: 'gotham-medium',
-        fontSize: '0.65rem',
+        fontSize: '0.7rem',
         color: '#072169',
         lineHeight: responsiveScreenHeight(2),
         width: responsiveScreenWidth(38)
@@ -296,16 +347,16 @@ const styles = EStyleSheet.create({
     },
     buyBoost: {
         paddingHorizontal: normalize(18),
-        paddingVertical: normalize(15)
+        paddingVertical: normalize(15),
+        backgroundColor: '#F9FBFF'
     },
     buyItemHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        alignItems: 'center'
     },
     buyItemTitle: {
-        fontFamily: 'graphik-medium',
+        fontFamily: 'gotham-bold',
         fontSize: '1rem',
-        color: '#151C2F',
+        color: '#072169',
         marginBottom: normalize(10),
     },
     actionButton: {
@@ -319,16 +370,17 @@ const styles = EStyleSheet.create({
     boostDetailsContainer: {
         flexDirection: 'row',
         alignItems: 'flex-start',
+        // backgroundColor:'#fff'
     },
     boostNameCount: {
         flexDirection: 'column',
         alignItems: 'flex-start'
     },
     amountContainer: {
-        backgroundColor:'#FA5F4A',
+        backgroundColor: '#FA5F4A',
         borderRadius: 30,
-        paddingHorizontal:'.3rem',
-        paddingVertical:'.2rem'
+        paddingHorizontal: '.3rem',
+        paddingVertical: '.2rem'
     },
     number: {
         fontSize: '.85rem',
@@ -340,7 +392,7 @@ const styles = EStyleSheet.create({
             width: 0.5,
             height: 0.5,
         },
-        position:'absolute',
+        position: 'absolute',
         left: 35,
         top: 10
     },
@@ -371,5 +423,25 @@ const styles = EStyleSheet.create({
         fontFamily: 'graphik-bold',
         fontSize: '0.9rem',
         marginTop: normalize(5)
+    },
+    balancesContainer: {
+        marginBottom: '1rem'
+    },
+    labelContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '.6rem'
+    },
+    requiredText: {
+        fontFamily: 'sansation-regular',
+        color: '#E15220',
+        fontSize: '0.85rem',
+    },
+    balanceLabel: {
+        fontFamily: 'gotham-bold',
+        color: '#072169',
+        fontSize: '0.85rem',
+
     },
 });
