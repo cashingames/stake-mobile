@@ -214,24 +214,24 @@ const BuyBoost = ({ boost, onClose }) => {
             <View style={styles.buyItemCard}>
                 <BoostCardDetails boost={boost} />
             </View>
-            <WalletBalances depositBalance={depositBalance} user={user} minimumExhibitionStakeAmount={minimumExhibitionStakeAmount} setSelected={setSelected} />
+            <WalletBalances depositBalance={depositBalance} user={user} minimumExhibitionStakeAmount={minimumExhibitionStakeAmount} setSelected={setSelected} boost={boost} />
             <AppButton text={loading ? 'Buying...' : 'Purchase Boost'} onPress={buyBoostWallet} disabled={!canPay || loading || selected === ''} style={styles.actionButton} />
         </View>
     )
 }
 
 
-const WalletBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, setSelected }) => {
+const WalletBalances = ({ depositBalance, user, setSelected , boost}) => {
     const balanceAccounts = [
         {
             key: '1',
             value: `Deposit (NGN ${formatCurrency(depositBalance)})`,
-            disabled: depositBalance < minimumExhibitionStakeAmount,
+            disabled: depositBalance < boost.currency_value,
         },
         {
             key: '2',
             value: `Bonus (NGN ${formatCurrency(user.bonusBalance)})`,
-            disabled: user.bonusBalance < minimumExhibitionStakeAmount,
+            disabled: true
         }
     ]
     const [balanceName, setBalanceName] = useState('')
