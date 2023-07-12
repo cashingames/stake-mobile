@@ -20,12 +20,6 @@ export default function FundWalletCompleted() {
         dispatch(getUser())
     }, [])
 
-    useFocusEffect(
-        React.useCallback(() => {
-            dispatch(getUser());
-        }, [])
-    );
-
     return (
         <ImageBackground source={require('../../../assets/images/success-background.png')}
             style={styles.mainContainer}

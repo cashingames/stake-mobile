@@ -156,6 +156,7 @@ const ChallengePracticeSkip = ({ copilot }) => {
 }
 
 const SelectedPlayers = ({ user }) => {
+    const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     return (
         <View style={styles.playerImage}>
             <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
@@ -163,7 +164,7 @@ const SelectedPlayers = ({ user }) => {
             <Image
                 source={require('../../../../assets/images/versus.png')}
             />
-            <SelectedPlayer playerName='Practice Bot' playerAvatar={require("../../../../assets/images/user-icon.png")} />
+            <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
         </View>
     )
 }
