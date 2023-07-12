@@ -169,7 +169,7 @@ function AppRouter() {
 						<AppStack.Screen name="GamePracticeTour" component={GamePracticeTourScreen} options={{ headerShown: false }} />
 
 
-						
+
 						{/* challenge */}
 						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{
 							title: 'Challenge Player',
@@ -225,7 +225,13 @@ function AppRouter() {
 
 
 						{/** store */}
-						<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ title: 'Store', headerShadowVisible: false }} />
+						<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{
+							title: 'Store', headerTintColor: '#072169',
+							headerTitleStyle: {
+								fontFamily: 'bubble-regular',
+								fontSize: 23,
+							},
+						}} />
 						<AppStack.Screen name="GameBoostPurchaseSuccessful" component={GameBoostPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
 

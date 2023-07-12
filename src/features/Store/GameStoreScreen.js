@@ -238,7 +238,7 @@ const WalletBalances = ({ depositBalance, user, setSelected , boost}) => {
     return (
         <View style={styles.balancesContainer}>
             <View style={styles.labelContainer}>
-                <Text style={styles.balanceLabel}>Purchase boost from from ?</Text>
+                <Text style={styles.balanceLabel}>Purchase boost from ?</Text>
                 <Text style={styles.requiredText}>Required</Text>
             </View>
             <SelectList

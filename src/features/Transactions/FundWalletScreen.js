@@ -29,7 +29,7 @@ export default function FundWalletScreen() {
   const [amount, setAmount] = useState("");
   const [showPayment, setShowPayment] = React.useState(false);
   const minimumWalletFundableAmount = useSelector(state => state.common.minimumWalletFundableAmount);
-  const [paystackChecked, setPaystackChecked] = useState(false);
+  const [paystackChecked, setPaystackChecked] = useState(true);
   const [flutterChecked, setFlutterChecked] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
