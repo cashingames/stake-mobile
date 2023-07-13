@@ -40,7 +40,7 @@ export const submitGameSession = createAsyncThunk(
 )
 
 export const submitPracticeGameSession = createAsyncThunk(
-    'game/submitGameSession',
+    'game/submitPracticeGameSession',
     async (_data, { getState }) => {
 
         const state = getState().triviaChallenge;
