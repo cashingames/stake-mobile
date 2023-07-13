@@ -1,6 +1,6 @@
 const env = process.env.APP_VARIANT;
 const isDevelopment = env === 'development' || env === 'local' || false;
-const version = "1.3.12"; //Update for every build and publish
+const version = "1.3.13"; //Update for every build and publish
 
 export default {
   name: getAppName(),
