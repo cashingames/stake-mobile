@@ -28,11 +28,7 @@ const WithdrawBalanceScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [withdraw, setWithdraw] = useState(false);
     const [allError, setAllError] = useState('');
-
-
-
-    const minimumWithdrawableAmount = Number.parseFloat(1000);
-
+    const minimumWithdrawableAmount = useSelector(state => state.common.minimumWithdrawableAmount);
     const [modalVisible, setModalVisible] = useState(false);
 
 

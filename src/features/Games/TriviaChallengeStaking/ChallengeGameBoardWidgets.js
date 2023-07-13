@@ -20,7 +20,6 @@ const ChallengeGameBoardWidgets = () => {
     const practiceMode = useSelector(state => state.game.practiceMode);
     const [updatepracticeFreezeCount, setUpdatePracticeFreezeCount] = useState(20);
     const [updatepracticeSkipCount, setUpdatePracticeSkipCount] = useState(20);
-    const [clicked, setClicked] = useState(false);
 
 
 
@@ -109,7 +108,7 @@ const ChallengeGameBoardWidgets = () => {
     return (
         <View style={styles.gameProgressAndBoost}>
             {practiceMode &&
-                <ChallengePracticeBoosts practiceBoosts={practiceBoosts} boostApplied={practiceBoostApplied} clicked={clicked} />
+                <ChallengePracticeBoosts practiceBoosts={practiceBoosts} boostApplied={practiceBoostApplied} />
             }
             {cashMode &&
                 <ChallengeStakingBoosts boosts={boosts} boostsToDisplay={boostsToDisplay} boostApplied={boostApplied} />
@@ -145,7 +144,7 @@ const ChallengeStakingBoosts = ({ boosts, boostsToDisplay, boostApplied }) => {
         </>
     )
 }
-const ChallengePracticeBoosts = ({ practiceBoosts, boostApplied, clicked }) => {
+const ChallengePracticeBoosts = ({ practiceBoosts, boostApplied }) => {
     const user = useSelector(state => state.auth.user);
     return (
         <View style={styles.availableBoosts}>
@@ -155,7 +154,7 @@ const ChallengePracticeBoosts = ({ practiceBoosts, boostApplied, clicked }) => {
             <View style={styles.availableBoostsIcons}>
                 {
                     practiceBoosts.map((practiceBoost, index) =>
-                        <ChallengePracticeBoost practiceBoost={practiceBoost} key={index} onConsume={boostApplied} clicked={clicked} />
+                        <ChallengePracticeBoost practiceBoost={practiceBoost} key={index} onConsume={boostApplied} />
                     )
                 }
             </View>
@@ -212,7 +211,7 @@ const ChallengeStakingBoost = ({ boost, onConsume }) => {
     )
 }
 
-const ChallengePracticeBoost = ({ practiceBoost, onConsume, clicked }) => {
+const ChallengePracticeBoost = ({ practiceBoost, onConsume }) => {
 
     const scaleValue = useRef(new Animated.Value(1)).current;
     const zoomAnimation = {
@@ -252,7 +251,6 @@ const ChallengePracticeBoost = ({ practiceBoost, onConsume, clicked }) => {
                     />
                     <Text style={styles.storeItemName}>x{formatNumber(practiceBoost.count)}</Text>
                 </View>
-                {/* <Text style={styles.storeItemName}>{boost.name}</Text> */}
             </Pressable>
         </Animated.View>
     )

@@ -162,6 +162,7 @@ const initialState = {
     maximumChallengeStakeAmount: 0,
     minimumChallengeStakeAmount: 0,
     minimumWalletFundableAmount: 0,
+    minimumWithdrawableAmount: 0,
     minimumBoostScore:0,
     periodBeforeChallengeStakingExpiry: '',
     stakeWinners:[]
@@ -202,6 +203,7 @@ export const CommonSlice = createSlice({
                 state.maximumChallengeStakeAmount = data.maximumChallengeStakeAmount;
                 state.minimumChallengeStakeAmount = data.minimumChallengeStakeAmount;
                 state.minimumWalletFundableAmount = data.minimumWalletFundableAmount;
+                state.minimumWithdrawableAmount = data.minimumWithdrawableAmount;
                 state.periodBeforeChallengeStakingExpiry = data.periodBeforeChallengeStakingExpiry;
                 state.minimumBoostScore = data.minimumBoostScore;
             })
