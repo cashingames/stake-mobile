@@ -12,8 +12,8 @@ const initialState = {
 
 export const buyBoostFromWallet = createAsyncThunk(
     'store/wallet/purchaseBoost',
-    async (boostId, thunkAPI) => {
-        const response = await axios.post(`v3/wallet/buy-boosts/${boostId}`)
+    async (boostId, data, thunkAPI) => {
+        const response = await axios.post(`v3/wallet/buy-boosts/${boostId}`, data)
         // .then(value => {
         //     console.log("success")
         //     console.log(value);

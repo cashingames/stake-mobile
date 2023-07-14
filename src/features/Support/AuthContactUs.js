@@ -10,12 +10,24 @@ import { sendUserFeedback } from "../CommonSlice";
 import logToAnalytics from "../../utils/analytics";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import CustomAlert from "../../shared/CustomAlert";
+import { Image } from "react-native";
 
 
 
 const AuthContactUs = ({ navigation }) => {
+    const dispatch = useDispatch();
+
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const [saving, setSaving] = useState(false);
+    const [canSave, setCanSave] = useState(false);
+    const [first_name, setFirstName] = useState('');
+    const [last_name, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [message_body, setMessage] = useState('');
+
+
 
 
     const startModal = () => {
@@ -26,51 +38,13 @@ const AuthContactUs = ({ navigation }) => {
 
     }
 
-    return (
-        <ScrollView style={styles.container}>
-            <View style={styles.headerContainerStyle}>
-                <Ionicons name="chevron-back" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
-                <Text style={styles.headerTextStyle}>
-                    Support
-                </Text>
-            </View>
-            <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
-                <Text style={styles.whatsappTitle}>Live chat with a support agent on Whatsapp</Text>
-                <FontAwesome5 name="whatsapp" size={30} color="#25D366" style={styles.icon}
-                />
-            </Pressable>
-            <Text style={styles.title}>Do you have any question?</Text>
-            <ContactForm startModal={startModal} setAlertMessage={setAlertMessage} />
-            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                textLabel={alertMessage} buttonLabel='Ok, got it'
-                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
-        </ScrollView>
-    )
-}
-
-const ContactForm = ({ startModal, setAlertMessage }) => {
-    const dispatch = useDispatch();
-    const [saving, setSaving] = useState(false);
-    const [first_name, setFirstName] = useState('');
-    const [last_name, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [message_body, setMessage] = useState('');
-    const [emailErr, setEmailError] = useState(false);
-    const [firstNameErr, setFirstNameError] = useState(false);
-    const [lastNameErr, setLastNameError] = useState(false);
-    const [phoneErr, setPhoneError] = useState(false);
-    const [messageError, setMessageError] = useState(false);
-    const [canSave, setCanSave] = useState(false);
-
-
-
     const sendFeedback = () => {
         setSaving(true)
         dispatch(sendUserFeedback({
             first_name,
             last_name,
             email,
+            phone,
             message_body,
         }))
             .then(unwrapResult)
@@ -84,6 +58,7 @@ const ContactForm = ({ startModal, setAlertMessage }) => {
                 setMessage('')
                 setFirstName('')
                 setLastName('')
+                setPhone('')
                 setSaving(false)
             })
             .catch((rejectedValueOrSerializedError) => {
@@ -96,6 +71,57 @@ const ContactForm = ({ startModal, setAlertMessage }) => {
             });
 
     }
+
+    return (
+        <View style={styles.container}>
+            <ScrollView >
+                <View style={styles.headerContainerStyle}>
+                    <Ionicons name="chevron-back" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
+                    <Text style={styles.headerTextStyle}>
+                        Support
+                    </Text>
+                </View>
+                <Text style={styles.title}>Do you have any question?</Text>
+                <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
+                    <Image
+                        source={require('../../../assets/images/whatsapp-icon.png')}
+                        style={styles.icon}
+                    />
+                    <View style={styles.textContainer}>
+                        <View style={styles.headerContainer}>
+                            <Text style={styles.header}>Contact Support</Text>
+                            <Ionicons name="chevron-forward" size={22} color='#072169' />
+                        </View>
+                        <Text style={styles.whatsappTitle}>Live chat with support on Whatsapp</Text>
+                    </View>
+                </Pressable>
+                <ContactForm setCanSave={setCanSave} first_name={first_name} setFirstName={setFirstName} last_name={last_name} setLastName={setLastName}
+                    email={email} setEmail={setEmail} message_body={message_body} setMessage={setMessage} phone={phone} setPhone={setPhone}
+                />
+
+                <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    textLabel={alertMessage} buttonLabel='Ok, got it'
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
+            </ScrollView>
+            <AppButton
+                text={saving ? 'Sending' : 'Send'}
+                onPress={sendFeedback}
+                disabled={!canSave || saving}
+                style={styles.buttonStyle}
+            />
+        </View>
+    )
+}
+
+const ContactForm = ({ setCanSave, first_name, setFirstName, last_name, setLastName, email,
+    setEmail, message_body, setMessage, phone, setPhone }) => {
+
+    const [emailErr, setEmailError] = useState(false);
+    const [firstNameErr, setFirstNameError] = useState(false);
+    const [lastNameErr, setLastNameError] = useState(false);
+    const [phoneErr, setPhoneError] = useState(false);
+    const [messageError, setMessageError] = useState(false);
+
 
     const onChangeEmail = (text) => {
         const rule = /^\S+@\S+\.\S+$/;
@@ -155,6 +181,9 @@ const ContactForm = ({ startModal, setAlertMessage }) => {
                 value={phone}
                 onChangeText={text => { onChangePhone(text) }}
                 error={phoneErr && '*please input a valid phone number'}
+                type="phone"
+                maxLength={11}
+                keyboardType='numeric'
 
             />
             <View>
@@ -168,12 +197,7 @@ const ContactForm = ({ startModal, setAlertMessage }) => {
                 />
                 {messageError && <Text>Please input your message</Text>}
             </View>
-            <AppButton
-                text={saving ? 'Sending' : 'Send'}
-                onPress={sendFeedback}
-                disabled={!canSave || saving}
-                style={styles.buttonStyle}
-            />
+
 
         </View>
     )
@@ -209,7 +233,7 @@ const styles = EStyleSheet.create({
     },
     formContainer: {
         marginTop: '1rem',
-        marginBottom: responsiveScreenWidth(40)
+        marginBottom: responsiveScreenWidth(10)
     },
     messageBox: {
         paddingBottom: Platform.OS === 'ios' ? '5rem' : '3rem',
@@ -231,23 +255,42 @@ const styles = EStyleSheet.create({
         textAlign: 'center'
     },
     buttonStyle: {
-        marginBottom: 0
+        marginBottom: '3rem'
     },
     whatsappChat: {
         display: "flex",
         flexDirection: 'row',
         alignItems: 'center',
-
+        backgroundColor: '#FFF',
+        borderRadius: 13,
+        borderColor: '#E5E5E5',
+        borderWidth: 1,
+        paddingVertical: '.5rem',
+        paddingHorizontal: '.5rem',
+        marginTop: '1rem'
+    },
+    textContainer: {
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    header: {
+        fontSize: '0.9rem',
+        fontFamily: 'gotham-bold',
+        color: '#072169'
     },
     whatsappTitle: {
-        fontSize: '0.85rem',
-        fontFamily: 'gotham-bold',
-        marginTop: normalize(9),
-        marginRight: '.5rem',
-        textAlign: 'center',
+        fontSize: '0.8rem',
+        fontFamily: 'sansation-regular',
+        marginTop: normalize(3),
         color: '#072169'
     },
     icon: {
-        marginTop: '.8rem'
+        width: 55,
+        height: 55,
+        marginRight: '.4rem'
     }
 })

@@ -152,7 +152,10 @@ const BuyBoost = ({ boost, onClose }) => {
     const buyBoostWallet = () => {
         setLoading(true);
         dispatch(setWalletSource(walletType))
-        dispatch(buyBoostFromWallet(boost.id))
+        dispatch(buyBoostFromWallet(
+            boost.id, 
+            {wallet_type:walletType}
+            ))
             .then(unwrapResult)
             .then(async () => {
                 if (formattedDate === newUserDate) {

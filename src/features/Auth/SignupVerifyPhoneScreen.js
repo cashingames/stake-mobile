@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, ScrollView, TextInput } from 'react-native';
+import { Text, View, ScrollView, TextInput, Linking, Pressable, Image } from 'react-native';
 import { useDispatch } from 'react-redux';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
@@ -116,97 +116,112 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.headerContainerStyle}>
-                <Ionicons name="close-sharp" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
-                <Text style={styles.headerTextStyle}>
-                    OTP Verification
-                </Text>
-            </View>
-            <Text style={styles.verifySubText}>Enter Otp code</Text>
-            {error.length > 0 &&
-                <Text style={styles.errorBox}>{error}</Text>
-            }
-            <View style={styles.form}>
-                <TextInput
-                    ref={pin1Ref}
-                    keyboardType={'number-pad'}
-                    maxLength={1}
-                    value={otp1}
-                    onChangeText={(otp1) => {
-                        setOtp1(otp1);
-                        if (otp1 !== '') {
-                            pin2Ref.current.focus()
-                        }
-                    }}
-                    style={styles.input}
-                />
-                <TextInput
-                    ref={pin2Ref}
-                    keyboardType={'number-pad'}
-                    maxLength={1}
-                    onChangeText={(otp2) => {
-                        setOtp2(otp2);
-                        if (otp2 !== '') {
-                            pin3Ref.current.focus()
-                        }
-                    }}
-                    style={styles.input}
-                />
-                <TextInput
-                    ref={pin3Ref}
-                    keyboardType={'number-pad'}
-                    maxLength={1}
-                    onChangeText={(otp3) => {
-                        setOtp3(otp3);
-                        if (otp3 !== '') {
-                            pin4Ref.current.focus()
-                        }
-                    }}
-                    style={styles.input}
-                />
-                <TextInput
-                    ref={pin4Ref}
-                    keyboardType={'number-pad'}
-                    maxLength={1}
-                    onChangeText={(otp4) => {
-                        setOtp4(otp4);
-                        if (otp4 !== '') {
-                            pin5Ref.current.focus()
-                        }
-                    }}
-                    style={styles.input}
-                />
+        <View style={styles.container}>
+            <ScrollView >
+                <View style={styles.headerContainerStyle}>
+                    <Ionicons name="close-sharp" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
+                    <Text style={styles.headerTextStyle}>
+                        OTP Verification
+                    </Text>
+                </View>
+                <Text style={styles.verifySubText}>Enter Otp code</Text>
+                {error.length > 0 &&
+                    <Text style={styles.errorBox}>{error}</Text>
+                }
+                <View style={styles.form}>
+                    <TextInput
+                        ref={pin1Ref}
+                        keyboardType={'number-pad'}
+                        maxLength={1}
+                        value={otp1}
+                        onChangeText={(otp1) => {
+                            setOtp1(otp1);
+                            if (otp1 !== '') {
+                                pin2Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        ref={pin2Ref}
+                        keyboardType={'number-pad'}
+                        maxLength={1}
+                        onChangeText={(otp2) => {
+                            setOtp2(otp2);
+                            if (otp2 !== '') {
+                                pin3Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        ref={pin3Ref}
+                        keyboardType={'number-pad'}
+                        maxLength={1}
+                        onChangeText={(otp3) => {
+                            setOtp3(otp3);
+                            if (otp3 !== '') {
+                                pin4Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        ref={pin4Ref}
+                        keyboardType={'number-pad'}
+                        maxLength={1}
+                        onChangeText={(otp4) => {
+                            setOtp4(otp4);
+                            if (otp4 !== '') {
+                                pin5Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
 
-                <TextInput
-                    ref={pin5Ref}
-                    keyboardType={'number-pad'}
-                    maxLength={1}
-                    onChangeText={(otp5) => {
-                        setOtp5(otp5)
-                    }}
-                    style={styles.input}
-                />
+                    <TextInput
+                        ref={pin5Ref}
+                        keyboardType={'number-pad'}
+                        maxLength={1}
+                        onChangeText={(otp5) => {
+                            setOtp5(otp5)
+                        }}
+                        style={styles.input}
+                    />
 
-            </View>
-            <View style={styles.expireContainer}>
-                <Text style={styles.digitText}>Enter 5 digit OTP Code</Text>
-                {isCountdownInProgress &&
-                <Text style={styles.digitText}>Expires in {counter}</Text>
-            }
-            </View>
-            <AppButton text={loading ? 'Verifying...' : 'Login'} disabled={loading || !active} onPress={goToDashboard} disabledStyle={styles.disabled}
-                style={styles.loginButton} textStyle={styles.buttonText} />
-            <View style={styles.reset}>
-                <ResendOtp counter={counter}
-                    isCountdownInProgress={isCountdownInProgress}
-                    onPress={resendButton}
-                    countdowvnDone={countdowvnDone} />
-            </View>
-            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                </View>
+                <View style={styles.expireContainer}>
+                    <Text style={styles.digitText}>Enter 5 digit OTP Code</Text>
+                    {isCountdownInProgress &&
+                        <Text style={styles.digitText}>Expires in {counter}</Text>
+                    }
+                </View>
+                <AppButton text={loading ? 'Verifying...' : 'Login'} disabled={loading || !active} onPress={goToDashboard} disabledStyle={styles.disabled}
+                    style={styles.loginButton} textStyle={styles.buttonText} />
+                <View style={styles.reset}>
+                    <ResendOtp counter={counter}
+                        isCountdownInProgress={isCountdownInProgress}
+                        onPress={resendButton}
+                        countdowvnDone={countdowvnDone} />
+                </View>
+                <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                     textLabel={alertMessage} buttonLabel='Ok, got it'
-                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close}  />
-        </ScrollView>
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
+            </ScrollView>
+            <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
+                <Image
+                    source={require('../../../assets/images/whatsapp-icon.png')}
+                    style={styles.icon}
+                />
+                <View style={styles.textContainer}>
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.header}>OTP Verification Help</Text>
+                        <Ionicons name="chevron-forward" size={22} color='#072169' />
+                    </View>
+                    <Text style={styles.whatsappTitle}>Live chat with support on Whatsapp</Text>
+                </View>
+            </Pressable>
+        </View>
     )
 }
 
@@ -268,9 +283,9 @@ const styles = EStyleSheet.create({
     },
     expireContainer: {
         marginTop: '2rem',
-        flexDirection:'row',
-        justifyContent:'space-between',
-        alignItems:'center'
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     digitText: {
         fontFamily: 'sansation-bold',
@@ -289,5 +304,41 @@ const styles = EStyleSheet.create({
     },
     disabled: {
         backgroundColor: '#EA8663'
+    },
+    whatsappChat: {
+        display: "flex",
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        borderRadius: 13,
+        borderColor: '#E5E5E5',
+        borderWidth: 1,
+        paddingVertical: '.5rem',
+        paddingHorizontal: '.5rem',
+        marginBottom:'3rem'
+    },
+    textContainer: {
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    header: {
+        fontSize: '0.9rem',
+        fontFamily: 'gotham-bold',
+        color: '#072169'
+    },
+    whatsappTitle: {
+        fontSize: '0.8rem',
+        fontFamily: 'sansation-regular',
+        marginTop: normalize(3),
+        color: '#072169'
+    },
+    icon: {
+        width: 55,
+        height: 55,
+        marginRight: '.4rem'
     }
 });

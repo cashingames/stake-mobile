@@ -1,7 +1,7 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Alert, Linking, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Linking, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import AppButton from "../../shared/AppButton";
@@ -10,6 +10,7 @@ import normalize from "../../utils/normalize";
 import { sendUserFeedback } from "../CommonSlice";
 import logToAnalytics from "../../utils/analytics";
 import CustomAlert from "../../shared/CustomAlert";
+import { Image } from "react-native";
 
 
 
@@ -28,13 +29,28 @@ const ContactUs = () => {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <Text style={styles.title}>Do you have any question?</Text>
-            <ContactForm user={user} setAlertMessage={setAlertMessage} startModal={startModal} />
-            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                 textLabel={alertMessage} buttonLabel='Ok, got it'
-                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
-        </ScrollView>
+        <View style={styles.container}>
+            <ScrollView >
+                <Text style={styles.title}>Do you have any question?</Text>
+                <ContactForm user={user} setAlertMessage={setAlertMessage} startModal={startModal} />
+                <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    textLabel={alertMessage} buttonLabel='Ok, got it'
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
+            </ScrollView>
+            <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
+                <Image
+                    source={require('../../../assets/images/whatsapp-icon.png')}
+                    style={styles.icon}
+                />
+                <View style={styles.textContainer}>
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.header}>Contact Support</Text>
+                        <Ionicons name="chevron-forward" size={22} color='#072169' />
+                    </View>
+                    <Text style={styles.whatsappTitle}>Live chat with support on Whatsapp</Text>
+                </View>
+            </Pressable>
+        </View>
     )
 }
 
@@ -113,11 +129,7 @@ const ContactForm = ({ user, setAlertMessage, startModal }) => {
                 onPress={sendFeedback}
                 disabled={!canSave || saving}
             />
-            <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
-                <Text style={styles.whatsappTitle}>Live chat with a support agent on Whatsapp</Text>
-                <FontAwesome5 name="whatsapp" size={30} color="#25D366" style={styles.icon}
-                />
-            </Pressable>
+
         </View>
     )
 }
@@ -126,7 +138,7 @@ export default ContactUs;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
+        backgroundColor: '#F9FBFF',
         padding: normalize(20),
     },
     title: {
@@ -152,15 +164,37 @@ const styles = EStyleSheet.create({
     whatsappChat: {
         display: "flex",
         flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        borderRadius: 13,
+        borderColor: '#E5E5E5',
+        borderWidth: 1,
+        paddingVertical: '.5rem',
+        paddingHorizontal: '.5rem',
+        marginBottom:'2rem'
+    },
+    textContainer: {
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+    },
+    headerContainer: {
+        flexDirection: 'row',
         alignItems: 'center'
     },
+    header: {
+        fontSize: '0.9rem',
+        fontFamily: 'gotham-bold',
+        color: '#072169'
+    },
     whatsappTitle: {
-        fontSize: '0.85rem',
-        fontFamily: 'graphik-medium',
-        marginTop: normalize(9),
-        marginRight: '.5rem'
+        fontSize: '0.8rem',
+        fontFamily: 'sansation-regular',
+        marginTop: normalize(3),
+        color: '#072169'
     },
     icon: {
-        marginTop: '.5rem'
+        width: 55,
+        height: 55,
+        marginRight: '.4rem'
     }
 })

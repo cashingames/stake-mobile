@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
     View,
     Text,
+    Pressable,
+    Image,
+    Linking
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import AppButton from '../../shared/AppButton';
@@ -96,7 +99,8 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
     }
 
     return (
-        <ScrollView style={styles.container} >
+        <View style={styles.container}> 
+        <ScrollView >
 
             <View style={styles.headerContainerStyle}>
                 <Ionicons name="close-sharp" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
@@ -186,6 +190,20 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
             </View>
 
         </ScrollView>
+        <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
+                <Image
+                    source={require('../../../assets/images/whatsapp-icon.png')}
+                    style={styles.icon}
+                />
+                <View style={styles.textContainer}>
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.header}>Contact Support</Text>
+                        <Ionicons name="chevron-forward" size={22} color='#072169' />
+                    </View>
+                    <Text style={styles.whatsappTitle}>Live chat with support on Whatsapp</Text>
+                </View>
+            </Pressable>
+        </View>
     )
 }
 
@@ -282,6 +300,42 @@ const styles = EStyleSheet.create({
     },
     disabled: {
         backgroundColor: '#EA8663'
+    },
+    whatsappChat: {
+        display: "flex",
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        borderRadius: 13,
+        borderColor: '#E5E5E5',
+        borderWidth: 1,
+        paddingVertical: '.5rem',
+        paddingHorizontal: '.5rem',
+        marginBottom:'3rem'
+    },
+    textContainer: {
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    header: {
+        fontSize: '0.9rem',
+        fontFamily: 'gotham-bold',
+        color: '#072169'
+    },
+    whatsappTitle: {
+        fontSize: '0.8rem',
+        fontFamily: 'sansation-regular',
+        marginTop: normalize(3),
+        color: '#072169'
+    },
+    icon: {
+        width: 55,
+        height: 55,
+        marginRight: '.4rem'
     }
 }
 )
