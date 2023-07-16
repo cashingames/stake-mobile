@@ -114,15 +114,6 @@ export const getStakeWinners = createAsyncThunk(
     }
 )
 
-export const fetchFeatureFlags = createAsyncThunk(
-    'common/fetchFeatureFlags',
-    async () => {
-        const response = await axios.get(`v3/feature-flags`)
-        return response.data;
-    }
-)
-
-
 export const withdrawWinnings = async (data) => {
     return axios.post('v3/winnings/withdraw', data);
 }
@@ -152,7 +143,6 @@ const initialState = {
     minVersionForce: false,
     userChallenges: [],
     userNotifications: [],
-    featureFlags: [],
     userTransactions: [],
     // loadMoreTransactions: true,
     loadMoreChallenges: true,
@@ -246,9 +236,6 @@ export const CommonSlice = createSlice({
             })
             .addCase(fetchUserTransactions.fulfilled, (state, action) => {
                 state.userTransactions = action.payload;
-            })
-            .addCase(fetchFeatureFlags.fulfilled, (state, action) => {
-                state.featureFlags = action.payload.data
             })
     },
 });

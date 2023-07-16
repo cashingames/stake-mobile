@@ -71,7 +71,8 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
     );
 }
 
-export const notifyOfPublishedUpdates = async () => {
+export const notifyOfPublishedUpdates = async (currentRouteName) => {
+
     try {
 
         const update = await Updates.checkForUpdateAsync();
@@ -80,6 +81,8 @@ export const notifyOfPublishedUpdates = async () => {
             return;
         }
         await Updates.fetchUpdateAsync();
+        if (currentRouteName !== 'Home')
+            return;
         Alert.alert(
             "Updates available",
             "Please reload the app to enjoy the new experience we just added to cashingames",

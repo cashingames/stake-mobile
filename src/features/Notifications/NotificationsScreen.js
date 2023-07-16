@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Text, View, ScrollView, Pressable, ImageBackground, Platform, ActivityIndicator, Image } from 'react-native';
+import React, { useEffect, useState } from "react";
 import EStyleSheet from "react-native-extended-stylesheet";
+import { Text, View, ScrollView, Pressable, ImageBackground, Platform, ActivityIndicator, Image } from 'react-native';
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../Auth/AuthSlice";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
@@ -12,8 +12,6 @@ import AppButton from "../../shared/AppButton";
 
 
 const NotificationsScreen = () => {
-
-
     const notifications = useSelector(state => state.common.userNotifications)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
@@ -29,10 +27,13 @@ const NotificationsScreen = () => {
         });
     }
 
+    useEffect(() => {
+        dispatch(getUserNotifications()).then(() => setLoading(false));
+    }, []);
+
     useFocusEffect(
         React.useCallback(() => {
-            dispatch(getUser());
-            dispatch(getUserNotifications()).then(() => setLoading(false));
+            dispatch(getUserNotifications());
         }, [])
     );
 

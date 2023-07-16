@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Pressable, Text, View, ScrollView, Platform } from 'react-native';
+import { Text, View, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
 
-import AuthBanner from '../../shared/AuthBanner';
 import AuthTitle from '../../shared/AuthTitle';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
@@ -13,15 +12,12 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { loginUser } from './AuthSlice';
 import { triggerNotifierForReferral } from '../../shared/Notification';
-// import Login from '../../shared/FacebookLogin';
 import logToAnalytics from '../../utils/analytics';
 
 export default function LoginScreen({ navigation }) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // const [email, setEmail] = useState(Constants.expoConfig.extra.isStaging ? 'gorotaZee' : '');
-    // const [password, setPassword] = useState(Constants.expoConfig.extra.isStaging ? '12345678' : '');
     const [canLogin, setCanLogin] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -149,9 +145,6 @@ const RenderCreateAccount = () => {
     const navigation = useNavigation();
 
     return (
-        // <Pressable onPress={() => navigation.navigate('Signup')}>
-        //     <Text style={styles.linkText}> Create one</Text>
-        // </Pressable>
         <AppButton text='Create Account' onPress={() => navigation.navigate('Signup')}
             style={styles.signupButton} textStyle={styles.signupText} isIcon={true} iconColor="#072169" />
     )

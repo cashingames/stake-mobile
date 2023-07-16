@@ -9,7 +9,7 @@ import normalize, {
 } from '../../utils/normalize';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
-import { fetchFeatureFlags, getCommonData, initialLoadingComplete } from '../CommonSlice';
+import { getCommonData, initialLoadingComplete } from '../CommonSlice';
 import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import { Ionicons } from '@expo/vector-icons';
 import UserWalletAccounts from '../../shared/UserWalletAccounts';
@@ -17,33 +17,27 @@ import LeaderboardCards from '../Leaderboard/LeaderboardCards';
 import logToAnalytics from '../../utils/analytics';
 import GamesCardsList from '../../shared/GameCardsList';
 import { formatCurrency } from '../../utils/stringUtl';
+import { useRoute } from '@react-navigation/native';
 
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
 
 const HomeScreen = () => {
     const dispatch = useDispatch();
-
-
     const loading = useSelector(state => state.common.initialLoading);
     const [refreshing, setRefreshing] = useState(false);
-    const user = useSelector(state => state.auth.user);
-    const username = user.firstName === '' ? user.username?.charAt(0) : (user.firstName?.charAt(0) + user.lastName?.charAt(0))
-    const firstname = user.firstName === '' ? user?.username : user.firstName
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         dispatch(getUser())
-        dispatch(getCommonData())
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
     useEffect(() => {
         const _1 = dispatch(getUser());
         const _2 = dispatch(getCommonData());
-        const _3 = dispatch(fetchFeatureFlags())
 
-        Promise.all([_1, _2, _3]).then(() => {
+        Promise.all([_1, _2]).then(() => {
             dispatch(initialLoadingComplete());
         });
 
@@ -52,11 +46,8 @@ const HomeScreen = () => {
     useFocusEffect(
         React.useCallback(() => {
             dispatch(getUser());
-            dispatch(getCommonData());
         }, [])
     );
-
-
 
     if (loading) {
         return <PageLoading spinnerColor="#0000ff" />
@@ -74,8 +65,8 @@ const HomeScreen = () => {
                     />
                 }
             >
-                <UserProfile user={user} username={username} firstname={firstname} />
-                <UserWalletAccounts user={user} />
+                <UserProfile />
+                <UserWalletAccounts />
                 <GamesCardsList />
                 <LeaderboardCards />
             </ScrollView>
@@ -84,9 +75,20 @@ const HomeScreen = () => {
 }
 export default HomeScreen;
 
-const UserProfile = ({ user, username, firstname }) => {
+const UserProfile = () => {
     const navigation = useNavigation();
-    const totalWalletBalance = Number.parseFloat(user.walletBalance) + Number.parseFloat(user.bonusBalance)
+
+    const user = useSelector(state => state.auth.user);
+    const totalWalletBalance = Number.parseFloat(user.walletBalance ?? 0) + Number.parseFloat(user.bonusBalance ?? 0)
+
+    const displayName = user.firstName ?? user.username;
+    const getAvatarInitials = () => {
+        if (user.firstName) {
+            return user.firstName.charAt(0) + '' + user.lastName.charAt(0)
+        } else {
+            return user.username.charAt(0)
+        }
+    }
 
     const viewWallet = async () => {
         logToAnalytics("wallet_amount_clicked", {
@@ -101,12 +103,12 @@ const UserProfile = ({ user, username, firstname }) => {
         <View style={styles.userProfileContainer}>
             <View style={styles.userProfileLeft}>
                 <View style={styles.avatar}>
-                    <Text style={styles.avatarText}>{username}</Text>
+                    <Text style={styles.avatarText}>{getAvatarInitials()}</Text>
                 </View>
                 <Pressable style={styles.nameMainContainer} onPress={() => navigation.navigate('UserProfile')}>
                     <View style={styles.nameContainer}>
                         <Text style={styles.welcomeText}>Hello </Text>
-                        <Text style={styles.usernameText} numberOfLines={1}>{firstname}</Text>
+                        <Text style={styles.usernameText} numberOfLines={1}>{displayName}</Text>
                         <Ionicons name='chevron-forward-sharp' size={20} color='#072169' style={{marginTop:4}} />
                     </View>
                 </Pressable>
@@ -120,6 +122,7 @@ const UserProfile = ({ user, username, firstname }) => {
 }
 
 function RenderUpdateChecker() {
+    const route = useRoute();
 
     const minVersionCode = useSelector(state => state.common.minVersionCode);
     const minVersionForce = useSelector(state => state.common.minVersionForce);
@@ -135,7 +138,7 @@ function RenderUpdateChecker() {
         return null;
     }
 
-    notifyOfPublishedUpdates();
+    notifyOfPublishedUpdates(route.name);
 }
 
 
