@@ -35,10 +35,8 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     const [isCountdownInProgress, setIsCountdownInProgress] = useState(true);
     const [countdowvnDone, setCountdowvnDone] = (useState(false))
     const [active, setActive] = useState(false);
-    const [error, setError] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-
 
 
     const token = `${otp1}${otp2}${otp3}${otp4}${otp5}`
@@ -76,12 +74,14 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
         dispatch(resendPhoneOtp({
             username: params.username
         }))
-        setCountdowvnDone(true)
+        setCountdowvnDone(true);
+        setModalVisible(true);
+        setOtp1('')
+        setAlertMessage("Otp resent successfully");
     }
 
     const goToDashboard = () => {
         setActive(false);
-        setError('')
         setLoading(true);
         dispatch(verifyPhoneOtp({
             phone_number: params.phone_number,
@@ -104,8 +104,8 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                 triggerNotifierForReferral()
             })
             .catch((rejectedValueOrSerializedError) => {
-                console.log(rejectedValueOrSerializedError)
-                setModalVisible(true)
+                setModalVisible(true);
+                setOtp1('');
                 setAlertMessage("Invalid authentication code provided");
                 setLoading(false);
             })
@@ -125,9 +125,9 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                     </Text>
                 </View>
                 <Text style={styles.verifySubText}>Enter Otp code</Text>
-                {error.length > 0 &&
+                {/* {error.length > 0 &&
                     <Text style={styles.errorBox}>{error}</Text>
-                }
+                } */}
                 <View style={styles.form}>
                     <TextInput
                         ref={pin1Ref}
@@ -315,7 +315,7 @@ const styles = EStyleSheet.create({
         borderWidth: 1,
         paddingVertical: '.5rem',
         paddingHorizontal: '.5rem',
-        marginBottom:'3rem'
+        marginBottom: '3rem'
     },
     textContainer: {
         flexDirection: 'column',

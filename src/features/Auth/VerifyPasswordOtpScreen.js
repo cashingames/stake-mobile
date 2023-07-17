@@ -18,6 +18,7 @@ import { TextInput } from 'react-native';
 import { ScrollView } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from '@expo/vector-icons';
+import CustomAlert from '../../shared/CustomAlert';
 
 export default function VerifyPasswordOtpScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -40,14 +41,13 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
     const [isCountdownInProgress, setIsCountdownInProgress] = useState(true);
     const [countdowvnDone, setCountdowvnDone] = (useState(false))
     const [active, setActive] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
 
     const token = `${otp1}${otp2}${otp3}${otp4}${otp5}`
 
-    const [error, setError] = useState('');
-
     const nextAction = () => {
         setActive(false);
-        setError('')
         dispatch(setUserPasswordResetToken(token));
         dispatch(setUserPhone(params.phone));
         dispatch(verifyOtp({ token })).then(unwrapResult)
@@ -58,7 +58,13 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
             })
             .catch((rejectedValueOrSerializedError) => {
                 setActive(true);
-                setError("Otp code is not correct");
+                setOtp1('')
+                setOtp2('')
+                setOtp3('')
+                setOtp4('')
+                setOtp5('')
+                setModalVisible(true);
+                setAlertMessage("Invalid authentication code provided");
             })
     }
 
@@ -95,102 +101,117 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
         dispatch(resendPasswordOtp({
             phone_number: params.phone
         }))
-        setCountdowvnDone(true)
+        setCountdowvnDone(true);
+        setOtp1('')
+        setOtp2('')
+        setOtp3('')
+        setOtp4('')
+        setOtp5('')
+        setModalVisible(true)
+        setAlertMessage("Otp resent successfully");
+    }
+
+    const close = () => {
+
     }
 
     return (
-        <View style={styles.container}> 
-        <ScrollView >
+        <View style={styles.container}>
+            <ScrollView >
 
-            <View style={styles.headerContainerStyle}>
-                <Ionicons name="close-sharp" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
-                <Text style={styles.headerTextStyle}>
-                    OTP Verification
-                </Text>
-            </View>
+                <View style={styles.headerContainerStyle}>
+                    <Ionicons name="close-sharp" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
+                    <Text style={styles.headerTextStyle}>
+                        OTP Verification
+                    </Text>
+                </View>
 
-            <Text style={styles.verifySubText}>Enter Otp code</Text>
-            {error.length > 0 &&
-                <Text style={styles.errorBox}>{error}</Text>
-            }
-            <View style={styles.form}>
-                <TextInput
-                    ref={pin1Ref}
-                    keyboardType='numeric'
-                    maxLength={1}
-                    value={otp1}
-                    onChangeText={(otp1) => {
-                        setOtp1(otp1);
-                        if (otp1 !== '') {
-                            pin2Ref.current.focus()
-                        }
-                    }}
-                    style={styles.input}
-                />
-                <TextInput
-                    ref={pin2Ref}
-                    keyboardType='numeric'
-                    maxLength={1}
-                    onChangeText={(otp2) => {
-                        setOtp2(otp2);
-                        if (otp2 !== '') {
-                            pin3Ref.current.focus()
-                        }
-                    }}
-                    style={styles.input}
-                />
-                <TextInput
-                    ref={pin3Ref}
-                    keyboardType='numeric'
-                    maxLength={1}
-                    onChangeText={(otp3) => {
-                        setOtp3(otp3);
-                        if (otp3 !== '') {
-                            pin4Ref.current.focus()
-                        }
-                    }}
-                    style={styles.input}
-                />
-                <TextInput
-                    ref={pin4Ref}
-                    keyboardType='numeric'
-                    maxLength={1}
-                    onChangeText={(otp4) => {
-                        setOtp4(otp4);
-                        if (otp4 !== '') {
-                            pin5Ref.current.focus()
-                        }
-                    }}
-                    style={styles.input}
-                />
+                <Text style={styles.verifySubText}>Enter Otp code</Text>
+                {/* {error.length > 0 &&
+                    <Text style={styles.errorBox}>{error}</Text>
+                } */}
+                <View style={styles.form}>
+                    <TextInput
+                        ref={pin1Ref}
+                        keyboardType='numeric'
+                        maxLength={1}
+                        value={otp1}
+                        onChangeText={(otp1) => {
+                            setOtp1(otp1);
+                            if (otp1 !== '') {
+                                pin2Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        ref={pin2Ref}
+                        keyboardType='numeric'
+                        maxLength={1}
+                        onChangeText={(otp2) => {
+                            setOtp2(otp2);
+                            if (otp2 !== '') {
+                                pin3Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        ref={pin3Ref}
+                        keyboardType='numeric'
+                        maxLength={1}
+                        onChangeText={(otp3) => {
+                            setOtp3(otp3);
+                            if (otp3 !== '') {
+                                pin4Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        ref={pin4Ref}
+                        keyboardType='numeric'
+                        maxLength={1}
+                        onChangeText={(otp4) => {
+                            setOtp4(otp4);
+                            if (otp4 !== '') {
+                                pin5Ref.current.focus()
+                            }
+                        }}
+                        style={styles.input}
+                    />
 
-                <TextInput
-                    ref={pin5Ref}
-                    keyboardType='numeric'
-                    maxLength={1}
-                    onChangeText={(otp5) => {
-                        setOtp5(otp5)
-                    }}
-                    style={styles.input}
-                />
+                    <TextInput
+                        ref={pin5Ref}
+                        keyboardType='numeric'
+                        maxLength={1}
+                        onChangeText={(otp5) => {
+                            setOtp5(otp5)
+                        }}
+                        style={styles.input}
+                    />
 
-            </View>
-            <View style={styles.expireContainer}>
-                <Text style={styles.digitText}>Enter 5 digit OTP Code</Text>
-                {isCountdownInProgress &&
-                <Text style={styles.digitText}>Expires in {counter}</Text>
-            }
-            </View>
-            <AppButton onPress={() => nextAction()} text="Verify Otp" disabled={!active} disabledStyle={styles.disabled}
-                style={styles.loginButton} textStyle={styles.buttonText} />
-            <View style={styles.reset}>
-                <ResendOtp counter={counter}
-                    isCountdownInProgress={isCountdownInProgress}
-                    onPress={resend} countdowvnDone={countdowvnDone} />
-            </View>
+                </View>
+                <View style={styles.expireContainer}>
+                    <Text style={styles.digitText}>Enter 5 digit OTP Code</Text>
+                    {isCountdownInProgress &&
+                        <Text style={styles.digitText}>Expires in {counter}</Text>
+                    }
+                </View>
+                <AppButton onPress={() => nextAction()} text="Verify Otp" disabled={!active} disabledStyle={styles.disabled}
+                    style={styles.loginButton} textStyle={styles.buttonText} />
+                <View style={styles.reset}>
+                    <ResendOtp counter={counter}
+                        isCountdownInProgress={isCountdownInProgress}
+                        onPress={resend} countdowvnDone={countdowvnDone} />
+                </View>
 
-        </ScrollView>
-        <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
+                <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    textLabel={alertMessage} buttonLabel='Ok, got it'
+                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
+
+            </ScrollView>
+            <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
                 <Image
                     source={require('../../../assets/images/whatsapp-icon.png')}
                     style={styles.icon}
@@ -271,9 +292,9 @@ const styles = EStyleSheet.create({
     },
     expireContainer: {
         marginTop: '2rem',
-        flexDirection:'row',
-        justifyContent:'space-between',
-        alignItems:'center'
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     digitText: {
         fontFamily: 'sansation-bold',
@@ -311,7 +332,7 @@ const styles = EStyleSheet.create({
         borderWidth: 1,
         paddingVertical: '.5rem',
         paddingHorizontal: '.5rem',
-        marginBottom:'3rem'
+        marginBottom: '3rem'
     },
     textContainer: {
         flexDirection: 'column',
