@@ -18,45 +18,6 @@ export const getBankData = createAsyncThunk(
     }
 )
 
-export const getGlobalLeaders = createAsyncThunk(
-    'common/globalLeaders/get',
-    async () => {
-        const response = await axios.post('v3/leaders/global');
-        return response.data
-    }
-)
-
-export const getGlobalLeadersByDate = createAsyncThunk(
-    'common/globalLeadersByDate/get',
-    async (data) => {
-        const response = await axios.post('v3/leaders/global', data);
-        return response.data
-    }
-)
-
-export const getCategoryLeaders = createAsyncThunk(
-    'common/categoryLeaders/get',
-    async () => {
-        const response = await axios.post('v3/leaders/categories');
-        return response.data
-    }
-)
-
-export const getCategoryLeadersByDate = createAsyncThunk(
-    'common/categoryLeadersByDate/get',
-    async (data) => {
-        const response = await axios.post('v3/leaders/categories', data);
-        return response.data
-    }
-)
-export const getWeeklyLeadersByDate = createAsyncThunk(
-    'common/getWeeklyLeadersByDate/get',
-    async (data) => {
-        const response = await axios.post('v3/leaders/global', data);
-        return response.data
-    }
-)
-
 export const fetchFaqAndAnswers = createAsyncThunk(
     'common/faq/get',
     async () => {
@@ -67,7 +28,7 @@ export const fetchFaqAndAnswers = createAsyncThunk(
 
 export const logActionToServer = createAsyncThunk(
     'common/logActionToServer',
-    async (data, thunkAPI) => {
+    async (data) => {
         const response = await axios.post('v3/log/frontend-info', data)
         return response.data
     }
@@ -75,7 +36,7 @@ export const logActionToServer = createAsyncThunk(
 
 export const fetchUserTransactions = createAsyncThunk(
     'common/fetchUserTransactions',
-    async (data, thunkAPI) => {
+    async () => {
         const response = await axios.get(`v3/wallet/me/transactions`)
         return response.data;
     }
@@ -84,7 +45,7 @@ export const fetchUserTransactions = createAsyncThunk(
 
 export const getUserNotifications = createAsyncThunk(
     'common/getUserNotifications',
-    async (data, thunkAPI) => {
+    async () => {
         const response = await axios.get('v3/notifications')
         return response.data;
     }
@@ -92,35 +53,21 @@ export const getUserNotifications = createAsyncThunk(
 
 export const markNotificationRead = createAsyncThunk(
     'common/markNotificationRead',
-    async (data, thunkAPI) => {
+    async (data) => {
         const response = await axios.post(`v3/notifications/read/${data}`, data)
         return response.data;
     }
 )
 export const sendUserFeedback = createAsyncThunk(
     'common/sendUserFeedback',
-    async (data, thunkAPI) => {
-        console.log(data)
+    async (data) => {
         const response = await axios.post('v3/client/feedback', data)
-        return response.data;
-    }
-)
-
-export const getStakeWinners = createAsyncThunk(
-    'common/getStakeWinners',
-    async (data, thunkAPI) => {
-        const response = await axios.get('v3/stakers/sessions/recent')
         return response.data;
     }
 )
 
 export const withdrawWinnings = async (data) => {
     return axios.post('v3/winnings/withdraw', data);
-}
-
-export const isFeatureEnabled = async (feature, features = {}) => {
-
-    return features.hasOwnProperty(feature) && features[feature].enabled === true
 }
 
 const initialState = {
@@ -134,19 +81,12 @@ const initialState = {
     banks: [],
     categoryLeaders: [],
     globalLeaders: [],
-    weeklyLeaderboard: {
-        leaderboard: [],
-        userRank: {}
-    },
     faqAndAnswers: [],
     minVersionCode: '',
     minVersionForce: false,
     userChallenges: [],
     userNotifications: [],
     userTransactions: [],
-    // loadMoreTransactions: true,
-    loadMoreChallenges: true,
-    loadMoreLiveTrivias: true,
     maximumExhibitionStakeAmount: 0,
     minimumExhibitionStakeAmount: 0,
     maximumChallengeStakeAmount: 0,
@@ -155,7 +95,6 @@ const initialState = {
     minimumWithdrawableAmount: 0,
     minimumBoostScore:0,
     periodBeforeChallengeStakingExpiry: '',
-    stakeWinners:[]
 }
 
 const stakingGameMode =
@@ -204,35 +143,13 @@ export const CommonSlice = createSlice({
                         value: bank.name
                     }
                 });
-                // console.log(banks);
                 state.banks = banks;
-            })
-            .addCase(getGlobalLeaders.fulfilled, (state, action) => {
-                state.globalLeaders = action.payload.data
-            })
-            .addCase(getGlobalLeadersByDate.fulfilled, (state, action) => {
-                state.globalLeaders = action.payload.data;
-            })
-            .addCase(getCategoryLeaders.fulfilled, (state, action) => {
-                state.categoryLeaders = action.payload.data
-            })
-            .addCase(getCategoryLeadersByDate.fulfilled, (state, action) => {
-                state.categoryLeaders = action.payload.data
-            })
-            .addCase(getWeeklyLeadersByDate.fulfilled, (state, action) => {
-                state.weeklyLeaderboard = {
-                    leaderboard:  action.payload.data.leaderboard,
-                    userRank: action.payload.data.userRank,
-                }
             })
             .addCase(fetchFaqAndAnswers.fulfilled, (state, action) => {
                 state.faqAndAnswers = action.payload
             })
             .addCase(getUserNotifications.fulfilled, (state, action) => {
                 state.userNotifications = action.payload.data.data;
-            })
-            .addCase(getStakeWinners.fulfilled, (state, action) => {
-                state.stakeWinners = action.payload;
             })
             .addCase(fetchUserTransactions.fulfilled, (state, action) => {
                 state.userTransactions = action.payload;

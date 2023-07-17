@@ -3,15 +3,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { isTrue } from '../../utils/stringUtl';
-
 export const registerUser = async (data) => {
     return axios.post(`auth/register`, data);
 }
 
 export const verifyUser = createAsyncThunk(
     'auth/verifyUser',
-    async (data, thunkAPI) => {
+    async (data) => {
         const response = await axios.post('auth/user/authenticate', data)
         return response.data
     }
@@ -29,30 +27,9 @@ export const loginUser = createAsyncThunk(
         }
     }
 )
-
-export const loginWithSocialLink = createAsyncThunk(
-    'auth/loginWithSocialLink',
-    async (data, thunkAPI) => {
-        const response = await axios.post('/auth/social-login/authenticate', data)
-        return response.data
-    }
-)
-
-export const registerWithSocialLink = createAsyncThunk(
-    'auth/registerWithSocialLink',
-    async (data, thunkAPI) => {
-        const response = await axios.post('/auth/social-login/create-account', data)
-        return response.data
-    }
-)
-
-export const googleSignUp = async (data) => {
-    return axios.post('/auth/social-login/create-account', data)
-}
-
 export const logoutUser = createAsyncThunk(
     'auth/logoutUser',
-    async (data, thunkAPI) => {
+    async () => {
         await AsyncStorage.removeItem("token");
         return true;
     }
@@ -60,7 +37,7 @@ export const logoutUser = createAsyncThunk(
 
 export const deleteUserAccount = createAsyncThunk(
     'auth/deleteUserAccount',
-    async (data, thunkAPI) => {
+    async (data) => {
         const response = await axios.delete('v3/account/delete', data)
 
         return response.data
@@ -90,13 +67,6 @@ export const verifyEmailOTP = createAsyncThunk(
     }
 )
 
-export const shouldShowIntro = createAsyncThunk(
-    'auth/shouldShowIntro',
-    async (thunkAPI) => {
-        return await AsyncStorage.getItem("used");
-    }
-)
-
 export const verifyAccount = createAsyncThunk(
     'auth/verifyAccount',
     async (data, thunkAPI) => {
@@ -107,7 +77,7 @@ export const verifyAccount = createAsyncThunk(
 
 export const verifyOtp = createAsyncThunk(
     'auth/verifyOtp',
-    async (data, thunkAPI) => {
+    async (data) => {
         const response = await axios.post(`auth/token/verify`, data);
         return response.data
     }
@@ -115,7 +85,7 @@ export const verifyOtp = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
     'auth/resetPassword',
-    async (data, thunkAPI) => {
+    async (data) => {
         const response = await axios.post(`auth/password/reset`, data);
         return response.data
     }
@@ -123,7 +93,7 @@ export const resetPassword = createAsyncThunk(
 
 export const changePassword = createAsyncThunk(
     'auth/user/changePassword',
-    async (data, thunkAPI) => {
+    async (data) => {
         const response = await axios.post('v3/profile/me/password/change', data)
         return response.data
     }
@@ -142,7 +112,7 @@ export const editBankDetails = createAsyncThunk(
 
 export const editProfileAvatar = createAsyncThunk(
     'auth/user/avatarUpdate',
-    async (data, thunkAPI) => {
+    async (data) => {
         const config = {
             headers: {
                 'content-type': 'multipart/form-data'
@@ -156,8 +126,7 @@ export const editProfileAvatar = createAsyncThunk(
 
 export const verifyDeviceToken = createAsyncThunk(
     'auth/verifyDeviceToken',
-    async (token, thunkAPI) => {
-        // console.log(token)
+    async (token) => {
         const response = await axios.post('v3/fcm/subscriptions', { token, device_token: token });
         return response.data;
     }
@@ -178,7 +147,7 @@ export const verifyPhoneOtp = createAsyncThunk(
 
 export const resendPhoneOtp = createAsyncThunk(
     'auth/resendPhoneOtp',
-    async (data, thunkAPI) => {
+    async (data) => {
         const response = await axios.post('auth/register/token/resend', data);
         return response.data;
     }
@@ -186,7 +155,7 @@ export const resendPhoneOtp = createAsyncThunk(
 
 export const resendPasswordOtp = createAsyncThunk(
     'auth/resendPasswordOtp',
-    async (data, thunkAPI) => {
+    async (data) => {
         const response = await axios.post('auth/password/token/resend', data);
         return response.data;
     }
@@ -194,7 +163,7 @@ export const resendPasswordOtp = createAsyncThunk(
 
 export const getFirstTimeUserReward = createAsyncThunk(
     'auth/getFirstTimeUserReward',
-    async (data, thunkAPI) => {
+    async () => {
         const response = await axios.get('v3/first-time-bonus/fetch');
         return response.data;
     }
@@ -203,7 +172,7 @@ export const getFirstTimeUserReward = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
     'auth/user/get',
-    async (thunkAPI) => {
+    async () => {
         const response = await axios.get('v3/user/profile')
             // .catch(error => {
             //     console.log(error);
@@ -234,9 +203,7 @@ const initialState = {
     token: "",
     showIntro: false,
     user: {},
-    passwordReset: {
-        // email: 'oyekunmi@gmail.com'
-    },
+    passwordReset: {},
     createAccount: {},
     firstTimeUserReward: [],
     loginError: "",
@@ -251,8 +218,6 @@ export const AuthSlice = createSlice({
         },
         setToken: (state, action) => {
             state.token = action.payload;
-            state.showIntro = false;
-            console.log("token set");
         },
         showLogin: (state) => {
             state.showIntro = false;
@@ -278,48 +243,32 @@ export const AuthSlice = createSlice({
         builder
             .addCase(logoutUser.fulfilled, (state) => {
                 state.token = "";
-                state.showIntro = false;
                 state.user = {};
                 state.passwordReset = {};
                 state.createAccount = {};
-
-                console.log("after logging out");
             })
             .addCase(loginUser.fulfilled, (state, action) => {
-                console.log("action response X", action.payload.data);
                 state.token = action.payload.data;
             })
             .addCase(loginUser.rejected, (state, action) => {
-                
                 console.log("login rejected payload", action.payload);
             })
             .addCase(resetPassword.fulfilled, (state) => {
                 state.passwordReset = {};
             })
             .addCase(getUser.fulfilled, (state, action) => {
-                // Add user to the state array
                 state.user = action.payload.data;
             })
             .addCase(isLoggedIn.fulfilled, (state, action) => {
                 state.token = action.payload;
-            })
-            .addCase(shouldShowIntro.fulfilled, (state, action) => {
-                state.showIntro = !isTrue(action.payload);
             })
             .addCase(verifyAccount.fulfilled, (state, action) => {
                 state.passwordReset.email = action.meta.arg.email;
             })
             .addCase(verifyUser.fulfilled, (state, action) => {
                 state.token = action.payload.data;
-
             })
             .addCase(verifyPhoneOtp.fulfilled, (state, action) => {
-                state.token = action.payload.data;
-            })
-            .addCase(loginWithSocialLink.fulfilled, (state, action) => {
-                state.token = action.payload.data.token;
-            })
-            .addCase(registerWithSocialLink.fulfilled, (state, action) => {
                 state.token = action.payload.data;
             })
             .addCase(getFirstTimeUserReward.fulfilled, (state, action) => {

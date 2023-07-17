@@ -1,28 +1,22 @@
-import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import SwiperFlatList from "react-native-swiper-flatlist";
-import logToAnalytics from "../utils/analytics";
+import { useNavigation } from "@react-navigation/native";
+import logToAnalytics from "../../utils/analytics";
 import { Pressable, View, Text, Image, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import EStyleSheet from 'react-native-extended-stylesheet';
-import normalize from "../utils/normalize";
-import { formatCurrency, formatNumber } from "../utils/stringUtl";
+import normalize from "../../utils/normalize";
+import { formatNumber } from "../../utils/stringUtl";
 import Constants from 'expo-constants';
 import { useSelector } from "react-redux";
 
 
-const UserWalletAccounts = ({ user }) => {
-    return (
-        <View style={styles.walletsContainer}>
-            <UserBoosts user={user} />
-        </View>
-    )
-}
 
-const UserBoosts = ({ user }) => {
-    const boosts = useSelector(state => state.auth.user.boosts);
+const UserAvailabeBoosts = () => {
 
     const navigation = useNavigation();
+    const user = useSelector(state => state.auth.user);
+    const boosts = user.boosts;
+
     const goToStore = async () => {
         logToAnalytics("earnings_button_clicked", {
             'id': user.username,
@@ -33,57 +27,57 @@ const UserBoosts = ({ user }) => {
     const doNothing = () => {
 
     }
-
     return (
-        <Pressable style={styles.boostsContainer}
-            onPress={Platform.OS !== 'ios' ? goToStore : doNothing}
-        // onPress={goToStore}
-        >
-            <View style={styles.boostHeader}>
-                <Text style={styles.boostHeaderText}>Available boosts</Text>
-                <View style={styles.boostSub}>
-                    {Platform.OS !== 'ios' &&
-                        <View style={styles.addContainer}>
-                            <Text style={styles.addText}>Get Boost</Text>
-                            <Ionicons name='chevron-forward-sharp' size={15} color='#F9FBFF' />
-                        </View>
-                    }
-                </View>
-            </View>
-            {boosts?.length > 0 ?
-                <View style={styles.itemsContainer}>
-
-                    {
-                        boosts.map((boost, index) =>
-                            <UserBoost boost={boost} key={index} />
-                        )
-                    }
-
-
-                </View>
-                :
-                <View style={styles.noContainer}>
-                    <View style={styles.boostContainer}>
-                        <View style={styles.boostIconContainer}>
-                            <Image
-                                source={require('../../assets/images/timefreeze-boost.png')}
-                                style={styles.boostIcon}
-                            />
-                        </View>
-                        <Text style={styles.boostAmount}>x0</Text>
-                    </View>
-                    <View style={styles.boostContainer}>
-                        <View style={styles.boostIconContainer}>
-                            <Image
-                                source={require('../../assets/images/skip-boost.png')}
-                                style={styles.boostIcon}
-                            />
-                        </View>
-                        <Text style={styles.boostAmount}>x0</Text>
+        <View style={styles.walletsContainer}>
+            <Pressable style={styles.boostsContainer}
+                onPress={Platform.OS !== 'ios' ? goToStore : doNothing}
+            >
+                <View style={styles.boostHeader}>
+                    <Text style={styles.boostHeaderText}>Available boosts</Text>
+                    <View style={styles.boostSub}>
+                        {Platform.OS !== 'ios' &&
+                            <View style={styles.addContainer}>
+                                <Text style={styles.addText}>Get Boost</Text>
+                                <Ionicons name='chevron-forward-sharp' size={15} color='#F9FBFF' />
+                            </View>
+                        }
                     </View>
                 </View>
-            }
-        </Pressable>
+                {boosts?.length > 0 ?
+                    <View style={styles.itemsContainer}>
+
+                        {
+                            boosts.map((boost, index) =>
+                                <UserBoost boost={boost} key={index} />
+                            )
+                        }
+
+
+                    </View>
+                    :
+                    <View style={styles.noContainer}>
+                        <View style={styles.boostContainer}>
+                            <View style={styles.boostIconContainer}>
+                                <Image
+                                    source={require('../../../assets/images/timefreeze-boost.png')}
+                                    style={styles.boostIcon}
+                                />
+                            </View>
+                            <Text style={styles.boostAmount}>x0</Text>
+                        </View>
+                        <View style={styles.boostContainer}>
+                            <View style={styles.boostIconContainer}>
+                                <Image
+                                    source={require('../../../assets/images/skip-boost.png')}
+                                    style={styles.boostIcon}
+                                />
+                            </View>
+                            <Text style={styles.boostAmount}>x0</Text>
+                        </View>
+                    </View>
+                }
+            </Pressable>
+        </View>
     )
 }
 
@@ -100,17 +94,17 @@ const UserBoost = ({ boost }) => {
     }
     return (
         <View style={styles.boostContainer}>
-                <Image
-                    source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
-                    style={styles.boostIcon}
-                />
+            <Image
+                source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
+                style={styles.boostIcon}
+            />
             <Text style={styles.boostAmount}>x{formatNumber(boost.count)}</Text>
             {/* <Text style={styles.boostAmount}>{boost.name}</Text> */}
         </View>
     )
 }
 
-export default UserWalletAccounts;
+export default UserAvailabeBoosts;
 
 const styles = EStyleSheet.create({
     walletsContainer: {
@@ -207,7 +201,7 @@ const styles = EStyleSheet.create({
             width: 1,
             height: 1,
         },
-        position:'absolute',
+        position: 'absolute',
         left: 35,
         top: 10
     },

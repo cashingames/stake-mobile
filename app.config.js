@@ -1,12 +1,12 @@
 const env = process.env.APP_VARIANT;
 const isDevelopment = env === 'development' || env === 'local' || false;
-const version = "1.3.13"; //Update for every build and publish
+const version = "3.0.1"; //Update for every build and publish
 
 export default {
   name: getAppName(),
   slug: getSlug(),
   version: version,
-  runtimeVersion: "2.98", //All apps using the same runtime will get the published updates. Generally update for every new build
+  runtimeVersion: "3.01", //All apps using the same runtime will get the published updates. Generally update for every new build
   icon: "./assets/images/adaptive-icon2.png",
   jsEngine: "hermes",
   scheme: "cashingames",
@@ -185,7 +185,6 @@ function getPaystackKey() {
 
 function getApiUrl() {
 
-  console.log("get env", env);
   switch (env) {
     case "local":
       return 'http://172.20.10.3:8000/api';

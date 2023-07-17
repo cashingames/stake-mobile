@@ -3,21 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Text, View, ScrollView, Platform, RefreshControl, Pressable } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Constants from 'expo-constants';
 import normalize, {
     responsiveHeight, responsiveScreenWidth
 } from '../../utils/normalize';
 import PageLoading from '../../shared/PageLoading';
 import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, initialLoadingComplete } from '../CommonSlice';
-import { notifyOfPublishedUpdates, notifyOfStoreUpdates } from '../../utils/utils';
 import { Ionicons } from '@expo/vector-icons';
-import UserWalletAccounts from '../../shared/UserWalletAccounts';
+import UserAvailabeBoosts from './UserAvailabeBoosts';
 import LeaderboardCards from '../Leaderboard/LeaderboardCards';
+import UpdatesChecker from './UpdatesChecker';
 import logToAnalytics from '../../utils/analytics';
 import GamesCardsList from '../../shared/GameCardsList';
 import { formatCurrency } from '../../utils/stringUtl';
-import { useRoute } from '@react-navigation/native';
 
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
@@ -55,7 +53,7 @@ const HomeScreen = () => {
 
     return (
         <>
-            <RenderUpdateChecker />
+            <UpdatesChecker />
             <ScrollView contentContainerStyle={styles.container} style={styles.mainContainer}
                 refreshControl={
                     <RefreshControl
@@ -66,13 +64,14 @@ const HomeScreen = () => {
                 }
             >
                 <UserProfile />
-                <UserWalletAccounts />
+                <UserAvailabeBoosts />
                 <GamesCardsList />
                 <LeaderboardCards />
             </ScrollView>
         </>
     );
 }
+
 export default HomeScreen;
 
 const UserProfile = () => {
@@ -90,7 +89,7 @@ const UserProfile = () => {
         }
     }
 
-    const viewWallet = async () => {
+    const viewWallet = () => {
         logToAnalytics("wallet_amount_clicked", {
             'id': user.username,
             'phone_number': user.phoneNumber,
@@ -120,27 +119,6 @@ const UserProfile = () => {
         </View>
     )
 }
-
-function RenderUpdateChecker() {
-    const route = useRoute();
-
-    const minVersionCode = useSelector(state => state.common.minVersionCode);
-    const minVersionForce = useSelector(state => state.common.minVersionForce);
-
-    if (minVersionCode && Constants.expoConfig.extra.isDevelopment !== true) {
-        notifyOfStoreUpdates(minVersionCode, minVersionForce);
-    }
-
-    console.log("Checking for published updates", Constants.expoConfig.extra.isDevelopment);
-
-    if (Constants.expoConfig.extra.isDevelopment === true) {
-        console.log("Skipping published updates check in development mode");
-        return null;
-    }
-
-    notifyOfPublishedUpdates(route.name);
-}
-
 
 const styles = EStyleSheet.create({
     container: {
