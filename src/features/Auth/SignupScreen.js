@@ -203,6 +203,7 @@ const SignupScreen = () => {
 
                 <CountryPicker
                     show={show}
+                    showOnly={['NG', 'EN']}
                     style={{
                         // Styles for whole modal [View]
                         modal: {
