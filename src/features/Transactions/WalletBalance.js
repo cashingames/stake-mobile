@@ -1,96 +1,83 @@
-import React from 'react';
-import { Text, View, Platform } from 'react-native';
+import { Pressable, Text, View } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
-import LottieAnimations from '../../shared/LottieAnimations';
-import normalize, { responsiveScreenWidth } from '../../utils/normalize';
+import normalize from "../../utils/normalize";
 import { formatCurrency } from '../../utils/stringUtl';
-import { useNavigation } from '@react-navigation/native';
-import AppButton from '../../shared/AppButton';
+import { Ionicons } from "@expo/vector-icons";
 
 
 
-const WalletBalance = ({ balance }) => {
+export default function ({ title, value, action }) {
     return (
-        <>
-            <View style={styles.balance}>
-                <View style={styles.balanceTop}>
-                    <Text style={styles.walletTitle}>Deposit Balance</Text>
-                    <View style={styles.animationView}>
-                        <LottieAnimations
-                            animationView={require('../../../assets/moneybag.json')}
-                            // width={normalize(50)}
-                            height={normalize(50)}
-                        />
-                    </View>
-                    <Text style={styles.availableAmount}>&#8358;{formatCurrency(balance)}</Text>
+        <View style={styles.container}>
+            <View style={styles.totalHeader}>
+                <Text style={styles.totalTitleText}>{title}</Text>
+                <View style={styles.currencyHeader}>
+                    <Text style={styles.currencyText}>NGN</Text>
+                    <Text style={styles.currencyAmount}>{formatCurrency(value)}</Text>
                 </View>
-                <FundButton />
             </View>
-            <Text style={styles.borderLine}></Text>
-        </>
-    )
-};
-
-const FundButton = () => {
-    const navigation = useNavigation();
-    return (
-        <View style={styles.buttonContainer}>
-            <AppButton text="Fund Wallet" textStyle={styles.fundButton} onPress={() => navigation.navigate('FundWallet')} style={styles.button} />
+            {action && <Pressable onPress={action.clicked} style={styles.fundingButton}>
+                <Text style={styles.fundingText}>{action.text}</Text>
+                <Ionicons name="chevron-forward" size={22} color="#fff" />
+            </Pressable>}
         </View>
     )
-};
+}
 
 const styles = EStyleSheet.create({
-    balance: {
-        display: 'flex',
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        backgroundColor: '#000059',
-        marginHorizontal: normalize(30),
-        opacity: 0.8,
-        borderRadius: 15,
-        paddingVertical: '.8rem',
+    container: {
+        backgroundColor: '#fff',
+        marginHorizontal: normalize(18),
+        borderRadius: 13,
+        borderColor: '#E5E5E5',
+        borderWidth: 1,
+        paddingHorizontal: '1rem',
+        paddingVertical: '1.4rem',
+        marginBottom: '1.5rem',
+        elevation: 2,
+        shadowColor: '#000000',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.25,
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center'
+
     },
-    animationView: {
+    totalTitleText: {
+        color: '#1C453B',
+        fontFamily: 'gotham-medium',
+        fontSize: '1rem',
+    },
+    currencyHeader: {
+        flexDirection: 'row',
         alignItems: 'center',
+        marginTop: '.5rem'
     },
-    walletTitle: {
-        fontFamily: 'graphik-medium',
-        fontSize: '0.8rem',
-        color: '#7C7D7F',
-        textAlign: 'center'
+    currencyText: {
+        color: '#1C453B',
+        fontFamily: 'gotham-bold',
+        fontSize: '1.2rem',
+        marginRight: '.3rem'
     },
-    availableAmount: {
-        fontFamily: 'graphik-bold',
-        fontSize: '1.6rem',
-        color: '#FFFF',
-        textAlign: 'center',
-        marginBottom: '.6rem'
+    currencyAmount: {
+        color: '#1C453B',
+        fontFamily: 'sansation-regular',
+        fontSize: '1.2rem',
     },
-    balanceTop: {
-        borderColor: 'rgba(255, 255, 255, 0.15)',
-        borderBottomWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
+    fundingButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 20,
+        paddingHorizontal: '.6rem',
+        paddingVertical: '.4rem',
+        backgroundColor: '#E15220'
     },
-    buttonContainer: {
-        marginHorizontal: '1rem',
-        marginTop: '.6rem'
+    fundingText: {
+        color: '#FFF',
+        fontFamily: 'gotham-medium',
+        fontSize: '.85rem',
     },
-    button: {
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        // paddingVertical: normalize(15),
-        // paddingHorizontal: normalize(28),
-        // marginHorizontal: normalize(18),
-        borderRadius: 12,
-        elevation: 3,
-        marginVertical: '.3rem',
-
+    totalHeader: {
+        flexDirection: 'column',
     },
-    borderLine: {
-        borderBottomWidth: Platform.OS === 'ios' ? normalize(1) : normalize(3),
-        borderColor: 'rgba(0, 0, 0, 0.15)',
-    }
-
-});
-
-export default WalletBalance;
+})

@@ -42,6 +42,14 @@ export const fetchUserTransactions = createAsyncThunk(
     }
 )
 
+export const userNewTransactions = createAsyncThunk(
+    'common/userNewTransactions',
+    async (data, thunkAPI) => {
+        const response = await axios.get(`v3/wallet/transactions/${data.walletType}?page=${data.pageNo}`)
+        return response.data;
+    }
+)
+
 
 export const getUserNotifications = createAsyncThunk(
     'common/getUserNotifications',
@@ -87,6 +95,8 @@ const initialState = {
     userChallenges: [],
     userNotifications: [],
     userTransactions: [],
+    newTransactions:[],
+    loadMoreTransactions: true,
     maximumExhibitionStakeAmount: 0,
     minimumExhibitionStakeAmount: 0,
     maximumChallengeStakeAmount: 0,
@@ -153,6 +163,11 @@ export const CommonSlice = createSlice({
             })
             .addCase(fetchUserTransactions.fulfilled, (state, action) => {
                 state.userTransactions = action.payload;
+            })
+            .addCase(userNewTransactions.fulfilled, (state, action) => {
+                // state.loadMoreTransactions = action.payload.length >= 10;
+                // state.newTransactions = action.payload;
+                state.newTransactions = state.newTransactions.concat(action.payload);
             })
     },
 });

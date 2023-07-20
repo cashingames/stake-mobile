@@ -74,7 +74,7 @@ function AppRouter() {
 	const [loading, setLoading] = useState(true);
 
 	const token = useSelector(state => state.auth.token);
-	const showIntro = useSelector(state => state.auth.showIntro);
+	const showLandingPage = useSelector(state => state.auth.showLandingPage);
 	appendAxiosAuthHeader(token);
 
 
@@ -264,7 +264,7 @@ function AppRouter() {
 
 					<AppStack.Group screenOptions={{ title: "", headerShadowVisible: false }}>
 						{/* unauthenticated */}
-						{showIntro &&
+						{showLandingPage &&
 							<AppStack.Screen name="Landing" component={LandingPage} options={{ headerShown: false }} />
 						}
 						<AppStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
@@ -327,7 +327,7 @@ const setupAxios = async function () {
 }
 
 const appendAxiosAuthHeader = function (token) {
-	axios.defaults.headers.common['x-brand-id'] = 2; //@TODO Change to 1
+	axios.defaults.headers.common['x-brand-id'] = Constants.expoConfig.extra.brandId;
 	if (token) {
 		axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {

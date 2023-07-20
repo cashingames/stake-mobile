@@ -15,7 +15,7 @@ import Toast from 'react-native-toast-message';
 import { Settings } from 'react-native-fbsdk-next';
 
 
-import store from './src/store';
+import {store} from './src/store';
 import AppRouter from './src/AppRouter';
 import messaging from '@react-native-firebase/messaging';
 

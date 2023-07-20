@@ -95,9 +95,9 @@ export default {
     gaTrackingID: getGATrackingID(),
     paystackKey: getPaystackKey(),
     apiBaseUrl: getApiUrl(),
-    stakingAppUrl: getStakingAppUrl(),
     appDomain: getDomain(),
     assetBaseUrl: getAssetsBaseUrl(),
+    brandId: 1,
     eas: {
       projectId: getEasProjectId()
     }
@@ -193,18 +193,6 @@ function getApiUrl() {
       return 'https://stg-api.cashingames.com/api';
     default:
       return 'https://api.cashingames.com/api';
-  }
-}
-
-function getStakingAppUrl() {
-  switch (env) {
-    case "local":
-      return 'http://192.168.42.202:3000/authenticate';
-    case "development":
-    case "preview":
-      return 'https://stake-stg.cashingames.com/authenticate';
-    default:
-      return 'https://stake.cashingames.com/authenticate';
   }
 }
 

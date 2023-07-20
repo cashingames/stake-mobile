@@ -201,7 +201,7 @@ export const getUser = createAsyncThunk(
 
 const initialState = {
     token: "",
-    showIntro: false,
+    showLandingPage: false,
     user: {},
     passwordReset: {},
     createAccount: {},
@@ -220,7 +220,7 @@ export const AuthSlice = createSlice({
             state.token = action.payload;
         },
         showLogin: (state) => {
-            state.showIntro = false;
+            state.showLandingPage = false;
         },
         setUserPasswordResetToken: (state, action) => {
             state.passwordReset.userCode = action.payload;
