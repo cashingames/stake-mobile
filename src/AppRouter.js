@@ -47,7 +47,6 @@ import HelpPages from './features/Support/HelpPages';
 import ContactUs from './features/Support/ContactUs';
 import AuthContactUs from './features/Support/AuthContactUs';
 import EmailVerificationScreen from './features/Auth/EmailVerificationScreen';
-import GameLoadingScreen from './features/Games/GameLoadingScreen';
 import ChallengeStakingScreen from './features/Games/TriviaChallengeStaking/ChallengeStakingScreen';
 import ChallengeEndGameScreen from './features/Games/TriviaChallengeStaking/ChallengeEndGameScreen';
 import ChallengeGameEndWaitingScreen from './features/Games/TriviaChallengeStaking/ChallengeGameEndWaitingScreen';
@@ -162,7 +161,6 @@ function AppRouter() {
 							},
 							headerTintColor: '#072169',
 						}} />
-						<AppStack.Screen name="GameLoading" component={GameLoadingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />

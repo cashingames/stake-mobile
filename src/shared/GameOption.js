@@ -1,7 +1,7 @@
 import React from "react";
 import { Pressable, Text } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
-import normalize, { responsiveScreenWidth } from "../utils/normalize";
+import { responsiveScreenWidth } from "../utils/normalize";
 import { Ionicons } from "@expo/vector-icons";
 
 const GameOption = ({ option: { title, isSelected }, onSelected }) => {

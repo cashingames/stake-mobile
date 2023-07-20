@@ -8,12 +8,12 @@ import logToAnalytics from "../../utils/analytics";
 import { Ionicons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 
-const LeaderboardCards = () => {
+const MarketingPromotionCards = () => {
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
 
     const [isNewPromotion, setIsNewPromotion] = useState(true);
-    const [isLeaderboard, setIsLeaderboard] = useState(false);
+    const [isCashDrop, setIsCashDrop] = useState(false);
 
 
     const RenderForAndroid = () => {
@@ -26,14 +26,10 @@ const LeaderboardCards = () => {
             navigation.navigate('Promotions')
         }
         return (
-            // <SwiperFlatList>
             <>
-                {/* <BoostsCard /> */}
                 <PromotionsBoard isNewPromotion={isNewPromotion} onPress={checkAvailablePromotions} />
-                <TopLeaderboards isLeaderboard={isLeaderboard} />
-                {/* <ChallengeLeaderboard /> */}
+                <CashDropBoards isCashDrop={isCashDrop} />
             </>
-            // </SwiperFlatList>
         )
     }
 
@@ -47,13 +43,10 @@ const LeaderboardCards = () => {
             navigation.navigate('Promotions')
         }
         return (
-            // <SwiperFlatList>
             <>
                 <PromotionsBoard isNewPromotion={isNewPromotion} onPress={checkAvailablePromotions} />
-                <TopLeaderboards isLeaderboard={isLeaderboard} />
-                {/* <ChallengeLeaderboard /> */}
+                <CashDropBoards isCashDrop={isCashDrop} />
             </>
-            // </SwiperFlatList>
         )
     }
     return (
@@ -64,9 +57,9 @@ const LeaderboardCards = () => {
     )
 }
 
-const TopLeaderboards = ({ isLeaderboard }) => {
+const CashDropBoards = ({ isCashDrop }) => {
     return (
-        <Pressable style={[styles.topLeadersContainer, { opacity: !isLeaderboard ? 0.4 : 1 }]}>
+        <Pressable style={[styles.topLeadersContainer, { opacity: !isCashDrop ? 0.4 : 1 }]}>
             <View style={styles.topLeadersSubContainer}>
                 <View style={styles.imageAvatar}>
                     <Image
@@ -144,7 +137,7 @@ const BoostsCard = () => {
         </Pressable>
     )
 }
-export default LeaderboardCards;
+export default MarketingPromotionCards;
 
 const styles = EStyleSheet.create({
     leadersContainer: {

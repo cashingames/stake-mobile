@@ -11,11 +11,11 @@ import { getUser } from '../Auth/AuthSlice';
 import { getCommonData, initialLoadingComplete } from '../CommonSlice';
 import { Ionicons } from '@expo/vector-icons';
 import UserAvailabeBoosts from './UserAvailabeBoosts';
-import LeaderboardCards from '../Leaderboard/LeaderboardCards';
 import UpdatesChecker from './UpdatesChecker';
 import logToAnalytics from '../../utils/analytics';
 import GamesCardsList from '../../shared/GameCardsList';
 import { formatCurrency } from '../../utils/stringUtl';
+import MarketingPromotionCards from '../MarketingPromotions/MarketingPromotionCards';
 
 
 const wait = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
@@ -66,7 +66,7 @@ const HomeScreen = () => {
                 <UserProfile />
                 <UserAvailabeBoosts />
                 <GamesCardsList />
-                <LeaderboardCards />
+                <MarketingPromotionCards />
             </ScrollView>
         </>
     );
