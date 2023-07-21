@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Alert, Platform, ScrollView, Text, View } from "react-native";
+import { Platform, ScrollView, Text, View } from "react-native";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
 import Input from "../../shared/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { formatCurrency } from "../../utils/stringUtl";
-import { Picker } from '@react-native-picker/picker';
 import { fetchUserTransactions, getBankData, withdrawWinnings } from "../CommonSlice";
 import AppButton from "../../shared/AppButton";
 import logToAnalytics from "../../utils/analytics";
@@ -30,7 +29,7 @@ const WithdrawBalanceScreen = ({ navigation }) => {
     const [allError, setAllError] = useState('');
     const minimumWithdrawableAmount = useSelector(state => state.common.minimumWithdrawableAmount);
     const [modalVisible, setModalVisible] = useState(false);
-
+console.log(Number.parseFloat(amount) < minimumWithdrawableAmount)
 
     const startModal = () => {
         setModalVisible(true)
@@ -89,7 +88,7 @@ const WithdrawBalanceScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
-        const invalid = accountNumberErr || amount < minimumWithdrawableAmount || amount > Number.parseFloat(user.withdrawableBalance) || amount === '' || accountNumber === ''
+        const invalid = accountNumberErr || Number.parseFloat(amount) < minimumWithdrawableAmount || amount > Number.parseFloat(user.withdrawableBalance) || amount === '' || accountNumber === ''
         setWithdraw(!invalid);
     }, [accountNumberErr, amount, minimumWithdrawableAmount, user.withdrawableBalance, accountNumber])
 
@@ -109,7 +108,7 @@ const WithdrawBalanceScreen = ({ navigation }) => {
                             label='Enter amount'
                             placeholder={`Minimum of NGN ${minimumWithdrawableAmount}`}
                             value={amount}
-                            error={((amount < minimumWithdrawableAmount) && `Minimum withdrawable amount is NGN ${minimumWithdrawableAmount}`) ||
+                            error={((Number.parseFloat(amount) < minimumWithdrawableAmount) && `Minimum withdrawable amount is NGN ${minimumWithdrawableAmount}`) ||
                                 ((amount > Number.parseFloat(user.withdrawableBalance)) && 'You cannot withdraw more than your available balance')}
                             onChangeText={setAmount}
                             isRequired={true}
