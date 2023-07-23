@@ -19,46 +19,26 @@ import { setWalletSource } from "../Games/GameSlice";
 
 
 export default function () {
-    const dispatch = useDispatch();
 
-    const user = useSelector(state => state.auth.user)
-
-
-    useEffect(() => {
-        dispatch(getUser());
-    }, []);
+    const boosts = useSelector(state => state.common.boosts);
 
     return (
         <ImageBackground source={require('../../../assets/images/game-play-background.png')}
             style={{ flex: 1 }}
             resizeMethod="resize">
             <ScrollView contentContainerStyle={styles.container} >
-                {/* <UserItems /> */}
-                <GameBoosts user={user} />
+                <View style={styles.storeCards}>
+                    {boosts.map((boost, i) => <BoostCard key={i} boost={boost} />)}
+                </View>
             </ScrollView>
         </ImageBackground>
     );
 }
 
 
-const GameBoosts = (user) => {
-    const boosts = useSelector(state => state.common.boosts);
-    console.log(boosts)
-    return (
-        <View style={styles.storeItems}>
-            {/* <Text style={styles.title}>Get Boosts</Text>
-            <Text style={styles.storeItemsDescription}>
-                Boost gives you super powers when you’re playing quizes.
-                Get boosts to win more games
-            </Text> */}
-            <View style={styles.storeCards}>
-                {boosts.map((boost, i) => <BoostCard key={i} boost={boost} user={user} />)}
-            </View>
-        </View>
-    )
-}
+const BoostCard = ({ boost }) => {
+    const user = useSelector(state => state.auth.user)
 
-const BoostCard = ({ boost, user }) => {
     const refRBSheet = useRef();
     const buyBoost = () => {
         logToAnalytics('initiate_boost_purchase', {

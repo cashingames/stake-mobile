@@ -78,6 +78,7 @@ const UserProfile = () => {
     const navigation = useNavigation();
 
     const user = useSelector(state => state.auth.user);
+    // console.log('user', user)
     const totalWalletBalance = Number.parseFloat(user.walletBalance ?? 0) + Number.parseFloat(user.bonusBalance ?? 0)
 
     const displayName = user.firstName ?? user.username;
