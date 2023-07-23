@@ -5,10 +5,11 @@ import normalize from "../../utils/normalize";
 import { Ionicons } from "@expo/vector-icons";
 import { formatCurrency } from "../../utils/stringUtl";
 import AppButton from '../../shared/AppButton';
+import { useState } from "react";
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function ({ transactions }) {
+export default function ({ transactions, onFetchMore }) {
 
     return (
         <Tab.Navigator
@@ -22,21 +23,24 @@ export default function ({ transactions }) {
             <Tab.Screen name="All">
                 {(props) => <ListComponent {...props} extraData={{
                     transactions,
-                    filter: false
+                    filter: false,
+                    viewMoreClicked: onFetchMore
                 }} />
                 }
             </Tab.Screen>
             <Tab.Screen name="Credit">
                 {(props) => <ListComponent {...props} extraData={{
                     transactions,
-                    filter: true
+                    filter: true,
+                    viewMoreClicked: onFetchMore
                 }} />
                 }
             </Tab.Screen>
             <Tab.Screen name="Debit">
                 {(props) => <ListComponent {...props} extraData={{
                     transactions,
-                    filter: true
+                    filter: true,
+                    viewMoreClicked: onFetchMore
                 }} />
                 }
             </Tab.Screen>
@@ -45,18 +49,26 @@ export default function ({ transactions }) {
 }
 
 function ListComponent({ extraData, route }) {
-
-    const { transactions, filter } = extraData;
+    const [pageNo, setPageNo] = useState(1);
+    const { transactions, filter, viewMoreClicked } = extraData;
     const data = filter ?
         transactions.filter(x => x.type == route.name.toUpperCase()) :
         transactions;
 
+    function viewMore(){
+        setPageNo(pageNo+1);
+        if(viewMoreClicked)
+            viewMoreClicked(pageNo);
+    }
+
+    if(data.length == 0)
+        return <Text>Empty state</Text>
     return (
         <ScrollView style={styles.items}>
             {
                 data.map(item => <RenderItem key={item.id} item={item} />)
             }
-            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} />
+            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={viewMore} />
         </ScrollView>
     )
 }
@@ -97,7 +109,7 @@ const styles = EStyleSheet.create({
     items: {
         backgroundColor: '#F9FBFF',
         flex: 1,
-        paddingHorizontal: 22,
+        // paddingHorizontal: 22,
         paddingVertical: 30
     },
     narationDetails: {

@@ -27,7 +27,7 @@ export default function ({ title, value, action }) {
 const styles = EStyleSheet.create({
     container: {
         backgroundColor: '#fff',
-        marginHorizontal: normalize(18),
+        // marginHorizontal: normalize(18),
         borderRadius: 13,
         borderColor: '#E5E5E5',
         borderWidth: 1,

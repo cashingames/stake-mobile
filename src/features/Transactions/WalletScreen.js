@@ -1,13 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import normalize from '../../utils/normalize';
+import normalize, { s } from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { ActivityIndicator, Alert, Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import TransactionsList from './TransactionsList';
 import WalletBalance from './WalletBalance';
 import { useGetTransactionsQuery } from '../../services/wallets-api';
+import TabBarTab from './TabBarTab';
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -20,38 +21,29 @@ export default function WalletScreen() {
     const winningsBalance = user.withdrawableBalance;
     const bonusBalance = user.bonusBalance;
 
-    const { data = [], isLoading } = useGetTransactionsQuery('CREDIT_BALANCE', 1);
-    const { data: dataBonus = [], isLoading: isLoading1 } = useGetTransactionsQuery('BONUS_BALANCE', 1);
-    const { data: dataWinnings = [], isLoading: isLoading2 } = useGetTransactionsQuery('WINNINGS_BALANCE', 1);
-
-
-    function transformData(item) {
-        return {
-            id: item.transactionId,
-            description: item.description,
-            type: item.type,
-            amount: item.amount,
-            transactionDate: item.transactionDate
-        }
-    }
-    const transactionsWinning = dataWinnings.map(transformData);
-    const transactionsBonus = dataBonus.map(transformData);
-    const transactionsDeposit = data.map(transformData);
-
-
-    if (isLoading || isLoading1 || isLoading2)
-        return <ActivityIndicator size="large" color='#072169' />
-
     return (
         <View style={styles.container}>
             <Tab.Navigator
+                tabBar={props => <TabBarTab {...props} />}
                 screenOptions={{
-                    tabBarLabelStyle: { fontSize: 18, fontFamily: 'gotham-medium', textTransform: 'capitalize' },
-                    tabBarActiveTintColor: '#FFF',
+                    tabBarLabelStyle: styles.tabBarLabel,
+                    activeTabBarLabelContainerStyle: { backgroundColor: '#E15220', borderRadius: 20, },
+                    tabBarLabelContainerStyle: { paddingHorizontal: 10, paddingVertical: 5, },
+                    tabBarIndicatorStyle: { backgroundColor: 'transparent' },
                     tabBarInactiveTintColor: '#1C453B',
-                    tabBarStyle: { backgroundColor: '#EFF2F6', borderRadius: 35, marginHorizontal: 35, marginVertical: 20 },
+                    tabBarActiveTintColor: '#FFF',
+                    tabBarStyle: styles.tabBarStyle,
+                    tabBarGap: 0
                 }}>
-                <Tab.Screen name="Deposits">
+                <Tab.Screen 
+                    name="Deposits"
+                    listeners={{
+                        tabPress: (e) => {
+                        //   fetchData("CREDIT_BALANCE")
+                        //   e.preventDefault();
+                        },
+                      }}
+                >
                     {(props) => <WalletDetails {...props} walletInfo={{
                         title: "Balance",
                         value: depositBalance,
@@ -60,7 +52,7 @@ export default function WalletScreen() {
                                 navigation.navigate('FundWallet')
                             }
                         },
-                        transactions: transactionsDeposit
+                        // transactions: transactionsDeposit
                     }} />}
                 </Tab.Screen>
                 <Tab.Screen name="Winnings">
@@ -72,7 +64,7 @@ export default function WalletScreen() {
                                 navigation.navigate('WithdrawBalance')
                             }
                         },
-                        transactions: transactionsWinning
+                        // transactions: transactionsWinning
                     }} />
                     }
                 </Tab.Screen>
@@ -81,7 +73,7 @@ export default function WalletScreen() {
                         <WalletDetails {...props} walletInfo={{
                             title: "Bonus",
                             value: bonusBalance,
-                            transactions: transactionsBonus
+                            // transactions: transactionsBonus
                         }} />
                     }
 
@@ -91,13 +83,35 @@ export default function WalletScreen() {
     );
 }
 
+function transformData(item) {
+    return {
+        id: item.transactionId,
+        description: item.description,
+        type: item.type,
+        amount: item.amount,
+        transactionDate: item.transactionDate
+    }
+}
 
-function WalletDetails({ walletInfo }) {
+function WalletDetails({ route, walletInfo }) {
+
+    const walletKey = getWalletTypeValue(route.name);
+    const { data = [], isLoading } = useGetTransactionsQuery(walletKey, 1);
+
+    const transactions = data.map(transformData);
+
+    const fetchMoreTransactions = (pageNo) => {
+        
+    }
+
+    if (isLoading)
+        return <ActivityIndicator size="large" color='#072169' />
+
     return (
         <View style={{ flex: 1, backgroundColor: '#F9FBFF' }}>
             <WalletBalance {...walletInfo} />
             <Text style={styles.transactionsHeader}>Transaction History</Text>
-            <TransactionsList transactions={walletInfo.transactions} />
+            <TransactionsList transactions={transactions} onFetchMore={fetchMoreTransactions} />
         </View>
     )
 }
@@ -107,14 +121,36 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flex: 1,
         backgroundColor: '#F9FBFF',
-        paddingVertical: normalize(15)
-
+        paddingHorizontal: '0.8rem',
+        paddingVertical: '1.3rem',
     },
     transactionsHeader: {
         color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '1rem',
         textAlign: 'center',
-        marginBottom: '1rem'
+        marginBottom: '0.5rem',
+        marginTop: '0.5rem'
     },
+    tabBarStyle: {
+        borderRadius: 35,
+        marginBottom: '1.3rem',
+        marginTop: 0,
+        backgroundColor: '#EFF2F6',
+        marginHorizontal: '1.3rem'
+    },
+    tabBarLabel: {
+        fontSize: '0.75rem', 
+        fontFamily: 'gotham-bold', 
+        textTransform: 'capitalize'
+    }
 });
+
+function getWalletTypeValue (tabName) {
+    if(tabName == "Deposits")
+        return "CREDIT_BALANCE";
+    else if(tabName == "Winnings")
+        return "WINNINGS_BALANCE";
+    else if(tabName == "Bonus")
+        return "BONUS_BALANCE";
+}
