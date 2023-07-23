@@ -51,7 +51,6 @@ export default function ({ navigation }) {
                 navigation.navigate('Login');
             })
             .catch((rejectedValueOrSerializedError) => {
-                // console.log(rejectedValueOrSerializedError)
                 setAllError("Password reset failed, try again");
                 setModalVisible(true)
                 setLoading(false);

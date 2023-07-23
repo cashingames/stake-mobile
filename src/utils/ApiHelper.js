@@ -21,8 +21,6 @@ async function postData(url = '', data = {}) {
         body: JSON.stringify(data) // body data type must match "Content-Type" header
     });
     if (!response.ok) {
-        debugger;
-        // console.log(response);
         throw new Error(response.json());
     }
 
@@ -45,7 +43,6 @@ async function getData(url = '') {
 
 async function register(data) {
     return postData('auth/register', data).then(response => {
-        // console.log("here")
         saveToken(response.data);
         return response;
     });
@@ -60,7 +57,6 @@ async function login(data) {
 }
 
 async function verifyUsername(username) {
-    // console.log(username);
     return postData('auth/username/verify/' + username)
         .then(response => {
             return response.data
@@ -93,14 +89,6 @@ async function saveToken(data) {
     await AsyncStorage.setItem("used", "token")
 }
 
-// async function signInWithGoogle(email, first_name, last_name) {
-//     return postData("/auth/google/login", { email, first_name, last_name })
-//         .then(response => {
-//             saveToken(response.data);
-//             console.log(response + ' in apiiiidjdjd')
-//             return response;
-//         });
-// }
 
 export { login, register, verifyUsername, saveToken, verifyAccount, resetPassword, verifyOtp };
 export { getData, postData };

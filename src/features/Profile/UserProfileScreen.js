@@ -60,12 +60,10 @@ const UserAvatar = () => {
         formData.append('avatar', { uri: localUri, name: filename, type });
 
         dispatch(editProfileAvatar(formData)).then(result => {
-            // console.log("changed");
             dispatch(getUser()).then(x => {
                 setLoading(false)
             });
         }).catch(ex => {
-            // console.log("erroring", ex);
             setLoading(false);
         });
     }

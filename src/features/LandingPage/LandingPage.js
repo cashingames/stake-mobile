@@ -23,7 +23,6 @@ const LandingPage = ({navigation}) => {
     }
 
     const goToSignup = () => {
-        console.log('here')
         navigation.navigate('Signup')
       }
 

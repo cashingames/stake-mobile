@@ -31,8 +31,6 @@ const Stakingpopup = ({ setModalVisible, modalVisible, gameModes }) => {
         const isValidUrl = await Linking.canOpenURL(url);
         if (isValidUrl) {
             await Linking.openURL(url);
-        } else {
-            console.log(`This url is not valid: ${url}`);
         }
     }
 

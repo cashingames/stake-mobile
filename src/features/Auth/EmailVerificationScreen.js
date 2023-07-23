@@ -29,7 +29,6 @@ const EmailVerificationScreen = ({ navigation, route }) => {
     const pin5Ref = useRef(null)
 
     const otpToken = `${otp1}${otp2}${otp3}${otp4}${otp5}`
-    console.log(otpToken.length)
 
     useEffect(() => {
         if (otpToken.length < 5) {

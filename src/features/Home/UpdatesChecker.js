@@ -14,8 +14,6 @@ export default function UpdatesChecker() {
         notifyOfStoreUpdates(minVersionCode, minVersionForce);
     }
 
-    console.log("Checking for published updates", Constants.expoConfig.extra.isDevelopment);
-
     if (Constants.expoConfig.extra.isDevelopment === true) {
         console.log("Skipping published updates check in development mode");
         return null;

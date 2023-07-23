@@ -64,14 +64,12 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
         setExitClicked(false)
         setModalVisible(false)
         if (isEnded) {
-            console.log("game already ended", "timer bug is trying to submit again");
             return;
         };
 
         setSubmitting(true);
         dispatch(setIsEnded(true));
         if (cashMode) {
-            console.log('cash mode')
             dispatch(submitGameSession())
                 .then(unwrapResult)
                 .then(async () => {
@@ -83,7 +81,6 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                     );
                 })
                 .catch((error, rejectedValueOrSerializedError) => {
-                    console.log(error, rejectedValueOrSerializedError)
                     crashlytics().recordError(error);
                     crashlytics().log('failed to end challenge game');
                     setEnding(false);
@@ -92,7 +89,6 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                 });
         }
         if (practiceMode) {
-            console.log('practice mode')
             dispatch(submitPracticeGameSession())
                 .then(unwrapResult)
                 .then(async () => {
@@ -104,7 +100,6 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
                     );
                 })
                 .catch((error, rejectedValueOrSerializedError) => {
-                    console.log(error, rejectedValueOrSerializedError)
                     crashlytics().recordError(error);
                     crashlytics().log('failed to end demo challenge game');
                     setEnding(false);
@@ -284,7 +279,7 @@ const styles = EStyleSheet.create({
     },
     image: {
         flex: 1,
- 
+
     },
     // options: {
     //     paddingBottom: normalize(45),

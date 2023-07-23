@@ -11,20 +11,11 @@ const shuffleArray = array => {
     return array;
 }
 
-function getAllIndexes(arr, val) {
-    var indexes = [], i;
-    for (i = 0; i < arr.length; i++)
-        if (arr[i] === val)
-            indexes.push(i);
-    return indexes;
-}
-
 export const startGame = createAsyncThunk(
     'game/startGame',
     async (data, thunkAPI) => {
         try {
             const response = await axios.post('v3/game/start/single-player', data);
-            console.log(data.staking_amount, 'stake amount');
             return response.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response.data);
@@ -37,7 +28,6 @@ export const startPracticeGame = createAsyncThunk(
     async (data, thunkAPI) => {
         try {
             const response = await axios.post('v3/single-player/practice/start', data);
-            console.log(data.amount, 'stake amount');
             return response.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response.data);
@@ -50,7 +40,6 @@ export const endGame = createAsyncThunk(
     'game/endGame',
     async (data, thunkAPI) => {
         const response = await axios.post('v3/game/end/single-player', data)
-        console.log(response.data, 'game ended')
         return response.data;
     }
 )
@@ -59,7 +48,6 @@ export const endPracticeGame = createAsyncThunk(
     'game/endPracticeGame',
     async (data, thunkAPI) => {
         const response = await axios.post('v3/single-player/practice/end', data)
-        console.log(response.data, 'game ended')
         return response.data;
     }
 )
@@ -70,7 +58,6 @@ export const getGameStakes = createAsyncThunk(
     async (data, thunkAPI) => {
         //make a network request to the server
         const response = await axios.get('v3/odds/standard', data)
-        // console.log(response.data)
         return response.data;
     }
 )
@@ -78,9 +65,7 @@ export const getGameStakes = createAsyncThunk(
 export const geBonusStakes = createAsyncThunk(
     'game/geBonusStakes',
     async (data, thunkAPI) => {
-        //make a network request to the server
         const response = await axios.get('v3/odds/bonus', data)
-        // console.log(response.data)
         return response.data;
     }
 )
@@ -111,15 +96,15 @@ let initialState = {
     hasPlayedTrivia: false,
     gameDuration: 60,
     gameStakes: [],
-    bonusStakes:[],
+    bonusStakes: [],
     withStaking: false,
-    endedWithoutStaking:null,
+    endedWithoutStaking: null,
     correctCount: 0,
-    totalCount:0,
+    totalCount: 0,
     wrongCount: 0,
     practiceMode: false,
     cashMode: false,
-    walletSource:''
+    walletSource: ''
 }
 
 
@@ -132,23 +117,18 @@ export const GameSlice = createSlice({
             state.gameCategory = null;
         },
         setGameCategory: (state, action) => {
-            // console.log("seeting")
             state.gameCategory = action.payload;
         },
         setGameMode: (state, action) => {
-            // console.log("here")
             state.gameMode = action.payload;
         },
         setPracticeMode: (state, action) => {
-            // console.log("here")
             state.practiceMode = action.payload;
         },
         setCashMode: (state, action) => {
-            // console.log("here")
             state.cashMode = action.payload;
         },
         setWalletSource: (state, action) => {
-            // console.log("here")
             state.walletSource = action.payload;
         },
         setGameDuration: (state, action) => {
@@ -165,7 +145,6 @@ export const GameSlice = createSlice({
         },
         setAmountStaked: (state, action) => {
             state.amountStaked = action.payload;
-            console.log(action.payload)
         },
         setWithStaking: (state, action) => {
             state.withStaking = action.payload;
@@ -284,9 +263,6 @@ export const GameSlice = createSlice({
             .addCase(geBonusStakes.fulfilled, (state, action) => {
                 state.bonusStakes = action.payload.data;
             })
-        // .addCase(canStake.rejected, (state, payload) => {
-        //     console.log(state, payload)
-        // })
 
     },
 })
@@ -294,7 +270,7 @@ export const GameSlice = createSlice({
 export const { setGameType, setGameMode, setGameCategory,
     setPointsGained, setAmountWon, setCorrectCount, setAmountStaked, questionAnswered, nextQuestion, setSelectedFriend,
     incrementCountdownResetIndex, consumeBoost, pauseGame, skipQuestion, boostReleased, bombOptions,
-    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, setWithStaking,showStakingPopup, setPracticeMode, setCashMode, setWalletSource
+    setIsPlayingTrivia, setHasPlayedTrivia, setGameDuration, setQuestionsCount, setWithStaking, showStakingPopup, setPracticeMode, setCashMode, setWalletSource
 } = GameSlice.actions
 
 

@@ -119,7 +119,6 @@ const BoostsCard = () => {
         logToAnalytics("boost_card_clicked")
         navigation.navigate('GameStore')
     }
-    console.log("PSPPP", Platform.OS);
     if (Platform.OS === 'ios') return null
     return (
         <Pressable style={styles.boostsContainer} onPress={goToStore}>

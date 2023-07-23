@@ -4,9 +4,7 @@ import axios from 'axios'
 export const startChallengeRequest = createAsyncThunk(
     'game/createRealTimeChallenge',
     async (data, _thunkAPI) => {
-        console.log(data, 'this is the data')
         const response = await axios.post('v3/challenges/create', data)
-        console.log(response.data, 'this is the challenge data')
         return response.data
     }
 )
@@ -14,9 +12,7 @@ export const startChallengeRequest = createAsyncThunk(
 export const startPracticeChallengeRequest = createAsyncThunk(
     'game/createPracticeChallenge',
     async (data, _thunkAPI) => {
-        console.log(data, 'this is the data')
         const response = await axios.post('v3/challenges/practice/create', data)
-        console.log(response.data, 'this is the challenge data')
         return response.data
     }
 )
@@ -24,17 +20,13 @@ export const startPracticeChallengeRequest = createAsyncThunk(
 export const submitGameSession = createAsyncThunk(
     'game/submitGameSession',
     async (_data, { getState }) => {
-
         const state = getState().triviaChallenge;
         const data = {
             challenge_request_id: state.challengeDetails.challenge_request_id,
             selected_options: state.selectedOptions,
             consumed_boosts: state.consumedBoosts
         }
-        // console.log('submitting game session')
-
         const response = await axios.post('v3/challenges/submit', data);
-        // console.log(response,'blabla')
         return response.data
     }
 )
@@ -42,16 +34,12 @@ export const submitGameSession = createAsyncThunk(
 export const submitPracticeGameSession = createAsyncThunk(
     'game/submitPracticeGameSession',
     async (_data, { getState }) => {
-
         const state = getState().triviaChallenge;
         const data = {
             challenge_request_id: state.challengeDetails.challenge_request_id,
             selected_options: state.selectedOptions,
         }
-        // console.log('submitting game session')
-
         const response = await axios.post('v3/challenges/practice/submit', data);
-        // console.log(response,'blabla')
         return response.data
     }
 )
@@ -120,7 +108,7 @@ export const TriviaChallengeStakeGameSlice = createSlice({
             const q = state.questions.filter(x => x.id !== state.currentQuestion.id);
             state.questions = q,
                 state.currentQuestion = state.questions[state.currentQuestionIndex]
-                state.currentQuestion.options
+            state.currentQuestion.options
         },
         boostReleased: (state) => {
             state.activeBoost = {}
@@ -132,7 +120,6 @@ export const TriviaChallengeStakeGameSlice = createSlice({
             state.countdownKey += 1;
         },
         clearSession: (state) => {
-            console.log("clearing game session")
             state.questions = [];
             state.documentId = '';
             state.currentQuestion = {};
@@ -140,7 +127,7 @@ export const TriviaChallengeStakeGameSlice = createSlice({
             state.currentQuestionIndex = 0;
             state.countdownFrozen = false;
             state.consumedBoosts = [];
-            state.activeBoost= [];
+            state.activeBoost = [];
             state.challengeDetails = {};
             state.totalQuestions = 10
             state.isEnded = false;

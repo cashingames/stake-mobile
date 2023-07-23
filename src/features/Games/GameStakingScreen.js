@@ -90,7 +90,6 @@ const GameStakingScreen = ({ navigation }) => {
         setLoading(true);
         dispatch(setIsPlayingTrivia(false))
         if (practiceMode) {
-            console.log('started practice')
             dispatch(setWalletSource(walletType))
             dispatch(startPracticeGame({
                 category: gameCategoryId,
@@ -121,7 +120,6 @@ const GameStakingScreen = ({ navigation }) => {
                 });
         }
         if (cashMode) {
-            console.log('started normal')
             dispatch(setWalletSource(walletType))
 
             dispatch(startGame({
@@ -249,7 +247,7 @@ const GameStakingScreen = ({ navigation }) => {
                         }
                     </>
                 }
-                 {walletType === 'demo_bonus_balance' &&
+                {walletType === 'demo_bonus_balance' &&
                     <>
                         {bonusStakes.map((gameStake, i) => <StakingPredictionsTable key={i} gameStake={gameStake} position={i + 1}
                             amount={amount} />)

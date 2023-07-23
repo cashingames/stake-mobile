@@ -54,14 +54,11 @@ export default function GameInProgressScreen({ navigation, route }) {
         setModalVisible(false)
 
         if (ending) {
-            //do not delete
-            // console.log("Trying to end second time. If this happens, please notify Oye")
             return;
         }
 
         setEnding(true);
         if (cashMode) {
-            console.log('ending normal')
             dispatch(endGame({
                 token: gameSessionToken,
                 chosenOptions,
@@ -69,7 +66,6 @@ export default function GameInProgressScreen({ navigation, route }) {
             }))
                 .then(unwrapResult)
                 .then(() => {
-                    console.log('hidddt')
                     crashlytics().log('User completed exhibition game');
                     if (formattedDate !== newUserDate && !isStaking && !isPlayingTrivia) {
                         logToAnalytics('exhibition_game_completed', {
@@ -120,7 +116,6 @@ export default function GameInProgressScreen({ navigation, route }) {
                     crashlytics().recordError(error);
                     crashlytics().log('failed to end exhibition game');
                     setEnding(false);
-                    // console.log(rejectedValueOrSerializedError);
                     startModal()
                     setAlertMessage("failed to end game");
                 });
@@ -134,7 +129,6 @@ export default function GameInProgressScreen({ navigation, route }) {
             }))
                 .then(unwrapResult)
                 .then(() => {
-                    console.log('practice')
                     crashlytics().log('User completed practice exhibition game');
                     logToAnalytics('practice_stake_game_completed', {
                         'id': user.username,
@@ -145,7 +139,6 @@ export default function GameInProgressScreen({ navigation, route }) {
                     navigation.navigate('GameEndResult');
                 })
                 .catch((error, rejectedValueOrSerializedError) => {
-                    console.log(error, rejectedValueOrSerializedError)
                     crashlytics().recordError(error);
                     crashlytics().log('failed to end practice exhibition game');
                     setEnding(false);

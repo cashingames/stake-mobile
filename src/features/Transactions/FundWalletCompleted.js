@@ -14,7 +14,6 @@ export default function FundWalletCompleted() {
 
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
-    console.log(user)
 
     useEffect(() => {
         dispatch(getUser())

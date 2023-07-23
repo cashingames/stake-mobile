@@ -39,7 +39,6 @@ export default function LoginScreen({ navigation }) {
         setError("");
 
         dispatch(loginUser({ email, password })).unwrap().then((response) => {
-            console.info("login response 1", response);
             if (response?.isFirstTime || false) {
                 triggerTour(navigation)
                 triggerNotifierForReferral()

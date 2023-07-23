@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {  BackHandler, ImageBackground, Image, Text, View, ScrollView } from "react-native";
+import { BackHandler, ImageBackground, Image, Text, View, ScrollView } from "react-native";
 import { isTrue } from "../../../utils/stringUtl";
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -45,11 +45,9 @@ const ChallengeMatchingScreen = ({ navigation }) => {
             .doc(documentId)
             .onSnapshot(documentSnapshot => {
                 if (!documentSnapshot.exists) {
-                    console.log('listening and got updated: ', "no data");
                     return;
                 }
                 const data = documentSnapshot.data();
-                console.log('listening and got updated: ', "got data", documentId, data.status);
                 /**
                  * @TODO fix this bug, something keeps reruning this subscription from game in progress screen
                  * when opponent info changes
@@ -70,17 +68,15 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                     setChallengeInfo(data)
                     setDataUpdated(true)
                     setTimeout(() => {
-                        console.log("game loading", "navigating after 5 seconds")
-                        if(cashMode) {
+                        if (cashMode) {
                             navigation.navigate('ChallengeGameBoard');
                         }
-                        if(practiceMode) {
+                        if (practiceMode) {
                             navigation.navigate('ChallengePracticeTour');
                         }
                     }, 5000);
                 }
             }, error => {
-                console.log('listening and got updated: ', "error", error);
             });
 
 
@@ -133,8 +129,8 @@ const ChallengeMatchingScreen = ({ navigation }) => {
                 {!dataUpdated &&
                     <AppButton text="Cancel" onPress={cancelChallenge} style={styles.stakeButton} />
                 }
-                  <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                     textLabel={alertMessage} buttonLabel='Dismiss' actionLabel='Yes, cancel'
+                <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                    textLabel={alertMessage} buttonLabel='Dismiss' actionLabel='Yes, cancel'
                     alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={proceedWithCancel} />
 
             </ScrollView>

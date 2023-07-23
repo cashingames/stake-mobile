@@ -78,7 +78,6 @@ const UserProfile = () => {
     const navigation = useNavigation();
 
     const user = useSelector(state => state.auth.user);
-    // console.log('user', user)
     const totalWalletBalance = Number.parseFloat(user.walletBalance ?? 0) + Number.parseFloat(user.bonusBalance ?? 0)
 
     const displayName = user.firstName ?? user.username;
@@ -109,13 +108,13 @@ const UserProfile = () => {
                     <View style={styles.nameContainer}>
                         <Text style={styles.welcomeText}>Hello </Text>
                         <Text style={styles.usernameText} numberOfLines={1}>{displayName}</Text>
-                        <Ionicons name='chevron-forward-sharp' size={20} color='#072169' style={{marginTop:4}} />
+                        <Ionicons name='chevron-forward-sharp' size={20} color='#072169' style={{ marginTop: 4 }} />
                     </View>
                 </Pressable>
             </View>
             <Pressable style={styles.walletContainer} onPress={viewWallet}>
                 <Text style={styles.balanceCurrency}>NGN {formatCurrency(totalWalletBalance)}</Text>
-                <Ionicons name='chevron-forward-sharp' size={20} color='#072169' style={{marginTop:0.5}} />
+                <Ionicons name='chevron-forward-sharp' size={20} color='#072169' style={{ marginTop: 0.5 }} />
             </Pressable>
         </View>
     )

@@ -23,7 +23,6 @@ export const AchievementSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getAchievements.fulfilled, (state, action) => {
-                // console.log(Object.keys(action.payload.data), "action.payload")
                 state.all = action?.payload?.data?.allAchievementBadges || [];
                 state.mine = action?.payload?.data?.myAchievementBadges || [];
             })

@@ -23,7 +23,6 @@ const ChallengeStakingScreen = ({ navigation }) => {
     const maximumChallengeStakeAmount = useSelector(state => state.common.maximumChallengeStakeAmount);
     const gameCategoryId = useSelector(state => state.game.gameCategory.id);
     const [amount, setAmount] = useState('');
-    console.log(amount)
     const [loading, setLoading] = useState(false);
     const [canSend, setCanSend] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);

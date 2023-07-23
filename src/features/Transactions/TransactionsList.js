@@ -50,7 +50,7 @@ function ListComponent({ extraData, route }) {
     const data = filter ?
         transactions.filter(x => x.type == route.name.toUpperCase()) :
         transactions;
-    console.log(transactions)
+
     return (
         <ScrollView style={styles.items}>
             {

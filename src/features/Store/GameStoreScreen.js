@@ -117,8 +117,6 @@ const BuyBoost = ({ boost, onClose }) => {
     const minimumExhibitionStakeAmount = useSelector(state => state.common.minimumExhibitionStakeAmount);
     const [selected, setSelected] = useState('');
     const [walletType, setWalletType] = useState('');
-    console.log(walletType)
-
 
     useEffect(() => {
         if (selected === `Deposit (NGN ${formatCurrency(depositBalance)})`) {

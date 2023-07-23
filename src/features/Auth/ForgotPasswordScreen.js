@@ -36,7 +36,6 @@ export default function ({ navigation }) {
         dispatch(verifyAccount({ phone_number: phone, country_code: countryCode }))
             .then(unwrapResult)
             .then((originalPromiseResult) => {
-                console.log('here before')
                 setLoading(false);
                 setCanSend(true);
                 navigation.navigate("VerifyPasswordOtp", {
@@ -44,7 +43,6 @@ export default function ({ navigation }) {
                 });
             })
             .catch((rejectedValueOrSerializedError) => {
-                console.log('here error')
                 setLoading(false);
                 setCanSend(true);
                 setError("Phone number does not exist");

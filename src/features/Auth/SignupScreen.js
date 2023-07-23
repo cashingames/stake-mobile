@@ -49,19 +49,10 @@ const SignupScreen = () => {
     const deviceModelName = Device.modelName;
     const [deviceId, setDeviceId] = useState('');
 
-    const deviceTokenNumber = async () => {
-        const deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
-        setDeviceId(deviceToken)
-    }
-    deviceTokenNumber;
-    // console.log(deviceId, 'device id o')
-
-
-    useEffect(() => {
-
-        deviceTokenNumber()
-
-    }, []);
+    Notifications.getDevicePushTokenAsync().then((response) => {
+        setDeviceId(response.data)
+        return response.data
+    });
 
 
     const contactUs = () => {

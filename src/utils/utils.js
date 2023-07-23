@@ -49,7 +49,6 @@ export const notifyOfStoreUpdates = (minVersionCode, forceUpdate = false) => {
     if (!forceUpdate) {
         config.push({
             text: 'Skip',
-            onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
         });
     }
@@ -121,9 +120,7 @@ export const networkIssueNotify = async () => {
 export const calculateTimeRemaining = (futureTime, onComplete) => {
     const diff = futureTime - new Date().getTime();
 
-    // console.log(diff, typeof(diff), diff < 2000, diff < Number(2000))
     if (diff < 3000) {
-        // console.log("stop running countdown")
         onComplete();
         return "1s";
     }

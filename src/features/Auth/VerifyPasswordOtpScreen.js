@@ -51,12 +51,11 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
         dispatch(setUserPasswordResetToken(token));
         dispatch(setUserPhone(params.phone));
         dispatch(verifyOtp({ token })).then(unwrapResult)
-            .then((originalPromiseResult) => {
+            .then(() => {
                 setActive(true);
-                // console.log(originalPromiseResult)
                 navigation.navigate('ResetPassword');
             })
-            .catch((rejectedValueOrSerializedError) => {
+            .catch(() => {
                 setActive(true);
                 setOtp1('')
                 setOtp2('')
@@ -69,7 +68,6 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
     }
 
     useEffect(() => {
-        // console.log(codes.length);
         if (token.length < 5) {
             setActive(false)
             return;

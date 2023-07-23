@@ -42,7 +42,6 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     const token = `${otp1}${otp2}${otp3}${otp4}${otp5}`
     const params = route.params;
     useEffect(() => {
-        // console.log(codes.length);
         if (token.length < 5) {
             setActive(false)
             return;

@@ -19,7 +19,6 @@ export default function TransactionScreen({ navigation }) {
         setLoading(true)
         dispatch(fetchUserTransactions())
             .then(() => {
-                console.log("fetching page ",)
                 setLoading(false)
             })
     }, []);

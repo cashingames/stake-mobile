@@ -37,14 +37,9 @@ export default function SignupProfileScreen({ navigation }) {
             username: username,
             ...userCredentials
         }).then(response => {
-            console.log(response.data.data, 'all good')
-            // saveToken(response.data.data)
-            // dispatch(setToken(response.data.data))
             navigation.navigate('SignupVerifyPhone' , { phone_number: userCredentials.phone_number , 
-                username:username, next_resend_minutes: response.data.data.next_resend_minutes })
-            // navigation.navigate('EmailVerified')
-            // console.log(response)
-
+                username: username, next_resend_minutes: response.data.data.next_resend_minutes
+            })
         }, err => {
             if (!err || !err.response || err.response === undefined) {
                 setError("Your Network is Offline.");
