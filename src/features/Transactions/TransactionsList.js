@@ -49,17 +49,10 @@ export default function ({ transactions, onFetchMore }) {
 }
 
 function ListComponent({ extraData, route }) {
-    const [pageNo, setPageNo] = useState(1);
     const { transactions, filter, viewMoreClicked } = extraData;
     const data = filter ?
         transactions.filter(x => x.type == route.name.toUpperCase()) :
         transactions;
-
-    function viewMore(){
-        setPageNo(pageNo+1);
-        if(viewMoreClicked)
-            viewMoreClicked(pageNo);
-    }
 
     if(data.length == 0)
         return <Text>Empty state</Text>
@@ -68,7 +61,7 @@ function ListComponent({ extraData, route }) {
             {
                 data.map(item => <RenderItem key={item.id} item={item} />)
             }
-            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={viewMore} />
+            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={viewMoreClicked} />
         </ScrollView>
     )
 }

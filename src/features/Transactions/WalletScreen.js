@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import normalize, { s } from '../../utils/normalize';
@@ -96,12 +96,13 @@ function transformData(item) {
 function WalletDetails({ route, walletInfo }) {
 
     const walletKey = getWalletTypeValue(route.name);
-    const { data = [], isLoading } = useGetTransactionsQuery(walletKey, 1);
+    const [pageNo, setPageNo] = useState(1);
+    const { data = [], isLoading } = useGetTransactionsQuery({ walletType: walletKey, pageNo: pageNo });
 
-    const transactions = data.map(transformData);
+    let transactions = data.map(transformData);
 
-    const fetchMoreTransactions = (pageNo) => {
-        
+    const fetchMoreTransactions = () => {
+        setPageNo((prev) => prev + 1);
     }
 
     if (isLoading)

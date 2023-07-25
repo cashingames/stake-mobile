@@ -2,9 +2,6 @@ import { Animated, View, Text, TouchableOpacity } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {
-    ParamListBase,
-    Route,
-    TabNavigationState,
     useTheme,
 } from '@react-navigation/native';
 import * as React from 'react';
@@ -12,7 +9,6 @@ import { TabBar, TabBarIndicator } from 'react-native-tab-view';
 
 
 export default function TabBarTab({ state, navigation, descriptors, ...rest }) {
-    console.log("Asadfd")
     const { colors, fonts } = useTheme();
     const focusedOptions = descriptors[state.routes[state.index].key].options;
 

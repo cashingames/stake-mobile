@@ -19,7 +19,30 @@ export const walletsApi = createApi({
 
     endpoints: (builder) => ({
         getTransactions: builder.query({
-            query: (walletType, pageNo) => `v3/wallet/transactions/${walletType}?page=${pageNo}`,
+            query: ({ walletType, pageNo }) => {
+                console.log("walletType", walletType, pageNo);
+                return `v3/wallet/transactions/${walletType}?page=${pageNo}`
+            },
+            merge: (currentState, incomingState) => {
+                console.log("currentState", currentState);
+                console.log("incomingState", incomingState);
+                return [...currentState, ...incomingState]
+            },
+            forceRefetch: ({ currentArg, previousArg }) => {
+                console.log("currentArgs", currentArg);
+                console.log("previousArg", previousArg);
+                const force = currentArg?.pageNo !== previousArg?.pageNo
+                console.log("force", force);
+                return force;
+            },
+            serializeQueryArgs: ({ endpointName, queryArgs }) => {
+                // if (endpointName === 'getTransactions') {
+                //     return [queryArgs.walletType, queryArgs.pageNo]
+                // }
+                const key = `${endpointName}-${queryArgs.walletType}`
+                console.log("key", key);
+                return key;
+            }
         }),
     }),
 })
