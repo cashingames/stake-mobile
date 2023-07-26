@@ -5,7 +5,7 @@ import normalize from "../../utils/normalize";
 import { Ionicons } from "@expo/vector-icons";
 import { formatCurrency } from "../../utils/stringUtl";
 import AppButton from '../../shared/AppButton';
-import { useState } from "react";
+import TabBarTab from "./TabBarTab";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -14,11 +14,16 @@ export default function ({ transactions, onFetchMore }) {
     return (
         <Tab.Navigator
             style={styles.container}
+            tabBar={props => <TabBarTab {...props} />}
             screenOptions={{
-                tabBarLabelStyle: { fontSize: 18, fontFamily: 'gotham-medium', textTransform: 'capitalize' },
-                tabBarActiveTintColor: '#FFF',
+                tabBarLabelStyle: styles.tabBarLabel,
+                activeTabBarLabelContainerStyle: { backgroundColor: '#E15220', borderRadius: 20, },
+                tabBarLabelContainerStyle: { paddingHorizontal: 10, paddingVertical: 5, },
+                tabBarIndicatorStyle: { backgroundColor: 'transparent' },
                 tabBarInactiveTintColor: '#1C453B',
-                tabBarStyle: { backgroundColor: '#EFF2F6', borderRadius: 35, marginHorizontal: 60, marginVertical: 5 },
+                tabBarActiveTintColor: '#FFF',
+                tabBarStyle: styles.tabBarStyle,
+                tabBarGap: 0
             }}>
             <Tab.Screen name="All">
                 {(props) => <ListComponent {...props} extraData={{
@@ -146,4 +151,16 @@ const styles = EStyleSheet.create({
         fontFamily: 'gotham-medium',
         fontSize: '1.1rem'
     },
+    tabBarStyle: {
+        borderRadius: 35,
+        marginBottom: '1.3rem',
+        marginTop: 0,
+        backgroundColor: '#EFF2F6',
+        marginHorizontal: '2.8rem'
+    },
+    tabBarLabel: {
+        fontSize: '0.75rem', 
+        fontFamily: 'gotham-bold', 
+        textTransform: 'capitalize'
+    }
 })
