@@ -83,9 +83,9 @@ const UserProfile = () => {
     const displayName = user.firstName ?? user.username;
     const getAvatarInitials = () => {
         if (user.firstName) {
-            return user.firstName.charAt(0) + '' + user.lastName.charAt(0)
+            return user.firstName?.charAt(0) + '' + user.lastName?.charAt(0)
         } else {
-            return user.username.charAt(0)
+            return user.username?.charAt(0)
         }
     }
 

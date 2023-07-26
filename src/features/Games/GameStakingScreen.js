@@ -35,20 +35,21 @@ const GameStakingScreen = ({ navigation }) => {
     const [selected, setSelected] = useState('');
     const [walletType, setWalletType] = useState('');
     const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
-    const depositBalanceSelected = selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && Number.parseFloat(depositBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
-    const bonusSelected = selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && Number.parseFloat(user.bonusBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
+    const depositBalanceSelected = selected === 1 && Number.parseFloat(depositBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
+    const bonusSelected = selected === 2 && Number.parseFloat(user.bonusBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
+    console.log(walletType)
 
     useEffect(() => {
-        if (cashMode && selected === `Deposit (NGN ${formatCurrency(depositBalance)})`) {
+        if (cashMode && selected === 1) {
             setWalletType('deposit_balance')
         }
-        if (cashMode && selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})`) {
+        if (cashMode && selected === 2) {
             setWalletType('bonus_balance')
         }
-        if (practiceMode && selected === `Deposit (NGN ${formatCurrency(100000)})`) {
+        if (practiceMode && selected === 1) {
             setWalletType('demo_deposit_balance')
         }
-        if (practiceMode && selected === `Bonus (NGN ${formatCurrency(100000)})`) {
+        if (practiceMode && selected === 2) {
             setWalletType('demo_bonus_balance')
         }
     }, [selected])
@@ -61,7 +62,6 @@ const GameStakingScreen = ({ navigation }) => {
 
     useEffect(() => {
         const canSend = selected !== '' && (depositBalanceSelected === true || bonusSelected === true) && amount !== ''
-        // const canSend = amount !== '' && (amount >= Number.parseFloat(minimumExhibitionStakeAmount) && amount <= totalBalance);
         setCanSend(canSend);
     }, [amount, minimumExhibitionStakeAmount, selected, depositBalance, user.bonusBalance])
 
@@ -279,12 +279,12 @@ const GameStakingScreen = ({ navigation }) => {
 const StakingBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, setSelected }) => {
     const balanceAccounts = [
         {
-            key: '1',
+            key: 1,
             value: `Deposit (NGN ${formatCurrency(depositBalance)})`,
             disabled: depositBalance < minimumExhibitionStakeAmount,
         },
         {
-            key: '2',
+            key: 2,
             value: `Bonus (NGN ${formatCurrency(user.bonusBalance)})`,
             disabled: user.bonusBalance < minimumExhibitionStakeAmount,
         }
@@ -299,7 +299,7 @@ const StakingBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, s
             <SelectList
                 setSelected={(balanceName) => setBalanceName(balanceName)}
                 data={balanceAccounts}
-                save="value"
+                save="key"
                 onSelect={() => setSelected(balanceName)}
                 placeholder="Select Wallet"
                 fontFamily='sansation-regular'
@@ -317,11 +317,11 @@ const StakingBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, s
 const PracticeStakingBalances = ({ setSelected }) => {
     const balanceAccounts = [
         {
-            key: '1',
+            key: 1,
             value: `Deposit (NGN ${formatCurrency(100000)})`,
         },
         {
-            key: '2',
+            key: 2,
             value: `Bonus (NGN ${formatCurrency(100000)})`,
         }
     ]
@@ -335,7 +335,7 @@ const PracticeStakingBalances = ({ setSelected }) => {
             <SelectList
                 setSelected={(balanceName) => setBalanceName(balanceName)}
                 data={balanceAccounts}
-                save="value"
+                save="key"
                 onSelect={() => setSelected(balanceName)}
                 placeholder="Select Wallet"
                 fontFamily='sansation-regular'

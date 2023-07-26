@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Animated from "react-native-reanimated";
 import { unwrapResult } from "@reduxjs/toolkit";
 import EStyleSheet from "react-native-extended-stylesheet";
-import { buyBoostFromWallet } from "./StoreSlice";
+import { buyBoost, buyBoostFromWallet } from "./StoreSlice";
 import { getUser } from "../Auth/AuthSlice";
 import { formatCurrency, formatNumber } from "../../utils/stringUtl";
 import AppButton from "../../shared/AppButton";
@@ -15,7 +15,6 @@ import { randomEnteringAnimation } from "../../utils/utils";
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import logToAnalytics from "../../utils/analytics";
 import { SelectList } from "react-native-dropdown-select-list";
-import { setWalletSource } from "../Games/GameSlice";
 
 
 export default function () {
@@ -108,32 +107,30 @@ const BuyBoost = ({ boost, onClose }) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const user = useSelector((state) => state.auth.user);
-    const userBalance = useSelector(state => state.auth.user.walletBalance);
     const newUser = useSelector(state => state.auth.user.joinedOn);
     const newUserDate = newUser.slice(0, 10);
     let formattedDate = new Date().toISOString().split('T')[0];
-    const canPay = Number(userBalance) >= Number(boost.currency_value);
-    const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
-    const minimumExhibitionStakeAmount = useSelector(state => state.common.minimumExhibitionStakeAmount);
     const [selected, setSelected] = useState('');
     const [walletType, setWalletType] = useState('');
 
+
     useEffect(() => {
-        if (selected === `Deposit (NGN ${formatCurrency(depositBalance)})`) {
-            setWalletType('deposit_balance')
+        if (selected === 1) {
+            setWalletType('CREDIT_BALANCE')
         }
-        if (selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})`) {
-            setWalletType('bonus_balance')
+        if (selected === 2) {
+            setWalletType('BONUS_BALANCE')
         }
     }, [selected])
 
     const buyBoostWallet = () => {
         setLoading(true);
-        dispatch(setWalletSource(walletType))
-        dispatch(buyBoostFromWallet(
-            boost.id, 
-            {wallet_type:walletType}
-            ))
+        dispatch(buyBoost(
+            {
+                id:boost.id,
+                wallet_type: walletType
+            }
+        ))
             .then(unwrapResult)
             .then(async () => {
                 if (formattedDate === newUserDate) {
@@ -195,24 +192,26 @@ const BuyBoost = ({ boost, onClose }) => {
             <View style={styles.buyItemCard}>
                 <BoostCardDetails boost={boost} />
             </View>
-            <WalletBalances depositBalance={depositBalance} user={user} minimumExhibitionStakeAmount={minimumExhibitionStakeAmount} setSelected={setSelected} boost={boost} />
-            <AppButton text={loading ? 'Buying...' : 'Purchase Boost'} onPress={buyBoostWallet} disabled={!canPay || loading || selected === ''} style={styles.actionButton} />
+            <WalletBalances user={user} setSelected={setSelected} boost={boost} />
+            <AppButton text={loading ? 'Buying...' : 'Purchase Boost'} onPress={buyBoostWallet} disabled={loading || selected === ''} style={styles.actionButton} />
         </View>
     )
 }
 
 
-const WalletBalances = ({ depositBalance, user, setSelected , boost}) => {
+const WalletBalances = ({ user, setSelected , boost}) => {
+    const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
+
     const balanceAccounts = [
         {
-            key: '1',
+            key: 1,
             value: `Deposit (NGN ${formatCurrency(depositBalance)})`,
             disabled: depositBalance < boost.currency_value,
         },
         {
-            key: '2',
+            key: 2,
             value: `Bonus (NGN ${formatCurrency(user.bonusBalance)})`,
-            disabled: true
+            disabled: user.bonusBalance < boost.currency_value
         }
     ]
     const [balanceName, setBalanceName] = useState('')
@@ -225,7 +224,7 @@ const WalletBalances = ({ depositBalance, user, setSelected , boost}) => {
             <SelectList
                 setSelected={(balanceName) => setBalanceName(balanceName)}
                 data={balanceAccounts}
-                save="value"
+                save="key"
                 onSelect={() => setSelected(balanceName)}
                 placeholder="Select Wallet"
                 fontFamily='sansation-regular'

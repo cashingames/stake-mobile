@@ -30,7 +30,9 @@ const UserAvailabeBoosts = () => {
     return (
         <View style={styles.walletsContainer}>
             <Pressable style={styles.boostsContainer}
-                onPress={Platform.OS !== 'ios' ? goToStore : doNothing}
+                // onPress={Platform.OS !== 'ios' ? goToStore : doNothing}
+                onPress={goToStore}
+
             >
                 <View style={styles.boostHeader}>
                     <Text style={styles.boostHeaderText}>Available boosts</Text>
