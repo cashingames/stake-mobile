@@ -29,7 +29,7 @@ export default function ({ transactions, onFetchMore }) {
                 {(props) => <ListComponent {...props} extraData={{
                     transactions,
                     filter: false,
-                    viewMoreClicked: onFetchMore
+                    // viewMoreClicked: onFetchMore
                 }} />
                 }
             </Tab.Screen>
@@ -37,7 +37,7 @@ export default function ({ transactions, onFetchMore }) {
                 {(props) => <ListComponent {...props} extraData={{
                     transactions,
                     filter: true,
-                    viewMoreClicked: onFetchMore
+                    // viewMoreClicked: onFetchMore
                 }} />
                 }
             </Tab.Screen>
@@ -45,7 +45,7 @@ export default function ({ transactions, onFetchMore }) {
                 {(props) => <ListComponent {...props} extraData={{
                     transactions,
                     filter: true,
-                    viewMoreClicked: onFetchMore
+                    // viewMoreClicked: onFetchMore
                 }} />
                 }
             </Tab.Screen>
@@ -59,14 +59,18 @@ function ListComponent({ extraData, route }) {
         transactions.filter(x => x.type == route.name.toUpperCase()) :
         transactions;
 
-    if(data.length == 0)
-        return <Text>Empty state</Text>
+    if (data.length == 0)
+        return (
+            <View style={styles.emptyStateContainer}>
+                <Text style={styles.emptyState}>No transaction records</Text>
+            </View>
+        )
     return (
         <ScrollView style={styles.items}>
             {
                 data.map(item => <RenderItem key={item.id} item={item} />)
             }
-            <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={viewMoreClicked} />
+            {/* <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={viewMoreClicked} /> */}
         </ScrollView>
     )
 }
@@ -103,6 +107,17 @@ const styles = EStyleSheet.create({
         // paddingHorizontal: normalize(22),
         paddingVertical: normalize(15)
 
+    },
+    emptyStateContainer: {
+        flex: 1,
+        backgroundColor: '#F9FBFF',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    emptyState: {
+        color:'#072169',
+        fontFamily:'sansation-regular',
+        fontSize:'1.5rem'
     },
     items: {
         backgroundColor: '#F9FBFF',
@@ -159,8 +174,8 @@ const styles = EStyleSheet.create({
         marginHorizontal: '2.8rem'
     },
     tabBarLabel: {
-        fontSize: '0.75rem', 
-        fontFamily: 'gotham-bold', 
+        fontSize: '0.75rem',
+        fontFamily: 'gotham-bold',
         textTransform: 'capitalize'
     }
 })

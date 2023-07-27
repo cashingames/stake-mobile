@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import normalize, { s } from '../../utils/normalize';
+import normalize from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { ActivityIndicator, Alert, Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -101,9 +101,9 @@ function WalletDetails({ route, walletInfo }) {
 
     let transactions = data.map(transformData);
 
-    const fetchMoreTransactions = () => {
-        setPageNo((prev) => prev + 1);
-    }
+    // const fetchMoreTransactions = () => {
+    //     setPageNo((prev) => prev + 1);
+    // }
 
     if (isLoading)
         return <ActivityIndicator size="large" color='#072169' />
@@ -112,7 +112,9 @@ function WalletDetails({ route, walletInfo }) {
         <View style={{ flex: 1, backgroundColor: '#F9FBFF' }}>
             <WalletBalance {...walletInfo} />
             <Text style={styles.transactionsHeader}>Transaction History</Text>
-            <TransactionsList transactions={transactions} onFetchMore={fetchMoreTransactions} />
+            <TransactionsList transactions={transactions} />
+            {/* <TransactionsList transactions={transactions} onFetchMore={fetchMoreTransactions} /> */}
+
         </View>
     )
 }
