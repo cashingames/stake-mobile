@@ -23,7 +23,7 @@ export default function ({ navigation }) {
     const [confirmPassErr, setConfirmPassError] = useState(false);
     const [loading, setLoading] = useState(false);
     const [allError, setAllError] = useState('');
-    const [modalVisible, setModalVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
     const phone = useSelector(state => state.auth.passwordReset.userPhone);
     const code = useSelector(state => state.auth.passwordReset.userCode);
 
@@ -46,18 +46,15 @@ export default function ({ navigation }) {
             .then((originalPromiseResult) => {
                 setLoading(false);
                 setCanSend(true);
-                setAllError("Password reset successful");
-                setModalVisible(true)
+                setAllError('');
+                setAlertMessage("Password reset successful");
                 navigation.navigate('Login');
             })
             .catch((rejectedValueOrSerializedError) => {
+                setAlertMessage('');
                 setAllError("Password reset failed, try again");
-                setModalVisible(true)
                 setLoading(false);
             })
-    }
-    const close = () => {
-
     }
 
     useEffect(() => {
@@ -70,8 +67,17 @@ export default function ({ navigation }) {
         <ScrollView style={styles.container}>
             <View style={styles.content}>
                 <ForgotPasswordTitle />
+                {allError.length > 0 &&
+                    <View style={styles.errorBoxContainer}>
+                        <Text style={styles.errorBox}>{allError}</Text>
+                    </View>
+                }
+                {alertMessage.length > 0 &&
+                    <View style={styles.successBoxContainer}>
+                        <Text style={styles.errorBox}>{alertMessage}</Text>
+                    </View>
+                }
                 <View style={styles.form}>
-
                     <Input
                         label='Enter new password'
                         type="password"
@@ -95,9 +101,6 @@ export default function ({ navigation }) {
                         style={styles.loginButton} textStyle={styles.buttonText} disabledStyle={styles.disabled} />
                 </View>
             </View>
-            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                 textLabel={allError} buttonLabel='Ok, got it'
-                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close}  />
         </ScrollView>
     );
 }
@@ -107,8 +110,9 @@ const ForgotPasswordTitle = () => {
 
     return (
         <View style={styles.headerContainerStyle}>
-            <Ionicons name="close-sharp" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
+            <Ionicons name="close-sharp" size={22} color="#1C453B" onPress={() => navigation.navigate('Login')} />
             <Text style={styles.headerTextStyle}>Update your password</Text>
+            <View></View>
         </View>
     )
 }
@@ -123,7 +127,8 @@ const styles = EStyleSheet.create({
     },
     headerContainerStyle: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent:'space-between'
     },
     content: {
         justifyContent: 'space-between'
@@ -131,8 +136,7 @@ const styles = EStyleSheet.create({
     headerTextStyle: {
         fontSize: 26,
         fontFamily: 'gotham-bold',
-        color: '#072169',
-        marginLeft: '2.5rem',
+        color: '#1C453B',
         textAlign: 'center'
         // paddingTop: normalize(10),
     },
@@ -143,15 +147,25 @@ const styles = EStyleSheet.create({
         lineHeight: 20,
         marginTop: normalize(15),
     },
+    errorBoxContainer: {
+        borderRadius: 38,
+        marginTop: responsiveScreenWidth(5),
+        backgroundColor: '#FF0032',
+        paddingVertical: normalize(10),
+        marginHorizontal: '2rem',
+    },
+    successBoxContainer: {
+        borderRadius: 38,
+        marginTop: responsiveScreenWidth(5),
+        backgroundColor: '#048C5B',
+        paddingVertical: normalize(10),
+        marginHorizontal: '2rem',
+    },
     errorBox: {
-        marginVertical: normalize(20),
-        backgroundColor: '#F442741A',
-        paddingVertical: normalize(6),
-        borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'gotham-light',
-        color: '#EF2F55',
-        fontSize: normalize(10)
+        fontFamily: 'sansation-bold',
+        color: '#FFFF',
+        fontSize: '0.85rem',
     },
     form: {
         marginTop: '5rem',
@@ -166,11 +180,11 @@ const styles = EStyleSheet.create({
         paddingRight: normalize(20),
         borderColor: '#CDD4DF',
         fontFamily: 'graphik-regular',
-        color: '#00000080'
+        color: '#1C453B'
     },
     inputLabel: {
         marginBottom: normalize(12),
-        color: 'rgba(0, 0, 0, 0.7)',
+        color: '#1C453B',
         fontFamily: 'graphik-regular',
         fontWeight: '800'
     },

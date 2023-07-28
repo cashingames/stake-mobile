@@ -27,7 +27,7 @@ export default function (props) {
                         onPress={toggleSecureText}
                     // style={styles.passwordIcon}
                     >
-                        <Ionicons name={hidden ? 'eye-off' : "eye"} size={20} color="#072169" />
+                        <Ionicons name={hidden ? 'eye-off' : "eye"} size={20} color="#1C453B" />
                     </Text>
                 }
                 {isRequired &&
@@ -62,7 +62,7 @@ const styles = EStyleSheet.create({
     },
     inputLabel: {
         fontFamily: 'gotham-medium',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.98rem',
     },
     requiredText: {
@@ -87,7 +87,7 @@ const styles = EStyleSheet.create({
         paddingRight: normalize(13),
         borderColor: '#D9D9D9',
         fontFamily: 'sansation-regular',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.85rem',
         backgroundColor: '#fff',
     },
@@ -99,7 +99,7 @@ const styles = EStyleSheet.create({
         paddingRight: normalize(13),
         borderColor: '#EF2F55',
         fontFamily: 'sansation-regular',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.85rem',
         backgroundColor: '#fff',
     },
@@ -117,7 +117,7 @@ const styles = EStyleSheet.create({
     },
     extraWord: {
         fontFamily: 'sansation-regular',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: normalize(13),
         marginTop: '.5rem'
     },

@@ -76,7 +76,7 @@ const AuthContactUs = ({ navigation }) => {
         <View style={styles.container}>
             <ScrollView >
                 <View style={styles.headerContainerStyle}>
-                    <Ionicons name="chevron-back" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
+                    <Ionicons name="chevron-back" size={22} color="#1C453B" onPress={() => navigation.navigate('Login')} />
                     <Text style={styles.headerTextStyle}>
                         Support
                     </Text>
@@ -90,7 +90,7 @@ const AuthContactUs = ({ navigation }) => {
                     <View style={styles.textContainer}>
                         <View style={styles.headerContainer}>
                             <Text style={styles.header}>Contact Support</Text>
-                            <Ionicons name="chevron-forward" size={22} color='#072169' />
+                            <Ionicons name="chevron-forward" size={22} color='#1C453B' />
                         </View>
                         <Text style={styles.whatsappTitle}>Live chat with support on Whatsapp</Text>
                     </View>
@@ -101,7 +101,7 @@ const AuthContactUs = ({ navigation }) => {
 
                 <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                     textLabel={alertMessage} buttonLabel='Ok, got it'
-                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
+                    alertImageVisible={true} doAction={close} />
             </ScrollView>
             <AppButton
                 text={saving ? 'Sending' : 'Send'}
@@ -219,7 +219,7 @@ const styles = EStyleSheet.create({
     headerTextStyle: {
         fontSize: 26,
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         marginLeft: '2.5rem',
         textAlign: 'center'
         // paddingTop: normalize(10),
@@ -228,7 +228,7 @@ const styles = EStyleSheet.create({
         fontSize: '1rem',
         fontFamily: 'sansation-regular',
         marginTop: normalize(15),
-        color: '#072169',
+        color: '#1C453B',
 
     },
     formContainer: {
@@ -241,7 +241,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: '.7rem',
         borderColor: '#CDD4DF',
         fontFamily: 'sansation-regular',
-        color: '#00000080',
+        color: '#1C453B',
         fontSize: '0.85rem',
         borderWidth: 1,
         borderRadius: 10,
@@ -280,13 +280,13 @@ const styles = EStyleSheet.create({
     header: {
         fontSize: '0.9rem',
         fontFamily: 'gotham-bold',
-        color: '#072169'
+        color: '#1C453B'
     },
     whatsappTitle: {
         fontSize: '0.8rem',
         fontFamily: 'sansation-regular',
         marginTop: normalize(3),
-        color: '#072169'
+        color: '#1C453B'
     },
     icon: {
         width: 55,

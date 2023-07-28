@@ -18,7 +18,6 @@ import { TextInput } from 'react-native';
 import { ScrollView } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from '@expo/vector-icons';
-import CustomAlert from '../../shared/CustomAlert';
 
 export default function VerifyPasswordOtpScreen({ navigation, route }) {
     useApplyHeaderWorkaround(navigation.setOptions);
@@ -41,7 +40,6 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
     const [isCountdownInProgress, setIsCountdownInProgress] = useState(true);
     const [countdowvnDone, setCountdowvnDone] = (useState(false))
     const [active, setActive] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
     const token = `${otp1}${otp2}${otp3}${otp4}${otp5}`
@@ -57,13 +55,9 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
             })
             .catch(() => {
                 setActive(true);
-                setOtp1('')
-                setOtp2('')
-                setOtp3('')
-                setOtp4('')
-                setOtp5('')
-                setModalVisible(true);
-                setAlertMessage("Invalid authentication code provided");
+                setAlertMessage('');
+                setError("Invalid authentication code provided");
+                setOtp1('');
             })
     }
 
@@ -100,12 +94,8 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
             phone_number: params.phone
         }))
         setCountdowvnDone(true);
-        setOtp1('')
-        setOtp2('')
-        setOtp3('')
-        setOtp4('')
-        setOtp5('')
-        setModalVisible(true)
+        setOtp1('');
+        setError('');
         setAlertMessage("Otp resent successfully");
     }
 
@@ -118,16 +108,24 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
             <ScrollView >
 
                 <View style={styles.headerContainerStyle}>
-                    <Ionicons name="close-sharp" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
+                    <Ionicons name="close-sharp" size={22} color="#1C453B" onPress={() => navigation.navigate('Login')} />
                     <Text style={styles.headerTextStyle}>
                         OTP Verification
                     </Text>
+                    <View></View>
                 </View>
 
                 <Text style={styles.verifySubText}>Enter Otp code</Text>
-                {/* {error.length > 0 &&
-                    <Text style={styles.errorBox}>{error}</Text>
-                } */}
+                {error.length > 0 &&
+                    <View style={styles.errorBoxContainer}>
+                        <Text style={styles.errorBox}>{error}</Text>
+                    </View>
+                }
+                {alertMessage.length > 0 &&
+                    <View style={styles.successBoxContainer}>
+                        <Text style={styles.errorBox}>{alertMessage}</Text>
+                    </View>
+                }
                 <View style={styles.form}>
                     <TextInput
                         ref={pin1Ref}
@@ -204,10 +202,6 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
                         onPress={resend} countdowvnDone={countdowvnDone} />
                 </View>
 
-                <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    textLabel={alertMessage} buttonLabel='Ok, got it'
-                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
-
             </ScrollView>
             <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
                 <Image
@@ -217,7 +211,7 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
                 <View style={styles.textContainer}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.header}>Contact Support</Text>
-                        <Ionicons name="chevron-forward" size={22} color='#072169' />
+                        <Ionicons name="chevron-forward" size={22} color='#1C453B' />
                     </View>
                     <Text style={styles.whatsappTitle}>Live chat with support on Whatsapp</Text>
                 </View>
@@ -236,19 +230,20 @@ const styles = EStyleSheet.create({
 
     verifySubText: {
         fontSize: '1.1rem',
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-medium',
         lineHeight: '1.5rem',
         marginTop: '4rem'
     },
     headerContainerStyle: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent:'space-between'
     },
     headerTextStyle: {
         fontSize: 26,
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         marginLeft: '2.5rem',
         textAlign: 'center'
         // paddingTop: normalize(10),
@@ -260,15 +255,25 @@ const styles = EStyleSheet.create({
         lineHeight: 20,
         marginTop: normalize(7),
     },
+    errorBoxContainer: {
+        borderRadius: 38,
+        marginTop: responsiveScreenWidth(5),
+        backgroundColor: '#FF0032',
+        paddingVertical: normalize(10),
+        marginHorizontal: '2rem',
+    },
+    successBoxContainer: {
+        borderRadius: 38,
+        marginTop: responsiveScreenWidth(5),
+        backgroundColor: '#048C5B',
+        paddingVertical: normalize(10),
+        marginHorizontal: '2rem',
+    },
     errorBox: {
-        marginVertical: normalize(20),
-        backgroundColor: '#F442741A',
-        paddingVertical: normalize(6),
-        borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'gotham-light',
-        color: '#EF2F55',
-        fontSize: normalize(10)
+        fontFamily: 'sansation-bold',
+        color: '#FFFF',
+        fontSize: '0.85rem',
     },
     form: {
         display: 'flex',
@@ -296,7 +301,7 @@ const styles = EStyleSheet.create({
     },
     digitText: {
         fontFamily: 'sansation-bold',
-        color: "#072169",
+        color: "#1C453B",
         fontSize: '.9rem'
     },
     loginButton: {
@@ -343,13 +348,13 @@ const styles = EStyleSheet.create({
     header: {
         fontSize: '0.9rem',
         fontFamily: 'gotham-bold',
-        color: '#072169'
+        color: '#1C453B'
     },
     whatsappTitle: {
         fontSize: '0.8rem',
         fontFamily: 'sansation-regular',
         marginTop: normalize(3),
-        color: '#072169'
+        color: '#1C453B'
     },
     icon: {
         width: 55,

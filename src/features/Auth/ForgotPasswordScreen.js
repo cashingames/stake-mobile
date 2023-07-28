@@ -60,10 +60,11 @@ export default function ({ navigation }) {
             <View style={styles.content}>
                 <ForgotPasswordTitle />
                 <View style={styles.form}>
-
-                    {error.length > 0 &&
+                     {error.length > 0 &&
+                    <View style={styles.errorBoxContainer}>
                         <Text style={styles.errorBox}>{error}</Text>
-                    }
+                    </View>
+                }
 
                     <>
                         <Text style={styles.inputLabel} >Phone number</Text>
@@ -75,7 +76,7 @@ export default function ({ navigation }) {
                                 <Text style={styles.countryCodeDigit}>
                                     {countryCode}
                                 </Text>
-                                <Ionicons name="caret-down-outline" size={14} color="#072169" />
+                                <Ionicons name="caret-down-outline" size={14} color="#1C453B" />
                             </Pressable>
                             <TextInput
                                 style={styles.phoneNumberInput}
@@ -123,10 +124,11 @@ const ForgotPasswordTitle = () => {
 
     return (
             <View style={styles.headerContainerStyle}>
-                <Ionicons name="chevron-back" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
+                <Ionicons name="chevron-back" size={22} color="#1C453B" onPress={() => navigation.navigate('Login')} />
                 <Text style={styles.headerTextStyle}>
                     Password reset
                 </Text>
+                <View></View>
             </View>
     )
 }
@@ -144,32 +146,35 @@ const styles = EStyleSheet.create({
     },
     headerContainerStyle: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent:'space-between'
     },
     headerTextStyle: {
         fontSize: 26,
         fontFamily: 'gotham-bold',
-        color: '#072169',
-        marginLeft: '2.5rem',
+        color: '#1C453B',
         textAlign: 'center'
         // paddingTop: normalize(10),
     },
     instructionTextStyle: {
         fontSize: 17,
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'sansation-regular',
         lineHeight: 22,
         marginTop: normalize(5),
     },
+    errorBoxContainer: {
+        borderRadius: 38,
+        marginBottom: responsiveScreenWidth(5),
+        backgroundColor: '#FF0032',
+        paddingVertical: normalize(10),
+        marginHorizontal: '1.8rem',
+    },
     errorBox: {
-        marginVertical: normalize(20),
-        backgroundColor: '#F442741A',
-        paddingVertical: normalize(6),
-        borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'gotham-medium',
-        color: '#EF2F55',
-        fontSize: normalize(13)
+        fontFamily: 'sansation-bold',
+        color: '#FFFF',
+        fontSize: '0.85rem',
     },
     form: {
         marginTop: '4rem',
@@ -184,12 +189,12 @@ const styles = EStyleSheet.create({
         paddingRight: normalize(20),
         borderColor: '#CDD4DF',
         fontFamily: 'sansation-regular',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.85rem'
     },
     inputLabel: {
         fontFamily: 'gotham-medium',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.98rem',
         marginBottom: normalize(10)
     },
@@ -220,14 +225,14 @@ const styles = EStyleSheet.create({
     },
     phoneNumberInput: {
         fontFamily: 'sansation-regular',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.85rem',
         marginLeft: '.8rem',
         width: '8rem'
     },
     countryCodeDigit: {
         fontFamily: 'sansation-regular',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.85rem'
     },
     codeButton: {
