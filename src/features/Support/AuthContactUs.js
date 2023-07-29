@@ -81,7 +81,7 @@ const AuthContactUs = ({ navigation }) => {
                         Support
                     </Text>
                 </View>
-                <Text style={styles.title}>Do you have any question?</Text>
+                <Text style={styles.title}>Do you have any question? Write to us</Text>
                 <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
                     <Image
                         source={require('../../../assets/images/whatsapp-icon.png')}
@@ -89,7 +89,7 @@ const AuthContactUs = ({ navigation }) => {
                     />
                     <View style={styles.textContainer}>
                         <View style={styles.headerContainer}>
-                            <Text style={styles.header}>Contact Support</Text>
+                            <Text style={styles.header}>Need live help</Text>
                             <Ionicons name="chevron-forward" size={22} color='#1C453B' />
                         </View>
                         <Text style={styles.whatsappTitle}>Live chat with support on Whatsapp</Text>
@@ -225,8 +225,8 @@ const styles = EStyleSheet.create({
         // paddingTop: normalize(10),
     },
     title: {
-        fontSize: '1rem',
-        fontFamily: 'sansation-regular',
+        fontSize: '.9rem',
+        fontFamily: 'sansation-bold',
         marginTop: normalize(15),
         color: '#1C453B',
 

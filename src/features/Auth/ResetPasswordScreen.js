@@ -11,7 +11,6 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import CustomAlert from '../../shared/CustomAlert';
 
 export default function ({ navigation }) {
     const dispatch = useDispatch();

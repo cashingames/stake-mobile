@@ -38,7 +38,8 @@ export default function VerifyPasswordOtpScreen({ navigation, route }) {
     const [otp5, setOtp5] = useState('')
     const [counter, setCounter] = useState('');
     const [isCountdownInProgress, setIsCountdownInProgress] = useState(true);
-    const [countdowvnDone, setCountdowvnDone] = (useState(false))
+    const [countdowvnDone, setCountdowvnDone] = (useState(false));
+    const [error, setError] = useState('');
     const [active, setActive] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 

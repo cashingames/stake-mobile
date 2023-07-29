@@ -107,7 +107,7 @@ export default function ({ navigation }) {
                     />
 
                 </View>
-                <Text style={styles.instructionTextStyle}>Enter your phone number above. An Otp code would be sent to your phone number.</Text>
+                <Text style={styles.instructionTextStyle}>An Otp code would be sent to your phone number.</Text>
 
                 <View style={styles.button}>
                     <AppButton onPress={onSend} text={loading ? 'Sending...' : 'Reset password'} 

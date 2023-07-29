@@ -54,7 +54,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
             clearInterval(countDown);
             setIsCountdownInProgress(false)
         }
-        let nextResendMinutes = 0.5;
+        let nextResendMinutes = 5;
 
         const futureDate = new Date()
         futureDate.setMinutes(futureDate.getMinutes() + nextResendMinutes)
