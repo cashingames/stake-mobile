@@ -13,9 +13,9 @@ const HomeRouter = () => {
 
     return (
         <Tab.Navigator screenOptions={{
-            tabBarActiveTintColor: "#072169", tabBarInactiveTintColor: '#0721697d',
-            headerTitleAlign: 'center', tabBarLabelStyle: { fontSize: 11, fontFamily: 'bubble-regular' },
-            tabBarStyle: { backgroundColor: '#EFF2F6', height: 71, paddingBottom: 15 }
+            tabBarActiveTintColor: "#1C453B", tabBarInactiveTintColor: '#1c453b87',
+            headerTitleAlign: 'center', tabBarLabelStyle: { fontSize: 13, fontFamily: 'bubble-regular' },
+            tabBarStyle: { backgroundColor: '#EFF2F6', height: 73, paddingBottom: 16 }
         }} >
             <Tab.Screen name="Home" component={HomeScreen}
                 options={{
@@ -36,9 +36,9 @@ const HomeRouter = () => {
                     fontSize: 23,
                 },
                 // headerTransparent: true,
-                headerTintColor: '#072169',
+                headerTintColor: '#1C453B',
                 tabBarIcon: ({ color }) => (
-                    <Ionicons name="game-controller" color={color} size={30} />
+                    <Ionicons name="game-controller" color={color} size={35} />
                 ),
             }} />
             <Tab.Screen name="Contact Us" component={HelpPages} options={{
@@ -47,13 +47,13 @@ const HomeRouter = () => {
                 headerStyle: {
                     backgroundColor: '#FFFF',
                 },
-                headerTintColor: '#072169',
+                headerTintColor: '#1C453B',
                 headerTitleStyle: {
                     fontFamily: 'bubble-regular',
                     fontSize: 23,
                 },
                 tabBarIcon: ({ color }) => (
-                    <Ionicons name="help-circle" color={color} size={30} />
+                    <Ionicons name="help-circle" color={color} size={35} />
                 ),
             }} />
             <Tab.Screen name="Notification" component={NotificationsScreen} options={{
@@ -66,9 +66,9 @@ const HomeRouter = () => {
                     fontFamily: 'bubble-regular',
                     fontSize: 23,
                 },
-                headerTintColor: '#072169',
+                headerTintColor: '#1C453B',
                 tabBarIcon: ({ color }) => (
-                    <Ionicons name="mail" color={color} size={30} />
+                    <Ionicons name="mail" color={color} size={35} />
                 ),
             }} />
         </Tab.Navigator>
