@@ -158,7 +158,12 @@ export default function GameInProgressScreen({ navigation, route }) {
     const showExitConfirmation = () => {
         setExitClicked(true)
         startModal()
-        setAlertMessage("You have an ongoing game. Do you want to submit this game ?");
+        if (practiceMode) {
+            setAlertMessage("Are you sure you want to cancel demo game?");
+        }
+        else if (cashMode) {
+            setAlertMessage("Are you sure you want to end staked game?");
+        }
     }
 
     //disable back button
@@ -184,12 +189,12 @@ export default function GameInProgressScreen({ navigation, route }) {
                 <GameQuestions onPress={() => onEndGame()} ending={ending} onComplete={() => onEndGame()} exiting={exiting} />
                 {exitClicked ?
                     <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                        textLabel={alertMessage} buttonLabel='Continue playing' actionLabel='Exit'
-                        alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={() => onEndGame()} />
+                        textLabel={alertMessage} buttonLabel='Continue game' actionLabel='Yes, cancel'
+                        alertImageVisible={false} onPress={() => onEndGame()} />
                     :
                     <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                         textLabel={alertMessage} buttonLabel='Ok, got it'
-                        alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
+                        alertImageVisible={false} doAction={close} />
                 }
             </ScrollView>
         </ImageBackground>
