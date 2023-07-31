@@ -76,7 +76,7 @@ export default HomeScreen;
 
 const UserProfile = () => {
     const navigation = useNavigation();
-
+    const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
     const totalWalletBalance = Number.parseFloat(user.walletBalance ?? 0) + Number.parseFloat(user.bonusBalance ?? 0)
 
@@ -97,6 +97,10 @@ const UserProfile = () => {
         })
         navigation.navigate('Wallet')
     }
+
+    useEffect(() => {
+        dispatch(getUser());
+    }, [])
 
     return (
         <View style={styles.userProfileContainer}>

@@ -280,12 +280,12 @@ const StakingBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, s
         {
             key: 1,
             value: `Deposit (NGN ${formatCurrency(depositBalance)})`,
-            disabled: depositBalance < minimumExhibitionStakeAmount,
+            disabled: depositBalance == 0,
         },
         {
             key: 2,
             value: `Bonus (NGN ${formatCurrency(user.bonusBalance)})`,
-            disabled: user.bonusBalance < minimumExhibitionStakeAmount,
+            disabled: user.bonusBalance == 0,
         }
     ]
     const [balanceName, setBalanceName] = useState('')

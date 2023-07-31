@@ -126,22 +126,16 @@ function AppRouter() {
 	}
 
 	return (
-		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' }, headerTitleAlign: 'center', headerTintColor: '#1C453B', }} >
+		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F9FBFF' }, headerTitleAlign: 'center', headerTintColor: '#1C453B', 	headerTitleStyle: {
+			fontFamily: 'gotham-bold',
+			fontSize: 23
+		} }} >
 			{isTrue(token) ?
 				(
 					<>
 						<AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 						{/* game */}
-						<AppStack.Screen name="SelectGameCategory" component={SelectGameCategoryScreen} options={{
-							title: 'Trivia Game Category',
-							headerStyle: {
-								backgroundColor: '#F9FBFF',
-							},
-							headerTitleStyle: {
-								fontFamily: 'gotham-bold',
-								fontSize: 23,
-							},
-						}} />
+						<AppStack.Screen name="SelectGameCategory" component={SelectGameCategoryScreen} options={{ title: 'Trivia Game Category'}} />
 						<AppStack.Screen name="GamesList" component={GamesListScreen} options={{ title: 'Games'}} />
 						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
@@ -170,27 +164,8 @@ function AppRouter() {
 						<AppStack.Screen name="ChallengeEndGame" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
 
 						{/** wallet */}
-						<AppStack.Screen name="Wallet" component={WalletScreen} options={{
-							title: 'Wallet',
-							headerStyle: {
-								backgroundColor: '#F9FBFF',
-							},
-							headerTintColor: '#072169',
-							headerTitleStyle: {
-								fontFamily: 'gotham-bold',
-								fontSize: 23
-							}
-						}} />
-						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{
-							title: 'Deposit', headerStyle: {
-								backgroundColor: '#F9FBFF',
-							},
-							headerTintColor: '#072169',
-							headerTitleStyle: {
-								fontFamily: 'gotham-bold',
-								fontSize: 23
-							}
-						}} />
+						<AppStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
+						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Deposit' }} />
 						<AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
 						<AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
 						<AppStack.Screen name="WithdrawalSuccess" component={WithdrawalSuccessScreen} options={{ headerShown: false }} />

@@ -128,7 +128,7 @@ const WithdrawBalanceScreen = ({ navigation }) => {
                                 placeholder="Select bank"
                                 fontFamily='sansation-regular'
                                 boxStyles={{ height: normalize(52), alignItems: 'center', borderColor: '#D9D9D9', backgroundColor: '#fff' }}
-                                inputStyles={{ fontSize: 18, color: '#072169' }}
+                                inputStyles={{ fontSize: 18, color: '#1C453B' }}
                             />
                         </View>
                         <Input
@@ -175,7 +175,7 @@ const WithdrawBalanceTitle = () => {
 
     return (
         <View style={styles.headerContainerStyle}>
-            <Ionicons name="close-sharp" size={22} color="#072169" onPress={() => navigation.navigate('Wallet')} />
+            <Ionicons name="close-sharp" size={30} color="#1C453B" onPress={() => navigation.navigate('Wallet')} />
             <Text style={styles.headerTextStyle}>Withdrawal</Text>
             <Text></Text>
         </View>
@@ -187,13 +187,9 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F9FBFF',
-        // paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(22) : responsiveScreenWidth(15),
-        // paddingHorizontal: normalize(22),
 
     },
     containeri: {
-        // flex: 1,
-        // backgroundColor: '#F9FBFF',
         paddingBottom: 30,
         paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(15) : responsiveScreenWidth(8),
         paddingHorizontal: normalize(22),
@@ -207,9 +203,8 @@ const styles = EStyleSheet.create({
     headerTextStyle: {
         fontSize: 26,
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center'
-        // paddingTop: normalize(10),
     },
     inputContainer: {
         marginTop: responsiveScreenWidth(10),
@@ -234,7 +229,7 @@ const styles = EStyleSheet.create({
     },
     bankLabel: {
         fontFamily: 'gotham-medium',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.98rem',
     },
     requiredText: {
@@ -243,9 +238,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.95rem',
     },
     loginButton: {
-        // backgroundColor: '#E15220',
         marginVertical: 20,
-        // paddingVertical: normalize(19),
     },
     buttonText: {
         fontFamily: 'gotham-medium',

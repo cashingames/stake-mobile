@@ -34,14 +34,6 @@ export const logActionToServer = createAsyncThunk(
     }
 )
 
-export const fetchUserTransactions = createAsyncThunk(
-    'common/fetchUserTransactions',
-    async () => {
-        const response = await axios.get(`v3/wallet/me/transactions`)
-        return response.data;
-    }
-)
-
 export const userNewTransactions = createAsyncThunk(
     'common/userNewTransactions',
     async (data, thunkAPI) => {
@@ -77,6 +69,14 @@ export const sendUserFeedback = createAsyncThunk(
 export const withdrawWinnings = async (data) => {
     return axios.post('v3/winnings/withdraw', data);
 }
+
+export const fetchUserTransactions = createAsyncThunk(
+    'common/fetchUserTransactions',
+    async (data, thunkAPI) => {
+        const response = await axios.get(`v3/wallet/transactions/${data.wallet_type}?page=${data.pageNo}`)
+        return response.data;
+    }
+)
 
 const initialState = {
     initialLoading: true,

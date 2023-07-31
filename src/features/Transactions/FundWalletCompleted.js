@@ -29,7 +29,7 @@ export default function FundWalletCompleted() {
                     <WelcomeBonusNotification user={user} />
                 }
             </View>
-            <AppButton onPress={() => navigation.navigate('Wallet')} text={user.showRegistrationBonusNotice === false ? 'Okay, got it' : 'View Bonus'} />
+            <AppButton onPress={() => navigation.navigate('Home')} text={user.showRegistrationBonusNotice === false ? 'Okay, got it' : 'View Bonus'} />
         </ImageBackground>
     );
 }
@@ -79,7 +79,7 @@ const styles = EStyleSheet.create({
     successTitle: {
         fontFamily: 'gotham-medium',
         fontSize: '1.5rem',
-        color: '#072169',
+        color: '#1C453B',
         alignItems: 'center',
         textAlign: 'center',
         marginTop: '2rem'
@@ -107,7 +107,7 @@ const styles = EStyleSheet.create({
     bonusAmount: {
         fontFamily: 'gotham-bold',
         fontSize: '1rem',
-        color: '#072169',
+        color: '#1C453B',
         marginTop: '.3rem'
     },
     confetti: {
@@ -117,7 +117,7 @@ const styles = EStyleSheet.create({
     bonusMessage: {
         fontFamily: 'gotham-medium',
         fontSize: normalize(15),
-        color: '#072169',
+        color: '#1C453B',
         width: '12rem',
         lineHeight: normalize(22),
     },
@@ -131,8 +131,6 @@ const styles = EStyleSheet.create({
         marginVertical: normalize(15)
     },
     buttonContainer: {
-        // borderColor: 'rgba(0, 0, 0, 0.15)',
-        // borderBottomWidth: normalize(1),
         paddingVertical: normalize(20),
         backgroundColor: '#fff',
     },
