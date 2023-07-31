@@ -237,12 +237,12 @@ const styles = EStyleSheet.create({
     stakeHeader: {
         fontSize: '0.9rem',
         fontFamily: 'gotham-medium',
-        color: '#072169',
+        color: '#1C453B',
     },
     stakeAmount: {
         fontSize: '0.9rem',
         fontFamily: 'sansation-regular',
-        color: '#072169',
+        color: '#1C453B',
     },
     gameProgressAndBoost: {
         display: 'flex',

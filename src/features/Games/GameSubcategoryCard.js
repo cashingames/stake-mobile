@@ -49,7 +49,7 @@ export default ({ subcategory }) => {
                     <Text style={styles.cardTitle}>{subcategory.name}</Text>
                 </View>
             </View>
-            <Ionicons name='chevron-forward-sharp' size={24} color='#072169' />
+            <Ionicons name='chevron-forward-sharp' size={24} color='#1C453B' />
         </Pressable >
     );
 }
@@ -88,9 +88,9 @@ const styles = EStyleSheet.create({
         justifyContent: "space-evenly",
     },
     cardTitle: {
-        fontSize: '0.87rem',
+        fontSize: '0.95rem',
         width:'11rem',
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         marginLeft:'.7rem'
     },

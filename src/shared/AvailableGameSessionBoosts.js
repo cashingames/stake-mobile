@@ -210,11 +210,11 @@ const styles = EStyleSheet.create({
         marginRight: '1rem'
     },
     boostIcon: {
-        width: '3.2rem',
-        height: '3.2rem',
+        width: '3.5rem',
+        height: '3.5rem',
     },
     storeItemName: {
-        fontSize: '.85rem',
+        fontSize: '.9rem',
         color: '#fff',
         fontFamily: 'gotham-bold',
         textShadowColor: '#121212',

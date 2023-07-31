@@ -108,11 +108,11 @@ const PlayGameHeader = () => {
 
     return (
         <View style={styles.header}>
-            <View></View>
-            <Text style={styles.headerTextStyle}>Trivia game</Text>
-            <Pressable>
-                <Text style={styles.headerTitle}>Exit</Text>
+            <Pressable style={styles.exitContainer}>
+                <Text style={styles.headerTitle}>Exit Game</Text>
             </Pressable>
+            <Text style={styles.headerTextStyle}>Trivia game</Text>
+            <View></View>
         </View>
     )
 };
@@ -238,7 +238,7 @@ const RenderQuestion = ({ onComplete, copilot }) => {
             <View style={styles.options}>
                 {options.map((option, i) => <RenderOption option={option} key={i} />)}
             </View>
-            <AppButton text='Next' />
+            <AppButton text='Next' textStyle={styles.nextButton} disabled />
         </View>
     )
 }
@@ -271,14 +271,20 @@ const styles = EStyleSheet.create({
     },
     headerTextStyle: {
         textAlign: 'center',
-        fontSize: '1.2rem',
-        fontFamily: 'gotham-medium',
-        color: '#072169',
+        fontSize: '1.3rem',
+        fontFamily: 'gotham-bold',
+        color: '#1C453B',
+    },
+    exitContainer: {
+        backgroundColor:'#FA5F4A',
+        borderRadius:30,
+        paddingHorizontal:'.5rem',
+        paddingVertical:'.2rem'
     },
     headerTitle: {
-        fontSize: '0.9rem',
+        fontSize: '0.7rem',
         fontFamily: 'gotham-medium',
-        color: '#072169',
+        color: '#FFF',
     },
     questionsAnsweredContainer: {
         marginVertical: normalize(12)
@@ -299,9 +305,9 @@ const styles = EStyleSheet.create({
         justifyContent: 'space-between'
     },
     categoryName: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
-        fontSize: '0.85rem'
+        fontSize: '0.9rem'
     },
     demoContainer: {
         backgroundColor: '#E15220',
@@ -317,7 +323,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.6rem'
     },
     questionsAnswered: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '0.8rem'
     },
@@ -381,7 +387,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     pickText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '1rem',
         marginBottom: '.8rem'
@@ -391,20 +397,20 @@ const styles = EStyleSheet.create({
 
     },
     questions: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'sansation-regular',
         fontSize: '1.1rem',
         lineHeight: normalize(26)
     },
     timeText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '0.8rem',
     },
     questionCount: {
         fontFamily: 'gotham-bold',
-        fontSize: '0.9rem',
-        color: '#072169',
+        fontSize: '0.95rem',
+        color: '#1C453B',
     },
     answer: {
         flexDirection: 'row',
@@ -414,9 +420,13 @@ const styles = EStyleSheet.create({
         // backgroundColor: 'red',
     },
     optionText: {
-        color: '#072169',
-        fontFamily: 'sansation-regular',
+        color: '#1C453B',
+        fontFamily: 'gotham-bold',
         fontSize: '0.9rem',
+        marginLeft:'.4rem'
+    },
+    nextButton: {
+        fontSize:'1.2rem'
     },
 
 })

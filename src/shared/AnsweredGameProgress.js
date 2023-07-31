@@ -10,7 +10,7 @@ const AnsweredGameProgress = ({ index, total }) => {
     return (
         <View style={styles.questionsAnsweredContainer}>
             <Progress.Bar progress={(index + 1) / total}
-                width={130} color='#E15220' unfilledColor='#F2C8BC' borderWidth={0} height={12}
+                width={130} color='#E15220' unfilledColor='#F2C8BC' borderWidth={0} height={14} borderRadius={32}
             />
         </View>
     );

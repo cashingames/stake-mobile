@@ -33,7 +33,7 @@ const HomeRouter = () => {
                 },
                 headerTitleStyle: {
                     fontFamily: 'bubble-regular',
-                    fontSize: 23,
+                    fontSize: 25,
                 },
                 // headerTransparent: true,
                 headerTintColor: '#1C453B',
@@ -50,7 +50,7 @@ const HomeRouter = () => {
                 headerTintColor: '#1C453B',
                 headerTitleStyle: {
                     fontFamily: 'bubble-regular',
-                    fontSize: 23,
+                    fontSize: 25,
                 },
                 tabBarIcon: ({ color }) => (
                     <Ionicons name="help-circle" color={color} size={35} />
@@ -64,7 +64,7 @@ const HomeRouter = () => {
                 },
                 headerTitleStyle: {
                     fontFamily: 'bubble-regular',
-                    fontSize: 23,
+                    fontSize: 25,
                 },
                 headerTintColor: '#1C453B',
                 tabBarIcon: ({ color }) => (

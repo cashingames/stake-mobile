@@ -340,7 +340,7 @@ const PracticeStakingBalances = ({ setSelected }) => {
                 fontFamily='sansation-bold'
                 boxStyles={{ height: normalize(52), alignItems: 'center', borderColor: '#D9D9D9', backgroundColor: '#fff' }}
                 inputStyles={{ fontSize: 17, color: '#1C453B' }}
-                dropdownTextStyles={{ fontSize: 18, color: '#072169' }}
+                dropdownTextStyles={{ fontSize: 18, color: '#1C453B' }}
                 dropdownItemStyles={{ borderBottomWidth: 1, borderBottomColor: '#D9D9D9' }}
                 disabledTextStyles={{ fontSize: 18 }}
                 disabledItemStyles={{ backgroundColor: '#F9FBFF' }}

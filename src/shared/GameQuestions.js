@@ -76,10 +76,11 @@ const NextButton = ({ onPress, ending, exiting, index }) => {
     return (
         <AppButton
             disabled={ending || exiting}
-            text={isLastQuestion ? 'Finish' : `Next Q${index + 2}`}
+            text={isLastQuestion ? 'Finish' : 'Next'}
             onPress={pressNext}
             style={styles.nextButton}
             disabledStyle={styles.disabled}
+            textStyle={styles.nextButtonText}
         />
     )
 }
@@ -105,7 +106,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     pickText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '1rem',
         marginBottom: '.8rem'
@@ -115,23 +116,26 @@ const styles = EStyleSheet.create({
 
     },
     questions: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'sansation-regular',
         fontSize: '1.1rem',
         lineHeight: normalize(26)
     },
     timeText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '0.8rem',
     },
     questionCount: {
         fontFamily: 'gotham-bold',
-        fontSize: '0.9rem',
-        color: '#072169',
+        fontSize: '0.95rem',
+        color: '#1C453B',
     },
     disabled: {
         backgroundColor: '#EA8663'
+    },
+    nextButtonText: {
+        fontSize:'1.2rem'
     },
 
 })

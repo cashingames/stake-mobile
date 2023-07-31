@@ -22,8 +22,9 @@ const styles = EStyleSheet.create({
         height: responsiveScreenWidth(8)
     },
     answerText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
-        fontSize: '0.9rem',
+        fontSize: '0.95rem',
+        marginLeft:'.4rem'
     },
 })

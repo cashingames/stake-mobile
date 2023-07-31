@@ -126,7 +126,7 @@ function AppRouter() {
 	}
 
 	return (
-		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' }, headerTitleAlign: 'center' }} >
+		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' }, headerTitleAlign: 'center', headerTintColor: '#1C453B', }} >
 			{isTrue(token) ?
 				(
 					<>
@@ -141,15 +141,8 @@ function AppRouter() {
 								fontFamily: 'gotham-bold',
 								fontSize: 23,
 							},
-							headerTintColor: '#072169',
 						}} />
-						<AppStack.Screen name="GamesList" component={GamesListScreen} options={{
-							title: 'Games',
-							headerStyle: {
-								backgroundColor: '#072169',
-							},
-							headerTintColor: '#FFF',
-						}} />
+						<AppStack.Screen name="GamesList" component={GamesListScreen} options={{ title: 'Games'}} />
 						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
