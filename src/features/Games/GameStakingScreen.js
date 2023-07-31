@@ -39,7 +39,6 @@ const GameStakingScreen = ({ navigation }) => {
     const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
     const depositBalanceSelected = selected === 1 && Number.parseFloat(depositBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
     const bonusSelected = selected === 2 && Number.parseFloat(user.bonusBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
-    console.log(walletType)
 
     useEffect(() => {
         if (cashMode && selected === 1) {
