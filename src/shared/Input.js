@@ -71,7 +71,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.95rem',
     },
     inputContainer: {
-        marginBottom: normalize(30),
+        marginBottom: normalize(28),
     },
     labelContainer: {
         flexDirection: 'row',
