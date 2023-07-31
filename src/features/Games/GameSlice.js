@@ -94,7 +94,7 @@ let initialState = {
     displayedQuestion: {},
     isPlayingTrivia: false,
     hasPlayedTrivia: false,
-    gameDuration: 600,
+    gameDuration: 60,
     gameStakes: [],
     bonusStakes: [],
     withStaking: false,
