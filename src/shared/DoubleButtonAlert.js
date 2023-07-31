@@ -122,9 +122,9 @@ const styles = EStyleSheet.create({
     },
     labelText: {
         letterSpacing: 0.25,
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
-        fontSize: '1rem',
+        fontSize: '1.1rem',
         textAlign: 'center'
     },
 })
