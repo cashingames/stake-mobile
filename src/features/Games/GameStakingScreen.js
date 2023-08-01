@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, ScrollView, ActivityIndicator, Image, Pressable, TextInput, Alert } from 'react-native';
+import { Text, View, ScrollView, ActivityIndicator, Pressable } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
@@ -174,7 +174,7 @@ const GameStakingScreen = ({ navigation }) => {
         <ScrollView style={styles.container}>
             <ScreenHeader />
             {cashMode &&
-                <StakingBalances setSelected={setSelected} depositBalance={depositBalance} user={user} minimumExhibitionStakeAmount={minimumExhibitionStakeAmount} />
+                <StakingBalances setSelected={setSelected} depositBalance={depositBalance} user={user} />
             }
             {practiceMode &&
                 <PracticeStakingBalances setSelected={setSelected} />
@@ -185,13 +185,15 @@ const GameStakingScreen = ({ navigation }) => {
                         label='Enter amount'
                         placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`}
                         value={amount}
-                        error={((selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
-                            ((selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`)}
+                        error={((selected === 1 && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
+                            ((selected === 2 && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
+                            ((amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum amount is NGN ${minimumExhibitionStakeAmount}`)
+                        }
                         onChangeText={setAmount}
                         // isRequired={true}
                         keyboardType="numeric"
                     />
-                    {(selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && amount > Number.parseFloat(depositBalance)) &&
+                    {(selected === 1 && amount > Number.parseFloat(depositBalance)) &&
                         <View style={styles.errorContainer}>
                             <Text style={styles.error}>Insufficient wallet balance</Text>
                             <Pressable style={styles.fundError} onPress={fundWallet}>
@@ -199,20 +201,24 @@ const GameStakingScreen = ({ navigation }) => {
                             </Pressable>
                         </View>
                     }
-                    {(selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && amount > Number.parseFloat(user.bonusBalance)) &&
+                    {(selected === 2 && amount > Number.parseFloat(user.bonusBalance)) &&
                         <View style={styles.errorContainer}>
                             <Text style={styles.error}>Insufficient bonus balance, stake from another balance</Text>
                         </View>
                     }
                 </>
             }
+
             {practiceMode &&
-                <View style={styles.inputContainer}>
-                    <Text style={styles.inputLabel}>Enter amount</Text>
-                    <TextInput style={styles.input} placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`} value={amount}
-                        onChangeText={setAmount}
-                        keyboardType="numeric" />
-                </View>
+                <Input
+                    label='Enter amount'
+                    placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`}
+                    value={amount}
+                    error={((amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`)}
+                    onChangeText={setAmount}
+                    isRequired={false}
+                    keyboardType="numeric"
+                />
             }
             {cashMode &&
                 <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
@@ -274,7 +280,7 @@ const GameStakingScreen = ({ navigation }) => {
 
 }
 
-const StakingBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, setSelected }) => {
+const StakingBalances = ({ depositBalance, user, setSelected }) => {
     const balanceAccounts = [
         {
             key: 1,

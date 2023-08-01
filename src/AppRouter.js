@@ -146,17 +146,7 @@ function AppRouter() {
 
 
 						{/* challenge */}
-						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{
-							title: 'Challenge Player',
-							headerStyle: {
-								backgroundColor: '#F9FBFF',
-							},
-							headerTitleStyle: {
-								fontFamily: 'gotham-bold',
-								fontSize: 23,
-							},
-							headerTintColor: '#072169',
-						}} />
+						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{title: 'Challenge a Player'}} />
 						<AppStack.Screen name="ChallengeMatching" component={ChallengeMatchingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengePracticeTour" component={ChallengePracticeTourScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameBoard" component={ChallengeGameBoardScreen} options={{ headerShown: false }} />
