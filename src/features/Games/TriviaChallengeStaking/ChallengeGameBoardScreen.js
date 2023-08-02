@@ -11,8 +11,6 @@ import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import PlayGameHeader from "../../../shared/PlayGameHeader";
 import AppButton from "../../../shared/AppButton";
 import logToAnalytics from "../../../utils/analytics";
-import { isTrue } from "../../../utils/stringUtl";
-import Constants from 'expo-constants';
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { Animated } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -27,7 +25,6 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const isEnded = useSelector(state => state.triviaChallenge.isEnded);
     const [submitting, setSubmitting] = useState(false);
-    const user = useSelector(state => state.auth.user);
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [exiting, setExiting] = useState(false);
@@ -112,8 +109,12 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     const showExitConfirmation = () => {
         setExitClicked(true);
         startModal()
-        setAlertMessage("You have an ongoing game. Do you want to submit this game ?");
-    }
+        if (practiceMode) {
+            setAlertMessage("Are you sure you want to cancel demo game?");
+        }
+        else if (cashMode) {
+            setAlertMessage("Are you sure you want to end staked game?");
+        }    }
 
     const getOpponentStatus = async () => {
         const result = await firestore()
