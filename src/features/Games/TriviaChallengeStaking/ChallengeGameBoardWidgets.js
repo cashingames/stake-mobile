@@ -9,6 +9,8 @@ import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import { reduceBoostCount } from "../../Auth/AuthSlice";
 import { boostReleased, consumeBoost, pauseGame, skipQuestion } from "./TriviaChallengeGameSlice";
 import logToAnalytics from "../../../utils/analytics";
+import * as Progress from 'react-native-progress';
+
 
 const ChallengeGameBoardWidgets = () => {
     const dispatch = useDispatch();
@@ -107,36 +109,123 @@ const ChallengeGameBoardWidgets = () => {
 
     return (
         <View style={styles.gameProgressAndBoost}>
-            {practiceMode &&
-                <ChallengePracticeBoosts practiceBoosts={practiceBoosts} boostApplied={practiceBoostApplied} />
-            }
+            <GameTopicProgress />
+            <View>
+                {practiceMode &&
+                    <ChallengePracticeBoosts practiceBoosts={practiceBoosts} boostApplied={practiceBoostApplied} />
+                }
+                {cashMode &&
+                    <ChallengeStakingBoosts boosts={boosts} boostsToDisplay={boostsToDisplay} boostApplied={boostApplied} />
+                }
+            </View>
+        </View>
+    )
+}
+
+const GameTopicProgress = () => {
+
+    return (
+        <View style={styles.topicProgress}>
+            <GameTopicContainer />
+        </View>
+    )
+}
+
+const GameTopicContainer = () => {
+    const gameCategory = useSelector(state => state.game.gameCategory.name);
+    const index = useSelector(state => state.triviaChallenge.currentQuestionIndex);
+    const total = useSelector(state => state.triviaChallenge.totalQuestions);
+    const practiceMode = useSelector(state => state.game.practiceMode);
+    const cashMode = useSelector(state => state.game.cashMode);
+
+    return (
+        <View style={styles.topicContainer}>
+            <View style={styles.categoryContainer}>
+                <Text style={styles.categoryName} numberOfLines={1}>{gameCategory}</Text>
+                <AnsweredGameProgress index={index} total={total} />
+                <Text style={styles.questionsAnswered}>
+                    {`${index + 1}/${total}`}
+                </Text>
+
+            </View>
             {cashMode &&
-                <ChallengeStakingBoosts boosts={boosts} boostsToDisplay={boostsToDisplay} boostApplied={boostApplied} />
+                <View>
+                    <StakeDetails />
+                    <SelectedPlayers />
+                </View>
             }
+            {practiceMode &&
+                <View>
+                    <View style={styles.demoContainer}>
+                        <Image
+                            source={require('../../../../assets/images/star.png')}
+                            style={styles.starIcon}
+                        />
+                        <Text style={styles.demoText}>Demo game</Text>
+                    </View>
+                    <SelectedPlayers />
+                </View>
+            }
+        </View>
+    )
+}
+
+const AnsweredGameProgress = ({ index, total }) => {
+
+    return (
+        <View style={styles.questionsAnsweredContainer}>
+            <Progress.Bar progress={(index + 1) / total}
+                width={130} color='#E15220' unfilledColor='#F2C8BC' borderWidth={0} height={14} borderRadius={32}
+            />
+        </View>
+    );
+}
+
+const StakeDetails = () => {
+    const amountStaked = useSelector(state => state.triviaChallenge.amountStaked);
+
+    return (
+        <View style={styles.stakeContainer}>
+            <Text style={styles.stakeHeader}>STK.</Text>
+            <Text style={styles.stakeHeader}>&#8358;{amountStaked}</Text>
+        </View>
+    )
+}
+
+const SelectedPlayers = () => {
+    const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
+    const user = useSelector(state => state.auth.user);
+    const username = user.username?.charAt(0) + user.username?.charAt(1);
+    const opponentName = challengeDetails.opponent?.username?.charAt(0) + challengeDetails.opponent?.username?.charAt(1)
+    return (
+        <View style={styles.playerImage}>
+            <SelectedPlayer playerAvatar={username} backgroundColor='#ccded48c' />
+            <SelectedPlayer playerAvatar={opponentName} backgroundColor='#FEECE7' />
+        </View>
+    )
+}
+
+const SelectedPlayer = ({ playerAvatar, backgroundColor }) => {
+    return (
+        <View style={[styles.avatarContent, { backgroundColor: backgroundColor }]}>
+            <Text style={styles.avatarText}>{playerAvatar}</Text>
         </View>
     )
 }
 
 
 const ChallengeStakingBoosts = ({ boosts, boostsToDisplay, boostApplied }) => {
-    const user = useSelector(state => state.auth.user);
 
     return (
         <>
             {boosts?.length > 0 ?
-                <View style={styles.availableBoosts}>
-                    <View style={styles.boostinfo}>
-                        <Text style={styles.title}>{user.username}, score higher with boost</Text>
-                    </View>
-                    <View style={styles.availableBoostsIcons}>
-                        {
-                            boostsToDisplay().map((boost, index) =>
-                                boost.count >= 1 &&
-                                <ChallengeStakingBoost boost={boost} key={index} onConsume={boostApplied} />
-                            )
-                        }
-                    </View>
-
+                <View style={styles.boostItems}>
+                    {
+                        boostsToDisplay().map((boost, index) =>
+                            boost.count >= 1 &&
+                            <ChallengeStakingBoost boost={boost} key={index} onConsume={boostApplied} />
+                        )
+                    }
                 </View>
                 :
                 <></>
@@ -145,20 +234,13 @@ const ChallengeStakingBoosts = ({ boosts, boostsToDisplay, boostApplied }) => {
     )
 }
 const ChallengePracticeBoosts = ({ practiceBoosts, boostApplied }) => {
-    const user = useSelector(state => state.auth.user);
     return (
-        <View style={styles.availableBoosts}>
-            <View style={styles.boostinfo}>
-                <Text style={styles.title}>{user.username}, score higher with boost</Text>
-            </View>
-            <View style={styles.availableBoostsIcons}>
-                {
-                    practiceBoosts.map((practiceBoost, index) =>
-                        <ChallengePracticeBoost practiceBoost={practiceBoost} key={index} onConsume={boostApplied} />
-                    )
-                }
-            </View>
-
+        <View style={styles.boostItems}>
+            {
+                practiceBoosts.map((practiceBoost, index) =>
+                    <ChallengePracticeBoost practiceBoost={practiceBoost} key={index} onConsume={boostApplied} />
+                )
+            }
         </View>
     )
 }
@@ -261,59 +343,120 @@ export default ChallengeGameBoardWidgets;
 const styles = EStyleSheet.create({
     gameProgressAndBoost: {
         display: 'flex',
-        shadowColor: 'inset 0px 4px 0px rgba(0, 0, 0, 0.05)',
         borderRadius: 16,
         marginVertical: normalize(18),
-        backgroundColor: '#AAD880',
-        paddingVertical: '1rem'
+        borderWidth: 1,
+        borderColor: '#E5E5E5',
+        elevation: 2.5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0.5, height: 1 },
+        shadowOpacity: 0.1,
+        backgroundColor: '#fff'
+
     },
     topicProgress: {
-        display: 'flex',
+        borderBottomWidth: 1,
+        borderColor: '#93939336',
+        paddingVertical: normalize(18),
+        paddingHorizontal: '.3rem'
+    },
+
+    topicContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        paddingHorizontal: '1rem'
+    },
+    categoryContainer: {
+        flexDirection: 'column',
+    },
+    stakeContainer: {
+        flexDirection: 'row',
         alignItems: 'center',
-        borderBottomWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.2)',
+        backgroundColor: '#FA5F4A',
+        borderRadius: 30,
+        paddingHorizontal: '.4rem',
+        paddingVertical: '.2rem'
     },
-    questionsAnsweredContainer: {
-        marginRight: normalize(20)
+    stakeHeader: {
+        fontSize: '0.65rem',
+        fontFamily: 'gotham-medium',
+        color: '#FFF',
     },
-
-    questionsAnsweredContainer: {
-        marginRight: normalize(20)
+    categoryName: {
+        color: '#1C453B',
+        fontFamily: 'gotham-bold',
+        fontSize: '1rem',
+        width: '8rem',
+        marginBottom:'.8rem'
     },
     questionsAnswered: {
-        color: '#FFFF',
-        fontFamily: 'graphik-medium',
-        fontSize: '0.75rem',
+        color: '#1C453B',
+        fontFamily: 'gotham-bold',
+        fontSize: '0.85rem',
+        marginTop:'.7rem'
     },
-    availableBoosts: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-
-    },
-    availableBoost: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    availableBoostsIcons: {
-        flexDirection: 'row',
-        marginTop: '1rem'
-
-    },
-    boostinfo: {
-        display: 'flex',
+    oddContainer: {
         flexDirection: 'row',
         alignItems: 'center'
     },
-
-    title: {
-        color: '#072169',
+    oddTitle: {
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
-        fontSize: '.85rem'
+        fontSize: '0.8rem'
+    },
+    oddText: {
+        color: '#1C453B',
+        fontFamily: 'sansation-regular',
+        fontSize: '0.8rem',
+        marginLeft: '.3rem'
+    },
+    demoContainer: {
+        backgroundColor: '#E15220',
+        borderRadius: 30,
+        paddingHorizontal: '.35rem',
+        paddingVertical: '.3rem',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    demoText: {
+        color: '#F9FBFF',
+        fontFamily: 'gotham-medium',
+        fontSize: '0.7rem'
+    },
+    starIcon: {
+        width: '.7rem',
+        height: '.7rem'
+    },
+    playerImage: {
+        flexDirection: 'row',
+        marginTop: '.7rem'
+    },
+    avatarContent: {
+        borderRadius: 100,
+        width: '2.3rem',
+        height: '2.3rem',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    avatarText: {
+        textTransform: 'uppercase',
+        fontFamily: 'gotham-medium',
+        fontSize: '0.8rem',
+        color: '#1C453B'
     },
 
+    availableBoosts: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: normalize(10),
+        paddingHorizontal: '.5rem'
+    },
+
+    availableBoost: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
     boostActive: {
         borderWidth: 1,
         borderColor: 'rgba(255, 255, 255, 0.2)',
@@ -321,48 +464,45 @@ const styles = EStyleSheet.create({
         padding: normalize(7),
         shadowColor: 'rgba(0, 0, 0, 0.75)',
         shadowOffset: { width: -1, height: 1 },
-
     },
     boostContainer: {
-        alignItems: 'center',
-        marginHorizontal: '1rem'
-    },
-    name: {
-        color: '#FFFF',
-        fontFamily: 'gotham-medium',
-        fontSize: '0.65rem',
-        marginTop: '.5rem',
-        width: "4rem"
-    },
-    opponentName: {
-        fontSize: '0.75rem',
-        fontFamily: 'graphik-regular',
-        color: '#FFFF',
-        width: responsiveScreenWidth(25),
-        textAlign: 'center',
-        marginLeft: '1rem'
+
     },
     boostDetailsHead: {
         flexDirection: 'row',
         alignItems: 'flex-start',
-        marginHorizontal: '.5rem'
+        marginRight: '1rem'
     },
     boostIcon: {
-        width: '2rem',
-        height: '2rem',
+        width: '3.2rem',
+        height: '3.2rem',
     },
     storeItemName: {
+        fontSize: '.9rem',
+        color: '#fff',
         fontFamily: 'gotham-bold',
-        fontSize: '0.8rem',
-        color: '#FFF',
+        textShadowColor: '#121212',
+        textShadowRadius: 1,
+        textShadowOffset: {
+            width: 1,
+            height: 1,
+        },
+        position: 'absolute',
+        left: 35,
+        top: 10
     },
-    boostActive: {
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.2)',
-        borderRadius: normalize(5),
-        padding: normalize(7),
-        shadowColor: 'rgba(0, 0, 0, 0.75)',
-        shadowOffset: { width: -1, height: 1 },
+    name: {
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+        fontSize: '0.65rem',
+        marginTop: '.5rem',
+        width: "4rem"
+    },
+    boostItems: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: '1rem',
+        paddingVertical: '.7rem'
     },
 
 

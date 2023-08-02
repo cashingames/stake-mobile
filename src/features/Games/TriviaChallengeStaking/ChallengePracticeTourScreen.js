@@ -9,6 +9,7 @@ import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { Ionicons } from "@expo/vector-icons";
 import AppButton from "../../../shared/AppButton";
 import { useNavigation } from "@react-navigation/native";
+import * as Progress from 'react-native-progress';
 import {
     CopilotProvider,
     CopilotStep,
@@ -78,30 +79,21 @@ const Practice = ({ modalVisible, setModalVisible, alertMessage }) => {
         };
     }, [])
 
-    const user = useSelector(state => state.auth.user);
 
     return (
         <View style={styles.container} >
             <PlayGameHeader />
             <View style={styles.gameProgressAndBoost}>
-                <View style={styles.availableBoosts}>
-                    <View style={styles.boostinfo}>
-                        <Text style={styles.title}>{user.username}, score higher with boost</Text>
-                    </View>
-                    <View style={styles.availableBoostsIcons}>
-                        <CopilotStep text="Use Time Freeze to freeze time for 10 seconds" order={1} name="freeze">
-                            <ChallengePracticeFreeze />
-                        </CopilotStep>
-                        <CopilotStep text="Use Skip to skip a question" order={2} name="skip">
-                            <ChallengePracticeSkip />
-                        </CopilotStep>
-                    </View>
-
+                <GameTopicProgress />
+                <View style={{ flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 10 }}>
+                    <CopilotStep text="Use Time Freeze to freeze time for 10 seconds" order={1} name="freeze">
+                        <ChallengePracticeFreeze />
+                    </CopilotStep>
+                    <CopilotStep text="Use Skip to skip a question" order={2} name="skip">
+                        <ChallengePracticeSkip />
+                    </CopilotStep>
                 </View>
-
             </View>
-
-            <SelectedPlayers user={user} />
             <CopilotStep text="Answer all questions before the time runs out" order={3} name="timer">
                 <RenderQuestion />
             </CopilotStep>
@@ -127,17 +119,67 @@ const PlayGameHeader = () => {
     )
 };
 
+const GameTopicProgress = () => {
+
+    return (
+        <View style={styles.topicProgress}>
+            <GameTopicContainer />
+        </View>
+    )
+}
+
+const GameTopicContainer = () => {
+    const gameCategory = useSelector(state => state.game.gameCategory.name);
+    const user = useSelector(state => state.auth.user);
+    const index = 0;
+    const total = 10;
+
+    return (
+        <View style={styles.topicContainer}>
+            <View style={styles.categoryContainer}>
+                <Text style={styles.categoryName} numberOfLines={1}>{gameCategory}</Text>
+                <AnsweredGameProgress index={index} total={total} />
+                <Text style={styles.questionsAnswered}>
+                    {`${index + 1}/${total}`}
+                </Text>
+
+            </View>
+            <View>
+                <View style={styles.demoContainer}>
+                    <Image
+                        source={require('../../../../assets/images/star.png')}
+                        style={styles.starIcon}
+                    />
+                    <Text style={styles.demoText}>Demo game</Text>
+                </View>
+                <SelectedPlayers user={user} />
+            </View>
+        </View>
+    )
+}
+
+const AnsweredGameProgress = ({ index, total }) => {
+
+    return (
+        <View style={styles.questionsAnsweredContainer}>
+            <Progress.Bar progress={(index + 1) / total}
+                width={130} color='#E15220' unfilledColor='#F2C8BC' borderWidth={0} height={14} borderRadius={32}
+            />
+        </View>
+    );
+}
+
 
 const ChallengePracticeFreeze = ({ copilot }) => {
 
     return (
-        <View style={styles.boostDetailsHead} {...copilot}>
+        <View style={styles.boostItems} {...copilot}>
 
             <Image {...copilot}
                 source={require('../../../../assets/images/timefreeze-boost.png')}
                 style={styles.boostIcon}
             />
-                        <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
+            <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
         </View>
 
     )
@@ -145,7 +187,7 @@ const ChallengePracticeFreeze = ({ copilot }) => {
 const ChallengePracticeSkip = ({ copilot }) => {
 
     return (
-        <View style={styles.boostDetailsHead} {...copilot}>
+        <View style={styles.boostItems} {...copilot}>
             <Image
                 source={require('../../../../assets/images/skip-boost.png')}
                 style={styles.boostIcon}
@@ -155,28 +197,23 @@ const ChallengePracticeSkip = ({ copilot }) => {
     )
 }
 
-const SelectedPlayers = ({ user }) => {
+const SelectedPlayers = () => {
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
+    const user = useSelector(state => state.auth.user);
+    const username = user.username?.charAt(0) + user.username?.charAt(1);
+    const opponentName = challengeDetails.opponent?.username?.charAt(0) + challengeDetails.opponent?.username?.charAt(1)
     return (
         <View style={styles.playerImage}>
-            <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-
-            <Image
-                source={require('../../../../assets/images/versus.png')}
-            />
-            <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+            <SelectedPlayer playerAvatar={username} backgroundColor='#ccded48c' />
+            <SelectedPlayer playerAvatar={opponentName} backgroundColor='#FEECE7' />
         </View>
     )
 }
 
-const SelectedPlayer = ({ playerName, playerAvatar }) => {
+const SelectedPlayer = ({ playerAvatar, backgroundColor }) => {
     return (
-        <View style={styles.avatarBackground}>
-            <Image
-                source={playerAvatar}
-                style={styles.avatar}
-            />
-            <Text style={styles.username}>@{playerName}</Text>
+        <View style={[styles.avatarContent, { backgroundColor: backgroundColor }]}>
+            <Text style={styles.avatarText}>{playerAvatar}</Text>
         </View>
     )
 }
@@ -270,70 +307,17 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         fontSize: '1.2rem',
         fontFamily: 'gotham-medium',
-        color: '#072169',
+        color: '#1C453B',
     },
     headerTitle: {
         fontSize: '0.9rem',
         fontFamily: 'gotham-medium',
-        color: '#072169',
+        color: '#1C453B',
     },
     gameProgressAndBoost: {
         display: 'flex',
-        shadowColor: 'inset 0px 4px 0px rgba(0, 0, 0, 0.05)',
         borderRadius: 16,
         marginVertical: normalize(18),
-        backgroundColor: '#AAD880',
-        paddingVertical: '1rem'
-    },
-    availableBoosts: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-
-    },
-    availableBoostsIcons: {
-        flexDirection: 'row',
-        marginTop: '1rem'
-
-    },
-    boostinfo: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-
-    title: {
-        color: '#072169',
-        fontFamily: 'gotham-bold',
-        fontSize: '.85rem'
-    },
-    boostContainer: {
-        alignItems: 'center',
-        marginHorizontal: '1rem'
-    },
-    boostDetailsHead: {
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        marginHorizontal: '.5rem'
-    },
-    boostIcon: {
-        width: '2rem',
-        height: '2rem',
-    },
-    storeItemName: {
-        fontFamily: 'gotham-bold',
-        fontSize: '0.8rem',
-        color: '#FFF',
-    },
-    playerImage: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: normalize(15),
-        paddingHorizontal: normalize(20),
-        alignItems: 'center',
-        borderRadius: 13,
-        marginBottom: '1rem',
         borderWidth: 1,
         borderColor: '#E5E5E5',
         elevation: 2.5,
@@ -341,23 +325,175 @@ const styles = EStyleSheet.create({
         shadowOffset: { width: 0.5, height: 1 },
         shadowOpacity: 0.1,
         backgroundColor: '#fff'
+
     },
-    avatarBackground: {
+    topicProgress: {
+        borderBottomWidth: 1,
+        borderColor: '#93939336',
+        paddingVertical: normalize(18),
+        paddingHorizontal: '.3rem'
+    },
+    topicContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: '1rem'
+    },
+    categoryContainer: {
+        flexDirection: 'column',
+    },
+    stakeContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FA5F4A',
+        borderRadius: 30,
+        paddingHorizontal: '.4rem',
+        paddingVertical: '.2rem'
+    },
+    stakeHeader: {
+        fontSize: '0.65rem',
+        fontFamily: 'gotham-medium',
+        color: '#FFF',
+    },
+    categoryName: {
+        color: '#1C453B',
+        fontFamily: 'gotham-bold',
+        fontSize: '1rem',
+        width: '8rem',
+        marginBottom: '.8rem'
+    },
+    questionsAnswered: {
+        color: '#1C453B',
+        fontFamily: 'gotham-bold',
+        fontSize: '0.85rem',
+        marginTop: '.7rem'
+    },
+    oddContainer: {
+        flexDirection: 'row',
         alignItems: 'center'
     },
-    avatar: {
-        width: normalize(65),
-        height: normalize(65),
-        backgroundColor: '#F6F4FF',
-        borderRadius: 50,
-    },
-    username: {
-        fontSize: '0.9rem',
+    oddTitle: {
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
-        color: '#072169',
-        width: responsiveScreenWidth(25),
-        textAlign: 'center',
-        marginTop: '.8rem'
+        fontSize: '0.8rem'
+    },
+    oddText: {
+        color: '#1C453B',
+        fontFamily: 'sansation-regular',
+        fontSize: '0.8rem',
+        marginLeft: '.3rem'
+    },
+    demoContainer: {
+        backgroundColor: '#E15220',
+        borderRadius: 30,
+        paddingHorizontal: '.35rem',
+        paddingVertical: '.3rem',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    demoText: {
+        color: '#F9FBFF',
+        fontFamily: 'gotham-medium',
+        fontSize: '0.7rem'
+    },
+    starIcon: {
+        width: '.7rem',
+        height: '.7rem'
+    },
+    storeItemName: {
+        fontSize: '.9rem',
+        color: '#fff',
+        fontFamily: 'gotham-bold',
+        textShadowColor: '#121212',
+        textShadowRadius: 1,
+        textShadowOffset: {
+            width: 1,
+            height: 1,
+        },
+        position: 'absolute',
+        left: 35,
+        top: 10
+    },
+    name: {
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+        fontSize: '0.65rem',
+        marginTop: '.5rem',
+        width: "4rem"
+    },
+    boostItems: {
+        flexDirection: 'row',
+        marginRight: '1.5rem',
+    },
+    playerImage: {
+        flexDirection: 'row',
+        marginTop: '.7rem'
+    },
+    avatarContent: {
+        borderRadius: 100,
+        width: '2.3rem',
+        height: '2.3rem',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    avatarText: {
+        textTransform: 'uppercase',
+        fontFamily: 'gotham-medium',
+        fontSize: '0.8rem',
+        color: '#1C453B'
+    },
+
+    availableBoosts: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: normalize(10),
+        paddingHorizontal: '.5rem'
+    },
+
+    availableBoost: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    boostActive: {
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: normalize(5),
+        padding: normalize(7),
+        shadowColor: 'rgba(0, 0, 0, 0.75)',
+        shadowOffset: { width: -1, height: 1 },
+    },
+    boostContainer: {
+
+    },
+    boostDetailsHead: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginRight: '1rem'
+    },
+    boostIcon: {
+        width: '3.2rem',
+        height: '3.2rem',
+    },
+    storeItemName: {
+        fontSize: '.9rem',
+        color: '#fff',
+        fontFamily: 'gotham-bold',
+        textShadowColor: '#121212',
+        textShadowRadius: 1,
+        textShadowOffset: {
+            width: 1,
+            height: 1,
+        },
+        position: 'absolute',
+        left: 35,
+        top: 10
+    },
+    name: {
+        color: '#FFFF',
+        fontFamily: 'graphik-medium',
+        fontSize: '0.65rem',
+        marginTop: '.5rem',
+        width: "4rem"
     },
     questionsContainer: {
         backgroundColor: '#FFF',
@@ -378,7 +514,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     pickText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '1rem',
         marginBottom: '.8rem'
@@ -388,20 +524,23 @@ const styles = EStyleSheet.create({
 
     },
     questions: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'sansation-regular',
         fontSize: '1.1rem',
         lineHeight: normalize(26)
     },
     timeText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '0.8rem',
     },
     questionCount: {
         fontFamily: 'gotham-bold',
         fontSize: '0.9rem',
-        color: '#072169',
+        color: '#1C453B',
+    },
+    disabled: {
+        backgroundColor: '#EA8663'
     },
     answer: {
         flexDirection: 'row',
@@ -411,9 +550,10 @@ const styles = EStyleSheet.create({
         // backgroundColor: 'red',
     },
     optionText: {
-        color: '#072169',
-        fontFamily: 'sansation-regular',
+        color: '#1C453B',
+        fontFamily: 'gotham-bold',
         fontSize: '0.9rem',
     },
+
 
 })

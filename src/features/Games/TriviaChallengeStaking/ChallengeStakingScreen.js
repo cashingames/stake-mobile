@@ -8,7 +8,7 @@ import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../
 import Constants from 'expo-constants';
 import { formatCurrency, formatNumber } from '../../../utils/stringUtl';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { startChallengeRequest, startPracticeChallengeRequest } from './TriviaChallengeGameSlice';
+import { setChallengeAmountStaked, startChallengeRequest, startPracticeChallengeRequest } from './TriviaChallengeGameSlice';
 import logToAnalytics from '../../../utils/analytics';
 import CustomAlert from '../../../shared/CustomAlert';
 import { SelectList } from 'react-native-dropdown-select-list';
@@ -38,6 +38,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
 
     const stakeAmount = async () => {
         setLoading(true);
+        dispatch(setChallengeAmountStaked(amount))
         dispatch(startChallengeRequest({
             category: gameCategoryId,
             amount: amount,
