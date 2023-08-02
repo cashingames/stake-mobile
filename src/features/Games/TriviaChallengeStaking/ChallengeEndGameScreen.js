@@ -11,6 +11,7 @@ import { useState } from "react";
 import logToAnalytics from "../../../utils/analytics";
 import AppButton from "../../../shared/AppButton";
 import { formatCurrency, isTrue } from "../../../utils/stringUtl";
+import { getUser } from "../../Auth/AuthSlice";
 
 
 const ChallengeEndGameScreen = ({ navigation }) => {
@@ -26,12 +27,14 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     const goHome = () => {
         navigation.navigate('Home');
+        dispatch(getUser());
         dispatch(clearSession());
     };
 
 
     const onPlayButtonClick = () => {
         setLoading(true);
+        dispatch(getUser());
         dispatch(clearSession());
         logToAnalytics('trivia_challenge_play_again_clicked', {
             'id': user.username,

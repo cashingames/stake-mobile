@@ -12,6 +12,7 @@ import { startChallengeRequest, startPracticeChallengeRequest } from './TriviaCh
 import logToAnalytics from '../../../utils/analytics';
 import CustomAlert from '../../../shared/CustomAlert';
 import { SelectList } from 'react-native-dropdown-select-list';
+import { getUser } from '../../Auth/AuthSlice';
 
 
 
@@ -91,6 +92,10 @@ const ChallengeStakingScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
+        dispatch(getUser());
+    },[])
+
+    useEffect(() => {
         if (cashMode && selected === 1) {
             setWalletType('CREDIT_BALANCE')
         }
@@ -112,7 +117,7 @@ const ChallengeStakingScreen = ({ navigation }) => {
 
     return (
         <>
-            <ImageBackground source={require('../../../../assets/images/game-play-background.png')}
+            <ImageBackground source={require('../../../../assets/images/match-background.png')}
                 style={{ flex: 1 }}
                 resizeMethod="resize">
                 <KeyboardAvoidingView
@@ -403,7 +408,6 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        // paddingVertical: normalize(15),
         paddingHorizontal: normalize(20),
         alignItems: 'center',
         borderRadius: 13,
@@ -456,12 +460,6 @@ const styles = EStyleSheet.create({
         alignItems: 'flex-start',
         marginRight: '1.8rem'
     },
-    boostDetailsContainer: {
-        flexDirection: 'column',
-    },
-    boostNameCount: {
-        alignItems: 'center',
-    },
     storeItemName: {
         fontSize: '.9rem',
         color: '#fff',
@@ -493,20 +491,6 @@ const styles = EStyleSheet.create({
         width: '3.3rem',
         height: '3.3rem',
     },
-    noBoost: {
-        fontSize: '.75rem',
-        fontFamily: 'gotham-medium',
-        color: '#1C453B',
-        textAlign: 'center',
-        marginTop: '.5rem'
-    },
-    noBoostText: {
-        fontSize: '.75rem',
-        fontFamily: 'gotham-medium',
-        color: '#1C453B',
-        textAlign: 'center',
-        marginTop: '.5rem'
-    },
     boostContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -520,14 +504,6 @@ const styles = EStyleSheet.create({
         width: responsiveScreenWidth(38),
         textAlign: 'center'
     },
-    matchingText: {
-        fontSize: '.8rem',
-        fontFamily: 'gotham-medium',
-        color: '#E15220',
-        textAlign: 'center',
-        textDecorationColor: '#E15220',
-        textDecorationLine: 'underline',
-    },
     purchaseBoost: {
         backgroundColor: '#FAF0E8',
         marginVertical: normalize(15),
@@ -540,9 +516,6 @@ const styles = EStyleSheet.create({
         shadowColor: '#000',
         shadowOffset: { width: 0.5, height: 1 },
         shadowOpacity: 0.1,
-    },
-    storeLink: {
-        marginTop: '.6rem'
     },
     disabled: {
         backgroundColor: '#EA8663'
@@ -575,10 +548,6 @@ const styles = EStyleSheet.create({
         fontFamily: 'gotham-medium',
         fontSize: '.95rem',
     },
-    cashAvatar: {
-        width: '1.35rem',
-        height: '1.35rem'
-    },
     versus: {
         width: '3.2rem',
         height: '7.9rem'
@@ -603,15 +572,6 @@ const styles = EStyleSheet.create({
     currencyHeaderLeft: {
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    currencyHeaderRight: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    depositText: {
-        color: '#1C453B',
-        fontFamily: 'gotham-medium',
-        fontSize: '.9rem',
     },
     errorContainer: {
         flexDirection: 'row',
