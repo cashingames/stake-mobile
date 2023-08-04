@@ -7,8 +7,8 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Auth/AuthSlice';
 import { formatCurrency } from '../../utils/stringUtl';
-import AppButton from '../../shared/AppButton';
-import { fetchUserTransactions } from '../CommonSlice';
+// import AppButton from '../../shared/AppButton';
+// import { fetchUserTransactions } from '../CommonSlice';
 import { useGetTransactionsQuery } from '../../services/wallets-api';
 
 
@@ -330,7 +330,7 @@ const TransactionsContainer = ({ mainWalletActive, bonusWalletActive, winningsWa
                                             />)
                                         }
 
-                                        <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        {/* <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} /> */}
                                     </View>
                                     :
                                     <View style={styles.noTransactionContainer}>
@@ -353,7 +353,7 @@ const TransactionsContainer = ({ mainWalletActive, bonusWalletActive, winningsWa
                                             />)
                                         }
 
-                                        <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        {/* <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} /> */}
                                     </View>
                                     :
                                     <View style={styles.noTransactionContainer}>
@@ -376,7 +376,7 @@ const TransactionsContainer = ({ mainWalletActive, bonusWalletActive, winningsWa
                                             />)
                                         }
 
-                                        <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        {/* <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} /> */}
                                     </View>
                                     :
                                     <View style={styles.noTransactionContainer}>
@@ -399,7 +399,7 @@ const TransactionsContainer = ({ mainWalletActive, bonusWalletActive, winningsWa
                                             />)
                                         }
 
-                                        <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        {/* <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} /> */}
                                     </View>
                                     :
                                     <View style={styles.noTransactionContainer}>
@@ -422,7 +422,7 @@ const TransactionsContainer = ({ mainWalletActive, bonusWalletActive, winningsWa
                                             />)
                                         }
 
-                                        <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        {/* <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} /> */}
                                     </View>
                                     :
                                     <View style={styles.noTransactionContainer}>
@@ -444,7 +444,7 @@ const TransactionsContainer = ({ mainWalletActive, bonusWalletActive, winningsWa
                                             />)
                                         }
 
-                                        <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} />
+                                        {/* <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} onPress={() => navigation.navigate('Transactions')} /> */}
                                     </View>
                                     :
                                     <View style={styles.noTransactionContainer}>
@@ -465,7 +465,7 @@ const TransactionsContainer = ({ mainWalletActive, bonusWalletActive, winningsWa
                                             bonusDebitTransactions().map((transaction, i) => <FundTransactions key={i} transaction={transaction}
                                             />)
                                         }
-                                        <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} style={styles.appButton} onPress={() => navigation.navigate('Transactions')} />
+                                        {/* <AppButton text='View more' isIcon={true} iconColor="#FFF" textStyle={styles.buttonText} style={styles.appButton} onPress={() => navigation.navigate('Transactions')} /> */}
                                     </View>
 
                                     :
