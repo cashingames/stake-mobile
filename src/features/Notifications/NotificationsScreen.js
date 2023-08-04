@@ -11,7 +11,7 @@ import { getUserNotifications, markNotificationRead } from "../CommonSlice";
 import AppButton from "../../shared/AppButton";
 
 
-const NotificationsScreen = () => {
+const NotificationsScreen = ({ navigation }) => {
     const notifications = useSelector(state => state.common.userNotifications)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
@@ -72,8 +72,14 @@ const NotificationsScreen = () => {
 
                 }
             </ScrollView>
-            <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFF" /> : 'Mark all as read'} onPress={markAllAsRead} disabled={clicking} style={styles.markButton} textStyle={styles.buttonText}
-                disabledStyle={styles.disabled} />
+            {notifications?.length > 0 ?
+                <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFF" /> : 'Mark all as read'} onPress={markAllAsRead} disabled={clicking} style={styles.markButton} textStyle={styles.buttonText}
+                    disabledStyle={styles.disabled} />
+                :
+
+                <AppButton text='Okay, got it' onPress={() => navigation.navigate('Home')} style={styles.markButton} textStyle={styles.buttonText}
+                    disabledStyle={styles.disabled} />
+            }
 
         </ImageBackground>
 

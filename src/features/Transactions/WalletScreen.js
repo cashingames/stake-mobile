@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, ScrollView, Pressable, Image, RefreshControl, ImageBackground, ActivityIndicator, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, ScrollView, Pressable, RefreshControl, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import normalize from '../../utils/normalize';
 import EStyleSheet from 'react-native-extended-stylesheet';
