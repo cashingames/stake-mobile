@@ -77,7 +77,7 @@ const QuestionTab = ({ question, answer }) => {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
+        backgroundColor: '#F9FBFF',
         padding: normalize(20),
     },
     titleContainer: {

@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from './HomeScreen';
 import GamesListScreen from '../Games/GamesListScreen';
-import HelpPages from '../Support/HelpPages';
 import NotificationsScreen from '../Notifications/NotificationsScreen';
+import ContactUs from '../Support/ContactUs';
 
 
 const Tab = createBottomTabNavigator();
@@ -41,9 +41,9 @@ const HomeRouter = () => {
                     <Ionicons name="game-controller" color={color} size={35} />
                 ),
             }} />
-            <Tab.Screen name="Contact Us" component={HelpPages} options={{
-                title: 'Help',
-                tabBarLabel: 'Help',
+            <Tab.Screen name="Contact Us" component={ContactUs} options={{
+                title: 'Contact Us',
+                tabBarLabel: 'Contact',
                 headerStyle: {
                     backgroundColor: '#FFFF',
                 },

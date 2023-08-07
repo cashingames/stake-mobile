@@ -21,7 +21,7 @@ export default function SupportAnswerScreen({ navigation, route }) {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F2F5FF',
+        backgroundColor: '#F9FBFF',
         paddingHorizontal: normalize(18),
         paddingVertical: normalize(25),
     },

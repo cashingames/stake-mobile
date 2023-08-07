@@ -30,8 +30,8 @@ const UserAvailabeBoosts = () => {
     return (
         <View style={styles.walletsContainer}>
             <Pressable style={styles.boostsContainer}
-                onPress={Platform.OS !== 'ios' ? goToStore : doNothing}
-                // onPress={goToStore}
+                // onPress={Platform.OS !== 'ios' ? goToStore : doNothing}
+                onPress={goToStore}
 
             >
                 <View style={styles.boostHeader}>
