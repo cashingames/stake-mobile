@@ -24,12 +24,12 @@ const styles = EStyleSheet.create({
     mainFooter:{
         marginTop:'3rem',
         alignItems:'center',
-        backgroundColor:'#EF2F55',
+        backgroundColor:'#E05C28',
         padding:'.8rem'
     },
     mainFooterHeader:{
       fontSize:'1.2rem',
-      fontFamily:'graphik-medium',
+      fontFamily:'gotham-medium',
       color:'#fff',
       marginVertical:'1rem'
     },
@@ -37,7 +37,7 @@ const styles = EStyleSheet.create({
       color:'#fff',
       marginVertical:'0.2rem',
       fontSize:'.8rem',
-      fontFamily:'graphik-regular',
+      fontFamily:'sansation-regular',
       lineSpacing:'2rem'
     },
 
@@ -50,12 +50,12 @@ const styles = EStyleSheet.create({
       alingSelf:'flex-end',
       alignItems:'center',
       borderRadius:30,
-      backgroundColor:'#ef2f55',
+      backgroundColor:'#E05C28',
     },
     mainFooterBtnText:{
       fontSize:'0.7rem',
       color:'#fff',
-      fontFamily:'graphik-medium'
+      fontFamily:'gotham-medium'
     }
 })
 

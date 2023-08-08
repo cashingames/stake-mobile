@@ -90,9 +90,9 @@ const styles = EStyleSheet.create({
     },
     contactUs: {
         fontSize: '0.75rem',
-        color: '#EF2F55',
+        color: '#E05C28',
         marginTop: '1rem',
-        fontFamily: 'graphik-medium',
+        fontFamily: 'gotham-medium',
         textAlign: 'center'
     }
 })

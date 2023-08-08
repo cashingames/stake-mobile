@@ -2,7 +2,6 @@ import React from 'react';
 import {
     ScrollView,
 } from 'react-native';
-import { useNavigation } from "@react-navigation/native";
 import {SafeAreaView} from 'react-native-safe-area-context';
 import LandingPageHeader from '../../shared/LandingPageHeader';
 import LandingBanner from '../../shared/LandingBanner';
