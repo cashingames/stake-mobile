@@ -6,7 +6,7 @@ export default function ({ backgroundColor, spinnerColor, barStyle, statusBackgr
     return (
      
             <View style={[styles.loadingContainer,
-            backgroundColor ? { backgroundColor: backgroundColor } : { backgroundColor: '#fff' }
+            backgroundColor ? { backgroundColor: backgroundColor } : { backgroundColor: '#F9FBFF' }
             ]}>
                 <ActivityIndicator size="large" color={spinnerColor} />
             </View>

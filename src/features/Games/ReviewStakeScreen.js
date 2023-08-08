@@ -137,7 +137,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     totalTitleText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-medium',
         fontSize: '.9rem',
         marginLeft: '.4rem'
@@ -147,13 +147,13 @@ const styles = EStyleSheet.create({
         height: '1.35rem'
     },
     currencyText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '1.1rem',
         marginRight: '.3rem'
     },
     currencyAmount: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'sansation-regular',
         fontSize: '1.1rem',
     },
@@ -172,7 +172,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
     },
     depositText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-medium',
         fontSize: '.9rem',
     },
@@ -199,25 +199,25 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         fontFamily: "gotham-bold",
         fontSize: ".95rem",
-        color: "#072169",
+        color: "#1C453B",
         marginVertical: '1.1rem',
     },
 
     stakeScore: {
         fontFamily: "gotham-bold",
         fontSize: ".85rem",
-        color: "#072169",
+        color: "#1C453B",
     },
     stakeHead: {
         fontFamily: "gotham-bold",
         fontSize: ".85rem",
-        color: "#072169",
+        color: "#1C453B",
         marginRight: '1rem',
     },
     stakePay: {
         fontFamily: "gotham-bold",
         fontSize: ".85rem",
-        color: "#072169",
+        color: "#1C453B",
         marginRight: '1rem',
     },
     stakeHeaders: {

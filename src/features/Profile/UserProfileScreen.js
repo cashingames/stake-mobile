@@ -9,25 +9,33 @@ import { useSelector, useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { isTrue } from '../../utils/stringUtl';
-import { getUser, editProfileAvatar } from '../Auth/AuthSlice';
+import { getUser, editProfileAvatar, logoutUser } from '../Auth/AuthSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
-import Animated from 'react-native-reanimated';
-import { randomEnteringAnimation } from '../../utils/utils';
 
 
 export default function UserProfileScreen({ navigation }) {
 
     useApplyHeaderWorkaround(navigation.setOptions);
 
+    const dispatch = useDispatch();
+
+    const onLogout = () => {
+        dispatch(logoutUser());
+    }
+
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
+            <ScrollView style={styles.container}>
                 <View style={styles.content}>
                     <UserAvatar />
                     <ProfileTabs />
                 </View>
+                <View style={styles.logoutContainer}>
+                <Pressable onPress={onLogout} style={styles.button}>
+                    <Text style={styles.text}>Logout</Text>
+                </Pressable>
+                <Text style={styles.appVersion}>App version: {Constants.expoConfig.version}</Text>
+            </View>
             </ScrollView>
-        </SafeAreaView>
     );
 }
 
@@ -116,7 +124,7 @@ const ProfileTabs = () => {
 }
 
 
-const ProfileTab = ({ tabName, onPress, icon , styleProp}) => {
+const ProfileTab = ({ tabName, onPress, icon, styleProp }) => {
     return (
         <Pressable onPress={onPress} style={styleProp}>
             <View style={styles.profileTabIcon}>
@@ -134,6 +142,8 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F9FBFF',
+        paddingHorizontal:'1.2rem',
+        paddingTop:'1rem'
     },
     content: {
         marginHorizontal: normalize(18),
@@ -170,7 +180,7 @@ const styles = EStyleSheet.create({
     profileTabI: {
         flexDirection: 'column',
         alignItems: 'center',
-        marginTop:'2.5rem'
+        marginTop: '2.5rem'
     },
     profileTabIcon: {
         borderColor: '#F5870F',
@@ -199,7 +209,7 @@ const styles = EStyleSheet.create({
         marginTop: '.6rem'
     },
     profileTabsContainer: {
-        flexDirection:'column'
+        flexDirection: 'column'
     },
     profileTabs: {
         flexDirection: 'row',
@@ -210,6 +220,33 @@ const styles = EStyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center'
         // paddingVertical: normalize(25)
-    }
+    },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: normalize(15),
+        paddingHorizontal: normalize(28),
+        marginBottom: 10,
+        borderRadius: 13,
+        elevation: 3,
+        backgroundColor: '#E15220',
+    },
+    text: {
+        letterSpacing: 0.25,
+        color: 'white',
+        fontFamily: 'graphik-medium',
+        fontSize: '1.2rem',
+        textAlign:'center',
+    },
+    logoutContainer:{
+        marginBottom:'2rem'
+    },
+    appVersion: {
+        letterSpacing: 0.25,
+        color: '#1C453B',
+        fontFamily: 'gotham-medium',
+        fontSize: '.7rem',
+        textAlign:'center',
+    },
 
 });

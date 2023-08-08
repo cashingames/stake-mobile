@@ -54,13 +54,13 @@ const styles = EStyleSheet.create({
         fontFamily: 'gotham-bold',
         fontSize: '1.5rem',
         textAlign: 'center',
-        color: '#072169',
+        color: '#1C453B',
     },
     message: {
         fontFamily: 'gotham-medium',
         fontSize: '1.1rem',
         textAlign: 'center',
-        color: '#072169',
+        color: '#1C453B',
         lineHeight: '1.6rem',
     },
     congratsButtons: {
