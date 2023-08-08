@@ -169,7 +169,7 @@ function AppRouter() {
 						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Bio Data' }} />
 						<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Change Password' }} />
 						<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
-						<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Help' }} />
+						<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'FAQ' }} />
 						<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
 						<AppStack.Screen name="EmailVerification" component={EmailVerificationScreen} options={{ title: 'Email Verification' }} />
 

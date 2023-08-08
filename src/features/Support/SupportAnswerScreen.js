@@ -26,16 +26,16 @@ const styles = EStyleSheet.create({
         paddingVertical: normalize(25),
     },
     question: {
-        fontFamily: 'graphik-medium',
+        fontFamily: 'gotham-bold',
         fontSize: '0.9rem',
         marginVertical: normalize(20),
-        color: '#000000',
+        color: '#1C453B',
         lineHeight: '1.3rem'
     },
     answer: {
-        fontFamily: 'graphik-regular',
+        fontFamily: 'sansation-regular',
         fontSize: '0.9rem',
-        color: '#151C2F',
+        color: '#1C453B',
         lineHeight: '1.3rem'
     }
 });

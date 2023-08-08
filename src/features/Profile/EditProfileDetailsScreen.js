@@ -19,7 +19,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user);
-    const isEmailVerified = user.isEmailVerified;
+    // const isEmailVerified = user.isEmailVerified;
     const [saving, setSaving] = useState(false);
     const [email, setEmail] = useState(user.email);
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
@@ -146,7 +146,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
                             label='Email'
                             value={email}
                             onChangeText={text => { onChangeEmail(text) }}
-                            editable={!isEmailVerified ? true : false}
+                            editable={false}
                             style={styles.input}
                         />
                         {/* {!isEmailVerified &&

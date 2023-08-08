@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-
 import normalize, { responsiveScreenHeight } from './../../utils/normalize';
 import { fetchFaqAndAnswers } from '../CommonSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,8 +9,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
 import Animated, { FlipInXUp, SlideInRight } from 'react-native-reanimated';
 import PageLoading from '../../shared/PageLoading';
-import { logoutUser } from '../Auth/AuthSlice';
-import Constants from 'expo-constants';
 
 
 export default function SupportQuestionsScreen({ navigation }) {
@@ -33,8 +30,8 @@ export default function SupportQuestionsScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <Animated.View style={styles.titleContainer} entering={SlideInRight}>
-                <Text style={styles.title}>Need some help ?</Text>
-                <Text style={styles.title}>Go through our FAQs</Text>
+                {/* <Text style={styles.title}>Need some help ?</Text>
+                <Text style={styles.title}>Go through our FAQs</Text> */}
 
             </Animated.View>
             <View style={styles.profileTabs}>
@@ -68,7 +65,7 @@ const QuestionTab = ({ question, answer }) => {
             })}
             style={styles.tab}>
             <Text style={styles.tabText}>{question}</Text>
-            <Ionicons name="chevron-forward-outline" size={20} color="#524D4D" />
+            <Ionicons name="chevron-forward-outline" size={20} color="#1C453B" />
         </Pressable >
     )
 }
@@ -89,21 +86,29 @@ const styles = EStyleSheet.create({
         marginTop: normalize(9),
     },
     profileTabs: {
-        paddingVertical: normalize(20)
+        paddingTop: normalize(5),
+        marginBottom:'2rem'
     },
     tab: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderBottomColor: 'rgba(0, 0, 0, 0.1)',
-        borderBottomWidth: 1,
-        paddingVertical: normalize(20),
+        borderColor: '#E0E0E0',
+        borderWidth: 1,
+        paddingVertical: normalize(15),
+        paddingHorizontal:'1rem',
+        marginBottom: '.3rem',
+        elevation: 2.5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0.5, height: 2 },
+        shadowOpacity: 0.2,
+        backgroundColor:'#FFF'
     },
     tabText: {
-        fontSize: '0.87rem',
-        fontFamily: 'graphik-regular',
-        color: '#151C2F',
-        lineHeight: '1.5rem',
+        fontSize: '0.8rem',
+        fontFamily: 'gotham-medium',
+        color: '#1C453B',
+        lineHeight: '1.1rem',
         width: normalize(250)
     },
     logoutText: {
