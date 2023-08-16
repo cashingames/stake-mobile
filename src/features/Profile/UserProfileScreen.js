@@ -9,25 +9,33 @@ import { useSelector, useDispatch } from 'react-redux';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { isTrue } from '../../utils/stringUtl';
-import { getUser, editProfileAvatar } from '../Auth/AuthSlice';
+import { getUser, editProfileAvatar, logoutUser } from '../Auth/AuthSlice';
 import useApplyHeaderWorkaround from '../../utils/useApplyHeaderWorkaround';
-import Animated from 'react-native-reanimated';
-import { randomEnteringAnimation } from '../../utils/utils';
 
 
 export default function UserProfileScreen({ navigation }) {
 
     useApplyHeaderWorkaround(navigation.setOptions);
 
+    const dispatch = useDispatch();
+
+    const onLogout = () => {
+        dispatch(logoutUser());
+    }
+
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
+            <ScrollView style={styles.container}>
                 <View style={styles.content}>
                     <UserAvatar />
                     <ProfileTabs />
                 </View>
+                <View style={styles.logoutContainer}>
+                <Pressable onPress={onLogout} style={styles.button}>
+                    <Text style={styles.text}>Logout</Text>
+                </Pressable>
+                <Text style={styles.appVersion}>App version: {Constants.expoConfig.version}</Text>
+            </View>
             </ScrollView>
-        </SafeAreaView>
     );
 }
 
@@ -35,6 +43,8 @@ const UserAvatar = () => {
     const user = useSelector(state => state.auth.user)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
+    const username = user.firstName === '' ? user.username : (user.firstName + ' ' + user.lastName)
+
 
 
     const pickImage = async () => {
@@ -69,17 +79,24 @@ const UserAvatar = () => {
     }
 
     return (
-        <View style={styles.userAvatar}>
-            <Image
-                style={styles.avatar}
-                source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
+        <>
+            <View style={styles.userAvatar}>
+                <Image
+                    style={styles.avatar}
+                    source={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../assets/images/user-icon.png")}
 
-            />
-            {!loading ?
-                <Pressable style={styles.camera} onPress={pickImage}>
-                    <Ionicons name="camera-sharp" size={26} color="#FFFF" />
-                </Pressable> : <ActivityIndicator size="large" color="#0000ff" />}
-        </View>
+                />
+
+                {!loading ?
+                    <Pressable style={styles.camera} onPress={pickImage}>
+                        <Ionicons name="camera-sharp" size={20} color="#FFFF" />
+                    </Pressable> :
+                    <ActivityIndicator size="large" color="#0000ff" />
+                }
+            </View>
+            <Text style={styles.userName}>{username}</Text>
+        </>
+
     )
 }
 
@@ -88,30 +105,45 @@ const ProfileTabs = () => {
     const navigation = useNavigation();
 
     return (
-        <View style={styles.profileTabs}>
-            <ProfileTab tabName='Edit Details' onPress={() => navigation.navigate('EditDetails')} />
-            <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ChangePassword')} />
-            <ProfileTab tabName='Invite Friends' onPress={() => navigation.navigate('Invite')} />
+        <View style={styles.profileTabsContainer}>
+            <View style={styles.profileTabs}>
+                <ProfileTab tabName='Bio data' onPress={() => navigation.navigate('EditDetails')} icon={require('../../../assets/images/single-player.png')} styleProp={styles.profileTab} />
+                <ProfileTab tabName='Notification' onPress={() => navigation.navigate('Notifications')} icon={require('../../../assets/images/bell-dynamic-color.png')} styleProp={styles.profileTabI} />
+                <ProfileTab tabName='Wallet' onPress={() => navigation.navigate('Wallet')} icon={require('../../../assets/images/wallet-dynamic-color.png')} styleProp={styles.profileTab} />
+            </View>
+            <View style={styles.profileTabs}>
+                <ProfileTab tabName='FAQ' onPress={() => navigation.navigate('Support')} icon={require('../../../assets/images/file-dynamic-color.png')} styleProp={styles.profileTab} />
+                <ProfileTab tabName='Contact Us' onPress={() => navigation.navigate('ContactUs')} icon={require('../../../assets/images/mail-dynamic-color.png')} styleProp={styles.profileTabI} />
+                <ProfileTab tabName='Invite' onPress={() => navigation.navigate('Invite')} icon={require('../../../assets/images/link-dynamic-color.png')} styleProp={styles.profileTab} />
+            </View>
+            <View style={styles.profileTabsI}>
+                <ProfileTab tabName='Change Password' onPress={() => navigation.navigate('ChangePassword')} icon={require('../../../assets/images/key-dynamic-color.png')} styleProp={styles.profileTabI} />
+            </View>
         </View>
     )
 }
 
 
-const ProfileTab = ({ tabName, onPress }) => {
+const ProfileTab = ({ tabName, onPress, icon, styleProp }) => {
     return (
-        <Animated.View entering={randomEnteringAnimation().duration(1000)}>
-            <Pressable onPress={onPress} style={styles.profileTab}>
-                <Text style={styles.tabText}>{tabName}</Text>
-                <Ionicons name="chevron-forward-outline" size={20} color="#524D4D" />
-            </Pressable >
-        </Animated.View>
+        <Pressable onPress={onPress} style={styleProp}>
+            <View style={styles.profileTabIcon}>
+                <Image
+                    source={icon}
+                    style={styles.tabIcon}
+                />
+            </View>
+            <Text style={styles.tabText}>{tabName}</Text>
+        </Pressable >
     )
 }
 
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
+        backgroundColor: '#F9FBFF',
+        paddingHorizontal:'1.2rem',
+        paddingTop:'1rem'
     },
     content: {
         marginHorizontal: normalize(18),
@@ -129,30 +161,92 @@ const styles = EStyleSheet.create({
         height: normalize(100),
         backgroundColor: '#FFFF',
         borderRadius: 100,
-        borderColor: ' rgba(0, 0, 0, 0.1)',
+        borderColor: '#F5870F',
         borderWidth: 1,
         marginBottom: normalize(10)
     },
     camera: {
-        backgroundColor: '#EF2F55',
+        backgroundColor: '#F5870F',
         borderRadius: 50,
         padding: normalize(6),
+        position: 'absolute',
+        // left: 35,
+        bottom: -5
     },
     profileTab: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexDirection: 'column',
         alignItems: 'center',
-        borderBottomColor: 'rgba(0, 0, 0, 0.1)',
-        borderBottomWidth: 1,
-        paddingVertical: normalize(20)
+    },
+    profileTabI: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: '2.5rem'
+    },
+    profileTabIcon: {
+        borderColor: '#F5870F',
+        borderWidth: 2,
+        borderRadius: 100,
+        width: '5rem',
+        height: '5rem',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    tabIcon: {
+        width: '3rem',
+        height: '3rem'
     },
     tabText: {
+        fontSize: '0.85rem',
+        fontFamily: 'sansation-bold',
+        color: '#1C453B',
+        marginTop: '.4rem'
+    },
+    userName: {
         fontSize: '0.93rem',
-        fontFamily: 'graphik-regular',
-        color: '#151C2F',
+        fontFamily: 'sansation-bold',
+        color: '#1C453B',
+        textAlign: 'center',
+        marginTop: '.6rem'
+    },
+    profileTabsContainer: {
+        flexDirection: 'column'
     },
     profileTabs: {
-        paddingVertical: normalize(25)
-    }
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+        // paddingVertical: normalize(25)
+    },
+    profileTabsI: {
+        flexDirection: 'row',
+        justifyContent: 'center'
+        // paddingVertical: normalize(25)
+    },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: normalize(15),
+        paddingHorizontal: normalize(28),
+        marginBottom: 10,
+        borderRadius: 13,
+        elevation: 3,
+        backgroundColor: '#E15220',
+    },
+    text: {
+        letterSpacing: 0.25,
+        color: 'white',
+        fontFamily: 'graphik-medium',
+        fontSize: '1.2rem',
+        textAlign:'center',
+    },
+    logoutContainer:{
+        marginBottom:'2rem'
+    },
+    appVersion: {
+        letterSpacing: 0.25,
+        color: '#1C453B',
+        fontFamily: 'gotham-medium',
+        fontSize: '.7rem',
+        textAlign:'center',
+    },
 
 });

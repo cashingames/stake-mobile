@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, ScrollView, Share, Pressable, Platform } from 'react-native';
+import { Text, View, ScrollView, Share, Pressable, Platform, Image, ImageBackground } from 'react-native';
 import normalize from '../utils/normalize';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
@@ -9,6 +9,7 @@ import LottieAnimations from '../shared/LottieAnimations';
 import logToAnalytics from '../utils/analytics';
 import { useState } from 'react';
 import CustomAlert from '../shared/CustomAlert';
+import AppButton from '../shared/AppButton';
 
 
 const InviteFriendsScreen = () => {
@@ -25,24 +26,19 @@ const InviteFriendsScreen = () => {
 
 
     return (
-        <View style={styles.container}>
-
-            <ScrollView contentContainerStyle={styles.content}>
-                <LottieAnimations
-                    animationView={require('../../assets/friends.json')}
-                    width={normalize(160)}
-                    height={normalize(160)}
-                />
+        <ImageBackground source={require('../../assets/images/success-background.png')}
+            style={styles.content}
+            resizeMethod="resize">
+            <ScrollView style={styles.container}>
                 <Heading />
                 <Instructions />
-                <InviteLink startModal={startModal} setAlertMessage={setAlertMessage} />
-                <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    textLabel={alertMessage} buttonLabel='Ok, got it'
-                    alertImage={require('../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
-
+                <InviteLink />
             </ScrollView>
-        </View>
-
+            <ShareButtons startModal={startModal} setAlertMessage={setAlertMessage} />
+            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                textLabel={alertMessage} buttonLabel='Ok, got it'
+                alertImage={require('../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
+        </ImageBackground>
 
     );
 }
@@ -50,8 +46,7 @@ const InviteFriendsScreen = () => {
 const Heading = () => {
     return (
         <View style={styles.heading}>
-            <Text style={styles.value}>We value friendship</Text>
-            <Text style={styles.points}>with your referrals</Text>
+            <Text style={styles.value}>We value friendship with your referrals</Text>
         </View>
     )
 }
@@ -66,9 +61,29 @@ const Instructions = () => {
     )
 }
 
-const InviteLink = ({ startModal, setAlertMessage }) => {
+const InviteLink = () => {
     const user = useSelector(state => state.auth.user);
+    const referralUrl = (user.referralCode)
 
+    return (
+        <>
+            <Text style={styles.inviteLink}>Your referral code</Text>
+            <View style={styles.linkContainer} >
+                <Image
+                    source={require('../../assets/images/bonus-confetti.png')}
+                    style={styles.tabIcon}
+                />
+                <View style={{ marginLeft: 10 }}>
+                    <Text style={styles.link}>Share the great news of our interesting trivia games</Text>
+                    <Text style={styles.linkName}>{referralUrl}</Text>
+                </View>
+            </View>
+        </>
+    )
+}
+
+const ShareButtons = ({ startModal, setAlertMessage }) => {
+    const user = useSelector(state => state.auth.user);
     const referralUrl = (user.referralCode)
     const referralMsg = `Play exciting games with me on Cashingames and stand a chance to earn great rewards! Create an account with my referral code - ${referralUrl}`
 
@@ -93,18 +108,17 @@ const InviteLink = ({ startModal, setAlertMessage }) => {
             setAlertMessage("Copied to clipboard.");
         });
     };
-
     return (
-        <>
-            <Text style={styles.inviteLink}>Your referral code</Text>
-            <View style={styles.linkContainer} >
-                <Text style={styles.link}>{referralUrl}</Text>
-                <View style={styles.shareIcons}>
-                    <ShareLink iconName="md-copy" text='Copy' onPress={copyToClipboard} />
-                    <ShareLink iconName="md-share-social" text='Share' onPress={onShare} />
-                </View>
-            </View>
-        </>
+        <View style={styles.buttonsContainer}>
+            <Pressable style={styles.button} onPress={onShare}>
+                <Text style={styles.text}>Share to friends</Text>
+                <Ionicons name="md-share-social" size={20} color="#FFF" />
+            </Pressable>
+            <Pressable style={styles.buttonI} onPress={copyToClipboard}>
+                <Text style={styles.textI}>Copy link</Text>
+                <Ionicons name="md-copy" size={20} color="#1C453B" />
+            </Pressable>
+        </View>
     )
 }
 
@@ -123,27 +137,23 @@ export default InviteFriendsScreen;
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8F9FD',
-        paddingHorizontal: normalize(18)
+
     },
     content: {
         flex: 1,
-        justifyContent: 'center'
-
+        backgroundColor: '#F8F9FD',
+        paddingHorizontal: normalize(18),
+        paddingVertical: '1rem'
     },
+
 
     heading: {
-        marginVertical: normalize(30),
-    },
-    headingContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
+        marginBottom: normalize(20),
     },
     value: {
-        fontSize: '1.5rem',
-        fontFamily: 'graphik-medium',
-        color: '#151C2F',
+        fontSize: '.95rem',
+        fontFamily: 'gotham-medium',
+        color: '#1C453B',
         marginBottom: Platform.OS === 'ios' ? normalize(10) : normalize(0),
     },
     points: {
@@ -152,36 +162,47 @@ const styles = EStyleSheet.create({
         color: '#EF2F55',
     },
     instructions: {
-        fontSize: '0.95rem',
-        fontFamily: 'graphik-regular',
-        color: '#151C2F',
-        lineHeight: '1.7rem',
-        opacity: 0.6,
-        marginBottom: normalize(40),
+        fontSize: '0.8rem',
+        fontFamily: 'gotham-medium',
+        color: '#1C453B',
+        lineHeight: '1.1rem',
+        marginBottom: '3rem',
+    },
+    tabIcon: {
+        width: '3.2rem',
+        height: '3.2rem'
     },
     inviteLink: {
-        color: 'rgba(0, 0, 0, 0.6)',
+        color: '#1C453B',
         fontSize: '0.79rem',
-        fontFamily: 'graphik-medium',
-        lineHeight: '1.2rem',
+        fontFamily: 'gotham-medium',
         marginBottom: normalize(12),
     },
     link: {
-        fontSize: '0.73rem',
-        fontFamily: 'graphik-medium',
-        lineHeight: '1.1rem',
-        color: '#151C2F',
+        fontSize: '0.8rem',
+        fontFamily: 'gotham-medium',
+        lineHeight: '1rem',
+        color: '#1C453B',
+        width: '80%',
+        marginBottom: '.5rem'
+    },
+    linkName: {
+        fontSize: '1rem',
+        fontFamily: 'gotham-bold',
+        color: '#1C453B',
         width: '80%',
     },
     linkContainer: {
         backgroundColor: '#FFFF',
-        paddingVertical: normalize(10),
-        paddingHorizontal: normalize(15),
+        paddingVertical: normalize(13),
+        paddingHorizontal: normalize(10),
         borderRadius: 16,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderColor: '#E0E0E0',
+        borderWidth: 1,
     },
     shareIcons: {
         display: 'flex',
@@ -196,10 +217,46 @@ const styles = EStyleSheet.create({
         marginLeft: normalize(10),
         alignItems: 'center'
     },
-    tourTitle: {
-        color: '#EF2F55',
-        fontWeight: '600',
-        fontSize: 22,
-        marginBottom: 10
-    }
+    buttonsContainer: {
+        marginBottom: '1rem'
+    },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: normalize(17),
+        paddingHorizontal: normalize(28),
+        marginBottom: 12,
+        borderRadius: 13,
+        elevation: 3,
+        backgroundColor: '#E15220',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    text: {
+        letterSpacing: 0.25,
+        color: 'white',
+        fontFamily: 'graphik-medium',
+        fontSize: '1.2rem',
+        marginRight: '.3rem'
+    },
+    buttonI: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: normalize(17),
+        paddingHorizontal: normalize(28),
+        borderWidth: 2,
+        borderColor: '#1C453B',
+        borderRadius: 13,
+        elevation: 3,
+        backgroundColor: '#F9FBFF',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    textI: {
+        letterSpacing: 0.25,
+        color: '#1C453B',
+        fontFamily: 'graphik-medium',
+        fontSize: '1.2rem',
+        marginRight: '.3rem'
+    },
 });

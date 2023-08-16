@@ -19,7 +19,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.auth.user);
-    const isEmailVerified = user.isEmailVerified;
+    // const isEmailVerified = user.isEmailVerified;
     const [saving, setSaving] = useState(false);
     const [email, setEmail] = useState(user.email);
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
@@ -146,16 +146,16 @@ export default function EditProfileDetailsScreen({ navigation }) {
                             label='Email'
                             value={email}
                             onChangeText={text => { onChangeEmail(text) }}
-                            editable={!isEmailVerified ? true : false}
+                            editable={false}
                             style={styles.input}
                         />
-                        {!isEmailVerified &&
+                        {/* {!isEmailVerified &&
                             <Text style={styles.unverifyText}>unverified</Text>
-                        }
+                        } */}
                     </View>
-                    {!isEmailVerified &&
+                    {/* {!isEmailVerified &&
                         <Text style={styles.verifyText} onPress={goToVerifyEmailScreen}>Your email is not verified. Please, CLICK to verify your email!</Text>
-                    }
+                    } */}
                     <Input
                         label='Username'
                         value={username}
@@ -278,7 +278,7 @@ export default function EditProfileDetailsScreen({ navigation }) {
 const styles = EStyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFF',
+        backgroundColor: '#F9FBFF',
         paddingHorizontal: normalize(18),
         paddingBottom: normalize(20),
     },
@@ -369,7 +369,7 @@ const styles = EStyleSheet.create({
     },
     bankLabel: {
         fontFamily: 'gotham-medium',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.98rem',
         marginBottom: '.6rem'
     },

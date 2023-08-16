@@ -52,7 +52,7 @@ const styles = EStyleSheet.create({
     successTitle: {
         fontFamily: 'gotham-medium',
         fontSize: '1.5rem',
-        color: '#072169',
+        color: '#1C453B',
         alignItems: 'center',
         textAlign: 'center',
         marginTop:'2rem'
@@ -67,8 +67,6 @@ const styles = EStyleSheet.create({
         marginVertical: normalize(15)
     },
     buttonContainer: {
-        // borderColor: 'rgba(0, 0, 0, 0.15)',
-        // borderBottomWidth: normalize(1),
         paddingVertical: normalize(20),
         backgroundColor: '#fff',
     },

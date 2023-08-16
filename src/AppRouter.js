@@ -126,41 +126,20 @@ function AppRouter() {
 	}
 
 	return (
-		<AppStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' }, headerTitleAlign: 'center' }} >
+		<AppStack.Navigator screenOptions={{
+			headerStyle: { backgroundColor: '#F9FBFF' }, headerTitleAlign: 'center', headerTintColor: '#1C453B', headerTitleStyle: {
+				fontFamily: 'gotham-bold',
+				fontSize: 23
+			}
+		}} >
 			{isTrue(token) ?
 				(
 					<>
 						<AppStack.Screen options={{ headerShown: false }} name="AppRouter" component={HomeRouter} />
 						{/* game */}
-						<AppStack.Screen name="SelectGameCategory" component={SelectGameCategoryScreen} options={{
-							title: 'Select Category',
-							headerStyle: {
-								backgroundColor: '#F9FBFF',
-							},
-							headerTitleStyle: {
-								fontFamily: 'gotham-bold',
-								fontSize: 23,
-							},
-							headerTintColor: '#072169',
-						}} />
-						<AppStack.Screen name="GamesList" component={GamesListScreen} options={{
-							title: 'Games',
-							headerStyle: {
-								backgroundColor: '#072169',
-							},
-							headerTintColor: '#FFF',
-						}} />
-						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{
-							title: 'Enter stake',
-							headerStyle: {
-								backgroundColor: '#F9FBFF',
-							},
-							headerTitleStyle: {
-								fontFamily: 'gotham-bold',
-								fontSize: 23,
-							},
-							headerTintColor: '#072169',
-						}} />
+						<AppStack.Screen name="SelectGameCategory" component={SelectGameCategoryScreen} options={{ title: 'Trivia Game Category' }} />
+						<AppStack.Screen name="GamesList" component={GamesListScreen} options={{ title: 'Games' }} />
+						<AppStack.Screen name="GameStaking" component={GameStakingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ReviewStake" component={ReviewStakeScreen} options={{ title: 'Review Stake' }} />
 						<AppStack.Screen name="GameInProgress" component={GameInProgressScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameEndResult" component={GameEndResultScreen} options={{ headerShown: false }} />
@@ -169,17 +148,7 @@ function AppRouter() {
 
 
 						{/* challenge */}
-						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{
-							title: 'Challenge Player',
-							headerStyle: {
-								backgroundColor: '#F9FBFF',
-							},
-							headerTitleStyle: {
-								fontFamily: 'gotham-bold',
-								fontSize: 23,
-							},
-							headerTintColor: '#072169',
-						}} />
+						<AppStack.Screen name="ChallengeStaking" component={ChallengeStakingScreen} options={{ title: 'Challenge a Player' }} />
 						<AppStack.Screen name="ChallengeMatching" component={ChallengeMatchingScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengePracticeTour" component={ChallengePracticeTourScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="ChallengeGameBoard" component={ChallengeGameBoardScreen} options={{ headerShown: false }} />
@@ -187,27 +156,8 @@ function AppRouter() {
 						<AppStack.Screen name="ChallengeEndGame" component={ChallengeEndGameScreen} options={{ headerShown: false }} />
 
 						{/** wallet */}
-						<AppStack.Screen name="Wallet" component={WalletScreen} options={{
-							title: 'Wallet',
-							headerStyle: {
-								backgroundColor: '#F9FBFF',
-							},
-							headerTintColor: '#072169',
-							headerTitleStyle: {
-								fontFamily: 'gotham-bold',
-								fontSize: 23
-							}
-						}} />
-						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{
-							title: 'Deposit', headerStyle: {
-								backgroundColor: '#F9FBFF',
-							},
-							headerTintColor: '#072169',
-							headerTitleStyle: {
-								fontFamily: 'gotham-bold',
-								fontSize: 23
-							}
-						}} />
+						<AppStack.Screen name="Wallet" component={WalletScreen} options={{ title: 'Wallet' }} />
+						<AppStack.Screen name="FundWallet" component={FundWalletScreen} options={{ title: 'Deposit' }} />
 						<AppStack.Screen name="Transactions" component={TransactionScreen} options={{ title: 'Transactions' }} />
 						<AppStack.Screen name="FundWalletCompleted" component={FundWalletCompleted} options={{ headerShown: false }} />
 						<AppStack.Screen name="WithdrawalSuccess" component={WithdrawalSuccessScreen} options={{ headerShown: false }} />
@@ -216,44 +166,28 @@ function AppRouter() {
 
 						{/* user profile */}
 						<AppStack.Screen name="UserProfile" component={UserProfileScreen} options={{ title: 'Profile' }} />
-						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Edit Details' }} />
+						<AppStack.Screen name="EditDetails" component={EditProfileDetailsScreen} options={{ title: 'Bio Data' }} />
 						<AppStack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Change Password' }} />
 						<AppStack.Screen name="Invite" component={InviteFriendsScreen} options={{ title: 'Invite Friends' }} />
+						<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'FAQ' }} />
+						<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
 						<AppStack.Screen name="EmailVerification" component={EmailVerificationScreen} options={{ title: 'Email Verification' }} />
 
 
 						{/** store */}
-						<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{
-							title: 'Store', headerTintColor: '#072169',
-							headerTitleStyle: {
-								fontFamily: 'bubble-regular',
-								fontSize: 23,
-							},
-						}} />
+						<AppStack.Screen name="GameStore" component={GameStoreScreen} options={{ title: 'Store' }} />
 						<AppStack.Screen name="GameBoostPurchaseSuccessful" component={GameBoostPurchaseSuccessfulScreen} options={{ headerShown: false }} />
 						<AppStack.Screen name="GameStoreItemsPurchaseFailed" component={GameStoreItemsPurchaseFailed} options={{ headerShown: false }} />
 
 						{/* promotions */}
 						<AppStack.Screen name="Promotions" component={PromotionsScreen} options={{
-							title: 'Promotions',
-							headerStyle: {
-								backgroundColor: '#F9FBFF',
-							},
-							headerTintColor: '#072169',
-							headerTitleStyle: {
-								fontFamily: 'gotham-bold',
-								fontSize: 23
-							}
+							title: 'Promotions'
 						}} />
 						<AppStack.Screen name="Promotion" component={PromotionScreen} options={{ headerShown: false }} />
 
 
 						<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{
-							title: 'Notifications',
-							headerStyle: {
-								backgroundColor: '#072169',
-							},
-							headerTintColor: '#FFF',
+							title: 'Notifications'
 						}} />
 
 					</>
@@ -286,8 +220,7 @@ function AppRouter() {
 			<AppStack.Screen name="Help" component={HelpPages} options={{
 				title: 'Support'
 			}} />
-			<AppStack.Screen name="Support" component={SupportQuestionsScreen} options={{ title: 'Help' }} />
-			<AppStack.Screen name="Answer" component={SupportAnswerScreen} options={{ title: 'Details' }} />
+
 			<AppStack.Screen name="ContactUs" component={ContactUs} options={{ title: 'Contact Us' }} />
 		</AppStack.Navigator >
 	)

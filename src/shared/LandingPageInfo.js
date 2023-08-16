@@ -72,14 +72,14 @@ const styles = EStyleSheet.create({
     // padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ef2f55',
+    backgroundColor: '#E05C28',
   },
 
   landingImageText: {
     color: '#fff',
     fontSize: '1.8rem',
     width: responsiveScreenWidth(100),
-    fontFamily: 'graphik-medium',
+    fontFamily: 'gotham-medium',
     paddingLeft: Platform.OS === 'ios' ? '3rem' : '3.5rem',
     letterSpacing: 1
   },
@@ -92,7 +92,7 @@ const styles = EStyleSheet.create({
     backgroundColor: '#E24066',
     textAlign: 'center',
     letterSpacing: 1,
-    fontFamily: 'graphik-medium'
+    fontFamily: 'gotham-medium'
   },
 
   imgLink2: {
@@ -104,7 +104,7 @@ const styles = EStyleSheet.create({
     backgroundColor: '#6C15C9',
     textAlign: 'center',
     letterSpacing: 1,
-    fontFamily: 'graphik-medium'
+    fontFamily: 'gotham-medium'
   },
 
   landingImage2: {
@@ -126,14 +126,14 @@ const styles = EStyleSheet.create({
     width: responsiveScreenWidth(50),
     right: '-2rem',
     padding: '1rem',
-    backgroundColor: '#ef2f55',
+    backgroundColor: '#E05C28',
     boxShadow: '0 5px 20px rgba(239, 82, 47, 0.4)',
 
   },
 
   extraTitle: {
     fontSize: '1.2rem',
-    fontFamily: 'graphik-bold',
+    fontFamily: 'gotham-bold',
     lineHeight: '2rem',
     color: '#fff',
     alignItems: 'flex-start'
@@ -145,7 +145,7 @@ const styles = EStyleSheet.create({
     paddingTop: '0.8rem',
     borderTopWidth: 1,
     color: '#fff',
-    fontFamily: 'graphik-medium',
+    fontFamily: 'gotham-medium',
     borderColor: '#fff',
     marginVertical: responsiveScreenWidth(2)
   },
@@ -158,13 +158,13 @@ const styles = EStyleSheet.create({
     alingSelf: 'flex-end',
     alignItems: 'center',
     borderRadius: 30,
-    backgroundColor: '#ef2f55'
+    backgroundColor: '#E05C28'
   },
 
   btnText: {
     fontSize: '0.8rem',
     color: '#fff',
-    fontFamily: 'graphik-medium'
+    fontFamily: 'gotham-medium'
   },
 
   landingImage3: {
@@ -182,7 +182,7 @@ const styles = EStyleSheet.create({
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ef2f55'
+    backgroundColor: '#E05C28'
   },
   image3: {
     marginTop: 0,
@@ -193,7 +193,7 @@ const styles = EStyleSheet.create({
     color: '#fff',
     fontSize: '1.2rem',
     width: responsiveScreenWidth(100),
-    fontFamily: 'graphik-medium',
+    fontFamily: 'gotham-medium',
     paddingLeft: Platform.OS === 'ios' ? '3.8rem' : '4.3rem',
     letterSpacing: 1,
   },

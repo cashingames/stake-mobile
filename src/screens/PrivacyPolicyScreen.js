@@ -379,16 +379,15 @@ const styles = EStyleSheet.create({
     },
     title: {
         flex: 1,
-        marginLeft: responsiveScreenWidth(2),
-        color: '#151C2F',
-        fontSize: '1.1rem',
-        fontFamily: 'graphik-bold',
+        color: '#1C453B',
+        fontSize: '1rem',
+        fontFamily: 'gotham-bold',
         marginVertical: responsiveScreenWidth(1.5)
     },
     paragraph: {
         color: '#6c757dcc',
-        fontFamily: 'graphik-regular',
-        fontSize: '0.9rem',
+        fontFamily: 'sansation-regular',
+        fontSize: '0.85rem',
         lineHeight: '1.6rem',
     },
 })

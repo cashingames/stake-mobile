@@ -71,7 +71,7 @@ const styles = EStyleSheet.create({
     alignItems: 'center',
     height: 40,
     width: 40,
-    backgroundColor: '#EF2F55',
+    backgroundColor: '#E05C28',
     marginLeft: '0.5rem',
     justifyContent: 'center',
     borderRadius: 100
@@ -80,7 +80,7 @@ const styles = EStyleSheet.create({
   clickMeText: {
     flex: 1,
     color: '#fff',
-    fontFamily: 'graphik-medium',
+    fontFamily: 'gotham-medium',
     fontSize: '1rem',
     paddingRight: '4rem',
     alignItems: 'center',

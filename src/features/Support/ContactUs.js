@@ -45,7 +45,7 @@ const ContactUs = () => {
                 <View style={styles.textContainer}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.header}>Contact Support</Text>
-                        <Ionicons name="chevron-forward" size={22} color='#072169' />
+                        <Ionicons name="chevron-forward" size={22} color='#1C453B' />
                     </View>
                     <Text style={styles.whatsappTitle}>Live chat with support on Whatsapp</Text>
                 </View>
@@ -145,6 +145,7 @@ const styles = EStyleSheet.create({
         fontSize: '0.95rem',
         fontFamily: 'graphik-medium',
         marginTop: normalize(9),
+        color:'#1C453B'
     },
     formContainer: {
         marginTop: '2rem'
@@ -184,13 +185,13 @@ const styles = EStyleSheet.create({
     header: {
         fontSize: '0.9rem',
         fontFamily: 'gotham-bold',
-        color: '#072169'
+        color: '#1C453B'
     },
     whatsappTitle: {
         fontSize: '0.8rem',
         fontFamily: 'sansation-regular',
         marginTop: normalize(3),
-        color: '#072169'
+        color: '#1C453B'
     },
     icon: {
         width: 55,

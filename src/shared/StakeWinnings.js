@@ -29,15 +29,15 @@ const styles = EStyleSheet.create({
 		marginBottom: '.8rem',
 	},
 	winningsText: {
-		color: '#072169',
+		color: '#1C453B',
 		fontFamily: 'gotham-bold',
-		fontSize: '1.2rem',
+		fontSize: '1.3rem',
 		textAlign:'center'
 	},
 	winningsCash: {
-		color: '#072169',
+		color: '#1C453B',
 		fontFamily: 'gotham-bold',
-		fontSize: '1.1rem',
+		fontSize: '1.05rem',
 		marginTop: '.7rem',
 		textAlign:'center'
 	},

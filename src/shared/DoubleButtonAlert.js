@@ -11,49 +11,49 @@ const DoubleButtonAlert = ({ setModalVisible, modalVisible,
         setModalVisible(false)
     }
     return (
-            <View>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        setModalVisible(!modalVisible);
-                    }}
-                >
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <View style={styles.container}>
-                                {alertImageVisible &&
-                                    <View style={{ alignItems: 'center', marginBottom: 20 }}>
-                                        <Image
-                                            source={alertImage}
-                                        />
-                                    </View>
-
-                                }
-
-                                <Text style={styles.labelText}>{textLabel}</Text>
-                                <View>
-                                    <Pressable
-                                        style={styles.buttonOk}
-                                        onPress={closeModal}
-                                    >
-                                        <Text style={styles.text}>{buttonLabel}</Text>
-                                    </Pressable>
-                                    <Pressable
-                                        style={styles.buttonOk}
-                                        onPress={onPress}
-                                    >
-                                        <Text style={styles.text}>{actionLabel}</Text>
-                                    </Pressable>
+        <View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={styles.container}>
+                            {alertImageVisible &&
+                                <View style={{ alignItems: 'center', marginBottom: 20 }}>
+                                    <Image
+                                        source={alertImage}
+                                    />
                                 </View>
 
+                            }
+
+                            <Text style={styles.labelText}>{textLabel}</Text>
+                            <View>
+                                <Pressable
+                                    style={styles.button}
+                                    onPress={onPress}
+                                >
+                                    <Text style={styles.text}>{actionLabel}</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.buttonOk}
+                                    onPress={closeModal}
+                                >
+                                    <Text style={styles.textOk}>{buttonLabel}</Text>
+                                </Pressable>
                             </View>
 
                         </View>
+
                     </View>
-                </Modal>
-            </View>
+                </View>
+            </Modal>
+        </View>
     )
 }
 export default DoubleButtonAlert;
@@ -86,7 +86,7 @@ const styles = EStyleSheet.create({
         background: '#66142E',
 
     },
-    buttonOk: {
+    button: {
         backgroundColor: '#E15220',
         alignItems: 'center',
         justifyContent: 'center',
@@ -95,18 +95,36 @@ const styles = EStyleSheet.create({
         borderRadius: 13,
         marginTop: 20,
     },
+    buttonOk: {
+        backgroundColor: '#FFF',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: normalize(15),
+        // paddingHorizontal: normalize(28),
+        borderRadius: 13,
+        marginTop: 20,
+        borderWidth: 2,
+        borderColor: '#1C453B'
+    },
     text: {
 
         letterSpacing: 0.25,
         color: 'white',
         fontFamily: 'gotham-medium',
-        fontSize: '0.85rem'
+        fontSize: '0.95rem'
+    },
+    textOk: {
+
+        letterSpacing: 0.25,
+        color: '#1C453B',
+        fontFamily: 'gotham-medium',
+        fontSize: '1rem'
     },
     labelText: {
         letterSpacing: 0.25,
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
-        fontSize: '.95rem',
+        fontSize: '1.1rem',
         textAlign: 'center'
     },
 })

@@ -11,7 +11,7 @@ import { getUserNotifications, markNotificationRead } from "../CommonSlice";
 import AppButton from "../../shared/AppButton";
 
 
-const NotificationsScreen = () => {
+const NotificationsScreen = ({ navigation }) => {
     const notifications = useSelector(state => state.common.userNotifications)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true)
@@ -72,8 +72,14 @@ const NotificationsScreen = () => {
 
                 }
             </ScrollView>
-            <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFF" /> : 'Mark all as read'} onPress={markAllAsRead} disabled={clicking} style={styles.markButton} textStyle={styles.buttonText}
-                disabledStyle={styles.disabled} />
+            {notifications?.length > 0 ?
+                <AppButton text={clicking ? <ActivityIndicator size="small" color="#FFF" /> : 'Mark all as read'} onPress={markAllAsRead} disabled={clicking} style={styles.markButton} textStyle={styles.buttonText}
+                    disabledStyle={styles.disabled} />
+                :
+
+                <AppButton text='Okay, got it' onPress={() => navigation.navigate('Home')} style={styles.markButton} textStyle={styles.buttonText}
+                    disabledStyle={styles.disabled} />
+            }
 
         </ImageBackground>
 
@@ -164,7 +170,7 @@ const styles = EStyleSheet.create({
         marginRight: '1rem',
         marginTop: '.2rem',
         marginLeft: 'auto',
-        backgroundColor: "#072169",
+        backgroundColor: "#1C453B",
         paddingHorizontal: '.8rem',
         paddingVertical: normalize(3),
         borderRadius: 30,
@@ -194,7 +200,7 @@ const styles = EStyleSheet.create({
     notificationTitle: {
         fontFamily: 'sansation-regular',
         fontSize: '.9rem',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center',
         lineHeight: '1.1rem',
         width: '10rem'
@@ -202,7 +208,7 @@ const styles = EStyleSheet.create({
     clickedText: {
         fontFamily: 'sansation-regular',
         fontSize: '.9rem',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center',
         lineHeight: '1.1rem',
         width: '10rem'
@@ -219,12 +225,12 @@ const styles = EStyleSheet.create({
     noNotification: {
         fontFamily: 'gotham-medium',
         fontSize: '1.3rem',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center',
 
     },
     bellContainer: {
-        backgroundColor: "#072169",
+        backgroundColor: "#1C453B",
         borderRadius: 100,
         paddingLeft: normalize(3),
         marginRight: '.6rem',

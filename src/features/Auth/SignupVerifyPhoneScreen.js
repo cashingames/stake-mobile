@@ -11,7 +11,6 @@ import { calculateTimeRemaining } from '../../utils/utils';
 import { triggerNotifierForReferral } from '../../shared/Notification';
 import logToAnalytics from '../../utils/analytics';
 import { Ionicons } from '@expo/vector-icons';
-import CustomAlert from '../../shared/CustomAlert';
 
 
 const SignupVerifyPhoneScreen = ({ navigation, route }) => {
@@ -35,8 +34,9 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
     const [isCountdownInProgress, setIsCountdownInProgress] = useState(true);
     const [countdowvnDone, setCountdowvnDone] = (useState(false))
     const [active, setActive] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const [error, setError] = useState('');
+
 
 
     const token = `${otp1}${otp2}${otp3}${otp4}${otp5}`
@@ -74,8 +74,8 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
             username: params.username
         }))
         setCountdowvnDone(true);
-        setModalVisible(true);
-        setOtp1('')
+        setOtp1('');
+        setError('');
         setAlertMessage("Otp resent successfully");
     }
 
@@ -103,30 +103,35 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                 triggerNotifierForReferral()
             })
             .catch((rejectedValueOrSerializedError) => {
-                setModalVisible(true);
                 setOtp1('');
-                setAlertMessage("Invalid authentication code provided");
+                setAlertMessage('');
+                setError("Invalid authentication code provided");
                 setLoading(false);
             })
     }
 
-    const close = () => {
-
-    }
 
     return (
         <View style={styles.container}>
             <ScrollView >
                 <View style={styles.headerContainerStyle}>
-                    <Ionicons name="close-sharp" size={22} color="#072169" onPress={() => navigation.navigate('Login')} />
+                    <Ionicons name="close-sharp" size={26} color="#1C453B" onPress={() => navigation.navigate('Login')} />
                     <Text style={styles.headerTextStyle}>
                         OTP Verification
                     </Text>
+                    <View></View>
                 </View>
+                {error.length > 0 &&
+                    <View style={styles.errorBoxContainer}>
+                        <Text style={styles.errorBox}>{error}</Text>
+                    </View>
+                }
+                {alertMessage.length > 0 &&
+                    <View style={styles.successBoxContainer}>
+                        <Text style={styles.errorBox}>{alertMessage}</Text>
+                    </View>
+                }
                 <Text style={styles.verifySubText}>Enter Otp code</Text>
-                {/* {error.length > 0 &&
-                    <Text style={styles.errorBox}>{error}</Text>
-                } */}
                 <View style={styles.form}>
                     <TextInput
                         ref={pin1Ref}
@@ -203,9 +208,6 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                         onPress={resendButton}
                         countdowvnDone={countdowvnDone} />
                 </View>
-                <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    textLabel={alertMessage} buttonLabel='Ok, got it'
-                    alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
             </ScrollView>
             <Pressable style={styles.whatsappChat} onPress={() => Linking.openURL('https://wa.me/2348025116306')}>
                 <Image
@@ -215,7 +217,7 @@ const SignupVerifyPhoneScreen = ({ navigation, route }) => {
                 <View style={styles.textContainer}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.header}>OTP Verification Help</Text>
-                        <Ionicons name="chevron-forward" size={22} color='#072169' />
+                        <Ionicons name="chevron-forward" size={22} color='#1C453B' />
                     </View>
                     <Text style={styles.whatsappTitle}>Live chat with support on Whatsapp</Text>
                 </View>
@@ -235,29 +237,39 @@ const styles = EStyleSheet.create({
     },
     headerContainerStyle: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent:'space-between'
     },
     headerTextStyle: {
         fontSize: 26,
         fontFamily: 'gotham-bold',
-        color: '#072169',
-        marginLeft: '2.5rem',
+        color: '#1C453B',
         textAlign: 'center'
         // paddingTop: normalize(10),
     },
+    errorBoxContainer: {
+        borderRadius: 38,
+        marginTop: responsiveScreenWidth(5),
+        backgroundColor: '#FF0032',
+        paddingVertical: normalize(10),
+        marginHorizontal: '2rem',
+    },
+    successBoxContainer: {
+        borderRadius: 38,
+        marginTop: responsiveScreenWidth(5),
+        backgroundColor: '#048C5B',
+        paddingVertical: normalize(10),
+        marginHorizontal: '2rem',
+    },
     errorBox: {
-        marginVertical: normalize(20),
-        backgroundColor: '#F442741A',
-        paddingVertical: normalize(6),
-        borderRadius: normalize(8),
         textAlign: 'center',
-        fontFamily: 'gotham-medium',
-        color: '#EF2F55',
-        fontSize: normalize(13)
+        fontFamily: 'sansation-bold',
+        color: '#FFFF',
+        fontSize: '0.85rem',
     },
     verifySubText: {
         fontSize: '1.1rem',
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-medium',
         lineHeight: '1.5rem',
         marginTop: '4rem'
@@ -277,7 +289,7 @@ const styles = EStyleSheet.create({
         backgroundColor: '#fff',
         fontFamily: 'sansation-bold',
         textAlign: 'center',
-        color: "#072169",
+        color: "#1C453B",
         fontSize: '1.1rem'
     },
     expireContainer: {
@@ -288,7 +300,7 @@ const styles = EStyleSheet.create({
     },
     digitText: {
         fontFamily: 'sansation-bold',
-        color: "#072169",
+        color: "#1C453B",
         fontSize: '.9rem'
     },
     loginButton: {
@@ -327,13 +339,13 @@ const styles = EStyleSheet.create({
     header: {
         fontSize: '0.9rem',
         fontFamily: 'gotham-bold',
-        color: '#072169'
+        color: '#1C453B'
     },
     whatsappTitle: {
         fontSize: '0.8rem',
         fontFamily: 'sansation-regular',
         marginTop: normalize(3),
-        color: '#072169'
+        color: '#1C453B'
     },
     icon: {
         width: 55,

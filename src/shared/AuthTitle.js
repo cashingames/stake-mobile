@@ -11,7 +11,7 @@ const styles = EStyleSheet.create({
         textAlign: 'center',
         fontFamily: 'gotham-bold',
         fontSize: '1.35rem',
-        color:'#072169'
+        color:'#1C453B'
     },
 
 });

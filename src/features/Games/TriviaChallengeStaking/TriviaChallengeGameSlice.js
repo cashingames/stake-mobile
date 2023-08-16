@@ -52,6 +52,7 @@ let initialState = {
     selectedOptions: [],
     currentQuestionIndex: 0,
     totalQuestions: 10,
+    amountStaked: null,
     countdownFrozen: false,
     consumedBoosts: [],
     activeBoost: [],
@@ -70,6 +71,9 @@ export const TriviaChallengeStakeGameSlice = createSlice({
             state.questions = state.challengeDetails.questions;
             // state.totalQuestions = state.questions.length;
             state.currentQuestion = state.questions[state.currentQuestionIndex];
+        },
+        setChallengeAmountStaked: (state, action) => {
+            state.amountStaked = action.payload;
         },
         getNextQuestion: (state) => {
             state.currentQuestionIndex += 1;
@@ -149,7 +153,7 @@ export const TriviaChallengeStakeGameSlice = createSlice({
 })
 
 export const { getNextQuestion, selectedOption, setGameDuration, pauseGame, incrementCountdownResetIndex, setChallengeDetails, clearSession, setIsEnded,
-    consumeBoost, boostReleased, skipQuestion } = TriviaChallengeStakeGameSlice.actions
+    consumeBoost, boostReleased, skipQuestion, setChallengeAmountStaked } = TriviaChallengeStakeGameSlice.actions
 
 export default TriviaChallengeStakeGameSlice.reducer
 

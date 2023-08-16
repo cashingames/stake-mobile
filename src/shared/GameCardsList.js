@@ -139,7 +139,7 @@ const WelcomeCard = () => {
                     </View>
                     <View style={styles.triviaActionsTexts}>
                         <Text style={styles.triviaBetHeaderI}>Let's cashout</Text>
-                        <Text style={styles.triviaBetHeader}>Fund & win</Text>
+                        <Text style={styles.triviaBetHeader}>Fund & play</Text>
                     </View>
                 </View>
                 <View style={styles.playButton}>
@@ -198,11 +198,11 @@ const PlayEarnCard = () => {
 
 const styles = EStyleSheet.create({
     gamesContainer: {
-        marginTop: '1.5rem'
+        marginTop: '1.1rem'
     },
     triviaBetContainer: {
-        width: normalize(300),
-        marginRight: '.8rem',
+        width: normalize(305),
+        marginRight: '.5rem',
         elevation: 2.5,
         shadowColor: '#000',
         shadowOffset: { width: 0.5, height: 2 },
@@ -211,7 +211,7 @@ const styles = EStyleSheet.create({
     triviaAvatar: {
         borderTopLeftRadius: 13,
         borderTopRightRadius: 13,
-        width: normalize(300),
+        width: normalize(305),
         height: normalize(230),
     },
     bookAvatar: {
@@ -231,18 +231,6 @@ const styles = EStyleSheet.create({
     subTriviaActions: {
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    triviaChallengeContainer: {
-        backgroundColor: '#FDCCD4',
-        borderColor: '#EF2F55',
-        borderWidth: 2,
-        borderRadius: 13,
-        width: normalize(208),
-        height: normalize(190),
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: '1rem',
-        marginRight: '1rem'
     },
     triviaRoomContainer: {
         width: normalize(330),
@@ -266,16 +254,14 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-
-
     triviaBetHeader: {
-        fontSize: '.8rem',
-        color: '#072169',
+        fontSize: '.85rem',
+        color: '#1C453B',
         fontFamily: 'sansation-regular',
     },
     triviaBetHeaderI: {
-        fontSize: '.85rem',
-        color: '#072169',
+        fontSize: '1rem',
+        color: '#1C453B',
         fontFamily: 'gotham-medium',
     },
     triviaActionsTexts: {
@@ -284,36 +270,13 @@ const styles = EStyleSheet.create({
 
     playButton: {
         backgroundColor: '#E15220',
-        paddingVertical: '.45rem',
+        paddingVertical: '.6rem',
         paddingHorizontal: '.8rem',
         borderRadius: 20
     },
-    playButtonI: {
-        backgroundColor: '#F9FBFF',
-        paddingVertical: '.6rem',
-        paddingHorizontal: '.5rem',
-        borderRadius: 20
-    },
-    challengePlayButton: {
-        backgroundColor: '#EF2F55',
-        paddingVertical: '.7rem',
-        paddingHorizontal: '1.7rem',
-        borderRadius: 20
-    },
-    roomPlayButton: {
-        backgroundColor: '#9186E9',
-        paddingVertical: '.7rem',
-        paddingHorizontal: '1.7rem',
-        borderRadius: 20
-    },
     playButtonText: {
-        fontSize: '.8rem',
+        fontSize: '.85rem',
         color: '#E3ECF2',
-        fontFamily: 'sansation-bold',
-    },
-    playButtonTextI: {
-        fontSize: '.8rem',
-        color: '#072169',
-        fontFamily: 'sansation-bold',
+        fontFamily: 'gotham-bold',
     },
 })

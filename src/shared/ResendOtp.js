@@ -34,18 +34,18 @@ const styles = EStyleSheet.create({
         marginVertical: 20,
         paddingVertical: normalize(19),
         borderWidth: 2,
-        borderColor: '#072169',
+        borderColor: '#1C453B',
         borderRadius: 13,
     },
     statusText: {
         fontFamily: 'gotham-medium',
         fontSize: '1.1rem',
-        color: '#072169'
+        color: '#1C453B'
     },
     disabledText: {
         fontFamily: 'gotham-medium',
         fontSize: '.9rem',
-        color: '#072169'
+        color: '#1C453B'
     },
     resendTimer: {
         fontSize: '.9rem',

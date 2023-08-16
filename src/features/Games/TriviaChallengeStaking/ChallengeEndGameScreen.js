@@ -11,6 +11,7 @@ import { useState } from "react";
 import logToAnalytics from "../../../utils/analytics";
 import AppButton from "../../../shared/AppButton";
 import { formatCurrency, isTrue } from "../../../utils/stringUtl";
+import { getUser } from "../../Auth/AuthSlice";
 
 
 const ChallengeEndGameScreen = ({ navigation }) => {
@@ -26,12 +27,14 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 
     const goHome = () => {
         navigation.navigate('Home');
+        dispatch(getUser());
         dispatch(clearSession());
     };
 
 
     const onPlayButtonClick = () => {
         setLoading(true);
+        dispatch(getUser());
         dispatch(clearSession());
         logToAnalytics('trivia_challenge_play_again_clicked', {
             'id': user.username,
@@ -101,7 +104,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
             resizeMethod="resize">
             <ScrollView style={styles.container}>
 
-                <SelectedPlayers challengeDetails={challengeDetails} />
+                <SelectedPlayers challengeDetails={challengeDetails} user={user} />
                 {Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score) &&
                     <Text style={styles.headText}>You won the challenge</Text>
                 }
@@ -118,8 +121,8 @@ const ChallengeEndGameScreen = ({ navigation }) => {
                 <View style={styles.gameButtons}>
                     <AppButton onPress={onPlayButtonClick} text='Stake again' disabled={loading} textStyle={styles.againText} style={styles.stakeButton} disabledStyle={styles.disabled} />
                     <Pressable style={styles.homeButton} onPress={goHome}>
-						<Text style= {styles.buttonText}>Return to home</Text>
-					</Pressable>
+                        <Text style={styles.buttonText}>Return to home</Text>
+                    </Pressable>
                 </View>
             </ScrollView>
 
@@ -131,7 +134,7 @@ const ChallengeEndGameScreen = ({ navigation }) => {
 const Winnings = () => {
     const amount = useSelector(state => state.triviaChallenge.challengeDetails.amount_won);
     return (
-        <View style={styles.winningsAmountCont}> 
+        <View style={styles.winningsAmountCont}>
             <Text style={styles.winningsHeaderI}>Winnings</Text>
             <Text style={styles.scoreCountI}>NGN {formatCurrency(amount)}</Text>
         </View>
@@ -141,51 +144,49 @@ const Winnings = () => {
 const ScoreDetails = ({ challengeDetails, cashMode, practiceMode }) => {
     return (
         <View style={styles.winningsContainer}>
-            {practiceMode &&
-                <Text style={styles.winningsHeader}>Demo scores</Text>
-            }
-            {cashMode &&
-                <Text style={styles.winningsHeader}>Scores</Text>
-            }
             <View style={styles.scoreCountContainer}>
                 <View style={styles.userCountContainer}>
                     <Text style={styles.countName}>You</Text>
                     <Text style={styles.scoreCount}>{challengeDetails.score}</Text>
                 </View>
+                {practiceMode &&
+                    <Text style={styles.winningsHeader}>Demo scores</Text>
+                }
+                {cashMode &&
+                    <Text style={styles.winningsHeader}>Scores</Text>
+                }
                 <View style={styles.userCountContainer}>
                     <Text style={styles.countName}>{challengeDetails.opponent.username}</Text>
                     <Text style={styles.scoreCount}>{challengeDetails.opponent.score}</Text>
                 </View>
             </View>
-            {/* {Number.parseFloat(challengeDetails.score) > Number.parseFloat(challengeDetails.opponent.score) &&
-                <Text style={styles.winningsText}>You have won <Text style={styles.winningsAmount}> &#8358;{formatCurrency(amount)}!</Text></Text>
-            } */}
         </View>
     )
 }
 
-const SelectedPlayers = ({ challengeDetails }) => {
+const SelectedPlayers = ({ challengeDetails, user }) => {
+    const username = user.username?.charAt(0) + user.username?.charAt(1);
+    const opponentName = challengeDetails.opponent?.username?.charAt(0) + challengeDetails.opponent?.username?.charAt(1)
+
     return (
         <View style={styles.playerImage}>
-            <SelectedPlayer playerName={challengeDetails.username} playerAvatar={isTrue(challengeDetails.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-
+            <SelectedPlayer playerName={user.username} playerAvatar={username} backgroundColor='#ccded48c' />
             <Image
                 source={require('../../../../assets/images/versus.png')}
                 style={styles.versus}
             />
-            <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+            <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={opponentName} backgroundColor='#FEECE7' />
         </View>
     )
 }
 
-const SelectedPlayer = ({ playerName, playerAvatar }) => {
+const SelectedPlayer = ({ playerName, playerAvatar, backgroundColor }) => {
     return (
         <View style={styles.avatarBackground}>
-            <Image
-                source={playerAvatar}
-                style={styles.avatar}
-            />
-            <Text style={styles.username}>@{playerName}</Text>
+            <View style={[styles.avatarContent, { backgroundColor: backgroundColor }]}>
+                <Text style={styles.avatarText}>{playerAvatar}</Text>
+            </View>
+            <Text style={styles.username}>{playerName}</Text>
         </View>
     )
 }
@@ -228,13 +229,12 @@ const styles = EStyleSheet.create({
     headText: {
         fontSize: '1.2rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center',
         lineHeight: '2rem'
     },
     winningsAmountCont: {
         backgroundColor: '#AAD880',
-        // justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: '.7rem',
         marginVertical: '.5rem',
@@ -248,8 +248,6 @@ const styles = EStyleSheet.create({
     },
     winningsContainer: {
         backgroundColor: '#fff',
-        // justifyContent: 'center',
-        // alignItems: 'center',
         paddingVertical: '.5rem',
         paddingHorizontal: '3rem',
         marginVertical: '.5rem',
@@ -262,57 +260,57 @@ const styles = EStyleSheet.create({
         shadowOpacity: 0.1,
     },
     homeButton: {
-		marginVertical: 5,
-		backgroundColor: 'none',
-		borderWidth: 2,
-		borderColor: '#072169',
-		paddingVertical: normalize(19),
-		borderRadius:13,
-		alignItems:'center'
-	},
+        marginVertical: 5,
+        backgroundColor: 'none',
+        borderWidth: 2,
+        borderColor: '#1C453B',
+        paddingVertical: normalize(19),
+        borderRadius: 13,
+        alignItems: 'center'
+    },
     buttonText: {
-		fontFamily: 'gotham-medium',
-		fontSize: '1.1rem',
-		color: '#072169'
-	},
+        fontFamily: 'gotham-medium',
+        fontSize: '1.1rem',
+        color: '#1C453B'
+    },
     winningsHeader: {
-        fontSize: '.9rem',
+        fontSize: '1.1rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center',
     },
     winningsHeaderI: {
         fontSize: '1.2rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center',
-        marginBottom:'.5rem'
+        marginBottom: '.5rem'
     },
     scoreCountContainer: {
         justifyContent: 'space-between',
         flexDirection: 'row',
-        marginTop: '.5rem'
+        alignItems:'center'
+        // marginTop: '.5rem'
     },
     userCountContainer: {
         alignItems: 'center'
     },
     countName: {
-        fontSize: '.8rem',
+        fontSize: '1rem',
         fontFamily: 'sansation-regular',
-        color: '#072169',
-        // width:'5rem',
+        color: '#1C453B',
         textAlign: 'center'
     },
     scoreCountI: {
         fontSize: '1rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
 
     },
     scoreCount: {
-        fontSize: '1.3rem',
+        fontSize: '2rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
 
     },
     winningsText: {
@@ -324,13 +322,29 @@ const styles = EStyleSheet.create({
     winningsAmount: {
         color: '#EB7474',
     },
-    username: {
-        fontSize: '0.75rem',
-        fontFamily: 'graphik-medium',
-        color: '#FFFF',
-        width: '5rem',
-        textAlign: 'center',
-        marginBottom: '.4rem'
+    avatarBackground: {
+        alignItems: 'center',
+        marginVertical: normalize(15)
+    },
+    avatar: {
+        width: normalize(65),
+        height: normalize(65),
+        backgroundColor: '#F6F4FF',
+        borderRadius: 50,
+    },
+    avatarContent: {
+        width: normalize(80),
+        height: normalize(80),
+        backgroundColor: '#ccded48c',
+        borderRadius: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    avatarText: {
+        fontSize: '1.6rem',
+        color: '#1C453B',
+        fontFamily: 'gotham-medium',
+        textTransform: 'uppercase'
     },
     disabled: {
         backgroundColor: '#EA8663'
@@ -364,19 +378,10 @@ const styles = EStyleSheet.create({
         borderRadius: 13,
         marginBottom: '1rem',
     },
-    avatarBackground: {
-        alignItems: 'center'
-    },
-    avatar: {
-        width: normalize(65),
-        height: normalize(65),
-        backgroundColor: '#F6F4FF',
-        borderRadius: 50,
-    },
     username: {
         fontSize: '0.9rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         width: responsiveScreenWidth(25),
         textAlign: 'center',
         marginTop: '.8rem'
@@ -398,7 +403,7 @@ const styles = EStyleSheet.create({
         shadowOpacity: 0.1,
     },
     finalScoreText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '1.2rem',
         marginBottom: '.3rem',
@@ -410,12 +415,12 @@ const styles = EStyleSheet.create({
         marginVertical: '.5rem'
     },
     pointTitle: {
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '1.1rem',
         fontFamily: 'gotham-medium',
     },
     point: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'sansation-regular',
         fontSize: '1.1rem',
         marginLeft: '.7rem'

@@ -11,8 +11,6 @@ import normalize, { responsiveScreenWidth } from "../../../utils/normalize";
 import PlayGameHeader from "../../../shared/PlayGameHeader";
 import AppButton from "../../../shared/AppButton";
 import logToAnalytics from "../../../utils/analytics";
-import { isTrue } from "../../../utils/stringUtl";
-import Constants from 'expo-constants';
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { Animated } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -27,7 +25,6 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     const challengeDetails = useSelector(state => state.triviaChallenge.challengeDetails);
     const isEnded = useSelector(state => state.triviaChallenge.isEnded);
     const [submitting, setSubmitting] = useState(false);
-    const user = useSelector(state => state.auth.user);
     const [modalVisible, setModalVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [exiting, setExiting] = useState(false);
@@ -112,8 +109,12 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
     const showExitConfirmation = () => {
         setExitClicked(true);
         startModal()
-        setAlertMessage("You have an ongoing game. Do you want to submit this game ?");
-    }
+        if (practiceMode) {
+            setAlertMessage("Are you sure you want to cancel demo game?");
+        }
+        else if (cashMode) {
+            setAlertMessage("Are you sure you want to end staked game?");
+        }    }
 
     const getOpponentStatus = async () => {
         const result = await firestore()
@@ -133,7 +134,6 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
             <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
                 <PlayGameHeader onPress={showExitConfirmation} challengeGame={true} />
                 <ChallengeGameBoardWidgets />
-                <SelectedPlayers user={user} challengeDetails={challengeDetails} />
                 <RenderQuestion onComplete={gameEnded} onEnd={gameEnded} submitting={submitting} exiting={exiting} />
                 {exitClicked ?
                     <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
@@ -147,32 +147,6 @@ const ChallengeGameBoardScreen = ({ navigation }) => {
             </ScrollView>
         </ImageBackground>
 
-    )
-}
-
-const SelectedPlayers = ({ user, challengeDetails }) => {
-    return (
-        <View style={styles.playerImage}>
-            <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-
-            <Image
-                source={require('../../../../assets/images/versus.png')}
-                style={styles.versus}
-            />
-            <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
-        </View>
-    )
-}
-
-const SelectedPlayer = ({ playerName, playerAvatar }) => {
-    return (
-        <View style={styles.avatarBackground}>
-            <Image
-                source={playerAvatar}
-                style={styles.avatar}
-            />
-            <Text style={styles.username}>@{playerName}</Text>
-        </View>
     )
 }
 
@@ -281,9 +255,6 @@ const styles = EStyleSheet.create({
         flex: 1,
 
     },
-    // options: {
-    //     paddingBottom: normalize(45),
-    // },
 
     activeOption: {
         backgroundColor: '#F5D2FF'
@@ -328,7 +299,7 @@ const styles = EStyleSheet.create({
     username: {
         fontSize: '0.9rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         width: responsiveScreenWidth(25),
         textAlign: 'center',
         marginTop: '.8rem'
@@ -352,7 +323,7 @@ const styles = EStyleSheet.create({
         alignItems: 'center'
     },
     pickText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '1rem',
         marginBottom: '.8rem'
@@ -362,20 +333,20 @@ const styles = EStyleSheet.create({
 
     },
     questions: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'sansation-regular',
         fontSize: '1.1rem',
         lineHeight: normalize(26)
     },
     timeText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '0.8rem',
     },
     questionCount: {
         fontFamily: 'gotham-bold',
         fontSize: '0.9rem',
-        color: '#072169',
+        color: '#1C453B',
     },
     disabled: {
         backgroundColor: '#EA8663'
@@ -388,8 +359,8 @@ const styles = EStyleSheet.create({
         // backgroundColor: 'red',
     },
     optionText: {
-        color: '#072169',
-        fontFamily: 'sansation-regular',
+        color: '#1C453B',
+        fontFamily: 'gotham-bold',
         fontSize: '0.9rem',
     },
 })

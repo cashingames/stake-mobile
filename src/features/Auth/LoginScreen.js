@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import Constants from 'expo-constants';
-
+import { FAB } from 'react-native-elements';
 import AuthTitle from '../../shared/AuthTitle';
 import AppButton from '../../shared/AppButton';
 import normalize, { responsiveScreenWidth } from '../../utils/normalize';
@@ -93,7 +92,9 @@ export default function LoginScreen({ navigation }) {
 
                 <View style={styles.inputContainer} >
                     {error.length > 0 &&
-                        <Text style={styles.errorBox}>{error}</Text>
+                        <View style={styles.errorBoxContainer}>
+                            <Text style={styles.errorBox}>{error}</Text>
+                        </View>
                     }
 
                     <Input
@@ -145,7 +146,7 @@ const RenderCreateAccount = () => {
 
     return (
         <AppButton text='Create Account' onPress={() => navigation.navigate('Signup')}
-            style={styles.signupButton} textStyle={styles.signupText} isIcon={true} iconColor="#072169" />
+            style={styles.signupButton} textStyle={styles.signupText} isIcon={true} iconColor="#1C453B" />
     )
 }
 
@@ -162,22 +163,26 @@ const styles = EStyleSheet.create({
     inputContainer: {
         marginTop: responsiveScreenWidth(20),
     },
+    errorBoxContainer: {
+        borderRadius: 38,
+        marginBottom: responsiveScreenWidth(5),
+        backgroundColor: '#FF0032',
+        paddingVertical: normalize(10),
+        marginHorizontal: '2.5rem',
+    },
 
     errorBox: {
-        marginVertical: responsiveScreenWidth(5),
-        backgroundColor: '#F442741A',
-        paddingVertical: normalize(6),
-        borderRadius: normalize(8),
+
         textAlign: 'center',
-        fontFamily: 'gotham-light',
-        color: '#EF2F55',
-        fontSize: '0.7rem'
+        fontFamily: 'sansation-bold',
+        color: '#FFFF',
+        fontSize: '0.85rem',
     },
     textRight: {
         textAlign: "right"
     },
     linkText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-medium',
         // marginLeft: normalize(15),
         fontSize: '0.95rem'
@@ -218,7 +223,7 @@ const styles = EStyleSheet.create({
     orText: {
         fontFamily: 'sansation-bold',
         fontSize: '1.1rem',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center'
     },
     signupButton: {
@@ -226,12 +231,12 @@ const styles = EStyleSheet.create({
         marginVertical: 20,
         paddingVertical: normalize(19),
         borderWidth: 2,
-        borderColor: '#072169'
+        borderColor: '#1C453B'
     },
     signupText: {
         fontFamily: 'gotham-medium',
         fontSize: '1.1rem',
-        color: '#072169'
+        color: '#1C453B'
     },
     google: {
         alignItems: 'center',

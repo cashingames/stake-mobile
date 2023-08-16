@@ -35,20 +35,20 @@ const styles = EStyleSheet.create({
     },
     stakeOddDigit: {
         fontFamily: "sansation-bold",
-        fontSize: ".8rem",
-        color: "#072169",
+        fontSize: ".85rem",
+        color: "#1C453B",
         marginLeft: '.3rem',
     },
     stakeScoreDigit: {
         fontFamily: "sansation-bold",
-        fontSize: ".8rem",
-        color: "#072169",
+        fontSize: ".85rem",
+        color: "#1C453B",
         marginLeft: '.3rem',
     },
     stakeWinnings: {
         fontFamily: "sansation-bold",
-        fontSize: ".8rem",
-        color: "#072169",
+        fontSize: ".85rem",
+        color: "#1C453B",
         width: '4.8rem',
         alignItems:'flex-start'
     },

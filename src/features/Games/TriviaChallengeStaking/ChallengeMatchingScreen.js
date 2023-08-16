@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { BackHandler, ImageBackground, Image, Text, View, ScrollView } from "react-native";
-import { isTrue } from "../../../utils/stringUtl";
+import { formatNumber, isTrue } from "../../../utils/stringUtl";
 import Constants from 'expo-constants';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { useDispatch, useSelector } from "react-redux";
@@ -11,11 +11,12 @@ import firestore from '@react-native-firebase/firestore';
 import { setChallengeDetails } from "./TriviaChallengeGameSlice";
 import logToAnalytics from "../../../utils/analytics";
 import DoubleButtonAlert from "../../../shared/DoubleButtonAlert";
+import AuthTitle from "../../../shared/AuthTitle";
 
 const ChallengeMatchingScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth.user);
-    const boosts = useSelector(state => state.common.boosts);
+    const boosts = useSelector(state => state.auth.user.boosts);
     const documentId = useSelector(state => state.triviaChallenge.documentId);
     const [dataUpdated, setDataUpdated] = useState(false);
     const [challengeInfo, setChallengeInfo] = useState([]);
@@ -95,43 +96,86 @@ const ChallengeMatchingScreen = ({ navigation }) => {
     );
 
     return (
-        <ImageBackground source={require('../../../../assets/images/game-play-background.png')}
+        <ImageBackground source={require('../../../../assets/images/match-background.png')}
             style={{ flex: 1 }}
             resizeMethod="resize">
             <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-                {!dataUpdated ?
-                    <View style={styles.findingContainer}>
-                        <Text style={styles.message}>
-                            Finding a player...
-                        </Text>
-                        <View style={styles.animationContainer}>
-
-                            <Image
-                                source={require('../../../../assets/images/finding-bar.png')}
-                                style={styles.barAvatar}
-                            />
+                <View>
+                <View style={styles.headerBox}>
+                    <AuthTitle text='Challenge a Player' />
+                </View>
+                    <View style={styles.purchaseBoost}>
+                        <Text style={styles.boostText}>Score high using boosts</Text>
+                        {practiceMode &&
+                            <DemoBoostCardDetails />
+                        }
+                        {cashMode &&
+                            <View>
+                                {boosts?.length > 0 ?
+                                    <View style={styles.boostContainer}>
+                                        {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
+                                    </View>
+                                    :
+                                    <View style={styles.boostContainer}>
+                                        <View style={styles.boostDetailsHead}>
+                                            <Image
+                                                source={require('../../../../assets/images/timefreeze-boost.png')}
+                                                style={styles.boostIcon}
+                                            />
+                                            <Text style={styles.storeItemName}>x0</Text>
+                                        </View>
+                                        <View style={styles.boostDetailsHead}>
+                                            <Image
+                                                source={require('../../../../assets/images/skip-boost.png')}
+                                                style={styles.boostIcon}
+                                            />
+                                            <Text style={styles.storeItemName}>x0</Text>
+                                        </View>
+                                    </View>
+                                }
+                            </View>
+                        }
+                    </View>
+                    <View style={styles.messageContainer}>
+                        <SelectedPlayers user={user} challengeDetails={challengeInfo} dataUpdated={dataUpdated} />
+                    </View>
+                    {!dataUpdated ?
+                        <View style={styles.findingContainer}>
+                            <View style={styles.animationContainer}>
+                                <Image
+                                    source={require('../../../../assets/images/finding-bar.png')}
+                                    style={styles.barAvatar}
+                                />
+                            </View>
+                            <Text style={styles.message}>
+                                Finding a player...
+                            </Text>
                         </View>
-
-                    </View>
-                    :
-                    <Text style={styles.message}>Nice, you have been matched</Text>
-                }
-                <View style={styles.boostInfoContainer}>
-                    <Text style={styles.boostText}>Score high points using boosts</Text>
-                    <View style={styles.boostContainer}>
-                        {boosts.map((boost, i) => <BoostCardDetails key={i} boost={boost} />)}
-                    </View>
+                        :
+                        <View style={styles.findingContainer}>
+                            <View style={styles.animationContainer}>
+                                <Image
+                                    source={require('../../../../assets/images/matched-bar.png')}
+                                    style={styles.barAvatar}
+                                />
+                            </View>
+                            <Text style={styles.message}>
+                                You have been matched
+                            </Text>
+                        </View>
+                    }
                 </View>
-                <View style={styles.messageContainer}>
-                    <SelectedPlayers user={user} challengeDetails={challengeInfo} dataUpdated={dataUpdated} />
+                <View>
+                    {!dataUpdated &&
+                        <AppButton text="Cancel" onPress={cancelChallenge} style={styles.stakeButton} />
+                    }
+                    {dataUpdated &&
+                        <AppButton text="Starting Game" style={styles.stakeButton} />
+                    }
+                    <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
+                        textLabel={alertMessage} buttonLabel='Dismiss' actionLabel='Yes, cancel'
+                     onPress={proceedWithCancel} />
                 </View>
-
-                {!dataUpdated &&
-                    <AppButton text="Cancel" onPress={cancelChallenge} style={styles.stakeButton} />
-                }
-                <DoubleButtonAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                    textLabel={alertMessage} buttonLabel='Dismiss' actionLabel='Yes, cancel'
-                    alertImage={require('../../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} onPress={proceedWithCancel} />
 
             </ScrollView>
         </ImageBackground>
@@ -140,30 +184,31 @@ const ChallengeMatchingScreen = ({ navigation }) => {
 
 
 const SelectedPlayers = ({ user, dataUpdated, challengeDetails }) => {
+    const username = user.username?.charAt(0) + user.username?.charAt(1);
+    const opponentName = challengeDetails.opponent?.username?.charAt(0) + challengeDetails.opponent?.username?.charAt(1)
     return (
         <View style={styles.playerImage}>
-            <SelectedPlayer playerName={user.username} playerAvatar={isTrue(user.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+            <SelectedPlayer playerName={user.username} playerAvatar={username} backgroundColor='#ccded48c' />
 
             <Image
                 source={require('../../../../assets/images/versus.png')}
                 style={styles.versus}
             />
             {dataUpdated ?
-                <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={isTrue(challengeDetails.opponent.avatar) ? { uri: `${Constants.expoConfig.extra.assetBaseUrl}/${challengeDetails.opponent.avatar}` } : require("../../../../assets/images/user-icon.png")} />
+                <SelectedPlayer playerName={challengeDetails.opponent.username} playerAvatar={opponentName} backgroundColor='#FEECE7' />
                 :
-                <SelectedPlayer playerName="...." playerAvatar={require("../../../../assets/images/question.png")} />
+                <SelectedPlayer playerName="...." playerAvatar="?" backgroundColor='#FEECE7' />
             }
         </View>
     )
 }
 
-const SelectedPlayer = ({ playerName, playerAvatar }) => {
+const SelectedPlayer = ({ playerName, playerAvatar, backgroundColor }) => {
     return (
         <View style={styles.avatarBackground}>
-            <Image
-                source={playerAvatar}
-                style={styles.avatar}
-            />
+            <View style={[styles.avatarContent, { backgroundColor: backgroundColor }]}>
+                <Text style={styles.avatarText}>{playerAvatar}</Text>
+            </View>
             <Text style={styles.username}>@{playerName}</Text>
         </View>
     )
@@ -176,11 +221,27 @@ const BoostCardDetails = ({ boost }) => {
                 source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${boost.icon}` }}
                 style={styles.boostIcon}
             />
-            <View style={styles.boostDetailsContainer}>
-                <View style={styles.boostNameCount}>
-                    {/* <Text style={styles.storeItemName}>{boost.name}</Text> */}
-                    <Text style={styles.boostDescription}>{boost.description}</Text>
-                </View>
+            <Text style={styles.storeItemName}>x{formatNumber(boost.count)}</Text>
+        </View>
+    )
+}
+
+const DemoBoostCardDetails = () => {
+    return (
+        <View style={styles.boostContainer}>
+            <View style={styles.boostDetailsHead}>
+                <Image
+                    source={require('../../../../assets/images/timefreeze-boost.png')}
+                    style={styles.boostIcon}
+                />
+                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
+            </View>
+            <View style={styles.boostDetailsHead}>
+                <Image
+                    source={require('../../../../assets/images/skip-boost.png')}
+                    style={styles.boostIcon}
+                />
+                <Text style={styles.storeItemName}>x{formatNumber(20)}</Text>
             </View>
         </View>
     )
@@ -192,10 +253,15 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: normalize(18),
+        paddingTop:'2rem',
+        paddingBottom:'1rem',
     },
     content: {
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         flex: 1,
+    },
+    headerBox: {
+        marginTop: Platform.OS === 'ios' ? responsiveScreenWidth(3) : 0,
     },
     animationContainer: {
         display: 'flex',
@@ -205,7 +271,6 @@ const styles = EStyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: normalize(15),
         paddingHorizontal: normalize(20),
         alignItems: 'center',
         borderRadius: 13,
@@ -218,8 +283,10 @@ const styles = EStyleSheet.create({
         shadowOpacity: 0.1,
         backgroundColor: '#fff'
     },
+
     avatarBackground: {
-        alignItems: 'center'
+        alignItems: 'center',
+        marginVertical: normalize(15)
     },
     avatar: {
         width: normalize(65),
@@ -227,24 +294,41 @@ const styles = EStyleSheet.create({
         backgroundColor: '#F6F4FF',
         borderRadius: 50,
     },
+    avatarContent: {
+        width: normalize(80),
+        height: normalize(80),
+        backgroundColor: '#ccded48c',
+        borderRadius: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    avatarText: {
+        fontSize: '1.6rem',
+        color: '#1C453B',
+        fontFamily: 'gotham-medium',
+        textTransform: 'uppercase'
+    },
     username: {
-        fontSize: '0.9rem',
+        fontSize: '0.85rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
-        width: '6rem',
+        color: '#1C453B',
+        width: '5rem',
         textAlign: 'center',
         marginTop: '.8rem'
     },
     versus: {
-        width: '3rem',
-        height: '6rem'
+        width: '3.2rem',
+        height: '7.9rem'
+    },
+    findingContainer: {
+        marginTop:'1rem'
     },
     message: {
         fontSize: '1rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center',
-        marginVertical: normalize(4),
+        marginTop: normalize(15),
         lineHeight: '2rem'
     },
     matchingText: {
@@ -255,31 +339,12 @@ const styles = EStyleSheet.create({
         marginBottom: normalize(4),
         lineHeight: '2rem'
     },
-    boostText: {
-        fontSize: '.85rem',
-        fontFamily: 'gotham-bold',
-        color: '#072169',
-        textAlign: 'center',
-        lineHeight: '1.2rem'
-    },
-    boostIcon: {
-        marginBottom: normalize(5),
-        width: responsiveScreenHeight(6),
-        height: responsiveScreenHeight(6),
-    },
-    boostContainer: {
-        flexDirection: 'row',
-        // alignItems: 'flex-start',
-        // justifyContent: 'center',
-
-    },
-    boostInfoContainer: {
-        backgroundColor: '#FFF',
+    purchaseBoost: {
+        backgroundColor: '#FAF0E8',
         marginVertical: normalize(15),
         paddingVertical: normalize(15),
         paddingHorizontal: normalize(18),
         borderRadius: 13,
-        alignItems: 'center',
         borderWidth: 1,
         borderColor: '#E5E5E5',
         elevation: 2.5,
@@ -287,47 +352,37 @@ const styles = EStyleSheet.create({
         shadowOffset: { width: 0.5, height: 1 },
         shadowOpacity: 0.1,
     },
+    boostText: {
+        fontSize: '1rem',
+        fontFamily: 'gotham-bold',
+        color: '#1C453B',
+    },
+    boostIcon: {
+        width: '3.3rem',
+        height: '3.3rem',
+    },
+    boostContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: '.8rem'
+    },
     boostDetailsHead: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: '1rem',
-        marginHorizontal: '1rem'
-    },
-    boostDetailsContainer: {
-        flexDirection: 'column',
-    },
-    boostNameCount: {
-        alignItems: 'center',
-    },
-    boostDescription: {
-        fontFamily: 'gotham-medium',
-        fontSize: '0.7rem',
-        color: '#072169',
-        width: '8rem',
-        textAlign: 'center',
-        lineHeight: '1.2rem'
-
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginRight: '1.8rem'
     },
     storeItemName: {
-        fontFamily: 'graphik-medium',
-        fontSize: '0.7rem',
-        color: '#FFF',
-        marginVertical: '.3rem'
-    },
-    storeItemDescription: {
-        fontFamily: 'graphik-medium',
-        fontSize: '0.7rem',
-        color: '#FFF',
-        width: '8rem',
-        textAlign: 'center',
-        lineHeight: '1.2rem'
-    },
-    cardDescription: {
-        fontFamily: 'graphik-medium',
-        fontSize: '0.73rem',
-        color: '#828282',
-        lineHeight: responsiveScreenHeight(2.5),
-        width: responsiveScreenWidth(38),
-        textAlign: 'center'
+        fontSize: '.9rem',
+        color: '#fff',
+        fontFamily: 'gotham-bold',
+        textShadowColor: '#121212',
+        textShadowRadius: 1,
+        textShadowOffset: {
+            width: 1,
+            height: 1,
+        },
+        position: 'absolute',
+        left: 35,
+        top: 10
     },
 })

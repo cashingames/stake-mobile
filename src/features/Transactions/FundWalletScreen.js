@@ -109,7 +109,7 @@ export default function FundWalletScreen() {
           />
           <View style={styles.gatewaysContainer}>
             <View style={styles.gatewayHeaders}>
-              <Text style={styles.gatewayHeaderText}>Choose gateway</Text>
+              <Text style={styles.gatewayHeaderText}>Choose Gateway</Text>
               <Text style={styles.gatewayRequired}>Required</Text>
             </View>
             <Text style={styles.gatewaySubHeader}>Select a preferred gateway to fund wallet</Text>
@@ -182,7 +182,7 @@ const styles = EStyleSheet.create({
     flex: 1,
   },
   gatewaysContainer: {
-    marginTop: '2rem'
+    marginTop: '1.5rem'
   },
   gatewayHeaders: {
     flexDirection: 'row',
@@ -192,7 +192,7 @@ const styles = EStyleSheet.create({
   },
   gatewayHeaderText: {
     fontFamily: 'gotham-medium',
-    color: '#072169',
+    color: '#1C453B',
     fontSize: '0.98rem',
   },
   gatewayRequired: {
@@ -202,10 +202,10 @@ const styles = EStyleSheet.create({
   },
   gatewaySubHeader: {
     fontFamily: 'sansation-regular',
-    color: '#072169',
+    color: '#1C453B',
     fontSize: '1rem',
     opacity: 0.5,
-    marginTop: '.6rem',
+    marginTop: '.3rem',
     marginBottom: '2rem'
   },
   mainGatewayContainer: {

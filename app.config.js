@@ -12,8 +12,7 @@ export default {
   scheme: "cashingames",
   splash: {
     image: "./assets/images/splash2.png",
-    resizeMode: "contain",
-    backgroundColor: "#ffffff"
+    resizeMode: "cover",
   },
   androidStatusBar: {
     barStyle: "dark-content"

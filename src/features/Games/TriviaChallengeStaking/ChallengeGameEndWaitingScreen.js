@@ -136,7 +136,7 @@ const styles = EStyleSheet.create({
     username: {
         fontSize: '0.9rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         width: responsiveScreenWidth(25),
         textAlign: 'center',
         marginTop: '.8rem'
@@ -144,7 +144,7 @@ const styles = EStyleSheet.create({
     message: {
         fontSize: '1rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center',
         marginVertical: normalize(4),
         lineHeight: '2rem'
@@ -152,7 +152,7 @@ const styles = EStyleSheet.create({
     matchingText: {
         fontSize: '.8rem',
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center',
         marginBottom: normalize(4),
         lineHeight: '2rem'

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, ScrollView, ActivityIndicator, Image, Pressable, TextInput, Alert } from 'react-native';
+import { Text, View, ScrollView, ActivityIndicator, Pressable } from 'react-native';
 import EStyleSheet from "react-native-extended-stylesheet";
 import { useDispatch, useSelector } from "react-redux";
 import normalize, { responsiveScreenWidth } from "../../utils/normalize";
@@ -14,6 +14,8 @@ import logToAnalytics from "../../utils/analytics";
 import { formatCurrency } from "../../utils/stringUtl";
 import CustomAlert from "../../shared/CustomAlert";
 import { SelectList } from "react-native-dropdown-select-list";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 
 const GameStakingScreen = ({ navigation }) => {
@@ -37,7 +39,6 @@ const GameStakingScreen = ({ navigation }) => {
     const depositBalance = Number.parseFloat(user.walletBalance) - Number.parseFloat(user.withdrawableBalance)
     const depositBalanceSelected = selected === 1 && Number.parseFloat(depositBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
     const bonusSelected = selected === 2 && Number.parseFloat(user.bonusBalance) >= amount && amount >= Number.parseFloat(minimumExhibitionStakeAmount)
-    console.log(walletType)
 
     useEffect(() => {
         if (cashMode && selected === 1) {
@@ -171,8 +172,9 @@ const GameStakingScreen = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container}>
+            <ScreenHeader />
             {cashMode &&
-                <StakingBalances setSelected={setSelected} depositBalance={depositBalance} user={user} minimumExhibitionStakeAmount={minimumExhibitionStakeAmount} />
+                <StakingBalances setSelected={setSelected} depositBalance={depositBalance} user={user} />
             }
             {practiceMode &&
                 <PracticeStakingBalances setSelected={setSelected} />
@@ -180,16 +182,18 @@ const GameStakingScreen = ({ navigation }) => {
             {cashMode &&
                 <>
                     <Input
-                        label='Enter stake amount'
+                        label='Enter amount'
                         placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`}
                         value={amount}
-                        error={((selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
-                            ((selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`)}
+                        error={((selected === 1 && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
+                            ((selected === 2 && amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`) ||
+                            ((amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum amount is NGN ${minimumExhibitionStakeAmount}`)
+                        }
                         onChangeText={setAmount}
-                        isRequired={true}
+                        // isRequired={true}
                         keyboardType="numeric"
                     />
-                    {(selected === `Deposit (NGN ${formatCurrency(depositBalance)})` && amount > Number.parseFloat(depositBalance)) &&
+                    {(selected === 1 && amount > Number.parseFloat(depositBalance)) &&
                         <View style={styles.errorContainer}>
                             <Text style={styles.error}>Insufficient wallet balance</Text>
                             <Pressable style={styles.fundError} onPress={fundWallet}>
@@ -197,22 +201,34 @@ const GameStakingScreen = ({ navigation }) => {
                             </Pressable>
                         </View>
                     }
-                    {(selected === `Bonus (NGN ${formatCurrency(user.bonusBalance)})` && amount > Number.parseFloat(user.bonusBalance)) &&
+                    {(selected === 2 && amount > Number.parseFloat(user.bonusBalance)) &&
                         <View style={styles.errorContainer}>
                             <Text style={styles.error}>Insufficient bonus balance, stake from another balance</Text>
                         </View>
                     }
                 </>
             }
+
             {practiceMode &&
-                <View style={styles.inputContainer}>
-                    <Text style={styles.inputLabel}>Enter stake amount</Text>
-                    <TextInput style={styles.input} placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`} value={amount}
-                        onChangeText={setAmount}
-                        keyboardType="numeric" />
-                </View>
+                <Input
+                    label='Enter amount'
+                    placeholder={`Minimum amount is NGN ${minimumExhibitionStakeAmount}`}
+                    value={amount}
+                    error={((amount < Number.parseFloat(minimumExhibitionStakeAmount)) && `Minimum staking amount is NGN ${minimumExhibitionStakeAmount}`)}
+                    onChangeText={setAmount}
+                    isRequired={false}
+                    keyboardType="numeric"
+                />
             }
-            <View style={[styles.stakeContainer, { marginBottom: 0 }]}>
+            {cashMode &&
+                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
+                    disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButtoni} />
+            }
+            {practiceMode &&
+                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
+                    disabled={loading || amount === '' || selected === ''} style={styles.stakeButtoni} />
+            }
+            <View style={[styles.stakeContainer, { marginBottom: responsiveScreenWidth(20) }]}>
                 <Text style={styles.stakeHeading}>Winning Odds</Text>
                 <View style={styles.stakeHeaders}>
                     <Text style={styles.stakeScore}>OUTCOME</Text>
@@ -255,18 +271,6 @@ const GameStakingScreen = ({ navigation }) => {
                     </>
                 }
             </View>
-            {/* <Pressable style={styles.instructionsContainer}>
-                <Text style={styles.instructionsTitle}>Odds instructions</Text>
-                <Ionicons name="chevron-forward" size={30} color='#072169' />
-            </Pressable> */}
-            {cashMode &&
-                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
-                    disabled={loading || !canSend} disabledStyle={styles.disabled} style={styles.stakeButtoni} />
-            }
-            {practiceMode &&
-                <AppButton text={loading ? <ActivityIndicator size="small" color="#FFFF" /> : "Stake Amount"} onPress={validate}
-                    disabled={loading || amount === '' || selected === ''} style={styles.stakeButtoni} />
-            }
             <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
                 textLabel={alertMessage} buttonLabel='Ok, got it'
                 alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close} />
@@ -276,17 +280,17 @@ const GameStakingScreen = ({ navigation }) => {
 
 }
 
-const StakingBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, setSelected }) => {
+const StakingBalances = ({ depositBalance, user, setSelected }) => {
     const balanceAccounts = [
         {
             key: 1,
             value: `Deposit (NGN ${formatCurrency(depositBalance)})`,
-            disabled: depositBalance < minimumExhibitionStakeAmount,
+            disabled: depositBalance == 0,
         },
         {
             key: 2,
             value: `Bonus (NGN ${formatCurrency(user.bonusBalance)})`,
-            disabled: user.bonusBalance < minimumExhibitionStakeAmount,
+            disabled: user.bonusBalance == 0,
         }
     ]
     const [balanceName, setBalanceName] = useState('')
@@ -302,10 +306,10 @@ const StakingBalances = ({ depositBalance, user, minimumExhibitionStakeAmount, s
                 save="key"
                 onSelect={() => setSelected(balanceName)}
                 placeholder="Select Wallet"
-                fontFamily='sansation-regular'
+                fontFamily='sansation-bold'
                 boxStyles={{ height: normalize(52), alignItems: 'center', borderColor: '#D9D9D9', backgroundColor: '#fff' }}
-                inputStyles={{ fontSize: 18, color: '#072169' }}
-                dropdownTextStyles={{ fontSize: 18, color: '#072169' }}
+                inputStyles={{ fontSize: 17, color: '#1C453B' }}
+                dropdownTextStyles={{ fontSize: 18, color: '#1C453B' }}
                 dropdownItemStyles={{ borderBottomWidth: 1, borderBottomColor: '#D9D9D9' }}
                 disabledTextStyles={{ fontSize: 18 }}
                 disabledItemStyles={{ backgroundColor: '#F9FBFF' }}
@@ -338,10 +342,10 @@ const PracticeStakingBalances = ({ setSelected }) => {
                 save="key"
                 onSelect={() => setSelected(balanceName)}
                 placeholder="Select Wallet"
-                fontFamily='sansation-regular'
+                fontFamily='sansation-bold'
                 boxStyles={{ height: normalize(52), alignItems: 'center', borderColor: '#D9D9D9', backgroundColor: '#fff' }}
-                inputStyles={{ fontSize: 18, color: '#072169' }}
-                dropdownTextStyles={{ fontSize: 18, color: '#072169' }}
+                inputStyles={{ fontSize: 17, color: '#1C453B' }}
+                dropdownTextStyles={{ fontSize: 18, color: '#1C453B' }}
                 dropdownItemStyles={{ borderBottomWidth: 1, borderBottomColor: '#D9D9D9' }}
                 disabledTextStyles={{ fontSize: 18 }}
                 disabledItemStyles={{ backgroundColor: '#F9FBFF' }}
@@ -351,7 +355,19 @@ const PracticeStakingBalances = ({ setSelected }) => {
 }
 
 
+const ScreenHeader = () => {
+    const navigation = useNavigation();
 
+    return (
+        <View style={styles.headerContainerStyle}>
+            <View style={styles.closeContainerStyle}>
+                <Ionicons name="close-sharp" size={30} color="#1C453B" onPress={() => navigation.navigate('SelectGameCategory')} />
+            </View>
+            <Text style={styles.headerTextStyle}>Enter Stake</Text>
+            <View></View>
+        </View>
+    )
+}
 
 export default GameStakingScreen;
 
@@ -359,8 +375,7 @@ const styles = EStyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F9FBFF',
-        paddingBottom: normalize(10),
-        paddingTop: normalize(20),
+        paddingTop: Platform.OS === 'ios' ? responsiveScreenWidth(12) : responsiveScreenWidth(7),
         paddingHorizontal: normalize(18)
     },
     balancesContainer: {
@@ -392,8 +407,8 @@ const styles = EStyleSheet.create({
     stakeHeading: {
         textAlign: 'center',
         fontFamily: "gotham-bold",
-        fontSize: ".95rem",
-        color: "#072169",
+        fontSize: "1rem",
+        color: "#1C453B",
         marginVertical: '1.1rem',
     },
     stakeHeaders: {
@@ -407,26 +422,19 @@ const styles = EStyleSheet.create({
     stakeScore: {
         fontFamily: "gotham-bold",
         fontSize: ".85rem",
-        color: "#072169",
+        color: "#1C453B",
     },
     stakeHead: {
         fontFamily: "gotham-bold",
         fontSize: ".85rem",
-        color: "#072169",
+        color: "#1C453B",
         marginRight: '1rem',
     },
     stakePay: {
         fontFamily: "gotham-bold",
         fontSize: ".85rem",
-        color: "#072169",
+        color: "#1C453B",
         marginRight: '1rem',
-    },
-    note: {
-        fontFamily: "gotham-medium",
-        fontSize: ".8rem",
-        color: "#DF5921",
-        lineHeight: '1.2rem',
-        marginTop: '1rem'
     },
     disabled: {
         backgroundColor: '#EA8663'
@@ -519,8 +527,8 @@ const styles = EStyleSheet.create({
         marginVertical: 5,
     },
     stakeButtoni: {
-        marginBottom: responsiveScreenWidth(20),
-        marginTop: '.7rem'
+        marginTop: 0,
+        marginBottom: '.6rem'
     },
     input: {
         height: normalize(52),
@@ -528,27 +536,27 @@ const styles = EStyleSheet.create({
         borderRadius: 10,
         paddingLeft: normalize(13),
         paddingRight: normalize(13),
-        borderColor: '#000000',
+        borderColor: '#D9D9D9',
         fontFamily: 'sansation-regular',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.85rem',
         backgroundColor: '#fff',
     },
     inputLabel: {
         fontFamily: 'gotham-medium',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.98rem',
         marginBottom: normalize(7),
 
     },
     balanceLabel: {
-        fontFamily: 'gotham-medium',
-        color: '#072169',
-        fontSize: '0.85rem',
+        fontFamily: 'gotham-bold',
+        color: '#1C453B',
+        fontSize: '0.9rem',
 
     },
     requiredText: {
-        fontFamily: 'sansation-regular',
+        fontFamily: 'gotham-bold',
         color: '#E15220',
         fontSize: '0.85rem',
     },
@@ -568,5 +576,25 @@ const styles = EStyleSheet.create({
         fontSize: '.85rem',
         color: '#072169',
         fontFamily: 'gotham-bold',
+    },
+    headerContainerStyle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '2rem'
+    },
+    closeContainerStyle: {
+        backgroundColor: '#EEEEEE',
+        borderRadius: 50,
+        width: '2rem',
+        height: '2rem',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    headerTextStyle: {
+        fontSize: 26,
+        fontFamily: 'gotham-bold',
+        color: '#1C453B',
+        textAlign: 'center'
     },
 })

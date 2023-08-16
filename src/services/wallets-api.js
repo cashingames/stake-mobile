@@ -20,8 +20,9 @@ export const walletsApi = createApi({
     endpoints: (builder) => ({
         getTransactions: builder.query({
             query: ({ walletType, pageNo }) => {
-                console.log("walletType", walletType, pageNo);
-                return `v3/wallet/transactions/${walletType}?page=${pageNo}`
+                return (
+                    `v3/wallet/transactions/${walletType}?page=${pageNo}`
+                )
             },
             merge: (currentState, incomingState) => {
                 console.log("currentState", currentState);
@@ -40,12 +41,14 @@ export const walletsApi = createApi({
                 //     return [queryArgs.walletType, queryArgs.pageNo]
                 // }
                 const key = `${endpointName}-${queryArgs.walletType}`
-                console.log("key", key);
                 return key;
             }
+        }),
+        getProfile: builder.query({
+            query: () => `v3/user/profile`,
         }),
     }),
 })
 
 // Export hooks for usage in functional components
-export const { useGetTransactionsQuery } = walletsApi
+export const { useGetTransactionsQuery, useGetProfileQuery } = walletsApi

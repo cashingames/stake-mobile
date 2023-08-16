@@ -38,7 +38,7 @@ const styles = EStyleSheet.create({
         letterSpacing: 0.25,
         color: 'white',
         fontFamily: 'graphik-medium',
-        fontSize: '0.9rem'
+        fontSize: '1.2rem'
     },
     textContainer: {
         flexDirection: "row",

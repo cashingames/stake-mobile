@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import normalize from "../utils/normalize";
 import AnsweredGameProgress from "./AnsweredGameProgress";
 import { Image } from "react-native";
-import { formatCurrency } from "../utils/stringUtl";
 
 
 
@@ -92,27 +91,27 @@ const styles = EStyleSheet.create({
         color: '#FFF',
     },
     categoryName: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
-        fontSize: '0.9rem',
+        fontSize: '1rem',
         width: '8rem'
     },
     questionsAnswered: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
-        fontSize: '0.8rem'
+        fontSize: '0.85rem'
     },
     oddContainer: {
         flexDirection: 'row',
         alignItems: 'center'
     },
     oddTitle: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '0.8rem'
     },
     oddText: {
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'sansation-regular',
         fontSize: '0.8rem',
         marginLeft: '.3rem'
@@ -120,15 +119,15 @@ const styles = EStyleSheet.create({
     demoContainer: {
         backgroundColor: '#E15220',
         borderRadius: 30,
-        paddingHorizontal: '.5rem',
-        paddingVertical: '.1rem',
+        paddingHorizontal: '.35rem',
+        paddingVertical: '.3rem',
         flexDirection: 'row',
         alignItems: 'center'
     },
     demoText: {
         color: '#F9FBFF',
         fontFamily: 'gotham-medium',
-        fontSize: '0.6rem'
+        fontSize: '0.7rem'
     },
     starIcon: {
         width: '.7rem',

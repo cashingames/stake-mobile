@@ -229,8 +229,8 @@ const WalletBalances = ({ user, setSelected , boost}) => {
                 placeholder="Select Wallet"
                 fontFamily='sansation-regular'
                 boxStyles={{ height: normalize(52), alignItems: 'center', borderColor: '#D9D9D9', backgroundColor: '#fff' }}
-                inputStyles={{ fontSize: 18, color: '#072169' }}
-                dropdownTextStyles={{ fontSize: 18, color: '#072169' }}
+                inputStyles={{ fontSize: 18, color: '#1C453B' }}
+                dropdownTextStyles={{ fontSize: 18, color: '#1C453B' }}
                 dropdownItemStyles={{ borderBottomWidth: 1, borderBottomColor: '#D9D9D9' }}
                 disabledTextStyles={{ fontSize: 18 }}
                 disabledItemStyles={{ backgroundColor: '#F9FBFF' }}
@@ -249,20 +249,6 @@ const styles = EStyleSheet.create({
     storeItems: {
         // marginTop: normalize(20),
         flexDirection: 'column',
-    },
-    title: {
-        fontFamily: 'graphik-bold',
-        fontWeight: '900',
-        fontSize: '1.2rem',
-        color: '#151C2F',
-    },
-    storeItemsDescription: {
-        color: '#151C2F',
-        fontSize: '0.7rem',
-        fontFamily: 'graphik-regular',
-        opacity: 0.6,
-        lineHeight: responsiveScreenHeight(2.6),
-        marginVertical: normalize(18)
     },
     storeCards: {
         display: 'flex',
@@ -311,12 +297,12 @@ const styles = EStyleSheet.create({
     storeItemName: {
         fontFamily: 'gotham-bold',
         fontSize: '0.85rem',
-        color: '#072169',
+        color: '#1C453B',
     },
     cardDescription: {
         fontFamily: 'gotham-medium',
         fontSize: '0.7rem',
-        color: '#072169',
+        color: '#1C453B',
         lineHeight: responsiveScreenHeight(2),
         width: responsiveScreenWidth(38)
     },
@@ -336,7 +322,7 @@ const styles = EStyleSheet.create({
     buyItemTitle: {
         fontFamily: 'gotham-bold',
         fontSize: '1rem',
-        color: '#072169',
+        color: '#1C453B',
         marginBottom: normalize(10),
     },
     actionButton: {
@@ -420,7 +406,7 @@ const styles = EStyleSheet.create({
     },
     balanceLabel: {
         fontFamily: 'gotham-bold',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.85rem',
 
     },

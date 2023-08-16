@@ -42,7 +42,6 @@ const SignupScreen = () => {
     const [countryCode, setCountryCode] = useState('+234');
     const [referrer, setReferrer] = useState('');
     const [loading, setLoading] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
 
     //check for device ids
     const deviceBrand = Device.brand;
@@ -118,24 +117,18 @@ const SignupScreen = () => {
         }, err => {
             if (!err || !err.response || err.response === undefined) {
                 setAllError("Your Network is Offline.");
-                setModalVisible(true)
             }
             else if (err.response.status === 500) {
                 setAllError("Service not currently available. Please contact support");
-                setModalVisible(true)
             }
             else {
                 const errors =
                     err.response && err.response.data && err.response.data.errors;
                 const firstError = Object.values(errors, {})[0];
                 setAllError(firstError[0])
-                setModalVisible(true)
             }
             setLoading(false);
         })
-    }
-    const close = () => {
-
     }
 
     useEffect(() => {
@@ -158,9 +151,11 @@ const SignupScreen = () => {
                 <AuthTitle text='Create Account' />
             </View>
             <View style={styles.inputContainer}>
-                {/* {allError.length > 0 &&
-                    <Text>{allError}</Text>
-                } */}
+                {allError.length > 0 &&
+                    <View style={styles.errorBoxContainer}>
+                        <Text style={styles.errorBox}>{allError}</Text>
+                    </View>
+                }
                 <View style={styles.phoneHeadContainer}>
                     <View style={styles.labelContainer}>
                         <Text style={styles.inputLabel}>Phone number</Text>
@@ -286,9 +281,6 @@ const SignupScreen = () => {
                 <RenderCreateAccount />
             </View>
             <Text style={styles.contactUs} onPress={contactUs}>You need help? Contact us</Text>
-            <CustomAlert modalVisible={modalVisible} setModalVisible={setModalVisible}
-                 textLabel={allError} buttonLabel='Ok, got it'
-                alertImage={require('../../../assets/images/target-dynamic-color.png')} alertImageVisible={true} doAction={close}  />
         </ScrollView>
     );
 }
@@ -299,7 +291,7 @@ const RenderCreateAccount = () => {
 
     return (
         <AppButton text='Login to account' onPress={() => navigation.navigate('Login')}
-            style={styles.signupButton} textStyle={styles.signupText} isIcon={true} iconColor="#072169" />
+            style={styles.signupButton} textStyle={styles.signupText} isIcon={true} iconColor="#1C453B" />
     )
 }
 
@@ -319,6 +311,19 @@ const styles = EStyleSheet.create({
     inputContainer: {
         marginTop: responsiveScreenWidth(10),
     },
+    errorBoxContainer: {
+        borderRadius: 38,
+        marginBottom: responsiveScreenWidth(5),
+        backgroundColor: '#FF0032',
+        paddingVertical: normalize(10),
+        marginHorizontal: '1.8rem',
+    },
+    errorBox: {
+        textAlign: 'center',
+        fontFamily: 'sansation-bold',
+        color: '#FFFF',
+        fontSize: '0.85rem',
+    },
     linkText: {
         fontFamily: 'sansation-regular',
         fontSize: '0.85rem',
@@ -327,7 +332,7 @@ const styles = EStyleSheet.create({
     agreementText: {
         fontFamily: 'sansation-regular',
         fontSize: '0.9rem',
-        color: '#072169',
+        color: '#1C453B',
         lineHeight: '1.2rem',
         marginLeft: '.6rem',
         textAlign: 'justify'
@@ -375,14 +380,14 @@ const styles = EStyleSheet.create({
     },
     phoneNumberInput: {
         fontFamily: 'sansation-regular',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.85rem',
         marginLeft: '.8rem',
         width: '8rem'
     },
     countryCodeDigit: {
         fontFamily: 'sansation-regular',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.85rem'
     },
     codeButton: {
@@ -399,7 +404,7 @@ const styles = EStyleSheet.create({
     },
     inputLabel: {
         fontFamily: 'gotham-medium',
-        color: '#072169',
+        color: '#1C453B',
         fontSize: '0.98rem',
     },
     requiredText: {
@@ -430,7 +435,7 @@ const styles = EStyleSheet.create({
     orText: {
         fontFamily: 'sansation-bold',
         fontSize: '1.1rem',
-        color: '#072169',
+        color: '#1C453B',
         textAlign: 'center'
     },
     signupButton: {
@@ -438,12 +443,12 @@ const styles = EStyleSheet.create({
         marginVertical: 20,
         paddingVertical: normalize(19),
         borderWidth: 2,
-        borderColor: '#072169'
+        borderColor: '#1C453B'
     },
     signupText: {
         fontFamily: 'gotham-medium',
         fontSize: '1.1rem',
-        color: '#072169'
+        color: '#1C453B'
     },
     error: {
         fontFamily: 'gotham-medium',

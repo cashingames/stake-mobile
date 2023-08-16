@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Image, ScrollView, Pressable, BackHandler, Platform, ImageBackground } from 'react-native';
+import { Text, View, ScrollView, Pressable, BackHandler, Platform, ImageBackground } from 'react-native';
 import normalize, { responsiveScreenHeight, responsiveScreenWidth } from '../../utils/normalize';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,9 +7,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import UserName from '../../shared/UserName';
 import { getUser } from '../Auth/AuthSlice';
 import StakeWinnings from '../../shared/StakeWinnings';
-import Constants from 'expo-constants';
 import logToAnalytics from '../../utils/analytics';
-import { isTrue } from '../../utils/stringUtl';
 import { Ionicons } from '@expo/vector-icons';
 import AppButton from '../../shared/AppButton';
 
@@ -26,7 +24,7 @@ export default function GameEndResultScreen({ navigation }) {
 	const practiceMode = useSelector(state => state.game.practiceMode);
 	const cashMode = useSelector(state => state.game.cashMode);
 	const walletSource = useSelector(state => state.game.walletSource);
-    const username = user.firstName === '' ? user.username?.charAt(0) : (user.firstName?.charAt(0) + user.lastName?.charAt(0))
+	const username = user.firstName === '' ? user.username?.charAt(0) : (user.firstName?.charAt(0) + user.lastName?.charAt(0))
 	const isGameEnded = useSelector(state => state.game.isEnded);
 	const [loading, setLoading] = useState(false);
 
@@ -80,18 +78,10 @@ export default function GameEndResultScreen({ navigation }) {
 		<ImageBackground source={require('../../../assets/images/success-background.png')} style={{ flex: 1 }} resizeMethod="resize">
 			<ScrollView style={styles.container}>
 				<View style={styles.trophy}>
-					{isTrue(user.avatar) ?
-						<Image
-							style={styles.emoji}
-							source={{ uri: `${Constants.expoConfig.extra.assetBaseUrl}/${user.avatar}` }}
+					<View style={styles.avatar}>
+						<Text style={styles.avatarText}>{username}</Text>
+					</View>
 
-						/>
-						:
-						<View style={styles.avatar}>
-							<Text style={styles.avatarText}>{username}</Text>
-						</View>
-
-					}
 				</View>
 				<UserName userName={user.firstName} />
 				{withStaking && cashMode &&
@@ -140,7 +130,7 @@ const DemoWinnings = ({ amountWon }) => {
 const FinalScore = ({ pointsGained, correctCount, totalCount, wrongCount }) => {
 	return (
 		<View style={styles.finalScore}>
-			<Text style={styles.finalScoreText}>Game play statistics</Text>
+			<Text style={styles.finalScoreText}>Game statistics</Text>
 			<View style={styles.scoreContainer}>
 				<Text style={styles.pointTitle}>Questions answered</Text>
 				<Text style={styles.point}>{totalCount}</Text>
@@ -174,30 +164,22 @@ const styles = EStyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
-	emoji: {
-		width: normalize(80),
-		height: normalize(80),
-		borderRadius: 50,
-		borderWidth: 1,
-		borderColor: '#072169',
-		backgroundColor: '#fff'
-	},
 	avatar: {
-        width: normalize(80),
-        height: normalize(80),
-        backgroundColor: '#FDCCD4',
-        borderRadius: 100,
-        borderColor: ' rgba(0, 0, 0, 0.1)',
-        borderWidth: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    avatarText: {
-        fontSize: '1.7rem',
-        color: '#072169',
-        fontFamily: 'gotham-bold',
-        textTransform: 'uppercase'
-    },
+		width: normalize(100),
+		height: normalize(100),
+        backgroundColor: '#ccded48c',
+		borderRadius: 100,
+		borderColor: ' rgba(0, 0, 0, 0.1)',
+		borderWidth: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	avatarText: {
+		fontSize: '2rem',
+		color: '#1C453B',
+		fontFamily: 'gotham-bold',
+		textTransform: 'uppercase'
+	},
 	finalScore: {
 		display: 'flex',
 		flexDirection: 'column',
@@ -215,7 +197,7 @@ const styles = EStyleSheet.create({
 		shadowOpacity: 0.1,
 	},
 	finalScoreText: {
-		color: '#072169',
+		color: '#1C453B',
 		fontFamily: 'gotham-bold',
 		fontSize: '1.3rem',
 		marginBottom: '.7rem'
@@ -223,15 +205,15 @@ const styles = EStyleSheet.create({
 	scoreContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginVertical: '1rem'
+		marginVertical: '.6rem'
 	},
 	pointTitle: {
-		color: '#072169',
+		color: '#1C453B',
 		fontSize: '1.1rem',
 		fontFamily: 'gotham-medium',
 	},
 	point: {
-		color: '#072169',
+		color: '#1C453B',
 		fontFamily: 'sansation-regular',
 		fontSize: '1.1rem',
 		marginLeft: '.7rem'
@@ -240,7 +222,7 @@ const styles = EStyleSheet.create({
 		marginVertical: 5,
 		backgroundColor: 'none',
 		borderWidth: 2,
-		borderColor: '#072169',
+		borderColor: '#1C453B',
 		paddingVertical: normalize(19),
 		borderRadius: 13,
 		alignItems: 'center'
@@ -252,12 +234,12 @@ const styles = EStyleSheet.create({
 	},
 	buttonText: {
 		fontFamily: 'gotham-medium',
-		fontSize: '1.1rem',
-		color: '#072169'
+		fontSize: '1.2rem',
+		color: '#1C453B'
 	},
 	againText: {
 		fontFamily: 'gotham-medium',
-		fontSize: '1.1rem',
+		fontSize: '1.2rem',
 	},
 	disabled: {
 		backgroundColor: '#EA8663'
@@ -266,13 +248,14 @@ const styles = EStyleSheet.create({
 		display: 'flex',
 		flexDirection: 'column',
 		marginBottom: responsiveScreenHeight(18),
-		paddingHorizontal: '2rem'
+		// paddingHorizontal: '2rem'
 	},
 	winningsContainer: {
 		alignItems: 'center',
 		backgroundColor: '#FFFF',
 		paddingVertical: Platform.OS === 'ios' ? normalize(24) : normalize(20),
 		marginBottom: normalize(20),
+		marginTop: normalize(20),
 		borderRadius: 13,
 		borderWidth: 1,
 		borderColor: '#E5E5E5',
@@ -289,6 +272,7 @@ const styles = EStyleSheet.create({
 		color: '#E05C28',
 		fontFamily: 'gotham-bold',
 		fontSize: '1.1rem',
+		textAlign:'center'
 	},
 
 });

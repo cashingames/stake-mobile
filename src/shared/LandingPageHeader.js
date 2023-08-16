@@ -46,7 +46,7 @@ const styles = EStyleSheet.create({
         alignItems:'center'
     },
     link:{
-      backgroundColor:'#ef2f55',
+      backgroundColor:'#E05C28',
       paddingBottom:normalize(8),
       paddingTop:normalize(4),
       paddingHorizontal:'0.9rem',
@@ -54,7 +54,7 @@ const styles = EStyleSheet.create({
     },
     linkText:{
       color:'#fff',
-      fontFamily:'graphik-medium',
+      fontFamily:'gotham-medium',
       fontSize:'.8rem',
     }
 })

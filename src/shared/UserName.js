@@ -19,7 +19,7 @@ const styles = EStyleSheet.create({
     },
     name: {
         textAlign: 'center',
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
         fontSize: '1.5rem',
     },
