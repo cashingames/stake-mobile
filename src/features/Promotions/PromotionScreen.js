@@ -19,7 +19,7 @@ const PromotionScreen = ({ route }) => {
             style={{ flex: 1 }}
             resizeMethod="resize">
             <View style={styles.headerContainer}>
-                <Ionicons name='chevron-back-sharp' size={29} color='#072169' style={{ marginLeft: 10 }} onPress={goBack} />
+                <Ionicons name='chevron-back-sharp' size={29} color='#1C453B' style={{ marginLeft: 10 }} onPress={goBack} />
                 <Text style={styles.headerText}>{params.promotion_title}</Text>
                 {/* <Text style={styles.headerText}>Weekly</Text> */}
                 <View></View>
@@ -69,7 +69,7 @@ const styles = EStyleSheet.create({
     },
     headerText: {
         fontSize: 23,
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'gotham-bold',
     },
     detailsMainContainer: {
@@ -83,13 +83,13 @@ const styles = EStyleSheet.create({
     },
     detailsHeader: {
         fontSize: '1.3rem',
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'bubble-regular',
         marginBottom:'.5rem'
     },
     detailsText: {
         fontSize: '1rem',
-        color: '#072169',
+        color: '#1C453B',
         fontFamily: 'sansation-regular',
         textAlign: 'center',
         lineHeight: '1.3rem'

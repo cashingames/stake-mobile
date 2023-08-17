@@ -7,16 +7,16 @@ import { useNavigation } from "@react-navigation/native";
 import logToAnalytics from "../../utils/analytics";
 import { Ionicons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
+import { formatCurrency } from "../../utils/stringUtl";
 
 const MarketingPromotionCards = () => {
     const navigation = useNavigation();
     const user = useSelector(state => state.auth.user);
 
     const [isNewPromotion, setIsNewPromotion] = useState(true);
-    const [isCashDrop, setIsCashDrop] = useState(false);
+    const [isCashDrop, setIsCashDrop] = useState(true);
 
-
-    const RenderForAndroid = () => {
+    const RenderPromotions = () => {
         const checkAvailablePromotions = () => {
             logToAnalytics("promotions_button_clicked", {
                 'id': user.username,
@@ -25,41 +25,37 @@ const MarketingPromotionCards = () => {
             })
             navigation.navigate('Promotions')
         }
-        return (
-            <>
-                <PromotionsBoard isNewPromotion={isNewPromotion} onPress={checkAvailablePromotions} />
-                <CashDropBoards isCashDrop={isCashDrop} />
-            </>
-        )
-    }
 
-    const RenderForIOS = () => {
-        const checkAvailablePromotions = () => {
-            logToAnalytics("promotions_button_clicked", {
+        const checkAvailableCashDrop = () => {
+            logToAnalytics('cashdrop_tab_clicked', {
                 'id': user.username,
-                'phone_number': user.phoneNumber,
+                'phone_number': user.phone_number,
                 'email': user.email
-            })
-            navigation.navigate('Promotions')
+            });
+            navigation.navigate('CashDrop')
+        }
+
+        const doNothing = () => {
+
         }
         return (
             <>
                 <PromotionsBoard isNewPromotion={isNewPromotion} onPress={checkAvailablePromotions} />
-                <CashDropBoards isCashDrop={isCashDrop} />
+                <CashDropBoards isCashDrop={isCashDrop} onPress={isCashDrop ? checkAvailableCashDrop : doNothing} />
             </>
         )
     }
     return (
         <View style={styles.leadersContainer}>
-            {Platform.OS === 'ios' ? <RenderForIOS /> : <RenderForAndroid />}
+            <RenderPromotions />
 
         </View>
     )
 }
 
-const CashDropBoards = ({ isCashDrop }) => {
+const CashDropBoards = ({ isCashDrop, onPress }) => {
     return (
-        <Pressable style={[styles.topLeadersContainer, { opacity: !isCashDrop ? 0.4 : 1 }]}>
+        <Pressable style={[styles.topLeadersContainer, { opacity: !isCashDrop ? 0.4 : 1 }]} onPress={onPress}>
             <View style={styles.topLeadersSubContainer}>
                 <View style={styles.imageAvatar}>
                     <Image
@@ -69,10 +65,24 @@ const CashDropBoards = ({ isCashDrop }) => {
                 </View>
                 <View style={styles.leadersHeaderContainer}>
                     <Text style={styles.topLeadersHeader}>Cash drop</Text>
-                    <Text style={styles.topLeadersHeaderi}>Lucky winners win the pools</Text>
+                    {isCashDrop ?
+                        <Text style={styles.topLeadersHeaderii}>NGN {formatCurrency(348000)}</Text>
+                        :
+                        <Text style={styles.topLeadersHeaderi}>Lucky winners win the pools</Text>
+                    }
                 </View>
             </View>
-            <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+            {isCashDrop ?
+                <View style={styles.liveContainer}>
+                    <Image
+                        source={require('../../../assets/images/star.png')}
+                        style={styles.starIcon}
+                    />
+                    <Text style={styles.liveText}>Live Now</Text>
+                </View>
+                :
+                <Ionicons name='chevron-forward-sharp' size={20} color='#072169' />
+            }
         </Pressable>
     )
 }
@@ -153,5 +163,25 @@ const styles = EStyleSheet.create({
         fontFamily: 'sansation-regular',
         width: '11rem',
         marginTop: '.2rem'
+    },
+    topLeadersHeaderii: {
+        fontSize: '.9rem',
+        color: '#1C453B',
+        fontFamily: 'sansation-bold',
+        width: '9rem',
+        marginTop: '.2rem'
+    },
+    liveContainer: {
+        backgroundColor: '#FA5F4A',
+        borderRadius: 30,
+        paddingHorizontal: '.4rem',
+        paddingVertical: '.2rem',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    liveText: {
+        fontSize: '.55rem',
+        color: '#F9FBFF',
+        fontFamily: 'gotham-medium',
     },
 })

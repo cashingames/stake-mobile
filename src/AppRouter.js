@@ -62,6 +62,8 @@ import PromotionsScreen from './features/Promotions/PromotionsScreen';
 import PromotionScreen from './features/Promotions/PromotionScreen';
 import ChallengePracticeTourScreen from './features/Games/TriviaChallengeStaking/ChallengePracticeTourScreen';
 import GamePracticeTourScreen from './features/Games/GamePracticeTourScreen';
+import CashDropScreen from './features/Promotions/CashDropScreen';
+import DropWinnerScreen from './features/Promotions/DropWinnerScreen';
 
 
 const AppStack = createNativeStackNavigator();
@@ -184,7 +186,8 @@ function AppRouter() {
 							title: 'Promotions'
 						}} />
 						<AppStack.Screen name="Promotion" component={PromotionScreen} options={{ headerShown: false }} />
-
+						<AppStack.Screen name="CashDrop" component={CashDropScreen} options={{ title: 'Cash Drop' }} />
+						<AppStack.Screen name="DropWinner" component={DropWinnerScreen} options={{ headerShown: false }} />
 
 						<AppStack.Screen name="Notifications" component={NotificationsScreen} options={{
 							title: 'Notifications'
