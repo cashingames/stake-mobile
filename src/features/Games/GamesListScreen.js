@@ -83,8 +83,8 @@ const GamesListScreen = ({ navigation }) => {
             resizeMethod="resize">
             <ScrollView style={styles.contentContainer}>
                 <View style={styles.gamesContainer}>
-                    <TriviaBetCard openBottomSheet={openBottomSheet} />
                     <TriviaChallengeCard openBottomSheet={openBottomSheet} />
+                    <TriviaBetCard openBottomSheet={openBottomSheet} />
                     <TriviaRoomsCard />
                     {/* <JackpotBetCard /> */}
                 </View>
@@ -193,7 +193,7 @@ const TriviaChallengeCard = ({ openBottomSheet }) => {
 const TriviaRoomsCard = () => {
     return (
         <Pressable style={styles.triviaBetContainer}>
-             <Image
+            <Image
                 source={require('../../../assets/images/room-banner.png')}
                 style={styles.triviaAvatar}
             />
@@ -432,7 +432,7 @@ const styles = EStyleSheet.create({
     },
     continueButton: {
         marginTop: '5rem',
-        marginBottom:0,
+        marginBottom: 0,
         paddingVertical: normalize(19),
     },
     buttonText: {
